@@ -459,6 +459,9 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
         assert mapping.opening_operation_id == opened['operation_id'] and mapping.native_session_id == thread
         assert mapping.stream_epoch == epoch and mapping.adapter_id == 'codex_app_server'
         assert mapping.launch_inventory_revision and mapping.launch_candidate_ref and mapping.launch_profile_revision > 0
+        assert mapping.launch_build is not None and mapping.launch_build.version == '0.159.0'
+        assert mapping.launch_build.architecture == 'x86_64' and mapping.launch_build.qualification == 'qualified'
+        assert mapping.launch_build.content_fingerprint.startswith('sha256:')
         assert mapping.receipt_connection_id and mapping.receipt_connection_generation > 0
         for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):
             assert read_managed_native_session(uow, replace(scope, **{field: 'other-' + field})) is None

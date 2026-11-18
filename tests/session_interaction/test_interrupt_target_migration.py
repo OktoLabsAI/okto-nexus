@@ -77,3 +77,10 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
     assert retained() == original
     with factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT input_id FROM session_interaction_pending_inputs').fetchone()[0] == 'prior-input'
+    assert MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 179)).apply() == [179]
+    assert retained() == original
+    with factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        assert conn.execute('SELECT native_launch_build_json FROM execution_sessions WHERE session_id=?',
+                            (scope.session.session_id,)).fetchone()[0] is None
+        assert not conn.execute('PRAGMA foreign_key_check').fetchall()

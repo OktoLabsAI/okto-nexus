@@ -288,15 +288,18 @@ def submit_execution_operation(
                  "delivery_" + secrets.token_hex(16), "ACCEPTED", now, len(encoded_semantic), connection_key_id, boot_authority),
             )
             if action == "runtime.open":
+                from .execution_native_session_mapping import native_launch_build
+                launch_build = native_launch_build(snapshot, resolved["semantic_intent"]["payload"])
                 conn.execute(
                     "INSERT INTO execution_sessions(server_id,executor_id,"
                     "session_id,binding_id,workspace_id,workspace_binding_id,"
-                    "open_operation_id,owner_generation,lifecycle_state,lease_state,metadata_json) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                    "open_operation_id,owner_generation,lifecycle_state,lease_state,metadata_json,native_launch_build_json) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                     (server_id, executor_id, session_id, scope["binding_id"],
                      scope["workspace_id"], scope["workspace_binding_id"],
                      operation_id, scope["session_owner_generation"],
-                     "OPEN_PENDING", "NONE", canonical_json(resolved.get('_session_metadata', {})).decode('utf-8')),
+                     "OPEN_PENDING", "NONE", canonical_json(resolved.get('_session_metadata', {})).decode('utf-8'),
+                     canonical_json(launch_build).decode('utf-8') if launch_build else None),
                 )
             conn.execute(
                 "INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
