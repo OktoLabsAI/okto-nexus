@@ -4,6 +4,8 @@ import {applyConversationUpdates, assertConversationPage, assertInteractionScope
   receiptLabel, type ConversationMessage} from '../sessionConversation';
 import {OperatorSignIn} from './OperatorSignIn';
 import {SessionInputQueue} from './SessionInputQueue';
+import {SessionInterruptControl} from './SessionInterruptControl';
+import {clearInterruptIntents} from '../sessionInterrupt';
 
 interface Draft {
   text: string;
@@ -16,6 +18,7 @@ const drafts = new Map<string, Draft>();
 
 export function clearConversationDrafts() {
   drafts.clear();
+  if (typeof window !== 'undefined') clearInterruptIntents(window.sessionStorage);
 }
 
 interface History {
@@ -50,6 +53,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const [messageError, setMessageError] = useState('');
   const [busy, setBusy] = useState(false);
   const [newMessages, setNewMessages] = useState(false);
+  const [queueRefresh, setQueueRefresh] = useState(0);
   const view = useRef(history);
   const lastInteraction = useRef<SessionInteraction | null>(null);
   const polling = useRef<() => void>(() => {});
@@ -258,10 +262,14 @@ export function SessionConversation({scope, active, onAccessLost}: {
       {draft.uncertain ? (busy ? 'Checking message…' : 'Waiting for confirmation of this message.') :
         receiptLabel[draft.latest!.receipt.status]}</p>}
     {messageError && <p role="alert" className="text-sm">{messageError}</p>}
-    {active && capability?.human_login_required === false && <SessionInputQueue scope={scope} onAccessLost={loseAccess}
-      onCancelled={receipt => {
-        const latest = drafts.get(key)?.latest;
-        if (latest?.receipt.input_id === receipt.input_id) installReceipt(latest.intent, receipt);
-      }}/>}
+    {capability?.human_login_required === false && <>
+      {active && <SessionInputQueue scope={scope} onAccessLost={loseAccess} refreshKey={queueRefresh}
+        onCancelled={receipt => {
+          const latest = drafts.get(key)?.latest;
+          if (latest?.receipt.input_id === receipt.input_id) installReceipt(latest.intent, receipt);
+        }}/>}
+      <SessionInterruptControl scope={scope} canReview={active && interaction?.interrupt_review_supported === true}
+        onAccessLost={loseAccess} onQueueChanged={() => setQueueRefresh(value => value + 1)}/>
+    </>}
   </section>;
 }

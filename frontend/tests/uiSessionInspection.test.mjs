@@ -27,7 +27,33 @@ function load(url){
 }
 const {SessionExecutionPanel}=load(new URL('../src/components/SessionExecutionPanel.tsx',import.meta.url));
 const {assertConversationPage,applyConversationUpdates,interactionKey}=load(new URL('../src/sessionConversation.ts',import.meta.url));
+const {interruptStatus,canDismissInterrupt,interruptStorageKey,clearInterruptIntents}=load(new URL('../src/sessionInterrupt.ts',import.meta.url));
 const render=props=>renderToStaticMarkup(React.createElement(SessionExecutionPanel,props));
+
+test('an interrupt receipt stays distinct from proof that the target stopped',()=>{
+  const receipt={executor_stage:'SUCCEEDED',admission_state:'RESOLVED_TERMINAL',possible_effect:true,error:null,
+    interrupt:{target_status:'unconfirmed',queue_paused:true,pending_count:2}};
+  assert.match(interruptStatus(receipt),/delivered.*Waiting/);
+  assert.equal(canDismissInterrupt(receipt),false);
+  const confirmed={...receipt,interrupt:{...receipt.interrupt,target_status:'interrupted'}};
+  assert.equal(interruptStatus(confirmed),'Turn interrupted.');
+  assert.equal(canDismissInterrupt(confirmed),true);
+  const refused={...receipt,error:{code:'CONTROL_REFUSED'},possible_effect:false,
+    interrupt:{...receipt.interrupt,target_status:'running'}};
+  assert.match(interruptStatus(refused),/refused.*still running/);
+  assert.equal(canDismissInterrupt(refused),true);
+});
+
+test('interrupt recovery references stay isolated by full scope and are cleared with the login',()=>{
+  const exact={...context,session_owner_generation:3};
+  const exactKey=interruptStorageKey(exact);
+  const nextKey=interruptStorageKey({...exact,session_owner_generation:4});
+  const otherKey=interruptStorageKey({...exact,executor_id:'other'});
+  assert.equal(new Set([exactKey,nextKey,otherKey]).size,3);
+  const items=new Map([[exactKey,'intent-a'],['unrelated-ui-preference','keep'],[otherKey,'intent-b']]);
+  clearInterruptIntents({get length(){return items.size;},key:index=>[...items.keys()][index],removeItem:key=>items.delete(key)});
+  assert.deepEqual([...items], [['unrelated-ui-preference','keep']]);
+});
 
 test('passive session inspection sends exact session/executor and verifies all seven admitted scope fields',async()=>{
   const calls=[],client={session:async(...args)=>{calls.push(args);return session();}};

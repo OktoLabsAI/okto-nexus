@@ -347,12 +347,20 @@ def assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact,
     from okto_nexus.application.session_interaction_controls import (
         request_exact_human_interrupt,
     )
+    from okto_nexus.application.session_interaction_targets import ExactNativeTurn
+    from tests.session_interaction.test_receipt_lookup import _store_operation
 
     with (pytest.raises(RuntimeError, match='rollback control fixture'),
           app.state.operator_auth.authority_fence() as resolve, deps.connection_factory.unit_of_work() as uow):
         borrowed = DeliveryTransactionFactory(uow)
+        _store_operation(uow, exact, 'fixture-active-turn', 'turn.submit')
+        target = ExactNativeTurn('fixture-turn', 'fixture-active-turn', 'fixture-interrupt', 'fixture-stream')
+
+        def revision_for(*_):
+            return target.revision
+
         options = {'factory': borrowed, 'access': access, 'authority_fence': lambda: nullcontext(resolve),
-                   'current_interrupt_revision': lambda *_: 'fixture-interrupt', 'scope': exact, 'author': author,
+                   'current_interrupt_target': lambda *_: target, 'scope': exact, 'author': author,
                    'client_intent_id': 'fixture-exact-interrupt', 'capability_revision': 'fixture-interrupt',
                    'expected_queue_revision': queue_revision, 'remote_ready': True,
                    'fresh_publications': app.state.inventory_fresh_publications}
@@ -370,9 +378,9 @@ def assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact,
             begin_execution_send(borrowed, **send)
         with pytest.raises(OktoNexusError, match='no longer signed in'):
             begin_execution_send(borrowed, resolve_session_input_human=lambda _: None,
-                session_interrupt_capability_revision=options['current_interrupt_revision'], **send)
+                session_interrupt_capability_revision=revision_for, **send)
         authorized = begin_execution_send(borrowed, resolve_session_input_human=resolve,
-            session_interrupt_capability_revision=options['current_interrupt_revision'], **send)
+            session_interrupt_capability_revision=revision_for, **send)
         assert authorized.frame['action'] == 'turn.interrupt' and authorized.frame['expected_turn_id'] == 'fixture-turn'
         with pytest.raises(OktoNexusError, match='Wait for the interrupt outcome'):
             set_input_queue_paused(uow, scope=exact, paused=False, expected_queue_revision=queue_revision + 1,

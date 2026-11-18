@@ -14,6 +14,7 @@ class ExactNativeTurn:
     native_id: str
     operation_id: str
     revision: str
+    stream_epoch: str
 
 
 def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) -> ExactNativeTurn | None:
@@ -97,7 +98,7 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
         return None
     revision = 'sha256:' + digest({'action': 'exact_native_turn.v1', 'capability': capability,
         'operation_id': selected['operation_id'], 'epoch': selected['stream_epoch'], 'start': start['event_hash']})
-    return ExactNativeTurn(turn, selected['operation_id'], revision)
+    return ExactNativeTurn(turn, selected['operation_id'], revision, selected['stream_epoch'])
 
 
 def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision) -> str | None:

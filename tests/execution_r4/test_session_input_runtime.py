@@ -486,6 +486,12 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
         'turn_state', 'turn/started', {'turn_id': native_turn, 'thread_id': thread, 'threadId': thread,
             'turn': {'id': native_turn, 'status': 'inProgress'}, 'delivery_phase': 'started'}, operation_id=operation))
     eventually(target)
+    send_capability = client.get(path + '/interaction', params=query).json()['next_turn']['capability_revision']
+    queued = client.post(path + '/inputs', headers={'x-nexus-ui': '1'}, json={
+        'scope': exact, 'expected_session_generation': generation, 'capability_revision': send_capability,
+        'client_intent_id': 'queued-after-interrupt', 'content': [{'type': 'text', 'text': 'Stay queued after interrupt'}],
+    })
+    assert queued.status_code == 202, queued.text
     control = target()
     assert control['target'] == {'kind': 'native_turn', 'turn_id': native_turn}
     seen = []
@@ -509,7 +515,8 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
     assert client.post(path + '/interrupt', json=body, headers=ui | {'origin': 'https://foreign.invalid'}).status_code == 403
     wrong = body | {'target': {'kind': 'native_turn', 'turn_id': 'another-turn'}}
     assert client.post(path + '/interrupt', json=wrong, headers=ui).status_code == 409
-    assert client.post(path + '/interrupt', json=body | {'expected_queue_revision': 1}, headers=ui).status_code == 409
+    stale = {'expected_queue_revision': control['queue_revision'] + 1}
+    assert client.post(path + '/interrupt', json=body | stale, headers=ui).status_code == 409
     no_effect = client.get(path + '/inputs', params=query).json()
     assert no_effect['paused'] is False and not seen
 
@@ -521,10 +528,35 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
     retained = client.get(path + '/interrupt/receipt', params=receipt_query)
     assert retained.status_code == 200, retained.text
     assert retained.json()['operation_id'] == control_op
+    assert retained.json()['interrupt'] == {'target_status': 'unconfirmed', 'queue_paused': True, 'pending_count': 1}
+    assert client.get(path + '/inputs', params=query).json()['pause_capability_revision'] is None
     retry = client.post(path + '/interrupt', json=body, headers=ui)
     assert retry.status_code == 200 and retry.json()['operation_id'] == control_op
     assert client.get(path + '/inputs', params=query).json()['paused'] is True
     assert native.native.sent == [('send_turn', operation), ('interrupt', control_op)]
+    with factory.unit_of_work(write=False) as uow:
+        assert tuple(uow.connection.execute(
+            'SELECT target_operation_id,target_stream_epoch FROM session_interaction_interrupt_targets WHERE operation_id=?',
+            (control_op,)).fetchone()) == (operation, epoch)
+    client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+        'turn_state', 'turn/completed', {'turn_id': native_turn, 'thread_id': thread,
+            'delivery_phase': 'terminal', 'delivery_outcome': 'interrupted'}, operation_id=operation))
+    eventually(lambda: client.get(path + '/interrupt/receipt', params=receipt_query).json().get('interrupt', {}).get(
+        'target_status') == 'interrupted')
+    assert client.get(path + '/interrupt/receipt', params=receipt_query).json()['interrupt'] == {
+        'target_status': 'interrupted', 'queue_paused': True, 'pending_count': 1,
+    }
+    assert native.native.sent == [('send_turn', operation), ('interrupt', control_op)]
+    paused_queue = client.get(path + '/inputs', params=query).json()
+    assert paused_queue['paused'] and paused_queue['pause_capability_revision']
+    resumed = client.post(path + '/inputs/queue-state', headers=ui, json={
+        'scope': exact, 'expected_session_generation': generation, 'paused': False,
+        'capability_revision': paused_queue['pause_capability_revision'], 'expected_queue_revision': paused_queue['queue_revision'],
+    })
+    assert resumed.status_code == 200, resumed.text
+    eventually(lambda: len(native.native.sent) == 3)
+    assert native.native.sent[2][0] == 'send_turn'
+    assert client.get(path + '/interrupt/receipt', params=receipt_query).json()['interrupt']['queue_paused'] is False
     other_login = auth.login('control-fixture', 'fixture-password-long')
     client.cookies.set('nexus_operator_session', other_login)
     assert client.get(path + '/interrupt/receipt', params=receipt_query).status_code == 404

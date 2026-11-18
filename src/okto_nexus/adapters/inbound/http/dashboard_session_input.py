@@ -100,6 +100,11 @@ def _exact_view(factory, uow, *, context, access, document, scope):
     return exact
 
 
+def _interrupt_target_for(state):
+    next_turn = getattr(state, 'session_input_dispatch_options', {}).get('session_input_capability_revision')
+    return partial(active_native_turn, current_next_turn_revision=next_turn) if next_turn is not None else None
+
+
 def build_router():
     router = APIRouter(prefix='/runtime/sessions/{session_id}')
 
@@ -122,12 +127,19 @@ def build_router():
         def read():
             with factory.unit_of_work(write=False) as uow:
                 exact = _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
-                epoch = uow.connection.execute(
-                    'SELECT stream_epoch FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?',
+                session = uow.connection.execute("""
+                    SELECT s.stream_epoch,e.adapter_id FROM execution_sessions s
+                    LEFT JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id
+                      AND b.binding_id=s.binding_id
+                    LEFT JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id
+                    WHERE s.server_id=? AND s.executor_id=? AND s.session_id=?
+                    """,
                     (scope.session.server_id, scope.session.executor_id, session_id),
-                ).fetchone()[0]
+                ).fetchone()
                 revision = revision_for(uow, scope) if revision_for is not None else None
-                return {'scope': exact, 'stream_epoch': epoch,
+                return {'scope': exact, 'stream_epoch': session['stream_epoch'],
+                        'interaction_enabled': revision_for is not None,
+                        'interrupt_review_supported': revision is not None and session['adapter_id'] == 'codex_app_server',
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}
 
@@ -315,14 +327,14 @@ def build_router():
         factory = state.deps.connection_factory
         context = runtime_request_context()
         access = build_execution_access(state.deps)
-        next_turn = getattr(state, 'session_input_dispatch_options', {}).get('session_input_capability_revision')
+        target_for = _interrupt_target_for(state)
 
         def read():
             with factory.unit_of_work(write=False) as uow:
                 _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
                 target = None
-                if next_turn is not None and not has_unresolved_interrupt(uow.connection, scope.session):
-                    target = active_native_turn(uow, scope, current_next_turn_revision=next_turn)
+                if target_for is not None and not has_unresolved_interrupt(uow.connection, scope.session):
+                    target = target_for(uow, scope)
                 control = None
                 if target is not None:
                     row = uow.connection.execute("""
@@ -359,7 +371,8 @@ def build_router():
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
             return request_exact_human_interrupt(factory=state.deps.connection_factory,
                 access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
-                current_interrupt_revision=options['session_interrupt_capability_revision'], scope=body.input_scope(),
+                current_interrupt_target=partial(active_native_turn,
+                    current_next_turn_revision=options['session_input_capability_revision']), scope=body.input_scope(),
                 author=InputAuthor(ref, 'web'), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
                 capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
                 fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'])
@@ -389,7 +402,8 @@ def build_router():
             if ref is None:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.')
             return read_human_interrupt_receipt(state.deps.connection_factory, access=build_execution_access(state.deps),
-                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, 'web'), client_intent_id=intent)
+                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, 'web'), client_intent_id=intent,
+                current_interrupt_target=_interrupt_target_for(state))
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)

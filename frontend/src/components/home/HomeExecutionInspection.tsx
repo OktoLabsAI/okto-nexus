@@ -2,6 +2,7 @@ import {useEffect,useState} from 'react';
 import {api,ApiError} from '../../api';
 import type {AttentionTarget} from '../../attentionNavigation';
 import {runtimeApi} from '../../runtimeApi';
+import {assertInteractionScope} from '../../sessionConversation';
 import type {HomeSessionContext} from '../../homeTypes';
 import {RuntimeOperations} from '../RuntimeOperations';
 import {SessionExecutionPanel} from '../SessionExecutionPanel';
@@ -68,8 +69,30 @@ export function HomeExecutionDetails({context,suppressOutput=true,onAccessLost}:
 export function ExactSessionControls({session,binding,onAccessLost}:Awaited<ReturnType<typeof readExactSessionContext>>&{onAccessLost?:()=>void}) {
   const available=session.control_available&&!session.durable_release_pending&&binding.state==='APPROVED'&&
     !['CLOSED','FAILED','CLOSING','DRAINING'].includes(session.lifecycle_state)&&session.lease_state!=='CLOSED';
+  const generation = session.scope.session_owner_generation;
+  const scopeKey = exactScopeKey(session.scope) + ':' + generation;
+  const [mode, setMode] = useState<{key: string; enabled: boolean | null; error: boolean} | null>(null);
+  useEffect(() => {
+    if (!available || generation === undefined) return;
+    const controller = new AbortController();
+    const scope = {...session.scope, session_owner_generation: generation};
+    void runtimeApi.sessionInteraction(scope, controller.signal).then(value => {
+      if (controller.signal.aborted) return;
+      assertInteractionScope(value.scope, scope);
+      setMode({key: scopeKey, enabled: value.interaction_enabled === true, error: false});
+    }).catch(() => {
+      if (!controller.signal.aborted) setMode({key: scopeKey, enabled: null, error: true});
+    });
+    return () => controller.abort();
+  }, [scopeKey, available]);
+  if (available && generation !== undefined && (mode?.key !== scopeKey || mode.enabled === null)) {
+    return <p role="status">{mode?.error ? 'Session controls could not be checked. Reopen this session to try again.'
+      : 'Checking session controls…'}</p>;
+  }
+  const canonicalInteraction = mode?.key === scopeKey && mode.enabled === true;
   return available?<RuntimeOperations key={exactScopeKey(session.scope)} agentId={session.scope.agent_id} binding={binding}
-    canStart={false} exactContext={{scope:session.scope}} allowedIntents={['turn.submit','turn.interrupt','runtime.close']} suppressOutput onAccessLost={onAccessLost}/>:
+    canStart={false} exactContext={{scope:session.scope}} allowedIntents={canonicalInteraction ? ['runtime.close']
+      : ['turn.submit','turn.interrupt','runtime.close']} suppressOutput onAccessLost={onAccessLost}/>:
     <p role="status">Controls are unavailable for this exact session. Opening another session requires a separate explicit intention.</p>;
 }
 

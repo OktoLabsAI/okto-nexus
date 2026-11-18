@@ -7,6 +7,7 @@ from sqlite3 import Connection
 from ....domain.execution.keys import SessionKey
 from ....domain.session_interaction import MAX_SQLITE_INTEGER, InputScope
 from .connection import SqliteUnitOfWork
+from .session_interaction_interrupt_targets import interrupt_target_status
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,12 +30,27 @@ def is_input_queue_paused(conn: Connection, session: SessionKey) -> bool:
 
 
 def has_unresolved_interrupt(conn: Connection, session: SessionKey) -> bool:
-    return conn.execute("""
-        SELECT 1 FROM execution_operations
-        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
-          AND action='turn.interrupt' AND admission_state NOT IN ('REJECTED','RESOLVED_TERMINAL')
-        LIMIT 1
-    """, asdict(session)).fetchone() is not None
+    key = asdict(session)
+    pending = conn.execute("""
+        SELECT o.admission_state,o.binding_id,o.workspace_id,o.workspace_binding_id,o.subject_agent_id AS agent_id,
+            c.owner_generation AS session_owner_generation,c.native_turn_id,t.target_operation_id,t.target_stream_epoch,
+            r.stage AS control_stage
+        FROM execution_operations o
+        LEFT JOIN session_interaction_controls c USING (server_id,executor_id,operation_id)
+        LEFT JOIN session_interaction_interrupt_targets t USING (server_id,executor_id,operation_id)
+        LEFT JOIN execution_dispatch_outbox d USING (server_id,executor_id,operation_id)
+        LEFT JOIN execution_receipts r ON r.server_id=o.server_id AND r.executor_id=o.executor_id
+          AND r.operation_id=o.operation_id AND r.receipt_revision=d.last_receipt_revision
+        WHERE o.server_id=:server_id AND o.executor_id=:executor_id AND o.session_id=:session_id
+          AND o.action='turn.interrupt' AND o.admission_state NOT IN ('REJECTED','RESOLVED_TERMINAL')
+    """, key)
+    for row in pending:
+        # Core acknowledges delivery of the control. The original turn's
+        # authenticated terminal fact, when correlated, settles the barrier.
+        if (row['admission_state'] != 'DISPATCHED' or row['control_stage'] not in ('SUBMITTED', 'ACCEPTED')
+                or interrupt_target_status(conn, {**key, **dict(row)}, row) == 'unconfirmed'):
+            return True
+    return False
 
 
 def set_input_queue_paused(

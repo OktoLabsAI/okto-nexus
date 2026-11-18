@@ -5,6 +5,9 @@ from dataclasses import asdict
 from ..adapters.outbound.sqlite.execution_receipts import (
     read_execution_operation_history,
 )
+from ..adapters.outbound.sqlite.session_interaction_interrupt_targets import (
+    interrupt_target_status,
+)
 from ..adapters.outbound.sqlite.session_interaction_queue_controls import (
     has_unresolved_interrupt,
     is_input_queue_paused,
@@ -31,7 +34,7 @@ def _exact_scope(scope):
             'session_owner_generation': scope.generation.value}
 
 
-def request_exact_human_interrupt(*, factory, access, authority_fence, current_interrupt_revision,
+def request_exact_human_interrupt(*, factory, access, authority_fence, current_interrupt_target,
                                   scope, author, client_intent_id, native_turn_id, capability_revision,
                                   expected_queue_revision, fresh_publications, remote_ready):
     """Route an exact native target through the existing R4 interrupt path."""
@@ -65,9 +68,11 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
         if existing is None:
             if has_unresolved_interrupt(uow.connection, scope.session):
                 raise OktoNexusError(ErrorCode.CONFLICT, 'An interrupt is already pending in this session.', {})
+            target = current_interrupt_target(uow, scope)
+            if target is None or target.native_id != native_turn_id or target.revision != capability_revision:
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The exact interrupt target changed.', {})
             set_input_queue_paused(uow, scope=scope, paused=True, expected_queue_revision=expected_queue_revision,
-                capability_revision=capability_revision,
-                verify_authority=lambda: current_interrupt_revision(uow, scope, native_turn_id))
+                capability_revision=capability_revision, verify_authority=lambda: target.revision)
         else:
             prior = uow.connection.execute("""
                 SELECT session_id,owner_generation,authority_ref,surface,capability_revision,native_turn_id
@@ -83,10 +88,15 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
                 INSERT INTO session_interaction_controls(server_id,executor_id,operation_id,session_id,owner_generation,
                     authority_ref,surface,capability_revision,native_turn_id) VALUES (?,?,?,?,?,?,?,?,?)
             """, (*identity, *control))
+            uow.connection.execute("""
+                INSERT INTO session_interaction_interrupt_targets
+                    (server_id,executor_id,operation_id,target_operation_id,target_stream_epoch) VALUES (?,?,?,?,?)
+            """, (*identity, target.operation_id, target.stream_epoch))
         return operation
 
 
-def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, author, client_intent_id):
+def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, author, client_intent_id,
+                                 current_interrupt_target=None):
     """Recover the original interrupt for this login and scope without admitting work."""
     with factory.unit_of_work(write=False) as uow:
         context = require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
@@ -97,12 +107,14 @@ def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, autho
                 or any(view['scope'][key] != value for key, value in exact.items() if key != 'session_owner_generation')):
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.', {})
         row = uow.connection.execute("""
-            SELECT o.operation_id
+            SELECT o.operation_id, c.native_turn_id, t.target_operation_id, t.target_stream_epoch
             FROM execution_client_intents i
             JOIN execution_operations o ON o.server_id=i.server_id AND o.operation_id=i.operation_id
               AND o.actor_agent_id=i.actor_agent_id
             JOIN session_interaction_controls c ON c.server_id=o.server_id AND c.executor_id=o.executor_id
               AND c.operation_id=o.operation_id
+            LEFT JOIN session_interaction_interrupt_targets t ON t.server_id=c.server_id
+              AND t.executor_id=c.executor_id AND t.operation_id=c.operation_id
             WHERE i.server_id=:server_id AND i.actor_agent_id='operator' AND i.client_intent_id=:intent
               AND o.executor_id=:executor_id AND o.session_id=:session_id AND o.action='turn.interrupt'
               AND o.binding_id=:binding_id AND o.workspace_id=:workspace_id
@@ -112,9 +124,26 @@ def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, autho
         """, {**exact, 'intent': _intent_key(author, client_intent_id), **asdict(author)}).fetchone()
         if row is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.', {})
-        return read_execution_operation_history(DeliveryTransactionFactory(uow), server_id=scope.session.server_id,
+        operation = read_execution_operation_history(DeliveryTransactionFactory(uow), server_id=scope.session.server_id,
             executor_id=scope.session.executor_id, operation_id=row['operation_id'],
             subject_agent_id=scope.agent_id).public_view()
+        target_status = interrupt_target_status(uow.connection, exact, row)
+        if (target_status == 'unconfirmed' and current_interrupt_target is not None
+                and operation['error'] and not operation['possible_effect'] and row['target_operation_id'] is not None):
+            live = current_interrupt_target(uow, scope)
+            if (live and (live.operation_id, live.stream_epoch, live.native_id)
+                    == (row['target_operation_id'], row['target_stream_epoch'], row['native_turn_id'])):
+                target_status = 'running'
+        pending = uow.connection.execute("""
+            SELECT COUNT(*) FROM session_interaction_inputs
+            WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+              AND owner_generation=:session_owner_generation AND binding_id=:binding_id AND workspace_id=:workspace_id
+              AND workspace_binding_id=:workspace_binding_id AND agent_id=:agent_id
+              AND status NOT IN ('ACCEPTED_NATIVE','EXPIRED','CANCELLED')
+        """, exact).fetchone()[0]
+        operation['interrupt'] = {'target_status': target_status,
+            'queue_paused': is_input_queue_paused(uow.connection, scope.session), 'pending_count': pending}
+        return operation
 
 
 def require_interrupt_send_authority(uow, *, access, control, scope, semantic, resolve_human,

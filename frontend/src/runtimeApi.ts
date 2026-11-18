@@ -183,6 +183,8 @@ export interface InteractionScope extends RuntimeScope {
 export interface SessionInteraction {
   scope: InteractionScope;
   stream_epoch: string | null;
+  interaction_enabled?: boolean;
+  interrupt_review_supported?: boolean;
   next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean};
 }
 
@@ -215,6 +217,26 @@ export interface SessionInputQueuePage extends SessionInputQueueState {
   pause_capability_revision: string | null;
   items: SessionInputQueueItem[];
   next_cursor: string | null;
+}
+
+export interface SessionInterruptTarget {
+  target: {kind: 'native_turn'; turn_id: string};
+  capability_revision: string;
+  queue_revision: number;
+}
+
+export interface SessionInterruptAvailability {
+  scope: RuntimeScope;
+  session_owner_generation: number;
+  control: SessionInterruptTarget | null;
+}
+
+export interface SessionInterruptReceipt extends RuntimeOperation {
+  interrupt: {
+    target_status: 'unconfirmed' | 'running' | 'interrupted' | 'finished';
+    queue_paused: boolean;
+    pending_count: number;
+  };
 }
 
 export interface ConversationUpdate {
@@ -424,6 +446,22 @@ export const runtimeApi = {
       scope: target.scope, expected_session_generation: scope.session_owner_generation,
       expected_queue_revision: page.queue_revision, capability_revision: page.pause_capability_revision, paused,
     });
+  },
+  sessionInterruptTarget: (scope: InteractionScope, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionInterruptAvailability>(`${target.path}/interrupt?${target.query}`, signal);
+  },
+  interruptSessionTurn: (scope: InteractionScope, reviewed: SessionInterruptTarget, intent: string, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<RuntimeOperation>(`${target.path}/interrupt`, signal, {
+      scope: target.scope, expected_session_generation: scope.session_owner_generation, client_intent_id: intent,
+      capability_revision: reviewed.capability_revision, expected_queue_revision: reviewed.queue_revision, target: reviewed.target,
+    });
+  },
+  sessionInterruptReceipt: (scope: InteractionScope, intent: string, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    target.query.set('client_intent_id', intent);
+    return read<SessionInterruptReceipt>(`${target.path}/interrupt/receipt?${target.query}`, signal);
   },
   sessions: (agentId: string, binding: Pick<BindingView, 'executor_id' | 'binding_id'>, after: string, signal?: AbortSignal) => {
     const query = new URLSearchParams({agent_id: agentId, executor_id: binding.executor_id,

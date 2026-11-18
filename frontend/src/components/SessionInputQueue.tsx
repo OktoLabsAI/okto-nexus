@@ -6,10 +6,11 @@ function assertReceiptScope(receipt: SessionInputReceipt, scope: InteractionScop
   assertInteractionScope({...receipt.scope, session_owner_generation: receipt.session_owner_generation}, scope);
 }
 
-export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
+export function SessionInputQueue({scope, onAccessLost, onCancelled, refreshKey}: {
   scope: InteractionScope;
   onAccessLost: () => void;
   onCancelled: (receipt: SessionInputReceipt) => void;
+  refreshKey: number;
 }) {
   const [page, setPage] = useState<SessionInputQueuePage | null>(null);
   const [busy, setBusy] = useState(false);
@@ -17,12 +18,16 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
   const [confirmResume, setConfirmResume] = useState(false);
   const request = useRef<AbortController | null>(null);
   const summary = useRef<HTMLElement>(null);
+  const disclosure = useRef<HTMLDetailsElement>(null);
   const keepPaused = useRef<HTMLButtonElement>(null);
 
   useEffect(() => () => request.current?.abort(), []);
   useEffect(() => {
     if (confirmResume) keepPaused.current?.focus();
   }, [confirmResume]);
+  useEffect(() => {
+    if (refreshKey && disclosure.current?.open) void run({keepNotice: true});
+  }, [refreshKey]);
 
   async function readPage(cursor: string | null, signal: AbortSignal) {
     const result = await runtimeApi.sessionInputQueue(scope, cursor, signal);
@@ -62,7 +67,9 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
     }
   }
 
-  async function run({cursor = null, remove, paused}: {cursor?: string | null; remove?: SessionInputQueueItem; paused?: boolean} = {}) {
+  async function run({cursor = null, remove, paused, keepNotice = false}: {
+    cursor?: string | null; remove?: SessionInputQueueItem; paused?: boolean; keepNotice?: boolean;
+  } = {}) {
     if (request.current) return;
     const capability = page?.cancel_capability_revision;
     if (remove && (!capability || !remove.can_cancel)) return;
@@ -71,7 +78,7 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
     request.current = controller;
     setBusy(true);
     setConfirmResume(false);
-    setNotice('');
+    if (!keepNotice) setNotice('');
     let confirmed = '';
     try {
       if (remove && capability) {
@@ -120,7 +127,7 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
     }
   }
 
-  return <details className="rounded-lg border p-2" onToggle={event => {
+  return <details ref={disclosure} className="rounded-lg border p-2" onToggle={event => {
     if (event.currentTarget.open) void run();
   }}>
     <summary ref={summary} className="cursor-pointer text-sm font-medium">View message queue</summary>
