@@ -13,6 +13,9 @@ from nexus_connector_core.native.redaction import NativeSecretRedactor
 from nexus_connector_core.protocol import canonical_json
 
 from okto_nexus.application import execution_event_views
+from okto_nexus.application.codex_presenter_history import read_codex_history_snapshot
+from okto_nexus.application.codex_presenter_requests import codex_history_page
+from okto_nexus.application.execution_native_session_mapping import ManagedNativeSession
 from okto_nexus.application.session_interaction_transcript import (
     MAX_PART_BYTES,
     MAX_SCAN_EVENTS,
@@ -89,7 +92,18 @@ def stream(monkeypatch):
             options = {"scope": scope, "context": context, "access": access, **query}
             return read_session_interaction_transcript(factory, **options)
 
-        yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope)
+        def history(thread_id, **changes):
+            mapping = ManagedNativeSession(
+                scope=scope, opening_operation_id="open", adapter_id="codex_app_server",
+                native_session_id="adapter-session", stream_epoch="epoch", launch_candidate_ref="candidate",
+                launch_inventory_revision="inventory", launch_profile_revision=1, launch_build=None,
+                receipt_connection_id="connection", receipt_connection_generation=1, codex_thread_id=thread_id,
+                codex_configuration_hash="event-digest",
+            )
+            mapping = replace(mapping, **changes)
+            return read_codex_history_snapshot(factory, mapping=mapping, context=context, access=access)
+
+        yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope, history=history)
     db.close()
 
 
@@ -280,3 +294,58 @@ def test_canonical_authorization_and_cursor_validation(stream):
         stream.read(limit=MAX_SCAN_EVENTS + 1)
     with pytest.raises(OktoNexusError, match="stream was not found"):
         stream.read(stream_epoch="unknown")
+
+
+def test_codex_history_pages_share_a_scope_and_contiguous_snapshot(stream):
+    thread = "bdfe5b81-54cf-43cf-8001-5de670d3dd69"
+    turn = "f1577a8a-c99a-4677-91e3-459ba893eaed"
+    data = {"thread_id": thread, "threadId": thread, "turnId": turn}
+    stream.store(1, "turn/started", "turn_state", data | {"turn": {"id": turn, "status": "inProgress"}})
+    stream.store(2, "item/completed", "tool_activity", data | {"item": {
+        "id": "question", "type": "userMessage", "content": [{"type": "text", "text": "Question"}]}})
+    stream.store(3, "item/completed", "tool_activity", data | {"item": {
+        "id": "answer", "type": "agentMessage", "text": "Answer\x1b", "private_field": "not exposed"}})
+    stream.store(4, "item/completed", "tool_activity", data | {"item": {
+        "id": "tool", "type": "commandExecution", "command": "not exposed"}})
+    stream.store(5, "item/completed", "tool_activity", data | {"threadId": "sibling", "item": {
+        "id": "sibling", "type": "agentMessage", "text": "not exposed"}})
+    stream.store(6, "turn/completed", "turn_state", data | {"turn": {"id": turn, "status": "completed"}})
+    stream.watermark(6)
+    history = stream.history(thread)
+    assert history.committed_through == 6 and history.omitted_items == 1
+
+    def request(method, **params):
+        return codex_history_page(method=f"thread/{method}/list",
+                                  params={"threadId": thread, **params}, native_thread_id=thread)
+
+    page = history.page(request("items", limit=1, turnId=turn))
+    assert page["data"] == [{"turnId": turn, "item": {
+        "id": "question", "type": "userMessage", "content": [
+            {"type": "text", "text": "Question", "text_elements": []}]}}]
+    cursor = page["nextCursor"]
+    last = history.page(request("items", limit=1, turnId=turn, cursor=cursor))
+    assert last["nextCursor"] is None
+    assert last["data"] == [{"turnId": turn, "item": {"id": "answer", "type": "agentMessage", "text": "Answer"}}]
+    assert history.page(request("items", limit=1, turnId=turn, sortDirection="desc",
+        cursor=page["backwardsCursor"]))["data"] == page["data"]
+    assert history.page(request("turns"))["data"] == [
+        {"id": turn, "status": "completed", "itemsView": "notLoaded", "items": []}]
+    with pytest.raises(OktoNexusError, match="cursor is unavailable"):
+        history.page(request("turns", cursor=cursor))
+    with pytest.raises(OktoNexusError, match="cursor is unavailable"):
+        stream.history(thread).page(request("items", cursor=cursor, turnId=turn))
+    with pytest.raises(OktoNexusError, match="outside this presentation"):
+        history.page(request("items", turnId=thread))
+    with pytest.raises(OktoNexusError, match="outside this presentation"):
+        stream.history(thread, scope=replace(stream.scope, generation=SessionOwnerGeneration(2)))
+
+
+def test_codex_history_requires_a_complete_bounded_range(stream):
+    stream.watermark(0, gap="gap")
+    with pytest.raises(OktoNexusError, match="complete history range"):
+        stream.history("bdfe5b81-54cf-43cf-8001-5de670d3dd69")
+    for sequence in range(1, 514):
+        stream.store(sequence, "unrelated", "lifecycle", {})
+    stream.watermark(513)
+    with pytest.raises(OktoNexusError, match="complete history range"):
+        stream.history("bdfe5b81-54cf-43cf-8001-5de670d3dd69")
