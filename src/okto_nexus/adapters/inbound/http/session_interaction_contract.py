@@ -214,6 +214,16 @@ class PrepareAttachment(ScopedInteraction):
     client_intent_id: Identifier
     intent: Literal["attach_live", "resume_saved"]
     access: Literal["read", "write"]
+    expected_writer_epoch: Annotated[int, Field(ge=0, lt=MAX_SQLITE_INTEGER)] | None = None
+    takeover: bool = False
+
+    @model_validator(mode="after")
+    def exact_writer_intent(self):
+        if self.access == "write" and self.expected_writer_epoch is None:
+            raise ValueError("Review the writer epoch before preparing a writer.")
+        if self.access == "read" and (self.expected_writer_epoch is not None or self.takeover):
+            raise ValueError("A reader cannot take over a writer.")
+        return self
 
 
 CommandId = Literal[

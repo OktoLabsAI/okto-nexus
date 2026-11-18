@@ -37,6 +37,7 @@ class PresenterAttachment:
 class PresenterWriterReview:
     epoch: int
     occupied: bool
+    capability_revision: str
 
 
 def _secret_hash(value):
@@ -104,16 +105,16 @@ class SessionAttachmentBroker:
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'The exact presentation is unavailable.', {})
         return row
 
-    def review_writer(self, *, scope, author, audience, capability_revision) -> PresenterWriterReview:
+    def review_writer(self, *, scope, author, audience) -> PresenterWriterReview:
         """Read the present writer epoch under the exact current human authority."""
         with self.authority_fence() as human, self.factory.unit_of_work(write=False) as uow:
-            self._authorize(uow, human, scope, author, 'write', audience, capability_revision)
+            revision = self._current_revision(uow, human, scope, author, 'write', audience)
             conn = uow.connection
             writer = conn.execute("""
                 SELECT 1 FROM session_attachments WHERE server_id=? AND executor_id=? AND session_id=?
                   AND state='ACTIVE' AND access='write' AND broker_instance=? AND expires_monotonic>?
             """, (*_key(scope), self.instance, self.clock())).fetchone()
-            return PresenterWriterReview(self._epoch(conn, scope), writer is not None)
+            return PresenterWriterReview(self._epoch(conn, scope), writer is not None, revision)
 
     def prepare(self, *, scope: InputScope, author: InputAuthor, access: AttachmentAccess,
                 audience: str, capability_revision: str, client_intent_id: str,

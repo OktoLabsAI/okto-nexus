@@ -18,6 +18,7 @@ from ....application.codex_presenter_channel import CodexPresenterHistoryChannel
 from ....application.codex_viewer_protocol import CodexViewerContext
 from ....application.execution_native_session_mapping import ManagedNativeSession
 from ....application.session_attachment_broker import SessionAttachmentBroker
+from ....application.session_interaction_authority import enqueue_human_input
 from ....domain.presentation_protocol import (
     LOCAL_CODEX_AUDIENCE,
     MAX_PRESENTATION_REQUEST_BYTES,
@@ -25,7 +26,7 @@ from ....domain.presentation_protocol import (
     PRESENTATION_SUBPROTOCOL,
 )
 from ....domain.session_interaction import InputAuthor, InputScope
-from ....errors import OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 from .dashboard_session_input import _HEADERS, _error, _runtime_error
 from .executor_link import _safe_transport
 from .operator_auth import COOKIE, same_origin_request
@@ -34,6 +35,7 @@ from .session_interaction_contract import (
     PrepareAttachment,
     Revision,
     ScopedSession,
+    TextInput,
     _Document,
 )
 
@@ -50,6 +52,7 @@ class LocalCodexPresentations:
     execution_access: object
     read_context: Callable[[InputScope], Awaitable[CodexViewerContext | None]] | None = None
     live_updates: bool = False
+    next_turn_revision: Callable[[object, InputScope], str | None] | None = None
 
 
 class _Hello(ScopedSession):
@@ -80,7 +83,21 @@ class _UpdatesRequest(_Document):
     request_id: Revision
 
 
-_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest, Field(discriminator='kind')])
+class _EnqueueRequest(_Document):
+    kind: Literal['enqueue']
+    request_id: Revision
+    thread_id: Identifier
+    client_intent_id: Identifier
+    capability_revision: Identifier
+    content: TextInput
+
+
+_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest,
+                                 Field(discriminator='kind')])
+
+
+class _Review(ScopedSession):
+    access: Literal['read', 'write'] = 'read'
 
 
 class _Detach(ScopedSession):
@@ -146,6 +163,25 @@ def _services(state):
     return getattr(state, 'local_codex_presentations', None)
 
 
+async def _enqueue(state, services, active, history, request):
+    broker = services.broker
+    if active['attachment'].access != 'write' or services.next_turn_revision is None:
+        raise ValueError('This presentation cannot enqueue input')
+    await history.verify_input_thread(request.thread_id)
+
+    def verify_presenter(uow, human):
+        if _services(state) is not services:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The presentation owner changed.', {})
+        broker.require_writer_effect(uow, human, **active)
+
+    receipt = await _worker(enqueue_human_input, factory=broker.factory, access=services.execution_access,
+        authority_fence=broker.authority_fence, current_capability_revision=services.next_turn_revision,
+        scope=active['scope'], author=active['author'], client_intent_id=request.client_intent_id,
+        capability_revision=request.capability_revision, text=request.content.text, verify_presenter=verify_presenter)
+    return {'kind': 'enqueue', 'input_id': receipt.input_id, 'enqueue_sequence': receipt.sequence,
+            'status': receipt.status, 'operation_id': receipt.operation_id, 'possible_effect': receipt.possible_effect}
+
+
 async def _present(ws, services, author, attachment_id, ticket):
     broker = services.broker
     channel_id = 'viewer_' + secrets.token_hex(16)
@@ -188,6 +224,8 @@ async def _present(ws, services, author, attachment_id, ticket):
             elif isinstance(request, _HistoryRequest):
                 page = await history.page(method=request.method, params=request.params)
                 reply = {'kind': 'page', 'page': page}
+            elif isinstance(request, _EnqueueRequest):
+                reply = await _enqueue(ws.app.state, services, active, history, request)
             else:
                 if not services.live_updates:
                     raise ValueError('Presentation updates are unavailable')
@@ -210,7 +248,7 @@ def build_router():
     router = APIRouter()
 
     @router.post('/sessions/{session_id}/attachments:review')
-    async def review(session_id: str, body: ScopedSession, request: Request):
+    async def review(session_id: str, body: _Review, request: Request):
         if not _local_transport(request) or not same_origin_request(request):
             return _error(403, 'PERMISSION_DENIED', 'Local operator access is required.')
         if session_id != body.scope.session_id or request.query_params:
@@ -220,7 +258,8 @@ def build_router():
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to review this presentation.')
         services = _services(state)
-        if services is None or services.read_context is None:
+        writing = body.access == 'write'
+        if services is None or services.read_context is None or writing and services.next_turn_revision is None:
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         scope = body.input_scope()
         try:
@@ -231,18 +270,30 @@ def build_router():
             if reference is None:
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
             authority = {'scope': scope, 'author': InputAuthor(reference, 'native_terminal'), 'audience': _AUDIENCE}
-            revision = await _worker(services.broker.review_reader, **authority)
+            review_capability = services.broker.review_writer if writing else services.broker.review_reader
+            reviewed = await _worker(review_capability, **authority)
             context = await services.read_context(scope)
             if (context is None or context.thread_id != mapping.codex_thread_id
-                    or revision != await _worker(services.broker.review_reader, **authority)
+                    or reviewed != await _worker(review_capability, **authority)
                     or _services(state) is not services):
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
+            details = {'attach_strategy': 'codex_local_read', 'capability_revision': reviewed}
+            if writing:
+                def input_revision():
+                    with services.broker.factory.unit_of_work(write=False) as uow:
+                        return services.next_turn_revision(uow, scope)
+
+                revision = await _worker(input_revision)
+                if revision is None or _services(state) is not services:
+                    raise CoreError('SESSION_CONFLICT', 'native_presentation')
+                details = {'attach_strategy': 'codex_local_write', 'capability_revision': reviewed.capability_revision,
+                    'writer_epoch': reviewed.epoch, 'writer_occupied': reviewed.occupied,
+                    'input_capability_revision': revision}
         except OktoNexusError as error:
             return _runtime_error(error)
         except CoreError:
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
-        return JSONResponse({'version': 1, 'attach_strategy': 'codex_local_read', 'capability_revision': revision,
-                             **body.model_dump()}, headers=_HEADERS)
+        return JSONResponse({'version': 1, **details, **body.model_dump(exclude={'access'})}, headers=_HEADERS)
 
     @router.post('/sessions/{session_id}/attachments:prepare')
     async def prepare(session_id: str, body: PrepareAttachment, request: Request):
@@ -255,7 +306,8 @@ def build_router():
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to prepare this presentation.')
         services = _services(state)
-        if services is None or body.intent != 'attach_live' or body.access != 'read':
+        if (services is None or body.intent != 'attach_live'
+                or body.access == 'write' and services.next_turn_revision is None):
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         scope = body.input_scope()
         try:
@@ -267,7 +319,7 @@ def build_router():
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
             offer = await _worker(services.broker.prepare, scope=scope, author=InputAuthor(reference, 'native_terminal'),
                 audience=_AUDIENCE, capability_revision=body.capability_revision, client_intent_id=body.client_intent_id,
-                access=body.access)
+                access=body.access, expected_writer_epoch=body.expected_writer_epoch, takeover=body.takeover)
         except OktoNexusError as error:
             return _runtime_error(error)
         except CoreError:

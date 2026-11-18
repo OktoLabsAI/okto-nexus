@@ -93,9 +93,10 @@ def test_steer_is_separate_and_requires_a_reviewed_effect(wire):
 
 
 def test_attachment_intent_cannot_pick_latest_or_override_host_or_token(wire):
-    body = dict(wire, client_intent_id="attach-1", intent="attach_live", access="write")
+    body = dict(wire, client_intent_id="attach-1", intent="attach_live", access="write", expected_writer_epoch=0)
     assert PrepareAttachment.model_validate(body).intent == "attach_live"
-    for patch in ({"intent": "resume_latest"}, {"bearer": "client-token"}, {"host": "override"}):
+    for patch in ({"intent": "resume_latest"}, {"bearer": "client-token"}, {"host": "override"},
+                  {"access": "read"}, {"expected_writer_epoch": None}):
         with pytest.raises(ValidationError):
             PrepareAttachment.model_validate(dict(body, **patch))
 

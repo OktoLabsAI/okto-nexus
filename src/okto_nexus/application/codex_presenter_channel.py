@@ -5,7 +5,10 @@ from contextlib import asynccontextmanager
 
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
-from .codex_presenter_history import read_codex_history_snapshot, read_codex_history_updates
+from .codex_presenter_history import (
+    read_codex_history_snapshot,
+    read_codex_history_updates,
+)
 from .codex_presenter_requests import codex_history_page
 from .codex_viewer_protocol import CodexViewerContext
 
@@ -49,6 +52,11 @@ class CodexPresenterHistoryChannel:
             result = snapshot.page(request)
         self._snapshot = snapshot
         return result
+
+    async def verify_input_thread(self, thread_id):
+        async with self._bound_owner() as mapping:
+            if thread_id != mapping.codex_thread_id:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The exact Codex thread is unavailable.', {})
 
     async def viewer_context(self, read_context, *, can_follow=False):
         async with self._bound_owner() as mapping:

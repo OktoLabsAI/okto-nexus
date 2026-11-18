@@ -1,0 +1,73 @@
+{
+  "recorded_on": "2026-11-18",
+  "task": "SI-021",
+  "scope": "Windows local presentation transport and shared queue; native frontend write admission remains disabled",
+  "artifacts": {
+    "nexus_wheel_sha256": "2748709144c6233fd9e82ce58163cd157f3afabc99756c558b919a81cc03e53e",
+    "nexus_sdist_sha256": "f1dd65d7cddfdb10eff7cf30ee4e755ffe6a3e566d2d4aa6527765d5e5b1e12b",
+    "artifact_directory": "%TEMP%/nexus-si-codex-writer-build-d35d1d2bfe254054acec38482b06a12a",
+    "strict_twine": "PASS",
+    "changed_modules_matched_to_wheel": 5,
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303"
+  },
+  "supporting_regressions": {
+    "focused_source_python": 38,
+    "installed_session_interaction_python": 164,
+    "ruff_changed_files": "PASS"
+  },
+  "cases": {
+    "observed_native_enter": {
+      "fixture_directory": "%TEMP%/nexus-si-codex-write-probe-45279138448f4927b0272ce8dada2845",
+      "fixture_sha256": "ca4cf9ae92ff6590fae54e876724661220a4cafe2a2d12b911d0e146e84b13ab",
+      "viewer": "Codex 0.170.0 in Windows ConPTY",
+      "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+      "idle_enter": "turn/start with clientUserMessageId and one text input",
+      "busy_enter": "turn/steer with expectedTurnId, clientUserMessageId and one text input",
+      "native_requests_refused_with": -32601,
+      "isolated_viewers_terminated_after_observation": 2,
+      "engine_started": false,
+      "external_provider_calls": 0
+    },
+    "observed_native_busy_tab": {
+      "fixture_directory": "%TEMP%/nexus-si-codex-busy-tab-9929de31eaf041db98c2e14b821c6a4b",
+      "fixture_sha256": "40e85c27d791dc16d94f0e396782da86ff1cefe7341766f40cb7b847c7088eaf",
+      "viewer": "Same reviewed Codex 0.170.0 Windows build",
+      "requests_before_synthetic_completion": 0,
+      "request_after_synthetic_completion": "turn/start with the retained message",
+      "native_request_refused_with": -32601,
+      "engine_started": false,
+      "external_provider_calls": 0
+    },
+    "concurrent_fifo_transport": {
+      "partial_test_id": "SI-T-G09",
+      "fixture_directory": "%TEMP%/nexus-si-real-writer-queue-c3901c4b16e4437d915bff576410f7f8",
+      "fixture_sha256": "1134751446a40bca55b4ba114d571780a2cb24e4560340a606fdb0dc7a50d623",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_native_home_fifo.py",
+      "app_server": "Codex 0.157.0",
+      "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+      "input_transport": "Real Home HTTP endpoint and authenticated typed presentation WebSocket, with the writer capability enabled by the fixture",
+      "result_from_source": "PASS",
+      "result_from_installed_wheel": "PASS",
+      "native_viewer_sent_inputs": false,
+      "sqlite_verified_after_shutdown": {
+        "source_sequence": ["web", "native_terminal"],
+        "installed_sequence": ["native_terminal", "web"],
+        "input_statuses_in_each_run": ["ACCEPTED_NATIVE", "ACCEPTED_NATIVE"],
+        "operations_per_run": {"runtime.close": 1, "runtime.open": 1, "turn.submit": 3},
+        "closed_sessions_per_run": 1,
+        "detached_presentations_per_run": 1
+      },
+      "observations_per_run": {
+        "real_app_servers": 1,
+        "real_threads": 1,
+        "concurrent_surfaces": 2,
+        "canonical_sequence_and_native_delivery_match": true,
+        "same_existing_grant": true,
+        "replay_same_queue_receipt": true,
+        "detached_before_dispatch": true,
+        "loopback_model_requests": 3,
+        "external_provider_calls": 0
+      }
+    }
+  }
+}

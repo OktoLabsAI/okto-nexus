@@ -61,7 +61,7 @@ def use(broker, scope, attachment, channel, *, author=ALICE, writing=False):
 
 
 def review(broker, scope):
-    return broker.review_writer(scope=scope, author=ALICE, audience=AUDIENCE, capability_revision='capability-1')
+    return broker.review_writer(scope=scope, author=ALICE, audience=AUDIENCE)
 
 
 def test_ticket_is_exact_one_use_and_never_materialized_from_a_receipt(attachment_store):
@@ -157,7 +157,7 @@ def test_expiration_revision_changes_and_restart_fence_the_old_presentation(atta
         use(broker, scope, original, 'old-writer', writing=True)
     actor.revision = None
     with pytest.raises(OktoNexusError, match='capability changed'):
-        broker.review_writer(scope=scope, author=ALICE, audience=AUDIENCE, capability_revision=None)
+        review(broker, scope)
     actor.revision = 'capability-1'
     restarted = broker_for()
     with pytest.raises(OktoNexusError):

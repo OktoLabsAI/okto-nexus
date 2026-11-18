@@ -24,7 +24,10 @@ from okto_nexus.adapters.outbound.local_presenter_client import (
     review_local_presentation,
 )
 from okto_nexus.adapters.outbound.operator_client import RemoteOperatorHTTP
-from okto_nexus.application import codex_presenter_channel
+from okto_nexus.application import (
+    codex_presenter_channel,
+    session_interaction_authority,
+)
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
 from okto_nexus.application.codex_viewer_protocol import (
     CodexViewerContext,
@@ -32,6 +35,7 @@ from okto_nexus.application.codex_viewer_protocol import (
 )
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.application.terminal_connection import ConnectionError
+from okto_nexus.domain.session_interaction import InputAuthor
 from tests.session_interaction.test_queue_storage import database as queue_database
 
 database = queue_database
@@ -208,10 +212,79 @@ def test_wrong_challenge_logout_and_idle_retire_only_the_channel(transport, monk
 
 
 def test_disabled_and_unqualified_intents_are_refused(transport):
-    assert prepare(transport, access='write').status_code == 409
+    assert prepare(transport, access='write', expected_writer_epoch=0).status_code == 409
     assert prepare(transport, intent='resume_saved').status_code == 409
     transport.app.state.local_codex_presentations = None
     assert prepare(transport).status_code == 409
+
+
+def test_writer_and_web_share_queue_with_exact_scope_and_idempotency(transport, monkeypatch):
+    app, factory, scope = transport.app, transport.factory, transport.scope
+    service = app.state.local_codex_presentations
+    clock = SimpleNamespace(now_iso=lambda: '2026-01-01T00:00:00Z')
+    service = replace(service, execution_access=SimpleNamespace(clock=clock),
+                      next_turn_revision=lambda *_: 'input-revision')
+    app.state.local_codex_presentations = service
+    grants = []
+
+    def grant(_uow, *, scope, author, resolve_human, **_):
+        assert scope == transport.scope and resolve_human(author.authority_ref)
+        grants.append(author.surface)
+        return 'fixture-grant', 1
+
+    monkeypatch.setattr(session_interaction_authority, 'require_session_input_authority', grant)
+    reference = transport.auth.authority_reference(transport.token)
+    web = session_interaction_authority.enqueue_human_input(factory=factory, access=service.execution_access,
+        authority_fence=transport.auth.authority_fence, current_capability_revision=service.next_turn_revision,
+        scope=scope, author=InputAuthor(reference, 'web'), client_intent_id='web-intent',
+        capability_revision='input-revision', text='From Home')
+    path = PREFIX + f'/sessions/{scope.session.session_id}/attachments:review'
+
+    def writer_review():
+        return transport.client.post(path, headers={'x-nexus-ui': '1'},
+                                     json={**document(scope), 'access': 'write'}).json()
+
+    initial = writer_review()
+    assert initial['attach_strategy'] == 'codex_local_write' and initial['writer_occupied'] is False
+    assert initial['writer_epoch'] == 0 and initial['input_capability_revision'] == 'input-revision'
+    offer = prepare(transport, 'writer-one', access='write', expected_writer_epoch=initial['writer_epoch']).json()
+    payload = {'kind': 'enqueue', 'request_id': 1, 'thread_id': THREAD, 'client_intent_id': 'native-intent',
+               'capability_revision': 'input-revision', 'content': {'type': 'text', 'text': 'From Codex'}}
+    reader = prepare(transport, 'reader').json()
+    with stream(transport, reader) as ws, pytest.raises(WebSocketDisconnect):
+        attach(ws, scope)
+        ws.send_json(payload)
+        ws.receive_json()
+
+    with stream(transport, offer) as original:
+        attach(original, scope)
+        original.send_json(payload)
+        receipt = original.receive_json()
+        assert receipt == {'kind': 'enqueue', 'request_id': 1, 'input_id': receipt['input_id'],
+                           'enqueue_sequence': web.sequence + 1, 'status': 'QUEUED',
+                           'operation_id': None, 'possible_effect': False}
+        current = writer_review()
+        assert current['writer_epoch'] == 1 and current['writer_occupied'] is True
+        assert prepare(transport, 'no-takeover', access='write', expected_writer_epoch=1).status_code == 409
+        replacement = prepare(transport, 'writer-two', access='write', expected_writer_epoch=1, takeover=True).json()
+        with stream(transport, replacement) as next_writer:
+            attach(next_writer, scope)
+            original.send_json(payload)
+            with pytest.raises(WebSocketDisconnect):
+                original.receive_json()
+            next_writer.send_json(payload | {'request_id': 2})
+            assert next_writer.receive_json() == receipt | {'request_id': 2}
+            next_writer.send_json(payload | {'request_id': 3, 'thread_id': 'sibling-thread'})
+            with pytest.raises(WebSocketDisconnect):
+                next_writer.receive_json()
+
+    with factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute('''SELECT surface,content,source_grant_id,source_grant_revision
+            FROM session_interaction_inputs ORDER BY enqueue_sequence''').fetchall()
+        assert [tuple(row) for row in rows] == [('web', 'From Home', 'fixture-grant', 1),
+                                               ('native_terminal', 'From Codex', 'fixture-grant', 1)]
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
+    assert grants == ['web', 'native_terminal']
 
 
 @pytest.mark.parametrize('change', ['different-thread', 'owner-replaced', 'operator-logout'])

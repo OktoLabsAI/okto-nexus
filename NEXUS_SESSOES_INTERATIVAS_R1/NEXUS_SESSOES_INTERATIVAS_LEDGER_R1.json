@@ -1026,8 +1026,11 @@
         "SI-T-D13",
         "SI-T-H19"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si021-codex-terminal-queue.md",
+        "execution/si021-codex-terminal-queue.json"
+      ]
     },
     {
       "id": "SI-022",
@@ -3764,7 +3767,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si021-codex-terminal-queue.md",
+        "execution/si021-codex-terminal-queue.json"
+      ]
     },
     {
       "id": "SI-T-G10",

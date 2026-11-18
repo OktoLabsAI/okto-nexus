@@ -29,13 +29,16 @@ from .runtime_policy import effective
 
 
 def enqueue_human_input(*, factory, access, authority_fence, current_capability_revision,
-                        scope, author, client_intent_id, capability_revision, text, verify_command=None):
+                        scope, author, client_intent_id, capability_revision, text, verify_command=None,
+                        verify_presenter=None):
     """Commit one input for an already identified human and exact session."""
     if isinstance(text, str) and text.lstrip().startswith(('/', '!')):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Commands are unavailable in this message input.', {})
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         if not resolve_human(author.authority_ref):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The session input author is no longer signed in.', {})
+        if verify_presenter is not None:
+            verify_presenter(uow, resolve_human)
 
         def verify_new_authority():
             if verify_command is not None:
