@@ -104,11 +104,11 @@ def _select_session(call, binding, explicit, *, interactive):
     return read_binding_session(call, binding, candidates[int(choice) - 1])
 
 
-def _attach(args, call, binding):
-    interactive = not args.json and sys.stdin.isatty() and sys.stdout.isatty()
-    selected = _select_session(call, binding, args.session_id, interactive=interactive)
+def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None):
+    """Open a viewer for the exact existing session and return the detach receipt."""
+    selected = _select_session(call, binding, session_id, interactive=interactive)
     if selected is None:
-        return 0
+        return None
     source = selected['scope']
     if selected.get('control_available') is not True:
         raise ConnectionError('SESSION_UNAVAILABLE', 'This exact session is unavailable for live attachment.')
@@ -121,7 +121,7 @@ def _attach(args, call, binding):
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
     revision = review_local_presentation(call, scope=scope, expected_session_generation=generation)
-    executable = select_viewer(args.viewer_executable)
+    executable = select_viewer(viewer_executable)
     print(f'Opening read-only Codex for {display_text(scope["session_id"])} '
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
     print('Exit the viewer to detach from this session.', flush=True)
@@ -131,7 +131,8 @@ def _attach(args, call, binding):
         present_codex(link, executable)
     _display({'state': 'detached'}, False)
     print('Session ' + display_text(scope['session_id']))
-    return 0
+    return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
+            'attach_strategy': 'codex_local_read', 'capability_revision': revision}
 
 
 def _target(args, service_args, profile):
@@ -189,7 +190,9 @@ def run_session(argv):
         if status.get('server_id') not in (None, binding['server_id']):
             raise ConnectionError('SERVER_ID_MISMATCH', 'The session catalog belongs to another Server.')
         if args.action == 'attach':
-            return _attach(args, call, binding)
+            attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
+                           interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty())
+            return 0
         _display(_view(call, binding), args.json)
         return 0
     except ConnectionError as error:

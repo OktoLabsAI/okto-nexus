@@ -87,27 +87,37 @@ def test_f21_customize_real_review_creates_fresh_exact_intent(quick_cli, two_har
     assert canonical_snapshot(c) == after and len(c.t.turns) == len(c.t.probes) == 1
 
 
-def test_h01_bound_public_id_and_project_are_printed_before_chat_callback(quick_cli, monkeypatch, capsys):
-    from okto_nexus.adapters.inbound.cli import connect, work
+def test_h01_bound_public_id_is_printed_before_default_no_viewer(quick_cli, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import connect, session, work
     c = quick_cli
-    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
-    monkeypatch.setattr('builtins.input', lambda prompt: 'y' if 'Confirm this review' in prompt else pytest.fail(prompt))
-    observed = []
-    def chat(service, profile, *, timeout):
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(connect, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    prompts = []
+
+    def choose(prompt):
+        prompts.append(prompt)
+        if 'Confirm this review' in prompt:
+            return 'y'
+        assert prompt == 'Open codex in this terminal? [y/N] '
         text = capsys.readouterr().out
         assert 'Conexão configurada — ID do Harness: codex' in text
         assert 'Project: Chat Logical Project | Harness: codex' in text
-        assert 'Connection shortcut:' not in text and profile not in text
-        document = json.loads((c.home / 'terminal/profiles' / (profile + '.json')).read_text())
+        assert 'Connection shortcut:' not in text
+        document = json.loads(next((c.home / 'terminal/profiles').glob('*.json')).read_text())
         assert document['state'] == 'done'
         assert document['result']['public_connection']['state'] == 'bound'
         assert len(c.t.turns) == len(c.t.probes) == 1
-        observed.append(dict(profile=profile, bound=True))
-        return 37  # observation spy only; never enters or submits project work
-    monkeypatch.setattr(work, 'interactive_work', chat)
-    assert c.run(['connect', 'codex', 'Chat Logical Project']) == 37
-    assert len(observed) == 1 and observed[0]['bound']
+        return ''
+
+    def forbidden(*args, **kwargs):
+        pytest.fail('Default No entered a terminal surface')
+
+    monkeypatch.setattr('builtins.input', choose)
+    monkeypatch.setattr(work, 'interactive_work', forbidden)
+    monkeypatch.setattr(session, 'attach_session', forbidden)
+    assert c.run(['connect', 'codex', 'Chat Logical Project']) == 0
+    assert len(prompts) == 2
 
 
 # Explicit public exports include pytest fixtures used through injection.
-__all__ = ['Path', 'SimpleNamespace', 'canonical_snapshot', 'checking', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'pytest', 'quick_cli', 'terminal', 'test_f21_customize_real_review_creates_fresh_exact_intent', 'test_h01_bound_public_id_and_project_are_printed_before_chat_callback', 'two_harnesses']
+__all__ = ['Path', 'SimpleNamespace', 'canonical_snapshot', 'checking', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'pytest', 'quick_cli', 'terminal', 'test_f21_customize_real_review_creates_fresh_exact_intent', 'test_h01_bound_public_id_is_printed_before_default_no_viewer', 'two_harnesses']

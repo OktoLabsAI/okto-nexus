@@ -74,7 +74,7 @@ def customize(args, service_args, document, *, invocation_cwd, read=input, write
         value = getattr(updated, name)
         if value is not None:
             argv.extend(('--id' if name == 'connect_id' else '--' + name.replace('_', '-'), str(value)))
-    for name in ('new_connection', 'no_chat'):
+    for name in ('new_connection', 'no_chat', 'interactive', 'no_interactive'):
         if getattr(updated, name):
             argv.append('--' + name.replace('_', '-'))
     if updated.start_at_login is not None:

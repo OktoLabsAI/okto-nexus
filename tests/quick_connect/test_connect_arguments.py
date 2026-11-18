@@ -35,6 +35,29 @@ def test_legacy_path_flags_and_defaults_keep_their_original_types():
     assert defaults.start_at_login is None and defaults.timeout == 300 and defaults.new_connection is False
 
 
+@pytest.mark.parametrize('flag', ['-i', '--interactive'])
+def test_native_presentation_flag_preserves_plan_and_arity(flag):
+    args, service = grammar.parse_connect_args(['codex', flag, 'My App', '--plan', '--port', '8203'])
+    assert args.interactive is True and args.plan is True and args.project_name == 'My App'
+    assert service == ['--port', '8203']
+    passive, _ = grammar.parse_connect_args(['codex', '--no-interactive', '--json'])
+    assert passive.no_interactive and not passive.interactive and not passive.no_chat
+
+
+@pytest.mark.parametrize('flags', [['-i', '--json'], ['-i', '--no-interactive'], ['-i', '--no-chat'],
+                                  ['--no-interactive', '--no-chat']])
+def test_invalid_surface_combinations_refused_before_discovery(flags):
+    with pytest.raises(SystemExit) as failure:
+        grammar.parse_connect_args(['codex', *flags])
+    assert failure.value.code == 2
+
+
+def test_ambiguous_short_negative_names_the_long_option(capsys):
+    with pytest.raises(SystemExit):
+        grammar.parse_connect_args(['codex', '-ni'])
+    assert 'use --no-interactive instead of -ni' in capsys.readouterr().err
+
+
 @pytest.mark.parametrize('argv', [['codex', '--client', 'claude'], ['--client', 'codex', 'app'],
     ['codex', 'app', 'extra'], ['codex', '--clinet', 'pi'], ['codex', '--pro', '/tmp'],
     ['--agent', 'A', '--new-agent', 'B'], ['--agent', 'A', '--name', 'new'],

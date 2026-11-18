@@ -179,6 +179,12 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
                 effects_started=False, lifecycle_requested=False), True)
             return int(error.code)
         raise
+    terminal = not args.json and sys.stdin.isatty() and sys.stdout.isatty()
+    if args.interactive and not terminal:
+        _display({'state': 'refused', 'code': 'PRESENTATION_TTY_REQUIRED',
+                  'message': '--interactive requires terminal input and output. Use --no-interactive for scripts.',
+                  'effects_started': False, 'lifecycle_requested': False}, args.json)
+        return 2
     from .quick_connect_policy import entry_enabled
     enabled = entry_enabled()
     if not enabled and (args.harness or args.project_name or args.connect_id):
@@ -194,6 +200,24 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
     quick_operation = None
     quick_enabled = enabled and _quick_entry_requested(args)
     canonical_metadata = False
+
+    def report(value, document=None):
+        nonlocal guard
+        from .connect_presentation import display_attach_command, interaction_preview, present_after_connect
+        interaction = interaction_preview(value, args, profile=profile, home=service.adapter.home,
+                                          terminal=terminal, service_args=service_args,
+                                          operator_profile=getattr(service, 'operator_profile', args.operator_profile))
+        _display({**value, 'interaction': interaction}, args.json)
+        if not args.json:
+            display_attach_command(interaction)
+        if interaction['status'] in ('offer', 'requested'):
+            # The exact completed document is retained before terminal input.
+            # The viewer must not hold this profile's setup lock.
+            if guard is not None:
+                guard.release()
+                guard = None
+            present_after_connect(service, profile=profile, document=document, interaction=interaction)
+
     try:
         from .terminal_target import resolve_terminal_target, terminal_target_selection
         invocation_cwd = invocation_cwd or str(Path.cwd())  # Capture once, including across customization.
@@ -351,11 +375,9 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
             facade = RemoteTerminalConnection if selected_choice.canonical_ref['execution_location'] == 'remote' else TerminalConnection
             flow = facade(call, lambda value: atomic_json(target, value))
             result = associate_canonical(flow, call, reference=selected_choice.canonical_ref, project=project)
-            _display(dict(result, profile=profile, canonical_metadata_revalidation_requested=True,
-                effects_started=None, lifecycle_requested=not args.plan), args.json)
-            if not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
-                from .work import interactive_work
-                return interactive_work(service, profile, timeout=args.timeout)
+            document = read_json(target) if result['state'] == 'configured' and not args.plan else None
+            report(dict(result, profile=profile, canonical_metadata_revalidation_requested=True,
+                effects_started=None, lifecycle_requested=not args.plan), document)
             return 0
         if selected_choice is not None:
             retained = saved or reservation
@@ -579,10 +601,7 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
             from .quick_connect_outcome import annotate
             result = annotate(result, saved, profile=profile, home=service.adapter.home,
                 plan=args.plan, operation=quick_operation)
-        _display(result, args.json)
-        if result['state'] == 'configured' and not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
-            from .work import interactive_work
-            return interactive_work(service, profile, timeout=args.timeout)
+        report(result, saved)
         return 0 if result['state'] in ('configured', 'review', 'login_start_review') else 3
     except KeyboardInterrupt:
         return 130  # The service and any submitted test retain ownership.

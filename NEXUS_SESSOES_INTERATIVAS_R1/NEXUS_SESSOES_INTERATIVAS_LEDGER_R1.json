@@ -1299,8 +1299,10 @@
         "SI-T-F10",
         "SI-T-F17"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "execution/si028-connect-presentation.md"
+      ]
     },
     {
       "id": "SI-029",
@@ -1332,8 +1334,10 @@
         "SI-T-F13",
         "SI-T-F16"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si028-connect-presentation.md"
+      ]
     },
     {
       "id": "SI-030",

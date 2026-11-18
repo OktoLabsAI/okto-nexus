@@ -72,6 +72,11 @@ def test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_o
     assert quick['connect_id']=='remote-codex' and quick['canonical_reference']==reference
     assert quick['execution_location']=='remote' and 'project_root' not in quick
     assert quick['cwd_resolution']['project_root'] is None and quick['cwd_resolution']['source']=='remote'
+    interaction = observed['interaction']
+    assert interaction['setup_success'] is True and interaction['status'] == 'not_requested'
+    assert interaction['attach_argv'][:5] == ['okto-nexus', 'session', 'attach', '--id', 'remote-codex']
+    assert interaction['attach_argv'][-2:] == ['--operator-profile', 'remote']
+    assert execution_root not in interaction['attach_argv'] and str(operator_cwd) not in interaction['attach_argv']
     assert rows(r.t)==before and r.t.native.opens==0
     wire=r.bridge.calls[first_call:]
     assert wire and all(request.method=='GET' and request.data is None for request in wire)

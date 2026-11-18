@@ -12,7 +12,7 @@ def public_wire(value):
         return value
     keys = ('format', 'kind', 'state', 'server_id', 'review_revision', 'selection', 'request',
         'version_check_required', 'effects', 'identity_creation', 'preset_review', 'quick_connect',
-        'canonical_metadata_revalidation_requested', 'effects_started', 'lifecycle_requested')
+        'canonical_metadata_revalidation_requested', 'effects_started', 'lifecycle_requested', 'interaction')
     result = {key: value[key] for key in keys if key in value}
     allowed = ('agent', 'client', 'project', 'label', 'workspace_id', 'binding_id', 'candidate_ref',
         'provider_home', 'create_agent', 'display_name', 'quick_connect', 'public_connection', 'operator_profile')

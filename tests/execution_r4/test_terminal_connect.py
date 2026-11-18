@@ -508,8 +508,8 @@ def test_reconnect_reads_later_customization_without_reissuing_grants(terminal):
     assert snapshot(t.deps) == before and len(t.turns) == 1
 
 
-def test_interactive_connect_enters_work_only_after_configuration(terminal, tmp_path, monkeypatch, capsys):
-    from okto_nexus.adapters.inbound.cli import work
+def test_interactive_connect_preserves_configuration_on_viewer_failure(terminal, tmp_path, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import session, work
     from okto_nexus.adapters.outbound.service_manager.context import read_json
 
     t = terminal
@@ -517,20 +517,45 @@ def test_interactive_connect_enters_work_only_after_configuration(terminal, tmp_
         inspect=lambda: {'state': 'ready'}, ensure_running=lambda **kwargs: {'state': 'ready'})
     monkeypatch.setattr(connect, 'resolve_local_service', lambda args: service)
     monkeypatch.setattr(connect, 'LocalOperatorHTTP', lambda **kwargs: t.call)
-    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(connect, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    monkeypatch.setattr(work, 'LocalOperatorHTTP', lambda **kwargs: t.call)
     entered = []
-    def enter(selected, profile, **kwargs):
-        assert read_json(selected.adapter.home / 'terminal/profiles' / (profile + '.json'))['state'] == 'done'
-        entered.append(profile)
-        return 0
-    monkeypatch.setattr(work, 'interactive_work', enter)
+    profile_path = service.adapter.home / 'terminal/profiles/interactive.json'
+
+    def enter(call, binding, *, interactive):
+        assert interactive is True
+        assert read_json(profile_path)['state'] == 'done'
+        entered.append(binding['agent_id'])
+        raise ConnectionError('VIEWER_BUILD_UNAVAILABLE', 'The native viewer build is unavailable.')
+
+    monkeypatch.setattr(session, 'attach_session', enter)
     args = ['--profile', 'interactive', '--agent', 'subject', '--project', t.selection['project']]
-    assert connect.run_connect(args + ['--plan']) == 0
+    assert connect.run_connect(args + ['--plan', '-i']) == 0
     assert entered == []
-    review = read_json(service.adapter.home / 'terminal/profiles/interactive.json')
-    assert connect.run_connect(args + ['--approve', review['review_revision']]) == 0
-    assert entered == ['interactive']
+    assert 'Plan requests the native viewer' in capsys.readouterr().out
+    review = read_json(profile_path)
+    assert connect.run_connect(args + ['--approve', review['review_revision'], '-i']) == 0
+    assert entered == ['subject']
+    assert 'Native viewer unavailable. Connection configured.' in capsys.readouterr().out
+    configured = read_json(profile_path)
     assert connect.run_connect(args + ['--no-chat']) == 0
-    assert connect.run_connect(args + ['--json']) == 0
-    assert entered == ['interactive']
+    capsys.readouterr()
+    assert connect.run_connect(args + ['--no-interactive', '--json']) == 0
+    interaction = json.loads(capsys.readouterr().out)['interaction']
+    assert interaction['setup_success'] and interaction['status'] == 'not_requested'
+    assert interaction['attach_argv'][:3] == ['okto-nexus', 'session', 'attach']
+    assert entered == ['subject'] and read_json(profile_path) == configured
     assert len(t.turns) == 1
+
+
+def test_connect_interactive_rejects_redirected_output_before_resolving_service(monkeypatch, capsys):
+    monkeypatch.setattr(connect, 'sys', SimpleNamespace(stdin=SimpleNamespace(isatty=lambda: True),
+        stdout=SimpleNamespace(isatty=lambda: False)))
+
+    def forbidden(*args, **kwargs):
+        pytest.fail('The invalid surface request reached service resolution')
+
+    monkeypatch.setattr(connect, 'resolve_local_service', forbidden)
+    assert connect.run_connect(['-i']) == 2
+    assert 'requires terminal input and output' in capsys.readouterr().out

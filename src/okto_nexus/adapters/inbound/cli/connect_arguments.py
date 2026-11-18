@@ -19,7 +19,7 @@ _VALUES = frozenset(('--profile', '--operator-profile', '--remote-draft', '--set
     '--agent', '--new-agent', '--name', '--client', '--project', '--workspace-id', '--binding-id',
     '--candidate-ref', '--provider-home', '--approve', '--timeout', '--id'))
 _SWITCHES = frozenset(('--new-connection', '--review-current', '--start-at-login', '--no-start-at-login',
-    '--plan', '--json', '--no-chat'))
+    '--plan', '--json', '--no-chat', '-i', '--interactive', '--no-interactive'))
 
 
 def _parser():
@@ -50,7 +50,12 @@ def _parser():
     parser.add_argument('--plan', action='store_true', help='review without service, Git, probes or model turns')
     parser.add_argument('--approve', help='apply the exact displayed review revision')
     parser.add_argument('--json', action='store_true')
-    parser.add_argument('--no-chat', action='store_true')
+    presentation = parser.add_mutually_exclusive_group()
+    presentation.add_argument('-i', '--interactive', action='store_true',
+                              help='open the native harness viewer after connecting')
+    presentation.add_argument('--no-interactive', action='store_true',
+                              help='finish the connection without opening a viewer')
+    presentation.add_argument('--no-chat', action='store_true', help='legacy alias for --no-interactive')
     parser.add_argument('--timeout', type=float, default=300)
     return parser
 
@@ -98,6 +103,8 @@ def _split_options(argv, parser):
             own.extend(argv[index:])
             break
         flag, separator, _ = token.partition('=')
+        if flag == '-ni':
+            parser.error('use --no-interactive instead of -ni')
         if not token.startswith('-'):
             own.append(token)
             index += 1
@@ -156,6 +163,8 @@ def parse_connect_args(argv):
         parser.error('QUICK_CONNECT_MODE_UNSUPPORTED: dispatch legacy participant mode before managed parsing')
     own, service = _split_options(remaining, parser)
     args = parser.parse_intermixed_args(own)
+    if args.interactive and args.json:
+        parser.error('--interactive requires a terminal and cannot be combined with --json')
     if args.harness is not None:
         args.harness = args.harness.lower()
     if args.client is not None:

@@ -1,0 +1,9 @@
+# SI-028 and SI-029 connect presentation choice
+
+Connect accepts `-i` and `--interactive` for native presentation and `--no-interactive` to finish setup without opening a viewer. `--no-chat` remains the legacy alias. Conflicting choices and interactive requests without terminal input and output are rejected before service resolution. `-ni` points to the long negative option. A plan can show the requested surface without opening it. Passive JSON output includes the setup status, exact known binding scope and an attach argument vector after a positive receipt. The remote vector retains the saved operator profile and excludes the execution folder.
+
+With terminal input and output and no explicit surface, Connect offers the viewer after the successful receipt and defaults to No. The setup profile lock is released before this choice. An explicit interactive request uses the same exact attach path as the session command. It revalidates the completed binding and only selects an existing session. Refusal or cancellation leaves the setup receipt and its successful exit status available. The presentation choice is absent from the saved setup request, approval revision and grants. `work` remains an explicit terminal command.
+
+The final grammar, terminal Connect, Quick Connect customization and session-command regressions passed 97 cases. Another focused run covered the remote attach arguments and the two Connect presentation cases. A temporary installation of the built Nexus and Core wheels passed 51 focused cases. The six runtime modules in the Nexus wheel match the source, and wheel and source archive passed strict validation. Nexus wheel SHA-256 `39fbf0f826ce556f310a7226c454ae0d44fe2e1fe59e1aeb64b4c8e1645f857e`.
+
+The post-Connect integration tests use fixture runtimes. Managed viewer qualification and authorization for opening an additional session are still pending. The stage uses schema 180. Restore the preceding Nexus build to roll it back.
