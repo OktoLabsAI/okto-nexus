@@ -236,7 +236,10 @@ def reserve_execution_dispatch(
                 "WHERE i.server_id=p.server_id AND i.executor_id=p.executor_id AND i.session_id=p.session_id "
                 "AND i.operation_id IS NOT NULL AND ("
                 "(i.operation_id=p.operation_id AND i.capacity_state IS NOT 'CONSUMED') OR "
-                "(i.operation_id<>p.operation_id AND i.status IN ('DISPATCHING','DELIVERY_UNKNOWN'))))) "
+                "(i.operation_id<>p.operation_id AND (i.status IN ('DISPATCHING','DELIVERY_UNKNOWN') OR "
+                "(i.status='ACCEPTED_NATIVE' AND EXISTS (SELECT 1 FROM execution_operations earlier_input "
+                "WHERE earlier_input.server_id=i.server_id AND earlier_input.executor_id=i.executor_id "
+                "AND earlier_input.operation_id=i.operation_id AND earlier_input.admission_state<>'RESOLVED_TERMINAL'))))))) "
                 # Administrative turns have no domain-delivery mapping. They
                 # still share the native session with a delivery awaiting a
                 # proven-unsent retry. Its immutable failed attempt identifies

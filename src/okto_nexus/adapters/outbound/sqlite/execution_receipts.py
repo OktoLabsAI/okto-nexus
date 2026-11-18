@@ -423,6 +423,10 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         from ....application.execution_domain_delivery import project_delivery_receipt
         project_delivery_receipt(conn, server_id=key[0], executor_id=key[1], operation_id=key[2],
                                  action=operation["action"], stage=projection.stage)
+        if operation['action'] == 'turn.submit':
+            from .session_interaction import project_input_receipt
+            project_input_receipt(conn, operation_key=key, stage=projection.stage,
+                                  possible_effect=projection.possible_effect, native_id=projection.native_id)
         from ....application.execution_results import project_domain_result
         project_domain_result(conn, server_id=key[0], executor_id=key[1], operation_id=key[2])
     return AcceptedExecutionReceipt(parsed["operation_id"],

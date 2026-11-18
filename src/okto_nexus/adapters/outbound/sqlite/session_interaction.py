@@ -309,3 +309,38 @@ def confirm_dispatch_capacity(uow: SqliteUnitOfWork, *, scope: InputScope, opera
         UPDATE session_interaction_queues SET revision=revision+1
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
     """, params)
+
+
+def record_input_delivery(conn: Connection, *, operation_key: tuple[str, str, str],
+                          state: InputDeliveryState, require_unsent: bool = False) -> None:
+    """Project canonical delivery evidence without replacing the R4 outcome."""
+    if state not in (InputDeliveryState.ACCEPTED_NATIVE, InputDeliveryState.REFUSED_BEFORE_SEND,
+                     InputDeliveryState.DELIVERY_UNKNOWN):
+        raise ValueError('Invalid canonical input delivery observation.')
+    affected = conn.execute("""
+        UPDATE session_interaction_inputs SET status=?,possible_effect=?,input_revision=input_revision+1
+        WHERE server_id=? AND executor_id=? AND operation_id=?
+          AND status IN ('DISPATCHING', 'DELIVERY_UNKNOWN') AND status<>?
+          AND (NOT ? OR (status='DISPATCHING' AND possible_effect=0))
+        RETURNING session_id
+    """, (state.value, state is not InputDeliveryState.REFUSED_BEFORE_SEND,
+          *operation_key, state.value, require_unsent)).fetchone()
+    if affected is not None:
+        conn.execute("""
+            UPDATE session_interaction_queues SET revision=revision+1
+            WHERE server_id=? AND executor_id=? AND session_id=?
+        """, (*operation_key[:2], affected['session_id']))
+
+
+def project_input_receipt(conn: Connection, *, operation_key: tuple[str, str, str],
+                          stage: str, possible_effect: bool, native_id: str | None) -> None:
+    if stage in ('ACCEPTED', 'RUNNING', 'WAITING_INPUT', 'SUCCEEDED'):
+        state = InputDeliveryState.ACCEPTED_NATIVE
+    elif stage in ('FAILED', 'CANCELLED') and not possible_effect and native_id is None:
+        state = InputDeliveryState.REFUSED_BEFORE_SEND
+    elif stage in ('OUTCOME_UNKNOWN', 'FAILED', 'CANCELLED'):
+        state = InputDeliveryState.DELIVERY_UNKNOWN
+    else:
+        # Receipt of the command or its submission alone does not prove native acceptance.
+        return
+    record_input_delivery(conn, operation_key=operation_key, state=state)

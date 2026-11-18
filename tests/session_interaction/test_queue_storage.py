@@ -10,6 +10,8 @@ import pytest
 from okto_nexus.adapters.outbound.sqlite.session_interaction import (
     accept_input,
     prepare_dispatch_head,
+    project_input_receipt,
+    record_input_delivery,
 )
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
@@ -193,3 +195,34 @@ def test_preparation_keeps_blocked_head_ahead_of_later_input(database):
         uow.connection.execute("UPDATE execution_sessions SET owner_generation=2")
         assert prepare_dispatch_head(uow, scope=scope, now=NOW) is None
         assert prepare_dispatch_head(uow, scope=replace(scope, generation=SessionOwnerGeneration(2)), now=NOW) is None
+
+
+def test_receipt_projection_keeps_native_acceptance_and_exact_executor(database):
+    factory, (scope, sibling) = database
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        for selection in (scope, sibling):
+            pending = enqueue(uow, selection)
+            conn.execute("""
+                INSERT INTO execution_operations(server_id,executor_id,session_id,operation_id,subject_agent_id,actor_agent_id,
+                    binding_id,workspace_id,workspace_binding_id,action,intent_hash,semantic_payload,expected_revisions_json,
+                    admission_state,created_at)
+                VALUES(?,?,?,'same-operation','recipient','recipient',?,?,?,'turn.submit','test','{}','{}','ACCEPTED','t')
+            """, (selection.session.server_id, selection.session.executor_id, selection.session.session_id,
+                  selection.binding_id, selection.workspace_id, selection.workspace_binding_id))
+            conn.execute("UPDATE session_interaction_inputs SET status='DISPATCHING',operation_id='same-operation',"
+                         "possible_effect=1 WHERE input_id=?", (pending.input_id,))
+        key = (scope.session.server_id, scope.session.executor_id, 'same-operation')
+        record_input_delivery(conn, operation_key=key, state=InputDeliveryState.REFUSED_BEFORE_SEND, require_unsent=True)
+        project_input_receipt(conn, operation_key=key, stage='SUBMITTED', possible_effect=True, native_id='turn')
+        assert enqueue(uow, scope).status is InputDeliveryState.DISPATCHING
+        record_input_delivery(conn, operation_key=key, state=InputDeliveryState.DELIVERY_UNKNOWN)
+        unknown = enqueue(uow, scope)
+        assert unknown.status is InputDeliveryState.DELIVERY_UNKNOWN and unknown.possible_effect
+        assert unknown.operation_id == 'same-operation'
+        assert enqueue(uow, sibling).status is InputDeliveryState.DISPATCHING
+        project_input_receipt(conn, operation_key=key, stage='ACCEPTED', possible_effect=True, native_id='turn')
+        accepted = enqueue(uow, scope)
+        assert accepted.status is InputDeliveryState.ACCEPTED_NATIVE and accepted.possible_effect
+        project_input_receipt(conn, operation_key=key, stage='OUTCOME_UNKNOWN', possible_effect=True, native_id='turn')
+        assert enqueue(uow, scope) == accepted

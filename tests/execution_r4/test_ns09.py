@@ -217,6 +217,7 @@ def assert_staged_input_respects_shared_pump(deps, app, access, open_scope, exac
     from okto_nexus.adapters.outbound.sqlite.session_interaction import (
         confirm_dispatch_capacity,
         prepare_dispatch_head,
+        project_input_receipt,
     )
     from okto_nexus.application.execution_domain_delivery import DeliveryTransactionFactory
     from okto_nexus.application.execution_native_facts import stamp
@@ -298,6 +299,20 @@ def assert_staged_input_respects_shared_pump(deps, app, access, open_scope, exac
         with pytest.raises(OktoNexusError, match='reservation changed'):
             begin_execution_send(borrowed, resolve_session_input_human=resolve,
                 session_input_capability_revision=input_args['current_capability_revision'], **send_args)
+        key = (exact.session.server_id, exact.session.executor_id, consumption.turn_operation_id)
+        uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='DISPATCHED' "
+                               "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+        uow.connection.execute("UPDATE execution_operations SET admission_state='DISPATCHED' "
+                               "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+        project_input_receipt(uow.connection, operation_key=key, stage='ACCEPTED',
+                              possible_effect=True, native_id='fixture-turn')
+        assert reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True) is None
+        uow.connection.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
+                               "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+        following = reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True)
+        assert following and following.operation_id != consumption.turn_operation_id
         raise RuntimeError('rollback staged fixture')
 
 

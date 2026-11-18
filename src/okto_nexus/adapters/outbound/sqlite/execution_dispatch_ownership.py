@@ -2,7 +2,9 @@
 
 import json
 
+from ....domain.session_interaction import InputDeliveryState
 from ....errors import ErrorCode, OktoNexusError
+from .session_interaction import record_input_delivery
 
 
 def _key(reservation):
@@ -45,6 +47,8 @@ def reject_unsent_dispatch(factory, *, reservation, error):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The unsent dispatch reservation changed.', {})
         conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
                      "WHERE server_id=? AND executor_id=? AND operation_id=?", _key(reservation)[:3])
+        record_input_delivery(conn, operation_key=_key(reservation)[:3],
+                              state=InputDeliveryState.REFUSED_BEFORE_SEND, require_unsent=True)
         conn.execute("UPDATE execution_sessions SET lifecycle_state='FAILED' WHERE server_id=? AND executor_id=? "
                      "AND open_operation_id=? AND lifecycle_state='OPEN_PENDING' AND lease_state='NONE'",
                      _key(reservation)[:3])
@@ -116,3 +120,4 @@ def release_dispatch_owner(factory, *, channel):
                                  possible_effect=True, operation_id=row['operation_id']), *operation_key))
             conn.execute("UPDATE execution_operations SET admission_state='RECONCILING' "
                          "WHERE server_id=? AND executor_id=? AND operation_id=?", operation_key)
+            record_input_delivery(conn, operation_key=operation_key, state=InputDeliveryState.DELIVERY_UNKNOWN)
