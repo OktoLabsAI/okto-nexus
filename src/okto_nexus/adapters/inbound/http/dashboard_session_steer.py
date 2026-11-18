@@ -46,7 +46,7 @@ from .session_interaction_contract import (
 )
 
 
-async def steer_response(session_id, body, request, operation, arguments):
+async def steer_response(session_id, body, request, operation, arguments, *, surface='web'):
     if not getattr(request.state, 'operator_session', False):
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to reorient a turn.')
     if body.scope.session_id != session_id or request.query_params:
@@ -65,7 +65,7 @@ async def steer_response(session_id, body, request, operation, arguments):
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'No input is available for this login and session.')
         receipt = operation(factory=state.deps.connection_factory, access=build_execution_access(state.deps),
             authority_fence=options['session_input_authority_fence'], current_steer_revisions=options['session_steer_revisions'],
-            scope=body.input_scope(), author=InputAuthor(ref, 'web'), native_turn_id=body.target.turn_id,
+            scope=body.input_scope(), author=InputAuthor(ref, surface), native_turn_id=body.target.turn_id,
             capability_revision=body.capability_revision, confirmed_effect_revision=body.confirmed_effect_revision,
             expected_queue_revision=body.expected_queue_revision, fresh_publications=state.inventory_fresh_publications,
             remote_ready=protocol_info()['remote_execution_ready'], **arguments)

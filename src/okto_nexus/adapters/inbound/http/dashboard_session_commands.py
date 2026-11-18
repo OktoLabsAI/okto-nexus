@@ -193,8 +193,7 @@ def build_router():
         except OktoNexusError as error:
             return _runtime_error(error)
 
-    @router.post('/commands:execute')
-    async def execute_command(session_id: str, body: SessionCommand, request: Request):
+    async def execute_command_for(session_id, body, request, surface):
         if not getattr(request.state, 'operator_session', False):
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to use session commands.')
         if body.scope.session_id != session_id or request.query_params:
@@ -218,13 +217,15 @@ def build_router():
             return catalog
 
         if isinstance(body, EnqueueSessionCommand):
-            return await enqueue_input_response(session_id, body, request, verify_command=verify_command)
+            return await enqueue_input_response(session_id, body, request, verify_command=verify_command,
+                                                surface=surface)
         if isinstance(body, InterruptSessionCommand):
-            return await interrupt_response(session_id, body, request, verify_command=verify_command)
+            return await interrupt_response(session_id, body, request, verify_command=verify_command,
+                                            surface=surface)
         if not isinstance(body, ReadSessionCommand):
             return await steer_response(session_id, body, request, steer_human_input, {
                 'client_intent_id': body.client_intent_id, 'text': body.content[0].text, 'verify_command': verify_command,
-            })
+            }, surface=surface)
 
         def read():
             with factory.unit_of_work(write=False) as uow:
@@ -240,5 +241,13 @@ def build_router():
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
         except OktoNexusError as error:
             return _runtime_error(error)
+
+    @router.post('/commands:execute')
+    async def execute_command(session_id: str, body: SessionCommand, request: Request):
+        return await execute_command_for(session_id, body, request, 'web')
+
+    @router.post('/terminal/commands:execute')
+    async def execute_terminal_command(session_id: str, body: SessionCommand, request: Request):
+        return await execute_command_for(session_id, body, request, 'nexus_cli')
 
     return router

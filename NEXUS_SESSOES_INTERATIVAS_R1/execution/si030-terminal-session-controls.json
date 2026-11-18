@@ -1,0 +1,42 @@
+{
+  "recorded_on": "2026-11-18",
+  "tasks": ["SI-021", "SI-030"],
+  "scope": "Exact Nexus terminal commands through canonical human operator controls on local Windows",
+  "test_scope": {"SI-T-C19": "PASS", "SI-T-I08": "partial controlled evidence"},
+  "artifacts": {
+    "nexus_wheel_sha256": "369371ec38695f19a2259ad957896023f818142f700e313bb440c84dddc282e6",
+    "nexus_sdist_sha256": "fb3a89999f06cd94bb4fd6678e3aca30f5e7f4fd4a5030c6cb1e58ab72c84de3",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "directory": "%TEMP%/nexus-si-terminal-controls-build-0094bb482d384d899735e5f47aa7b36e",
+    "strict_twine": "PASS",
+    "changed_application_modules_matched_to_wheel": 5
+  },
+  "supporting_regressions": {"source": 24, "installed": 24, "ruff": "PASS"},
+  "native_case": {
+    "fixture": "%TEMP%/nexus-si-terminal-exact-controls-f27e9637a68340cd81d553fe0296e926/test_terminal_exact_controls.py",
+    "fixture_sha256": "6a84dff51baa07d6ee7533c86dc6dcb45a7fc00abb610d48f1862066058acdd0",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "source_result": "PASS",
+    "installed_result": "PASS",
+    "observations_per_run": {
+      "two_real_sessions": true,
+      "declined_action_zero_writes": true,
+      "stale_review_refused_without_fallback": true,
+      "terminal_send_queued": true,
+      "steer_receipt_recovered_after_simulated_response_loss": true,
+      "interrupt_confirmation_from_exact_turn": true,
+      "sibling_unaffected": true,
+      "native_steers": 1,
+      "native_interrupts": 1,
+      "loopback_model_calls": 2,
+      "external_provider_calls": 0
+    },
+    "sqlite_after_shutdown": {
+      "operations": {"runtime.close": 2, "runtime.open": 2, "turn.interrupt": 1, "turn.steer": 1, "turn.submit": 2},
+      "input_surfaces_in_sequence_order": ["web", "nexus_cli", "nexus_cli"],
+      "control_surfaces": {"nexus_cli": 2},
+      "closed_sessions": 2
+    }
+  }
+}

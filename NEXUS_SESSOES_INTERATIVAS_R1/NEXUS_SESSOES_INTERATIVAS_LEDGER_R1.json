@@ -1033,7 +1033,9 @@
         "execution/si021-codex-terminal-queue.md",
         "execution/si021-codex-terminal-queue.json",
         "execution/si024-codex-native-input-windows.md",
-        "execution/si024-codex-native-input-windows.json"
+        "execution/si024-codex-native-input-windows.json",
+        "execution/si030-terminal-session-controls.md",
+        "execution/si030-terminal-session-controls.json"
       ]
     },
     {
@@ -1394,7 +1396,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si030-terminal-session-selection.md",
-        "execution/si023-codex-saved-resume.md"
+        "execution/si023-codex-saved-resume.md",
+        "execution/si030-terminal-session-controls.md",
+        "execution/si030-terminal-session-controls.json"
       ]
     },
     {
@@ -2773,8 +2777,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si030-terminal-session-controls.md",
+        "execution/si030-terminal-session-controls.json"
+      ]
     },
     {
       "id": "SI-T-D01",
@@ -4538,7 +4545,10 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si030-terminal-session-controls.md",
+        "execution/si030-terminal-session-controls.json"
+      ]
     },
     {
       "id": "SI-T-I09",

@@ -30,6 +30,12 @@ from .native_input import display_text
 from .quick_connect_ids import binding_reference, public_ids
 from .quick_connect_project import local_executor, project_context
 from .service import resolve_local_service
+from .session_commands import (
+    COMMANDS,
+    INTENT,
+    execute_session_command,
+    recover_session_command,
+)
 from .terminal_target import resolve_terminal_target, terminal_target_selection
 from .work import open_work
 
@@ -224,15 +230,18 @@ def _target(args, service_args, profile):
 
 
 def run_session(argv):
-    parser = argparse.ArgumentParser(prog='okto-nexus session', description='List, attach to or resume an exact saved session.')
-    parser.add_argument('action', choices=('list', 'attach', 'resume'))
+    parser = argparse.ArgumentParser(prog='okto-nexus session', description='Inspect or control an exact session.')
+    parser.add_argument('action', choices=('list', 'attach', 'resume', *COMMANDS, 'receipt'))
     connection = parser.add_mutually_exclusive_group()
     connection.add_argument('--id', dest='connect_id', help='public Harness ID in the selected workspace')
     connection.add_argument('--profile', help='existing project profile')
     parser.add_argument('--project', type=Path, help='existing local project folder')
     parser.add_argument('--workspace-id', help='exact workspace for a public Harness ID')
     parser.add_argument('--operator-profile', help='saved human operator login')
-    parser.add_argument('--session-id', help='exact runtime session for attach or saved resume')
+    parser.add_argument('--session-id', help='exact runtime session')
+    parser.add_argument('--message-file', type=Path, help='UTF-8 text to review for send or steer')
+    parser.add_argument('--intent', help='terminal request identifier for receipt recovery')
+    parser.add_argument('--owner-generation', type=int, help='original session owner generation for receipt recovery')
     parser.add_argument('--viewer-executable', type=Path, help='absolute path to the reviewed local viewer')
     parser.add_argument('--write', action='store_true', help='enable plain-text input for a supported local viewer')
     parser.add_argument('--json', action='store_true')
@@ -246,9 +255,18 @@ def run_session(argv):
     if args.write and (args.action != 'attach' or args.json):
         parser.error('--write requires interactive attach')
     if args.action == 'list' and args.session_id is not None:
-        parser.error('--session-id requires attach or resume')
-    if args.action == 'resume' and args.session_id is None:
-        parser.error('resume requires the exact --session-id of a saved session')
+        parser.error('--session-id requires a specific session action')
+    if args.action not in ('list', 'attach') and args.session_id is None:
+        parser.error(f'{args.action} requires the exact --session-id')
+    if args.message_file is not None and args.action not in ('send', 'steer'):
+        parser.error('--message-file requires send or steer')
+    if args.action in COMMANDS and args.json:
+        parser.error('write actions require terminal confirmation')
+    if args.action == 'receipt':
+        if args.intent is None or INTENT.fullmatch(args.intent) is None or not 0 < (args.owner_generation or 0) < 2**63:
+            parser.error('receipt requires the terminal --intent and original --owner-generation')
+    elif args.intent is not None or args.owner_generation is not None:
+        parser.error('--intent and --owner-generation require receipt')
     if args.session_id is not None and (not 1 <= len(args.session_id) <= 160 or not args.session_id.isprintable()):
         parser.error('invalid session ID')
     if args.connect_id is not None:
@@ -260,7 +278,7 @@ def run_session(argv):
         project, profile = project_profile(args.project, args.profile)
         service = _target(args, service_args, profile)
         status = service.inspect()
-        drain_read = args.action == 'list' and status['state'] == 'stopping' and status.get('ready_for_queries')
+        drain_read = args.action in ('list', 'receipt') and status['state'] == 'stopping' and status.get('ready_for_queries')
         if status['state'] != 'ready' and not drain_read:
             raise ConnectionError('SERVICE_NOT_READY', 'The selected Server is unavailable for session reads.')
         if args.connect_id:
@@ -284,6 +302,15 @@ def run_session(argv):
             result = resume_saved_session(call, binding, args.session_id)
             _display(result, args.json)
             return int(result['state'] == 'resume_unconfirmed' or result['executor_stage'] in ('FAILED', 'CANCELLED'))
+        if args.action in COMMANDS:
+            result = execute_session_command(call, binding, args.session_id, args.action,
+                interactive=sys.stdin.isatty() and sys.stdout.isatty(), message_file=args.message_file, read=input)
+            _display(result, args.json)
+            return int(result['state'] == 'unconfirmed')
+        if args.action == 'receipt':
+            result = recover_session_command(call, binding, args.session_id, args.owner_generation, args.intent)
+            _display(result, args.json)
+            return 0
         _display(_view(call, binding), args.json)
         return 0
     except ConnectionError as error:

@@ -165,6 +165,53 @@ def test_detach_key_distinguishes_paste_and_other_win32_key_events():
     assert _DetachKey().pressed('\x1d')
 
 
+def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatch, capsys):
+    scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {'session_id': 'session-a'}
+    exact = {'scope': scope, 'session_owner_generation': 7}
+    target = {'kind': 'native_turn', 'turn_id': 'turn-one'}
+
+    class CommandServer(Catalog):
+        token = 'fixture-login'
+        sent = None
+
+        def __call__(self, method, url, body=None):
+            path = urlsplit(url).path
+            if path.endswith('/commands'):
+                return exact | {'version': 1, 'capability_revision': 'catalog-1', 'items': [{
+                    'command_id': 'steer', 'handler': 'review_steer', 'state': 'supported', 'requires_confirmation': True}]}
+            if path.endswith('/steer'):
+                return exact | {'control': {'target': target, 'queue_revision': 2, 'capability_revision': 'steer-1',
+                                           'effect_revision': 'effect-1', 'effect': 'same_turn'}}
+            if method == 'POST':
+                assert path.endswith('/terminal/commands:execute') and self.sent is None
+                self.sent = body
+                raise session.ConnectionError('OUTCOME_UNKNOWN', 'Simulated lost response.', possible_effect=True)
+            if path.endswith('/terminal/inputs/receipt'):
+                assert parse_qs(urlsplit(url).query)['client_intent_id'] == [self.sent['client_intent_id']]
+                assert parse_qs(urlsplit(url).query)['expected_session_generation'] == ['7']
+                return exact | {'input_id': 'input-original', 'status': 'DISPATCHING', 'reorientation': True}
+            return super().__call__(method, url, body)
+
+    api = CommandServer()
+    service = SimpleNamespace(operator_http=api, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    tty = SimpleNamespace(isatty=lambda: True)
+    answers = iter(('Text by the human operator', '', 'Text by the human operator', 'yes'))
+    monkeypatch.setattr('builtins.input', lambda _: next(answers))
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    connection = ['--id', 'reviewer', '--session-id', 'session-a']
+    assert main(['session', 'steer', *connection]) == 0
+    assert api.sent is None and 'Action cancelled' in capsys.readouterr().out
+    assert main(['session', 'steer', *connection]) == 0
+    assert api.sent['target'] == target and api.sent['confirmed_effect_revision'] == 'effect-1'
+    assert api.sent['expected_queue_revision'] == 2 and api.sent['confirmed'] is True
+    assert api.sent['content'] == [{'type': 'text', 'text': 'Text by the human operator'}]
+    assert 'The message is being delivered.' in capsys.readouterr().out
+    assert main(['session', 'receipt', *connection, '--intent', api.sent['client_intent_id'],
+                 '--owner-generation', '7', '--json']) == 0
+    assert json.loads(capsys.readouterr().out)['receipt']['input_id'] == 'input-original'
+
+
 @pytest.mark.parametrize(('stage', 'successor_state', 'exit_code'), [
     ('SUBMITTED', None, 0),
     ('SUBMISSION_STARTED', 'OPEN_PENDING', 0),

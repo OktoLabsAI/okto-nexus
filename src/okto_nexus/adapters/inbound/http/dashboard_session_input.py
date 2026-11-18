@@ -106,7 +106,8 @@ def _interrupt_target_for(state):
     return partial(active_native_turn, current_next_turn_revision=next_turn) if next_turn is not None else None
 
 
-async def enqueue_input_response(session_id: str, body: EnqueueInput, request: Request, *, verify_command=None):
+async def enqueue_input_response(session_id: str, body: EnqueueInput, request: Request, *, verify_command=None,
+                                 surface='web'):
     if not getattr(request.state, 'operator_session', False):
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to send a message.')
     if body.scope.session_id != session_id or request.query_params:
@@ -124,7 +125,7 @@ async def enqueue_input_response(session_id: str, body: EnqueueInput, request: R
         receipt = enqueue_human_input(factory=state.deps.connection_factory,
             access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
             current_capability_revision=options['session_input_capability_revision'], scope=body.input_scope(),
-            author=InputAuthor(reference, 'web'), client_intent_id=body.client_intent_id,
+            author=InputAuthor(reference, surface), client_intent_id=body.client_intent_id,
             capability_revision=body.capability_revision, text=body.content[0].text, verify_command=verify_command)
         return _receipt_document(body.scope, body.expected_session_generation, receipt)
 
@@ -133,7 +134,8 @@ async def enqueue_input_response(session_id: str, body: EnqueueInput, request: R
     except OktoNexusError as error:
         return _runtime_error(error)
 
-async def interrupt_response(session_id: str, body: InterruptInput, request: Request, *, verify_command=None):
+async def interrupt_response(session_id: str, body: InterruptInput, request: Request, *, verify_command=None,
+                             surface='web'):
     if not getattr(request.state, 'operator_session', False):
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to interrupt a turn.')
     if body.scope.session_id != session_id or request.query_params:
@@ -153,7 +155,7 @@ async def interrupt_response(session_id: str, body: InterruptInput, request: Req
             access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
             current_interrupt_target=partial(active_native_turn,
                 current_next_turn_revision=options['session_input_capability_revision']), scope=body.input_scope(),
-            author=InputAuthor(ref, 'web'), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
+            author=InputAuthor(ref, surface), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
             capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
             fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
             verify_command=verify_command)
@@ -212,8 +214,7 @@ def build_router():
     async def enqueue_input(session_id: str, body: EnqueueInput, request: Request):
         return await enqueue_input_response(session_id, body, request)
 
-    @router.get('/inputs/receipt')
-    async def input_receipt(session_id: str, request: Request):
+    async def input_receipt_for(session_id, request, surface):
         if not getattr(request.state, 'operator_session', False):
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to recover a receipt.')
         selector = 'input_id' if 'input_id' in request.query_params else 'client_intent_id'
@@ -232,7 +233,7 @@ def build_router():
             if ref is None:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, 'The input receipt was not found in this scope.')
             receipt = read_session_input_receipt(state.deps.connection_factory, access=build_execution_access(state.deps),
-                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, 'web'),
+                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, surface),
                 **{selector: intent})
             return _receipt_document(document, scope.generation.value, receipt)
 
@@ -240,6 +241,14 @@ def build_router():
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
         except OktoNexusError as error:
             return _runtime_error(error)
+
+    @router.get('/inputs/receipt')
+    async def input_receipt(session_id: str, request: Request):
+        return await input_receipt_for(session_id, request, 'web')
+
+    @router.get('/terminal/inputs/receipt')
+    async def terminal_input_receipt(session_id: str, request: Request):
+        return await input_receipt_for(session_id, request, 'nexus_cli')
 
     @router.get('/inputs')
     async def input_queue(session_id: str, request: Request):
@@ -394,8 +403,7 @@ def build_router():
     async def interrupt(session_id: str, body: InterruptInput, request: Request):
         return await interrupt_response(session_id, body, request)
 
-    @router.get('/interrupt/receipt')
-    async def interrupt_receipt(session_id: str, request: Request):
+    async def interrupt_receipt_for(session_id, request, surface):
         if not getattr(request.state, 'operator_session', False):
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to recover an interrupt receipt.')
         try:
@@ -413,13 +421,21 @@ def build_router():
             if ref is None:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.')
             return read_human_interrupt_receipt(state.deps.connection_factory, access=build_execution_access(state.deps),
-                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, 'web'), client_intent_id=intent,
+                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, surface), client_intent_id=intent,
                 current_interrupt_target=_interrupt_target_for(state))
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
         except OktoNexusError as error:
             return _runtime_error(error)
+
+    @router.get('/interrupt/receipt')
+    async def interrupt_receipt(session_id: str, request: Request):
+        return await interrupt_receipt_for(session_id, request, 'web')
+
+    @router.get('/terminal/interrupt/receipt')
+    async def terminal_interrupt_receipt(session_id: str, request: Request):
+        return await interrupt_receipt_for(session_id, request, 'nexus_cli')
 
     return router
 
