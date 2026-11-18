@@ -1,23 +1,32 @@
 """Exercise the local presentation protocol across HTTP and WebSocket."""
 
+import json
 import socket
 import threading
 import time
 from dataclasses import asdict
 from types import SimpleNamespace
+from urllib.parse import urlsplit
 
 import pytest
 import uvicorn
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
+from wsproto import ConnectionType, WSConnection
+from wsproto.events import AcceptConnection, RejectConnection, Request, TextMessage
 
+from okto_nexus.adapters.inbound.cli.codex_viewer_relay import local_codex_relay
 from okto_nexus.adapters.inbound.http import dashboard_session_presentations
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE, OperatorAuth
 from okto_nexus.adapters.outbound.local_presenter_client import open_local_presentation
 from okto_nexus.adapters.outbound.operator_client import RemoteOperatorHTTP
 from okto_nexus.application import codex_presenter_channel
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
+from okto_nexus.application.codex_viewer_protocol import (
+    CodexViewerContext,
+    CodexViewerProtocol,
+)
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.application.terminal_connection import ConnectionError
 from tests.session_interaction.test_queue_storage import database as queue_database
@@ -27,6 +36,38 @@ THREAD = 'bdfe5b81-54cf-43cf-8001-5de670d3dd69'
 PREFIX = '/api/v1/runtime-management'
 SUBPROTOCOL = 'nexus.presenter.v1'
 ORIGIN = 'http://127.0.0.1'
+
+
+def viewer_context(path):
+    return CodexViewerContext(thread_id=THREAD, session_id=THREAD, cwd=str(path), model='synthetic',
+        model_provider='openai', status='idle', created_at=1, updated_at=2, ephemeral=True, cli_version='0.170.0',
+        source='cli', approval_policy='never', approvals_reviewer='user',
+        sandbox={'type': 'readOnly', 'networkAccess': False}, reasoning_effort='medium')
+
+
+def next_event(peer, wire):
+    while data := peer.recv(64 * 1024):
+        wire.receive_data(data)
+        yield from wire.events()
+
+
+def open_viewer(endpoint, peer, *, token, extra=()):
+    host = urlsplit(endpoint.address).netloc
+    wire = WSConnection(ConnectionType.CLIENT)
+    peer.sendall(wire.send(Request(host=host, target='/',
+        extra_headers=[(b'authorization', ('Bearer ' + token).encode()), *extra])))
+    return wire
+
+
+def rpc(peer, wire, ident, method, **params):
+    peer.sendall(wire.send(TextMessage(data=json.dumps({'id': ident, 'method': method, 'params': params}))))
+    fragments = []
+    for event in next_event(peer, wire):
+        assert isinstance(event, TextMessage)
+        fragments.append(event.data)
+        if event.message_finished:
+            return json.loads(''.join(fragments))
+    pytest.fail('The viewer closed before returning a reply')
 
 
 @pytest.fixture
@@ -182,7 +223,10 @@ def test_explicit_detach_requires_the_same_channel(transport):
     assert attachment_state(transport, offer) == ('DETACHED', None, None)
 
 
-def test_loopback_network_carries_history_and_releases_on_eof(transport):
+@pytest.mark.parametrize('quit_mode', ['eof', 'logout'])
+def test_loopback_network_carries_history_and_releases_on_eof(transport, quit_mode, tmp_path, monkeypatch):
+    if quit_mode == 'logout':
+        monkeypatch.setattr(dashboard_session_presentations, '_RENEW_SECONDS', 1)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
         listener.bind(('127.0.0.1', 0))
         listener.listen()
@@ -200,17 +244,35 @@ def test_loopback_network_carries_history_and_releases_on_eof(transport):
                                      server_id=transport.scope.session.server_id)
             with open_local_presentation(api, **document(transport.scope),
                                          capability_revision='capability-1', client_intent_id='loopback') as peer:
-                assert peer.page(method='thread/turns/list', params={'threadId': THREAD})['data'] == []
-                assert peer.page(method='thread/items/list', params={'threadId': THREAD})['data'] == []
                 with transport.factory.unit_of_work(write=False) as uow:
                     offer = dict(uow.connection.execute(
                         'SELECT attachment_id FROM session_attachments WHERE client_intent_id=?', ('loopback',)
                     ).fetchone())
                 assert attachment_state(transport, offer)[0] == 'ACTIVE'
-            deadline = time.monotonic() + 5
-            while attachment_state(transport, offer)[0] != 'DETACHED' and time.monotonic() < deadline:
-                time.sleep(.02)
-            assert attachment_state(transport, offer) == ('DETACHED', None, None)
+                with local_codex_relay(peer, context=viewer_context(tmp_path), viewer_home=str(tmp_path),
+                                       platform_os='windows') as endpoint:
+                    port = urlsplit(endpoint.address).port
+                    with socket.create_connection(('127.0.0.1', port), timeout=4) as foreign:
+                        denied = open_viewer(endpoint, foreign, token=endpoint.token,
+                                             extra=[(b'origin', b'http://foreign.test')])
+                        assert isinstance(next(next_event(foreign, denied)), RejectConnection)
+                    with socket.create_connection(('127.0.0.1', port), timeout=4) as viewer:
+                        wire = open_viewer(endpoint, viewer, token=endpoint.token)
+                        assert isinstance(next(next_event(viewer, wire)), AcceptConnection)
+                        assert rpc(viewer, wire, 1, 'initialize')['result']['platformOs'] == 'windows'
+                        response = rpc(viewer, wire, 2, 'thread/resume', threadId=THREAD)
+                        assert response['result']['thread']['id'] == THREAD
+                        for method in ['thread/turns/list', 'thread/items/list']:
+                            assert rpc(viewer, wire, method, method, threadId=THREAD)['result']['data'] == []
+                        assert rpc(viewer, wire, 3, 'thread/items/list', threadId='sibling')['error']['code'] == -32602
+                        assert rpc(viewer, wire, 4, 'turn/start', threadId=THREAD)['error']['code'] == -32601
+                        if quit_mode == 'logout':
+                            transport.auth.logout(transport.token)
+                            assert viewer.recv(1024) == b''
+                    deadline = time.monotonic() + 5
+                    while attachment_state(transport, offer)[0] != 'DETACHED' and time.monotonic() < deadline:
+                        time.sleep(.02)
+                    assert attachment_state(transport, offer) == ('DETACHED', None, None)
         finally:
             server.should_exit = True
             thread.join(10)
@@ -228,3 +290,27 @@ def test_client_refuses_foreign_server_before_sending_the_operator_cookie(transp
     with pytest.raises(ConnectionError) as refused, open_local_presentation(sibling, **arguments):
         pytest.fail('A foreign Server scope must not be prepared')
     assert refused.value.code == 'PRESENTATION_UNAVAILABLE'
+
+
+def test_native_inline_history_has_shared_scope_and_refuses_partial_reads(tmp_path):
+    calls = []
+    state = {'cursor': None}
+
+    def page(*, method, params):
+        assert params['threadId'] == THREAD
+        calls.append(method)
+        data = [{'id': 'turn', 'status': 'completed'}] if method == 'thread/turns/list' else [
+            {'turnId': 'turn', 'item': {'type': 'agentMessage', 'id': 'item', 'text': 'fixture'}}]
+        return {'data': data, 'nextCursor': state['cursor']}
+
+    protocol = CodexViewerProtocol(context=viewer_context(tmp_path), read_page=page,
+                                   viewer_home=str(tmp_path), platform_os='windows')
+    protocol.handle({'id': 1, 'method': 'initialize'})
+    read = {'id': 2, 'method': 'thread/read', 'params': {'threadId': THREAD, 'includeTurns': True}}
+    assert protocol.handle(read)['result']['thread']['turns'] == [{
+        'id': 'turn', 'status': 'completed', 'itemsView': 'summary',
+        'items': [{'type': 'agentMessage', 'id': 'item', 'text': 'fixture'}]}]
+    assert calls == ['thread/turns/list', 'thread/items/list']
+    state['cursor'] = 'continuation'
+    assert protocol.handle(read)['error']['code'] == -32601
+    assert calls[-1] == 'thread/turns/list' and calls.count('thread/items/list') == 1

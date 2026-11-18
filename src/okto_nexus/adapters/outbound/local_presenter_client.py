@@ -4,8 +4,9 @@ import re
 import socket
 import ssl
 import time
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, contextmanager, suppress
 from ipaddress import ip_address
+from select import select
 from urllib.parse import quote, urlsplit
 
 from nexus_connector_core.protocol import canonical_json, strict_json
@@ -36,6 +37,32 @@ class _LocalPresenter:
         self._peer = peer
         self._wire = wire
         self._request_id = 0
+
+    def close(self):
+        """Stop this presentation socket, including an in-flight read."""
+        with suppress(OSError):
+            self._peer.shutdown(socket.SHUT_RDWR)
+        self._peer.close()
+
+    def ensure_open(self):
+        """Observe upstream close while the viewer is idle without another request."""
+        if self._peer.fileno() < 0:
+            raise OSError('The presentation socket closed')
+        tls_pending = isinstance(self._peer, ssl.SSLSocket) and self._peer.pending()
+        if not tls_pending and not select([self._peer], [], [], 0)[0]:
+            return
+        self._peer.settimeout(.2)
+        try:
+            data = self._peer.recv(16 * 1024)
+        except TimeoutError:
+            return
+        if not data:
+            raise OSError('The presentation socket closed')
+        self._wire.receive_data(data)
+        for event in self._wire.events():
+            if not isinstance(event, Ping):
+                raise OSError('The presentation sent an unsolicited event or closed')
+            self._peer.sendall(self._wire.send(event.response()))
 
     def _events(self, deadline):
         while True:
