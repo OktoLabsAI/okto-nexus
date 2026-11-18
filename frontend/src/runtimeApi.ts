@@ -158,6 +158,7 @@ export interface RuntimeRequest {
 export interface RuntimeScope {
   server_id: string; agent_id: string; executor_id: string; binding_id: string;
   workspace_id: string; workspace_binding_id: string; session_id: string;
+  session_owner_generation?: number;
 }
 export interface RuntimeResolution {
   client_intent_id: string; operation_id: string; session_id: string; scope: RuntimeScope;
@@ -173,6 +174,51 @@ export interface RuntimeOperation {
 export interface RuntimeSession {
   scope: RuntimeScope; lifecycle_state: string; process_state: string; lease_state: string;
   control_available: boolean; durable_release_pending: boolean;
+}
+
+export interface InteractionScope extends RuntimeScope {
+  session_owner_generation: number;
+}
+
+export interface SessionInteraction {
+  scope: InteractionScope;
+  stream_epoch: string | null;
+  next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean};
+}
+
+export interface SessionInputReceipt {
+  scope: RuntimeScope;
+  session_owner_generation: number;
+  input_id: string;
+  enqueue_sequence: number;
+  input_revision: number;
+  queue_revision: number;
+  status: 'QUEUED' | 'DISPATCHING' | 'ACCEPTED_NATIVE' | 'REFUSED_BEFORE_SEND' | 'DELIVERY_UNKNOWN' |
+    'BLOCKED_AUTH' | 'BLOCKED_SESSION' | 'PAUSED' | 'EXPIRED' | 'CANCELLED';
+  operation_id: string | null;
+  possible_effect: boolean;
+}
+
+export interface ConversationUpdate {
+  update_id: string;
+  message_id: string;
+  sequence: number;
+  role: 'user' | 'assistant';
+  change: 'append' | 'replace';
+  text: string | null;
+  text_truncated: boolean;
+}
+
+export interface SessionConversationPage {
+  scope: InteractionScope;
+  stream_epoch: string | null;
+  updates: ConversationUpdate[];
+  next_after_sequence: number;
+  committed_contiguous: number;
+  gap_pending: boolean;
+  has_more: boolean;
+  omitted_artifact_events: number;
+  history_complete: boolean;
 }
 export interface RuntimeEventPage {
   scope: RuntimeScope; stream_epoch: string | null;
@@ -224,6 +270,16 @@ async function read<T>(path: string, signal: AbortSignal | undefined, body?: unk
     throw new RuntimeManagementError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details,error);
   }
   return value as T;
+}
+
+function interactionTarget(scope: InteractionScope) {
+  const {server_id, executor_id, binding_id, workspace_id, workspace_binding_id, agent_id, session_id} = scope;
+  const exact = {server_id, executor_id, binding_id, workspace_id, workspace_binding_id, agent_id};
+  return {
+    path: `/v1/runtime/sessions/${encodeURIComponent(session_id)}`,
+    query: new URLSearchParams({...exact, expected_session_generation: String(scope.session_owner_generation)}),
+    scope: {...exact, session_id},
+  };
 }
 
 // Save the complete immutable request before sending it. Retrying an uncertain
@@ -307,6 +363,29 @@ export const runtimeApi = {
   }),
   operation: (id: string, signal?: AbortSignal) => read<RuntimeOperation>(`/v1/runtime/operations/${encodeURIComponent(id)}`, signal),
   session: (id: string, signal?: AbortSignal, executorId?: string) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}${executorId ? `?executor_id=${encodeURIComponent(executorId)}` : ''}`, signal),
+  sessionInteraction: (scope: InteractionScope, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionInteraction>(`${target.path}/interaction?${target.query}`, signal);
+  },
+  sessionConversation: (scope: InteractionScope, after: number, epoch: string | null, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    target.query.set('after_sequence', String(after));
+    if (epoch !== null) target.query.set('stream_epoch', epoch);
+    return read<SessionConversationPage>(`${target.path}/conversation?${target.query}`, signal);
+  },
+  enqueueSessionInput: (scope: InteractionScope, intent: string, text: string, capability: string, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionInputReceipt>(`${target.path}/inputs`, signal, {
+      scope: target.scope, expected_session_generation: scope.session_owner_generation,
+      client_intent_id: intent, capability_revision: capability, mode: 'next_turn',
+      content: [{type: 'text', text}],
+    });
+  },
+  sessionInputReceipt: (scope: InteractionScope, intent: string, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    target.query.set('client_intent_id', intent);
+    return read<SessionInputReceipt>(`${target.path}/inputs/receipt?${target.query}`, signal);
+  },
   sessions: (agentId: string, binding: Pick<BindingView, 'executor_id' | 'binding_id'>, after: string, signal?: AbortSignal) => {
     const query = new URLSearchParams({agent_id: agentId, executor_id: binding.executor_id,
       binding_id: binding.binding_id, after_session_id: after, limit: "25"});

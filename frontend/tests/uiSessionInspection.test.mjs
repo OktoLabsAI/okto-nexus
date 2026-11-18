@@ -26,6 +26,7 @@ function load(url){
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
 const {SessionExecutionPanel}=load(new URL('../src/components/SessionExecutionPanel.tsx',import.meta.url));
+const {assertConversationPage,applyConversationUpdates,interactionKey}=load(new URL('../src/sessionConversation.ts',import.meta.url));
 const render=props=>renderToStaticMarkup(React.createElement(SessionExecutionPanel,props));
 
 test('passive session inspection sends exact session/executor and verifies all seven admitted scope fields',async()=>{
@@ -84,4 +85,35 @@ test('standalone wrapper body retains terminal maximizer while exact-session tar
   const resolved={version:1,available:true,source_revision:'revision',target,agent_id:context.agent_id,session_context:context};
   assert.deepEqual(homeInspectionTarget(resolved),{kind:'session',context});
   assert.equal(homeInspectionTarget({...resolved,session_context:{...context,workspace_id:'foreign'}}).kind,'unavailable');
+});
+
+test('the interactive Home body opens conversation and keeps existing controls in technical activity',()=>{
+  const markup=render({session:session(),embedded:true,interactive:true,technicalControls:React.createElement('button',null,'Older runtime actions')});
+  assert.match(markup,/aria-pressed="true"[^>]*>Conversation/);
+  assert.match(markup,/Technical activity/);
+  assert.doesNotMatch(markup,/Older runtime actions|Runtime session history/);
+});
+
+test('conversation cursor pages cannot cross scope, owner generation or stream',()=>{
+  const scope=session().scope;
+  const page={scope,stream_epoch:'epoch',next_after_sequence:2,committed_contiguous:3,has_more:true,updates:[]};
+  assert.doesNotThrow(()=>assertConversationPage(page,scope,0,'epoch'));
+  const replaced={...scope,session_owner_generation:2};
+  assert.notEqual(interactionKey(scope),interactionKey(replaced));
+  assert.throws(()=>assertConversationPage({...page,scope:replaced},scope,0,'epoch'));
+  assert.throws(()=>assertConversationPage(page,scope,2,'epoch'));
+  assert.throws(()=>assertConversationPage(page,scope,0,'foreign-epoch'));
+});
+
+test('conversation reconciles deltas and snapshots by message identity with stable prior rows',()=>{
+  const initial=new Map();
+  const part={message_id:'message',update_id:'delta',change:'append',role:'assistant',text:'part',text_truncated:false};
+  const first=applyConversationUpdates(initial,[part,part]);
+  assert.equal(initial.size,0);
+  assert.equal(first.get('message').text,'part');
+  const next=applyConversationUpdates(first,[{...part,update_id:'snapshot',change:'replace',text:'complete'},
+    {...part,message_id:'other',update_id:'other',change:'replace',text:'complete'}]);
+  assert.deepEqual([...next.keys()],['message','other']);
+  assert.equal(next.get('message').text,'complete');
+  assert.equal(first.get('message').text,'part');
 });

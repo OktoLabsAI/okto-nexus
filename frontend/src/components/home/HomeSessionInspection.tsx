@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, type ReactNode} from 'react';
 import type {HomeSessionContext} from '../../homeTypes';
 import {runtimeApi, type RuntimeSession} from '../../runtimeApi';
 import {readHomeSessionInspection} from '../../homeSessionInspection';
 import {SessionExecutionPanel} from '../SessionExecutionPanel';
 
-/** Revalidate admission identity before exposing only the existing passive event viewer. */
-export function HomeSessionInspection({context}: {context: HomeSessionContext}) {
+/** Revalidate identity before opening the exact session context. */
+export function HomeSessionInspection({context, technicalControls}: {context: HomeSessionContext; technicalControls?: ReactNode}) {
   const key=JSON.stringify([context.server_id,context.executor_id,context.workspace_id,context.session_id,
     context.binding_id,context.workspace_binding_id,context.agent_id]);
   const [read,setRead]=useState<{key:string;session:RuntimeSession|null;error:string}>({key,session:null,error:''});
@@ -19,5 +19,5 @@ export function HomeSessionInspection({context}: {context: HomeSessionContext}) 
     return()=>{controller.abort();window.removeEventListener('nexus-auth-expired',revoke);window.removeEventListener('nexus-operator-logout',revoke);};
   },[key]);
   if(read.key!==key||!read.session)return <p role={read.key===key&&read.error?'alert':'status'}>{read.key===key&&read.error?read.error:'Revalidating the exact session…'}</p>;
-  return <SessionExecutionPanel session={read.session} embedded/>;
+  return <SessionExecutionPanel session={read.session} embedded interactive technicalControls={technicalControls}/>;
 }

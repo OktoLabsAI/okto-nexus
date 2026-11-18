@@ -1,12 +1,14 @@
-import {useEffect, useRef, useState} from 'react';
-import {runtimeApi, type RuntimeSession} from '../runtimeApi';
+import {useEffect, useRef, useState, type ReactNode} from 'react';
+import {runtimeApi, type InteractionScope, type RuntimeSession} from '../runtimeApi';
 import {sessionReleased} from '../connectionSessions';
 import {assertHomeSessionContext} from '../homeSessionInspection';
 import {RuntimeEventStream} from './RuntimeEventStream';
 import {CopyMessageButton} from './CopyMessageButton';
+import {SessionConversation} from './SessionConversation';
 
 export interface SessionExecutionPanelProps {
-  session: RuntimeSession; harness?: string; host?: string; embedded?: boolean;
+  session: RuntimeSession; harness?: string; host?: string; embedded?: boolean; interactive?: boolean;
+  technicalControls?: ReactNode;
 }
 
 /** Build a shell-safe invocation of the Nexus CLI's existing-session prompt. */
@@ -16,16 +18,18 @@ function terminalSessionCommand(session: RuntimeSession): string | null {
       !/^ses_[a-zA-Z0-9_-]+$/.test(id)) return null;
   return `okto-nexus work chat --session-id ${id}`;
 }
-/** Shared output body: no dialog, command input, session selection or execution controls. */
+/** Shared exact-session body used in the Home context and the terminal viewer. */
 export function SessionExecutionPanel(props: SessionExecutionPanelProps) {
   const s = props.session.scope;
-  const identity = JSON.stringify([s.server_id,s.executor_id,s.workspace_id,s.session_id,s.binding_id,s.workspace_binding_id,s.agent_id]);
+  const identity = JSON.stringify([s.server_id,s.executor_id,s.workspace_id,s.session_id,s.binding_id,s.workspace_binding_id,
+    s.agent_id,s.session_owner_generation]);
   return <ExecutionBody key={identity} {...props}/>;
 }
 
-function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPanelProps) {
+function ExecutionBody({session,harness,host,embedded=false,interactive=false,technicalControls}: SessionExecutionPanelProps) {
   const [current,setCurrent] = useState<RuntimeSession|null>(session);
   const [tab,setTab] = useState<'tail'|'history'>(sessionReleased(session)?'history':'tail');
+  const [presentation,setPresentation] = useState<'conversation'|'activity'>('conversation');
   const [error,setError] = useState('');
   const [blocked,setBlocked] = useState(false);
   const stopObserving=useRef<()=>void>(()=>{});
@@ -41,6 +45,10 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
         if(controller.signal.aborted)return;
         try {assertHomeSessionContext(next,{...session.scope,lifecycle_state:session.lifecycle_state});}
         catch {stopObserving.current();setCurrent(null);setBlocked(true);setError('The session changed scope. Reopen its exact context.');return;}
+        if (interactive && next.scope.session_owner_generation !== session.scope.session_owner_generation) {
+          stopObserving.current();setCurrent(null);setBlocked(true);setError('The session owner changed. Reopen this session.');
+          return;
+        }
         setCurrent(next);setError('');
         if(sessionReleased(next))setTab('history');
         else timer=window.setTimeout(()=>void poll(),2000);
@@ -56,7 +64,7 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
   },[]);
   if(blocked||!current)return <p role="alert">{error}</p>;
   const command = embedded && !error ? terminalSessionCommand(current) : null;
-  return <section aria-label="Session execution output" data-modal-passive className="space-y-3 min-w-0">
+  const activity = <section aria-label="Session execution output" data-modal-passive className="space-y-3 min-w-0">
     <p className="text-xs text-surface-500 break-words">{[harness,host,current.lifecycle_state].filter(Boolean).join(' · ')} · Read only</p>
     {!embedded&&<p className="text-xs text-surface-500 break-all">{session.scope.session_id}</p>}
     {error&&<p role="alert" className="text-xs text-red-600">{error}</p>}
@@ -74,5 +82,21 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
         <CopyMessageButton text={command} item="command"/>
       </div>
     </details>}
+  </section>;
+  const generation = current.scope.session_owner_generation;
+  if (!interactive || generation === undefined || !Number.isSafeInteger(generation) || generation <= 0) {
+    return technicalControls ? <>{activity}{technicalControls}</> : activity;
+  }
+  const scope: InteractionScope = {...current.scope, session_owner_generation: generation};
+  return <section aria-label="Session" className="space-y-3 min-w-0">
+    <div role="group" aria-label="Session view" className="flex flex-wrap gap-2">
+      <button type="button" className="btn btn-secondary" aria-pressed={presentation === 'conversation'}
+        onClick={() => setPresentation('conversation')}>Conversation</button>
+      <button type="button" className="btn btn-secondary" aria-pressed={presentation === 'activity'}
+        onClick={() => setPresentation('activity')}>Technical activity</button>
+    </div>
+    {presentation === 'conversation'
+      ? <SessionConversation scope={scope} active={!sessionReleased(current) && !error} onAccessLost={clear}/>
+      : <>{activity}{technicalControls}</>}
   </section>;
 }

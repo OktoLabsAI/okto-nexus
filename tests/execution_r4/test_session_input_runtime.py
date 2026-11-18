@@ -159,6 +159,9 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
     assert client.post(path + '/inputs', json=body, headers=ui | {'origin': 'https://foreign.invalid'}).status_code == 403
     invalid = client.post(path + '/inputs', json=body | {'actor_agent_id': 'fixture-uncopied'}, headers=ui)
     assert invalid.status_code == 422 and 'fixture-uncopied' not in invalid.text
+    for text in ('  /unknown', '!fixture'):
+        command = client.post(path + '/inputs', json=body | {'content': [{'type': 'text', 'text': text}]}, headers=ui)
+        assert command.status_code == 422 and text not in command.text
     assert client.post(path + '/inputs', json=body | {'capability_revision': 'stale'}, headers=ui).status_code == 409
     first = client.post(path + '/inputs', json=body, headers=ui)
     assert first.status_code == 202, first.text

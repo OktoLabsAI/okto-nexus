@@ -59,8 +59,11 @@ export function CanonicalInspection({target, item, action, onClose, onChanged, r
       {target.kind === 'unavailable' && <p role="status">{target.reason}</p>}
       {loading && <p role="status">Loading canonical record…</p>}
       {error && <p role="alert">{error}</p>}
-      {target.kind === 'session' && <>{!suppressOutput&&<HomeSessionInspection key={targetKey} context={target.context}/>}
-        <HomeSessionControls key={`controls:${targetKey}`} context={target.context}/></>}
+      {target.kind === 'session' && (suppressOutput
+        ? <details><summary className="cursor-pointer">Session controls</summary>
+            <HomeSessionControls key={targetKey} context={target.context}/></details>
+        : <HomeSessionInspection key={targetKey} context={target.context}
+            technicalControls={<HomeSessionControls context={target.context}/>}/>)}
       {target.kind === 'connection' && <section aria-label="Connection context" className="space-y-2 text-sm">
         <h3 className="font-semibold">Connection · Read only</h3>
         <p>This connection can be inspected here. Individual reconnection is unavailable.</p>

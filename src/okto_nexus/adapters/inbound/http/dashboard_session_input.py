@@ -70,8 +70,12 @@ def build_router():
                 exact = {**document.model_dump(), 'session_owner_generation': scope.generation.value}
                 if any(view['scope'][key] != value for key, value in exact.items()):
                     raise OktoNexusError(ErrorCode.NOT_FOUND, 'The session is outside this scope.')
+                epoch = uow.connection.execute(
+                    'SELECT stream_epoch FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?',
+                    (scope.session.server_id, scope.session.executor_id, session_id),
+                ).fetchone()[0]
                 revision = revision_for(uow, scope) if revision_for is not None else None
-                return {'scope': exact,
+                return {'scope': exact, 'stream_epoch': epoch,
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}
 

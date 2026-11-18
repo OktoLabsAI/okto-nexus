@@ -90,6 +90,8 @@ import {AdvancedView} from './views/AdvancedView';
 import {useScopedAttentionSummary} from './hooks/useScopedAttentionSummary';
 import {NavigationSidebar} from './components/NavigationSidebar';
 import {GlobalAttentionButton} from './components/GlobalAttentionButton';
+import {OperatorSignIn} from './components/OperatorSignIn';
+import {clearConversationDrafts} from './components/SessionConversation';
 
 type View = ViewId;
 
@@ -103,16 +105,23 @@ export default function App() {
   useEffect(() => {
     sessionStorage.removeItem("okto_nexus_operator_key");
     void refreshAuth();
-    const expired = () => {clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);void refreshAuth();};
+    const expired = () => {clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);clearConversationDrafts();void refreshAuth();};
+    const signedIn = () => {clearConversationDrafts();void refreshAuth();};
     window.addEventListener("nexus-auth-expired", expired);
-    return () => window.removeEventListener("nexus-auth-expired", expired);
+    window.addEventListener("nexus-operator-login", signedIn);
+    return () => {
+      window.removeEventListener("nexus-auth-expired", expired);
+      window.removeEventListener("nexus-operator-login", signedIn);
+    };
   }, [refreshAuth]);
   if (error) return <div role="alert" className="p-6">{error}<button className="btn btn-secondary ml-3" onClick={() => void refreshAuth()}>Retry</button></div>;
   if (!status) return <div className="p-6">Connecting…</div>;
   if (!status.authenticated) return <OperatorGate configured={status.configured} onUnlock={() => void refreshAuth()} />;
-  return <Dashboard key={status.username || "local-operator"} identityKey={JSON.stringify([status.local, status.username])} localOpen={status.local} onLock={() => {
+  return <Dashboard key={status.username || "local-operator"} identityKey={JSON.stringify([status.local, status.username])}
+    localOpen={status.local} signedIn={!!status.username} onLock={() => {
     clearHomeContinuationRequests(sessionStorage);
     clearExactRuntimeRequests(sessionStorage);
+    clearConversationDrafts();
     window.dispatchEvent(new Event('nexus-operator-logout'));
     void api.operatorLogout().then(refreshAuth).catch(exc => setError((exc as Error).message));
   }} />;
@@ -140,26 +149,12 @@ function BrandMark({ className = "h-7 w-auto" }: { className?: string }) {
 }
 
 function OperatorGate({configured, onUnlock}: {configured: boolean; onUnlock: () => void}) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
   return <div className="h-screen grid place-items-center">
-    <form className="panel p-6 w-full max-w-[420px] space-y-4" onSubmit={async event => {
-      event.preventDefault(); setBusy(true); setError(null);
-      try { await api.operatorLogin(username.trim(), password); setPassword(""); onUnlock(); }
-      catch (exc) { setError((exc as Error).message); }
-      finally { setBusy(false); }
-    }}>
+    <section className="panel p-6 w-full max-w-[420px] space-y-4">
       <BrandMark className="h-9 w-auto mb-2" />
       <h1 className="font-semibold">Operator sign-in</h1>
-      {configured ? <>
-        <label className="block text-sm">Username<input autoFocus autoComplete="username" required value={username} onChange={e => setUsername(e.target.value)} className="w-full border rounded-lg p-2 mt-1 bg-transparent" /></label>
-        <label className="block text-sm">Password<input type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full border rounded-lg p-2 mt-1 bg-transparent" /></label>
-        {error && <p role="alert" className="text-sm text-red-500">{error}</p>}
-        <button className="btn btn-primary w-full justify-center" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</button>
-      </> : <p className="text-sm text-surface-500">Remote operator access is not configured. On the Nexus server, open the dashboard at localhost and go to Settings → Operator access.</p>}
-    </form>
+      <OperatorSignIn configured={configured} autoFocus onUnlock={onUnlock}/>
+    </section>
   </div>;
 }
 
@@ -172,10 +167,12 @@ export function restoreClosedNavigationFocus(navigation:HTMLElement|null, trigge
 function Dashboard({
   onLock,
   localOpen,
+  signedIn,
   identityKey,
 }: {
   onLock: () => void;
   localOpen: boolean;
+  signedIn: boolean;
   identityKey: string;
 }) {
   const { theme, toggle } = useTheme();
@@ -684,7 +681,7 @@ function Dashboard({
           >
             <RotateCw size={14} />
           </button>}
-          {!localOpen && (
+          {signedIn && (
             <button
               className="btn btn-secondary !px-2"
               onClick={() => {

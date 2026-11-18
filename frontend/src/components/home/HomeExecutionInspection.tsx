@@ -46,6 +46,8 @@ export function HomeExecutionInspection({target,refreshKey,suppressOutput=true}:
 export function HomeExecutionDetails({context,suppressOutput=true,onAccessLost}: {context:Context;suppressOutput?:boolean;onAccessLost?:()=>void}) {
   const {operation,session,binding}=context;
   const uncertain=operation.executor_stage==='OUTCOME_UNKNOWN'||operation.admission_state==='RECONCILING';
+  const controls = !uncertain ? <ExactSessionControls session={session} binding={binding} onAccessLost={onAccessLost}/> :
+    <p role="status">Controls are unavailable for this exact session. Inspect the pending operation first.</p>;
   return <section aria-label="Exact execution context" className="space-y-3 min-w-0">
     <h3 className="font-semibold">Execution · {operation.executor_stage||operation.admission_state}</h3>
     {uncertain&&operation.possible_effect&&<p className="text-sm">The action may have reached the harness.</p>}
@@ -54,12 +56,12 @@ export function HomeExecutionDetails({context,suppressOutput=true,onAccessLost}:
     {(uncertain||operation.error)&&<details className="text-xs"><summary>Reference for troubleshooting</summary>
       <p className="break-all">Operation: {operation.operation_id}</p>
     </details>}
-    {!suppressOutput&&<><SessionExecutionPanel session={session} harness={binding.adapter_id} embedded/>
+    {!suppressOutput&&<><SessionExecutionPanel session={session} harness={binding.adapter_id} embedded interactive
+      technicalControls={controls}/>
       {operation.result&&<section aria-label="Retained execution result"><h4 className="font-medium">Retained result</h4>
         <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated?'\n[Output truncated]':''}</pre>
       </section>}</>}
-    {!uncertain?<ExactSessionControls session={session} binding={binding} onAccessLost={onAccessLost}/>:
-      <p role="status">Controls are unavailable for this exact session. Its history does not authorize a new context or renew execution permission.</p>}
+    {suppressOutput && <details><summary className="cursor-pointer">Session controls</summary>{controls}</details>}
   </section>;
 }
 
