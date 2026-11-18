@@ -11,7 +11,8 @@ PAGE_BYTES = 512 * 1024
 
 
 def read_execution_events(factory, *, server_id, session_id, context, access,
-                          executor_id=None, stream_epoch=None, after_sequence=0, limit=200):
+                          executor_id=None, stream_epoch=None, after_sequence=0, limit=200,
+                          hydrate_artifacts=True):
     with factory.unit_of_work(write=False) as uow:
         view = read_execution_session(factory, server_id=server_id, session_id=session_id,
             context=context, access=access, executor_id=executor_id, _uow=uow)
@@ -49,7 +50,8 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
                     raise ValueError('Missing committed event')
             except (ValueError, TypeError, KeyError) as exc:
                 raise OktoNexusError(ErrorCode.DB_ERROR, 'Stored canonical event integrity is invalid.', {}) from exc
-            event = resolve_event(factory,uow.connection,event)
+            if hydrate_artifacts:
+                event = resolve_event(factory,uow.connection,event)
             presentation_bytes = len(canonical_json(event))
             if events and used + presentation_bytes > PAGE_BYTES:
                 break
