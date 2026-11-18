@@ -342,8 +342,15 @@
         "SI-T-E01",
         "SI-T-H14"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "timestamp": "2026-11-18T10:12:35.378790+00:00",
+          "artifact_path": "execution/si005-synthetic-peer.md",
+          "result": "Deterministic peer plus actual Core byte-limited buffer test; combined30PASS",
+          "limitations": "No provider, real host or TTY; scenario statuses unchanged"
+        }
+      ]
     },
     {
       "id": "SI-006",
