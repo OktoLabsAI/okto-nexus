@@ -34,9 +34,10 @@ _TIMEOUT = 10
 
 
 class _LocalPresenter:
-    def __init__(self, peer, wire):
+    def __init__(self, peer, wire, attachment_id):
         self._peer = peer
         self._wire = wire
+        self.attachment_id = attachment_id
         self._request_id = 0
 
     def close(self):
@@ -144,19 +145,40 @@ def _unavailable():
     return ConnectionError('PRESENTATION_UNAVAILABLE', 'The local presentation could not be confirmed. Review the exact session again.')
 
 
-@contextmanager
-def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id):
-    """Exchange the offer and challenge without passing the human session to the viewer."""
+def _local_origin(api, scope):
     expected_keys = {'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id',
                      'agent_id', 'session_id'}
-    if (scope.keys() != expected_keys or not api.server_id or scope['server_id'] != api.server_id
-            or not api.token or not all(isinstance(value, str) and value for value in scope.values())):
+    if (scope.keys() != expected_keys or not getattr(api, 'server_id', None) or scope['server_id'] != api.server_id
+            or not getattr(api, 'token', None) or not all(isinstance(value, str) and value for value in scope.values())):
         raise _unavailable()
     origin = urlsplit(api.base)
     host = origin.hostname
     if origin.scheme not in ('http', 'https') or host not in ('localhost', '127.0.0.1', '::1'):
         raise ConnectionError('PRESENTATION_LOCAL_REQUIRED', 'This presentation requires the local Server address.')
+    return origin
+
+
+def review_local_presentation(api, *, scope, expected_session_generation):
+    """Read an exact viewer capability without issuing an attachment ticket."""
+    _local_origin(api, scope)
+    state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
+    response = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:review', state)
+    revision = response.get('capability_revision')
+    if (type(response.get('version')) is not int or response['version'] != 1
+            or response.get('attach_strategy') != 'codex_local_read'
+            or response.get('scope') != scope or type(response.get('expected_session_generation')) is not int
+            or response['expected_session_generation'] != expected_session_generation
+            or not isinstance(revision, str) or not 1 <= len(revision) <= 160 or not revision.isprintable()):
+        raise _unavailable()
+    return revision
+
+
+@contextmanager
+def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id):
+    """Exchange the offer and challenge without passing the human session to the viewer."""
+    origin = _local_origin(api, scope)
     port = origin.port or (443 if origin.scheme == 'https' else 80)
+    host = origin.hostname
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     offer = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:prepare',
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,
@@ -173,7 +195,7 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
                 raise ValueError('The presentation peer is not local')
             if origin.scheme == 'https':
                 peer = stack.enter_context(ssl.create_default_context().wrap_socket(peer, server_hostname=host))
-            link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT))
+            link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',
                          headers=api.request_headers(), ticket=ticket)
             challenge = link.exchange({'kind': 'hello', 'version': 1, **state})

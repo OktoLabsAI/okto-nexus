@@ -20,6 +20,7 @@ Usage:
   okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
   okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus session list|attach [--id HARNESS_ID | --profile NAME] [options]
   okto-nexus message send [options]  Send conversation using a participant profile
   okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
   okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
@@ -76,6 +77,9 @@ def main(argv: list[str] | None = None) -> int:
     if command == 'work':
         from .work import run_work
         return run_work(rest)
+    if command == 'session':
+        from .session import run_session
+        return run_session(rest)
     if command == 'operator':
         from .operator import run_operator
         return run_operator(rest)
@@ -108,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
         print('MCP stdio is no longer available. Run `okto-nexus serve` and connect to its HTTP /mcp endpoint.', file=sys.stderr)
         return 2
     import difflib
-    choices = ('connect', 'init', 'doctor', 'participant', 'preset', 'work',
+    choices = ('connect', 'init', 'doctor', 'participant', 'preset', 'work', 'session',
         'operator', 'serve', 'service', 'tail', 'admin', 'observe',
         'message', 'handoff', 'request', 'provider-credentials', *CLIENTS)
     suggestions = difflib.get_close_matches(command, choices, n=3, cutoff=0.5)

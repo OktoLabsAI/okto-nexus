@@ -31,8 +31,8 @@ def terminal_target_selection(service_args, profile, operator_profile):
     parser.add_argument('--home', type=Path)
     args, remaining = parser.parse_known_args(service_args)
     home = (args.home or load_config(os.environ, []).home_dir).expanduser().resolve()
-    path = home / 'terminal/profiles' / (profile + '.json')
-    saved = read_json(path) if path.exists() else None
+    path = home / 'terminal/profiles' / (profile + '.json') if profile is not None else None
+    saved = read_json(path) if path is not None and path.exists() else None
     previous = saved.get('selection', {}).get('operator_profile') if saved else None
     if saved and operator_profile is not None and operator_profile != previous:
         raise ConnectionError('PROFILE_CONFLICT', 'The project profile belongs to another operator topology. Choose a new project profile.')

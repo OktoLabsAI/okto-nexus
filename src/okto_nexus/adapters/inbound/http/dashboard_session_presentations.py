@@ -196,6 +196,36 @@ async def _present(ws, services, author, attachment_id, ticket):
 def build_router():
     router = APIRouter()
 
+    @router.post('/sessions/{session_id}/attachments:review')
+    async def review(session_id: str, body: ScopedSession, request: Request):
+        if not _local_transport(request) or not same_origin_request(request):
+            return _error(403, 'PERMISSION_DENIED', 'Local operator access is required.')
+        if session_id != body.scope.session_id or request.query_params:
+            return _error(422, 'VALIDATION_ERROR', 'An exact presentation scope is required.')
+        state = request.app.state
+        token = request.cookies.get(COOKIE)
+        if await _worker(state.operator_auth.resolve, token=token) is None:
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to review this presentation.')
+        services = _services(state)
+        if services is None or services.read_context is None:
+            return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
+        scope = body.input_scope()
+        try:
+            mapping, _ = await services.prove_owner(scope)
+            if mapping.codex_thread_id is None or _services(state) is not services:
+                raise CoreError('SESSION_CONFLICT', 'native_presentation')
+            reference = await _worker(state.operator_auth.authority_reference, token=token)
+            if reference is None:
+                return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
+            revision = await _worker(services.broker.review_reader, scope=scope,
+                author=InputAuthor(reference, 'native_terminal'), audience=_AUDIENCE)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+        except CoreError:
+            return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
+        return JSONResponse({'version': 1, 'attach_strategy': 'codex_local_read', 'capability_revision': revision,
+                             **body.model_dump()}, headers=_HEADERS)
+
     @router.post('/sessions/{session_id}/attachments:prepare')
     async def prepare(session_id: str, body: PrepareAttachment, request: Request):
         if not _local_transport(request) or not same_origin_request(request):

@@ -37,6 +37,8 @@ _POLL_SECONDS = .2
 class CodexRelayEndpoint:
     address: str
     token: str = field(repr=False)
+    thread_id: str
+    connected: threading.Event = field(repr=False, compare=False)
 
 
 def _receive_events(peer, wire, stop, deadline, idle=None):
@@ -107,7 +109,7 @@ def _viewer(peer, wire, protocol, stop, link):
         parts, size, deadline = [], 0, None
 
 
-def _serve_once(listener, *, host, secret, protocol, stop, link):
+def _serve_once(listener, *, host, secret, protocol, stop, link, connected):
     expires = time.monotonic() + _CONNECT_SECONDS
     while not stop.is_set() and time.monotonic() < expires:
         try:
@@ -126,6 +128,7 @@ def _serve_once(listener, *, host, secret, protocol, stop, link):
                         peer.sendall(wire.send(RejectConnection(status_code=403)))
                     continue
                 peer.sendall(wire.send(AcceptConnection()))
+                connected.set()
             except (OSError, ProtocolError, ValueError):
                 continue
             listener.close()
@@ -145,20 +148,21 @@ def local_codex_relay(link, *, viewer_home, platform_os):
         host = f'127.0.0.1:{listener.getsockname()[1]}'
         token = secrets.token_urlsafe(32)
         stop = threading.Event()
+        connected = threading.Event()
         protocol = CodexViewerProtocol(context=context, read_page=link.page, viewer_home=viewer_home,
                                        platform_os=platform_os)
 
         def serve():
             try:
                 _serve_once(listener, host=host, secret=('Bearer ' + token).encode(), protocol=protocol,
-                            stop=stop, link=link)
+                            stop=stop, link=link, connected=connected)
             finally:
                 link.close()
 
         worker = threading.Thread(target=serve, name='nexus-codex-viewer', daemon=True)
         worker.start()
         try:
-            yield CodexRelayEndpoint('ws://' + host, token)
+            yield CodexRelayEndpoint('ws://' + host, token, context.thread_id, connected)
         finally:
             stop.set()
             link.close()

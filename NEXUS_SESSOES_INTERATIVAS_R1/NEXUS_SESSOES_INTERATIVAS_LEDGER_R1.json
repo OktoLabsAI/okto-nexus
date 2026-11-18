@@ -1367,8 +1367,10 @@
         "SI-T-G02",
         "SI-T-G16"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si030-terminal-session-selection.md"
+      ]
     },
     {
       "id": "SI-031",
@@ -4550,7 +4552,7 @@
     },
     {
       "id": "SI-05",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-028",
         "SI-029",

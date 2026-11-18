@@ -16,6 +16,48 @@ SCOPE = ('server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id')
 TERMINAL = {'SUCCEEDED', 'FAILED', 'CANCELLED'}
 
 
+def _verify_session_binding(value, binding):
+    scope = value.get('scope') if isinstance(value, dict) else None
+    if not isinstance(scope, dict) or any(
+            scope.get(key) != binding[key] for key in (*SCOPE, 'workspace_binding_id')):
+        raise ConnectionError('WORK_SCOPE_CHANGED', 'The Server result does not match the selected project binding.')
+    return scope
+
+
+def list_binding_sessions(call, binding):
+    """Read bounded pages for one authorized binding, reporting an incomplete inventory."""
+    items, cursor = [], ''
+    for _ in range(10):
+        page = call('GET', PREFIX + '/runtime/sessions?' + urlencode(dict(
+            executor_id=binding['executor_id'], binding_id=binding['binding_id'],
+            agent_id=binding['agent_id'], after_session_id=cursor, limit=100)))
+        if (not isinstance(page, dict) or not isinstance(page.get('sessions'), list)
+                or len(page['sessions']) > 100 or type(page.get('has_more')) is not bool):
+            raise ConnectionError('SESSION_LIST_UNCONFIRMED', 'The session inventory is invalid.')
+        following = cursor
+        for session in page['sessions']:
+            session_id = _verify_session_binding(session, binding).get('session_id')
+            if (not isinstance(session_id, str) or not 1 <= len(session_id) <= 160
+                    or not session_id.isprintable() or session_id <= following):
+                raise ConnectionError('SESSION_LIST_UNCONFIRMED', 'The session inventory contains invalid or unordered references.')
+            following = session_id
+        items.extend(page['sessions'])
+        if not page['has_more']:
+            return {'sessions': items, 'has_more': False}
+        if following == cursor or page.get('next_after_session_id') != following:
+            raise ConnectionError('SESSION_LIST_UNCONFIRMED', 'The session list cursor did not advance.')
+        cursor = following
+    return {'sessions': items, 'has_more': True, 'next_after_session_id': cursor}
+
+
+def read_binding_session(call, binding, session_id):
+    value = call('GET', PREFIX + '/runtime/sessions/' + quote(session_id, safe='') + '?' +
+                 urlencode({'executor_id': binding['executor_id']}))
+    if _verify_session_binding(value, binding).get('session_id') != session_id:
+        raise ConnectionError('WORK_SCOPE_CHANGED', 'The Server returned another session.')
+    return value
+
+
 class TerminalWork(TerminalAuthorization):
     def __init__(self, call, save, connection, checkpoint=None):
         self.call, self.save, self.connection = call, save, connection
@@ -51,30 +93,10 @@ class TerminalWork(TerminalAuthorization):
             raise ConnectionError('WORK_SCOPE_CHANGED', 'The Server result does not match the selected project binding.')
 
     def sessions(self):
-        binding = self.binding()
-        items, cursor = [], ''
-        for _ in range(10):
-            page = self.api('GET', '/runtime/sessions?' + urlencode(dict(
-                executor_id=binding['executor_id'], binding_id=binding['binding_id'],
-                agent_id=binding['agent_id'], after_session_id=cursor, limit=100)))
-            for session in page['sessions']:
-                self._check_scope(session['scope'], binding)
-            items.extend(page['sessions'])
-            if not page['has_more']:
-                return {'sessions': items, 'has_more': False}
-            following = page['next_after_session_id']
-            if following <= cursor:
-                raise ConnectionError('SESSION_LIST_UNCONFIRMED', 'The session list cursor did not advance.')
-            cursor = following
-        return {'sessions': items, 'has_more': True, 'next_after_session_id': cursor}
+        return list_binding_sessions(self.call, self.binding())
 
     def session(self, binding, session_id):
-        value = self.api('GET', '/runtime/sessions/' + quote(session_id, safe='') + '?' +
-                         urlencode({'executor_id': binding['executor_id']}))
-        self._check_scope(value['scope'], binding)
-        if value['scope']['session_id'] != session_id:
-            raise ConnectionError('WORK_SCOPE_CHANGED', 'The Server returned another session.')
-        return value
+        return read_binding_session(self.call, binding, session_id)
 
     def submit(self, text=None, *, action='send', session_id=None, new_session=False,
                client_intent_id=None, target_turn_id=None):

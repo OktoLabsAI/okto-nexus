@@ -59,13 +59,23 @@ class SessionAttachmentBroker:
         self.clock = clock
         self.instance = secrets.token_hex(16)
 
-    def _authorize(self, uow, resolve_human, scope, author, access, audience, revision):
+    def _current_revision(self, uow, resolve_human, scope, author, access, audience):
         if not resolve_human(author.authority_ref):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The presentation login is unavailable.', {})
-        if (type(revision) is not str or not revision
-                or not _current_session(uow.connection, _scope_params(scope), require_active_lease=True)
-                or self.current_capability(uow, scope, author, access, audience) != revision):
+        if not _current_session(uow.connection, _scope_params(scope), require_active_lease=True):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The exact presentation capability changed.', {})
+        revision = self.current_capability(uow, scope, author, access, audience)
+        if type(revision) is not str or not 1 <= len(revision) <= 160 or not revision.isprintable():
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The exact presentation capability changed.', {})
+        return revision
+
+    def _authorize(self, uow, resolve_human, scope, author, access, audience, revision):
+        if self._current_revision(uow, resolve_human, scope, author, access, audience) != revision:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The exact presentation capability changed.', {})
+
+    def review_reader(self, *, scope, author, audience) -> str:
+        with self.authority_fence() as human, self.factory.unit_of_work(write=False) as uow:
+            return self._current_revision(uow, human, scope, author, 'read', audience)
 
     @staticmethod
     def _epoch(conn, scope):

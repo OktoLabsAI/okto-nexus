@@ -19,7 +19,10 @@ from wsproto.events import AcceptConnection, RejectConnection, Request, TextMess
 from okto_nexus.adapters.inbound.cli.codex_viewer_relay import local_codex_relay
 from okto_nexus.adapters.inbound.http import dashboard_session_presentations
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE, OperatorAuth
-from okto_nexus.adapters.outbound.local_presenter_client import open_local_presentation
+from okto_nexus.adapters.outbound.local_presenter_client import (
+    open_local_presentation,
+    review_local_presentation,
+)
 from okto_nexus.adapters.outbound.operator_client import RemoteOperatorHTTP
 from okto_nexus.application import codex_presenter_channel
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
@@ -275,13 +278,18 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
             assert server.started
             api = RemoteOperatorHTTP(f'http://{host}:{port}', token=transport.token,
                                      server_id=transport.scope.session.server_id)
+            revision = review_local_presentation(api, **document(transport.scope))
+            assert revision == 'capability-1'
+            with transport.factory.unit_of_work(write=False) as uow:
+                assert uow.connection.execute('SELECT COUNT(*) FROM session_attachments').fetchone()[0] == 0
             with open_local_presentation(api, **document(transport.scope),
-                                         capability_revision='capability-1', client_intent_id='loopback') as peer:
+                                         capability_revision=revision, client_intent_id='loopback') as peer:
                 with transport.factory.unit_of_work(write=False) as uow:
                     offer = dict(uow.connection.execute(
                         'SELECT attachment_id FROM session_attachments WHERE client_intent_id=?', ('loopback',)
                     ).fetchone())
                 assert attachment_state(transport, offer)[0] == 'ACTIVE'
+                assert offer['attachment_id'] == peer.attachment_id
                 with local_codex_relay(peer, viewer_home=str(tmp_path), platform_os='windows') as endpoint:
                     port = urlsplit(endpoint.address).port
                     with socket.create_connection(('127.0.0.1', port), timeout=4) as foreign:
