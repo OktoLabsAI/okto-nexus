@@ -29,6 +29,7 @@ class InputCapacityAttempt:
     reservation: CapacityReservation | None
     consumption: CapacityConsumption | None
     resolved_at: str | None
+    resolution: CapacityReservation | None = None
 
 
 def read_capacity_attempt(
@@ -49,6 +50,7 @@ def read_capacity_attempt(
         CapacityReservation.from_dict(json.loads(row["reservation_json"])) if row["reservation_json"] else None,
         CapacityConsumption.from_dict(json.loads(row["consumption_json"])) if row["consumption_json"] else None,
         row["resolved_at"],
+        CapacityReservation.from_dict(json.loads(row["resolution_json"])) if row["resolution_json"] else None,
     )
 
 
@@ -150,3 +152,37 @@ def record_staged_capacity_attempt(
     return InputCapacityAttempt(
         request, attempt.input_id, attempt.input_revision, "STAGED", operation_id, reservation, consumption, None,
     )
+
+
+def retire_prepared_capacity_attempt(uow: SqliteUnitOfWork, *, scope: InputScope,
+                                     observed: CapacityReservation, now: datetime) -> InputCapacityAttempt:
+    """Record a definitive host refusal while leaving the original intent retained."""
+    uow.require_active_writer()
+    if (type(observed) is not CapacityReservation or observed.state not in ('EXPIRED_UNCONSUMED', 'RELEASED')
+            or observed.consumption is not None or not _matches_scope(observed.request, scope)
+            or observed.reservation_id != capacity_reservation_id(observed.request) or now.utcoffset() is None):
+        raise _conflict('INPUT_CAPACITY_PROOF_CHANGED', 'The host did not prove an exact unconsumed attempt.')
+    attempt = read_capacity_attempt(uow, session=scope.session, attempt_id=observed.request.attempt_id)
+    if attempt is None or attempt.request != observed.request or attempt.state != 'PREPARED':
+        raise _conflict('INPUT_CAPACITY_REQUEST_CHANGED', 'The prepared capacity request differs or is unavailable.')
+    if attempt.resolved_at is not None:
+        return attempt
+    conn = uow.connection
+    params = {**asdict(scope.session), 'attempt_id': observed.request.attempt_id, 'input_id': attempt.input_id,
+              'input_revision': attempt.input_revision, 'resolved_at': now.astimezone(UTC).isoformat(),
+              'proof': canonical_json(observed.to_dict()).decode()}
+    conn.execute("""
+        UPDATE session_interaction_capacity_attempts SET resolved_at=:resolved_at,resolution_json=:proof
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND attempt_id=:attempt_id
+    """, params)
+    changed = conn.execute("""
+        UPDATE session_interaction_inputs SET status='REFUSED_BEFORE_SEND',input_revision=input_revision+1
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id
+          AND input_revision=:input_revision AND status='QUEUED' AND operation_id IS NULL AND possible_effect=0
+    """, params).rowcount
+    if changed:
+        conn.execute("""
+            UPDATE session_interaction_queues SET revision=revision+1
+            WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+        """, params)
+    return read_capacity_attempt(uow, session=scope.session, attempt_id=observed.request.attempt_id)

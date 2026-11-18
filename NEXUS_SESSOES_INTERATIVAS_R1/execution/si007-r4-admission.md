@@ -8,9 +8,8 @@ commit. Migration 171 adds that capacity provenance to the existing
 input row. The operation, outbox row and input link roll back together.
 
 The shared pump leaves a linked input pending until its original host
-reservation is confirmed consumed. The outbox hold is durable and also
-keeps an earlier binary from picking an unconsumed operation. The current
-pump keeps other turn submits for
+reservation is confirmed consumed. The durable outbox hold uses an
+outbox state outside the pump's pending selection. The current pump keeps other turn submits for
 that exact session behind a dispatching or uncertain input. Control
 operations still have their existing path. The send transaction repeats
 the capacity condition. The Core capacity ledger already gates ordinary

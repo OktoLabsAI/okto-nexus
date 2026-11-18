@@ -1,6 +1,9 @@
 """SQLite proofs of attempt identity and staging, independent of any host."""
 
+import asyncio
+from contextlib import nullcontext
 from dataclasses import replace
+from types import SimpleNamespace
 
 import pytest
 from nexus_connector_core import (
@@ -23,7 +26,11 @@ from okto_nexus.adapters.outbound.sqlite.session_interaction_capacity_attempts i
     read_capacity_attempt,
     record_staged_capacity_attempt,
 )
+from okto_nexus.application import session_interaction_capacity
+from okto_nexus.application.execution_leases import ExecutionChannel
 from okto_nexus.application.execution_semantics import execution_intent_hash
+from okto_nexus.application.runtime_availability import CapacityHost
+from okto_nexus.domain.session_interaction import InputDeliveryState
 from okto_nexus.errors import OktoNexusError
 from tests.session_interaction.test_queue_storage import ALICE, NOW
 from tests.session_interaction.test_queue_storage import database as queue_database
@@ -157,3 +164,143 @@ def test_staging_requires_prepared_request_and_preserves_proof_after_link(databa
         with pytest.raises(OktoNexusError) as error:
             record_staged_capacity_attempt(uow, scope=scope, request=request, operation_id="operation-b")
         assert error.value.details["reason"] == "INPUT_CAPACITY_OPERATION_CHANGED"
+
+
+@pytest.mark.parametrize('expired', [False, True])
+def test_capacity_step_commits_request_before_host_and_uses_the_same_attempt(database, monkeypatch, expired):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        queued = _enqueue(uow, scope, 'first')
+        head, request = _head_and_request(uow, scope)
+    held = CapacityReservation(capacity_reservation_id(request), request, 'HELD', 1, 5000, None)
+    result = replace(held, state='EXPIRED_UNCONSUMED', capacity_revision=2, remaining_ms=0) if expired else held
+
+    def prepare(uow, **_options):
+        current = prepare_dispatch_head(uow, scope=scope, now=NOW)
+        return prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=NOW) if current else None
+
+    def stage(uow, *, reservation, **_options):
+        assert reservation == held
+        _, consumption = _stage(uow, scope, head, request)
+        record_staged_capacity_attempt(uow, scope=scope, request=request, operation_id=consumption.turn_operation_id)
+        return consumption
+
+    monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', prepare)
+    monkeypatch.setattr(session_interaction_capacity, 'admit_held_input', stage)
+
+    class Peer:
+        observed = None
+        reserve_calls = consume_calls = 0
+
+        async def get_capacity_reservation(self, supplied):
+            assert supplied == request
+            return self.observed
+
+        async def try_reserve_capacity(self, supplied):
+            assert supplied == request
+            with factory.unit_of_work(write=False) as uow:
+                assert read_capacity_attempt(uow, session=scope.session).request == request
+                assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 0
+            self.reserve_calls += 1
+            self.observed = result
+            return self.observed
+
+        async def consume_capacity(self, supplied, reservation_id, consumption):
+            assert (supplied, reservation_id) == (request, held.reservation_id)
+            self.consume_calls += 1
+            with factory.unit_of_work(write=False) as uow:
+                prior = read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id)
+                assert prior.state == 'STAGED' and prior.consumption == consumption
+            self.observed = replace(held, state='CONSUMED', capacity_revision=2, consumption=consumption)
+            return self.observed
+
+    peer = Peer()
+    access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
+    host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'fixture-connection', 1),
+                        peer, request.scope.boot_id)
+    args = {'factory': factory, 'access': access, 'host': host, 'scope': scope,
+            'authority_fence': lambda: nullcontext(lambda _: True), 'current_capability_revision': lambda *_: None,
+            'fresh_publications': {}, 'remote_ready': True}
+    observed = asyncio.run(session_interaction_capacity.advance_input_capacity(**args))
+    assert observed.state == ('EXPIRED_UNCONSUMED' if expired else 'CONSUMED')
+    assert asyncio.run(session_interaction_capacity.advance_input_capacity(**args)) is None
+    assert peer.reserve_calls == 1 and peer.consume_calls == int(not expired)
+    with factory.unit_of_work() as uow:
+        prior = read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id)
+        if expired:
+            assert prior.resolution == observed and prior.operation_id is None
+            current = _enqueue(uow, scope, 'first')
+            assert current.input_id == queued.input_id and current.status is InputDeliveryState.REFUSED_BEFORE_SEND
+        else:
+            assert prior.state == 'STAGED' and prior.operation_id == observed.consumption.turn_operation_id
+
+
+@pytest.mark.parametrize('staged', [False, True])
+def test_replacement_host_only_observes_the_original_attempt(database, monkeypatch, staged):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        first = _enqueue(uow, scope, 'first')
+        second = _enqueue(uow, scope, 'second')
+        head, request = _head_and_request(uow, scope)
+        prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=NOW)
+        if staged:
+            held, consumption = _stage(uow, scope, head, request)
+            record_staged_capacity_attempt(uow, scope=scope, request=request, operation_id=consumption.turn_operation_id)
+        else:
+            uow.connection.execute("UPDATE session_interaction_inputs SET status='CANCELLED' WHERE input_id=?",
+                                   (first.input_id,))
+        uow.connection.execute('UPDATE execution_executors SET generation=2')
+
+    historical = held if staged else CapacityReservation(capacity_reservation_id(request), request,
+        'EXPIRED_UNCONSUMED', 2, 0, None)
+
+    class ReconnectedPeer:
+        async def get_capacity_reservation(self, supplied):
+            assert supplied == request
+            return historical
+
+    def unexpected_prepare(*args, **kwargs):
+        pytest.fail('A historical lookup cannot prepare work on the replacement host.')
+
+    monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', unexpected_prepare)
+    access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
+    host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'new-connection', 2),
+                        ReconnectedPeer(), 'new-boot')
+    assert asyncio.run(session_interaction_capacity.advance_input_capacity(factory=factory, access=access,
+        host=host, scope=scope, authority_fence=lambda: nullcontext(lambda _: True),
+        current_capability_revision=lambda *_: None, fresh_publications={}, remote_ready=True)) == historical
+    with factory.unit_of_work() as uow:
+        old = read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id)
+        if staged:
+            assert old.state == 'STAGED'
+            assert uow.connection.execute('SELECT dispatch_state FROM execution_dispatch_outbox').fetchone()[0] == (
+                'WAITING_INTERACTION_CAPACITY')
+        else:
+            assert old.resolution == historical
+            assert read_capacity_attempt(uow, session=scope.session) is None
+            following = _enqueue(uow, scope, 'second')
+            assert following.input_id == second.input_id and following.status is InputDeliveryState.QUEUED
+            assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 0
+
+
+def test_missing_observation_retains_original_attempt_when_head_is_no_longer_ready(database, monkeypatch):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        _enqueue(uow, scope, 'first')
+        head, request = _head_and_request(uow, scope)
+        original = prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=NOW)
+        uow.connection.execute("UPDATE session_interaction_inputs SET status='EXPIRED' WHERE input_id=?", (head.input_id,))
+
+    class Peer:
+        async def get_capacity_reservation(self, supplied) -> None:
+            assert supplied == request
+
+    monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', lambda *_, **__: None)
+    host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'fixture-connection', 1),
+                        Peer(), request.scope.boot_id)
+    assert asyncio.run(session_interaction_capacity.advance_input_capacity(factory=factory, access=None,
+        host=host, scope=scope, authority_fence=lambda: nullcontext(lambda _: True),
+        current_capability_revision=lambda *_: None, fresh_publications={}, remote_ready=True)) is None
+    with factory.unit_of_work(write=False) as uow:
+        assert read_capacity_attempt(uow, session=scope.session) == original
+        assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 0

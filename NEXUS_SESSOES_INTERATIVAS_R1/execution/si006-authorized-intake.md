@@ -25,6 +25,7 @@ public endpoint or qualified Server capability projection for this
 service yet. No provider was called.
 
 Migration 170 adds nullable provenance fields without rewriting the
-existing receipt. They may remain when returning to the previous binary.
+existing receipt. Behavioral rollback must use a build that understands
+the migrated schema. The migration guard refuses an earlier binary.
 The feature path stays closed until a later stage can revalidate the same
 grant at the shared send gate and safely reconcile an in-flight operation.

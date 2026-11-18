@@ -444,7 +444,9 @@
         "execution/si007-r4-admission.md",
         "execution/si007-send-cut.md",
         "execution/si007-delivery-evidence.md",
-        "execution/si007-capacity-attempt.md"
+        "execution/si007-capacity-attempt.md",
+        "execution/si007-capacity-step.md",
+        "execution/si007-build-and-migration.md"
       ]
     },
     {
@@ -4427,7 +4429,7 @@
   "phases": [
     {
       "id": "SI-00",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-001",
         "SI-002",
@@ -4438,7 +4440,7 @@
     },
     {
       "id": "SI-01",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-006",
         "SI-007",
@@ -4450,7 +4452,7 @@
     },
     {
       "id": "SI-02",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-012",
         "SI-013",

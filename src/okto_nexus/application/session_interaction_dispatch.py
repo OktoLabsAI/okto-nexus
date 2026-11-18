@@ -39,6 +39,9 @@ def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capab
     head = prepare_dispatch_head(uow, scope=scope, now=now)
     if head is None:
         return None
+    prior = read_capacity_attempt(uow, session=scope.session)
+    if prior is not None and (prior.input_id, prior.input_revision) != (head.input_id, head.input_revision):
+        return None
     grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                            author=head.author, resolve_human=resolve_human)
     if grant != head.source_grant or current_capability_revision(uow, scope) != head.capability_revision:
