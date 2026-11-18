@@ -26,6 +26,11 @@ union in All projects and the title and authority in a project scope.
 Ruff reported the same 20 diagnostics on the changed Python files before
 and after this change.
 
+The broader checkout regression collected the first test version. It
+finished with 356 passes and one failure, the same out-of-scope lookup
+documented above. The final 21-test query run passed with the corrected
+fixture. The broader run retains its original result.
+
 The [first Chrome run](ui-cleanup-overlay-browser/cut-1/qualification.json)
 reproduced a remaining generic label on a delivery preview. The
 [second run](ui-cleanup-overlay-browser/cut-2/qualification.json)
