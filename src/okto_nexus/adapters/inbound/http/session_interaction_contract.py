@@ -150,6 +150,20 @@ class InputReceipt(_Document):
         return self
 
 
+class InputQueueEntry(InputReceipt):
+    can_cancel: bool
+
+
+class InputQueueSnapshot(_Document):
+    scope: ExactSessionScope
+    session_owner_generation: Generation
+    queue_revision: Revision
+    paused: bool
+    cancel_capability_revision: Identifier | None
+    items: Annotated[list[InputQueueEntry], Field(max_length=50)]
+    next_cursor: str | None
+
+
 class PrepareAttachment(ScopedInteraction):
     client_intent_id: Identifier
     intent: Literal["attach_live", "resume_saved"]

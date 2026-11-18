@@ -189,3 +189,100 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
     client.cookies.clear()
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT count(*) FROM session_interaction_inputs').fetchone()[0] == 1
+
+
+def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'dashboard-queue-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                        'workspace_binding_id', 'agent_id', 'session_id')}
+    generation = scope['session_owner_generation']
+    session = exact['session_id']
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    ui = {'x-nexus-ui': '1'}
+    assert client.get(path + '/inputs', params=query).status_code == 401
+
+    auth = app.state.operator_auth
+    assert auth.configure('queue-fixture', 'fixture-password-long', local=True)
+    token = auth.login('queue-fixture', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', token)
+    queue = client.get(path + '/inputs', params=query)
+    assert queue.status_code == 200 and queue.headers['cache-control'] == 'no-store'
+    assert queue.json()['items'] == [] and queue.json()['queue_revision'] == 0
+    assert auth.authority_reference(token, create=False) is None
+    assert client.get(path + '/inputs', params=query | {'limit': 51}).status_code == 422
+    assert client.get(path + '/inputs', params=query | {'expected_session_generation': generation + 1}).status_code == 404
+
+    def capability():
+        metadata = client.get(path + '/interaction', params=query)
+        assert metadata.status_code == 200
+        return metadata.json()['next_turn']['capability_revision']
+
+    eventually(capability)
+    body = {'scope': exact, 'expected_session_generation': generation, 'capability_revision': capability()}
+    busy = admit(setup, binding, 'dashboard-queue-busy', 'turn.submit', session_id=session, text='Busy synthetic turn')
+    wait_receipt(setup, busy)
+
+    def enqueue(intent):
+        response = client.post(path + '/inputs', headers=ui, json=body | {
+            'client_intent_id': intent, 'content': [{'type': 'text', 'text': 'Private synthetic input ' + intent}],
+        })
+        assert response.status_code == 202, response.text
+        return response.json()['input_id']
+
+    first, second = enqueue('first'), enqueue('second')
+    page = client.get(path + '/inputs', params=query | {'limit': 1})
+    assert page.status_code == 200 and 'Private synthetic input' not in page.text
+    data = page.json()
+    assert not data['paused'] and data['scope'] == exact
+    assert data['items'][0]['input_id'] == first and data['items'][0]['can_cancel']
+    cursor = data['next_cursor']
+    following = client.get(path + '/inputs', params=query | {'cursor': cursor}).json()
+    assert [item['input_id'] for item in following['items']] == [second] and following['next_cursor'] is None
+    assert client.get(path + '/inputs', params=query | {'cursor': cursor, 'agent_id': 'another'}).status_code == 422
+
+    cancel_path = path + f'/inputs/{first}/cancel'
+    cancellation = body | {'expected_queue_revision': data['queue_revision'],
+        'expected_input_revision': data['items'][0]['input_revision'],
+        'capability_revision': data['cancel_capability_revision']}
+    assert client.post(cancel_path, headers=ui | {'origin': 'https://foreign.invalid'}, json=cancellation).status_code == 403
+    other_login = auth.login('queue-fixture', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', other_login)
+    foreign = client.get(path + '/inputs', params=query)
+    assert foreign.status_code == 200 and not any(item['can_cancel'] for item in foreign.json()['items'])
+    assert client.post(cancel_path, headers=ui, json=cancellation).status_code == 404
+    assert auth.authority_reference(other_login, create=False) is None
+
+    client.cookies.set('nexus_operator_session', token)
+    third = enqueue('third')
+    assert client.post(cancel_path, headers=ui, json=cancellation).status_code == 409
+    current = client.get(path + '/inputs', params=query).json()
+    removed = client.post(cancel_path, headers=ui, json=cancellation | {
+        'expected_queue_revision': current['queue_revision'],
+    })
+    assert removed.status_code == 200, removed.text
+    assert removed.json()['status'] == 'CANCELLED' and removed.json()['operation_id'] is None
+    visible = client.get(path + '/inputs', params=query).json()['items']
+    assert [(item['input_id'], item['status'], item['can_cancel']) for item in visible] == [
+        (first, 'CANCELLED', False), (second, 'QUEUED', True), (third, 'QUEUED', True),
+    ]
+    pending = client.get(path + '/inputs', params=query | {'pending_only': 'true', 'limit': 1}).json()
+    assert [item['input_id'] for item in pending['items']] == [second]
+    assert pending['next_cursor']
+    assert client.get(path + '/inputs', params=query | {'cursor': pending['next_cursor']}).status_code == 422
+    remaining = client.get(path + '/inputs', params=query | {
+        'pending_only': 'true', 'cursor': pending['next_cursor'],
+    }).json()
+    assert [item['input_id'] for item in remaining['items']] == [third] and remaining['next_cursor'] is None
+    assert native.native.sent == [('send_turn', busy['operation_id'])]
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM session_interaction_inputs').fetchone()[0] == 3
+    auth.logout(token)
+    assert client.post(cancel_path, headers=ui, json=cancellation).status_code == 401
+    assert client.get(path + '/inputs', params=query).status_code == 401
+    client.cookies.clear()

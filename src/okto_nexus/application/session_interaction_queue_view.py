@@ -47,8 +47,8 @@ def _unavailable() -> OktoNexusError:
 
 
 def read_session_input_queue(
-    factory, *, access, resolve_human, scope: InputScope, author: InputAuthor,
-    cursor: InputQueueCursor | None = None, limit: int = 25,
+    factory, *, access, resolve_human, scope: InputScope, author: InputAuthor | None,
+    cursor: InputQueueCursor | None = None, limit: int = 25, pending_only: bool = False,
 ) -> InputQueuePage:
     """Return metadata in FIFO order within one authorized database snapshot.
 
@@ -63,7 +63,9 @@ def read_session_input_queue(
         or type(cursor.after_sequence) is not int or not 1 <= cursor.after_sequence <= MAX_SQLITE_INTEGER
     ):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "The input queue cursor does not match this scope.")
-    if not resolve_human(author.authority_ref):
+    # A newly signed-in viewer may have no durable author reference yet.
+    # The caller still verifies their login and the read cannot acquire ownership.
+    if not resolve_human(author.authority_ref if author else None):
         raise _unavailable()
 
     context = RuntimeRequestContext("operator", "operator_session", trusted_local_operator=True)
@@ -110,9 +112,12 @@ def read_session_input_queue(
             WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
               AND owner_generation=:owner_generation AND binding_id=:binding_id AND workspace_id=:workspace_id
               AND workspace_binding_id=:workspace_binding_id AND agent_id=:agent_id AND enqueue_sequence>:after_sequence
+              AND (:pending_only=0 OR status NOT IN ('ACCEPTED_NATIVE', 'EXPIRED', 'CANCELLED'))
             ORDER BY enqueue_sequence LIMIT :fetch_limit
-        """, {**params, "authority_ref": author.authority_ref, "surface": author.surface,
-               "after_sequence": cursor.after_sequence if cursor else 0, "fetch_limit": limit + 1}).fetchall()
+        """, {**params, "authority_ref": author.authority_ref if author else None,
+               "surface": author.surface if author else None,
+               "after_sequence": cursor.after_sequence if cursor else 0, "fetch_limit": limit + 1,
+               "pending_only": pending_only}).fetchall()
 
         revision = queue["revision"]
         items = []

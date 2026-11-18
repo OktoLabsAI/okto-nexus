@@ -1,18 +1,35 @@
-"""Dashboard admission of one native next-turn input by a real human login."""
+"""Dashboard interaction with one exact session under a real human login."""
+
+from dataclasses import asdict
 
 import anyio
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from ....application.execution_session_views import read_execution_session
-from ....application.session_interaction_authority import enqueue_human_input
+from ....application.session_interaction_authority import (
+    cancel_human_input,
+    enqueue_human_input,
+)
+from ....application.session_interaction_queue_view import (
+    InputQueueCursor,
+    read_session_input_queue,
+)
 from ....application.session_interaction_receipts import read_session_input_receipt
 from ....bootstrap.execution_authority import build_execution_access
+from ....domain.attention import digest
 from ....domain.session_interaction import InputAuthor
 from ....errors import ErrorCode, OktoNexusError
 from .identity_ctx import get_authenticated_agent, runtime_request_context
 from .operator_auth import COOKIE
-from .session_interaction_contract import EnqueueInput, ExactSessionScope, InputReceipt
+from .session_interaction_contract import (
+    CancelInput,
+    EnqueueInput,
+    ExactSessionScope,
+    InputQueueEntry,
+    InputQueueSnapshot,
+    InputReceipt,
+)
 
 _HEADERS = {'Cache-Control': 'no-store'}
 
@@ -42,6 +59,18 @@ def _receipt_document(document, generation, receipt):
         input_id=receipt.input_id, enqueue_sequence=receipt.sequence, input_revision=receipt.input_revision,
         queue_revision=receipt.queue_revision, status=receipt.status, operation_id=receipt.operation_id,
         possible_effect=receipt.possible_effect).model_dump(mode='json')
+
+
+def _cancel_revision(_uow, scope):
+    # Removing unsent work needs no productive capability or native grant.
+    return 'sha256:' + digest({'action': 'queue.cancel.v1', 'scope': asdict(scope)})
+
+
+def _queue_cursor(scope_digest, token):
+    namespace, _, sequence = token.partition('.')
+    if namespace != scope_digest or len(sequence) > 19 or not sequence.isascii() or not sequence.isdecimal():
+        raise ValueError('The queue cursor does not match this session.')
+    return int(sequence)
 
 
 def build_router():
@@ -137,6 +166,85 @@ def build_router():
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.get('/inputs')
+    async def input_queue(session_id: str, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to read the session queue.')
+        options = set(request.query_params) & {'cursor', 'limit', 'pending_only'}
+        try:
+            document, scope = _read_scope(request, session_id, extra=options)
+            pending = request.query_params.get('pending_only', 'false')
+            if pending not in ('true', 'false'):
+                raise ValueError('The pending input filter is invalid.')
+            scope_digest = digest({'kind': 'session_input_queue.v1', 'scope': asdict(scope), 'pending_only': pending})
+            raw_limit = request.query_params.get('limit', '25')
+            if len(raw_limit) > 2 or not raw_limit.isascii() or not raw_limit.isdecimal():
+                raise ValueError('The queue page limit is invalid.')
+            limit = int(raw_limit)
+            cursor = (InputQueueCursor(scope, _queue_cursor(scope_digest, request.query_params['cursor']))
+                      if 'cursor' in options else None)
+        except ValueError:
+            return _error(422, 'VALIDATION_ERROR', 'An exact session scope and a valid queue cursor and limit are required.')
+        state = request.app.state
+        auth = state.operator_auth
+        token = request.cookies.get(COOKIE)
+        issue_cancel = bool(getattr(state, 'session_input_dispatch_options', {}))
+
+        def read():
+            ref = auth.authority_reference(token, create=False)
+            author = InputAuthor(ref, 'web') if ref else None
+
+            def resolve(reference):
+                return auth.resolve(token) if reference is None else auth.resolve_authority(reference)
+
+            page = read_session_input_queue(state.deps.connection_factory, access=build_execution_access(state.deps),
+                resolve_human=resolve, scope=scope, author=author, cursor=cursor, limit=limit,
+                pending_only=pending == 'true')
+            return InputQueueSnapshot(
+                scope=document, session_owner_generation=scope.generation.value,
+                queue_revision=page.queue_revision, paused=page.paused,
+                cancel_capability_revision=_cancel_revision(None, scope) if issue_cancel else None,
+                items=[InputQueueEntry(
+                    scope=document, session_owner_generation=scope.generation.value,
+                    input_id=item.input_id, enqueue_sequence=item.sequence, input_revision=item.input_revision,
+                    queue_revision=page.queue_revision, status=item.status, operation_id=item.operation_id,
+                    possible_effect=item.possible_effect, can_cancel=issue_cancel and item.can_cancel,
+                ) for item in page.items],
+                next_cursor=f'{scope_digest}.{page.next_cursor.after_sequence}' if page.next_cursor else None,
+            ).model_dump(mode='json')
+
+        try:
+            return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.post('/inputs/{input_id}/cancel')
+    async def cancel_input(session_id: str, input_id: str, body: CancelInput, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to remove a queued message.')
+        if body.scope.session_id != session_id or request.query_params or not 1 <= len(input_id) <= 160:
+            return _error(422, 'VALIDATION_ERROR', 'The cancellation must use the exact input and session scope.')
+        state = request.app.state
+        options = getattr(state, 'session_input_dispatch_options', {})
+        if not options:
+            return _error(409, 'CONFLICT', 'Session queue controls are disabled.')
+
+        def cancel():
+            reference = state.operator_auth.authority_reference(request.cookies.get(COOKIE), create=False)
+            if reference is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, 'The input is unavailable in this author and session scope.')
+            receipt = cancel_human_input(factory=state.deps.connection_factory,
+                access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
+                current_cancel_revision=_cancel_revision, scope=body.input_scope(), author=InputAuthor(reference, 'web'),
+                input_id=input_id, capability_revision=body.capability_revision,
+                expected_queue_revision=body.expected_queue_revision, expected_input_revision=body.expected_input_revision)
+            return _receipt_document(body.scope, body.expected_session_generation, receipt)
+
+        try:
+            return JSONResponse(await anyio.to_thread.run_sync(cancel), headers=_HEADERS)
         except OktoNexusError as error:
             return _runtime_error(error)
 
