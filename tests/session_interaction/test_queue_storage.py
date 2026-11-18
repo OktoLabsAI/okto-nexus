@@ -1,18 +1,29 @@
 """SQLite acceptance only. Seeded scope rows carry no runtime grant or lease."""
 
+import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from threading import Barrier
 
 import pytest
+from nexus_connector_core import (
+    CAPACITY_CONTRACT_REVISION,
+    CapacityConsumption,
+    CapacityRequest,
+    CapacityReservation,
+    CapacityScope,
+)
+from nexus_connector_core.protocol import canonical_json
 
 from okto_nexus.adapters.outbound.sqlite.session_interaction import (
     accept_input,
     prepare_dispatch_head,
     project_input_receipt,
+    read_dispatch_capacity,
     record_input_delivery,
 )
+from okto_nexus.application.session_interaction_capacity import consume_input_capacity
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
 from okto_nexus.domain.session_interaction import (
@@ -226,3 +237,83 @@ def test_receipt_projection_keeps_native_acceptance_and_exact_executor(database)
         assert accepted.status is InputDeliveryState.ACCEPTED_NATIVE and accepted.possible_effect
         project_input_receipt(conn, operation_key=key, stage='OUTCOME_UNKNOWN', possible_effect=True, native_id='turn')
         assert enqueue(uow, scope) == accepted
+
+
+@pytest.mark.parametrize('expired', [False, True])
+def test_capacity_outcome_recovers_same_operation_and_keeps_outbox_fenced(database, expired):
+    factory, (scope, _) = database
+    operation_id = 'fixture-operation'
+    intent_hash = 'sha256:' + '0' * 64
+    cap_scope = CapacityScope(server_id=scope.session.server_id, executor_id=scope.session.executor_id,
+        session_id=scope.session.session_id, agent_id=scope.agent_id, binding_id=scope.binding_id,
+        workspace_id=scope.workspace_id, workspace_binding_id=scope.workspace_binding_id,
+        connection_generation=1, session_owner_generation=1, authorization_revision=1,
+        configuration_revision=1, binding_revision=1, credential_epoch=1, boot_id='fixture-boot')
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        queued = enqueue(uow, scope)
+        request = CapacityRequest(CAPACITY_CONTRACT_REVISION, f'{queued.input_id}:{queued.input_revision}',
+                                  cap_scope, 'next_turn', intent_hash, 10000)
+        held = CapacityReservation('fixture-held', request, 'HELD', 1, 9000, None)
+        consumption = CapacityConsumption(operation_id, intent_hash, None, None)
+        conn.execute("UPDATE execution_sessions SET lease_state='ACTIVE'")
+        conn.execute("UPDATE execution_executors SET control_state='CONTROL_READY'")
+        conn.execute("""
+            INSERT INTO execution_operations(server_id,executor_id,session_id,operation_id,subject_agent_id,actor_agent_id,
+                binding_id,workspace_id,workspace_binding_id,action,intent_hash,semantic_payload,expected_revisions_json,
+                admission_state,created_at)
+            VALUES(?,?,?,?,'recipient','recipient',?,?,?,'turn.submit',?,'{}','{}','ACCEPTED','t')
+        """, (scope.session.server_id, scope.session.executor_id, scope.session.session_id, operation_id,
+              scope.binding_id, scope.workspace_id, scope.workspace_binding_id, intent_hash))
+        conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state) "
+                     "VALUES(?,?,?,'WAITING_INTERACTION_CAPACITY')",
+                     (scope.session.server_id, scope.session.executor_id, operation_id))
+        conn.execute("UPDATE session_interaction_inputs SET operation_id=?,status='DISPATCHING', "
+            "capacity_state='WAITING_CONSUMPTION',capacity_reservation_json=?,capacity_consumption_json=? WHERE input_id=?",
+            (operation_id, canonical_json(held.to_dict()).decode(), canonical_json(consumption.to_dict()).decode(),
+             queued.input_id))
+
+    confirmed = replace(held, state='CONSUMED', capacity_revision=2, consumption=consumption)
+
+    class Peer:
+        observation = held
+        consume_calls = 0
+
+        async def get_capacity_reservation(self, supplied):
+            assert supplied == request
+            return self.observation
+
+        async def consume_capacity(self, supplied, reservation_id, identity):
+            assert (supplied, reservation_id, identity) == (request, held.reservation_id, consumption)
+            self.consume_calls += 1
+            self.observation = confirmed
+            raise ConnectionError('fixture loses confirmation after host consumption')
+
+    peer = Peer()
+    lookup = {'scope': scope, 'operation_id': operation_id}
+    arguments = {**lookup, 'factory': factory, 'capacity': peer}
+    if expired:
+        peer.observation = replace(held, state='EXPIRED_UNCONSUMED', capacity_revision=2, remaining_ms=0)
+        assert asyncio.run(consume_input_capacity(**arguments)) == peer.observation
+        assert asyncio.run(consume_input_capacity(**arguments)) == peer.observation
+        assert peer.consume_calls == 0
+        with factory.unit_of_work() as uow:
+            assert read_dispatch_capacity(uow, **lookup).state == 'CANCELLED_NO_EFFECT'
+            assert uow.connection.execute('SELECT dispatch_state FROM execution_dispatch_outbox').fetchone()[0] == (
+                'RESOLVED_TERMINAL')
+            refused = enqueue(uow, scope)
+            assert refused.status is InputDeliveryState.REFUSED_BEFORE_SEND
+            assert not refused.possible_effect and refused.operation_id == operation_id
+        return
+    with pytest.raises(ConnectionError, match='loses confirmation'):
+        asyncio.run(consume_input_capacity(**arguments))
+    with factory.unit_of_work(write=False) as uow:
+        assert read_dispatch_capacity(uow, **lookup).state == 'NEEDS_RECONCILIATION'
+        assert uow.connection.execute('SELECT dispatch_state FROM execution_dispatch_outbox').fetchone()[0] == (
+            'WAITING_INTERACTION_CAPACITY')
+    assert asyncio.run(consume_input_capacity(**arguments)) == confirmed
+    assert asyncio.run(consume_input_capacity(**arguments)) == confirmed
+    assert peer.consume_calls == 1
+    with factory.unit_of_work(write=False) as uow:
+        assert read_dispatch_capacity(uow, **lookup).state == 'CONSUMED'
+        assert uow.connection.execute('SELECT dispatch_state FROM execution_dispatch_outbox').fetchone()[0] == 'PENDING'

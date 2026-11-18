@@ -1,13 +1,27 @@
 """Prepare the next input through the existing R4 admission transaction."""
 
 import json
+from dataclasses import asdict
 
-from nexus_connector_core import CapacityConsumption, CapacityReservation
+from nexus_connector_core import (
+    CAPACITY_CONTRACT_REVISION,
+    CapacityConsumption,
+    CapacityRequest,
+    CapacityReservation,
+    CapacityScope,
+)
 
+from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from ..adapters.outbound.sqlite.session_interaction import (
     prepare_dispatch_head,
     stage_dispatch,
 )
+from ..adapters.outbound.sqlite.session_interaction_capacity_attempts import (
+    prepare_capacity_attempt,
+    read_capacity_attempt,
+    record_staged_capacity_attempt,
+)
+from ..domain.attention import digest
 from ..domain.execution.keys import SessionKey, SessionOwnerGeneration
 from ..domain.runtime_context import RuntimeRequestContext
 from ..domain.session_interaction import InputAuthor, InputScope
@@ -17,6 +31,36 @@ from .execution_domain_delivery import DeliveryTransactionFactory
 from .execution_intents import resolve_execution_intent
 from .execution_native_facts import stamp
 from .session_interaction_authority import require_session_input_authority
+
+
+def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capability_revision, scope, host):
+    """Persist the exact request before its first RPC to the authenticated host."""
+    now = stamp(access.clock.now_iso())
+    head = prepare_dispatch_head(uow, scope=scope, now=now)
+    if head is None:
+        return None
+    grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
+                                           author=head.author, resolve_human=resolve_human)
+    if grant != head.source_grant or current_capability_revision(uow, scope) != head.capability_revision:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The input authority or capability changed.', {})
+    key = asdict(scope.session)
+    lease = SqliteExecutionLeaseRepository().effective(uow, key)
+    channel = host.channel
+    if ((channel.server_id, channel.executor_id) != (scope.session.server_id, scope.session.executor_id)
+            or not host.boot_id or channel.connection_id != lease['connection_id']
+            or channel.connection_generation != lease['connection_generation']):
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The capacity host does not own the exact session.', {})
+    if uow.connection.execute("""
+        SELECT 1 FROM execution_operations WHERE server_id=:server_id AND executor_id=:executor_id
+          AND session_id=:session_id AND action IN ('turn.submit','runtime.close')
+          AND admission_state<>'RESOLVED_TERMINAL' LIMIT 1
+    """, key).fetchone() is not None:
+        return None
+    cap_scope = CapacityScope(**json.loads(lease['scope_json']), boot_id=host.boot_id,
+                              connection_generation=channel.connection_generation)
+    request = CapacityRequest(CAPACITY_CONTRACT_REVISION, f'{head.input_id}:{head.input_revision}', cap_scope,
+        'next_turn', 'sha256:' + digest({'scope': key, 'kind': 'session_input'}), 10000)
+    return prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=now)
 
 
 def admit_held_input(uow, *, factory, access, resolve_human, current_capability_revision,
@@ -34,6 +78,9 @@ def admit_held_input(uow, *, factory, access, resolve_human, current_capability_
             or reservation.request.unit != 'next_turn'
             or reservation.request.attempt_id != f'{head.input_id}:{head.input_revision}'):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The input or its capacity reservation changed.', {})
+    attempt = read_capacity_attempt(uow, session=scope.session, attempt_id=reservation.request.attempt_id)
+    if attempt is None or attempt.request != reservation.request or attempt.state != 'PREPARED' or attempt.resolved_at:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The host reservation differs from the prepared capacity request.', {})
     grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                            author=head.author, resolve_human=resolve_human)
     if grant != head.source_grant or current_capability_revision(uow, scope) != head.capability_revision:
@@ -54,8 +101,10 @@ def admit_held_input(uow, *, factory, access, resolve_human, current_capability_
         'client_intent_id', 'operation_id', 'intent_hash', 'resolution_revision')}, **common)
     if reused:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The session input already has a canonical operation.', {})
-    return stage_dispatch(uow, scope=scope, head=head, operation_id=resolved['operation_id'], reservation=reservation,
-                          now=stamp(access.clock.now_iso()))
+    consumption = stage_dispatch(uow, scope=scope, head=head, operation_id=resolved['operation_id'],
+                                 reservation=reservation, now=stamp(access.clock.now_iso()))
+    record_staged_capacity_attempt(uow, scope=scope, request=reservation.request, operation_id=resolved['operation_id'])
+    return consumption
 
 
 def require_input_send_authority(uow, *, factory, access, linked, scope, lease, intent_hash,
