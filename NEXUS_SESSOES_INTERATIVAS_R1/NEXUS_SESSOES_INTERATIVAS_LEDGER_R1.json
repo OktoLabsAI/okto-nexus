@@ -447,7 +447,8 @@
         "execution/si007-capacity-attempt.md",
         "execution/si007-capacity-step.md",
         "execution/si007-build-and-migration.md",
-        "execution/si007-registered-capacity.md"
+        "execution/si007-registered-capacity.md",
+        "execution/si007-serve-capacity.md"
       ]
     },
     {
@@ -483,7 +484,8 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si008-capacity-recovery.md",
-        "execution/si008-receipt-lookup.md"
+        "execution/si008-receipt-lookup.md",
+        "execution/si013-dashboard-input-api.md"
       ]
     },
     {
@@ -678,8 +680,10 @@
         "SI-T-A11",
         "SI-T-A12"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si013-dashboard-input-api.md"
+      ]
     },
     {
       "id": "SI-014",

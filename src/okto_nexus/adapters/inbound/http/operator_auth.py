@@ -105,13 +105,14 @@ class OperatorAuth:
                              (hashlib.sha256(token.encode()).hexdigest(), time.time())).fetchone()
         return row['username'] if row else None
 
-    def authority_reference(self, token: str | None) -> str | None:
-        """Record a private, non-credential reference to the authenticated session."""
+    def authority_reference(self, token: str | None, *, create=True) -> str | None:
+        """Find the private reference. Only a mutation may create it."""
         if not token or len(token) > 128 or not token.isascii():
             return None
         session_digest = hashlib.sha256(token.encode()).hexdigest()
         with self.db() as db:
-            db.execute("BEGIN IMMEDIATE")
+            if create:
+                db.execute("BEGIN IMMEDIATE")
             row = db.execute(
                 "SELECT ref.authority_ref FROM sessions AS s "
                 "JOIN account AS a ON a.id=1 AND a.username=s.username "
@@ -121,7 +122,7 @@ class OperatorAuth:
             ).fetchone()
             if row is None:
                 return None
-            if row["authority_ref"] is not None:
+            if row["authority_ref"] is not None or not create:
                 return row["authority_ref"]
             reference = _AUTHORITY_REF_PREFIX + secrets.token_urlsafe(32)
             db.execute("INSERT INTO session_authorities(authority_ref,session_digest) VALUES(?,?)",

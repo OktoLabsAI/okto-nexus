@@ -79,7 +79,8 @@ def _current_host(host, request):
 
 
 async def advance_input_capacity(*, factory, access, availability, scope, authority_fence,
-                                 current_capability_revision, fresh_publications, remote_ready):
+                                 current_capability_revision, fresh_publications, remote_ready,
+                                 acquisition_enabled=True):
     """Advance one exact session through the shared authenticated capacity registry."""
     if not remote_ready:
         return None
@@ -107,7 +108,7 @@ async def advance_input_capacity(*, factory, access, availability, scope, author
 
     claim, previous = await anyio.to_thread.run_sync(pending_work)
     if claim is not None:
-        current = _current_host(host, claim.reservation.request)
+        current = acquisition_enabled and _current_host(host, claim.reservation.request)
         return await consume_input_capacity(factory=factory, scope=scope, operation_id=claim.operation_id,
                                             capacity=availability, permit_consumption=current)
 
@@ -149,9 +150,11 @@ async def advance_input_capacity(*, factory, access, availability, scope, author
         if observed is not None and observed.state in ('EXPIRED_UNCONSUMED', 'RELEASED'):
             await anyio.to_thread.run_sync(retire, observed)
             return observed
-        if not current:
+        if not current or not acquisition_enabled:
             return await release_if_fenced()
 
+    if not acquisition_enabled:
+        return None
     try:
         attempt = await anyio.to_thread.run_sync(prepare)
     except OktoNexusError as error:

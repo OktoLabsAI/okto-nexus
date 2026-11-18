@@ -17,6 +17,7 @@ from ..adapters.outbound.sqlite.session_interaction import (
     stage_dispatch,
 )
 from ..adapters.outbound.sqlite.session_interaction_capacity_attempts import (
+    block_unstaged_input_authority,
     prepare_capacity_attempt,
     read_capacity_attempt,
     record_staged_capacity_attempt,
@@ -41,6 +42,9 @@ def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capab
         return None
     prior = read_capacity_attempt(uow, session=scope.session)
     if prior is not None and (prior.input_id, prior.input_revision) != (head.input_id, head.input_revision):
+        return None
+    if prior is None and not resolve_human(head.author.authority_ref):
+        block_unstaged_input_authority(uow, scope=scope, input_id=head.input_id, input_revision=head.input_revision)
         return None
     grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                            author=head.author, resolve_human=resolve_human)

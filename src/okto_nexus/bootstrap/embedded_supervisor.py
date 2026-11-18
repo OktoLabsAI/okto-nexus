@@ -82,7 +82,8 @@ class EmbeddedRuntimeSupervisor:
                                    max_owned_slots=old.host.max_owned_slots,
                                    capacity_enabled=old.host.capacity_enabled)
         host.local_launch_factory = lambda scope: ApprovedLocalLaunch(candidate, scope)
-        dispatch = EmbeddedDispatchOwner(candidate, host)
+        dispatch = EmbeddedDispatchOwner(candidate, host,
+                                         session_input_dispatch_options=old.session_input_dispatch_options)
         dispatch.native_factory = old.native_factory
         replacement_boot = RuntimeBootOwner(state.deps, candidate, run_runtime_boot)
         # No await between publishing references: HTTP, shutdown and reset all

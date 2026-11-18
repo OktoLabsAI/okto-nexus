@@ -458,7 +458,8 @@ def build_router() -> APIRouter:
                     send=_send_operation, send_lock=send_lock, verify_link=_verify,
                     close_link=_close_dispatch_link,
                     wake_deliveries=_wake_deliveries,
-                    resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve)
+                    resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve,
+                    **getattr(ws.app.state, 'session_input_dispatch_options', {}))
                 pump.start()
             else:
                 await anyio.to_thread.run_sync(lambda: recover_fenced_reservations(
@@ -658,7 +659,8 @@ def build_router() -> APIRouter:
                             send=_send_operation, send_lock=send_lock,
                             verify_link=_verify, close_link=_close_dispatch_link,
                             wake_deliveries=_wake_deliveries,
-                            resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve)
+                            resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve,
+                            **getattr(ws.app.state, 'session_input_dispatch_options', {}))
                         pump.start()
                     continue
                 if frame["type"] == "error" and (

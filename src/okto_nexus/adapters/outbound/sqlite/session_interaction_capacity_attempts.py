@@ -188,6 +188,24 @@ def retire_prepared_capacity_attempt(uow: SqliteUnitOfWork, *, scope: InputScope
     return read_capacity_attempt(uow, session=scope.session, attempt_id=observed.request.attempt_id)
 
 
+def block_unstaged_input_authority(uow: SqliteUnitOfWork, *, scope: InputScope, input_id: str, input_revision: int):
+    uow.require_active_writer()
+    params = {**asdict(scope.session), 'input_id': input_id, 'input_revision': input_revision,
+              'owner_generation': scope.generation.value}
+    conn = uow.connection
+    changed = conn.execute("""
+        UPDATE session_interaction_inputs SET status='BLOCKED_AUTH',input_revision=input_revision+1
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id
+          AND input_revision=:input_revision AND owner_generation=:owner_generation
+          AND status='QUEUED' AND operation_id IS NULL AND possible_effect=0
+    """, params).rowcount
+    if changed:
+        conn.execute("""
+            UPDATE session_interaction_queues SET revision=revision+1
+            WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+        """, params)
+
+
 def fence_prepared_capacity_release(uow: SqliteUnitOfWork, *, scope: InputScope, request: CapacityRequest,
                                     authority_denied: bool = False) -> bool:
     """Prove this request cannot stage before sending its exact release to Core."""
@@ -201,17 +219,7 @@ def fence_prepared_capacity_release(uow: SqliteUnitOfWork, *, scope: InputScope,
     params = {**asdict(scope.session), 'input_id': attempt.input_id, 'input_revision': attempt.input_revision,
               'owner_generation': scope.generation.value}
     if authority_denied:
-        changed = conn.execute("""
-            UPDATE session_interaction_inputs SET status='BLOCKED_AUTH',input_revision=input_revision+1
-            WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id
-              AND input_revision=:input_revision AND owner_generation=:owner_generation
-              AND status='QUEUED' AND operation_id IS NULL AND possible_effect=0
-        """, params).rowcount
-        if changed:
-            conn.execute("""
-                UPDATE session_interaction_queues SET revision=revision+1
-                WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
-            """, params)
+        block_unstaged_input_authority(uow, scope=scope, input_id=attempt.input_id, input_revision=attempt.input_revision)
     return conn.execute("""
         SELECT 1 FROM session_interaction_inputs
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id

@@ -160,6 +160,8 @@ Options:
   --runtime-handoff-auto-claim-enabled true|false
                       Startup rollout gate (default true); agent opt-in and
                       execution grants are also required. Off preserves recovery.
+  --runtime-session-interaction-enabled true|false
+                      Enable exact-session input dispatch at startup (default false).
   --log-level L       Console verbosity: critical|error|warning|info|debug|
                       trace (default warning; env OKTO_NEXUS_LOG_LEVEL). Only
                       warnings/errors show unless raised to info or higher.

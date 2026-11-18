@@ -1,6 +1,7 @@
 """Start the serve-owned runtime services, including after an operator reset."""
-import anyio
+from functools import partial
 
+import anyio
 
 async def start_runtime_services(app, *, native_factory=None):
     from .runtime_host import EmbeddedRuntimeHost
@@ -11,6 +12,10 @@ async def start_runtime_services(app, *, native_factory=None):
     from ..application.connection_test import ConnectionTests
     from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
     from ..application.handoff_runtime_service import HandoffRuntimeService
+    from ..application.session_interaction_capability import next_turn_revision
+    from ..application.session_interaction_scheduler import SessionInputScheduler
+    from ..adapters.outbound.execution.core_inventory import protocol_info
+    from .execution_authority import build_execution_access
     deps = app.state.deps
     previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
     if previous_supervisor is not None and not previous_supervisor.drained:
@@ -32,17 +37,35 @@ async def start_runtime_services(app, *, native_factory=None):
         history = SqliteRuntimeOutboxRepo().has_history(uow)
         handoff_history = uow.connection.execute(
             'SELECT 1 FROM handoff_runtime_attempts WHERE active=1 LIMIT 1').fetchone() is not None
+        input_history = uow.connection.execute("""
+            SELECT 1 FROM session_interaction_capacity_attempts WHERE state='PREPARED' AND resolved_at IS NULL
+            UNION ALL
+            SELECT 1 FROM session_interaction_inputs
+            WHERE capacity_state IN ('WAITING_CONSUMPTION','NEEDS_RECONCILIATION')
+               OR (capacity_state='CONSUMED' AND status IN ('DISPATCHING','REFUSED_BEFORE_SEND'))
+            LIMIT 1
+        """).fetchone() is not None
     acquisition_enabled = deps.config.runtime_handoff_auto_claim_enabled and deps.config.feature_harness_integrations
     scheduling = acquisition_enabled or handoff_history
-    if scheduling:
+    input_enabled = deps.config.runtime_session_interaction_enabled and deps.config.feature_harness_integrations
+    input_scheduling = input_enabled or input_history
+    capacity_enabled = scheduling or input_scheduling
+    if capacity_enabled:
         deps.runtime_availability.enabled = True
+    input_revision = partial(next_turn_revision, availability=deps.runtime_availability,
+                             fresh_publications=app.state.inventory_fresh_publications)
+    authority_fence = app.state.operator_auth.authority_fence
+    app.state.session_input_dispatch_options = {
+        'session_input_authority_fence': authority_fence,
+        'session_input_capability_revision': input_revision,
+    } if input_enabled else {}
     if deps.config.feature_harness_integrations or history:
         if not await anyio.to_thread.run_sync(build_dispatcher(deps).start):
             raise RuntimeError('Another runtime owner holds this store; serve startup refused.')
     with deps.connection_factory.unit_of_work(write=False) as uow:
         generation = uow.connection.execute('SELECT generation FROM runtime_reset_generation WHERE singleton=1').fetchone()[0]
     journal_dir = 'core-runtime' if generation == 0 else f'core-runtime-reset-{generation}'
-    host = EmbeddedRuntimeHost(deps.config.home_dir.resolve() / journal_dir, capacity_enabled=scheduling)
+    host = EmbeddedRuntimeHost(deps.config.home_dir.resolve() / journal_dir, capacity_enabled=capacity_enabled)
     inventory = dispatch = boot = None
     app.state.runtime_boot_owner = None
     app.state.embedded_core_host = host
@@ -56,7 +79,8 @@ async def start_runtime_services(app, *, native_factory=None):
         # by inventory, independently of HTTP and dispatch startup.
         await inventory.start()
         host.local_launch_factory = lambda scope: ApprovedLocalLaunch(inventory, scope)
-        dispatch = EmbeddedDispatchOwner(inventory, host)
+        dispatch = EmbeddedDispatchOwner(inventory, host,
+                                         session_input_dispatch_options=app.state.session_input_dispatch_options)
         dispatch.native_factory = native_factory
         app.state.embedded_dispatch_owner = dispatch
         await dispatch.start()
@@ -64,9 +88,14 @@ async def start_runtime_services(app, *, native_factory=None):
         app.state.runtime_boot_owner = boot
         boot.start()
     handoffs = None
-    if scheduling:
-        handoffs = HandoffRuntimeService(build_handoff_runtime_scheduler(deps,
-            acquisition_enabled=acquisition_enabled))
+    if scheduling or input_scheduling:
+        scheduler = build_handoff_runtime_scheduler(deps, acquisition_enabled=acquisition_enabled) if scheduling else None
+        session_inputs = SessionInputScheduler(factory=deps.connection_factory, access=build_execution_access(deps),
+            availability=deps.runtime_availability, authority_fence=authority_fence,
+            current_capability_revision=input_revision, fresh_publications=app.state.inventory_fresh_publications,
+            execution_ready=protocol_info()['remote_execution_ready'], acquisition_enabled=input_enabled,
+            interval=deps.config.runtime_idle_interval_ms / 1000) if input_scheduling else None
+        handoffs = HandoffRuntimeService(scheduler, session_inputs=session_inputs)
         app.state.handoff_runtime_service = handoffs
         handoffs.start()
     def drained():

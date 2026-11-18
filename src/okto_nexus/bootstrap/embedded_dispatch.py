@@ -94,13 +94,14 @@ class SessionAuthorityGate:
 
 
 class EmbeddedDispatchOwner:
-    def __init__(self, inventory, host):
+    def __init__(self, inventory, host, *, session_input_dispatch_options=None):
         self.inventory, self.host = inventory, host
         self.deps = inventory.deps
         self.factory = self.deps.connection_factory
         self.channel = ExecutionChannel(inventory.key.server_id, inventory.key.executor_id,
                                         inventory.dispatcher.owner_id, inventory.generation)
         self.access = build_execution_access(self.deps)
+        self.session_input_dispatch_options = session_input_dispatch_options or {}
         self.leases = ExecutionLeaseService(factory=self.factory, access=self.access,
                                             fresh_publications=inventory.fresh)
         from ..adapters.outbound.sqlite.execution_capacity_authority import SqliteExecutionCapacityAuthority
@@ -328,7 +329,7 @@ class EmbeddedDispatchOwner:
             retained_operations=lambda: tuple(self.active_operations),
             wake_deliveries=self.deps.runtime_dispatcher.wake,
             resolve_native_input=self.deps.native_decisions.inputs.resolve,
-            idle_interval=self.idle_interval)
+            idle_interval=self.idle_interval, **self.session_input_dispatch_options)
         self.pump.start()
         self.lease_maintenance = asyncio.create_task(self._maintain_leases(), name="embedded-lease-renewals")
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
