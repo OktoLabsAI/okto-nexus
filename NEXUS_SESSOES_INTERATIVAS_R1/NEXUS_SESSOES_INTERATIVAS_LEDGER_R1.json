@@ -987,7 +987,9 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
-        "execution/si020-pi-process-birth.md"
+        "execution/si020-pi-process-birth.md",
+        "execution/si020-codex-keyboard-detach-windows.md",
+        "execution/si020-codex-keyboard-detach-windows.json"
       ]
     },
     {
@@ -1157,7 +1159,9 @@
         "execution/si024-codex-interrupt-queue-windows.json",
         "execution/si024-codex-interrupt-queue-windows.md",
         "execution/si024-codex-native-input-windows.md",
-        "execution/si024-codex-native-input-windows.json"
+        "execution/si024-codex-native-input-windows.json",
+        "execution/si020-codex-keyboard-detach-windows.md",
+        "execution/si020-codex-keyboard-detach-windows.json"
       ]
     },
     {
@@ -4208,7 +4212,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si020-codex-keyboard-detach-windows.md",
+        "execution/si020-codex-keyboard-detach-windows.json"
+      ]
     },
     {
       "id": "SI-T-H12",

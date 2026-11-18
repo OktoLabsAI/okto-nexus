@@ -1,0 +1,11 @@
+# Desanexar o Codex pelo teclado no Windows
+
+Pressione **Ctrl+]** em `okto-nexus session attach` para voltar ao terminal do Nexus. O atalho funciona no modo somente leitura e com `--write`. O Codex pode estar exibindo um turno ativo ou aguardando o início de uma mensagem que já entrou na fila.
+
+O Nexus dá ao visualizador um pseudoconsole privado. Ele reconhece Ctrl+] na entrada do console e encerra o processo do visualizador associado àquele pseudoconsole. O relay então libera a apresentação. A engine permanece com o executor, e a fila conserva a mensagem e a concessão aplicadas. O comando restaura os modos do console ao sair. A variante Win32 de Ctrl+] e a entrada VT comum foram tratadas no mesmo ponto. [Pseudoconsole do Windows](https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session) [Entrada Win32 no terminal da Microsoft](https://github.com/microsoft/terminal/blob/main/src/terminal/input/terminalInput.cpp)
+
+O ensaio no Windows, build 26300, usou o Codex 0.170.0, o app-server 0.157.0, uma sessão temporária com autorização própria e resposta determinística em loopback. Enviou uma mensagem com a fila pausada, fechou o visualizador com Ctrl+] e confirmou o mesmo recibo durável. Depois da retomada da fila, abriu um leitor durante o turno ativo e desanexou novamente com Ctrl+]. O processo e a thread ainda eram os mesmos. Após a conclusão, um terceiro leitor exibiu o resultado e saiu por Ctrl+D. Cada saída restaurou os modos do console e gravou o detach. A única operação de fechamento ocorreu ao final do ensaio. [Dados dos ensaios](si020-codex-keyboard-detach-windows.json)
+
+O ensaio passou com o código e com o wheel instalado. Passaram 26 regressões do CLI e do transporte de apresentação na instalação temporária. Ruff e a validação estrita do wheel e do pacote fonte também passaram. O ensaio consumiu uma resposta em loopback e zero chamadas a provedores externos por execução.
+
+O teste cobre a parte local Windows de SI-T-H11. A qualificação em outras plataformas, no transporte remoto e com outras combinações de harness permanece em andamento. A alteração dispensa migração. Reverter o commit restaura o lançamento anterior do visualizador e preserva a fila e os registros de sessão.

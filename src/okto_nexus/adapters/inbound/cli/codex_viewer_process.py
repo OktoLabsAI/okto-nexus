@@ -4,7 +4,6 @@ import hashlib
 import os
 import platform
 import socket
-import subprocess
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -69,6 +68,8 @@ def _report_input_status(message):
 
 def present_codex(link, executable):
     """The foreground process is the viewer. Exiting closes only its attachment."""
+    from .windows_viewer_terminal import run_viewer_terminal
+
     try:
         with TemporaryDirectory(prefix='nexus-codex-viewer-') as temporary, socket.socket() as deny_proxy:
             deny_proxy.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
@@ -84,13 +85,13 @@ def present_codex(link, executable):
                     raise ValueError('Invalid native session identity')
                 _check_viewer(executable)
                 environment[_AUTH_VARIABLE] = endpoint.token
-                result = subprocess.run(
+                result = run_viewer_terminal(
                     [str(executable), 'resume', thread_id, '--remote', endpoint.address,
                      '--remote-auth-token-env', _AUTH_VARIABLE, '--no-alt-screen',
                      '-c', 'check_for_update_on_startup=false', '-c', 'analytics.enabled=false'],
-                    cwd=project, env=environment, shell=False, check=False,
+                    cwd=project, env=environment,
                 )
-                if not endpoint.connected.is_set():
+                if not endpoint.connected.is_set() and not result.detached:
                     raise ConnectionError('VIEWER_NOT_ATTACHED', 'The Codex viewer did not connect to this presentation.')
     except (KeyError, OSError, ValueError):
         raise ConnectionError('VIEWER_LAUNCH_FAILED', 'The local Codex viewer could not be opened.') from None

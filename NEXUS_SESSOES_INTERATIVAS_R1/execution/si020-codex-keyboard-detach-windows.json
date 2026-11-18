@@ -1,0 +1,58 @@
+{
+  "recorded_on": "2026-11-18",
+  "tasks": ["SI-020", "SI-024"],
+  "partial_test_id": "SI-T-H11",
+  "scope": "Local Windows detach in nested ConPTY, real frontend and real app-server",
+  "environment": {
+    "windows_build": 26300,
+    "viewer": "Codex 0.170.0",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "model_boundary": "Deterministic Responses SSE on loopback in isolated profiles"
+  },
+  "artifacts": {
+    "directory": "%TEMP%/nexus-si-keyboard-detach-build-50748be3eb4e4f5b94498204f995e954",
+    "nexus_wheel_sha256": "800b99152a3da4e2cf44242caa4f78a87302e1005aec6dedfd401521848b7194",
+    "nexus_sdist_sha256": "b509a2106277d56c1ca959a82d5bf9f248815978982311c31bd19aaf491737ed",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "strict_twine": "PASS",
+    "changed_cli_modules_matched_to_wheel": 3
+  },
+  "supporting_regressions": {
+    "source_cli_and_presentation": 26,
+    "installed_cli_and_presentation": 26,
+    "ruff": "PASS",
+    "console_smoke": {
+      "fixture": "%TEMP%/nexus-si-conpty-escape-verified-9d6107246f8d4df09101eb406fe6e88d/smoke.py",
+      "fixture_sha256": "4286c24d67b5d1a4f1ab1c399915ffab9480c0f98b8f5fa3da66b748be93f915",
+      "result": "PASS",
+      "observations": ["Ordinary input passed", "Keyboard detach with a blocked child", "Original console modes restored"]
+    }
+  },
+  "native_case": {
+    "source_fixture": "%TEMP%/nexus-si-codex-keyboard-detach-660939564e2f4054b271c5dd80d82fd7/test_keyboard_detach.py",
+    "installed_fixture": "%TEMP%/nexus-si-codex-keyboard-detach-installed-59bec46f5fc64b49a52f0f4ad0d5d02d/test_keyboard_detach.py",
+    "fixture_sha256": "d9a094801f1ae664e4d53a9f7ec9781a77fda138fb568f1a42554ae42db3b620",
+    "source_result": "PASS",
+    "installed_result": "PASS",
+    "observations_per_run": {
+      "keyboard_detach_while_awaiting_rpc": true,
+      "keyboard_detach_during_native_turn": true,
+      "normal_ctrl_d_exit_after_completion": true,
+      "console_modes_restored_in_all_exits": true,
+      "same_durable_queued_receipt_and_grant": true,
+      "same_engine_and_thread": true,
+      "native_starts": 1,
+      "native_interrupts": 0,
+      "loopback_model_requests": 1,
+      "external_provider_calls": 0
+    },
+    "sqlite_after_shutdown": {
+      "operations": {"runtime.open": 1, "turn.submit": 1, "runtime.close": 1},
+      "presentation_states": ["DETACHED", "DETACHED", "DETACHED"],
+      "input_states": ["ACCEPTED_NATIVE"],
+      "session_states": ["CLOSED"]
+    }
+  }
+}

@@ -1,6 +1,7 @@
 """Session catalog commands use the public ID and canonical binding."""
 
 import json
+import os
 from contextlib import contextmanager
 from types import SimpleNamespace
 from urllib.parse import parse_qs, urlsplit
@@ -146,7 +147,22 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
     assert '/runtime/sessions' not in catalog.routes
     assert collected == ['attach', ('att_fixture', 'reviewed-executable'), 'detach']
     output = capsys.readouterr().out
-    assert 'Session session-a' in output and 'Viewer detached' in output and catalog.token not in output
+    assert 'Press Ctrl+] to detach' in output and 'Session session-a' in output and 'Viewer detached' in output
+    assert catalog.token not in output
+
+
+@pytest.mark.skipif(os.name != 'nt', reason='Windows console input')
+def test_detach_key_distinguishes_paste_and_other_win32_key_events():
+    from okto_nexus.adapters.inbound.cli.windows_viewer_terminal import _DetachKey
+
+    key = _DetachKey()
+    assert not key.pressed('\x1b[20')
+    assert not key.pressed('0~paste\x1d\x1b[221;27;29;1;8;1_\x1b[201~')
+    assert not key.pressed('\x1b[221;27;29;0;8;1_\x1b[221;27;93;1;9;1_')
+    assert not key.pressed('\x1b[67;46;3;1;8;1_')
+    assert not key.pressed('\x1b[221;27;29;1;')
+    assert key.pressed('8;1_')
+    assert _DetachKey().pressed('\x1d')
 
 
 @pytest.mark.parametrize(('stage', 'successor_state', 'exit_code'), [

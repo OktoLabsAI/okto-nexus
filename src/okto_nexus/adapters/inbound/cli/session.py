@@ -129,7 +129,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
     executable = select_viewer(viewer_executable)
-    reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation, write=write)
+    reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                         **({'write': True} if write else {}))
     writer = reviewed if write else None
     revision = writer.capability_revision if writer else reviewed
     if writer and writer.occupied:
@@ -145,10 +146,10 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     if writer:
         print('Enter sends plain text when idle. During a turn, use Nexus for durable queue input or explicit reorientation.')
         print('Tab retains text in this viewer until it can send.')
-    print('Exit the viewer to detach from this session.', flush=True)
+    print('Press Ctrl+] to detach from this session.', flush=True)
     with open_local_presentation(call, scope=scope, expected_session_generation=generation,
                                  capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
-                                 writer=writer) as link:
+                                 **({'writer': writer} if writer else {})) as link:
         print('Presentation ' + link.attachment_id, flush=True)
         present_codex(link, executable)
     _display({'state': 'detached'}, False)
