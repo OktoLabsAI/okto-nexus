@@ -3,12 +3,15 @@
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import replace
+from datetime import UTC, datetime
 from types import SimpleNamespace
 
 import pytest
 
+from okto_nexus.adapters.outbound.sqlite.session_interaction import accept_input
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.domain.execution.keys import SessionOwnerGeneration
+from okto_nexus.domain.session_interaction import InputDeliveryState
 from okto_nexus.errors import ErrorCode, OktoNexusError
 from tests.session_interaction.test_queue_storage import ALICE, BOB
 from tests.session_interaction.test_queue_storage import database as queue_database
@@ -166,3 +169,56 @@ def test_expiration_revision_changes_and_restart_fence_the_old_presentation(atta
     with pytest.raises(OktoNexusError):
         use(restarted, scope, recovered, 'new-channel', writing=True)
     assert review(restarted, scope).epoch == 2 and not review(restarted, scope).occupied
+
+
+def test_writer_is_rechecked_inside_input_admission_after_takeover(attachment_store):
+    factory, (scope, _), _, broker_for = attachment_store
+    broker = broker_for()
+    old = open_presenter(broker, peer(offer(broker, scope, 'old-writer', epoch=0), scope, 'old-channel'))
+    use(broker, scope, old, 'old-channel', writing=True)
+    new = open_presenter(broker, peer(offer(broker, scope, 'new-writer', epoch=1, author=BOB, takeover=True),
+                                     scope, 'new-channel', BOB))
+
+    def enqueue(attachment, author, channel_id, intent):
+        with broker.authority_fence() as human, factory.unit_of_work() as uow:
+            broker.require_writer_effect(uow, human, scope=scope, author=author,
+                attachment=attachment, audience=AUDIENCE, channel_id=channel_id)
+            return accept_input(uow, scope=scope, author=author, client_intent_id=intent,
+                capability_revision='capability-1', text='Synthetic terminal input',
+                now=datetime.now(UTC), verify_new_authority=lambda: None)
+
+    with pytest.raises(OktoNexusError, match='cannot perform'):
+        enqueue(old, ALICE, 'old-channel', 'old-input')
+    receipt = enqueue(new, BOB, 'new-channel', 'new-input')
+    assert receipt.status is InputDeliveryState.QUEUED and receipt.sequence == 1
+    with broker.authority_fence() as human, factory.unit_of_work(write=False) as uow:
+        with pytest.raises(RuntimeError, match='active write'):
+            broker.require_writer_effect(uow, human, scope=scope, author=BOB,
+                attachment=new, audience=AUDIENCE, channel_id='new-channel')
+        assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == 1
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
+
+
+def test_refresh_extends_only_the_current_presentation(attachment_store):
+    factory, (scope, _), actor, broker_for = attachment_store
+    broker = broker_for()
+    reader = open_presenter(broker, peer(offer(broker, scope, 'reader'), scope, 'reader-channel'))
+    args = {'scope': scope, 'author': ALICE, 'attachment': reader, 'audience': AUDIENCE,
+            'channel_id': 'reader-channel'}
+    actor.time += 100
+    with pytest.raises(OktoNexusError):
+        broker.refresh(**(args | {'channel_id': 'other-channel'}))
+    broker.refresh(**args)
+    actor.time += 21
+    use(broker, scope, reader, 'reader-channel')
+    actor.valid.clear()
+    with pytest.raises(OktoNexusError, match='login'):
+        broker.refresh(**args)
+    actor.valid.add(ALICE.authority_ref)
+    actor.time += 100
+    with pytest.raises(OktoNexusError):
+        broker.refresh(**args)
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_leases').fetchone()[0] == 0
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
+        assert uow.connection.execute('SELECT COUNT(*) FROM session_attachment_epochs').fetchone()[0] == 0

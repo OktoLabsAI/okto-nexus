@@ -15,6 +15,8 @@ from ..domain.session_interaction import MAX_SQLITE_INTEGER, InputAuthor, InputS
 from ..errors import ErrorCode, OktoNexusError
 
 AttachmentAccess = Literal['read', 'write']
+_OFFER_SECONDS = 30
+_PRESENTER_SECONDS = 120
 
 
 @dataclass(frozen=True, slots=True)
@@ -141,7 +143,7 @@ class SessionAttachmentBroker:
                     state,ticket_hash,expires_monotonic
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'PREPARED',?,?)
             """, (attachment_id, *identity, intent_hash, self.instance, capability_revision, audience, access,
-                  expected_writer_epoch, takeover, _secret_hash(ticket), now + 30))
+                  expected_writer_epoch, takeover, _secret_hash(ticket), now + _OFFER_SECONDS))
             return PreparedPresenter(attachment_id, 'PREPARED', ticket)
 
     def _verify_writer(self, conn, scope, epoch, takeover):
@@ -198,18 +200,36 @@ class SessionAttachmentBroker:
             conn.execute("""
                 UPDATE session_attachments SET state='ACTIVE',writer_epoch=?,ticket_hash=NULL,challenge_hash=NULL,
                     expires_monotonic=? WHERE attachment_id=?
-            """, (epoch, now + 120, attachment_id))
+            """, (epoch, now + _PRESENTER_SECONDS, attachment_id))
             return PresenterAttachment(attachment_id, row['access'], epoch)
 
     def require_active(self, *, scope, author, attachment: PresenterAttachment, audience, channel_id, writing=False):
-        """Check a live presenter immediately before a transport operation."""
+        """Check a live presenter before a transport read or preliminary write review."""
         with self.authority_fence() as human, self.factory.unit_of_work(write=False) as uow:
-            row = self._row(uow.connection, scope, author, attachment.attachment_id, self.clock())
-            if (row['state'] != 'ACTIVE' or row['audience'] != audience or row['channel_id'] != channel_id
-                    or row['access'] != attachment.access or row['writer_epoch'] != attachment.writer_epoch
-                    or writing and (row['access'] != 'write' or self._epoch(uow.connection, scope) != row['writer_epoch'])):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'This presentation cannot perform the requested action.', {})
-            self._authorize(uow, human, scope, author, row['access'], audience, row['capability_revision'])
+            self._verify_active(uow, human, scope, author, attachment, audience, channel_id, self.clock(), writing)
+
+    def require_writer_effect(self, uow, human, *, scope, author, attachment, audience, channel_id):
+        """Verify the presenter inside the canonical effect transaction and human fence."""
+        uow.require_active_writer()
+        self._verify_active(uow, human, scope, author, attachment, audience, channel_id, self.clock(), True)
+
+    def refresh(self, *, scope, author, attachment, audience, channel_id):
+        """Extend only the current presentation on its original authenticated channel."""
+        with self.authority_fence() as human, self.factory.unit_of_work() as uow:
+            now = self.clock()
+            self._verify_active(uow, human, scope, author, attachment, audience, channel_id,
+                                now, attachment.access == 'write')
+            uow.connection.execute("""
+                UPDATE session_attachments SET expires_monotonic=? WHERE attachment_id=?
+            """, (now + _PRESENTER_SECONDS, attachment.attachment_id))
+
+    def _verify_active(self, uow, human, scope, author, attachment, audience, channel_id, now, writing):
+        row = self._row(uow.connection, scope, author, attachment.attachment_id, now)
+        if (row['state'] != 'ACTIVE' or row['audience'] != audience or row['channel_id'] != channel_id
+                or row['access'] != attachment.access or row['writer_epoch'] != attachment.writer_epoch
+                or writing and (row['access'] != 'write' or self._epoch(uow.connection, scope) != row['writer_epoch'])):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'This presentation cannot perform the requested action.', {})
+        self._authorize(uow, human, scope, author, row['access'], audience, row['capability_revision'])
 
     def detach(self, *, scope, author, attachment_id, channel_id):
         """Release a presentation receipt. The engine and its queue are independent."""
