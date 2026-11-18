@@ -1,6 +1,7 @@
 """Exercise the serve-owned queue against real R4/Core with a synthetic peer."""
 
-from dataclasses import replace
+import json
+from dataclasses import asdict, replace
 from functools import partial
 
 import pytest
@@ -523,6 +524,58 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     assert observed.model_dump() == context
     presentation['viewer_context'] = context | {'thread_id': 'sibling'}
     assert client.portal.call(owner.read_native_presentation_context, scope) is None
+
+    auth = app.state.operator_auth
+    user, password = 'presenter-fixture', 'fixture-viewer-password'
+    assert auth.configure(user, password, local=True)
+    token = auth.login(user, password)
+    origin = 'http://127.0.0.1'
+    headers = {'cookie': f'nexus_operator_session={token}', 'x-nexus-ui': '1', 'origin': origin}
+    prefix = '/api/v1/runtime-management'
+    url = origin + prefix + f'/sessions/{session}/attachments'
+    scope_body = {name: original[name] for name in (
+        'server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id', 'workspace_binding_id', 'session_id')}
+    body = {'scope': scope_body, 'expected_session_generation': scope.generation.value}
+    assert app.state.local_codex_presentations is not None
+    presentation['viewer_context'] = context
+    assert client.post(url + ':review', headers=headers, json=body).status_code == 409
+
+    def record_build(build):
+        with factory.unit_of_work() as uow:
+            uow.connection.execute("""
+                UPDATE execution_sessions SET native_launch_build_json=?
+                WHERE server_id=? AND executor_id=? AND session_id=?
+            """, (json.dumps(asdict(build)), server, executor, session))
+
+    reviewed = replace(mapping.launch_build, version='0.157.0', platform='win32',
+        content_fingerprint='sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f')
+    record_build(reviewed)
+    assert client.post(url + ':review', headers=headers, json=body).status_code == 409
+    idle = context | {'status': 'idle', 'cli_version': '0.157.0'}
+    presentation['viewer_context'] = idle
+    review = client.post(url + ':review', headers=headers, json=body)
+    assert review.status_code == 200, review.text
+    request = body | {'capability_revision': review.json()['capability_revision'],
+                      'intent': 'attach_live', 'access': 'read', 'client_intent_id': 'embedded-read'}
+    record_build(replace(reviewed, content_fingerprint='sha256:' + 'a' * 64))
+    assert client.post(url + ':prepare', headers=headers, json=request).status_code == 409
+    record_build(reviewed)
+    response = client.post(url + ':prepare', headers=headers, json=request)
+    assert response.status_code == 201, response.text
+    offer = response.json()
+    stream = 'ws://127.0.0.1' + prefix + f'/attachments/{offer["attachment_id"]}/stream'
+    ws_headers = headers | {'authorization': 'Bearer ' + offer['ticket']}
+    with client.websocket_connect(stream, headers=ws_headers, subprotocols=['nexus.presenter.v1']) as peer:
+        peer.send_json({'kind': 'hello', 'version': 1, **body})
+        challenge = peer.receive_json()
+        peer.send_json({'kind': 'prove', 'challenge': challenge['challenge']})
+        assert peer.receive_json()['kind'] == 'attached'
+        peer.send_json({'kind': 'context', 'request_id': 1})
+        assert peer.receive_json() == {'kind': 'context', 'request_id': 1, 'context': idle}
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT state FROM session_attachments').fetchone()[0] == 'DETACHED'
+    record_build(mapping.launch_build)
+
     for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):
         with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
             client.portal.call(owner.prove_native_presentation_owner, replace(scope, **{field: 'other-' + field}))

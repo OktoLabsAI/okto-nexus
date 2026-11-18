@@ -13,9 +13,9 @@ from nexus_connector_core import CoreError
 from nexus_connector_core.discovery import candidate, discover_path
 
 from ....application.terminal_connection import ConnectionError
+from ....domain.presentation_protocol import CODEX_VIEWER_WINDOWS_SHA256
 from .codex_viewer_relay import local_codex_relay
 
-_DIGEST = '8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce'
 _AUTH_VARIABLE = 'NEXUS_CODEX_VIEWER_TOKEN'
 
 
@@ -28,7 +28,8 @@ def select_viewer(executable=None):
             candidate('codex_app_server', executable.expanduser(), explicit=True),)
     except (CoreError, OSError):
         choices = ()
-    matches = [Path(item.executable) for item in choices if item.fingerprint == 'sha256:' + _DIGEST]
+    matches = [Path(item.executable) for item in choices
+               if item.fingerprint == 'sha256:' + CODEX_VIEWER_WINDOWS_SHA256]
     if len(matches) != 1:
         raise ConnectionError('VIEWER_BUILD_UNAVAILABLE',
                               'Select the reviewed Codex 0.170.0 executable with --viewer-executable.')
@@ -55,7 +56,7 @@ def _environment(root, proxy):
 
 def _check_viewer(executable):
     with executable.open('rb') as binary:
-        if hashlib.file_digest(binary, 'sha256').hexdigest() != _DIGEST:
+        if hashlib.file_digest(binary, 'sha256').hexdigest() != CODEX_VIEWER_WINDOWS_SHA256:
             raise ConnectionError('VIEWER_BUILD_CHANGED', 'The reviewed Codex executable changed before launch.')
 
 

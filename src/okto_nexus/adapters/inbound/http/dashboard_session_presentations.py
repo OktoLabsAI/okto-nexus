@@ -19,6 +19,7 @@ from ....application.codex_viewer_protocol import CodexViewerContext
 from ....application.execution_native_session_mapping import ManagedNativeSession
 from ....application.session_attachment_broker import SessionAttachmentBroker
 from ....domain.presentation_protocol import (
+    LOCAL_CODEX_AUDIENCE,
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
@@ -36,7 +37,7 @@ from .session_interaction_contract import (
     _Document,
 )
 
-_AUDIENCE = 'nexus.local.codex.v1'
+_AUDIENCE = LOCAL_CODEX_AUDIENCE
 _RENEW_SECONDS = 15
 
 
@@ -217,8 +218,13 @@ def build_router():
             reference = await _worker(state.operator_auth.authority_reference, token=token)
             if reference is None:
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
-            revision = await _worker(services.broker.review_reader, scope=scope,
-                author=InputAuthor(reference, 'native_terminal'), audience=_AUDIENCE)
+            authority = {'scope': scope, 'author': InputAuthor(reference, 'native_terminal'), 'audience': _AUDIENCE}
+            revision = await _worker(services.broker.review_reader, **authority)
+            context = await services.read_context(scope)
+            if (context is None or context.thread_id != mapping.codex_thread_id
+                    or revision != await _worker(services.broker.review_reader, **authority)
+                    or _services(state) is not services):
+                raise CoreError('SESSION_CONFLICT', 'native_presentation')
         except OktoNexusError as error:
             return _runtime_error(error)
         except CoreError:

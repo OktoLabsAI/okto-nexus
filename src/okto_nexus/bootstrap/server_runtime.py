@@ -7,6 +7,7 @@ async def start_runtime_services(app, *, native_factory=None):
     from .runtime_host import EmbeddedRuntimeHost
     from .server_shutdown import ServerShutdownCoordinator
     from .runtime_boot_owner import RuntimeBootOwner
+    from .local_codex_presentations import publish_local_codex_presentations
     from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
     from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
     from ..application.connection_test import ConnectionTests
@@ -90,6 +91,7 @@ async def start_runtime_services(app, *, native_factory=None):
         boot = RuntimeBootOwner(deps, inventory, run_runtime_boot)
         app.state.runtime_boot_owner = boot
         boot.start()
+    publish_local_codex_presentations(app, dispatch)
     handoffs = None
     if scheduling or input_scheduling:
         scheduler = build_handoff_runtime_scheduler(deps, acquisition_enabled=acquisition_enabled) if scheduling else None

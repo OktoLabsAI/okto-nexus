@@ -250,6 +250,22 @@ class EmbeddedDispatchOwner:
             return None
         return context if context.thread_id == metadata['thread_id'] else None
 
+    def _presentation_session_live(self, key, session):
+        return (session is not None and self.sessions.get(key) is session
+                and session['executor'] is not None and not session.get('recovering')
+                and not self._stopping.is_set() and self.failure is None and not self.host.draining)
+
+    def read_native_presentation_mapping(self, uow, scope: InputScope) -> ManagedNativeSession:
+        key = scope.session.session_id
+        session = self.sessions.get(key)
+        if not self._presentation_session_live(key, session):
+            raise CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
+        runtime_scope = dict(session['scope'])
+        mapping = self._native_presentation_mapping(scope, runtime_scope, uow=uow)
+        if not self._presentation_session_live(key, session) or session['scope'] != runtime_scope:
+            raise CoreError('STALE_GENERATION', 'native_presentation_owner')
+        return mapping
+
     @asynccontextmanager
     async def _native_presentation_context(self, scope):
         key = scope.session.session_id
@@ -257,9 +273,7 @@ class EmbeddedDispatchOwner:
         unavailable = CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
 
         def live():
-            return (session is not None and self.sessions.get(key) is session
-                    and session['executor'] is not None and not session.get('recovering')
-                    and not self._stopping.is_set() and self.failure is None and not self.host.draining)
+            return self._presentation_session_live(key, session)
 
         if not live():
             raise unavailable
@@ -279,28 +293,30 @@ class EmbeddedDispatchOwner:
         if not live() or session['scope'] != runtime_scope or self.channel != channel or current != mapping:
             raise CoreError('STALE_GENERATION', 'native_presentation_owner')
 
-    def _native_presentation_mapping(self, scope, runtime_scope):
-        with self.factory.unit_of_work(write=False) as uow:
-            self.verify(uow=uow)
-            params = _scope_params(scope)
-            if not _current_session(uow.connection, params, require_active_lease=True):
-                raise CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
-            repo = SqliteExecutionLeaseRepository()
-            owner, lease = repo.authority(uow, params), repo.effective(uow, params)
-            channel = self.channel
-            connection = channel.connection_id, channel.connection_generation
-            if (owner is None or owner['control_state'] != 'CONTROL_READY'
-                    or (owner['owner_instance_id'], owner['generation']) != connection
-                    or lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None
-                    or (lease['connection_id'], lease['connection_generation']) != connection
-                    or json.loads(lease['scope_json'] or 'null') != runtime_scope
-                    or stamp(lease['valid_until_server']) <= stamp(self.deps.clock.now_iso())):
-                raise CoreError('STALE_GENERATION', 'native_presentation_owner')
-            mapping = read_managed_native_session(uow, scope)
-            if (mapping is None or not mapping.stream_epoch or mapping.launch_build is None
-                    or (mapping.receipt_connection_id, mapping.receipt_connection_generation) != connection):
-                raise CoreError('SESSION_CONFLICT', 'native_presentation_owner')
-            return mapping
+    def _native_presentation_mapping(self, scope, runtime_scope, *, uow=None):
+        if uow is None:
+            with self.factory.unit_of_work(write=False) as unit:
+                return self._native_presentation_mapping(scope, runtime_scope, uow=unit)
+        self.verify(uow=uow)
+        params = _scope_params(scope)
+        if not _current_session(uow.connection, params, require_active_lease=True):
+            raise CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
+        repo = SqliteExecutionLeaseRepository()
+        owner, lease = repo.authority(uow, params), repo.effective(uow, params)
+        channel = self.channel
+        connection = channel.connection_id, channel.connection_generation
+        if (owner is None or owner['kind'] != 'embedded' or owner['control_state'] != 'CONTROL_READY'
+                or (owner['owner_instance_id'], owner['generation']) != connection
+                or lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None
+                or (lease['connection_id'], lease['connection_generation']) != connection
+                or json.loads(lease['scope_json'] or 'null') != runtime_scope
+                or stamp(lease['valid_until_server']) <= stamp(self.deps.clock.now_iso())):
+            raise CoreError('STALE_GENERATION', 'native_presentation_owner')
+        mapping = read_managed_native_session(uow, scope)
+        if (mapping is None or not mapping.stream_epoch or mapping.launch_build is None
+                or (mapping.receipt_connection_id, mapping.receipt_connection_generation) != connection):
+            raise CoreError('SESSION_CONFLICT', 'native_presentation_owner')
+        return mapping
 
     def _activate(self):
         # Only an empty installation uses fresh activation. Retained stores

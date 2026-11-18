@@ -46,6 +46,7 @@ class EmbeddedRuntimeSupervisor:
         from .embedded_dispatch import EmbeddedDispatchOwner
         from .runtime_host import EmbeddedRuntimeHost
         from .runtime_boot_owner import RuntimeBootOwner
+        from .local_codex_presentations import publish_local_codex_presentations
         from ..application.execution_local_launch import ApprovedLocalLaunch
         from ..adapters.inbound.mcp.tools.harness import run_runtime_boot
 
@@ -92,6 +93,7 @@ class EmbeddedRuntimeSupervisor:
         state.embedded_inventory_owner = coordinator.inventory = candidate
         state.embedded_dispatch_owner = coordinator.embedded = dispatch
         state.runtime_boot_owner = coordinator.runtime_boot = replacement_boot
+        publish_local_codex_presentations(self.app, dispatch)
         self._candidate = None
         self._starting = dispatch
         await self._start_replacement()
