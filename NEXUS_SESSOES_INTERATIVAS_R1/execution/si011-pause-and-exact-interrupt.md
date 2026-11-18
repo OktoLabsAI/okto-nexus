@@ -31,3 +31,10 @@ The offline Nexus 0.3.8 archive passed Twine's strict check. Byte comparisons
 matched migrations 169–175 and the exact interrupt module inside the wheel
 with their source files. The checked wheel has SHA-256
 `a0b33384c3865c83af8afd4a5d88a2d0454001c451abe917d97e7439fc90d66c`.
+
+The earlier 0.3.8 archive seeded two queued inputs in a temporary schema
+173 database. The checked archive applied only 174 and 175. Both queue
+revisions, input IDs, sequences, texts and delivery states matched their
+prior values. The new barriers and provenance were empty by default, the
+foreign key check passed, and applying the migrations again did no work.
+The earlier archive refused schema 175 without altering that database.
