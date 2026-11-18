@@ -1,0 +1,33 @@
+--- cli_cycle_v2.py
++++ cli_cycle_v3.py
+@@ -14,7 +14,7 @@
+     parser.add_argument('--gate', choices=['ROOT_APPROVED_COMPAT_BATCH'], required=True)
+     parser.add_argument('--manifest', type=Path, required=True)
+     parser.add_argument('--manifest-sha256', required=True)
+-    parser.add_argument('--phase', choices=['s3-current', 's4-old'], required=True)
++    parser.add_argument('--phase', choices=['s3-current', 's4-old', 'current-cli'], required=True)
+     parser.add_argument('--root', type=Path, required=True)
+     parser.add_argument('--home', type=Path, required=True)
+     parser.add_argument('--port', type=int, required=True)
+@@ -146,11 +146,19 @@
+     assert sha(root / 'control/effects.jsonl') == effects_before
+     assert sha(home / 'terminal/work/compat.json') == work_checkpoint
+     assert status() == owner
+-    invoke(['work', 'close', '--profile', profile, *service_args])
++    close = invoke(['work', 'close', '--profile', profile, *service_args])
++    deadline = time.monotonic() + 30
++    while True:
++        closed = invoke(['work', 'status', '--control', '--profile', profile, *service_args])
++        receipts = [operation for operation in closed.get('operations', []) if operation['operation_id'] == close['operation_id']]
++        if len(receipts) == 1 and receipts[0].get('executor_stage') == 'SUCCEEDED' and closed['session']['lifecycle_state'] == 'CLOSED':
++            break
++        assert time.monotonic() < deadline, 'Exact canonical close did not settle'
++        time.sleep(.1)
+     (root / 'control' / ('cli-cycle-' + args.phase + '.json')).write_text(json.dumps({
+         'owner': owner, 'binding': binding, 'decision_id': decision['decision_id'],
+         'result_operation_id': sent['submission_turn_operation_id'], 'cli_commands': records,
+-        'no_web_step_required': args.phase == 's4-old',
++        'no_web_step_required': args.phase != 's3-current',
+         'limits': 'Actual installed CLI/foreground service; synthetic version/Test/native protocol peer, no provider.'}, indent=2), encoding='utf-8')
+ 
+ 

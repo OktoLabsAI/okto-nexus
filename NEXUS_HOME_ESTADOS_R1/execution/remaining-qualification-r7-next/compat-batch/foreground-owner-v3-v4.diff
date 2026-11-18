@@ -1,0 +1,27 @@
+--- foreground_owner_v3.py
++++ foreground_owner_v4.py
+@@ -31,7 +31,7 @@
+     parser.add_argument('--gate', choices=['ROOT_APPROVED_COMPAT_BATCH'], required=True)
+     parser.add_argument('--manifest', type=Path, required=True)
+     parser.add_argument('--manifest-sha256', required=True)
+-    parser.add_argument('--phase', choices=['s3-current', 's4-old', 's4-current'], required=True)
++    parser.add_argument('--phase', choices=['s3-current', 's4-old', 's4-current', 'current-cli'], required=True)
+     parser.add_argument('--root', type=Path, required=True)
+     parser.add_argument('--home', type=Path, required=True)
+     parser.add_argument('--port', type=int, required=True)
+@@ -97,6 +97,15 @@
+     def build(deps, *positional, **kwargs):
+         application = original_build(deps, *positional, **kwargs)
+ 
++        @application.middleware('http')
++        async def record_http(request, call_next):
++            response = await call_next(request)
++            # Metadata only: no body, headers, cookies, query or credential values.
++            with (root / 'control' / ('http-' + args.phase + '.jsonl')).open('a', encoding='utf-8') as log:
++                log.write(json.dumps({'method': request.method, 'path': request.url.path,
++                    'status': response.status_code}) + '\n')
++            return response
++
+         async def synthetic_test(entry, request, selected):
+             assert selected.executable == str(binary)
+             with (root / 'control/effects.jsonl').open('a', encoding='utf-8') as log:

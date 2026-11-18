@@ -1,0 +1,34 @@
+--- run_nonbrowser.py
++++ run_nonbrowser_v2.py
+@@ -27,7 +27,7 @@
+     args = parser.parse_args()
+     expected_gate = 'ROOT_APPROVED_COMPAT_S4' if args.journey == 'S4' else 'ROOT_APPROVED_COMPAT_K05_CANDIDATE'
+     assert args.gate == expected_gate
+-    manifest_path = HERE / ('PREPARED-S4-R9.json' if args.journey == 'S4' else 'PREPARED-K05-R9.json')
++    manifest_path = HERE / ('PREPARED-S4-R9.json' if args.journey == 'S4' else 'PREPARED-K05-R9-v2.json')
+     digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+     assert digest(manifest_path) == args.manifest_sha256
+     manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+@@ -135,7 +135,7 @@
+         observed = request('GET', '/api/v1/service', authenticated=True)
+         assert {key: observed[key] for key in owner} == owner
+         assert manager.Commands.alive(commands.known[owner['pid']])
+-        record = {'phase': phase, 'owner_before': owner, 'owner_after': {key: observed[key] for key in owner},
++        record = {'phase': phase, 'port': port, 'owner_before': owner, 'owner_after': {key: observed[key] for key in owner},
+             'birth': birth, 'python': python, 'workspace_id': workspace, 'dashboard_opened': False,
+             'protected_before_stop': history.snapshot(home)}
+         stop_phase(active)
+@@ -218,11 +218,11 @@
+         if active is not None:
+             known.extend(active['commands'].known.values())
+         remaining = [item for item in known if manager.Commands.alive(item)]
+-        ports = [active['port']] if active is not None else []
++        ports = sorted({record['port'] for record in phases} | ({active['port']} if active is not None else set()))
+         listeners = [row.pid for row in psutil.net_connections(kind='tcp') if row.status == 'LISTEN' and row.laddr.port in ports]
+         helper.save(root / 'control/nonbrowser-final.json', {'journey': args.journey, 'failures': failures,
+             'root': str(root), 'phases': phases, 'before': before, 'after': after, 'copy_count': copied['copy_count'] if copied else 0,
+-            'remaining': remaining, 'listeners': listeners, 'forced_containment': containment,
++            'remaining': remaining, 'listeners': listeners, 'audited_ports': ports, 'forced_containment': containment,
+             'browser_started': False, 'browser_markers_written': False, 'provider_invocations': 0,
+             'phase_deadline_seconds': 180, 'K05_inferred_from_old_producer': False,
+             'limits': 'Canonical installed CLI/HTTP/SQLite with inert version/Test/native peers; no provider, human acceptance, Windows daemon/session event or performance claim.'})

@@ -7149,7 +7149,7 @@
       "when": "Executar sem abrir dashboard",
       "then": "Nenhum passo web obrigatório nem alteração do preset/grant na reconexão.",
       "level": "contrato + instalação isolada",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -7168,9 +7168,18 @@
           "command_or_procedure": "Canonical CLI connect/work and original native question; actual Settings classic/operational/classic toggle during that work; exact global question; CLI answer/result/reconnect/close with strict config/root/grant/checkpoint and owner assertions",
           "result": "PASS13 browser checks and14 installed CLI commands; UI writes0; same PID/birth/instance/generation throughout; selected config/grants/root/checkpoint unchanged by UI and reconnect; actual turn.submit and runtime.close SUCCEEDED; canonical service stop drained, physical0, source1829/R9payload1031/oldreadonly1028/tool192 drift0",
           "limitations": "Own foreground Nexus service, not Windows scheduled task or real Connector daemon qualification. Browser was open, so K05 no-dashboard is not qualified. Classic session summary/project/global question were exposed, but full classic Conversations/control navigation was not exercised. Selected invariant digests were compared by the successful pinned CLI process but not separately logged; post hashes are not fabricated. No real provider/human/performance claim."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:32:30.892125+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/compat-batch/K05-candidate-r9/qualification.json",
+          "environment": "Fresh installed R9 candidate; separate installed CLI subprocesses and real foreground HTTP service; inert version/Test/native protocol peers; canonical own account is fixture precondition",
+          "command_or_procedure": "Without any dashboard/browser: CLI connect review/exact approval, work send/status, exact-recipient answer review/confirmation, result, reconnect with selected invariant assertions, exact close and final status --control",
+          "result": "PASS14 CLI public documents and150 API request traces; zero dashboard HTML/assets, Chrome/Node births or browser marker; same owner PID/birth/instance/generation, reconnect config/root/grant/checkpoint/Test/probe unchanged; exact close SUCCEEDED/session CLOSED, service stop drained, physical0 and actual port audit0; source1829/R9payload1031/oldreadonly1028/tool192 unchanged",
+          "limitations": "Fresh candidate qualification, not inherited from S3 or old producer. Synthetic protocol peer is not Codex/provider qualification; no Windows Connector daemon task/login lifecycle or human acceptance. Selected snapshot digests were asserted by the successful pinned process and not separately logged. API fixture account creation is not a web UI step."
         }
       ],
-      "execution_notes": "PARTIAL actual installed connect/work/answer/result/reconnect/close passes without web intervention in the CLI decisions, but the dashboard was already open for S3. A separate no-dashboard candidate cut is required."
+      "execution_notes": "PASS fresh candidate no-dashboard CLI cycle and strict reconnect invariants; actual separate foreground service/CLI/native inert peer, no real provider or Windows task qualification."
     },
     {
       "id": "HST-T-K06",
@@ -7611,7 +7620,7 @@
       "remaining_qualification": "Inspect literal NOT_RUN/BLOCKED rows and remaining-qualification-review-r7.md",
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
-        "no-dashboard CLI and full classic-control navigation",
+        "full classic-control navigation",
         "old-producer state read compatibility",
         "stream/validity and remaining literal supported clauses"
       ]
@@ -7823,6 +7832,17 @@
       "normal_exit": true,
       "physical_absence": true,
       "H08_occupied_capacity": "NOT_RUN"
+    },
+    "r9_cli_without_dashboard": {
+      "status": "PASS_K05_CANDIDATE",
+      "qualification": "execution/remaining-qualification-r7-next/compat-batch/K05-candidate-r9/qualification.json",
+      "cli_documents": 14,
+      "http_api_requests": 150,
+      "dashboard_requests": 0,
+      "provider_calls": 0,
+      "canonical_close": "SUCCEEDED_AND_CLOSED",
+      "canonical_service_stop": "DRAINED",
+      "physical_absence": true
     }
   }
 }

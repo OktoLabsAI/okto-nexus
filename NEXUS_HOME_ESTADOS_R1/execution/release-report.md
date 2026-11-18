@@ -147,7 +147,7 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-64PASS/44NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+65PASS/43NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
 original evidence; fresh R9 focus predicates now pass. No timing target caused
 or resolved these functional qualifications.
 
@@ -210,6 +210,7 @@ dependency versions were compared, not all dependency file bytes.
 | CLI work and presentation rollback |13actual browser checks and14installed CLI commands; strict config/root/grant/checkpoint assertions and same foreground owner; canonical close SUCCEEDED and service stop drained |[R9 compatibility S3](remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json)|
 | Reported external completion |13actual R9 browser checks; exact reported episode opens without native success/verification; two live thirty-table comparisons allow only the two scoped observation events |[R9 security S2](remaining-qualification-r7-next/security-r9-s2-batch/runs/hst-security-r9-s2-observed-completion-v3/qualification.json)|
 | Native zoom prerequisite |14checks using real Chrome Settings100%→200%, DPR1→2/CSS720→360 at unchanged viewport; no Nexus app ran in this cut |[Native browser guard](remaining-qualification-r7-next/native-zoom-batch/runs/hst-native-zoom-r9-browser-only-2/qualification.json)|
+| CLI without dashboard |Fresh R9 candidate:14CLI documents and150API request traces, zero HTML/assets/browser/marker; strict reconnect invariants, exact close SUCCEEDED/CLOSED and normal drained stop |[K05 candidate](remaining-qualification-r7-next/compat-batch/K05-candidate-r9/qualification.json)|
 | Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -268,7 +269,7 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has64PASS,44NOT_RUN and8BLOCKED. The original menu and focus
+reviews it has65PASS,43NOT_RUN and8BLOCKED. The original menu and focus
 defects are corrected and have separate actual installed-browser evidence.
 Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
 completion or default approval.
@@ -312,8 +313,9 @@ daemon restart is not presented as an individual connection recovery action.
 Actual active-work rollback now exposes the classic session summary, selected
 project and exact global question while the CLI continues with unchanged
 selected configuration and service owner. Full classic-control navigation
-and a separate candidate CLI cycle with no dashboard remain unexecuted;
-neither is inferred from that scoped cut. No reset, clean,
+remains unexecuted. The separate candidate CLI cycle without a dashboard now
+passes K05, with actual API-only traffic, unchanged selected invariants and
+exact successful close; it is not inferred from the UI rollback cut. No reset, clean,
 force-push, release, deployment, merge or default activation was performed.
 
 ## Next gate
@@ -330,8 +332,9 @@ inviting a participant. The menu and focus corrections have actual browser
 proof. Foreground CLI, active presentation rollback and exact reported external
 completion have scoped actual evidence. Earlier S2 JSON-reader and wrong-modal
 oracle failures remain preserved; no occupied claim/one-shot capacity release
-is inferred from the empty-capacity observation fixture. No-dashboard CLI, full classic-control
-navigation and old-state increments remain distinct pending qualifications.
+is inferred from the empty-capacity observation fixture. The fresh no-dashboard
+CLI cycle passes separately. Full classic-control navigation and old-state
+increments remain distinct pending qualifications.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No
 further performance-only optimization round is required for this local delivery.

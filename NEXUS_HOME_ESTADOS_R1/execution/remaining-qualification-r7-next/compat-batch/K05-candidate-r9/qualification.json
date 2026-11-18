@@ -1,0 +1,305 @@
+{
+  "status": "PASS_K05_CANDIDATE_WITHOUT_DASHBOARD",
+  "scenario": "HST-T-K05",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "manifest_sha256": "b2269d9b19283ee9442eeba62ccde1462e5d8c1a37ac1ec6ba94d37114a98970",
+  "runner_sha256": "a485a6536381ea4bb3319b92c2cce1c3e82cf50194ccd7a39ab9388c0bc6f76e",
+  "runner_exit_code": 0,
+  "phase": "current-cli",
+  "CLI_documents": 14,
+  "HTTP_requests": 150,
+  "dashboard_HTTP_requests": [],
+  "browser_births": [],
+  "browser_started": false,
+  "browser_marker_written": false,
+  "owner_before": {
+    "pid": 19100,
+    "instance_id": "svc_7b977010e35387fa494937f3c322310af0b8e734101c1506a7d98faeeefd0d2f",
+    "generation": "169801aff3b2700d77ff6c6ad379eeab"
+  },
+  "owner_after": {
+    "pid": 19100,
+    "instance_id": "svc_7b977010e35387fa494937f3c322310af0b8e734101c1506a7d98faeeefd0d2f",
+    "generation": "169801aff3b2700d77ff6c6ad379eeab"
+  },
+  "birth": 1794961701.597154,
+  "canonical_stop": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "shutdown_outcome": "drained"
+  },
+  "server_process_exit_code": 0,
+  "physical": [
+    {
+      "pid": 58136,
+      "expected_birth": 1794961701.5567513,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 19100,
+      "expected_birth": 1794961701.597154,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 38240,
+      "expected_birth": 1794961716.3874083,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 12520,
+      "expected_birth": 1794961716.4093056,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 50384,
+      "expected_birth": 1794961716.7602136,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 55868,
+      "expected_birth": 1794961716.783538,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56496,
+      "expected_birth": 1794961718.5283377,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59608,
+      "expected_birth": 1794961718.5501056,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 42620,
+      "expected_birth": 1794961720.9234412,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 16788,
+      "expected_birth": 1794961720.9439726,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 2892,
+      "expected_birth": 1794961724.5430255,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 39856,
+      "expected_birth": 1794961724.5612872,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 62136,
+      "expected_birth": 1794961726.5153582,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61408,
+      "expected_birth": 1794961726.533394,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58128,
+      "expected_birth": 1794961726.9016428,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58016,
+      "expected_birth": 1794961728.9237075,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 49020,
+      "expected_birth": 1794961728.9368064,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 40512,
+      "expected_birth": 1794961730.9258564,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57584,
+      "expected_birth": 1794961730.9487026,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 27192,
+      "expected_birth": 1794961733.255514,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 11168,
+      "expected_birth": 1794961733.2735868,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57888,
+      "expected_birth": 1794961735.1718848,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 55500,
+      "expected_birth": 1794961735.1807172,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43480,
+      "expected_birth": 1794961736.886191,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 27348,
+      "expected_birth": 1794961736.8963673,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57516,
+      "expected_birth": 1794961738.3817875,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 42120,
+      "expected_birth": 1794961738.3974617,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 4068,
+      "expected_birth": 1794961740.3077211,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59732,
+      "expected_birth": 1794961740.3170147,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 24968,
+      "expected_birth": 1794961741.565415,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 55480,
+      "expected_birth": 1794961741.5791981,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 44068,
+      "expected_birth": 1794961743.216053,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 44784,
+      "expected_birth": 1794961743.231428,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59724,
+      "expected_birth": 1794961745.1080542,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58764,
+      "expected_birth": 1794961745.1234913,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "actual_audited_ports": [
+    58639
+  ],
+  "listeners_after": [],
+  "forced_containment": [],
+  "checks": [
+    "Actual installed CLI connect review and exact approval produce configured public connection",
+    "Actual CLI work send/question review/answer/terminal result, then reconnect and close",
+    "Exact actor from canonical connections/me equals canonical recipient fallback; no impersonation",
+    "Reconnect preserves exact binding/project, selected configuration/root/grants snapshot digest, work checkpoint and Test/probe log",
+    "Exact runtime.close operation SUCCEEDED and session CLOSED through final CLI status --control",
+    "Same real foreground PID/birth/instance/generation throughout, then canonical drained stop and separate physical/port proof",
+    "No dashboard HTML/assets request, no browser process or marker, no browser helper invocation"
+  ],
+  "synthetic_effects": [
+    {
+      "kind": "synthetic_version_probe"
+    },
+    {
+      "kind": "synthetic_setup_test",
+      "intent": "connect_2a4ee870a759428f83720205953da59e"
+    }
+  ],
+  "guards_before": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "guards_after": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "api_fixture_precondition": "Own canonical human account/login via HTTP API only; not a mandatory web UI step",
+  "no_inherited_PASS": "Fresh candidate run; does not inherit S3 or an old producer outcome",
+  "S4": "NOT_RUN",
+  "old_i4_started": false,
+  "provider_invocations": 0,
+  "raw_retained_private_only": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-k05-xgq02xz7",
+  "raw_final_sha256": "7c464f2e04eda178f9c4699db1eb81eeac9dc110bdb41dbe6532f5321b8d02fe",
+  "private_logs_copied": false,
+  "cookie_or_token_copied": false,
+  "input_readers_released": true,
+  "limits": [
+    "Foreground actual Nexus, not a Windows Connector daemon/task or login/reboot lifecycle.",
+    "Version/setup-Test/native protocol peers are inert synthetic fixtures, no real provider qualification.",
+    "Strict selected snapshots, not wholeDB immutability or arbitrary telemetry/lease suppression.",
+    "Local snapshot digests were compared in executed pinned CLI but not separately logged; no fabricated before/after hashes.",
+    "Bounded observed ancestry/root sampling does not enumerate every short-lived process.",
+    "No browser/human/performance acceptance claim."
+  ]
+}
