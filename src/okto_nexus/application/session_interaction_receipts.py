@@ -51,6 +51,7 @@ def read_session_input_receipt(
         row = uow.connection.execute("""
             SELECT i.input_id, i.enqueue_sequence, i.input_revision, q.revision AS queue_revision,
                 i.status, i.operation_id, i.possible_effect,
+                (c.confirmed_effect_revision IS NOT NULL) AS reorientation,
                 (c.confirmed_effect_revision IS NOT NULL AND d.dispatch_state='DISPATCHED'
                     AND r.stage='SUBMITTED') AS steer_submitted
             FROM session_interaction_inputs i
@@ -80,5 +81,6 @@ def read_session_input_receipt(
             raise _unavailable()
         return QueuedReceipt(
             row["input_id"], row["enqueue_sequence"], row["input_revision"], row["queue_revision"],
-            InputDeliveryState(row["status"]), row["operation_id"], bool(row["possible_effect"]), bool(row["steer_submitted"]),
+            InputDeliveryState(row["status"]), row["operation_id"], bool(row["possible_effect"]),
+            steer_submitted=bool(row["steer_submitted"]), reorientation=bool(row["reorientation"]),
         )

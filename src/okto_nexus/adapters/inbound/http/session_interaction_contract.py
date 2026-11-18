@@ -171,6 +171,7 @@ class InputReceipt(_Document):
     operation_id: Identifier | None
     possible_effect: bool
     steer_submitted: bool = False
+    reorientation: bool = False
 
     @model_validator(mode="after")
     def distinct_delivery_boundary(self) -> "InputReceipt":

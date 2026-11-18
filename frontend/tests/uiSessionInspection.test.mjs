@@ -28,6 +28,8 @@ function load(url){
 const {SessionExecutionPanel}=load(new URL('../src/components/SessionExecutionPanel.tsx',import.meta.url));
 const {assertConversationPage,applyConversationUpdates,interactionKey}=load(new URL('../src/sessionConversation.ts',import.meta.url));
 const {interruptStatus,canDismissInterrupt,interruptStorageKey,clearInterruptIntents}=load(new URL('../src/sessionInterrupt.ts',import.meta.url));
+const {assertSteerPreview,steerReceiptOutcome,steerStorageKey,readSteerReference,clearSteerReferences}=
+  load(new URL('../src/sessionSteer.ts',import.meta.url));
 const render=props=>renderToStaticMarkup(React.createElement(SessionExecutionPanel,props));
 
 test('an interrupt receipt stays distinct from proof that the target stopped',()=>{
@@ -53,6 +55,46 @@ test('interrupt recovery references stay isolated by full scope and are cleared 
   const items=new Map([[exactKey,'intent-a'],['unrelated-ui-preference','keep'],[otherKey,'intent-b']]);
   clearInterruptIntents({get length(){return items.size;},key:index=>[...items.keys()][index],removeItem:key=>items.delete(key)});
   assert.deepEqual([...items], [['unrelated-ui-preference','keep']]);
+});
+
+test('reorientation reviews freeze the supported effect, owner generation and queued input',()=>{
+  const scope={...context,session_owner_generation:3};
+  const control={effect:'same_turn',effect_revision:'effect',capability_revision:'capability',
+    queue_revision:4,target:{kind:'native_turn',turn_id:'native-turn'}};
+  const preview={scope,session_owner_generation:3,control,queued_input:{input_id:'queued-a',input_revision:1}};
+  const source={kind:'queue',inputId:'queued-a'};
+  assert.doesNotThrow(()=>assertSteerPreview(preview,scope,source));
+  assert.throws(()=>assertSteerPreview({...preview,session_owner_generation:4},scope,source));
+  assert.throws(()=>assertSteerPreview({...preview,control:{...control,effect:'interrupt_replace'}},scope,source));
+  assert.throws(()=>assertSteerPreview(preview,scope,{kind:'queue',inputId:'queued-b'}));
+});
+
+test('a reorientation receipt never conflates queue dispatch, submission and native acceptance',()=>{
+  const scope={...context,session_owner_generation:3};
+  const source={kind:'queue',inputId:'queued-a'};
+  const receipt={scope,session_owner_generation:3,operation_id:'op-x',input_id:'queued-a',status:'DISPATCHING',
+    possible_effect:false,reorientation:true,steer_submitted:false};
+  assert.equal(steerReceiptOutcome(receipt,scope,source),'dispatching');
+  assert.equal(steerReceiptOutcome({...receipt,steer_submitted:true},scope,source),'submitted');
+  assert.equal(steerReceiptOutcome({...receipt,status:'ACCEPTED_NATIVE'},scope,source),'accepted');
+  assert.equal(steerReceiptOutcome({...receipt,status:'REFUSED_BEFORE_SEND'},scope,source),'refused');
+  assert.equal(steerReceiptOutcome({...receipt,possible_effect:true,status:'REFUSED_BEFORE_SEND'},scope,source),'uncertain');
+  assert.equal(steerReceiptOutcome({...receipt,reorientation:false,status:'QUEUED'},scope,source),'uncertain');
+  assert.equal(steerReceiptOutcome({...receipt,reorientation:false},scope,source),'original-changed');
+  assert.throws(()=>steerReceiptOutcome({...receipt,input_id:'different'},scope,source));
+});
+
+test('reorientation stores only the exact recovery reference and clears its keys on logout',()=>{
+  const scope={...context,session_owner_generation:3};
+  const key=steerStorageKey(scope);
+  const other=steerStorageKey({...scope,session_owner_generation:4});
+  const items=new Map([[key,JSON.stringify({kind:'queue',inputId:'queued-a',text:'ignored'})],[other,'invalid'],['keep','setting']]);
+  const storage={get length(){return items.size;},key:index=>[...items.keys()][index],getItem:key=>items.get(key),
+    removeItem:key=>items.delete(key)};
+  assert.deepEqual(readSteerReference(storage,key),{kind:'queue',inputId:'queued-a'});
+  assert.equal(readSteerReference(storage,other),null);
+  clearSteerReferences(storage);
+  assert.deepEqual([...items.keys()],['keep']);
 });
 
 test('passive session inspection sends exact session/executor and verifies all seven admitted scope fields',async()=>{

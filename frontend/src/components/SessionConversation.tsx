@@ -5,7 +5,9 @@ import {applyConversationUpdates, assertConversationPage, assertInteractionScope
 import {OperatorSignIn} from './OperatorSignIn';
 import {SessionInputQueue} from './SessionInputQueue';
 import {SessionInterruptControl} from './SessionInterruptControl';
+import {SessionSteerControl} from './SessionSteerControl';
 import {clearInterruptIntents} from '../sessionInterrupt';
+import {clearSteerReferences, readSteerReference, steerStorageKey, type SteerReference, type SteerSource} from '../sessionSteer';
 
 interface Draft {
   text: string;
@@ -18,7 +20,10 @@ const drafts = new Map<string, Draft>();
 
 export function clearConversationDrafts() {
   drafts.clear();
-  if (typeof window !== 'undefined') clearInterruptIntents(window.sessionStorage);
+  if (typeof window !== 'undefined') {
+    clearInterruptIntents(window.sessionStorage);
+    clearSteerReferences(window.sessionStorage);
+  }
 }
 
 interface History {
@@ -54,6 +59,11 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const [busy, setBusy] = useState(false);
   const [newMessages, setNewMessages] = useState(false);
   const [queueRefresh, setQueueRefresh] = useState(0);
+  const [steerSource, setSteerSource] = useState<SteerSource | null>(null);
+  const [steerPending, setSteerPending] = useState<SteerReference | null>(() =>
+    typeof window === 'undefined' ? null : readSteerReference(window.sessionStorage, steerStorageKey(scope)));
+  const steerTrigger = useRef<HTMLButtonElement | null>(null);
+  const editor = useRef<HTMLTextAreaElement>(null);
   const view = useRef(history);
   const lastInteraction = useRef<SessionInteraction | null>(null);
   const polling = useRef<() => void>(() => {});
@@ -116,7 +126,8 @@ export function SessionConversation({scope, active, onAccessLost}: {
           setHistory(view.current);
         }
         const latest = drafts.get(key)?.latest;
-        if (latest && ['QUEUED', 'DISPATCHING', 'DELIVERY_UNKNOWN', 'PAUSED'].includes(latest.receipt.status) &&
+        if (latest && !latest.receipt.steer_submitted &&
+            ['QUEUED', 'DISPATCHING', 'DELIVERY_UNKNOWN', 'PAUSED'].includes(latest.receipt.status) &&
             !next.next_turn.human_login_required && !mutation.current) {
           try {
             const receipt = await runtimeApi.sessionInputReceipt(scope, latest.intent, signal);
@@ -168,10 +179,34 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const firstCharacter = draft.text.trimStart()[0];
   const command = firstCharacter === '/' || firstCharacter === '!';
   const tooLong = new TextEncoder().encode(draft.text).length > 64 * 1024;
+  const steerAvailable = active && interaction?.steer_review_supported === true && !capability?.human_login_required;
+  const canReviewSteer = steerAvailable && !steerSource && !steerPending && !draft.uncertain && !busy;
+  const draftHeld = steerSource?.kind === 'draft' || steerPending?.kind === 'draft';
+
+  function reviewSteer(source: SteerSource, trigger: HTMLButtonElement) {
+    if (!canReviewSteer || mutation.current) return;
+    steerTrigger.current = trigger;
+    setSteerSource(source);
+  }
+
+  function closeSteerReview() {
+    setSteerSource(null);
+    window.requestAnimationFrame(() => {
+      if (steerTrigger.current?.isConnected && !steerTrigger.current.disabled) steerTrigger.current.focus();
+      else editor.current?.focus();
+      steerTrigger.current = null;
+    });
+  }
+
+  function completeSteer(reference: SteerReference, receipt: SessionInputReceipt) {
+    const prior = drafts.get(key) ?? emptyDraft;
+    if (reference.kind === 'draft') save({...prior, text: '', latest: null});
+    else if (prior.latest?.receipt.input_id === receipt.input_id) save({...prior, latest: null});
+  }
 
   async function send(recover: boolean) {
     if (mutation.current || recover && !draft.uncertain) return;
-    if (!recover && (!canSend || !draft.text.trim() || draft.uncertain || command || tooLong)) return;
+    if (!recover && (!canSend || draftHeld || !draft.text.trim() || draft.uncertain || command || tooLong)) return;
     const intent = recover ? draft.uncertain! : 'ui_' + crypto.randomUUID();
     const controller = new AbortController();
     mutation.current = controller;
@@ -239,7 +274,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
       void send(false);
     }}>
       <label htmlFor={editorId} className="block text-sm font-medium">Message for this session</label>
-      <textarea id={editorId} value={draft.text} rows={3} readOnly={!!draft.uncertain} data-modal-passive
+      <textarea ref={editor} id={editorId} value={draft.text} rows={3} readOnly={!!draft.uncertain || draftHeld} data-modal-passive
         className="block w-full rounded-md border bg-transparent p-2 text-sm" aria-describedby={editorId + '-hint'}
         onChange={event => {save({...draft, text: event.target.value});setMessageError('');}}
         onKeyDown={event => {
@@ -253,17 +288,28 @@ export function SessionConversation({scope, active, onAccessLost}: {
       {tooLong && <p role="status" className="text-xs">The message is longer than 64 KiB.</p>}
       <div className="flex flex-wrap gap-2">
         <button type="submit" className="btn btn-primary"
-          disabled={!canSend || busy || !!draft.uncertain || !draft.text.trim() || command || tooLong}>Send for next turn</button>
+          disabled={!canSend || busy || draftHeld || !!draft.uncertain || !draft.text.trim() || command || tooLong}>Send for next turn</button>
+        {steerAvailable && <button type="button" className="btn btn-secondary"
+          disabled={!canReviewSteer || !draft.text.trim() || command || tooLong}
+          onClick={event => reviewSteer({kind: 'draft', text: draft.text}, event.currentTarget)}>Reorient current turn</button>}
         {draft.uncertain && <button type="button" disabled={busy} className="btn btn-secondary"
           onClick={() => void send(true)}>Check message receipt</button>}
       </div>
     </form>}
     {(draft.latest || draft.uncertain) && <p role="status" className="text-sm">
       {draft.uncertain ? (busy ? 'Checking message…' : 'Waiting for confirmation of this message.') :
-        receiptLabel[draft.latest!.receipt.status]}</p>}
+        draft.latest!.receipt.steer_submitted ? 'Reorientation sent. Harness acceptance is unconfirmed.' :
+          receiptLabel[draft.latest!.receipt.status]}</p>}
     {messageError && <p role="alert" className="text-sm">{messageError}</p>}
     {capability?.human_login_required === false && <>
+      <SessionSteerControl scope={scope} available={steerAvailable} source={steerSource} pending={steerPending}
+        draftRetained={!!draft.text}
+        onCloseReview={closeSteerReview} onPending={setSteerPending} onSubmitted={completeSteer}
+        onAccessLost={loseAccess} onQueueChanged={() => setQueueRefresh(value => value + 1)}/>
       {active && <SessionInputQueue scope={scope} onAccessLost={loseAccess} refreshKey={queueRefresh}
+        pendingSteerInput={steerPending?.kind === 'queue' ? steerPending.inputId : null}
+        onReviewPromotion={steerAvailable ? (inputId, trigger) => reviewSteer({kind: 'queue', inputId}, trigger) : undefined}
+        canReviewPromotion={canReviewSteer}
         onCancelled={receipt => {
           const latest = drafts.get(key)?.latest;
           if (latest?.receipt.input_id === receipt.input_id) installReceipt(latest.intent, receipt);

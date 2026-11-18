@@ -71,4 +71,5 @@ def link_promoted_input(uow, *, scope, row, operation_id):
     if linked != 1 or bumped != 1:
         raise _conflict('INPUT_REVISION_CHANGED', 'The input or queue changed during reorientation.')
     return QueuedReceipt(row['input_id'], row['enqueue_sequence'], row['input_revision'] + 1,
-                         row['queue_revision'] + 1, InputDeliveryState.DISPATCHING, operation_id, False)
+                         row['queue_revision'] + 1, InputDeliveryState.DISPATCHING, operation_id, False,
+                         reorientation=True)

@@ -637,6 +637,7 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     direct = client.post(path + '/steer', headers=ui, json=body)
     assert direct.status_code == 202, direct.text
     first = direct.json()
+    assert first['reorientation'] is True
     eventually(lambda: receipt(client_intent_id='direct-steer')['steer_submitted'])
     replay = client.post(path + '/steer', headers=ui, json=body)
     assert replay.status_code == 202 and replay.json()['operation_id'] == first['operation_id']
@@ -652,6 +653,7 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     assert next_turn('direct-steer', 'First reorientation').status_code == 409
     to_promote = next_turn('promote-this', 'Second reorientation').json()
     following = next_turn('ordinary-following', 'Wait for the next turn').json()
+    assert receipt(input_id=to_promote['input_id'])['reorientation'] is False
     owned = client.get(path + '/steer', params=query | {'input_id': to_promote['input_id']})
     assert owned.status_code == 200 and owned.json()['queued_input'] == {
         'input_id': to_promote['input_id'], 'input_revision': to_promote['input_revision'],
@@ -672,7 +674,7 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     moved = client.post(promote_path, headers=ui, json=promotion)
     assert moved.status_code == 202, moved.text
     second = moved.json()
-    assert second['input_id'] == to_promote['input_id']
+    assert second['input_id'] == to_promote['input_id'] and second['reorientation'] is True
     eventually(lambda: receipt(input_id=second['input_id'])['steer_submitted'])
     assert client.post(promote_path, headers=ui, json=promotion).json()['operation_id'] == second['operation_id']
     assert effects == [(turn, 'First reorientation', first['operation_id']),

@@ -93,7 +93,7 @@ def _promote(uow, *, factory, access, scope, author, context, resolve_human, cur
             raise OktoNexusError(ErrorCode.CONFLICT, 'The retained reorientation targets a different effect.', {})
         return QueuedReceipt(input_id, row['enqueue_sequence'], row['input_revision'], row['queue_revision'],
                              InputDeliveryState(row['status']), row['operation_id'], bool(row['possible_effect']),
-                             bool(row['steer_submitted']))
+                             steer_submitted=bool(row['steer_submitted']), reorientation=True)
     require_promotable_input(uow, scope=scope, row=row, now=stamp(access.clock.now_iso()),
         expected_queue_revision=expected_queue_revision, expected_input_revision=expected_input_revision)
     _require_plain_text(row['content'])

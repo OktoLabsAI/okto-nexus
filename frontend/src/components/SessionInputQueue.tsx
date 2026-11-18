@@ -6,11 +6,15 @@ function assertReceiptScope(receipt: SessionInputReceipt, scope: InteractionScop
   assertInteractionScope({...receipt.scope, session_owner_generation: receipt.session_owner_generation}, scope);
 }
 
-export function SessionInputQueue({scope, onAccessLost, onCancelled, refreshKey}: {
+export function SessionInputQueue({scope, onAccessLost, onCancelled, refreshKey, pendingSteerInput,
+  onReviewPromotion, canReviewPromotion}: {
   scope: InteractionScope;
   onAccessLost: () => void;
   onCancelled: (receipt: SessionInputReceipt) => void;
   refreshKey: number;
+  pendingSteerInput: string | null;
+  onReviewPromotion?: (inputId: string, trigger: HTMLButtonElement) => void;
+  canReviewPromotion: boolean;
 }) {
   const [page, setPage] = useState<SessionInputQueuePage | null>(null);
   const [busy, setBusy] = useState(false);
@@ -72,7 +76,7 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled, refreshKey}
   } = {}) {
     if (request.current) return;
     const capability = page?.cancel_capability_revision;
-    if (remove && (!capability || !remove.can_cancel)) return;
+    if (remove && (!capability || !remove.can_cancel || remove.input_id === pendingSteerInput)) return;
     if (paused !== undefined && (!page?.pause_capability_revision || page.paused === paused)) return;
     const controller = new AbortController();
     request.current = controller;
@@ -139,8 +143,11 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled, refreshKey}
         <ol className="space-y-1 text-sm" aria-label="Pending messages">
           {page.items.map((item, position) => <li key={item.input_id} className="flex flex-wrap items-center gap-2">
             <span>Entry {position + 1} · {receiptLabel[item.status]}</span>
+            {item.can_promote && onReviewPromotion && <button type="button" className="btn btn-secondary"
+              aria-label={`Reorient entry ${position + 1}`} disabled={busy || !canReviewPromotion}
+              onClick={event => onReviewPromotion(item.input_id, event.currentTarget)}>Reorient</button>}
             {item.can_cancel && page.cancel_capability_revision && <button type="button" className="btn btn-secondary"
-              aria-label={`Remove entry ${position + 1} from the queue`} disabled={busy}
+              aria-label={`Remove entry ${position + 1} from the queue`} disabled={busy || item.input_id === pendingSteerInput}
               onClick={() => void run({remove: item})}>Remove</button>}
           </li>)}
         </ol>)}

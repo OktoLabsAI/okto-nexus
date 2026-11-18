@@ -185,6 +185,7 @@ export interface SessionInteraction {
   stream_epoch: string | null;
   interaction_enabled?: boolean;
   interrupt_review_supported?: boolean;
+  steer_review_supported?: boolean;
   next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean};
 }
 
@@ -199,10 +200,13 @@ export interface SessionInputReceipt {
     'BLOCKED_AUTH' | 'BLOCKED_SESSION' | 'PAUSED' | 'EXPIRED' | 'CANCELLED';
   operation_id: string | null;
   possible_effect: boolean;
+  reorientation?: boolean;
+  steer_submitted?: boolean;
 }
 
 export interface SessionInputQueueItem extends SessionInputReceipt {
   can_cancel: boolean;
+  can_promote?: boolean;
 }
 
 export interface SessionInputQueueState {
@@ -229,6 +233,25 @@ export interface SessionInterruptAvailability {
   scope: RuntimeScope;
   session_owner_generation: number;
   control: SessionInterruptTarget | null;
+}
+
+export interface SessionSteerTarget extends SessionInterruptTarget {
+  effect: 'same_turn';
+  effect_revision: string;
+}
+
+export interface QueuedSteerPreview {
+  input_id: string;
+  input_revision: number;
+  text_preview: string;
+  truncated: boolean;
+}
+
+export interface SessionSteerAvailability {
+  scope: RuntimeScope;
+  session_owner_generation: number;
+  control: SessionSteerTarget | null;
+  queued_input: QueuedSteerPreview | null;
 }
 
 export interface SessionInterruptReceipt extends RuntimeOperation {
@@ -319,6 +342,21 @@ function interactionTarget(scope: InteractionScope) {
     path: `/v1/runtime/sessions/${encodeURIComponent(session_id)}`,
     query: new URLSearchParams({...exact, expected_session_generation: String(scope.session_owner_generation)}),
     scope: {...exact, session_id},
+  };
+}
+
+function sessionInputReceipt(scope: InteractionScope, selector: 'input_id' | 'client_intent_id', id: string, signal: AbortSignal) {
+  const target = interactionTarget(scope);
+  target.query.set(selector, id);
+  return read<SessionInputReceipt>(`${target.path}/inputs/receipt?${target.query}`, signal);
+}
+
+function steerConfirmation(scope: InteractionScope, reviewed: SessionSteerTarget) {
+  const target = interactionTarget(scope);
+  return {
+    scope: target.scope, expected_session_generation: scope.session_owner_generation,
+    capability_revision: reviewed.capability_revision, expected_queue_revision: reviewed.queue_revision,
+    confirmed_effect_revision: reviewed.effect_revision, target: reviewed.target,
   };
 }
 
@@ -421,10 +459,24 @@ export const runtimeApi = {
       content: [{type: 'text', text}],
     });
   },
-  sessionInputReceipt: (scope: InteractionScope, intent: string, signal: AbortSignal) => {
+  sessionInputReceipt: (scope: InteractionScope, intent: string, signal: AbortSignal) =>
+    sessionInputReceipt(scope, 'client_intent_id', intent, signal),
+  sessionInputReceiptById: (scope: InteractionScope, inputId: string, signal: AbortSignal) =>
+    sessionInputReceipt(scope, 'input_id', inputId, signal),
+  sessionSteerTarget: (scope: InteractionScope, inputId: string | null, signal: AbortSignal) => {
     const target = interactionTarget(scope);
-    target.query.set('client_intent_id', intent);
-    return read<SessionInputReceipt>(`${target.path}/inputs/receipt?${target.query}`, signal);
+    if (inputId !== null) target.query.set('input_id', inputId);
+    return read<SessionSteerAvailability>(`${target.path}/steer?${target.query}`, signal);
+  },
+  steerSessionInput: (scope: InteractionScope, reviewed: SessionSteerTarget, intent: string, text: string, signal: AbortSignal) =>
+    read<SessionInputReceipt>(`${interactionTarget(scope).path}/steer`, signal, {
+      ...steerConfirmation(scope, reviewed), client_intent_id: intent, content: [{type: 'text', text}],
+    }),
+  promoteSessionInput: (scope: InteractionScope, reviewed: SessionSteerTarget, input: QueuedSteerPreview, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionInputReceipt>(`${target.path}/inputs/${encodeURIComponent(input.input_id)}/promote`, signal, {
+      ...steerConfirmation(scope, reviewed), expected_input_revision: input.input_revision,
+    });
   },
   sessionInputQueue: (scope: InteractionScope, cursor: string | null, signal: AbortSignal) => {
     const target = interactionTarget(scope);

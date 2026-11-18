@@ -76,7 +76,8 @@ def _receipt_document(document, generation, receipt):
     return InputReceipt(scope=document, session_owner_generation=generation,
         input_id=receipt.input_id, enqueue_sequence=receipt.sequence, input_revision=receipt.input_revision,
         queue_revision=receipt.queue_revision, status=receipt.status, operation_id=receipt.operation_id,
-        possible_effect=receipt.possible_effect, steer_submitted=receipt.steer_submitted).model_dump(mode='json')
+        possible_effect=receipt.possible_effect, steer_submitted=receipt.steer_submitted,
+        reorientation=receipt.reorientation).model_dump(mode='json')
 
 
 def _cancel_revision(_uow, scope):
@@ -140,6 +141,7 @@ def build_router():
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,
                         'interrupt_review_supported': revision is not None and session['adapter_id'] == 'codex_app_server',
+                        'steer_review_supported': revision is not None and session['adapter_id'] == 'codex_app_server',
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}
 
