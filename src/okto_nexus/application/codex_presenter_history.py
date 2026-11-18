@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
+from ..domain.presentation_protocol import MAX_PRESENTATION_NOTIFICATIONS
 from ..errors import ErrorCode, OktoNexusError
 from .codex_presenter_requests import CodexHistoryPage
 from .execution_event_views import read_execution_events
@@ -28,6 +29,13 @@ class CodexHistorySnapshot:
     _turns: tuple[dict, ...] = field(repr=False)
     _items: tuple[dict, ...] = field(repr=False)
     _cursor_key: bytes = field(default_factory=lambda: secrets.token_bytes(32), repr=False)
+
+    @property
+    def active_turn(self):
+        active = [turn['id'] for turn in self._turns if turn['status'] == 'inProgress']
+        if len(active) > 1:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The active Codex turn is ambiguous.', {})
+        return active[0] if active else None
 
     def page(self, request: CodexHistoryPage) -> dict:
         if request.turn_id is not None and not any(turn['id'] == request.turn_id for turn in self._turns):
@@ -69,46 +77,89 @@ class CodexHistorySnapshot:
 
 def read_codex_history_snapshot(factory, *, mapping: ManagedNativeSession, context, access) -> CodexHistorySnapshot:
     """Capture one authorized, contiguous event range for an exact owner and stream."""
+    page = _read_page(factory, mapping=mapping, context=context, access=access,
+                      after_sequence=0, limit=_MAX_CAPTURE_EVENTS)
+    if page['gap_pending'] or page['has_more'] or page['next_after_sequence'] != page['committed_contiguous']:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'A bounded complete history range is unavailable.', {})
+    return _project(page['events'], mapping.codex_thread_id, page['committed_contiguous'])
+
+
+def _read_page(factory, *, mapping, context, access, after_sequence, limit):
     if mapping.codex_thread_id is None or mapping.stream_epoch is None:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact Codex history is unavailable.', {})
     scope = _scope_params(mapping.scope)
     scope['session_owner_generation'] = scope.pop('owner_generation')
     page = read_execution_events(factory, server_id=scope['server_id'], executor_id=scope['executor_id'],
         session_id=scope['session_id'], context=context, access=access, stream_epoch=mapping.stream_epoch,
-        limit=_MAX_CAPTURE_EVENTS, hydrate_artifacts=False)
-    if any(page['scope'].get(field) != expected for field, expected in scope.items()):
+        after_sequence=after_sequence, limit=limit, hydrate_artifacts=False)
+    if page['stream_epoch'] != mapping.stream_epoch or any(
+            page['scope'].get(field) != expected for field, expected in scope.items()):
         raise OktoNexusError(ErrorCode.NOT_FOUND, 'The history is outside this presentation.', {})
-    if page['gap_pending'] or page['has_more'] or page['next_after_sequence'] != page['committed_contiguous']:
-        raise OktoNexusError(ErrorCode.CONFLICT, 'A bounded complete history range is unavailable.', {})
-    return _project(page['events'], mapping.codex_thread_id, page['committed_contiguous'])
+    return page
+
+
+def read_codex_history_updates(factory, *, mapping, context, access, after_sequence, active_turn):
+    """Continue a viewer's captured stream using only committed native facts."""
+    page = _read_page(factory, mapping=mapping, context=context, access=access,
+                      after_sequence=after_sequence, limit=MAX_PRESENTATION_NOTIFICATIONS)
+    if page['gap_pending'] or page['committed_contiguous'] < after_sequence:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The Codex presentation lost its history position.', {})
+    notifications = []
+    for event in page['events']:
+        method, turn_id, value = _project_event(event, mapping.codex_thread_id)
+        if method == 'turn/started':
+            if active_turn == turn_id:
+                continue
+            if active_turn is not None:
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The active Codex turn changed without settling.', {})
+            active_turn = turn_id
+        elif method is None or turn_id != active_turn or value is None:
+            continue
+        elif method == 'turn/completed':
+            active_turn = None
+        params = {'threadId': mapping.codex_thread_id}
+        if method == 'item/completed':
+            params.update(turnId=turn_id, item=value)
+        else:
+            params['turn'] = {**value, 'items': [], 'itemsView': 'notLoaded', 'error': None}
+        notifications.append({'method': method, 'params': params})
+    return page['next_after_sequence'], active_turn, {'notifications': notifications, 'has_more': page['has_more']}
 
 
 def _project(events, thread_id, committed_through):
     turns, items = {}, {}
     omitted = 0
     for event in events:
-        payload = event['payload']
-        method = event.get('native_type')
-        if payload.get('thread_id') != thread_id or payload.get('threadId') != thread_id:
-            continue
-        turn_id = payload.get('turnId') or payload.get('turn_id')
-        if (not _native_id(turn_id) or payload.get('turn_id', turn_id) != turn_id
-                or payload.get('turnId', turn_id) != turn_id):
-            continue
-        if method in ('turn/started', 'turn/completed') and event.get('category') == 'turn_state':
-            turn = payload.get('turn')
-            status = turn.get('status') if isinstance(turn, dict) and turn.get('id') == turn_id else None
-            started = method == 'turn/started' and status == 'inProgress' and turn_id not in turns
-            settled = method == 'turn/completed' and turn_id in turns and status in ('completed', 'interrupted', 'failed')
-            if started or settled:
-                turns[turn_id] = {'id': turn_id, 'status': status}
-        if method == 'item/completed' and event.get('category') == 'tool_activity':
-            item = _text_item(payload.get('item'))
-            if turn_id not in turns or item is None:
+        method, turn_id, value = _project_event(event, thread_id)
+        if (method == 'turn/started' and turn_id not in turns
+                or method == 'turn/completed' and turn_id in turns):
+            turns[turn_id] = value
+        elif method == 'item/completed':
+            if turn_id not in turns or value is None:
                 omitted += 1
                 continue
-            items[turn_id, item['id']] = {'turnId': turn_id, 'item': item}
+            items[turn_id, value['id']] = {'turnId': turn_id, 'item': value}
     return CodexHistorySnapshot(committed_through, omitted, tuple(turns.values()), tuple(items.values()))
+
+
+def _project_event(event, thread_id):
+    payload = event['payload']
+    turn_id = payload.get('turnId') or payload.get('turn_id')
+    if (payload.get('thread_id') != thread_id or payload.get('threadId') != thread_id
+            or not _native_id(turn_id) or payload.get('turn_id', turn_id) != turn_id
+            or payload.get('turnId', turn_id) != turn_id):
+        return None, None, None
+    method = event.get('native_type')
+    category = event.get('category')
+    if method in ('turn/started', 'turn/completed') and category == 'turn_state':
+        turn = payload.get('turn')
+        status = turn.get('status') if isinstance(turn, dict) and turn.get('id') == turn_id else None
+        if (method == 'turn/started' and status == 'inProgress'
+                or method == 'turn/completed' and status in ('completed', 'interrupted', 'failed')):
+            return method, turn_id, {'id': turn_id, 'status': status}
+    if method == 'item/completed' and category == 'tool_activity':
+        return method, turn_id, _text_item(payload.get('item'))
+    return None, None, None
 
 
 def _text_item(item):

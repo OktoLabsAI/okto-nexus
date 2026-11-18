@@ -550,7 +550,7 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     reviewed = replace(mapping.launch_build, version='0.157.0', platform='win32',
         content_fingerprint='sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f')
     record_build(reviewed)
-    assert client.post(url + ':review', headers=headers, json=body).status_code == 409
+    assert client.post(url + ':review', headers=headers, json=body).status_code == 200
     idle = context | {'status': 'idle', 'cli_version': '0.157.0'}
     presentation['viewer_context'] = idle
     review = client.post(url + ':review', headers=headers, json=body)
@@ -574,6 +574,26 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
         assert peer.receive_json() == {'kind': 'context', 'request_id': 1, 'context': idle}
     with factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT state FROM session_attachments').fetchone()[0] == 'DETACHED'
+
+    presentation['viewer_context'] = context | {'cli_version': '0.157.0'}
+    response = client.post(url + ':prepare', headers=headers, json=request | {'client_intent_id': 'busy-read'})
+    assert response.status_code == 201 and response.json()['live_updates'] is True, response.text
+    offer = response.json()
+    stream = 'ws://127.0.0.1' + prefix + f'/attachments/{offer["attachment_id"]}/stream'
+    ws_headers = headers | {'authorization': 'Bearer ' + offer['ticket']}
+    with client.websocket_connect(stream, headers=ws_headers, subprotocols=['nexus.presenter.v1']) as peer:
+        peer.send_json({'kind': 'hello', 'version': 1, **body})
+        challenge = peer.receive_json()
+        peer.send_json({'kind': 'prove', 'challenge': challenge['challenge']})
+        assert peer.receive_json()['kind'] == 'attached'
+        peer.send_json({'kind': 'context', 'request_id': 1, 'follow': True})
+        assert peer.receive_json()['context']['status'] == 'active'
+        peer.send_json({'kind': 'page', 'request_id': 2, 'method': 'thread/turns/list', 'params': {'threadId': thread}})
+        assert peer.receive_json()['page']['data'] == [
+            {'id': native_turn, 'status': 'inProgress', 'itemsView': 'notLoaded', 'items': []}]
+        peer.send_json({'kind': 'updates', 'request_id': 3})
+        assert peer.receive_json()['updates'] == {'notifications': [], 'has_more': False}
+    assert active() == proven
     record_build(mapping.launch_build)
 
     for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):

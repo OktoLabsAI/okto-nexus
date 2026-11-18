@@ -37,3 +37,5 @@ With session interaction enabled, normal server startup and embedded owner repla
 The final transport, embedded session and owner-replacement regression passed 37 tests. The focused embedded and loopback cases passed again with the two installed wheels. The real executable pair also passed using the final Nexus wheel. Strict archive validation passed and seven packaged modules match the source. Nexus wheel SHA-256 `296bb680a18b35bd1e243957ce52a05aa672d362ca68b11e391e4ea33c8e5347`.
 
 Inline native startup covers up to 20 turns and 100 items and refuses an incomplete response beyond those bounds. Busy attach, writing, remote transport and the remaining adapter qualifications are open. There is no new migration. Restoring the previous schema-180 Nexus build and its matching Core wheel preserves the records.
+
+SI-024 adds local read-only following for a verified active turn. [Qualification and remaining gates](si024-codex-busy-presentation.md)

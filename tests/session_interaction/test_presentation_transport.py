@@ -49,6 +49,7 @@ def viewer_context(path):
 
 
 def next_event(peer, wire):
+    yield from wire.events()
     while data := peer.recv(64 * 1024):
         wire.receive_data(data)
         yield from wire.events()
@@ -259,10 +260,24 @@ def test_explicit_detach_requires_the_same_channel(transport):
     assert attachment_state(transport, offer) == ('DETACHED', None, None)
 
 
-@pytest.mark.parametrize('quit_mode', ['eof', 'logout'])
+@pytest.mark.parametrize('quit_mode', ['eof', 'logout', 'follow'])
 def test_loopback_network_carries_context_and_history_then_detaches(transport, quit_mode, tmp_path, monkeypatch):
     if quit_mode == 'logout':
         monkeypatch.setattr(dashboard_session_presentations, '_RENEW_SECONDS', 1)
+    positions = []
+    notice = {'method': 'turn/started', 'params': {'threadId': THREAD, 'turn': {
+        'id': 'turn', 'items': [], 'status': 'inProgress', 'itemsView': 'notLoaded', 'error': None}}}
+    if quit_mode == 'follow':
+        transport.app.state.local_codex_presentations = replace(
+            transport.app.state.local_codex_presentations, live_updates=True)
+
+        def updates(*_args, after_sequence, active_turn, **_kwargs):
+            positions.append((after_sequence, active_turn))
+            if after_sequence == 0:
+                return 1, 'turn', {'notifications': [notice], 'has_more': False}
+            return 1, 'turn', {'notifications': [], 'has_more': False}
+
+        monkeypatch.setattr(codex_presenter_channel, 'read_codex_history_updates', updates)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
         listener.bind(('127.0.0.1', 0))
         listener.listen()
@@ -307,6 +322,16 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
                             assert rpc(viewer, wire, method, method, threadId=THREAD)['result']['data'] == []
                         assert rpc(viewer, wire, 3, 'thread/items/list', threadId='sibling')['error']['code'] == -32602
                         assert rpc(viewer, wire, 4, 'turn/start', threadId=THREAD)['error']['code'] == -32601
+                        if quit_mode == 'follow':
+                            assert not positions
+                            assert rpc(viewer, wire, 5, 'thread/read', threadId=THREAD,
+                                       includeTurns=True)['result']['thread']['turns'] == []
+                            changed = next(next_event(viewer, wire))
+                            assert json.loads(changed.data) == {'jsonrpc': '2.0', **notice}
+                            deadline = time.monotonic() + 4
+                            while len(positions) < 2 and time.monotonic() < deadline:
+                                time.sleep(.02)
+                            assert positions[:2] == [(0, None), (1, 'turn')]
                         if quit_mode == 'logout':
                             transport.auth.logout(transport.token)
                             assert viewer.recv(1024) == b''

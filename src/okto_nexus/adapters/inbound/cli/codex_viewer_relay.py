@@ -31,6 +31,7 @@ from ....domain.presentation_protocol import (
 _CONNECT_SECONDS = 30
 _FRAME_SECONDS = 5
 _POLL_SECONDS = .2
+_UPDATE_SECONDS = .5
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,9 +74,37 @@ def _reply(peer, wire, frame):
     peer.sendall(wire.send(TextMessage(data=text.decode())))
 
 
+def _notice(peer, wire, frame):
+    params = frame['params']
+    item = params.get('item')
+    if (frame['method'] == 'item/completed' and isinstance(item, dict)
+            and item.get('type') == 'agentMessage' and all(isinstance(value, str) for value in (
+                item.get('text'), item.get('id'), params.get('turnId')))):
+        # This viewer paints assistant text on its delta notification. Send
+        # the whole scrubbed completion once instead of forwarding raw chunks.
+        _reply(peer, wire, {'jsonrpc': '2.0', 'method': 'item/agentMessage/delta', 'params': {
+            'threadId': params['threadId'], 'turnId': params['turnId'],
+            'itemId': item['id'], 'delta': item['text']}})
+    _reply(peer, wire, {'jsonrpc': '2.0', **frame})
+
+
 def _viewer(peer, wire, protocol, stop, link):
     parts, size, deadline = [], 0, None
-    events = _receive_events(peer, wire, stop, lambda: deadline, link.ensure_open)
+    next_update = 0.0
+
+    def follow():
+        nonlocal next_update
+        link.ensure_open()
+        if (deadline is not None or not getattr(link, 'live_updates', False) or not protocol.following
+                or time.monotonic() < next_update):
+            return
+        next_update = time.monotonic() + _UPDATE_SECONDS
+        for frame in link.updates(protocol.context.thread_id):
+            if stop.is_set():
+                return
+            _notice(peer, wire, frame)
+
+    events = _receive_events(peer, wire, stop, lambda: deadline, follow)
     for event in events:
         if stop.is_set():
             return
@@ -107,6 +136,7 @@ def _viewer(peer, wire, protocol, stop, link):
             peer.sendall(wire.send(CloseConnection(code=1000)))
             return
         parts, size, deadline = [], 0, None
+        follow()
 
 
 def _serve_once(listener, *, host, secret, protocol, stop, link, connected):

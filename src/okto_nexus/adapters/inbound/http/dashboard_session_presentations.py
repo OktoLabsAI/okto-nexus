@@ -49,6 +49,7 @@ class LocalCodexPresentations:
     prove_owner: Callable[[InputScope], Awaitable[tuple[ManagedNativeSession, NativeSessionOwnerProof]]]
     execution_access: object
     read_context: Callable[[InputScope], Awaitable[CodexViewerContext | None]] | None = None
+    live_updates: bool = False
 
 
 class _Hello(ScopedSession):
@@ -71,9 +72,15 @@ class _HistoryRequest(_Document):
 class _ContextRequest(_Document):
     kind: Literal['context']
     request_id: Revision
+    follow: Literal[True] | None = None
 
 
-_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest, Field(discriminator='kind')])
+class _UpdatesRequest(_Document):
+    kind: Literal['updates']
+    request_id: Revision
+
+
+_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest, Field(discriminator='kind')])
 
 
 class _Detach(ScopedSession):
@@ -175,11 +182,16 @@ async def _present(ws, services, author, attachment_id, ticket):
             if isinstance(request, _ContextRequest):
                 if services.read_context is None:
                     raise ValueError('Presentation context is unavailable')
-                context = await history.viewer_context(services.read_context)
+                context = await history.viewer_context(services.read_context,
+                    can_follow=services.live_updates and request.follow is True)
                 reply = {'kind': 'context', 'context': context.model_dump(mode='json')}
-            else:
+            elif isinstance(request, _HistoryRequest):
                 page = await history.page(method=request.method, params=request.params)
                 reply = {'kind': 'page', 'page': page}
+            else:
+                if not services.live_updates:
+                    raise ValueError('Presentation updates are unavailable')
+                reply = {'kind': 'updates', 'updates': await history.updates()}
             if _services(ws.app.state) is not services:
                 break
             await _send(ws, {'request_id': request.request_id, **reply})
@@ -261,7 +273,8 @@ def build_router():
         except CoreError:
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         return JSONResponse({'version': 1, 'attachment_id': offer.attachment_id, 'state': offer.state,
-                             'ticket': offer.ticket}, status_code=201 if offer.ticket else 200, headers=_HEADERS)
+                             'ticket': offer.ticket, 'live_updates': services.live_updates},
+                            status_code=201 if offer.ticket else 200, headers=_HEADERS)
 
     @router.websocket('/attachments/{attachment_id}/stream')
     async def stream(ws: WebSocket, attachment_id: str):

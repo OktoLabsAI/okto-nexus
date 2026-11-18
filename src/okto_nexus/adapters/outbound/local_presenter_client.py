@@ -24,6 +24,7 @@ from wsproto.utilities import ProtocolError
 from ...application.codex_viewer_protocol import CodexViewerContext
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
+    MAX_PRESENTATION_NOTIFICATIONS,
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
@@ -34,10 +35,11 @@ _TIMEOUT = 10
 
 
 class _LocalPresenter:
-    def __init__(self, peer, wire, attachment_id):
+    def __init__(self, peer, wire, attachment_id, *, live_updates):
         self._peer = peer
         self._wire = wire
         self.attachment_id = attachment_id
+        self.live_updates = live_updates
         self._request_id = 0
 
     def close(self):
@@ -123,9 +125,23 @@ class _LocalPresenter:
 
     def viewer_context(self):
         try:
-            return CodexViewerContext.model_validate(self._request('context'))
+            options = {'follow': True} if self.live_updates else {}
+            return CodexViewerContext.model_validate(self._request('context', **options))
         except ValueError:
             raise _unavailable() from None
+
+    def updates(self, thread_id):
+        data = self._request('updates')
+        notifications = data.get('notifications')
+        if (data.keys() != {'notifications', 'has_more'} or type(data['has_more']) is not bool
+                or not isinstance(notifications, list) or len(notifications) > MAX_PRESENTATION_NOTIFICATIONS):
+            raise _unavailable()
+        for notification in notifications:
+            if (not isinstance(notification, dict) or notification.keys() != {'method', 'params'}
+                    or notification['method'] not in ('turn/started', 'turn/completed', 'item/completed')
+                    or not isinstance(notification['params'], dict) or notification['params'].get('threadId') != thread_id):
+                raise _unavailable()
+        return notifications
 
     def _request(self, kind, **payload):
         self._request_id += 1
@@ -184,9 +200,11 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,
                  'intent': 'attach_live', 'access': 'read'})
     attachment_id, ticket = offer.get('attachment_id'), offer.get('ticket')
+    live_updates = offer.get('live_updates', False)
     if (type(offer.get('version')) is not int or offer['version'] != 1 or offer.get('state') != 'PREPARED'
             or not isinstance(attachment_id, str) or not re.fullmatch(r'att_[0-9a-f]{32}', attachment_id)
-            or not isinstance(ticket, str) or not re.fullmatch(r'[A-Za-z0-9_-]{43}', ticket)):
+            or not isinstance(ticket, str) or not re.fullmatch(r'[A-Za-z0-9_-]{43}', ticket)
+            or type(live_updates) is not bool):
         raise _unavailable()
     with ExitStack() as stack:
         try:
@@ -195,7 +213,8 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
                 raise ValueError('The presentation peer is not local')
             if origin.scheme == 'https':
                 peer = stack.enter_context(ssl.create_default_context().wrap_socket(peer, server_hostname=host))
-            link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id)
+            link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id,
+                                   live_updates=live_updates)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',
                          headers=api.request_headers(), ticket=ticket)
             challenge = link.exchange({'kind': 'hello', 'version': 1, **state})

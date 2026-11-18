@@ -13,7 +13,7 @@ from nexus_connector_core.native.redaction import NativeSecretRedactor
 from nexus_connector_core.protocol import canonical_json
 
 from okto_nexus.application import execution_event_views
-from okto_nexus.application.codex_presenter_history import read_codex_history_snapshot
+from okto_nexus.application.codex_presenter_history import read_codex_history_snapshot, read_codex_history_updates
 from okto_nexus.application.codex_presenter_requests import codex_history_page
 from okto_nexus.application.execution_native_session_mapping import ManagedNativeSession
 from okto_nexus.application.session_interaction_transcript import (
@@ -92,7 +92,7 @@ def stream(monkeypatch):
             options = {"scope": scope, "context": context, "access": access, **query}
             return read_session_interaction_transcript(factory, **options)
 
-        def history(thread_id, **changes):
+        def history(thread_id, *, position=None, **changes):
             mapping = ManagedNativeSession(
                 scope=scope, opening_operation_id="open", adapter_id="codex_app_server",
                 native_session_id="adapter-session", stream_epoch="epoch", launch_candidate_ref="candidate",
@@ -101,6 +101,10 @@ def stream(monkeypatch):
                 codex_configuration_hash="event-digest",
             )
             mapping = replace(mapping, **changes)
+            if position is not None:
+                sequence, active_turn = position
+                return read_codex_history_updates(factory, mapping=mapping, context=context, access=access,
+                                                  after_sequence=sequence, active_turn=active_turn)
             return read_codex_history_snapshot(factory, mapping=mapping, context=context, access=access)
 
         yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope, history=history)
@@ -349,3 +353,36 @@ def test_codex_history_requires_a_complete_bounded_range(stream):
     stream.watermark(513)
     with pytest.raises(OktoNexusError, match="complete history range"):
         stream.history("bdfe5b81-54cf-43cf-8001-5de670d3dd69")
+
+
+def test_codex_viewer_updates_continue_exact_snapshot_without_private_events(stream):
+    thread = 'owned-thread'
+    turn = 'active-turn'
+    scope = {'threadId': thread, 'thread_id': thread, 'turnId': turn}
+    started = {'id': turn, 'status': 'inProgress'}
+    stream.store(1, 'turn/started', 'turn_state', scope | {'turn': started})
+    stream.watermark(1)
+    snapshot = stream.history(thread)
+    assert snapshot.active_turn == turn
+
+    stream.store(2, 'item/completed', 'tool_activity', scope | {'item': {
+        'type': 'agentMessage', 'id': 'answer', 'text': 'Result\x1b', 'private_field': 'private'}})
+    stream.store(3, 'item/completed', 'tool_activity', scope | {'turn_id': 'sibling-turn', 'item': {
+        'type': 'agentMessage', 'id': 'sibling', 'text': 'private'}})
+    stream.store(4, 'item/completed', 'tool_activity', scope | {'item': {
+        'type': 'commandExecution', 'id': 'tool', 'command': 'private'}})
+    stream.store(5, 'turn/completed', 'turn_state', scope | {'turn': started | {'status': 'completed', 'error': 'private'}})
+    stream.watermark(5)
+    sequence, active_turn, batch = stream.history(thread, position=(snapshot.committed_through, snapshot.active_turn))
+    assert (sequence, active_turn) == (5, None)
+    assert batch == {'has_more': False, 'notifications': [
+        {'method': 'item/completed', 'params': {'threadId': thread, 'turnId': turn,
+                                               'item': {'type': 'agentMessage', 'id': 'answer', 'text': 'Result'}}},
+        {'method': 'turn/completed', 'params': {'threadId': thread, 'turn': {
+            'id': turn, 'status': 'completed', 'items': [], 'itemsView': 'notLoaded', 'error': None}}},
+    ]}
+    assert stream.history(thread, position=(sequence, active_turn)) == (5, None, {'notifications': [], 'has_more': False})
+    assert snapshot.committed_through == 1 and snapshot.active_turn == turn
+    stream.watermark(5, gap='gap')
+    with pytest.raises(OktoNexusError, match='lost its history position'):
+        stream.history(thread, position=(sequence, active_turn))

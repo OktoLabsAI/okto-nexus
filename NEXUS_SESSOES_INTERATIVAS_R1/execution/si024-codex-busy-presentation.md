@@ -1,0 +1,13 @@
+# SI-024 visualização de uma thread Codex em execução
+
+O terminal local aprovado pode abrir a thread em execução quando o Nexus comprova o dono atual, a concessão e o turno ativo nos eventos comprometidos da sessão exata. O cliente anuncia suporte a atualizações antes de receber o contexto ativo. Aberturas com contexto de erro, histórico incompleto, turno ambíguo ou mudança de dono são recusadas. O canal de visualização mantém o escopo e a autoridade do operador ao consultar a continuação do histórico.
+
+Depois da captura inicial, o Nexus mantém uma posição de leitura por visualizador e consulta lotes limitados de eventos comprometidos. Publica início e término do turno e mensagens de texto concluídas. O relay fornece a mensagem já sanitizada no formato que o frontend usa para desenhar a resposta. As páginas iniciais preservam a posição da captura. Deltas brutos, ferramentas e aprovações ficam fora do canal. Fechar o viewer libera o anexo do operador, e os comandos produtivos continuam sujeitos aos fluxos de autoridade existentes.
+
+O teste do proprietário embutido exercita a abertura, revisão, WebSocket e prova do turno com eventos sintéticos persistidos pelo Nexus. A sessão e seu turno permanecem ativos após desconectar o visualizador. O teste de rede cobre a entrega da notificação em loopback, recusa de outra thread, recusa de `turn/start` e encerramento do anexo. O teste de consulta SQLite confirma ordem, recusa de lacunas e exclusão de campos privados.
+
+O frontend Codex 0.170.0 real, SHA-256 `8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce`, abriu em Windows ConPTY com um turno ativo simulado. Renderizou o histórico inicial e uma resposta posterior à abertura, mostrou a conclusão e saiu com Ctrl+D. O Nexus registrou a desconexão. O ensaio usou HTTP e WebSocket em loopback e o broker SQLite reais, com o dono e o conteúdo do turno simulados. Houve zero chamadas a provedores. O roteiro local foi executado com `python -B %TEMP%/nexus-si-attach-running-941f8aad78fd4531a965ccc2e80bcd0d/probe.py <executável Codex revisado>`.
+
+Passaram 73 testes direcionados no checkout. O ensaio em ConPTY e 14 regressões de transporte e sessão passaram novamente com o wheel instalado em um ambiente temporário. Os oito módulos alterados conferem com o wheel de SHA-256 `0791d34ae2f46e2b54689e8ef0db88fa6fef417b6fc373af40263e00f7978774`. O wheel e a distribuição de código-fonte passaram na validação estrita.
+
+A etapa usa o schema 182 existente e pode ser revertida com o wheel anterior do Nexus. Ainda é preciso provar o fluxo completo com um turno produtivo no app-server real e qualificar entrada, reorientação, interrupção, reanexação e as demais combinações da matriz.

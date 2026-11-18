@@ -77,6 +77,7 @@ class CodexViewerProtocol:
         self._platform_os = platform_os
         self._initialized = False
         self.detached = False
+        self.following = False
 
     def handle(self, request):
         if (not isinstance(request, dict) or request.keys() - {'jsonrpc', 'id', 'method', 'params'}
@@ -118,6 +119,7 @@ class CodexViewerProtocol:
                 if turns is None:
                     return None
                 thread['turns'] = turns
+                self.following = True
             return {'thread': thread} if request.kind == 'read' else self.context.view(thread)
         if method in HISTORY_METHODS:
             codex_history_page(method=method, params=params, native_thread_id=self.context.thread_id)

@@ -45,9 +45,9 @@ def publish_local_codex_presentations(app, dispatch):
 
     async def read(scope):
         context = await dispatch.read_native_presentation_context(scope)
-        return context if context is not None and context.status == 'idle' else None
+        return context if context is not None and context.status in ('idle', 'active') else None
 
     broker = SessionAttachmentBroker(deps.connection_factory,
         authority_fence=state.operator_auth.authority_fence, current_capability=revision)
     state.local_codex_presentations = LocalCodexPresentations(
-        broker, prove, build_execution_access(deps), read_context=read)
+        broker, prove, build_execution_access(deps), read_context=read, live_updates=True)
