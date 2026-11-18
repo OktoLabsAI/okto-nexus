@@ -6561,7 +6561,7 @@
       "when": "Usar UI e reverter apresentação",
       "then": "Nenhum remapeamento de diretório/identidade/checkpoint ou interrupção de daemon.",
       "level": "API/SQLite + browser adversarial",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6571,9 +6571,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Read-only snapshots preserve facts; no CLI work active +presentation rollback+daemon/root/checkpoint exact lifecycle case. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:13:10.138947+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json",
+          "environment": "Fresh installed R9, real foreground Nexus run_serve/ServiceLifecycle, separate installed CLI processes, own-profile Chrome; synthetic version/Test/native protocol peer",
+          "command_or_procedure": "Canonical CLI connect/work and original native question; actual Settings classic/operational/classic toggle during that work; exact global question; CLI answer/result/reconnect/close with strict config/root/grant/checkpoint and owner assertions",
+          "result": "PASS13 browser checks and14 installed CLI commands; UI writes0; same PID/birth/instance/generation throughout; selected config/grants/root/checkpoint unchanged by UI and reconnect; actual turn.submit and runtime.close SUCCEEDED; canonical service stop drained, physical0, source1829/R9payload1031/oldreadonly1028/tool192 drift0",
+          "limitations": "Own foreground Nexus service, not Windows scheduled task or real Connector daemon qualification. Browser was open, so K05 no-dashboard is not qualified. Classic session summary/project/global question were exposed, but full classic Conversations/control navigation was not exercised. Selected invariant digests were compared by the successful pinned CLI process but not separately logged; post hashes are not fabricated. No real provider/human/performance claim."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Read-only snapshots preserve facts; no CLI work active +presentation rollback+daemon/root/checkpoint exact lifecycle case."
+      "execution_notes": "PASS local installed foreground-service variant: actual UI rollback while CLI work remains, strict root/identity/grant/checkpoint invariants and same live owner PID/birth/instance/generation; no Windows service-task/real Connector daemon claim."
     },
     {
       "id": "HST-T-I01",
@@ -7052,9 +7061,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Version1 compatibility tested; actual active execution with UIflagoff rollback/fallback/bell case missing. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:13:10.138947+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json",
+          "environment": "Fresh installed R9, real foreground Nexus run_serve/ServiceLifecycle, separate installed CLI processes, own-profile Chrome; synthetic version/Test/native protocol peer",
+          "command_or_procedure": "Canonical CLI connect/work and original native question; actual Settings classic/operational/classic toggle during that work; exact global question; CLI answer/result/reconnect/close with strict config/root/grant/checkpoint and owner assertions",
+          "result": "PASS13 browser checks and14 installed CLI commands; UI writes0; same PID/birth/instance/generation throughout; selected config/grants/root/checkpoint unchanged by UI and reconnect; actual turn.submit and runtime.close SUCCEEDED; canonical service stop drained, physical0, source1829/R9payload1031/oldreadonly1028/tool192 drift0",
+          "limitations": "Own foreground Nexus service, not Windows scheduled task or real Connector daemon qualification. Browser was open, so K05 no-dashboard is not qualified. Classic session summary/project/global question were exposed, but full classic Conversations/control navigation was not exercised. Selected invariant digests were compared by the successful pinned CLI process but not separately logged; post hashes are not fabricated. No real provider/human/performance claim."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Version1 compatibility tested; actual active execution with UIflagoff rollback/fallback/bell case missing."
+      "execution_notes": "PARTIAL actual active-work rollback: classic summary/project/global question reachable and CLI/canonical data retained; full classic controls/Conversations navigation not exercised. No whole-scenario promotion."
     },
     {
       "id": "HST-T-K04",
@@ -7114,9 +7132,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Installed CLI regression corpus exists; exact connect/work/answer/result loop no-dashboard/current preset/grant invariant not linked as full case. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:13:10.138947+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json",
+          "environment": "Fresh installed R9, real foreground Nexus run_serve/ServiceLifecycle, separate installed CLI processes, own-profile Chrome; synthetic version/Test/native protocol peer",
+          "command_or_procedure": "Canonical CLI connect/work and original native question; actual Settings classic/operational/classic toggle during that work; exact global question; CLI answer/result/reconnect/close with strict config/root/grant/checkpoint and owner assertions",
+          "result": "PASS13 browser checks and14 installed CLI commands; UI writes0; same PID/birth/instance/generation throughout; selected config/grants/root/checkpoint unchanged by UI and reconnect; actual turn.submit and runtime.close SUCCEEDED; canonical service stop drained, physical0, source1829/R9payload1031/oldreadonly1028/tool192 drift0",
+          "limitations": "Own foreground Nexus service, not Windows scheduled task or real Connector daemon qualification. Browser was open, so K05 no-dashboard is not qualified. Classic session summary/project/global question were exposed, but full classic Conversations/control navigation was not exercised. Selected invariant digests were compared by the successful pinned CLI process but not separately logged; post hashes are not fabricated. No real provider/human/performance claim."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Installed CLI regression corpus exists; exact connect/work/answer/result loop no-dashboard/current preset/grant invariant not linked as full case."
+      "execution_notes": "PARTIAL actual installed connect/work/answer/result/reconnect/close passes without web intervention in the CLI decisions, but the dashboard was already open for S3. A separate no-dashboard candidate cut is required."
     },
     {
       "id": "HST-T-K06",
@@ -7558,7 +7585,7 @@
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
         "external observation browser security",
-        "foreground CLI and active presentation rollback",
+        "no-dashboard CLI and full classic-control navigation",
         "old-producer state read compatibility",
         "stream/validity and remaining literal supported clauses"
       ]
@@ -7733,6 +7760,19 @@
       "normal_owner_exit": true,
       "physical_absence": true,
       "other_security_scenarios_promoted": false
+    },
+    "r9_compatibility_s3": {
+      "status": "PASS_SCOPED_FOREGROUND_UI_ROLLBACK",
+      "qualification": "execution/remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json",
+      "browser_checks": 13,
+      "cli_commands": 14,
+      "owner_preserved": true,
+      "protected_invariants": "EXECUTED_ASSERTIONS; POST_DIGEST_VALUES_NOT_SEPARATELY_LOGGED",
+      "canonical_stop": "DRAINED",
+      "physical_absence": true,
+      "K03": "PARTIAL_CLASSIC_CONTROL_NAVIGATION_NOT_RUN",
+      "K05": "NO_DASHBOARD_NOT_RUN",
+      "S4": "NOT_RUN"
     }
   }
 }

@@ -1,0 +1,58 @@
+{
+  "status": "STATIC_REVIEW_ONLY_NOT_EXECUTED",
+  "app_started": false,
+  "browser_started": false,
+  "original_script_sha256": "598d4ac95e0a812837abf1be1d3366d9fd8af32adc87b3bccbbc34c0de3221a6",
+  "original_prepared_manifest_sha256": "44c973294f70b9140df2aff0d7e56a370734682058c0af0d301e283422d16396",
+  "reviewed_script_sha256": "7972ed7667f538ea72d6ec4f8214f7820284ec5a896e9e3c1197a6953a80ded8",
+  "node_check": {
+    "command": "rtk proxy node --check browser-s3-reviewed.js",
+    "exit_code": 0
+  },
+  "findings": [
+    {
+      "severity": "oracle",
+      "original": "getByText Settings exact",
+      "actual": "System settings; button includes descriptive text in AdvancedView",
+      "reviewed": "advanced-view scoped button role with anchored System settings prefix"
+    },
+    {
+      "severity": "scope",
+      "original": "classic_conversations true from Harness sessions heading only",
+      "reviewed": "classic_sessions_summary true; complete Conversations navigation explicitly unasserted"
+    },
+    {
+      "severity": "readiness",
+      "reviewed": "wait reversed Settings toggle, three visible columns, exact canonical card DOM and project persistence; no sleeps or direct Home preference mutation"
+    },
+    {
+      "severity": "paired proof",
+      "reviewed": "PID/birth/generation/roots/profile/checkpoint/grants remain the outer executor responsibility"
+    }
+  ],
+  "cfg_fields_unchanged": [
+    "origin",
+    "workspace_id",
+    "binding_id",
+    "attention_id"
+  ],
+  "source_pins": {
+    "frontend/src/App.tsx": "bdb4eed69aecaf3d1e8e6f52f65bfe1cc5eb5d8ac3e287c71b02ce55f3f059f7",
+    "frontend/src/views/SettingsView.tsx": "2fa8a6891d2e10ceddf7c278b9dcbe55dc1d9b4fcee330063da75340324b03bc",
+    "frontend/src/navigationRegistry.ts": "2b7ab80924a61a655fa0756fbc4661bc808fe37545bbdf1c094b65a761fd8495",
+    "frontend/src/views/AdvancedView.tsx": "d9d195e6087b8a9354f327b0efed2c568796927075072d45bba825f0b8eb1b0e",
+    "frontend/src/components/NavigationSidebar.tsx": "8a6139a77225698360e1701798a62f4a5b24793f24e370f3dbe675fd6618ea36",
+    "frontend/src/views/HomeView.tsx": "cae0da51341e1c65dbf344de9e7f22a3681406c08eadbef5b009328c080128c7",
+    "frontend/src/components/GlobalAttentionButton.tsx": "746e160dc7ecd2368eeed8af51637090d399d1bbd11c992146c09860c56478f3",
+    "frontend/src/views/AttentionView.tsx": "82b866cbffad184ee08e99f4fb5138e63e3cbdce0fa3b3a89a924f0e2ea3189a"
+  },
+  "human_script_review": {
+    "path": "NEXUS_HOME_ESTADOS_R1/execution/human-usability-preparation.md",
+    "sha256": "84d6fb1a0aa6888c73ba1f8131938ffe7f3a077a325c5c8c0dc28b5107149b3d",
+    "state": "NOT_RUN remains; no invitation or environment created",
+    "already_correct": "Avoids open existing connection; frames collaborator activity, native decision versus application and result semantics",
+    "minor_drift": "Task1 latest activity may imply a recency heuristic; prefer follow current work of the selected harness. Task4 original collaborator could be worded original harness/work to keep the card model explicit",
+    "proposed_neutral_task1": "No projeto apresentado, encontre um harness trabalhando e acompanhe esse trabalho. Diga se ficou claro qual trabalho voce esta vendo.",
+    "source_not_edited": true
+  }
+}

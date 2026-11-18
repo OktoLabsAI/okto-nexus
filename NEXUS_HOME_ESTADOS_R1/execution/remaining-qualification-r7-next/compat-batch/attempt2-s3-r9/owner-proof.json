@@ -1,0 +1,20 @@
+{
+  "before": {
+    "pid": 29964,
+    "instance_id": "svc_9849b8873f852a5b04abb72b0d7f475e4ecaa0455b8926525d71475550c186d3",
+    "generation": "7e9527ed91f079409066ca1f81ddd1fe",
+    "state": "ready",
+    "supervisor": "foreground"
+  },
+  "after": {
+    "pid": 29964,
+    "instance_id": "svc_9849b8873f852a5b04abb72b0d7f475e4ecaa0455b8926525d71475550c186d3",
+    "generation": "7e9527ed91f079409066ca1f81ddd1fe",
+    "state": "ready",
+    "supervisor": "foreground"
+  },
+  "birth_before": 1794960251.2587593,
+  "birth_after": 1794960251.2587593,
+  "same_owner_across_ui_and_cli": true,
+  "process_kind": "Actual foreground Nexus run_serve, not Windows Connector daemon"
+}

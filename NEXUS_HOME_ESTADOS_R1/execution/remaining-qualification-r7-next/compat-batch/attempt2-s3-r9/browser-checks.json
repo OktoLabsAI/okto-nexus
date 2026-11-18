@@ -1,0 +1,97 @@
+{
+  "status": "PASS_BROWSER_S3_SUBSET",
+  "checks": [
+    {
+      "id": "shipped-classic-default",
+      "pass": true,
+      "actual": null
+    },
+    {
+      "id": "initial-project-exact",
+      "pass": true,
+      "actual": "wsr_70e88bddf5c9f05dd98411133d7386ad"
+    },
+    {
+      "id": "Settings-enables-presentation",
+      "pass": true,
+      "actual": "enabled"
+    },
+    {
+      "id": "three-board-column-elements",
+      "pass": true,
+      "actual": 3
+    },
+    {
+      "id": "operational-project-exact",
+      "pass": true,
+      "actual": "wsr_70e88bddf5c9f05dd98411133d7386ad"
+    },
+    {
+      "id": "canonical-Home-projection-200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "id": "exact-CLI-binding-in-canonical-projection",
+      "pass": true,
+      "actual": {
+        "bindings": [
+          {
+            "id": "home_group_21425d742d2cecfd77c87123b33f49c9a295dc414ee07f8a4b7b35b9fb52273c",
+            "binding_id": "bind_d97f18d14f42a2b579453ccc8f4a10d5",
+            "workspace_id": "wsr_70e88bddf5c9f05dd98411133d7386ad"
+          }
+        ]
+      }
+    },
+    {
+      "id": "canonical-CLI-card-visible-in-Home",
+      "pass": true,
+      "actual": {
+        "card_id": "home_group_21425d742d2cecfd77c87123b33f49c9a295dc414ee07f8a4b7b35b9fb52273c"
+      }
+    },
+    {
+      "id": "Settings-rolls-back-presentation",
+      "pass": true,
+      "actual": "disabled"
+    },
+    {
+      "id": "operational-board-unmounted",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "rollback-project-preserved",
+      "pass": true,
+      "actual": "wsr_70e88bddf5c9f05dd98411133d7386ad"
+    },
+    {
+      "id": "known-global-question-exposed",
+      "pass": true,
+      "actual": {
+        "attention_id": "att_3d5909c40a17c2288d5065686231956ad273fb06605621ae05a83ef1f4ac4448"
+      }
+    },
+    {
+      "id": "zero-non-read-browser-requests",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "writes": [],
+  "classic_default": true,
+  "settings_enable": true,
+  "operational_exact_binding": true,
+  "settings_rollback": true,
+  "classic_sessions_summary": true,
+  "exact_global_question": true,
+  "selected_project_preserved": true,
+  "productive_posts": 0,
+  "limits": [
+    "UI presentation toggle and exact queue item only",
+    "Classic Conversations navigation itself was not exercised",
+    "PID/birth/generation/roots/profile/checkpoint/grant invariants require paired external snapshots",
+    "No direct operational-Home localStorage writes; only the actual Settings callback changes preference"
+  ]
+}

@@ -147,7 +147,7 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-62PASS/46NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+63PASS/45NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
 original evidence; fresh R9 focus predicates now pass. No timing target caused
 or resolved these functional qualifications.
 
@@ -207,6 +207,7 @@ dependency versions were compared, not all dependency file bytes.
 | Predecessor browser subset |44positive predicates on R8; actual singleton/multi-session context, external failure, preserved panel, normal notices and scoped keyboard/mobile evidence; final move/focus incomplete and cleanup unknown retained |[R8 browser subset](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)|
 | Fresh focus regression |16PASS on R9: exact move/context/delivery and same canonical harness focus; original failure and A2 cleanup unknown retained |[R9 focus](remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json)|
 | Passive reads and scoped revocation |20actual R9 browser checks; thirty productive tables unchanged across Home/card/result reads; exact canonical revocation removes controls; refused runtime.close retained |[R9 security S1](remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json)|
+| CLI work and presentation rollback |13actual browser checks and14installed CLI commands; strict config/root/grant/checkpoint assertions and same foreground owner; canonical close SUCCEEDED and service stop drained |[R9 compatibility S3](remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json)|
 | Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -265,7 +266,7 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has62PASS,46NOT_RUN and8BLOCKED. The original menu and focus
+reviews it has63PASS,45NOT_RUN and8BLOCKED. The original menu and focus
 defects are corrected and have separate actual installed-browser evidence.
 Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
 completion or default approval.
@@ -304,8 +305,11 @@ Rollback uses the existing browser-local operational Home setting to select
 classic Home. It changes presentation, preserving daemon, CLI, MCP, global
 bell, identities, native sessions, decisions and retained results. A whole
 daemon restart is not presented as an individual connection recovery action.
-The full active-work rollback scenario still needs its literal isolated
-qualification; documentation is not execution evidence. No reset, clean,
+Actual active-work rollback now exposes the classic session summary, selected
+project and exact global question while the CLI continues with unchanged
+selected configuration and service owner. Full classic-control navigation
+and a separate candidate CLI cycle with no dashboard remain unexecuted;
+neither is inferred from that scoped cut. No reset, clean,
 force-push, release, deployment, merge or default activation was performed.
 
 ## Next gate
@@ -319,8 +323,9 @@ revocation; its closed=false fact remains separate from normal owner/browser
 exit and physical absence. Finish the
 additional supported functional/security/compatibility increments before
 inviting a participant. The menu and focus corrections have actual browser
-proof; the external-observation security, foreground CLI, rollback and old-state increments
-remain distinct pending qualifications.
+proof. Foreground CLI and active presentation rollback have scoped actual
+evidence; external-observation security, no-dashboard CLI, full classic-control
+navigation and old-state increments remain distinct pending qualifications.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No
 further performance-only optimization round is required for this local delivery.
