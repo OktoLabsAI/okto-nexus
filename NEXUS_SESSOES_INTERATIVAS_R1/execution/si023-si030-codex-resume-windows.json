@@ -1,0 +1,104 @@
+{
+  "recorded_on": "2026-11-18",
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "python": "3.13.1",
+    "codex": "0.157.0",
+    "codex_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "core_wheel_sha256": "0530b0c8c7f9b6916d30b5d98834431b07d11da313036575ca66eca9a32a772b",
+    "connection": "local embedded executor",
+    "history": "synthetic; no productive turns or provider calls"
+  },
+  "cli": {
+    "scenario": "SI-T-F15",
+    "nexus_commit": "01b21247cb4ac2b328a25705bff253ae7aeb9018",
+    "nexus_wheel_sha256": "a35fe0c9ba61532c8681cc92dc0c22ba9b6e33c2332c331a45b86d423cc54a4c",
+    "command": "okto-nexus session resume --id codex-fixture --session-id <exact source ID> --operator-profile fixture --home <temporary CLI home>",
+    "harness": "installed main entry point, Windows ConPTY, loopback Uvicorn, real cookie issued by Nexus with fixture substitution for OS vault lookup",
+    "passed": {
+      "fixture_directory": "%TEMP%/nexus-si-conpty-validated-dbfbe648436c46f7acdff601af7d9060/happy",
+      "fixture_commands": [
+        "python -B -m pytest -q -s --tb=short test_restart_first.py",
+        "python -B -m pytest -q -s --tb=short test_resume_conpty.py"
+      ],
+      "fixture_sha256": {
+        "test_restart_first.py": "be88ce1872ec10cd18287a9c7dee815ac83e234bd7f0174af88fe632c67f1c95",
+        "test_resume_conpty.py": "8024cd8d8998ad810d7f81057063cb4fba7abfd98f3738bd5008b216e567b023",
+        "cli_entry.py": "4a52bcdcc46233799d7693200d8e3c76c0e3fef7de855ab891558a817e7ef42b",
+        "pty_probe.py": "c4e8a7e6de2ff6dae5d716767db26ed6a073bb0f92fee3d1e954ed13a12a1c78"
+      },
+      "output": {
+        "conpty": true,
+        "cli_parser": true,
+        "real_loopback_operator_http": true,
+        "refuses_missing_exact_id": true,
+        "lineage_visible": true,
+        "native_resume_count": 1,
+        "same_native_thread": true,
+        "repeated_receipt": true,
+        "provider_calls": 0
+      }
+    },
+    "unconfirmed_after_recovery": {
+      "fixture_directory": "%TEMP%/nexus-si-conpty-validated-dbfbe648436c46f7acdff601af7d9060/unknown",
+      "fixture_commands": [
+        "python -B -m pytest -q -s --tb=short test_resume_conpty.py"
+      ],
+      "fixture_sha256": {
+        "test_resume_conpty.py": "1f63a0730c0af30fd61b036a9ed33b8d547f8d44fd135347cf559438157807a8",
+        "cli_entry.py": "4a52bcdcc46233799d7693200d8e3c76c0e3fef7de855ab891558a817e7ef42b",
+        "pty_probe.py": "c4e8a7e6de2ff6dae5d716767db26ed6a073bb0f92fee3d1e954ed13a12a1c78"
+      },
+      "output": {
+        "conpty": true,
+        "recovered_opening_fence": true,
+        "exact_successor_closed": true,
+        "outcome_unconfirmed": true,
+        "exit_code": 1,
+        "repeated_receipt": true,
+        "additional_native_calls": 0,
+        "provider_calls": 0
+      }
+    },
+    "directed_regressions_passed": 24
+  },
+  "crash": {
+    "scenario": "SI-T-G15",
+    "qualification": "Partial. Productive campaign remains pending.",
+    "nexus_commit": "a1759f9342edd00d51e89111a88d06919c19ff0e",
+    "nexus_wheel_sha256": "7e11200ce25b7bb37bbfc28c3a58821be3bb69aa94c4a2d71fe017625845271b",
+    "os_exit_observed": "Windows process handle opened while the exact Codex process was alive",
+    "fixture_commands": [
+      "python -B -m pytest -q -s --tb=short test_restart_first.py",
+      "python -B -m pytest -q -s --tb=short test_post_send_cut.py",
+      "python -B -m pytest -q -s --tb=short test_post_send_recover.py"
+    ],
+    "fixture_directories": {
+      "core_receipt_recorded": "%TEMP%/nexus-si-post-send-5eb3c7b1237d4037b59b11ef699c56a0",
+      "opening_fence_only": "%TEMP%/nexus-si-unknown-resume-d0e92261c8cc4c7bb95762c97392a13f"
+    },
+    "observations": [
+      {
+        "core_stage_at_exit": "SUBMITTED",
+        "nexus_stage_after_recovery": "SUBMITTED",
+        "nexus_receipt_missing_at_exit": true,
+        "successor_closed": true,
+        "same_successor_and_receipt": true,
+        "duplicate_native_calls": 0,
+        "provider_calls": 0
+      },
+      {
+        "core_stage_at_exit": "SUBMISSION_STARTED",
+        "nexus_stage_after_recovery": "SUBMISSION_STARTED",
+        "codex_already_answered_before_exit": true,
+        "nexus_receipt_missing_at_exit": true,
+        "successor_closed": true,
+        "possible_effect": true,
+        "retry_safe": false,
+        "same_successor_and_receipt": true,
+        "duplicate_native_calls": 0,
+        "provider_calls": 0
+      }
+    ]
+  }
+}

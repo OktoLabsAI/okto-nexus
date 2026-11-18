@@ -3510,9 +3510,10 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si023-codex-saved-resume.md"
+        "execution/si030-terminal-session-selection.md",
+        "execution/si023-si030-codex-resume-windows.json"
       ]
     },
     {
@@ -3850,7 +3851,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si023-codex-saved-resume.md"
+        "execution/si023-codex-saved-resume.md",
+        "execution/si023-si030-codex-resume-windows.json"
       ]
     },
     {
