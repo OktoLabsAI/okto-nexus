@@ -9,6 +9,9 @@ from nexus_connector_core import RuntimeEvent
 from test_agent_recovery_isolation import eventually
 from test_embedded_dispatch import admit, connect_local, wait_receipt
 
+from okto_nexus.application.execution_native_session_mapping import (
+    read_managed_native_session,
+)
 from okto_nexus.application.session_interaction_authority import enqueue_human_input
 from okto_nexus.application.session_interaction_capability import next_turn_revision
 from okto_nexus.application.session_interaction_capacity import advance_input_capacity
@@ -443,9 +446,18 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     proven = active()
     assert proven.operation_id == operation and proven.native_id == native_turn
     with factory.unit_of_work(write=False) as uow:
+        mapping = read_managed_native_session(uow, scope)
+        assert mapping is not None and mapping.scope == scope
+        assert mapping.opening_operation_id == opened['operation_id'] and mapping.native_session_id == thread
+        assert mapping.stream_epoch == epoch and mapping.adapter_id == 'codex_app_server'
+        assert mapping.launch_inventory_revision and mapping.launch_candidate_ref and mapping.launch_profile_revision > 0
+        assert mapping.receipt_connection_id and mapping.receipt_connection_generation > 0
+        for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):
+            assert read_managed_native_session(uow, replace(scope, **{field: 'other-' + field})) is None
         assert interrupt_revision(uow, scope, native_turn, current_next_turn_revision=next_turn)
         assert interrupt_revision(uow, scope, 'different-turn', current_next_turn_revision=next_turn) is None
         replaced = replace(scope, generation=SessionOwnerGeneration(scope.generation.value + 1))
+        assert read_managed_native_session(uow, replaced) is None
         assert active_native_turn(uow, replaced, current_next_turn_revision=next_turn) is None
     assert active() == proven
     emit('turn/completed', {'thread_id': thread, 'turn_id': native_turn,

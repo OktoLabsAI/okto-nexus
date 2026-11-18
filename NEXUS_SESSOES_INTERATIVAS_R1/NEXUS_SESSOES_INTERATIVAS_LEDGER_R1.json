@@ -890,8 +890,10 @@
         "SI-T-G16",
         "SI-T-G20"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si018-managed-native-session-mapping.md"
+      ]
     },
     {
       "id": "SI-019",

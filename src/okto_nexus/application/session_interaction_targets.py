@@ -9,6 +9,7 @@ from nexus_connector_core import get_control_targeting
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
+from .execution_native_session_mapping import read_managed_native_session
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,10 +29,13 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     capability = current_next_turn_revision(uow, scope)
     if capability is None:
         return None
+    mapping = read_managed_native_session(uow, scope)
+    if mapping is None or mapping.adapter_id != 'codex_app_server' or mapping.stream_epoch is None:
+        return None
     conn = uow.connection
     scope_params = _scope_params(scope)
     active = conn.execute("""
-        SELECT o.operation_id, s.stream_epoch, w.committed_contiguous, opening.native_id AS thread_id
+        SELECT o.operation_id, s.stream_epoch, w.committed_contiguous
         FROM execution_sessions s
         JOIN execution_executors x USING (server_id, executor_id)
         JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id
@@ -45,17 +49,12 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
           AND d.operation_id=o.operation_id
         JOIN execution_receipts r ON r.server_id=o.server_id AND r.executor_id=o.executor_id
           AND r.operation_id=o.operation_id AND r.receipt_revision=d.last_receipt_revision
-        JOIN execution_receipts opening ON opening.server_id=s.server_id AND opening.executor_id=s.executor_id
-          AND opening.operation_id=s.open_operation_id AND opening.receipt_revision=(
-            SELECT MAX(prior.receipt_revision) FROM execution_receipts prior
-            WHERE prior.server_id=s.server_id AND prior.executor_id=s.executor_id
-              AND prior.operation_id=s.open_operation_id)
         LEFT JOIN execution_results result ON result.server_id=o.server_id AND result.executor_id=o.executor_id
           AND result.operation_id=o.operation_id
         WHERE s.server_id=:server_id AND s.executor_id=:executor_id AND s.session_id=:session_id
           AND s.owner_generation=:owner_generation AND s.binding_id=:binding_id AND s.workspace_id=:workspace_id
           AND s.workspace_binding_id=:workspace_binding_id AND e.adapter_id='codex_app_server'
-          AND w.gap_state='none' AND opening.stage IN ('SUBMITTED','SUCCEEDED') AND opening.native_id IS NOT NULL
+          AND w.gap_state='none'
           AND o.action='turn.submit' AND o.admission_state='DISPATCHED' AND o.binding_id=:binding_id
           AND o.workspace_id=:workspace_id AND o.workspace_binding_id=:workspace_binding_id
           AND o.subject_agent_id=:agent_id AND d.dispatch_state='DISPATCHED'
@@ -94,8 +93,8 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     turn = payload.get('turn_id')
     details = payload.get('turn')
     if (not isinstance(turn, str) or not 1 <= len(turn) <= 160 or not turn.isprintable()
-            or 'REDACTED' in turn or payload.get('thread_id') != selected['thread_id']
-            or payload.get('threadId') != selected['thread_id']
+            or 'REDACTED' in turn or payload.get('thread_id') != mapping.native_session_id
+            or payload.get('threadId') != mapping.native_session_id
             or not isinstance(details, dict) or details.get('id') != turn):
         return None
     revision = 'sha256:' + digest({'action': 'exact_native_turn.v1', 'capability': capability,
