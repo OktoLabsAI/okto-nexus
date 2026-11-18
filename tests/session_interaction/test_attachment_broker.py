@@ -9,6 +9,8 @@ from types import SimpleNamespace
 import pytest
 
 from okto_nexus.adapters.outbound.sqlite.session_interaction import accept_input
+from okto_nexus.application import codex_presenter_channel
+from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.domain.execution.keys import SessionOwnerGeneration
 from okto_nexus.domain.session_interaction import InputDeliveryState
@@ -222,3 +224,48 @@ def test_refresh_extends_only_the_current_presentation(attachment_store):
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_leases').fetchone()[0] == 0
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
         assert uow.connection.execute('SELECT COUNT(*) FROM session_attachment_epochs').fetchone()[0] == 0
+
+
+@pytest.mark.asyncio
+async def test_codex_history_channel_rechecks_authority_and_owner_per_page(attachment_store, monkeypatch):
+    factory, (scope, _), actor, broker_for = attachment_store
+    broker = broker_for()
+    reader = open_presenter(broker, peer(offer(broker, scope, 'history'), scope, 'exact-channel'))
+    thread = 'bdfe5b81-54cf-43cf-8001-5de670d3dd69'
+    mapping = SimpleNamespace(codex_thread_id=thread)
+    state = SimpleNamespace(owner='owner', captures=0, revoke=False)
+
+    async def prove(requested):
+        assert requested == scope
+        return mapping, state.owner
+
+    def capture(selected_factory, *, mapping, access, context):
+        assert selected_factory is factory and mapping.codex_thread_id == thread
+        assert context.trusted_local_operator
+        state.captures += 1
+        if state.revoke:
+            actor.valid.clear()
+        return CodexHistorySnapshot(0, 0, (), ())
+
+    monkeypatch.setattr(codex_presenter_channel, 'read_codex_history_snapshot', capture)
+    channel = codex_presenter_channel.CodexPresenterHistoryChannel(broker=broker, prove_owner=prove,
+        access=object(), scope=scope, author=ALICE, attachment=reader, audience=AUDIENCE, channel_id='exact-channel')
+
+    async def history(method='thread/items/list', selected=thread):
+        return await channel.page(method=method, params={'threadId': selected})
+
+    with pytest.raises(OktoNexusError, match='exact presentation thread'):
+        await history(selected='sibling')
+    assert state.captures == 0
+    state.revoke = True
+    with pytest.raises(OktoNexusError, match='login'):
+        await history()
+    state.revoke = False
+    actor.valid.add(ALICE.authority_ref)
+    assert (await history())['data'] == []
+    assert (await history('thread/turns/list'))['data'] == []
+    assert state.captures == 2
+    state.owner = 'replacement'
+    with pytest.raises(OktoNexusError, match='owner changed'):
+        await history()
+    assert state.captures == 2
