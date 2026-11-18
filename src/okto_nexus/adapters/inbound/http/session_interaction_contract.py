@@ -52,6 +52,10 @@ class ExactSessionScope(_Document):
     def session_key(self) -> SessionKey:
         return SessionKey(self.server_id, self.executor_id, self.session_id)
 
+    def input_scope(self, generation: int) -> InputScope:
+        return InputScope(self.session_key(), SessionOwnerGeneration(generation), self.binding_id,
+                          self.workspace_id, self.workspace_binding_id, self.agent_id)
+
 
 class ScopedInteraction(_Document):
     scope: ExactSessionScope
@@ -62,9 +66,7 @@ class ScopedInteraction(_Document):
         return SessionOwnerGeneration(self.expected_session_generation)
 
     def input_scope(self) -> InputScope:
-        scope = self.scope
-        return InputScope(scope.session_key(), self.owner_generation(), scope.binding_id, scope.workspace_id,
-                          scope.workspace_binding_id, scope.agent_id)
+        return self.scope.input_scope(self.expected_session_generation)
 
 
 class TextInput(_Document):

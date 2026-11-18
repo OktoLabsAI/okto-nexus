@@ -836,6 +836,44 @@ def build_router() -> APIRouter:
             return runtime_error(error, "session.events")
         return JSONResponse(result, headers={"Cache-Control": "no-store"})
 
+    @router.get("/runtime/sessions/{session_id}/conversation")
+    async def session_conversation(
+        session_id: str, request: Request, server_id: str, executor_id: str,
+        binding_id: str, workspace_id: str, workspace_binding_id: str, agent_id: str,
+        expected_session_generation: int, stream_epoch: str | None = None,
+        after_sequence: int = 0, limit: int = 50,
+    ) -> JSONResponse:
+        if get_authenticated_agent() is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        from pydantic import ValidationError
+
+        from ....application.session_interaction_transcript import read_session_interaction_transcript
+        from .session_interaction_contract import ExactSessionScope
+
+        query = request.query_params
+        if (set(query) - {"server_id", "executor_id", "binding_id", "workspace_id", "workspace_binding_id",
+                          "agent_id", "expected_session_generation", "stream_epoch", "after_sequence", "limit"}
+                or len(query.multi_items()) != len(query)):
+            return v1_err(422, "VALIDATION_ERROR", "Invalid conversation query.")
+        try:
+            scope = ExactSessionScope(
+                server_id=server_id, executor_id=executor_id, session_id=session_id,
+                binding_id=binding_id, workspace_id=workspace_id, workspace_binding_id=workspace_binding_id,
+                agent_id=agent_id,
+            ).input_scope(expected_session_generation)
+        except (ValidationError, ValueError):
+            return v1_err(422, "VALIDATION_ERROR", "Invalid conversation scope.")
+        deps = request.app.state.deps
+        try:
+            page = await anyio.to_thread.run_sync(lambda: read_session_interaction_transcript(
+                deps.connection_factory, scope=scope, context=runtime_request_context(),
+                access=build_execution_access(deps), stream_epoch=stream_epoch,
+                after_sequence=after_sequence, limit=limit,
+            ))
+        except OktoNexusError as error:
+            return runtime_error(error, "session.conversation")
+        return JSONResponse(page, headers={"Cache-Control": "no-store"})
+
     @router.get("/runtime/operations/{operation_id}")
     async def operation_view(operation_id: str,
                              request: Request) -> JSONResponse:

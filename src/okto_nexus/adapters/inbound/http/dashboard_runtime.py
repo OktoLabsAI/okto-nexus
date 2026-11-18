@@ -10,7 +10,7 @@ def build_router():
         'agent_executors', 'runtime_options', 'check_local_installation',
         'refresh_inventory', 'revalidate_bindings', 'publish_realization', 'resolve_intent',
         'intent_view', 'submit_operation', 'operation_view', 'session_list',
-        'session_view', 'session_events', 'native_decision', 'native_decision_view',
+        'session_view', 'session_events', 'session_conversation', 'native_decision', 'native_decision_view',
         'native_input_requests',
         'project_preset_read',
         'remote_setup_review', 'remote_setup_bootstrap', 'remote_setup_recover', 'remote_setup_materialization',

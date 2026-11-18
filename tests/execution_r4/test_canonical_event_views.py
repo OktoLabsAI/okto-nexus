@@ -82,6 +82,84 @@ def test_event_replay_rejects_foreign_scope_and_invalid_queries(connected_local)
     wait_receipt(setup, admit(setup, binding, 'scope-close', 'runtime.close', session_id=session), stages=('SUCCEEDED',))
 
 
+def test_conversation_reads_only_committed_text_for_the_exact_scope(connected_local):
+    from test_agent_recovery_isolation import eventually
+
+    setup, binding, native, session = start(connected_local)
+    deps, app, client, headers, *_ = setup
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute(
+            'SELECT * FROM execution_local_streams WHERE session_id=?', (session,)).fetchone())
+        operations_before = uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0]
+    scope_response = client.get(f'/v1/runtime/sessions/{session}', headers=headers['subject'])
+    assert scope_response.status_code == 200, scope_response.text
+    scope = scope_response.json()['scope']
+    params = {key: scope[key] for key in
+              ('server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id')}
+    params['expected_session_generation'] = scope['session_owner_generation']
+
+    for kind, item, body in (
+        ('agentMessage', 'first', 'Fixture answer'),
+        ('commandExecution', 'internal', 'Private tool output'),
+        ('agentMessage', 'second', 'Next fixture answer'),
+    ):
+        client.portal.call(native.native.queue.put, RuntimeEvent(
+            stream['server_id'], stream['executor_id'], session, stream['stream_epoch'], 0, 'tool_activity',
+            'item/completed', {'thread_id': 'fixture-thread', 'threadId': 'fixture-thread',
+                               'item': {'type': kind, 'id': item, 'text': body}}))
+
+    path = f'/v1/runtime/sessions/{session}/conversation'
+    def ready():
+        page = client.get(path, params=params, headers=headers['subject'])
+        assert page.status_code == 200, page.text
+        return page.json()['committed_contiguous'] == 3
+
+    eventually(ready)
+    first = client.get(path, params={**params, 'limit': 2}, headers=headers['subject'])
+    assert first.headers['cache-control'] == 'no-store'
+    page = first.json()
+    assert page['scope'] == scope and page['has_more'] and not page['history_complete']
+    assert [update['text'] for update in page['updates']] == ['Fixture answer']
+    assert page['next_after_sequence'] == 2
+
+    auth = app.state.operator_auth
+    assert auth.configure('fixture-operator', 'fixture-password-long', local=True)
+    token = auth.login('fixture-operator', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', token)
+    dashboard = f'/api/v1/runtime-management/runtime/sessions/{session}/conversation'
+    human = {'x-nexus-operator-session-required': '1'}
+    remaining = client.get(dashboard, params={**params, 'stream_epoch': page['stream_epoch'],
+                           'after_sequence': 2}, headers=human)
+    assert remaining.status_code == 200, remaining.text
+    assert remaining.headers['cache-control'] == 'no-store'
+    assert [update['text'] for update in remaining.json()['updates']] == ['Next fixture answer']
+    assert not remaining.json()['has_more']
+    auth.logout(token)
+    assert client.get(dashboard, params=params, headers=human).status_code == 401
+    client.cookies.clear()
+
+    for key in params:
+        changed = dict(params)
+        changed[key] = (scope['session_owner_generation'] + 1
+                        if key == 'expected_session_generation' else 'different-scope')
+        assert client.get(path, params=changed, headers=headers['subject']).status_code == 404
+    assert client.get(path, params={**params, 'after_sequence': 2}, headers=headers['subject']).status_code == 422
+    assert client.get(path, params={**params, 'limit': 51}, headers=headers['subject']).status_code == 422
+    assert client.get(path, params=[*params.items(), ('limit', 1), ('limit', 2)],
+                      headers=headers['subject']).status_code == 422
+    assert client.get(path, params=params).status_code == 401
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agents(agent_id,created_at) VALUES('foreign',?)",
+                               (deps.clock.now_iso(),))
+        key = app.state.auth.issue_key(uow, agent_id='foreign')
+    assert client.get(path, params=params, headers={'Authorization': 'Bearer ' + key}).status_code == 404
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == operations_before
+        assert uow.connection.execute('SELECT count(*) FROM session_interaction_inputs').fetchone()[0] == 0
+    wait_receipt(setup, admit(setup, binding, 'conversation-close', 'runtime.close', session_id=session),
+                 stages=('SUCCEEDED',))
+
+
 def test_thread_configuration_replays_without_becoming_work_or_a_decision(connected_local):
     """Launch observations survive canonical replay but authorize no action."""
     from test_agent_recovery_isolation import eventually

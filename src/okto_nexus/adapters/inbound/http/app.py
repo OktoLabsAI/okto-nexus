@@ -204,6 +204,10 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         """Classify exact read contracts, never a caller-controlled bypass header."""
         if request.method == 'GET' and path == '/v1/connections/participant':
             return True
+        if request.method == 'GET' and re.fullmatch(
+            r'(?:/v1|/api/v1/runtime-management)/runtime/sessions/[^/]+/conversation', path
+        ):
+            return True
         if request.method == 'POST' and path in {
                 prefix + '/connections/remote-setup:' + action
                 for prefix in ('/v1', '/api/v1/runtime-management')
