@@ -7,6 +7,7 @@ def build_router():
     from .dashboard_session_commands import build_router as session_commands
     from .dashboard_session_input import build_router as session_inputs
     from .dashboard_session_steer import build_router as session_steer
+    from .dashboard_session_stream import build_router as session_stream
     from .runtime_v1 import build_router as runtime
     allowed = {
         'me', 'prepare_binding', 'apply_binding', 'binding_view',
@@ -33,4 +34,5 @@ def build_router():
     router.include_router(session_inputs())
     router.include_router(session_steer())
     router.include_router(session_commands())
+    router.include_router(session_stream())
     return router

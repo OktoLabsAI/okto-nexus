@@ -1,6 +1,7 @@
 import {useEffect, useId, useLayoutEffect, useRef, useState} from 'react';
-import {runtimeApi, type InteractionScope, type SessionInputReceipt, type SessionInteraction} from '../runtimeApi';
-import {applyConversationUpdates, assertConversationPage, assertInteractionScope, clearInputIntents,
+import {runtimeApi, type InteractionScope, type SessionConversationPosition, type SessionInputReceipt,
+  type SessionInteraction} from '../runtimeApi';
+import {applyConversationUpdates, assertConversationPage, assertConversationPosition, assertInteractionScope, clearInputIntents,
   inputIntentStorageKey, interactionKey, readInputIntent, receiptLabel, type ConversationMessage} from '../sessionConversation';
 import {OperatorSignIn} from './OperatorSignIn';
 import {SessionCommandPicker} from './SessionCommandPicker';
@@ -128,10 +129,41 @@ export function SessionConversation({scope, active, onAccessLost}: {
     setBusy(false);
     let timer: number | undefined;
     let inFlight = false;
+    let requestedPage = false;
+    let position: SessionConversationPosition | null = null;
+    let stream: EventSource | null = null;
     const signal = controller.signal;
 
+    function positionAdvanced(current: History) {
+      return position !== null && (position.stream_epoch !== current.epoch ||
+        position.committed_contiguous > current.after || position.gap_pending !== current.gap);
+    }
+
+    function schedule(delay: number) {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const includeNext = requestedPage;
+        requestedPage = false;
+        void poll(includeNext);
+      }, delay);
+    }
+
+    function unavailable() {
+      controller.abort();
+      stream?.close();
+      mutation.current?.abort();
+      setInteraction(null);
+      view.current = emptyHistory();
+      setHistory(view.current);
+      setReading('The exact session is unavailable. Reopen its context.');
+    }
+
     const poll = async (includeNext: boolean) => {
-      if (inFlight || signal.aborted) return;
+      if (signal.aborted) return;
+      if (inFlight) {
+        requestedPage ||= includeNext;
+        return;
+      }
       inFlight = true;
       window.clearTimeout(timer);
       try {
@@ -140,17 +172,19 @@ export function SessionConversation({scope, active, onAccessLost}: {
         assertInteractionScope(next.scope, scope);
         if (lastInteraction.current?.next_turn.human_login_required === false && next.next_turn.human_login_required) {
           controller.abort();
+          stream?.close();
           loseAccess();
           return;
         }
         lastInteraction.current = next;
         setInteraction(next);
         const current = view.current.epoch === next.stream_epoch ? view.current : emptyHistory(next.stream_epoch);
-        if (includeNext || !current.ready || !current.more) {
+        if (includeNext || !current.ready || (!current.more && (!position || positionAdvanced(current)))) {
           const page = await runtimeApi.sessionConversation(scope, current.after, current.epoch, signal);
           if (signal.aborted) return;
           assertConversationPage(page, scope, current.after, current.epoch);
-          view.current = {messages: applyConversationUpdates(current.messages, page.updates), epoch: page.stream_epoch,
+          view.current = {messages: page.updates.length ? applyConversationUpdates(current.messages, page.updates) : current.messages,
+            epoch: page.stream_epoch,
             after: page.next_after_sequence, ready: true, more: page.has_more, gap: page.gap_pending,
             incomplete: !page.history_complete};
           if (current.ready && !following.current && page.updates.length && !includeNext) setNewMessages(true);
@@ -171,16 +205,12 @@ export function SessionConversation({scope, active, onAccessLost}: {
       } catch (error) {
         if (signal.aborted) return;
         if (errorStatus(error) === 404) {
-          controller.abort();
-          mutation.current?.abort();
-          setInteraction(null);
-          view.current = emptyHistory();
-          setHistory(view.current);
-          setReading('The exact session is unavailable. Reopen its context.');
+          unavailable();
           return;
         }
         if ([401, 403].includes(errorStatus(error) ?? 0)) {
           controller.abort();
+          stream?.close();
           loseAccess();
           return;
         }
@@ -188,13 +218,53 @@ export function SessionConversation({scope, active, onAccessLost}: {
         setReading('Conversation could not be refreshed. Try again.');
       } finally {
         inFlight = false;
-        if (!signal.aborted && active) timer = window.setTimeout(() => void poll(false), 2000);
+        if (!signal.aborted && (active || requestedPage)) schedule(requestedPage ? 0 : 2000);
       }
     };
+
+    if (active && typeof EventSource === 'function') {
+      stream = new EventSource(runtimeApi.sessionConversationStream(scope));
+      stream.addEventListener('conversation-position', event => {
+        if (signal.aborted) return;
+        try {
+          const next: SessionConversationPosition = JSON.parse((event as MessageEvent<string>).data);
+          assertConversationPosition(next, scope);
+          position = next;
+        } catch {
+          position = null;
+          stream?.close();
+          return;
+        }
+        if (!inFlight && !view.current.more && positionAdvanced(view.current)) schedule(150);
+      });
+      stream.addEventListener('conversation-unavailable', event => {
+        if (signal.aborted) return;
+        position = null;
+        stream?.close();
+        try {
+          const value = JSON.parse((event as MessageEvent<string>).data);
+          if (value.version === 1 && value.reason === 'authorization_lost') {
+            controller.abort();
+            loseAccess();
+            return;
+          }
+          if (value.version === 1 && value.reason === 'scope_changed') {
+            unavailable();
+            return;
+          }
+        } catch {
+          // Resume bounded snapshot reads when the stream is unavailable.
+        }
+        if (!inFlight) schedule(0);
+      });
+      stream.onerror = () => {position = null;};
+    }
+
     polling.current = () => void poll(true);
     void poll(false);
     return () => {
       controller.abort();
+      stream?.close();
       window.clearTimeout(timer);
       mutation.current?.abort();
       mutation.current = null;

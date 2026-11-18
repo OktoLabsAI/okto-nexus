@@ -26,7 +26,8 @@ function load(url){
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
 const {SessionExecutionPanel}=load(new URL('../src/components/SessionExecutionPanel.tsx',import.meta.url));
-const {assertConversationPage,applyConversationUpdates,interactionKey,inputIntentStorageKey,readInputIntent,clearInputIntents}=
+const {assertConversationPage,assertConversationPosition,applyConversationUpdates,
+  interactionKey,inputIntentStorageKey,readInputIntent,clearInputIntents}=
   load(new URL('../src/sessionConversation.ts',import.meta.url));
 const {interruptStatus,canDismissInterrupt,interruptStorageKey,clearInterruptIntents}=load(new URL('../src/sessionInterrupt.ts',import.meta.url));
 const {assertSteerPreview,steerReceiptOutcome,steerStorageKey,readSteerReference,clearSteerReferences}=
@@ -201,4 +202,13 @@ test('conversation reconciles deltas and snapshots by message identity with stab
   assert.deepEqual([...next.keys()],['message','other']);
   assert.equal(next.get('message').text,'complete');
   assert.equal(first.get('message').text,'part');
+});
+
+test('conversation position notifications cannot move another owner or accept an invalid cursor',()=>{
+  const scope=session().scope;
+  const position={version:1,scope,stream_epoch:'epoch',committed_contiguous:4,gap_pending:false};
+  assert.doesNotThrow(()=>assertConversationPosition(position,scope));
+  assert.throws(()=>assertConversationPosition({...position,committed_contiguous:-1},scope));
+  assert.throws(()=>assertConversationPosition({...position,stream_epoch:null},scope));
+  assert.throws(()=>assertConversationPosition({...position,scope:{...scope,session_owner_generation:2}},scope));
 });

@@ -310,6 +310,14 @@ export interface SessionConversationPage {
   omitted_artifact_events: number;
   history_complete: boolean;
 }
+
+export interface SessionConversationPosition {
+  version: 1;
+  scope: InteractionScope;
+  stream_epoch: string | null;
+  committed_contiguous: number;
+  gap_pending: boolean;
+}
 export interface RuntimeEventPage {
   scope: RuntimeScope; stream_epoch: string | null;
   events: {server_id: string; executor_id: string; session_id: string; stream_epoch: string;
@@ -344,11 +352,15 @@ export class RuntimeManagementError extends ApiError {
       {status:422,code:'VALIDATION_ERROR',stage:'connection.test',possible_effect:false,operation_id:null,retry_safe:false}:null;
   }
 }
+function managementUrl(path: string) {
+  return path.replace(/^\/v1\//, "/api/v1/runtime-management/");
+}
+
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
   headers.set("x-nexus-ui", "1");
   if (body !== undefined) headers.set("Content-Type", "application/json");
-  const url = path.replace(/^\/v1\//, "/api/v1/runtime-management/");
+  const url = managementUrl(path);
   const response = await fetch(url, { headers, signal, cache: "no-store",
     method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body) });
   const raw = await response.text();
@@ -494,6 +506,10 @@ export const runtimeApi = {
     target.query.set('after_sequence', String(after));
     if (epoch !== null) target.query.set('stream_epoch', epoch);
     return read<SessionConversationPage>(`${target.path}/conversation?${target.query}`, signal);
+  },
+  sessionConversationStream: (scope: InteractionScope) => {
+    const target = interactionTarget(scope);
+    return managementUrl(`${target.path}/conversation/stream?${target.query}`);
   },
   enqueueSessionInput: (scope: InteractionScope, intent: string, text: string, capability: string, signal: AbortSignal,
     catalogRevision?: string) => {

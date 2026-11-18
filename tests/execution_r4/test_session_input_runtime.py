@@ -162,6 +162,10 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
     assert interaction()['human_login_required'] is False
     stale = client.get(path + '/interaction', params=query | {'expected_session_generation': generation + 1})
     assert stale.status_code == 404
+    stream_url = path + '/conversation/stream'
+    assert client.get(stream_url, params=query | {'workspace_id': 'another-workspace'}).status_code == 404
+    assert client.get(stream_url, params=query | {'expected_session_generation': generation + 1}).status_code == 404
+    assert client.get(stream_url, params=query | {'offset': '50'}).status_code == 422
     assert client.post(path + '/inputs', json=body, headers=ui | {'origin': 'https://foreign.invalid'}).status_code == 403
     invalid = client.post(path + '/inputs', json=body | {'actor_agent_id': 'fixture-uncopied'}, headers=ui)
     assert invalid.status_code == 422 and 'fixture-uncopied' not in invalid.text

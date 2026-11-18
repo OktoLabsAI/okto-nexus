@@ -1,4 +1,4 @@
-import type {ConversationUpdate, InteractionScope, SessionConversationPage, SessionInputReceipt} from './runtimeApi';
+import type {ConversationUpdate, InteractionScope, SessionConversationPage, SessionConversationPosition, SessionInputReceipt} from './runtimeApi';
 import {sameRuntimeScope} from './components/home/continuation';
 
 export function interactionKey(scope: InteractionScope) {
@@ -41,6 +41,16 @@ export function assertConversationPage(page: SessionConversationPage, scope: Int
         !['append', 'replace'].includes(update.change) || !['user', 'assistant'].includes(update.role) ||
         !(update.text === null || typeof update.text === 'string'))) {
     throw new Error('The conversation page did not match its cursor.');
+  }
+}
+
+export function assertConversationPosition(position: SessionConversationPosition, scope: InteractionScope) {
+  assertInteractionScope(position.scope, scope);
+  if (position.version !== 1 || !Number.isSafeInteger(position.committed_contiguous) || position.committed_contiguous < 0 ||
+      typeof position.gap_pending !== 'boolean' ||
+      (position.stream_epoch === null ? position.committed_contiguous !== 0 || position.gap_pending
+        : typeof position.stream_epoch !== 'string' || !position.stream_epoch || position.stream_epoch.length > 160)) {
+    throw new Error('The conversation position is invalid.');
   }
 }
 
