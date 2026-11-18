@@ -6,6 +6,7 @@ from dataclasses import asdict
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from ..adapters.outbound.sqlite.session_interaction import accept_input
+from ..adapters.outbound.sqlite.session_interaction_cancellation import cancel_input
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
 from .execution_agent_recovery import require_agent_ready
@@ -41,6 +42,24 @@ def enqueue_human_input(*, factory, access, authority_fence, current_capability_
         return accept_input(uow, scope=scope, author=author, client_intent_id=client_intent_id,
             capability_revision=capability_revision, text=text, now=stamp(access.clock.now_iso()),
             verify_new_authority=verify_new_authority)
+
+
+def cancel_human_input(*, factory, access, authority_fence, current_cancel_revision,
+                       scope, author, input_id, capability_revision, expected_queue_revision,
+                       expected_input_revision):
+    """Cancel an owned input under the current human's cancellation authority."""
+    with authority_fence() as resolve_human, factory.unit_of_work() as uow:
+        def verify():
+            if not resolve_human(author.authority_ref):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The session input author is no longer signed in.', {})
+            context = RuntimeRequestContext('operator', 'operator_session', trusted_local_operator=True)
+            if not access.authenticate(context, uow=uow, require_feature=False):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Input cancellation requires operator authority.', {})
+            return current_cancel_revision(uow, scope)
+
+        return cancel_input(uow, scope=scope, author=author, input_id=input_id, capability_revision=capability_revision,
+                            expected_queue_revision=expected_queue_revision, expected_input_revision=expected_input_revision,
+                            verify_authority=verify)
 
 
 def require_session_input_authority(uow, *, factory, access, scope, author, resolve_human):
