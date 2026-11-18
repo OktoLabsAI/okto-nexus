@@ -5,7 +5,7 @@ dashboard alias read the same bounded projection. The request carries
 Server, executor, binding, workspace, workspace binding, agent and the
 expected owner generation. Pagination uses the canonical stream epoch and
 sequence. Both surfaces use existing identity, session visibility and
-error handling. Responses carry `Cache-Control: no-store`, and bearer
+error handling. Conversation pages carry `Cache-Control: no-store`, and bearer
 authentication for this read uses the existing passive path.
 
 The canonical replay, contract and transcript regression passed 39 cases.

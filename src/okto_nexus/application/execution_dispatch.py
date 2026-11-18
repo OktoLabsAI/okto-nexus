@@ -399,7 +399,9 @@ def begin_execution_send(
         linked_input = conn.execute("SELECT * FROM session_interaction_inputs WHERE server_id=? AND executor_id=? "
                                     "AND operation_id=?", key).fetchone()
         if linked_input is not None:
-            from ..adapters.outbound.sqlite.session_interaction_queue_controls import is_input_queue_paused
+            from ..adapters.outbound.sqlite.session_interaction_queue_controls import (
+                is_input_queue_paused,
+            )
             from ..domain.execution.keys import SessionKey
 
             if is_input_queue_paused(conn, SessionKey(*key[:2], linked_input['session_id'])):

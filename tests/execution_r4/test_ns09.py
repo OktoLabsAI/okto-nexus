@@ -340,8 +340,12 @@ def assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact,
         is_input_queue_paused,
         set_input_queue_paused,
     )
-    from okto_nexus.application.execution_domain_delivery import DeliveryTransactionFactory
-    from okto_nexus.application.session_interaction_controls import request_exact_human_interrupt
+    from okto_nexus.application.execution_domain_delivery import (
+        DeliveryTransactionFactory,
+    )
+    from okto_nexus.application.session_interaction_controls import (
+        request_exact_human_interrupt,
+    )
 
     with (pytest.raises(RuntimeError, match='rollback control fixture'),
           app.state.operator_auth.authority_fence() as resolve, deps.connection_factory.unit_of_work() as uow):

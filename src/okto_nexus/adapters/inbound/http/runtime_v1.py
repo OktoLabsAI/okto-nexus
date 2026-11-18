@@ -847,7 +847,9 @@ def build_router() -> APIRouter:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         from pydantic import ValidationError
 
-        from ....application.session_interaction_transcript import read_session_interaction_transcript
+        from ....application.session_interaction_transcript import (
+            read_session_interaction_transcript,
+        )
         from .session_interaction_contract import ExactSessionScope
 
         query = request.query_params

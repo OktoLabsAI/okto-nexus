@@ -5,10 +5,13 @@ import time
 import pytest
 from nexus_connector_core import RuntimeEvent
 from test_harness_canonical import qualified_bridge
-from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
+from test_embedded_dispatch import local_setup, qualified_contract, admit, wait_receipt
+from test_embedded_dispatch import connected_local as connected_local_fixture
 from test_event_ingress import ingress, commit
 from test_reconciliation import recovery
 from test_binding_operator import onboarding
+
+connected_local = connected_local_fixture
 
 
 def start(connected_local):
