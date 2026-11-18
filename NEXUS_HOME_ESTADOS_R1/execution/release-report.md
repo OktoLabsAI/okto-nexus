@@ -1,9 +1,12 @@
 # Home states R1 — implementation and qualification checkpoint
 
-**Delivery is not fully qualified or approved for default. Human evaluation
-has not started.** The selected local functional/context flows have now been
+**Delivery remains opt-in and is still being qualified.** The participant
+requested an early usability session and completed its first task, with
+specific feedback on the work panel, card labels and timestamps.
+[Human observations](human-r9-session-1/feedback.md) record the scope.
+The selected local functional/context flows have now been
 reviewed against source, installed and browser evidence. Additional supported
-functional/security/compatibility checks remain before the human invitation;
+functional/security/compatibility checks remain;
 a reproduced unnamed menu control has been corrected and packaged in R8;
 its accessible name and expanded state are verified in the actual R8 browser.
 A later exact move/close test reproduced a focus-return defect; the same
@@ -121,8 +124,8 @@ later R9 replay below provides their separate positive qualification. A separate
 [cleanup record](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/canonical-cleanup-detail.json)
 keeps three confirmed session closes and one unconfirmed close/unknown state.
 Normal process exit and physical absence resolve resources, not that receipt.
-The whole cut and overall delivery remain unqualified. No human invitation
-has been sent.
+The whole cut and overall delivery remain unqualified. This R8 cut had no
+participant interaction.
 
 The [R8 installed functional batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)
 actually passed six new canonical Core/HTTP/SQLite cases, qualifying A04, B12,
@@ -317,7 +320,8 @@ as queued, without a conclusion. An empty combined-status response is not a
 passing check. The [repository checkpoint](repo-checkpoint-r9.json) records
 unchanged main refs/pins, the preserved worktree and clean Core/Connector trees
 before the focus edit; Nexus main was fetched again without moving checkout.
-No real user accepted this delivery on their own behalf or through automation.
+The scoped human session produced inspection feedback. Final human
+acceptance and the earlier novice-user gate remain open.
 
 ## Effects, migration and rollback
 
@@ -350,8 +354,8 @@ removes controls for the exact session, without claiming the unexecuted stale
 decision/same-name-successor clauses. The last runtime.close was refused after
 revocation; its closed=false fact remains separate from normal owner/browser
 exit and physical absence. Finish the
-additional supported functional/security/compatibility increments before
-inviting a participant. The menu and focus corrections have actual browser
+additional supported functional/security/compatibility increments.
+The menu and focus corrections have actual browser
 proof. Foreground CLI, active presentation rollback and exact reported external
 completion have scoped actual evidence. Earlier S2 JSON-reader and wrong-modal
 oracle failures remain preserved; no occupied claim/one-shot capacity release
@@ -363,13 +367,12 @@ including the two nonempty profile/checkpoint documents. No data were changed
 to obtain that proof. The classic original-control and responsive application
 clauses now pass separately, together with the actual keyboard path, wrong-scope
 browser denial and bounded-history payload boundary. Remaining supported functional/security/
-theme clauses are pending before the participant invitation; AT speech and
+theme clauses are pending. AT speech and
 real-provider/topology qualification remain explicit separate gates.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No
 further performance-only optimization round is required for this local delivery.
-Then invite the participant for the representative supported local flows using the
-neutral [human script](human-usability-preparation.md), while keeping the
-remaining technical qualification explicit.
+Continue the remaining human tasks and validate the presentation polish using the
+neutral [human script](human-usability-preparation.md).
 Provision a fresh temporary fixture after availability is confirmed; do not
 start a short-lived question or renew its authority while waiting for a user.

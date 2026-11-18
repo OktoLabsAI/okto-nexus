@@ -7414,7 +7414,7 @@
     "branch": "feature/v0.3.7",
     "version": "0.3.7",
     "baseline": "f28a31a22436c366a4c8dbdf5e3b250d606a61be",
-    "human_evaluation": "DEFERRED_UNTIL_IMPLEMENTATION_AND_AUTOMATED_TESTS_READY",
+    "human_evaluation": "TASK_1_REPORTED_COMPLETE_WITH_FRICTION; remaining tasks and novice gate open",
     "default_rollout_approved": false,
     "real_provider_campaign": "NOT_AUTHORIZED",
     "retained_gates": [
@@ -7977,13 +7977,18 @@
       "authorized_terminal_ANSI_sanitization": "NOT_CLAIMED"
     },
     "human_session_request": {
-      "status": "PROVISIONING_EXPLICIT_USER_REQUEST",
+      "status": "TASK_1_FEEDBACK_RECORDED",
       "record": "execution/human-session-request-2026-11-18.md",
       "whole_plan_ready": false,
-      "result": "NOT_RUN",
+      "result": "REPORTED_COMPLETION_WITH_PRESENTATION_FRICTION",
       "provider_usage": 0,
       "other_test_runtimes": "STOPPED",
-      "prior_novice_gate": "PRESERVED"
+      "prior_novice_gate": "PRESERVED",
+      "evidence": "execution/human-r9-session-1/feedback.md",
+      "question_and_lease_current_at_first_recorded_click": false,
+      "remaining_tasks": "NOT_RUN",
+      "canonical_close": "ONE_CONFIRMED_TWO_UNCONFIRMED",
+      "process_cleanup": "NORMAL_PHYSICAL_ABSENCE"
     }
   }
 }

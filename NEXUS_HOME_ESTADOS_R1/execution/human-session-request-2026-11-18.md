@@ -25,7 +25,7 @@ participant. Record their words and confidence, without inferring success
 from automation or accepting on their behalf. A returning participant does
 not automatically satisfy the separate UI-R1 novice-user gate.
 
-State at this record: PROVISIONING; no human result yet. Own root, URL,
-process identities, timestamps, screenshots and cleanup observations belong
-in the session's public evidence after privacy curation. Cookies and private
-storage stay exclusively in its own temporary directory.
+The scoped session ran. The participant reported completing the first task and
+identified presentation changes. See [the observed feedback](human-r9-session-1/feedback.md)
+and [cleanup](human-r9-session-1/cleanup.json). The remaining human tasks and
+the prior novice-user gate are open.
