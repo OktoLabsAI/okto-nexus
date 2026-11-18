@@ -1,6 +1,5 @@
 """Serve-owned local outbox execution through the shared Core contract."""
 import asyncio
-from contextlib import asynccontextmanager
 import json
 import logging
 import math
@@ -8,25 +7,51 @@ import random
 import secrets
 import sqlite3
 import time
+from contextlib import asynccontextmanager
+from dataclasses import asdict
 from datetime import datetime
 
 from nexus_connector_core import (
-    CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation, validate_harness_settings,
-    OperationKey, OperationNotAdmitted, prepare_r4_receipt_binding, project_r4_bound_receipt,
-    r4_close_operation, r4_native_decision_operation, ShutdownPolicy,
-    OperationCapacityDeferred, CapacityRetryWaiter,
+    CapacityRetryWaiter,
+    ControlOperation,
+    CoreError,
+    LaunchIntent,
+    NativeSessionOwnerProof,
+    NativeSessionTarget,
+    OpenOperation,
+    OperationCapacityDeferred,
+    OperationKey,
+    OperationNotAdmitted,
+    ShutdownPolicy,
+    TurnOperation,
+    prepare_r4_receipt_binding,
+    project_r4_bound_receipt,
+    r4_close_operation,
+    r4_native_decision_operation,
+    validate_harness_settings,
 )
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.execution.core_inventory import protocol_info
 from ..adapters.outbound.execution.embedded import EmbeddedExecutor
+from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from ..adapters.outbound.sqlite.execution_receipts import append_execution_receipt
+from ..adapters.outbound.sqlite.session_interaction import (
+    _current_session,
+    _scope_params,
+)
 from ..application.execution_dispatch_pump import ExecutionDispatchPump
 from ..application.execution_leases import ExecutionChannel, ExecutionLeaseService
 from ..application.execution_local_launch import ApprovedLocalLaunch
+from ..application.execution_native_facts import stamp
+from ..application.execution_native_session_mapping import (
+    ManagedNativeSession,
+    read_managed_native_session,
+)
+from ..domain.session_interaction import InputScope
 from ..errors import ErrorCode, OktoNexusError
-from .execution_authority import build_execution_access
 from .embedded_events import EmbeddedPublicationDeferred
+from .execution_authority import build_execution_access
 
 _SCOPE = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
           "workspace_binding_id", "session_id", "session_owner_generation",
@@ -192,6 +217,65 @@ class EmbeddedDispatchOwner:
                     "AND control_state IN ('RECOVERING','CONTROL_READY')",
                     (channel.server_id,channel.executor_id,channel.connection_id,channel.connection_generation)).fetchone() is None):
             raise OktoNexusError(ErrorCode.CONFLICT, "The embedded dispatch owner changed.", {})
+
+    async def prove_native_presentation_owner(
+            self, scope: InputScope) -> tuple[ManagedNativeSession, NativeSessionOwnerProof]:
+        """Observe a running owner for an exact session. No viewer authority is conferred."""
+        key = scope.session.session_id
+        session = self.sessions.get(key)
+        unavailable = CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
+
+        def live():
+            return (session is not None and self.sessions.get(key) is session
+                    and session['executor'] is not None and not session.get('recovering')
+                    and not self._stopping.is_set() and self.failure is None and not self.host.draining)
+
+        if not live():
+            raise unavailable
+        runtime_scope = dict(session['scope'])
+        exact_scope = _scope_params(scope)
+        exact_scope['session_owner_generation'] = exact_scope.pop('owner_generation')
+        if any(runtime_scope.get(name) != value for name, value in exact_scope.items()):
+            raise unavailable
+        mapping = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope)
+        if not live():
+            raise unavailable
+        channel = self.channel
+        target = NativeSessionTarget(mapping.opening_operation_id, mapping.adapter_id,
+                                     mapping.native_session_id, mapping.stream_epoch)
+        proof = await self.host.prove_r4_native_session(runtime_scope, target,
+            connection_id=channel.connection_id, connection_generation=channel.connection_generation)
+        current = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope)
+        if (not live() or session['scope'] != runtime_scope or self.channel != channel or current != mapping
+                or asdict(proof.key) != asdict(scope.session) or proof.target != target
+                or proof.owner_generation != scope.generation.value
+                or (proof.connection_id, proof.connection_generation) != (
+                    channel.connection_id, channel.connection_generation)):
+            raise CoreError('STALE_GENERATION', 'native_presentation_owner')
+        return mapping, proof
+
+    def _native_presentation_mapping(self, scope, runtime_scope):
+        with self.factory.unit_of_work(write=False) as uow:
+            self.verify(uow=uow)
+            params = _scope_params(scope)
+            if not _current_session(uow.connection, params, require_active_lease=True):
+                raise CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
+            repo = SqliteExecutionLeaseRepository()
+            owner, lease = repo.authority(uow, params), repo.effective(uow, params)
+            channel = self.channel
+            connection = channel.connection_id, channel.connection_generation
+            if (owner is None or owner['control_state'] != 'CONTROL_READY'
+                    or (owner['owner_instance_id'], owner['generation']) != connection
+                    or lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None
+                    or (lease['connection_id'], lease['connection_generation']) != connection
+                    or json.loads(lease['scope_json'] or 'null') != runtime_scope
+                    or stamp(lease['valid_until_server']) <= stamp(self.deps.clock.now_iso())):
+                raise CoreError('STALE_GENERATION', 'native_presentation_owner')
+            mapping = read_managed_native_session(uow, scope)
+            if (mapping is None or not mapping.stream_epoch or mapping.launch_build is None
+                    or (mapping.receipt_connection_id, mapping.receipt_connection_generation) != connection):
+                raise CoreError('SESSION_CONFLICT', 'native_presentation_owner')
+            return mapping
 
     def _activate(self):
         # Only an empty installation uses fresh activation. Retained stores

@@ -489,11 +489,33 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     live = client.portal.call(prove, scope_document)
     assert live.target == target and live.key.session_id == session
     assert live.process.evidence == birth and live.boot_id == runtime.r4_boot_id
+    assert client.portal.call(owner.prove_native_presentation_owner, scope) == (mapping, live)
+    for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):
+        with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
+            client.portal.call(owner.prove_native_presentation_owner, replace(scope, **{field: 'other-' + field}))
+    with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
+        client.portal.call(owner.prove_native_presentation_owner, replaced)
     with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
         client.portal.call(prove, scope_document | {'server_id': 'sibling-server'})
     with pytest.raises(CoreError, match='STALE_GENERATION'):
         client.portal.call(prove, scope_document | {'session_owner_generation': scope.generation.value + 1})
     assert len(host._runtime_tasks) == 1
+
+    original_proof = host.prove_r4_native_session
+
+    async def evidence_changes_while_proving(*args, **kwargs):
+        proof = await original_proof(*args, **kwargs)
+        with factory.unit_of_work() as uow:
+            uow.connection.execute("""
+                UPDATE execution_sessions SET native_launch_build_json=NULL
+                WHERE server_id=? AND executor_id=? AND session_id=?
+            """, (server, executor, session))
+        return proof
+
+    with monkeypatch.context() as changes:
+        changes.setattr(host, 'prove_r4_native_session', evidence_changes_while_proving)
+        with pytest.raises(CoreError, match='SESSION_CONFLICT'):
+            client.portal.call(owner.prove_native_presentation_owner, scope)
     emit('turn/completed', {'thread_id': thread, 'turn_id': native_turn,
                             'delivery_phase': 'terminal', 'delivery_outcome': 'success'})
     eventually(lambda: active() is None)
