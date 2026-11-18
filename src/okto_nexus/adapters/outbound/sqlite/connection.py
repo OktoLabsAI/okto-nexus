@@ -104,6 +104,11 @@ class SqliteUnitOfWork:
         # Do not suppress exceptions raised inside the with-block.
         return False
 
+    def require_active_writer(self) -> None:
+        """Require this factory's writer admission and an open transaction."""
+        if not (self._active and self._write and self.connection.in_transaction):
+            raise RuntimeError("An active write unit of work is required.")
+
     def _close(self, *, reuse):
         try:
             if self._release is not None:

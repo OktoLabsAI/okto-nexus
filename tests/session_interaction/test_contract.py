@@ -49,6 +49,7 @@ def test_input_requires_exact_fence_and_preserves_content(wire):
     {"actor_agent_id": "operator"},
     {"surface": "native_terminal"},
     {"expected_session_generation": True},
+    {"expected_session_generation": 2**63},
     {"mode": "steer"},
     {"content": [{"type": "text", "text": " "}]},
     {"content": [{"type": "text", "text": "é" * 32769}]},

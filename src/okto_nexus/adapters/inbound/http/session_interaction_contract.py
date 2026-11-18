@@ -16,9 +16,13 @@ from pydantic import (
 )
 
 from ....domain.execution.keys import SessionKey, SessionOwnerGeneration
-from ....domain.session_interaction import InputDeliveryState
-
-MAX_INPUT_BYTES = 64 * 1024
+from ....domain.session_interaction import (
+    MAX_INPUT_BYTES,
+    MAX_SQLITE_INTEGER,
+    InputDeliveryState,
+    InputScope,
+    validate_input_text,
+)
 
 
 def unicode_id(value: str) -> str:
@@ -28,8 +32,8 @@ def unicode_id(value: str) -> str:
 
 
 Identifier = Annotated[str, Field(min_length=1, max_length=160), AfterValidator(unicode_id)]
-Generation = Annotated[int, Field(ge=1)]
-Revision = Annotated[int, Field(ge=0)]
+Generation = Annotated[int, Field(ge=1, le=MAX_SQLITE_INTEGER)]
+Revision = Annotated[int, Field(ge=0, le=MAX_SQLITE_INTEGER)]
 
 
 class _Document(BaseModel):
@@ -57,6 +61,11 @@ class ScopedInteraction(_Document):
     def owner_generation(self) -> SessionOwnerGeneration:
         return SessionOwnerGeneration(self.expected_session_generation)
 
+    def input_scope(self) -> InputScope:
+        scope = self.scope
+        return InputScope(scope.session_key(), self.owner_generation(), scope.binding_id, scope.workspace_id,
+                          scope.workspace_binding_id, scope.agent_id)
+
 
 class TextInput(_Document):
     type: Literal["text"]
@@ -65,15 +74,7 @@ class TextInput(_Document):
     @field_validator("text")
     @classmethod
     def bounded_utf8(cls, text: str) -> str:
-        if not text.strip():
-            raise ValueError("Enter a message.")
-        try:
-            size = len(text.encode("utf-8"))
-        except UnicodeEncodeError as error:
-            raise ValueError("The message must be valid UTF-8.") from error
-        if size > MAX_INPUT_BYTES:
-            raise ValueError("The message exceeds the UTF-8 byte limit.")
-        return text
+        return validate_input_text(text)
 
 
 class InputRequest(ScopedInteraction):
