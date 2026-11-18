@@ -1,9 +1,9 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `5df03b51fda46a293ae5f0cca73c8947be139726`.
-The unpublished wheel SHA-256 is `f43b40c69660cf50129506110576d1890fdc0b00867dff15b6d7ae5219c568f1`.
-Core requires an exact matching grant for an explicit saved Codex resume and binds
-the R4 receipt to that target. This includes the Pi process-birth fix.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `1ed4bfa2854122b61c5ab6cc5df781e7683123ec`.
+The unpublished wheel SHA-256 is `0a377b4b66a158ae05d570e740f4d872b0cb9bfeda5943662f0a6ed19a77aa8d`.
+Core proves the exact Codex rollout against the live owner and binds an explicit
+saved resume and its R4 receipt to the selected thread.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency
