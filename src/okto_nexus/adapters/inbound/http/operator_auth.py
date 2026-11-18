@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 COOKIE = "nexus_operator_session"
 SESSION_SECONDS = 8 * 60 * 60
+_AUTHORITY_REF_PREFIX = "operator_session_"
 
 
 class OperatorAuth:
@@ -30,6 +31,9 @@ class OperatorAuth:
                     failures INTEGER NOT NULL DEFAULT 0, blocked_until REAL NOT NULL DEFAULT 0);
                 CREATE TABLE IF NOT EXISTS sessions (
                     digest TEXT PRIMARY KEY, username TEXT NOT NULL, expires REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS session_authorities (
+                    authority_ref TEXT PRIMARY KEY, session_digest TEXT NOT NULL UNIQUE
+                        REFERENCES sessions(digest) ON DELETE CASCADE);
                 CREATE TABLE IF NOT EXISTS audit (
                     id INTEGER PRIMARY KEY, at REAL NOT NULL, username TEXT NOT NULL,
                     action TEXT NOT NULL, path TEXT NOT NULL, status INTEGER NOT NULL);
@@ -41,6 +45,7 @@ class OperatorAuth:
         db = sqlite3.connect(self.path, timeout=10)
         db.row_factory = sqlite3.Row
         try:
+            db.execute("PRAGMA foreign_keys=ON")
             with db:
                 yield db
         finally:
@@ -99,6 +104,60 @@ class OperatorAuth:
             row = db.execute("SELECT username FROM sessions WHERE digest=? AND expires>?",
                              (hashlib.sha256(token.encode()).hexdigest(), time.time())).fetchone()
         return row['username'] if row else None
+
+    def authority_reference(self, token: str | None) -> str | None:
+        """Record a private, non-credential reference to the authenticated session."""
+        if not token or len(token) > 128 or not token.isascii():
+            return None
+        session_digest = hashlib.sha256(token.encode()).hexdigest()
+        with self.db() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute(
+                "SELECT ref.authority_ref FROM sessions AS s "
+                "JOIN account AS a ON a.id=1 AND a.username=s.username "
+                "LEFT JOIN session_authorities AS ref ON ref.session_digest=s.digest "
+                "WHERE s.digest=? AND s.expires>?",
+                (session_digest, time.time()),
+            ).fetchone()
+            if row is None:
+                return None
+            if row["authority_ref"] is not None:
+                return row["authority_ref"]
+            reference = _AUTHORITY_REF_PREFIX + secrets.token_urlsafe(32)
+            db.execute("INSERT INTO session_authorities(authority_ref,session_digest) VALUES(?,?)",
+                       (reference, session_digest))
+        return reference
+
+    def resolve_authority(self, reference: str | None) -> str | None:
+        """Read current authority for a projection that never admits work."""
+        with self.db() as db:
+            return self._resolve_authority(db, reference)
+
+    @contextmanager
+    def authority_fence(self):
+        """Order a synchronous execution claim before logout or rotation.
+
+        Acquire this fence before opening the execution write transaction.
+        Resolve the reference at its compare-and-set and leave this context
+        after the execution commit. Keep native I/O outside both locks.
+        """
+        with self.db() as db:
+            db.execute("BEGIN IMMEDIATE")
+            yield lambda reference: self._resolve_authority(db, reference)
+
+    @staticmethod
+    def _resolve_authority(db: sqlite3.Connection, reference: str | None) -> str | None:
+        if (not reference or len(reference) > 128
+                or not reference.isascii() or not reference.startswith(_AUTHORITY_REF_PREFIX)):
+            return None
+        row = db.execute(
+            "SELECT s.username FROM session_authorities AS ref "
+            "JOIN sessions AS s ON s.digest=ref.session_digest "
+            "JOIN account AS a ON a.id=1 AND a.username=s.username "
+            "WHERE ref.authority_ref=? AND s.expires>?",
+            (reference, time.time()),
+        ).fetchone()
+        return row["username"] if row else None
 
     def logout(self, token):
         username = self.resolve(token)
