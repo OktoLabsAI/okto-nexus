@@ -4,6 +4,8 @@ import hashlib
 import json
 from dataclasses import dataclass
 
+from nexus_connector_core import get_control_targeting
+
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
@@ -106,3 +108,21 @@ def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_n
     if turn is None or turn.native_id != native_turn_id:
         return None
     return turn.revision
+
+
+def steer_effect_revisions(turn: ExactNativeTurn) -> tuple[str, str] | None:
+    """Describe the installed Core contract for this proven Codex turn."""
+    contract = get_control_targeting('codex_app_server', 'turn.steer')
+    if not (contract.supported and contract.native_turn_id == 'required' and contract.requires_active_run
+            and contract.steer_timing == 'IMMEDIATE'):
+        return None
+    capability = 'sha256:' + digest({'target': turn.revision, 'contract': contract.to_dict()})
+    effect = 'sha256:' + digest({'capability': capability, 'effect': 'same_turn'})
+    return capability, effect
+
+
+def steer_revisions(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision) -> tuple[str, str] | None:
+    turn = active_native_turn(uow, scope, current_next_turn_revision=current_next_turn_revision)
+    if turn is None or turn.native_id != native_turn_id:
+        return None
+    return steer_effect_revisions(turn)

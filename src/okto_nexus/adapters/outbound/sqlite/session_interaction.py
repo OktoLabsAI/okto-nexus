@@ -83,6 +83,7 @@ def accept_input(
     text: str,
     now: datetime,
     verify_new_authority: Callable[[], tuple[str, int] | None],
+    steer: tuple[str, str, str] | None = None,
 ) -> QueuedReceipt:
     """Allocate a FIFO sequence and persist one input in the caller's transaction.
 
@@ -96,7 +97,10 @@ def accept_input(
     if now.utcoffset() is None:
         raise ValueError("Server time must be timezone-aware.")
     now = now.astimezone(UTC)
-    fingerprint = digest({"scope": asdict(scope), "mode": "next_turn", "text": text})
+    intent = {"scope": asdict(scope), "mode": "next_turn", "text": text}
+    if steer is not None:
+        intent.update(mode="steer", target_and_revisions=steer)
+    fingerprint = digest(intent)
     params = {
         **_scope_params(scope), "authority_ref": author.authority_ref, "client_intent_id": client_intent_id,
     }
@@ -124,7 +128,7 @@ def accept_input(
     source_grant = verify_new_authority()
     grant_id, grant_revision = source_grant if source_grant is not None else (None, None)
     pending = connection.execute(f"""
-        SELECT count(*) FROM session_interaction_inputs
+        SELECT count(*) FROM session_interaction_pending_inputs
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
           AND status IN ({_PENDING_STATES})
     """, params).fetchone()[0]
@@ -186,7 +190,7 @@ def prepare_dispatch_head(uow: SqliteUnitOfWork, *, scope: InputScope, now: date
     if is_input_queue_paused(conn, scope.session):
         return None
     head = conn.execute(f"""
-        SELECT * FROM session_interaction_inputs
+        SELECT * FROM session_interaction_pending_inputs
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
           AND status IN ({_PENDING_STATES})
         ORDER BY enqueue_sequence LIMIT 1
@@ -362,7 +366,22 @@ def record_input_delivery(conn: Connection, *, operation_key: tuple[str, str, st
 
 
 def project_input_receipt(conn: Connection, *, operation_key: tuple[str, str, str],
-                          stage: str, possible_effect: bool, native_id: str | None) -> None:
+                          stage: str, possible_effect: bool, native_id: str | None,
+                          action: str = 'turn.submit') -> None:
+    if action == 'turn.steer' and stage == 'SUBMITTED':
+        # The pending view no longer lists this input. Keep its true
+        # delivery status and invalidate old queue pages.
+        linked = conn.execute("""
+            UPDATE session_interaction_inputs SET input_revision=input_revision+1
+            WHERE server_id=? AND executor_id=? AND operation_id=? AND status='DISPATCHING'
+            RETURNING session_id
+        """, operation_key).fetchone()
+        if linked is not None:
+            conn.execute("""
+                UPDATE session_interaction_queues SET revision=revision+1
+                WHERE server_id=? AND executor_id=? AND session_id=?
+            """, (*operation_key[:2], linked['session_id']))
+        return
     if stage in ('ACCEPTED', 'RUNNING', 'WAITING_INPUT', 'SUCCEEDED'):
         state = InputDeliveryState.ACCEPTED_NATIVE
     elif stage in ('FAILED', 'CANCELLED') and not possible_effect and native_id is None:

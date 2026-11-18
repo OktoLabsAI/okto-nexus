@@ -76,7 +76,7 @@ def _receipt_document(document, generation, receipt):
     return InputReceipt(scope=document, session_owner_generation=generation,
         input_id=receipt.input_id, enqueue_sequence=receipt.sequence, input_revision=receipt.input_revision,
         queue_revision=receipt.queue_revision, status=receipt.status, operation_id=receipt.operation_id,
-        possible_effect=receipt.possible_effect).model_dump(mode='json')
+        possible_effect=receipt.possible_effect, steer_submitted=receipt.steer_submitted).model_dump(mode='json')
 
 
 def _cancel_revision(_uow, scope):
@@ -180,11 +180,12 @@ def build_router():
     async def input_receipt(session_id: str, request: Request):
         if not getattr(request.state, 'operator_session', False):
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to recover a receipt.')
+        selector = 'input_id' if 'input_id' in request.query_params else 'client_intent_id'
         try:
-            document, scope = _read_scope(request, session_id, extra=('client_intent_id',))
+            document, scope = _read_scope(request, session_id, extra=(selector,))
         except ValueError:
             return _error(422, 'VALIDATION_ERROR', 'An exact session scope and message intent are required.')
-        intent = request.query_params['client_intent_id']
+        intent = request.query_params[selector]
         if not 1 <= len(intent) <= 160 or not intent.isprintable():
             return _error(422, 'VALIDATION_ERROR', 'The message intent is invalid.')
         state = request.app.state
@@ -196,7 +197,7 @@ def build_router():
                 raise OktoNexusError(ErrorCode.NOT_FOUND, 'The input receipt was not found in this scope.')
             receipt = read_session_input_receipt(state.deps.connection_factory, access=build_execution_access(state.deps),
                 resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, 'web'),
-                client_intent_id=intent)
+                **{selector: intent})
             return _receipt_document(document, scope.generation.value, receipt)
 
         try:
@@ -250,6 +251,7 @@ def build_router():
                     input_id=item.input_id, enqueue_sequence=item.sequence, input_revision=item.input_revision,
                     queue_revision=page.queue_revision, status=item.status, operation_id=item.operation_id,
                     possible_effect=item.possible_effect, can_cancel=bool(dispatch) and item.can_cancel,
+                    can_promote=bool(dispatch) and not page.paused and item.can_cancel and item.status == 'QUEUED',
                 ) for item in page.items],
                 next_cursor=f'{scope_digest}.{page.next_cursor.after_sequence}' if page.next_cursor else None,
             ).model_dump(mode='json')

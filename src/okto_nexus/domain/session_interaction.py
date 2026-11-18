@@ -67,6 +67,7 @@ class QueuedReceipt:
     status: InputDeliveryState
     operation_id: str | None
     possible_effect: bool
+    steer_submitted: bool = False
 
 
 # Ordinary dispatch, not explicit recovery or reconciliation of a receipt.

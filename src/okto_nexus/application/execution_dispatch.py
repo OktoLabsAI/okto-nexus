@@ -233,7 +233,7 @@ def reserve_execution_dispatch(
                 + ("AND (" + pool_open + ") " if lane == 'opening' else
                    "AND NOT (" + pool_open + ") " if lane == 'regular' else "") +
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
-                "AND (p.action<>'turn.submit' OR NOT EXISTS (SELECT 1 FROM session_interaction_inputs i "
+                "AND (p.action<>'turn.submit' OR NOT EXISTS (SELECT 1 FROM session_interaction_pending_inputs i "
                 "WHERE i.server_id=p.server_id AND i.executor_id=p.executor_id AND i.session_id=p.session_id "
                 "AND i.operation_id IS NOT NULL AND ("
                 "(i.operation_id=p.operation_id AND (i.capacity_state IS NOT 'CONSUMED' OR EXISTS ("

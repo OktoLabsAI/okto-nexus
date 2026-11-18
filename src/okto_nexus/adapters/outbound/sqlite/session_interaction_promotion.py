@@ -11,17 +11,22 @@ from .session_interaction_capacity_attempts import read_capacity_attempt
 
 
 def read_promotion_candidate(uow, *, scope, author, input_id):
-    uow.require_active_writer()
     params = {**_scope_params(scope), 'input_id': input_id,
               'authority_ref': author.authority_ref, 'surface': author.surface}
     if not _current_session(uow.connection, params, require_active_lease=True):
         raise _conflict('INPUT_SESSION_CHANGED', 'The exact session is unavailable for reorientation.')
     row = uow.connection.execute("""
         SELECT i.*,q.revision AS queue_revision,q.paused_owner_generation,c.native_turn_id,c.confirmed_effect_revision,
-               c.capability_revision AS steer_capability_revision
+               c.capability_revision AS steer_capability_revision,
+               (c.confirmed_effect_revision IS NOT NULL AND d.dispatch_state='DISPATCHED'
+                    AND r.stage='SUBMITTED') AS steer_submitted
         FROM session_interaction_inputs i
         JOIN session_interaction_queues q USING(server_id,executor_id,session_id)
         LEFT JOIN session_interaction_controls c USING(server_id,executor_id,session_id,operation_id)
+        LEFT JOIN execution_dispatch_outbox d ON d.server_id=i.server_id AND d.executor_id=i.executor_id
+          AND d.operation_id=i.operation_id
+        LEFT JOIN execution_receipts r ON r.server_id=d.server_id AND r.executor_id=d.executor_id
+          AND r.operation_id=d.operation_id AND r.receipt_revision=d.last_receipt_revision
         WHERE i.server_id=:server_id AND i.executor_id=:executor_id AND i.session_id=:session_id
           AND i.owner_generation=:owner_generation AND i.binding_id=:binding_id
           AND i.workspace_id=:workspace_id AND i.workspace_binding_id=:workspace_binding_id

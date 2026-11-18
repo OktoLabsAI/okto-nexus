@@ -14,7 +14,7 @@ async def start_runtime_services(app, *, native_factory=None):
     from ..application.handoff_runtime_service import HandoffRuntimeService
     from ..application.session_interaction_capability import next_turn_revision
     from ..application.session_interaction_scheduler import SessionInputScheduler
-    from ..application.session_interaction_targets import interrupt_revision
+    from ..application.session_interaction_targets import interrupt_revision, steer_revisions
     from ..adapters.outbound.execution.core_inventory import protocol_info
     from .execution_authority import build_execution_access
     deps = app.state.deps
@@ -60,6 +60,7 @@ async def start_runtime_services(app, *, native_factory=None):
         'session_input_authority_fence': authority_fence,
         'session_input_capability_revision': input_revision,
         'session_interrupt_capability_revision': partial(interrupt_revision, current_next_turn_revision=input_revision),
+        'session_steer_revisions': partial(steer_revisions, current_next_turn_revision=input_revision),
     } if input_enabled else {}
     if deps.config.feature_harness_integrations or history:
         if not await anyio.to_thread.run_sync(build_dispatcher(deps).start):

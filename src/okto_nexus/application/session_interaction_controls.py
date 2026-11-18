@@ -135,7 +135,7 @@ def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, autho
                     == (row['target_operation_id'], row['target_stream_epoch'], row['native_turn_id'])):
                 target_status = 'running'
         pending = uow.connection.execute("""
-            SELECT COUNT(*) FROM session_interaction_inputs
+            SELECT COUNT(*) FROM session_interaction_pending_inputs
             WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
               AND owner_generation=:session_owner_generation AND binding_id=:binding_id AND workspace_id=:workspace_id
               AND workspace_binding_id=:workspace_binding_id AND agent_id=:agent_id

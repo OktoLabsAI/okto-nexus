@@ -83,6 +83,9 @@ def test_steer_is_separate_and_requires_a_reviewed_effect(wire):
         SteerInput.model_validate(body)
     with pytest.raises(ValidationError):
         EnqueueInput.model_validate(body)
+    with pytest.raises(ValidationError):
+        SteerInput.model_validate(dict(body, confirmed_effect_revision="review"))
+    body["expected_queue_revision"] = 0
     reviewed = SteerInput.model_validate(dict(body, confirmed_effect_revision="review"))
     assert reviewed.target.run_ref == "run-1"
     with pytest.raises(ValidationError):

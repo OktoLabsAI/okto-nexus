@@ -8,7 +8,7 @@ from okto_nexus.adapters.outbound.sqlite.session_interaction_queue_controls impo
     set_input_queue_paused,
 )
 from okto_nexus.errors import ErrorCode, OktoNexusError
-from tests.session_interaction.test_queue_storage import ALICE, enqueue
+from tests.session_interaction.test_queue_storage import ALICE
 from tests.session_interaction.test_queue_storage import database as queue_database
 from tests.session_interaction.test_receipt_lookup import _store_operation
 from tests.test_migrations import _partial_migrations_dir
@@ -30,14 +30,26 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
     schema_177 = _partial_migrations_dir(tmp_path, 177)
     key = (scope.session.server_id, scope.session.executor_id)
     with factory.unit_of_work() as uow:
-        first = enqueue(uow, scope)
+        # Seed data through the old schema shape, independently of the current writer.
+        uow.connection.execute("""
+            INSERT INTO session_interaction_queues (server_id,executor_id,session_id,next_sequence,revision)
+            VALUES (?,?,?,2,1)
+        """, (*key, scope.session.session_id))
+        uow.connection.execute("""
+            INSERT INTO session_interaction_inputs (server_id,executor_id,session_id,owner_generation,binding_id,
+                workspace_id,workspace_binding_id,agent_id,input_id,authority_ref,surface,client_intent_id,fingerprint,
+                enqueue_sequence,capability_revision,content,status,created_at,expires_at)
+            VALUES (?,?,?,?,?,?,?,?,'prior-input',?,?,'prior-intent','prior-fingerprint',1,'prior-capability',
+                'The retained input.','QUEUED','2026-01-01T00:00:00+00:00','2026-01-02T00:00:00+00:00')
+        """, (*key, scope.session.session_id, scope.generation.value, scope.binding_id, scope.workspace_id,
+              scope.workspace_binding_id, scope.agent_id, ALICE.authority_ref, ALICE.surface))
         _store_operation(uow, scope, 'old-interrupt', 'turn.interrupt')
         uow.connection.execute("""
             INSERT INTO session_interaction_controls (server_id,executor_id,session_id,operation_id,owner_generation,
                 authority_ref,surface,capability_revision,native_turn_id)
             VALUES (?,?,?,'old-interrupt',?,?,?,'prior-capability','prior-opaque-turn')
         """, (*key, scope.session.session_id, scope.generation.value, ALICE.authority_ref, ALICE.surface))
-        assert set_input_queue_paused(uow, scope=scope, paused=True, expected_queue_revision=first.queue_revision,
+        assert set_input_queue_paused(uow, scope=scope, paused=True, expected_queue_revision=1,
             capability_revision='pause', verify_authority=lambda: 'pause').paused
 
     def retained():
@@ -61,3 +73,7 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
         MigrationRunner(factory, migrations_dir=legacy).apply()
     assert refused.value.code == ErrorCode.MIGRATION_ERROR
     assert retained() == original
+    assert MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 178)).apply() == [178]
+    assert retained() == original
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT input_id FROM session_interaction_pending_inputs').fetchone()[0] == 'prior-input'

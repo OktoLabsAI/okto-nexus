@@ -104,6 +104,7 @@ TurnTarget = Annotated[NativeTurnTarget | ObservedRunTarget, Field(discriminator
 class SteerInput(InputRequest):
     target: TurnTarget
     confirmed_effect_revision: Identifier
+    expected_queue_revision: Revision
 
 
 class QueueChange(ScopedInteraction):
@@ -140,6 +141,25 @@ class InterruptAvailability(_Document):
     control: InterruptTargetView | None
 
 
+class SteerTargetView(InterruptTargetView):
+    effect: Literal["same_turn"]
+    effect_revision: Identifier
+
+
+class SteerInputPreview(_Document):
+    input_id: Identifier
+    input_revision: Revision
+    text_preview: Annotated[str, Field(max_length=200)]
+    truncated: bool
+
+
+class SteerAvailability(_Document):
+    scope: ExactSessionScope
+    session_owner_generation: Generation
+    control: SteerTargetView | None
+    queued_input: SteerInputPreview | None = None
+
+
 class InputReceipt(_Document):
     scope: ExactSessionScope
     session_owner_generation: Generation
@@ -150,6 +170,7 @@ class InputReceipt(_Document):
     status: InputDeliveryState
     operation_id: Identifier | None
     possible_effect: bool
+    steer_submitted: bool = False
 
     @model_validator(mode="after")
     def distinct_delivery_boundary(self) -> "InputReceipt":
@@ -168,6 +189,7 @@ class InputReceipt(_Document):
 
 class InputQueueEntry(InputReceipt):
     can_cancel: bool
+    can_promote: bool = False
 
 
 class InputQueueState(_Document):

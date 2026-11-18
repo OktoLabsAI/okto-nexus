@@ -565,3 +565,134 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
     auth.logout(token)
     assert client.get(path + '/interrupt/receipt', params=receipt_query).status_code == 401
     client.cookies.clear()
+
+
+def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'steer-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                        'workspace_binding_id', 'agent_id', 'session_id')}
+    generation = scope['session_owner_generation']
+    server, executor, session = (exact[key] for key in ('server_id', 'executor_id', 'session_id'))
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    base = {'scope': exact, 'expected_session_generation': generation}
+    ui = {'x-nexus-ui': '1'}
+    assert client.get(path + '/steer', params=query).status_code == 401
+    auth = app.state.operator_auth
+    assert auth.configure('steer-fixture', 'fixture-password-long', local=True)
+    token = auth.login('steer-fixture', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', token)
+
+    def preview():
+        response = client.get(path + '/steer', params=query)
+        assert response.status_code == 200, response.text
+        return response.json()['control']
+
+    assert preview() is None
+    assert auth.authority_reference(token, create=False) is None
+    active = admit(setup, binding, 'steer-active', 'turn.submit', session_id=session, text='Synthetic turn for steering')
+    wait_receipt(setup, active)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                       (session,)).fetchone()[0]
+    thread, turn = native.native.native_id, native.native.active_turn_id
+    client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+        'turn_state', 'turn/started', {'turn_id': turn, 'thread_id': thread, 'threadId': thread,
+            'turn': {'id': turn, 'status': 'inProgress'}, 'delivery_phase': 'started'}, operation_id=active['operation_id']))
+    eventually(preview)
+    effects = []
+    original_send = native.native.send
+
+    async def record_send(verb, payload, operation_id, *, expected_turn_id=None):
+        if verb == 'steer':
+            effects.append((expected_turn_id, payload['text'], operation_id))
+        return await original_send(verb, payload, operation_id, expected_turn_id=expected_turn_id)
+
+    native.native.send = record_send
+
+    def confirmation(control):
+        assert control['effect'] == 'same_turn'
+        return base | {'capability_revision': control['capability_revision'], 'target': control['target'],
+                       'expected_queue_revision': control['queue_revision'],
+                       'confirmed_effect_revision': control['effect_revision']}
+
+    def receipt(**selector):
+        response = client.get(path + '/inputs/receipt', params=query | selector)
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    body = confirmation(preview()) | {'client_intent_id': 'direct-steer',
+        'content': [{'type': 'text', 'text': 'First reorientation'}]}
+    stale = client.post(path + '/steer', headers=ui, json=body | {'confirmed_effect_revision': 'stale-effect'})
+    assert stale.status_code == 409
+    assert client.get(path + '/inputs/receipt', params=query | {'client_intent_id': 'direct-steer'}).status_code == 404
+    assert client.post(path + '/steer', headers=ui, json=body | {
+        'content': [{'type': 'text', 'text': '/private-fixture-command'}],
+    }).status_code == 422
+    direct = client.post(path + '/steer', headers=ui, json=body)
+    assert direct.status_code == 202, direct.text
+    first = direct.json()
+    eventually(lambda: receipt(client_intent_id='direct-steer')['steer_submitted'])
+    replay = client.post(path + '/steer', headers=ui, json=body)
+    assert replay.status_code == 202 and replay.json()['operation_id'] == first['operation_id']
+    assert replay.json()['steer_submitted'] and replay.json()['status'] == 'DISPATCHING'
+
+    send_revision = client.get(path + '/interaction', params=query).json()['next_turn']['capability_revision']
+
+    def next_turn(intent, text):
+        return client.post(path + '/inputs', headers=ui, json=base | {
+            'client_intent_id': intent, 'capability_revision': send_revision, 'content': [{'type': 'text', 'text': text}],
+        })
+
+    assert next_turn('direct-steer', 'First reorientation').status_code == 409
+    to_promote = next_turn('promote-this', 'Second reorientation').json()
+    following = next_turn('ordinary-following', 'Wait for the next turn').json()
+    owned = client.get(path + '/steer', params=query | {'input_id': to_promote['input_id']})
+    assert owned.status_code == 200 and owned.json()['queued_input'] == {
+        'input_id': to_promote['input_id'], 'input_revision': to_promote['input_revision'],
+        'text_preview': 'Second reorientation', 'truncated': False,
+    }
+    promotion = confirmation(owned.json()['control']) | {'expected_input_revision': to_promote['input_revision']}
+    promote_path = path + f"/inputs/{to_promote['input_id']}/promote"
+    assert client.post(promote_path, headers=ui | {'origin': 'https://foreign.invalid'}, json=promotion).status_code == 403
+    other = auth.login('steer-fixture', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', other)
+    assert client.post(promote_path, headers=ui, json=promotion).status_code == 404
+    foreign_review = client.get(path + '/steer', params=query | {'input_id': to_promote['input_id']})
+    assert foreign_review.status_code == 404 and 'Second reorientation' not in foreign_review.text
+    assert client.get(path + '/inputs/receipt', params=query | {'input_id': to_promote['input_id']}).status_code == 404
+    assert auth.authority_reference(other, create=False) is None
+    client.cookies.set('nexus_operator_session', token)
+    assert client.post(promote_path, headers=ui, json=promotion | {'expected_input_revision': 1}).status_code == 409
+    moved = client.post(promote_path, headers=ui, json=promotion)
+    assert moved.status_code == 202, moved.text
+    second = moved.json()
+    assert second['input_id'] == to_promote['input_id']
+    eventually(lambda: receipt(input_id=second['input_id'])['steer_submitted'])
+    assert client.post(promote_path, headers=ui, json=promotion).json()['operation_id'] == second['operation_id']
+    assert effects == [(turn, 'First reorientation', first['operation_id']),
+                       (turn, 'Second reorientation', second['operation_id'])]
+    pending = client.get(path + '/inputs', params=query | {'pending_only': 'true'}).json()['items']
+    assert [item['input_id'] for item in pending] == [following['input_id']]
+    client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+        'turn_state', 'turn/completed', {'turn_id': turn, 'thread_id': thread,
+            'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id=active['operation_id']))
+    eventually(lambda: len(native.native.sent) == 4)
+    assert native.native.sent == [('send_turn', active['operation_id']), ('steer', first['operation_id']),
+                                  ('steer', second['operation_id']), ('send_turn', receipt(input_id=following['input_id'])['operation_id'])]
+    assert preview() is None
+    finished_queue = client.get(path + '/inputs', params=query).json()
+    finished = client.post(path + '/steer', headers=ui, json=body | {
+        'client_intent_id': 'target-already-ended', 'expected_queue_revision': finished_queue['queue_revision'],
+    })
+    assert finished.status_code == 409
+    assert client.get(path + '/inputs/receipt', params=query | {
+        'client_intent_id': 'target-already-ended',
+    }).status_code == 404
+    assert len(effects) == 2
+    client.cookies.clear()

@@ -111,10 +111,11 @@ def read_session_input_queue(
         if queue["revision"] is None:
             return InputQueuePage(0, False, (), None, pause_revision)
 
-        rows = uow.connection.execute("""
+        table = 'session_interaction_pending_inputs' if pending_only else 'session_interaction_inputs'
+        rows = uow.connection.execute(f"""
             SELECT input_id, enqueue_sequence, input_revision, status, operation_id, possible_effect,
                 (authority_ref=:authority_ref AND surface=:surface) AS own_input
-            FROM session_interaction_inputs
+            FROM {table}
             WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
               AND owner_generation=:owner_generation AND binding_id=:binding_id AND workspace_id=:workspace_id
               AND workspace_binding_id=:workspace_binding_id AND agent_id=:agent_id AND enqueue_sequence>:after_sequence
