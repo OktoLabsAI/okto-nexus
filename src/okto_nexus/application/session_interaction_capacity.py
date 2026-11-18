@@ -78,10 +78,13 @@ def _current_host(host, request):
     return (scope.connection_generation, scope.boot_id) == (channel.connection_generation, host.boot_id)
 
 
-async def advance_input_capacity(*, factory, access, host, scope, authority_fence,
+async def advance_input_capacity(*, factory, access, availability, scope, authority_fence,
                                  current_capability_revision, fresh_publications, remote_ready):
-    """Advance one exact session's next input over the authenticated capacity port."""
+    """Advance one exact session through the shared authenticated capacity registry."""
     if not remote_ready:
+        return None
+    host = availability.current_host(scope.session.server_id, scope.session.executor_id)
+    if host is None:
         return None
 
     def pending_work():
@@ -106,7 +109,7 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
     if claim is not None:
         current = _current_host(host, claim.reservation.request)
         return await consume_input_capacity(factory=factory, scope=scope, operation_id=claim.operation_id,
-                                            capacity=host.port, permit_consumption=current)
+                                            capacity=availability, permit_consumption=current)
 
     common = {'factory': factory, 'access': access, 'scope': scope,
               'current_capability_revision': current_capability_revision}
@@ -131,8 +134,8 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
         if not await anyio.to_thread.run_sync(fence):
             return None
         request = previous.request
-        released = await host.port.release_capacity(request, capacity_reservation_id(request),
-                                                    'REVOKED' if authority_denied else 'CANCELLED')
+        released = await availability.release_capacity(request, capacity_reservation_id(request),
+                                                       'REVOKED' if authority_denied else 'CANCELLED')
         await anyio.to_thread.run_sync(retire, released)
         return released
 
@@ -140,7 +143,7 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
     if previous is not None:
         request = previous.request
         current = _current_host(host, request)
-        observed = await host.port.get_capacity_reservation(request)
+        observed = await availability.get_capacity_reservation(request)
         if observed is not None and not _matches_attempt(request, observed):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The host returned a different capacity attempt.', {})
         if observed is not None and observed.state in ('EXPIRED_UNCONSUMED', 'RELEASED'):
@@ -163,10 +166,10 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
     request = attempt.request
     if not _current_host(host, request) or (previous is not None and request != previous.request):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The capacity host or pending input changed.', {})
-    observed = await host.port.get_capacity_reservation(request)
+    observed = await availability.get_capacity_reservation(request)
     if observed is None:
         # A retry uses the same immutable request and cannot buy a second slot.
-        observed = await host.port.try_reserve_capacity(request)
+        observed = await availability.try_reserve_capacity(request)
     if type(observed) is CapacityAssessment and observed.request_hash == request.request_hash:
         return observed
     if not _matches_attempt(request, observed):
@@ -187,7 +190,7 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
     operation_id = await anyio.to_thread.run_sync(stage_or_recover)
     if operation_id is None:
         return observed
-    return await consume_input_capacity(factory=factory, scope=scope, operation_id=operation_id, capacity=host.port)
+    return await consume_input_capacity(factory=factory, scope=scope, operation_id=operation_id, capacity=availability)
 
 
 def _matches_attempt(request, observed):

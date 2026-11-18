@@ -11,6 +11,7 @@ from nexus_connector_core import (
     CapacityRequest,
     CapacityReservation,
     CapacityScope,
+    CoreError,
     capacity_reservation_id,
 )
 from nexus_connector_core.protocol import canonical_json
@@ -36,13 +37,20 @@ from okto_nexus.application import session_interaction_capacity
 from okto_nexus.application.execution_dispatch import reserve_execution_dispatch
 from okto_nexus.application.execution_leases import ExecutionChannel
 from okto_nexus.application.execution_semantics import execution_intent_hash
-from okto_nexus.application.runtime_availability import CapacityHost
+from okto_nexus.application.runtime_availability import RuntimeAvailabilityService
 from okto_nexus.domain.session_interaction import InputDeliveryState
 from okto_nexus.errors import ErrorCode, OktoNexusError
 from tests.session_interaction.test_queue_storage import ALICE, NOW
 from tests.session_interaction.test_queue_storage import database as queue_database
 
 database = queue_database
+
+
+def _register_peer(availability, scope, peer, *, generation=1, boot_id='fixture-boot'):
+    channel = ExecutionChannel(scope.session.server_id, scope.session.executor_id, f'connection-{generation}', generation)
+    host = availability.register(channel, peer)
+    availability.observe(host, binding_id=scope.binding_id, boot_id=boot_id, revision=1, reason='AVAILABLE', valid_for_ms=60000)
+    return host
 
 
 def _enqueue(uow, scope, intent):
@@ -223,9 +231,9 @@ def test_capacity_step_commits_request_before_host_and_uses_the_same_attempt(dat
 
     peer = Peer()
     access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
-    host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'fixture-connection', 1),
-                        peer, request.scope.boot_id)
-    args = {'factory': factory, 'access': access, 'host': host, 'scope': scope,
+    availability = RuntimeAvailabilityService(enabled=True)
+    _register_peer(availability, scope, peer)
+    args = {'factory': factory, 'access': access, 'availability': availability, 'scope': scope,
             'authority_fence': lambda: nullcontext(lambda _: True), 'current_capability_revision': lambda *_: None,
             'fresh_publications': {}, 'remote_ready': True}
     observed = asyncio.run(session_interaction_capacity.advance_input_capacity(**args))
@@ -271,10 +279,10 @@ def test_replacement_host_only_observes_the_original_attempt(database, monkeypat
 
     monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', unexpected_prepare)
     access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
-    host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'new-connection', 2),
-                        ReconnectedPeer(), 'new-boot')
+    availability = RuntimeAvailabilityService(enabled=True)
+    _register_peer(availability, scope, ReconnectedPeer(), generation=2, boot_id='new-boot')
     assert asyncio.run(session_interaction_capacity.advance_input_capacity(factory=factory, access=access,
-        host=host, scope=scope, authority_fence=lambda: nullcontext(lambda _: True),
+        availability=availability, scope=scope, authority_fence=lambda: nullcontext(lambda _: True),
         current_capability_revision=lambda *_: None, fresh_publications={}, remote_ready=True)) == historical
     with factory.unit_of_work() as uow:
         old = read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id)
@@ -327,10 +335,10 @@ def test_release_tombstone_recovers_abandoned_prepared_attempt(database, monkeyp
 
     monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', prepare)
     peer = Peer()
-    host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'fixture-connection', 1),
-                        peer, request.scope.boot_id)
+    availability = RuntimeAvailabilityService(enabled=True)
+    _register_peer(availability, scope, peer)
     access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
-    args = {'factory': factory, 'access': access, 'host': host, 'scope': scope,
+    args = {'factory': factory, 'access': access, 'availability': availability, 'scope': scope,
             'authority_fence': lambda: nullcontext(lambda _: True), 'current_capability_revision': lambda *_: None,
             'fresh_publications': {}, 'remote_ready': True}
     with pytest.raises(ConnectionError, match='reply lost'):
@@ -407,3 +415,52 @@ def test_recovery_releases_consumed_slot_only_for_exact_unsent_refusal(database,
         assert receipt.possible_effect == crossed_send_cut
         assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 1
         assert uow.connection.execute('SELECT count(*) FROM runtime_execution_grants').fetchone()[0] == 0
+
+
+def test_registry_fences_late_reservation_after_host_replacement(database, monkeypatch):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        _enqueue(uow, scope, 'first')
+        head, request = _head_and_request(uow, scope)
+
+    def prepare(uow, **_options):
+        return prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=NOW)
+
+    def stage(*args, **kwargs):
+        pytest.fail('A fenced host reply cannot stage an R4 operation.')
+
+    monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', prepare)
+    monkeypatch.setattr(session_interaction_capacity, 'admit_held_input', stage)
+    availability = RuntimeAvailabilityService(enabled=True)
+    reservation_id = capacity_reservation_id(request)
+    released = CapacityReservation(reservation_id, request, 'RELEASED', 2, 0, None)
+
+    class Replacement:
+        async def get_capacity_reservation(self, supplied):
+            assert supplied == request
+            return released
+
+    class Initial:
+        async def get_capacity_reservation(self, supplied) -> None:
+            assert supplied == request
+
+        async def try_reserve_capacity(self, supplied):
+            assert supplied == request
+            _register_peer(availability, scope, Replacement(), generation=2, boot_id='new-boot')
+            return CapacityReservation(reservation_id, request, 'HELD', 1, 5000, None)
+
+    _register_peer(availability, scope, Initial())
+    access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
+    args = {'factory': factory, 'access': access, 'availability': availability, 'scope': scope,
+            'authority_fence': lambda: nullcontext(lambda _: True), 'current_capability_revision': lambda *_: None,
+            'fresh_publications': {}, 'remote_ready': True}
+    with pytest.raises(CoreError) as error:
+        asyncio.run(session_interaction_capacity.advance_input_capacity(**args))
+    assert error.value.code == 'NEEDS_RECONCILIATION' and error.value.possible_effect
+    with factory.unit_of_work(write=False) as uow:
+        assert read_capacity_attempt(uow, session=scope.session).request == request
+        assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 0
+    assert asyncio.run(session_interaction_capacity.advance_input_capacity(**args)) == released
+    with factory.unit_of_work(write=False) as uow:
+        assert read_capacity_attempt(uow, session=scope.session) is None
+        assert read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id).resolution == released
