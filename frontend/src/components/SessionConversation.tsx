@@ -378,7 +378,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       {history.messages.size ? <ol className="space-y-3 m-0">
         {[...history.messages].map(([id, item]) => <li key={id}
           className={item.role === 'user' ? 'rounded-md bg-surface-100 p-2 dark:bg-surface-800' : 'p-2'}>
-          <strong className="text-xs">{item.role === 'user' ? 'User' : 'Assistant'}</strong>
+          <strong className="text-xs">{item.role === 'user' ? 'User' : item.subagent ? 'Subagent' : 'Assistant'}</strong>
           {item.text && <p className="whitespace-pre-wrap break-words text-sm">{item.text}</p>}
           {item.truncated && <p className="text-xs text-surface-500">Part of this message is unavailable.</p>}
         </li>)}

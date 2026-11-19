@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 from nexus_connector_core.native.adapter_types import HarnessEvent
-from nexus_connector_core.native.claude_chat_facts import CLAUDE_CHAT_EVENT
+from nexus_connector_core.native.claude_chat_facts import CLAUDE_CHAT_EVENT, CLAUDE_STREAM_CHAT_EVENT
 from nexus_connector_core.native.codex_chat_facts import CODEX_CHAT_DELTA
 from nexus_connector_core.native.event_ingest import translate_native_event
 from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT
@@ -226,6 +226,23 @@ def test_claude_retained_entries_keep_equal_messages_distinct_and_require_exact_
     assert [u["operation_id"] for u in updates] == ["one", "two"]
     assert len({u["message_id"] for u in updates}) == 2
     assert all(u["origin"] == {"kind": "native_session", "session_id": session_id} for u in updates)
+
+
+def test_claude_stream_child_origin_is_explicit_and_cannot_merge_with_main(stream):
+    native = "f44b4089-a389-4a20-9874-e93dbd7bf23e"
+    fact = {"revision": 1, "native_session_id": native, "entry_id": "27014e6d-9872-49b4-9826-b6466ec0918a",
+            "role": "assistant", "text": "Same text", "parent_tool_use_id": None}
+    child = fact | {"parent_tool_use_id": "toolu_native_child"}
+    for seq, payload in enumerate((fact, child, child | {"parent_tool_use_id": "invalid-parent"},
+                                   child | {"role": "user"}, child), start=1):
+        stream.store(seq, CLAUDE_STREAM_CHAT_EVENT, "tool_activity", payload,
+                     operation_id=None if seq == 5 else "operation")
+    stream.watermark(5)
+    main, subagent = stream.read()["updates"]
+    assert main["message_id"] != subagent["message_id"]
+    assert main["text"] == subagent["text"] == "Same text"
+    assert main["origin"] == {"kind": "native_session", "session_id": native}
+    assert subagent["origin"] == {"kind": "subagent", "session_id": native, "parent_tool_use_id": "toolu_native_child"}
 
 
 def test_hosted_pi_transcript_requires_retained_ids_and_keeps_equal_messages_distinct(stream):

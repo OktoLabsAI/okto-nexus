@@ -1,0 +1,108 @@
+{
+  "tasks": [
+    "SI-012",
+    "SI-026",
+    "SI-036"
+  ],
+  "status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "93a76fe60d979701696d2816f926715ff6f91aa3",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 456
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "bdfa1b51cd19e5a5c866c8e5608c55bf84eceafb",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 85
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "81c287b46eddbbafdbc12ddb35b35d4e4d869bf3",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 64
+    },
+    "feature_upstream_drift": "0 ahead, 0 behind",
+    "working_trees": "clean"
+  },
+  "candidate_commits": {
+    "core": "454c9700e0def181c81fe633857a25b48e125512",
+    "connector": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba"
+  },
+  "installed_wheels_sha256": {
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "nexus": "ba59ddf8c69de5e901404f23bd2212e227b4ea0638c302c2ecf7a6284cacf008"
+  },
+  "sdists_sha256": {
+    "core": "f05f99f583dd540d9a60f8b83bb8ac6cadda3e835b5c0a0b28711fd736063cca",
+    "nexus": "926107db514e23e2d94678e733cc6d8a1af7641786bdd8c914cda3bbd7c69e16"
+  },
+  "scope": {
+    "platform": "Windows",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "transport": "Disposable native profile, deterministic model responses over loopback",
+    "external_provider_calls": 0,
+    "dashboard_js": "index-DqHm4Da5.js"
+  },
+  "observations": {
+    "native": "One canonical result with three scoped assistant snapshots persisted for that operation. Distinct envelope UUIDs preserve two copies of identical root text. The third snapshot carries the explicit native parent tool use.",
+    "frontend": "Only a typed subordinate assistant message gets the Subagent label.",
+    "negative_component_scope": "Undeclared or malformed parent, foreign session, closed turn, tool and reasoning data are omitted. Sensitive text is scrubbed before publication.",
+    "run_limits": "A follow-up native envelope appeared after the first result. The in-operation evidence does not cover those messages. The native harness ended after a fixture assertion on an unfiltered count. Cleanup confirmed no PIDs in the disposable job. Separate launch attempts hit the process birth or profile drift guards.",
+    "replay": {
+      "native_snapshot_count": 3,
+      "native_child_count": 1,
+      "root_snapshots_with_equal_text": 2,
+      "durable_canonical_results": 1,
+      "api_messages": 3,
+      "browser": {
+        "attributionVisible": true,
+        "rootReplies": 2,
+        "subagentReplies": 1,
+        "rows": 3
+      },
+      "snapshot_sha256": "e5fabf7edb2ced504ba329dc531dfd0bdd8e93f8053133a1b34f5983ef58817b",
+      "native_processes_started_in_replay": 0,
+      "replay_scope": "Offline backup of the exact temporary native-run database, no owner or model started"
+    }
+  },
+  "scenarios": {
+    "SI-T-E06": "PASS on reviewed Windows Claude, installed API and real browser replay of the same database."
+  },
+  "tests_passed": {
+    "installed_core": 121,
+    "installed_connector": 45,
+    "installed_nexus": 37,
+    "frontend_node": 419
+  },
+  "build_checks": [
+    "Core and R4 contract generators",
+    "frontend build",
+    "offline Nexus lock",
+    "strict Twine wheels and sdists",
+    "isolated wheel installation"
+  ],
+  "limitations": [
+    "Claude stream deltas and user echo remain unqualified.",
+    "Native snapshots that arrive after completion need their own correlated lifecycle.",
+    "No real provider, other platform or human acceptance qualification."
+  ],
+  "migration": "none",
+  "local_evidence_sha256": {
+    "agents-final/stdout.jsonl": "d69fbe3857bdab2b32c2336b998adcffac0ab921570bc1119f2c868d968d9db7",
+    "blocks/stdout.jsonl": "4a6645b96c722f1781c73752d19c9902658436b75a7285e816d25f698b5f7844",
+    "replay/stdout.jsonl": "2009d1736d4eb5dfdb4958cca0f9f67e5a9ba3d9631b290493c72202f8ff1df4",
+    "nexus_stream_probe.py": "209df1415e8e56f54aff4ffa0f2b32a1d761853b90606f940cd27692f65693d4",
+    "nexus_stream_replay_final.py": "7195796277fb749eba455e8a550cfbaa414b5952a580a9fd5808043d9cc3901d",
+    "stream-0-installed.xml": "71afa14cceaa5dd38e184c56295fd059264b77d8a6dd605d8df8747a95d3d320",
+    "stream-1-installed.xml": "2d335ee0ab7620b21f6e8e6f0ce8cbe0cd83674c2b99badfcc251a98b775a638",
+    "stream-2-installed.xml": "27029896121f38e41c9605e92f6e0d527a2e37adafcbd3d2d2153c4b64f723bc",
+    "nexus-si012-claude-stream-1795118012588-candidate-triple/probe.log": "27c66b17038cc456a88e263815c03de688d008419b670bc4e538a97a4c4ae9e9",
+    "nxs-stream-replay-1795119699593/browser-render.json": "6972e3bb73e75acbab4def96ff9804cd3aea75703c3733377b68c1bbd6155879",
+    "nxs-stream-replay-1795119699593/result.json": "f8fecb77ab93f90681ae7da0c7709fca7ff4436f044c8865dbb266ed83320108"
+  }
+}

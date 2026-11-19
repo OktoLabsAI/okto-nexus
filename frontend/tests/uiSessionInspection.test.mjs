@@ -233,6 +233,19 @@ test('conversation reconciles deltas and snapshots by message identity with stab
   assert.equal(first.get('message').text,'part');
 });
 
+test('conversation preserves explicit subagent origin and rejects incomplete attribution',()=>{
+  const scope=session().scope;
+  const main={message_id:'main',update_id:'main',sequence:1,change:'replace',role:'assistant',text:'same',text_truncated:false};
+  const child={...main,message_id:'child',update_id:'child',sequence:2,
+    origin:{kind:'subagent',session_id:'native',parent_tool_use_id:'toolu_child'}};
+  const page={scope,stream_epoch:'epoch',next_after_sequence:2,committed_contiguous:2,has_more:false,updates:[main,child]};
+  assert.doesNotThrow(()=>assertConversationPage(page,scope,0,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,updates:[{...child,origin:{...child.origin,parent_tool_use_id:''}}]},scope,0,'epoch'));
+  const messages=applyConversationUpdates(new Map(),page.updates);
+  assert.equal(messages.get('main').subagent,undefined);
+  assert.equal(messages.get('child').subagent,true);
+});
+
 test('conversation position notifications cannot move another owner or accept an invalid cursor',()=>{
   const scope=session().scope;
   const position={version:1,scope,stream_epoch:'epoch',committed_contiguous:4,gap_pending:false};

@@ -39,6 +39,9 @@ export function assertConversationPage(page: SessionConversationPage, scope: Int
       page.updates.length > 400 || page.updates.some(update => !Number.isSafeInteger(update.sequence) ||
         update.sequence <= after || update.sequence > page.next_after_sequence ||
         !['append', 'replace'].includes(update.change) || !['user', 'assistant'].includes(update.role) ||
+        (update.origin?.kind === 'subagent' && (update.role !== 'assistant' ||
+          typeof update.origin.session_id !== 'string' || !update.origin.session_id ||
+          typeof update.origin.parent_tool_use_id !== 'string' || !update.origin.parent_tool_use_id)) ||
         !(update.text === null || typeof update.text === 'string'))) {
     throw new Error('The conversation page did not match its cursor.');
   }
@@ -58,6 +61,7 @@ export interface ConversationMessage {
   role: ConversationUpdate['role'];
   text: string;
   truncated: boolean;
+  subagent?: true;
 }
 
 export function applyConversationUpdates(previous: ReadonlyMap<string, ConversationMessage>, updates: ConversationUpdate[]) {
@@ -73,7 +77,8 @@ export function applyConversationUpdates(previous: ReadonlyMap<string, Conversat
     const text = (prior?.text ?? '') + (update.text ?? '');
     const limit = 16384;
     next.set(update.message_id, {role: update.role, text: text.slice(0, limit),
-      truncated: update.text_truncated || !!prior?.truncated || text.length > limit});
+      truncated: update.text_truncated || !!prior?.truncated || text.length > limit,
+      ...(update.origin?.kind === 'subagent' ? {subagent: true} : {})});
   }
   return next;
 }
