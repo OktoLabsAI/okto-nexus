@@ -9,7 +9,7 @@ async def start_runtime_services(app, *, native_factory=None):
     from .runtime_boot_owner import RuntimeBootOwner
     from .local_codex_presentations import publish_local_codex_presentations
     from .local_pi_presentations import publish_local_pi_presentations
-    from ..adapters.inbound.http.dashboard_session_presentations import RemoteCodexPresentations
+    from ..adapters.inbound.http.dashboard_session_presentations import LocalPiPresentations, RemoteCodexPresentations
     from ..application.session_attachment_broker import SessionAttachmentBroker
     from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
     from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
@@ -72,6 +72,12 @@ async def start_runtime_services(app, *, native_factory=None):
         SessionAttachmentBroker(deps.connection_factory, authority_fence=authority_fence,
             current_capability=partial(remote_codex.capability_revision, next_turn_revision=remote_next_turn)),
         remote_codex, build_execution_access(deps), next_turn_revision=remote_next_turn)
+    remote_pi = app.state.remote_pi_presentation
+    app.state.remote_pi_presentations = LocalPiPresentations(
+        SessionAttachmentBroker(deps.connection_factory, authority_fence=authority_fence,
+            current_capability=partial(remote_pi.capability_revision, next_turn_revision=remote_next_turn)),
+        remote_pi.prove, remote_pi.open_renderer, build_execution_access(deps), remote_next_turn,
+        open_editor=remote_pi.open_editor)
     if deps.config.feature_harness_integrations or history:
         if not await anyio.to_thread.run_sync(build_dispatcher(deps).start):
             raise RuntimeError('Another runtime owner holds this store; serve startup refused.')

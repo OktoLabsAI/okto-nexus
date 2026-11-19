@@ -187,27 +187,30 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
     remote = selected.get('executor_kind') == 'remote'
-    if remote and binding.get('adapter_id') != 'codex_app_server':
+    if remote and binding.get('adapter_id') not in ('codex_app_server', 'pi_rpc'):
         raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE',
                               'Remote terminal attachment is unavailable for this harness.')
     if binding.get('adapter_id') == 'pi_rpc':
         if viewer_executable is not None or write and sys.platform != 'win32':
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')
         reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
-                                             presentation='pi', **({'write': True} if write else {}))
+                                             presentation='pi_remote' if remote else 'pi',
+                                             **({'write': True} if write else {}))
         writer = reviewed if write else None
         revision = writer.capability_revision if writer else reviewed
         if not _approve_writer_transfer(writer):
             return None
         size = shutil.get_terminal_size(fallback=(100, 36))
         viewport = (max(24, min(300, size.columns)), max(8, min(120, size.lines)))
-        mode = 'Pi with session input' if writer else 'read-only Pi'
+        viewer = 'remote Pi' if remote else 'Pi'
+        mode = f'{viewer} with session input' if writer else f'read-only {viewer}'
         print(f'Opening {mode} for {display_text(scope["session_id"])} '
               f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
         if writer:
             print('Enter records your message in the session queue.')
-            print('Ctrl+R reviews reorientation at the next available boundary.')
-            print('Ctrl+X reviews interruption and pauses the queue after confirmation.')
+            if not remote:
+                print('Ctrl+R reviews reorientation at the next available boundary.')
+                print('Ctrl+X reviews interruption and pauses the queue after confirmation.')
             print(f'Receipt recovery uses session generation {generation}.')
         print('Ctrl+C detaches this viewer.', flush=True)
 
@@ -220,7 +223,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
 
         with open_local_presentation(call, scope=scope, expected_session_generation=generation,
                                      capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
-                                     pi_viewport=viewport, **({'writer': writer, 'pi_editor': True} if writer else {})) as link:
+                                     pi_viewport=viewport, **({'remote': True} if remote else {}),
+                                     **({'writer': writer, 'pi_editor': True} if writer else {})) as link:
             if writer:
                 show_pi_editor(link, recover)
             else:
@@ -228,7 +232,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         _display({'state': 'detached'}, False)
         print('Session ' + display_text(scope['session_id']))
         return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
-                'attach_strategy': 'pi_local_write' if writer else 'pi_local_read', 'capability_revision': revision}
+                'attach_strategy': f"pi_{'remote' if remote else 'local'}_{'write' if writer else 'read'}",
+                'capability_revision': revision}
     reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
                                          **({'presentation': 'codex_remote'} if remote else {}),
                                          **({'write': True} if write else {}))

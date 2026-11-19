@@ -36,6 +36,7 @@ from ...domain.presentation_protocol import (
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
     PI_PRESENTATION_SUBPROTOCOL,
+    REMOTE_PI_SUBPROTOCOL,
     PRESENTATION_SUBPROTOCOL,
     REMOTE_CODEX_SUBPROTOCOL,
 )
@@ -445,7 +446,7 @@ def _revision(value):
 
 def review_local_presentation(api, *, scope, expected_session_generation, write=False, presentation='codex'):
     """Read an exact viewer capability without issuing an attachment ticket."""
-    remote = presentation == 'codex_remote'
+    remote = presentation in ('codex_remote', 'pi_remote')
     _presentation_origin(api, scope, remote=remote)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     if presentation != 'codex':
@@ -483,15 +484,19 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
                             writer=None, pi_viewport=None, pi_editor=False, remote=False, on_intent=None):
     """Exchange the offer and challenge without passing the human session to the viewer."""
     origin = _presentation_origin(api, scope, remote=remote)
-    if pi_editor and (pi_viewport is None or writer is None) or remote and pi_viewport is not None:
+    if pi_editor and (pi_viewport is None or writer is None):
         raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     access = 'write' if writer is not None else 'read'
     writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
-    presentation = {'presentation': 'codex_remote'} if remote else (
-        {'presentation': 'pi'} if pi_viewport is not None else {})
+    if pi_viewport is not None:
+        presentation = {'presentation': 'pi_remote' if remote else 'pi'}
+        protocol = REMOTE_PI_SUBPROTOCOL if remote else PI_PRESENTATION_SUBPROTOCOL
+    else:
+        presentation = {'presentation': 'codex_remote'} if remote else {}
+        protocol = REMOTE_CODEX_SUBPROTOCOL if remote else PRESENTATION_SUBPROTOCOL
     offer = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:prepare',
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,
                  'intent': 'attach_live', 'access': access} | writer_fields | presentation)
@@ -512,8 +517,6 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
             link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id,
                                    live_updates=live_updates, input_revision=writer.input_revision if writer else None,
                                    on_intent=on_intent)
-            protocol = REMOTE_CODEX_SUBPROTOCOL if remote else (
-                PI_PRESENTATION_SUBPROTOCOL if pi_viewport is not None else PRESENTATION_SUBPROTOCOL)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',
                          headers=api.request_headers(), ticket=ticket, protocol=protocol)
             viewport = dict(zip(('columns', 'rows'), pi_viewport, strict=True)) if pi_viewport is not None else {}

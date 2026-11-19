@@ -19,7 +19,9 @@ from nexus_connector_core import (
     PREOPEN_REFUSAL_REVISION,
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
-from nexus_connector_core.presentation_link import PRESENTATION_LINK_REVISION, PRESENTATION_RESULT
+from nexus_connector_core.presentation_link import (
+    PI_PRESENTATION_LINK_REVISION, PI_PRESENTATION_RESULT, PRESENTATION_LINK_REVISION, PRESENTATION_RESULT,
+)
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
 from ....adapters.outbound.execution.presentation_link import PresentationLink
@@ -406,18 +408,25 @@ def build_router() -> APIRouter:
             if (ws.app.state.deps.config.runtime_session_interaction_enabled
                     and PRESENTATION_LINK_REVISION in hello['control_capabilities']):
                 welcome['control_capabilities'].append(PRESENTATION_LINK_REVISION)
+            if (ws.app.state.deps.config.runtime_session_interaction_enabled
+                    and ws.app.state.deps.config.feature_harness_integrations
+                    and PI_PRESENTATION_LINK_REVISION in hello['control_capabilities']):
+                welcome['control_capabilities'].append(PI_PRESENTATION_LINK_REVISION)
             negotiated_capabilities = tuple(welcome['control_capabilities'])
             resumed = 'resume_connection_id' in hello
             if resume_supported:
                 welcome['resumed'] = resumed
             await _send_text(encode_r4_frame(welcome).decode("utf-8"))
 
-            if PRESENTATION_LINK_REVISION in negotiated_capabilities:
+            codex_presentation = PRESENTATION_LINK_REVISION in negotiated_capabilities
+            pi_presentation = PI_PRESENTATION_LINK_REVISION in negotiated_capabilities
+            if codex_presentation or pi_presentation:
                 async def send_presentation(raw):
                     await anyio.to_thread.run_sync(_verify)
                     await _send_text(raw)
 
-                presentation = PresentationLink(_channel(), send_presentation)
+                presentation = PresentationLink(_channel(), send_presentation,
+                                                codex_enabled=codex_presentation, pi_enabled=pi_presentation)
                 prior = presentations.get(presentation_key)
                 if prior is not None:
                     prior.disconnect()
@@ -491,7 +500,7 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
-                if frame['type'] == PRESENTATION_RESULT:
+                if frame['type'] in (PRESENTATION_RESULT, PI_PRESENTATION_RESULT):
                     if presentation is None or presentations.get(presentation_key) is not presentation:
                         raise CoreError('STALE_GENERATION', 'presentation_link')
                     try:

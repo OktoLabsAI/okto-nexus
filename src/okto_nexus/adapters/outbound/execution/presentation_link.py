@@ -2,61 +2,140 @@
 
 import asyncio
 import secrets
+from contextlib import asynccontextmanager, suppress
 
+import anyio
 from nexus_connector_core import CoreError
 from nexus_connector_core.presentation_link import (
+    PI_PRESENTATION_CLOSE,
+    PI_PRESENTATION_EDIT,
+    PI_PRESENTATION_LINK_REVISION,
+    PI_PRESENTATION_NEXT,
+    PI_PRESENTATION_OPEN,
+    PI_PRESENTATION_PROBE,
+    PI_PRESENTATION_RESULT,
     PRESENTATION_LINK_REVISION,
     PRESENTATION_READ,
     PRESENTATION_RESULT,
+    decode_pi_presentation_output,
+    encode_pi_presentation_frame,
     encode_presentation_frame,
     presentation_request_hash,
 )
 
 
 class PresentationLink:
-    def __init__(self, channel, send, *, timeout=5):
+    def __init__(self, channel, send, *, timeout=5, codex_enabled=True, pi_enabled=False):
         self.channel, self._send, self._timeout = channel, send, timeout
         self.instance = secrets.token_hex(16)
-        self._pending = {}
+        self.codex_enabled, self.pi_enabled = codex_enabled, pi_enabled
+        self._pending = {PRESENTATION_RESULT: {}, PI_PRESENTATION_RESULT: {}}
         self.closed = False
 
     async def read_codex(self, *, scope, target, thread_id):
-        if self.closed or len(self._pending) >= 4:
+        if not self.codex_enabled:
             raise CoreError('SESSION_UNKNOWN', 'presentation_link')
         request_id = 'viewer_read_' + secrets.token_hex(16)
         frame = dict(contract_revision=PRESENTATION_LINK_REVISION, type=PRESENTATION_READ, **self.channel.identity(),
                      request_id=request_id, scope=scope, target=target, thread_id=thread_id)
-        raw = encode_presentation_frame(frame)
-        future = asyncio.get_running_loop().create_future()
-        self._pending[request_id] = (future, presentation_request_hash(frame))
+        context = await self._exchange(frame, encode_presentation_frame(frame), PRESENTATION_RESULT, self._timeout)
+        if context is None or context['thread_id'] != thread_id:
+            raise CoreError('SESSION_UNKNOWN', 'presentation_link')
+        return context
+
+    async def _pi_request(self, action, stream, *, timeout=None, **payload):
+        if not self.pi_enabled:
+            raise CoreError('CAPABILITY_UNSUPPORTED', 'pi_presentation_link')
+        frame = dict(contract_revision=PI_PRESENTATION_LINK_REVISION, type=action, **self.channel.identity(),
+                     request_id='viewer_pi_' + secrets.token_hex(16), stream_id=stream, **payload)
+        result = await self._exchange(frame, encode_pi_presentation_frame(frame), PI_PRESENTATION_RESULT,
+                                      self._timeout if timeout is None else timeout)
+        if result is None or result['state'] == 'refused':
+            raise CoreError('SESSION_UNKNOWN', 'pi_presentation_link')
+        return result
+
+    async def probe_pi(self, *, scope, target):
+        response = await self._pi_request(PI_PRESENTATION_PROBE, 'piv_' + secrets.token_hex(16), scope=scope, target=target)
+        if response['state'] != 'available':
+            raise CoreError('SESSION_UNKNOWN', 'pi_presentation_link')
+
+    @asynccontextmanager
+    async def open_pi(self, *, scope, target, columns, rows, editor):
+        stream = 'piv_' + secrets.token_hex(16)
+        sequence = read_sequence = 0
+
+        async def read():
+            nonlocal read_sequence
+            while True:
+                response = await self._pi_request(PI_PRESENTATION_NEXT, stream)
+                state = response['state']
+                if state == 'idle':
+                    continue
+                if state == 'closed':
+                    return None
+                if state == 'output':
+                    return decode_pi_presentation_output(response)
+                if (state == 'draft' and editor and response['sequence'] == read_sequence + 1
+                        and response['sequence'] <= sequence):
+                    read_sequence += 1
+                    return decode_pi_presentation_output(response)
+                raise CoreError('SCOPE_MISMATCH', 'pi_presentation_link')
+
+        async def edit(key, *, text):
+            nonlocal sequence
+            sequence += 1
+            response = await self._pi_request(PI_PRESENTATION_EDIT, stream, key=key, text=text, sequence=sequence)
+            if response['state'] != 'edited':
+                raise CoreError('SCOPE_MISMATCH', 'pi_presentation_link')
+
         try:
-            async with asyncio.timeout(self._timeout):
+            response = await self._pi_request(PI_PRESENTATION_OPEN, stream, scope=scope, target=target,
+                                               columns=columns, rows=rows, editor=editor)
+            if response['state'] != 'opened':
+                raise CoreError('SESSION_UNKNOWN', 'pi_presentation_link')
+            yield read, edit if editor else None
+        finally:
+            if not self.closed:
+                with anyio.CancelScope(shield=True), suppress(CoreError):
+                    await self._pi_request(PI_PRESENTATION_CLOSE, stream, timeout=min(self._timeout, 1.5))
+
+    async def _exchange(self, frame, raw, result_type, timeout):
+        pending = self._pending[result_type]
+        if self.closed or len(pending) >= (8 if result_type == PI_PRESENTATION_RESULT else 4):
+            raise CoreError('SESSION_UNKNOWN', 'presentation_link')
+        request_id = frame['request_id']
+        future = asyncio.get_running_loop().create_future()
+        pending[request_id] = (future, presentation_request_hash(frame), frame.get('stream_id'))
+        try:
+            async with asyncio.timeout(timeout):
                 await self._send(raw.decode('utf-8'))
                 context = await future
-            if self.closed or context is None or context['thread_id'] != thread_id:
+            if self.closed:
                 raise CoreError('SESSION_UNKNOWN', 'presentation_link')
             return context
         except (TimeoutError, OSError, RuntimeError) as error:
             raise CoreError('SESSION_UNKNOWN', 'presentation_link') from error
         finally:
-            self._pending.pop(request_id, None)
+            pending.pop(request_id, None)
             future.cancel()
 
     def accept_result(self, frame):
-        if (frame['type'] != PRESENTATION_RESULT
+        pending = self._pending.get(frame['type'])
+        if (pending is None
                 or any(frame[key] != value for key, value in self.channel.identity().items())):
             raise CoreError('SCOPE_MISMATCH', 'presentation_reply')
-        retained = self._pending.get(frame['request_id'])
+        retained = pending.get(frame['request_id'])
         if retained is None or self.closed:
             return
-        future, expected_hash = retained
-        if frame['request_hash'] != expected_hash:
+        future, expected_hash, stream = retained
+        if frame['request_hash'] != expected_hash or frame.get('stream_id') != stream:
             raise CoreError('SCOPE_MISMATCH', 'presentation_reply')
         if not future.done():
-            future.set_result(frame['context'])
+            future.set_result(frame['result'] if frame['type'] == PI_PRESENTATION_RESULT else frame['context'])
 
     def disconnect(self):
         self.closed = True
-        for future, _ in self._pending.values():
-            if not future.done():
-                future.set_result(None)
+        for pending in self._pending.values():
+            for future, _, _ in pending.values():
+                if not future.done():
+                    future.set_result(None)

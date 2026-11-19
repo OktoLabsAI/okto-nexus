@@ -97,6 +97,11 @@ session generation printed by the viewer.
 okto-nexus session receipt --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
 ```
 
+For Pi hosted by Connector, the same commands use the selected Nexus server.
+Pass the exact `--workspace-id` with the Harness ID and use HTTPS from a
+different machine. The remote editor supports drafting and queuing text.
+Reorientation and interruption in the Pi editor require a locally hosted run.
+
 ## Request identity and authorization
 
 `--request-id` supplies a stable client intent ID for an explicit submission.

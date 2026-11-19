@@ -52,7 +52,7 @@ class NativeFactory:
 
 
 class RemoteProject:
-    def __init__(self, runtime, tmp_path, monkeypatch, *, actions=1):
+    def __init__(self, runtime, tmp_path, monkeypatch, *, actions=1, adapter_id='codex_app_server'):
         self.deps, self.client = runtime[:2]
         self.origin = str(self.client.base_url).rstrip('/')
         self.root = tmp_path / 'remote-host'
@@ -73,9 +73,9 @@ class RemoteProject:
         self.flow = RemoteProjectSetup(self.call, self.save_connection, origin=self.origin,
             material_sink=self.material.append, handoff_sink=lambda value: self.handoffs.append(deepcopy(value)))
 
-        binary = self.root / 'synthetic-codex.exe'
+        binary = self.root / ('synthetic-' + adapter_id + '.exe')
         binary.write_bytes(b'Synthetic qualification peer; never executed')
-        self.candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        self.candidate = InstallationCandidate(adapter_id, str(binary), fingerprint(binary), 'explicit', 'selected')
         self.observed = replace(self.candidate, version='fixture-v1')
         self.store = StateStore(state_file(self.root))
         config = configuration(adapter_id=self.candidate.adapter_id, project=str(self.project), label='Remote renewal')

@@ -1,0 +1,61 @@
+{
+  "tasks": ["SI-022", "SI-025"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "01f22e0670dc13c467f34ab53dfe1e2d0aab334b",
+    "core_revision": "74df0284468a8b91705930ec6ddf30ed25624091",
+    "connector_revision": "1eaf8c7c77eb443c7f807320fea34f46cb936059"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "33068c5c673e50b69067be3fe65afb873590a22474199fe8672a055db50cf95e",
+    "core_0.0.16_wheel_sha256": "c2962da669ef948bda8b4acf593314cfdc6a4c56790c4809f7280d5eb6d46bf3",
+    "connector_0.0.15_wheel_sha256": "f77e98fbb6d6d74f7217eb518b73fad63401c061e9b39fc444fad0892b650938",
+    "database_migration": null
+  },
+  "regressions": {
+    "session_cli_presentation_and_remote_tests_installed": 62,
+    "reset_and_inventory_tests_installed": 11,
+    "strict_wheel_check": "PASS",
+    "changed_modules_verified_byte_for_byte": 12,
+    "offline_lock_check": "PASS",
+    "new_selective_ruff_diagnostics": 0
+  },
+  "fixture": {
+    "transport": "actual HTTP, Nexus presentation WebSocket, Connector R4, daemon and SQLite with a synthetic renderer",
+    "external_origin_agent_credential_and_wrong_generation_refused": true,
+    "read_and_write_attached_to_same_scope": true,
+    "draft_only_until_enter": true,
+    "one_queued_message": true,
+    "receipt_recovered_after_detach": true,
+    "interrupt_unavailable_without_exact_remote_target": true,
+    "no_new_work_on_open_or_detach": true
+  },
+  "native_windows_loopback": {
+    "status": "PASS",
+    "pi_version": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "window_and_harness": "real Windows ConPTY and Connector-owned Pi, with isolated profiles on one host",
+    "model_responses": "two deterministic in-process synthetic responses, with outbound Node connections disabled",
+    "external_provider_requests": 0,
+    "writer_draft_invisible_to_queue_until_enter": true,
+    "queued_receipt_recovered_after_writer_detach": true,
+    "reader_observed_both_turn_results": true,
+    "final_delivery_receipt": "ACCEPTED_NATIVE",
+    "same_process_and_session": true,
+    "exact_native_user_messages": 2,
+    "console_modes_restored": true,
+    "canonical_session_close": "SUCCEEDED",
+    "fixture_root": "%TEMP%/nexus-si022-remote-pi-1795078318173",
+    "fixture_hashes": {
+      "test_remote_native_pi.py": "317593d023b76bea81d44094fd97fe01442a479c98732a7ae3aea29f09b29b83",
+      "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+      "client.py": "92f3ce71f91652bb22ef43ef037954119d4ff4bd46754f70c7b07295828b5c17"
+    },
+    "prior_runs": "The initial opening observation elapsed before Nexus received the committed Connector receipt. The next test held the synthetic response until final native acceptance. The passing run extended the opening observation and released the synthetic response once the canonical queue assigned a dispatch operation."
+  },
+  "limitations": [
+    "Exact-run reorientation and interruption remain unavailable in the remote Pi editor.",
+    "Distinct-host TLS, physical network loss and the Connector-side Pi connect offer remain open."
+  ]
+}

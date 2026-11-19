@@ -36,6 +36,8 @@ from ....domain.presentation_protocol import (
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
     PI_PRESENTATION_SUBPROTOCOL,
+    REMOTE_PI_AUDIENCE,
+    REMOTE_PI_SUBPROTOCOL,
     REMOTE_CODEX_AUDIENCE,
     REMOTE_CODEX_SUBPROTOCOL,
 )
@@ -68,7 +70,10 @@ _PRESENTERS = {
     'codex': ('local_codex_presentations', LOCAL_CODEX_AUDIENCE, PRESENTATION_SUBPROTOCOL),
     'pi': ('local_pi_presentations', LOCAL_PI_AUDIENCE, PI_PRESENTATION_SUBPROTOCOL),
     'codex_remote': ('remote_codex_presentations', REMOTE_CODEX_AUDIENCE, REMOTE_CODEX_SUBPROTOCOL),
+    'pi_remote': ('remote_pi_presentations', REMOTE_PI_AUDIENCE, REMOTE_PI_SUBPROTOCOL),
 }
+_REMOTE = frozenset({'codex_remote', 'pi_remote'})
+_PI = frozenset({'pi', 'pi_remote'})
 _RENEW_SECONDS = 15
 
 
@@ -252,12 +257,12 @@ _REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesReq
 
 class _Review(ScopedSession):
     access: Literal['read', 'write'] = 'read'
-    presentation: Literal['codex', 'pi', 'codex_remote'] = 'codex'
+    presentation: Literal['codex', 'pi', 'codex_remote', 'pi_remote'] = 'codex'
 
 
 class _Detach(ScopedSession):
     channel_id: Identifier
-    presentation: Literal['codex', 'pi', 'codex_remote'] = 'codex'
+    presentation: Literal['codex', 'pi', 'codex_remote', 'pi_remote'] = 'codex'
 
 
 def _local_transport(request) -> bool:
@@ -277,14 +282,14 @@ def _transport(request, *, remote):
 
 
 def _presentation_post(request, presentation):
-    remote = presentation == 'codex_remote'
+    remote = presentation in _REMOTE
     return (_transport(request, remote=remote) and same_origin_request(request) and
             (not remote or (request.headers.getlist('origin') == [f'{request.url.scheme}://{request.url.netloc}']
                             and request.headers.get('x-nexus-operator-session-required') == '1')))
 
 
 def _upgrade_allowed(ws: WebSocket, protocol=PRESENTATION_SUBPROTOCOL) -> bool:
-    remote = protocol == REMOTE_CODEX_SUBPROTOCOL
+    remote = protocol in (REMOTE_CODEX_SUBPROTOCOL, REMOTE_PI_SUBPROTOCOL)
     if (not _transport(ws, remote=remote) or ws.query_params or ws.headers.get('sec-fetch-site') == 'cross-site'
             or len(ws.headers.getlist('origin')) > 1
             or remote and not ws.headers.get('origin')
@@ -332,14 +337,14 @@ async def _send(ws: WebSocket, frame):
 
 
 def _services(state, presentation='codex'):
-    if presentation == 'codex_remote' and not (state.deps.config.runtime_session_interaction_enabled
-                                               and state.deps.config.feature_harness_integrations):
+    if presentation in _REMOTE and not (state.deps.config.runtime_session_interaction_enabled
+                                        and state.deps.config.feature_harness_integrations):
         return None
     return getattr(state, _PRESENTERS[presentation][0], None)
 
 
-def _author_callback(services, callback, author):
-    return partial(callback, author=author) if isinstance(services, RemoteCodexPresentations) else callback
+def _author_callback(callback, author, presentation):
+    return partial(callback, author=author) if presentation in _REMOTE else callback
 
 
 def _matching_presenter(mapping, *, pi: bool) -> bool:
@@ -448,7 +453,7 @@ def _pi_review_reply(review):
     return {'status': 'reviewed', 'review_id': review.id} if review is not None else {'status': 'unavailable'}
 
 
-async def _decide_pi_control(state, services, active, request, review):
+async def _decide_pi_control(state, services, active, request, review, *, presentation):
     action, decision = request.kind.split('_')
     if review is None or request.review_id != review.id or review.request.kind != f'{action}_review':
         return {'status': 'refused'}
@@ -458,7 +463,7 @@ async def _decide_pi_control(state, services, active, request, review):
     def cut(uow, human):
         if time.monotonic() >= review.expires:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The Pi control review expired.', {})
-        _verify_writer(state, services, active, uow, human, presentation='pi')
+        _verify_writer(state, services, active, uow, human, presentation=presentation)
 
     common = dict(factory=services.broker.factory, access=services.execution_access,
         authority_fence=services.broker.authority_fence, scope=active['scope'], author=active['author'],
@@ -517,15 +522,15 @@ async def _reply_pi(ws, request, value):
     await _send(ws, {'kind': request.kind, 'request_id': request.request_id, request.kind: value})
 
 
-async def _present_pi(ws, services, active, hello):
+async def _present_pi(ws, services, active, hello, *, presentation):
     access = active['attachment'].access
     state = ws.app.state
 
     async def verify(*, renew=False):
-        if _services(state, 'pi') is not services:
+        if _services(state, presentation) is not services:
             raise ValueError('Presentation owner changed')
         await _worker(services.broker.refresh if renew else services.broker.require_active, **active)
-        if _services(state, 'pi') is not services:
+        if _services(state, presentation) is not services:
             raise ValueError('Presentation owner changed')
 
     async with AsyncExitStack() as stack:
@@ -539,9 +544,11 @@ async def _present_pi(ws, services, active, hello):
             if hello.editor:
                 if access != 'write' or services.open_editor is None or services.next_turn_revision is None:
                     raise ValueError('This presentation cannot open a draft editor')
-                edit, read_output = await stack.enter_async_context(services.open_editor(active['scope'], **viewport))
+                open_editor = _author_callback(services.open_editor, active['author'], presentation)
+                edit, read_output = await stack.enter_async_context(open_editor(active['scope'], **viewport))
             else:
-                frames = await stack.enter_async_context(services.open_renderer(active['scope'], **viewport))
+                open_renderer = _author_callback(services.open_renderer, active['author'], presentation)
+                frames = await stack.enter_async_context(open_renderer(active['scope'], **viewport))
 
                 async def read_output():
                     return await anext(frames, None)
@@ -596,7 +603,9 @@ async def _present_pi(ws, services, active, hello):
                     elif hello.editor and kind in ('steer_review', 'interrupt_review'):
                         review = None
                         request = _PiControlReviewRequest.model_validate(raw)
-                        if kind == 'steer_review' and admitted_steer is None:
+                        if presentation == 'pi_remote':
+                            await _reply_pi(ws, request, _pi_review_reply(None))
+                        elif kind == 'steer_review' and admitted_steer is None:
                             pending = request
                             await edit('snapshot', text=None)
                         else:
@@ -607,7 +616,7 @@ async def _present_pi(ws, services, active, hello):
                     elif hello.editor and kind in ('steer_confirm', 'steer_cancel', 'interrupt_confirm', 'interrupt_cancel'):
                         request = _PiControlDecisionRequest.model_validate(raw)
                         selected, review = review, None
-                        reply = await _decide_pi_control(state, services, active, request, selected)
+                        reply = await _decide_pi_control(state, services, active, request, selected, presentation=presentation)
                         if reply['status'] == 'recorded':
                             if kind == 'interrupt_confirm':
                                 admitted_interrupt = selected.request.client_intent_id
@@ -623,8 +632,8 @@ async def _present_pi(ws, services, active, hello):
                     else:
                         review = None
                         request = _PiEnqueueRequest.model_validate(raw)
-                        reply = await _record_presenter_input(state, services, active, request, presentation='pi')
-                        if _services(state, 'pi') is not services:
+                        reply = await _record_presenter_input(state, services, active, request, presentation=presentation)
+                        if _services(state, presentation) is not services:
                             break
                         await _send(ws, {'request_id': request.request_id, **reply})
                     inbound = asyncio.create_task(ws.receive())
@@ -653,9 +662,9 @@ async def _present_pi(ws, services, active, hello):
                             request = _PiEnqueueRequest(kind='enqueue', request_id=pending.request_id,
                                 client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
                                 content=TextInput(type='text', text=data.draft))
-                            queued = await _record_presenter_input(state, services, active, request, presentation='pi')
+                            queued = await _record_presenter_input(state, services, active, request, presentation=presentation)
                         reply = {'limit_reached': data.limit_reached, 'queued': queued}
-                    if _services(state, 'pi') is not services:
+                    if _services(state, presentation) is not services:
                         break
                     await _reply_pi(ws, pending, reply)
                     pending = None
@@ -675,7 +684,7 @@ async def _present_pi(ws, services, active, hello):
 
 async def _present(ws, services, author, attachment_id, ticket, presentation):
     broker = services.broker
-    pi = presentation == 'pi'
+    pi = presentation in _PI
     remote = presentation == 'codex_remote'
     _, audience, protocol = _PRESENTERS[presentation]
     channel_id = 'viewer_' + secrets.token_hex(16)
@@ -705,10 +714,10 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
             if not pi:
                 await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
         if pi:
-            await _present_pi(ws, services, active, hello)
+            await _present_pi(ws, services, active, hello, presentation=presentation)
             return
-        prove_owner = _author_callback(services, services.prove_owner, author)
-        read_context = _author_callback(services, services.read_context, author)
+        prove_owner = _author_callback(services.prove_owner, author, presentation)
+        read_context = _author_callback(services.read_context, author, presentation)
         history = CodexPresenterHistoryChannel(broker=broker, prove_owner=prove_owner,
                                               access=services.execution_access, **active)
         next_renewal = anyio.current_time() + _RENEW_SECONDS
@@ -781,7 +790,7 @@ def build_router():
         token = request.cookies.get(COOKIE)
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to review this presentation.')
-        pi = body.presentation == 'pi'
+        pi = body.presentation in _PI
         services = _services(state, body.presentation)
         writing = body.access == 'write'
         if (services is None or writing and services.next_turn_revision is None
@@ -794,19 +803,19 @@ def build_router():
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
             author = InputAuthor(reference, 'native_terminal')
             authority = {'scope': scope, 'author': author, 'audience': _PRESENTERS[body.presentation][1]}
-            mapping, _ = await _author_callback(services, services.prove_owner, author)(scope)
+            mapping, _ = await _author_callback(services.prove_owner, author, body.presentation)(scope)
             if not _matching_presenter(mapping, pi=pi) or _services(state, body.presentation) is not services:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
             review_capability = services.broker.review_writer if writing else services.broker.review_reader
             reviewed = await _worker(review_capability, **authority)
             if not pi:
-                context = await _author_callback(services, services.read_context, author)(scope)
+                context = await _author_callback(services.read_context, author, body.presentation)(scope)
                 if context is None or context.thread_id != mapping.codex_thread_id:
                     raise CoreError('SESSION_CONFLICT', 'native_presentation')
             if (reviewed != await _worker(review_capability, **authority)
                     or _services(state, body.presentation) is not services):
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
-            strategy = 'codex_remote' if body.presentation == 'codex_remote' else f'{body.presentation}_local'
+            strategy = body.presentation if body.presentation in _REMOTE else f'{body.presentation}_local'
             details = {'attach_strategy': f'{strategy}_read', 'capability_revision': reviewed}
             if writing:
                 def input_revision():
@@ -835,7 +844,7 @@ def build_router():
         token = request.cookies.get(COOKIE)
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to prepare this presentation.')
-        pi = body.presentation == 'pi'
+        pi = body.presentation in _PI
         services = _services(state, body.presentation)
         if (services is None or body.intent != 'attach_live'
                 or body.access == 'write' and services.next_turn_revision is None):
@@ -846,7 +855,7 @@ def build_router():
             if reference is None:
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
             author = InputAuthor(reference, 'native_terminal')
-            mapping, _ = await _author_callback(services, services.prove_owner, author)(scope)
+            mapping, _ = await _author_callback(services.prove_owner, author, body.presentation)(scope)
             if not _matching_presenter(mapping, pi=pi) or _services(state, body.presentation) is not services:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
             offer = await _worker(services.broker.prepare, scope=scope, author=author,
