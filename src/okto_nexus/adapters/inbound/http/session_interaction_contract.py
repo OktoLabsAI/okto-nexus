@@ -235,7 +235,7 @@ class PrepareAttachment(ScopedInteraction):
     client_intent_id: Identifier
     intent: Literal["attach_live", "resume_saved"]
     access: Literal["read", "write"]
-    presentation: Literal["codex", "pi", "codex_remote", "pi_remote"] = "codex"
+    presentation: Literal["codex", "pi", "claude", "codex_remote", "pi_remote"] = "codex"
     expected_writer_epoch: Annotated[int, Field(ge=0, lt=MAX_SQLITE_INTEGER)] | None = None
     takeover: bool = False
 

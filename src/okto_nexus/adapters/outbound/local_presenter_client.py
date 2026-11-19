@@ -31,6 +31,7 @@ from ...application.codex_viewer_protocol import (
 )
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
+    CLAUDE_PRESENTATION_SUBPROTOCOL,
     MAX_PI_PRESENTATION_BYTES,
     MAX_PRESENTATION_NOTIFICATIONS,
     MAX_PRESENTATION_REQUEST_BYTES,
@@ -148,11 +149,13 @@ class _LocalPresenter:
                 return value
         raise OSError('The presentation response ended early')
 
-    def read_pi_output(self) -> bytes:
+    def read_terminal_output(self) -> bytes:
         """Read a bounded binary frame with idle waits interruptible by the terminal."""
         while True:
             if output := self.poll_pi_output(1):
                 return output
+
+    read_pi_output = read_terminal_output
 
     def poll_pi_output(self, timeout: float) -> bytes | None:
         try:
@@ -481,17 +484,23 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
 
 @contextmanager
 def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id,
-                            writer=None, pi_viewport=None, pi_editor=False, remote=False, on_intent=None):
+                            writer=None, pi_viewport=None, pi_editor=False, remote=False, on_intent=None,
+                            claude=False):
     """Exchange the offer and challenge without passing the human session to the viewer."""
     origin = _presentation_origin(api, scope, remote=remote)
     if pi_editor and (pi_viewport is None or writer is None):
+        raise _unavailable()
+    if claude and (remote or writer is not None or pi_viewport is not None):
         raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     access = 'write' if writer is not None else 'read'
     writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
-    if pi_viewport is not None:
+    if claude:
+        presentation = {'presentation': 'claude'}
+        protocol = CLAUDE_PRESENTATION_SUBPROTOCOL
+    elif pi_viewport is not None:
         presentation = {'presentation': 'pi_remote' if remote else 'pi'}
         protocol = REMOTE_PI_SUBPROTOCOL if remote else PI_PRESENTATION_SUBPROTOCOL
     else:

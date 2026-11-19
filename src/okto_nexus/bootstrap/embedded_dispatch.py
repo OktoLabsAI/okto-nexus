@@ -266,6 +266,27 @@ class EmbeddedDispatchOwner:
         return state
 
     @asynccontextmanager
+    async def open_native_claude_terminal(self, scope: InputScope):
+        """Read the canonical successor without transferring its input or lifecycle."""
+        async with AsyncExitStack() as stack:
+            async with self._native_presentation_context(scope) as selected:
+                runtime_scope, mapping, target, channel = selected
+                if mapping.adapter_id != 'claude_stream':
+                    raise CoreError('CAPABILITY_UNSUPPORTED', 'claude_terminal_read')
+                frames = await stack.enter_async_context(self.host.open_r4_claude_terminal(runtime_scope, target,
+                    connection_id=channel.connection_id, connection_generation=channel.connection_generation))
+
+            async def output():
+                async for frame in frames:
+                    async with self._native_presentation_context(scope) as current:
+                        if current != selected:
+                            raise CoreError('STALE_GENERATION', 'claude_terminal_read')
+                    yield frame
+
+            async with aclosing(output()) as guarded:
+                yield guarded
+
+    @asynccontextmanager
     async def open_native_pi_renderer(self, scope: InputScope, *, columns: int, rows: int):
         """Keep output bound to the opening's canonical mapping for a trusted caller."""
         async with AsyncExitStack() as stack:

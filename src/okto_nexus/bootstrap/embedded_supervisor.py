@@ -47,6 +47,7 @@ class EmbeddedRuntimeSupervisor:
         from .runtime_host import EmbeddedRuntimeHost
         from .runtime_boot_owner import RuntimeBootOwner
         from .local_codex_presentations import publish_local_codex_presentations
+        from .local_claude_presentations import publish_local_claude_presentations
         from .local_pi_presentations import publish_local_pi_presentations
         from ..application.execution_local_launch import ApprovedLocalLaunch
         from ..adapters.inbound.mcp.tools.harness import run_runtime_boot
@@ -96,6 +97,7 @@ class EmbeddedRuntimeSupervisor:
         state.embedded_dispatch_owner = coordinator.embedded = dispatch
         state.runtime_boot_owner = coordinator.runtime_boot = replacement_boot
         publish_local_codex_presentations(self.app, dispatch)
+        publish_local_claude_presentations(self.app, dispatch)
         publish_local_pi_presentations(self.app, dispatch)
         self._candidate = None
         self._starting = dispatch

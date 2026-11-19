@@ -132,6 +132,34 @@ class EmbeddedRuntimeHost:
             return False
         return selection[6] and callable(getattr(task.result()[0], 'open_live_pi_renderer', None))
 
+    def has_owned_claude_terminal(self, server_id: str, executor_id: str, session_id: str) -> bool:
+        scope = {'server_id': server_id, 'executor_id': executor_id, 'session_id': session_id}
+        try:
+            _, selection, task = self._existing_presentation_runtime(scope, 'claude_terminal_read')
+        except CoreError:
+            return False
+        return selection[7] is not None and callable(getattr(task.result()[0], 'open_live_claude_terminal', None))
+
+    @asynccontextmanager
+    async def open_r4_claude_terminal(self, scope: Mapping, target: NativeSessionTarget, *,
+                                      connection_id: str, connection_generation: int):
+        stage = 'claude_terminal_read'
+        key, selection, task = self._existing_presentation_runtime(scope, stage)
+        attach = getattr(task.result()[0], 'open_live_claude_terminal', None)
+        if selection[7] is None or not callable(attach):
+            raise CoreError('CAPABILITY_UNSUPPORTED', stage)
+        async with attach(scope, target, connection_id=connection_id,
+                          connection_generation=connection_generation) as frames:
+            async def output():
+                async for frame in frames:
+                    if (self._draining or self._closing or self._runtime_tasks.get(key) is not task
+                            or self._selections.get(key) is not selection):
+                        raise CoreError('STALE_GENERATION', stage)
+                    yield frame
+
+            async with aclosing(output()) as guarded:
+                yield guarded
+
     def _pi_renderer_owner(self, scope):
         stage = 'pi_renderer'
         key, selection, task = self._existing_presentation_runtime(scope, stage)

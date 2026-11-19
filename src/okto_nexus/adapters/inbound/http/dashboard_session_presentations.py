@@ -29,8 +29,10 @@ from ....application.session_interaction_controls import read_human_interrupt_re
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_receipts import read_session_input_receipt
 from ....domain.presentation_protocol import (
+    CLAUDE_PRESENTATION_SUBPROTOCOL,
     LOCAL_CODEX_AUDIENCE,
     LOCAL_PI_AUDIENCE,
+    LOCAL_CLAUDE_AUDIENCE,
     MAX_PI_PRESENTATION_BYTES,
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
@@ -69,11 +71,13 @@ from .session_interaction_contract import (
 _PRESENTERS = {
     'codex': ('local_codex_presentations', LOCAL_CODEX_AUDIENCE, PRESENTATION_SUBPROTOCOL),
     'pi': ('local_pi_presentations', LOCAL_PI_AUDIENCE, PI_PRESENTATION_SUBPROTOCOL),
+    'claude': ('local_claude_presentations', LOCAL_CLAUDE_AUDIENCE, CLAUDE_PRESENTATION_SUBPROTOCOL),
     'codex_remote': ('remote_codex_presentations', REMOTE_CODEX_AUDIENCE, REMOTE_CODEX_SUBPROTOCOL),
     'pi_remote': ('remote_pi_presentations', REMOTE_PI_AUDIENCE, REMOTE_PI_SUBPROTOCOL),
 }
 _REMOTE = frozenset({'codex_remote', 'pi_remote'})
 _PI = frozenset({'pi', 'pi_remote'})
+_TERMINAL = _PI | {'claude'}
 _RENEW_SECONDS = 15
 
 
@@ -99,6 +103,14 @@ class LocalPiPresentations:
     open_editor: Callable[..., AbstractAsyncContextManager] | None = None
     renderer_locks: WeakValueDictionary[InputScope, asyncio.Lock] = field(default_factory=WeakValueDictionary,
                                                                           repr=False, compare=False)
+
+
+@dataclass(frozen=True, slots=True)
+class LocalClaudePresentations:
+    broker: SessionAttachmentBroker
+    prove_owner: Callable[[InputScope], Awaitable[tuple[ManagedNativeSession, NativeSessionOwnerProof]]]
+    open_reader: Callable[..., AbstractAsyncContextManager[AsyncIterator[bytes]]]
+    next_turn_revision = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -257,12 +269,12 @@ _REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesReq
 
 class _Review(ScopedSession):
     access: Literal['read', 'write'] = 'read'
-    presentation: Literal['codex', 'pi', 'codex_remote', 'pi_remote'] = 'codex'
+    presentation: Literal['codex', 'pi', 'claude', 'codex_remote', 'pi_remote'] = 'codex'
 
 
 class _Detach(ScopedSession):
     channel_id: Identifier
-    presentation: Literal['codex', 'pi', 'codex_remote', 'pi_remote'] = 'codex'
+    presentation: Literal['codex', 'pi', 'claude', 'codex_remote', 'pi_remote'] = 'codex'
 
 
 def _local_transport(request) -> bool:
@@ -347,8 +359,10 @@ def _author_callback(callback, author, presentation):
     return partial(callback, author=author) if presentation in _REMOTE else callback
 
 
-def _matching_presenter(mapping, *, pi: bool) -> bool:
-    return mapping.adapter_id == 'pi_rpc' if pi else mapping.codex_thread_id is not None
+def _matching_presenter(mapping, presentation) -> bool:
+    if presentation == 'claude':
+        return mapping.adapter_id == 'claude_stream'
+    return mapping.adapter_id == 'pi_rpc' if presentation in _PI else mapping.codex_thread_id is not None
 
 
 def _verify_writer(state, services, active, uow, human, *, presentation):
@@ -681,6 +695,55 @@ async def _present_pi(ws, services, active, hello, *, presentation):
     await ws.close(code=4409)
 
 
+async def _present_claude(ws, services, active):
+    if active['attachment'].access != 'read':
+        raise ValueError('Claude terminal attachment is read-only')
+
+    async def verify(renew=False):
+        if _services(ws.app.state, 'claude') is not services:
+            raise ValueError('Presentation owner changed')
+        await _worker(services.broker.refresh if renew else services.broker.require_active, **active)
+        if _services(ws.app.state, 'claude') is not services:
+            raise ValueError('Presentation owner changed')
+
+    async with AsyncExitStack() as stack:
+        with anyio.fail_after(10):
+            await verify()
+            frames = await stack.enter_async_context(services.open_reader(active['scope']))
+            await verify()
+            await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': 'read'})
+        inbound = asyncio.create_task(ws.receive())
+        output = asyncio.create_task(anext(frames, None))
+        renew_at = anyio.current_time() + _RENEW_SECONDS
+        try:
+            while True:
+                done, _ = await asyncio.wait((inbound, output),
+                    timeout=max(0, renew_at - anyio.current_time()), return_when=asyncio.FIRST_COMPLETED)
+                if inbound in done:
+                    if inbound.result()['type'] == 'websocket.disconnect':
+                        return
+                    raise ValueError('Claude terminal attachment does not accept input')
+                if anyio.current_time() >= renew_at:
+                    await verify(renew=True)
+                    renew_at = anyio.current_time() + _RENEW_SECONDS
+                if output in done:
+                    frame = output.result()
+                    if frame is None:
+                        break
+                    if type(frame) is not bytes or not 1 <= len(frame) <= MAX_PI_PRESENTATION_BYTES:
+                        raise ValueError('Invalid terminal frame')
+                    await verify()
+                    with anyio.fail_after(5):
+                        await ws.send_bytes(frame)
+                    output = asyncio.create_task(anext(frames, None))
+        finally:
+            inbound.cancel()
+            output.cancel()
+            with anyio.CancelScope(shield=True):
+                await asyncio.gather(inbound, output, return_exceptions=True)
+    await ws.close(code=1000)
+
+
 async def _present(ws, services, author, attachment_id, ticket, presentation):
     broker = services.broker
     pi = presentation in _PI
@@ -710,8 +773,11 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                 await _worker(broker.require_active, **active)
                 if _services(ws.app.state, presentation) is not services:
                     raise ValueError('Presentation owner changed')
-            if not pi:
+            if presentation not in _TERMINAL:
                 await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
+        if presentation == 'claude':
+            await _present_claude(ws, services, active)
+            return
         if pi:
             await _present_pi(ws, services, active, hello, presentation=presentation)
             return
@@ -789,11 +855,11 @@ def build_router():
         token = request.cookies.get(COOKIE)
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to review this presentation.')
-        pi = body.presentation in _PI
+        terminal = body.presentation in _TERMINAL
         services = _services(state, body.presentation)
         writing = body.access == 'write'
         if (services is None or writing and services.next_turn_revision is None
-                or not pi and services.read_context is None):
+                or not terminal and services.read_context is None):
             return _error(409, 'CONFLICT', 'This presentation is currently unavailable.')
         scope = body.input_scope()
         try:
@@ -803,11 +869,11 @@ def build_router():
             author = InputAuthor(reference, 'native_terminal')
             authority = {'scope': scope, 'author': author, 'audience': _PRESENTERS[body.presentation][1]}
             mapping, _ = await _author_callback(services.prove_owner, author, body.presentation)(scope)
-            if not _matching_presenter(mapping, pi=pi) or _services(state, body.presentation) is not services:
+            if not _matching_presenter(mapping, body.presentation) or _services(state, body.presentation) is not services:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
             review_capability = services.broker.review_writer if writing else services.broker.review_reader
             reviewed = await _worker(review_capability, **authority)
-            if not pi:
+            if not terminal:
                 context = await _author_callback(services.read_context, author, body.presentation)(scope)
                 if context is None or context.thread_id != mapping.codex_thread_id:
                     raise CoreError('SESSION_CONFLICT', 'native_presentation')
@@ -843,7 +909,7 @@ def build_router():
         token = request.cookies.get(COOKIE)
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to prepare this presentation.')
-        pi = body.presentation in _PI
+        terminal = body.presentation in _TERMINAL
         services = _services(state, body.presentation)
         if (services is None or body.intent != 'attach_live'
                 or body.access == 'write' and services.next_turn_revision is None):
@@ -855,7 +921,7 @@ def build_router():
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
             author = InputAuthor(reference, 'native_terminal')
             mapping, _ = await _author_callback(services.prove_owner, author, body.presentation)(scope)
-            if not _matching_presenter(mapping, pi=pi) or _services(state, body.presentation) is not services:
+            if not _matching_presenter(mapping, body.presentation) or _services(state, body.presentation) is not services:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
             offer = await _worker(services.broker.prepare, scope=scope, author=author,
                 audience=_PRESENTERS[body.presentation][1],
@@ -866,7 +932,7 @@ def build_router():
         except CoreError:
             return _error(409, 'CONFLICT', 'This presentation is currently unavailable.')
         return JSONResponse({'version': 1, 'attachment_id': offer.attachment_id, 'state': offer.state,
-                             'ticket': offer.ticket, 'live_updates': True if pi else services.live_updates},
+                             'ticket': offer.ticket, 'live_updates': True if terminal else services.live_updates},
                             status_code=201 if offer.ticket else 200, headers=_HEADERS)
 
     @router.websocket('/attachments/{attachment_id}/stream')

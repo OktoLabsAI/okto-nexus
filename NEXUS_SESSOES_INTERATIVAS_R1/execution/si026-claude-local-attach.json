@@ -1,0 +1,47 @@
+{
+  "task": "SI-026",
+  "status": "IN_PROGRESS",
+  "core_revision": "854b91d8c6e023ddd91df392853423d3c6f47321",
+  "connector_revision": "8ee88ceaf1633a187ce48e5b2a152425fecf8fb7",
+  "artifacts_sha256": {
+    "core": "bdebda134bd0c35f6ac111730ac3bf6874dfb60380d0b4ba086ce2813acd9852",
+    "connector": "b98ce7b2aabb615f2cc9ae75a36f134d60fc5d3eb674098f6d1486f8ea56e493",
+    "nexus": "60785ee84fec872640c0ae723b2d4b6b73b23f0db1a323cd3b420982709cdaff"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "profile": "explicit plan and locally approved fixture provider reference, tools denied",
+    "source_fixture": "D:/nexus-si026-attach-source-1795094763909",
+    "installed_fixture": "D:/nexus-si026-attach-wheel-final-1795094849014",
+    "probe_sha256": "ea33d045ff048aac392e382b5bb30da6b685a9bd0b42f269ca7eead069648a82",
+    "observations_sha256": "d94ff2ecfe76cf128926c2abe12030dcb09ca1265daf6d45f5c45b19502e3ec6",
+    "exact_saved_context": true,
+    "reader_admitted_before_first_turn": true,
+    "detached_while_turn_submitted": true,
+    "same_process_birth_at_reattachment": true,
+    "result_observed_in_pseudoconsole": true,
+    "turn_and_close_receipts": "SUCCEEDED",
+    "detached_attachment_count": 2,
+    "remaining_job_pids": []
+  },
+  "regressions_corrected": [
+    "A live idle successor needed an opening lifecycle event before the presenter could match its stream.",
+    "The redactor retained the final visible text during idle; the reader now releases safe text and keeps potentially partial secrets."
+  ],
+  "verification": {
+    "installed_core_tests": 18,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 59,
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed",
+    "lint": "Changed Nexus and Core presentation files passed focused checks. Core runtime.py has four diagnostics reproduced at the baseline revision."
+  },
+  "limitations": [
+    "Local read-only text projection of the managed Windows terminal with a bounded replay buffer.",
+    "CLI keyboard detach tested with simulated frames. Live executable verification used the authenticated WebSocket without a physical console.",
+    "Interactive rendering, operator writes and approvals, terminal controls, remote attach and the wider Claude profile matrix require qualification."
+  ],
+  "migration": "none"
+}

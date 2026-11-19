@@ -1,0 +1,11 @@
+# SI-026 — Acompanhamento local do terminal Claude
+
+O comando `okto-nexus session attach` abre uma leitura do terminal que o Core mantém para a sessão retomada. O Nexus exige uma sessão de operador, emite um ticket de uso único e verifica a sessão, a geração do dono, o processo e a autorização vigente. O leitor usa um cursor independente. `Ctrl+C` desconecta somente o leitor. O terminal registra a prontidão antes do primeiro turno, assim uma sessão retomada e ociosa já pode ser acompanhada.
+
+No Windows, com o Claude Code 2.1.328 e respostas simuladas em loopback, o Nexus retomou o histórico exato e abriu o primeiro leitor na sessão ociosa. O leitor saiu enquanto o turno aguardava a resposta do simulador. O turno chegou a `SUCCEEDED` no mesmo processo e o segundo leitor recebeu o resultado do pseudoconsole. As duas conexões registraram `DETACHED` e o fechamento canônico encerrou o processo. A jornada foi repetida a partir do código-fonte e com os wheels instalados. Os testes de contrato verificaram a recusa de escrita e o comportamento de `Ctrl+C` no cliente. [Cenários e hashes](si026-claude-local-attach.json)
+
+O ensaio revelou dois problemas corrigidos neste marco. O Nexus só conhecia o fluxo de eventos do terminal depois do primeiro turno. O filtro de segredos também podia reter o final de uma resposta curta enquanto o terminal estava quieto. Agora a prontidão registra o fluxo e a leitura libera o texto ocioso após verificar possíveis fragmentos de credenciais.
+
+O leitor mostra texto, com os controles ANSI removidos. Redesenhos podem produzir texto repetido ou omitir elementos do layout. A reprodução usa o buffer de 512 KiB do terminal e recusa a leitura se o início já saiu do buffer. O ensaio do binário qualificou o transporte local via WebSocket e processo real. O teste de `Ctrl+C` do CLI foi automatizado com um leitor simulado. A matriz de configuração, a apresentação interativa, as aprovações e os controles no terminal, a experiência do CLI em um console real e o transporte remoto continuam em andamento.
+
+Sem migração de dados. O rollback reverte o marco do Nexus e restaura seus wheels anteriores, depois reverte o pin do Connector e a alteração do Core. O próximo marco integra os controles do operador à sessão gerenciada com revisão de efeito e recibos canônicos.

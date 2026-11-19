@@ -8,6 +8,7 @@ async def start_runtime_services(app, *, native_factory=None):
     from .server_shutdown import ServerShutdownCoordinator
     from .runtime_boot_owner import RuntimeBootOwner
     from .local_codex_presentations import publish_local_codex_presentations
+    from .local_claude_presentations import publish_local_claude_presentations
     from .local_pi_presentations import publish_local_pi_presentations
     from ..adapters.inbound.http.dashboard_session_presentations import LocalPiPresentations, RemoteCodexPresentations
     from ..application.session_attachment_broker import SessionAttachmentBroker
@@ -110,6 +111,7 @@ async def start_runtime_services(app, *, native_factory=None):
         app.state.runtime_boot_owner = boot
         boot.start()
     publish_local_codex_presentations(app, dispatch)
+    publish_local_claude_presentations(app, dispatch)
     publish_local_pi_presentations(app, dispatch)
     handoffs = None
     if scheduling or input_scheduling:

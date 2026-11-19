@@ -170,6 +170,18 @@ def _approve_writer_transfer(writer):
         return False
 
 
+def _show_claude_transcript(link):
+    decoder = codecs.getincrementaldecoder('utf-8')()
+    try:
+        while True:
+            sys.stdout.write(decoder.decode(link.read_terminal_output()))
+            sys.stdout.flush()
+    except KeyboardInterrupt:
+        print()
+    except UnicodeError:
+        raise ConnectionError('PRESENTATION_UNAVAILABLE', 'The Claude terminal returned invalid text.') from None
+
+
 def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False):
     """Open a viewer for the exact existing session and return the detach receipt."""
     selected = _select_session(call, binding, session_id, interactive=interactive)
@@ -190,6 +202,19 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     if remote and binding.get('adapter_id') not in ('codex_app_server', 'pi_rpc'):
         raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE',
                               'Remote terminal attachment is unavailable for this harness.')
+    if binding.get('adapter_id') == 'claude_stream':
+        if write or viewer_executable is not None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The managed Claude terminal is read-only.')
+        revision = review_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                             presentation='claude')
+        print('Watching the Claude terminal. Ctrl+C detaches this viewer.', flush=True)
+        with open_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                     capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
+                                     claude=True) as link:
+            _show_claude_transcript(link)
+        _display({'state': 'detached'}, False)
+        return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
+                'attach_strategy': 'claude_local_read', 'capability_revision': revision}
     if binding.get('adapter_id') == 'pi_rpc':
         if viewer_executable is not None or write and sys.platform != 'win32':
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')

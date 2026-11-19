@@ -51,7 +51,7 @@ from okto_nexus.application.execution_native_session_mapping import (
 )
 from okto_nexus.bootstrap import local_pi_presentations
 from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_presentations
-from okto_nexus.domain.presentation_protocol import PI_PRESENTATION_SUBPROTOCOL
+from okto_nexus.domain.presentation_protocol import CLAUDE_PRESENTATION_SUBPROTOCOL, PI_PRESENTATION_SUBPROTOCOL
 from okto_nexus.domain.session_interaction import InputAuthor
 from tests.session_interaction.test_queue_storage import database as queue_database
 
@@ -106,7 +106,10 @@ def transport(database, tmp_path, monkeypatch):
     another_token = auth.login('test-operator', 'synthetic-local-operator-password')
     auth.authority_reference(another_token)
     app = FastAPI()
-    app.state.deps = SimpleNamespace(config=SimpleNamespace(transport_security='http_https'))
+    app.state.deps = SimpleNamespace(
+        config=SimpleNamespace(transport_security='http_https'),
+        runtime_availability=SimpleNamespace(current_host=lambda *_: None),
+    )
     app.state.operator_auth = auth
     broker = SessionAttachmentBroker(factory, authority_fence=auth.authority_fence,
         current_capability=lambda *_: 'capability-1')
@@ -167,6 +170,53 @@ def attachment_state(transport, offer):
           FROM session_attachments WHERE attachment_id=?""", (offer['attachment_id'],)).fetchone()
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
         return tuple(row)
+
+
+def test_claude_terminal_reader_detaches_and_refuses_input(transport):
+    readers = []
+
+    async def prove(scope):
+        assert scope == transport.scope
+        return SimpleNamespace(adapter_id='claude_stream'), 'same-owned-terminal'
+
+    @asynccontextmanager
+    async def open_reader(scope):
+        assert scope == transport.scope
+        readers.append('opened')
+
+        async def output():
+            yield b'Marker from the existing terminal\r\n'
+            await anyio.sleep_forever()
+
+        try:
+            yield output()
+        finally:
+            readers.append('detached')
+
+    broker = transport.app.state.local_codex_presentations.broker
+    transport.app.state.local_claude_presentations = dashboard_session_presentations.LocalClaudePresentations(
+        broker, prove, open_reader)
+    review = transport.client.post(PREFIX + f'/sessions/{transport.scope.session.session_id}/attachments:review',
+        headers={'x-nexus-ui': '1'}, json=document(transport.scope) | {'presentation': 'claude'})
+    assert review.status_code == 200 and review.json()['attach_strategy'] == 'claude_local_read'
+    refused = prepare(transport, presentation='claude', access='write', expected_writer_epoch=0)
+    assert refused.status_code == 409
+
+    first = prepare(transport, presentation='claude').json()
+    with stream(transport, first, protocol=CLAUDE_PRESENTATION_SUBPROTOCOL) as ws:
+        attach(ws, transport.scope)
+        assert ws.receive_bytes() == b'Marker from the existing terminal\r\n'
+    assert attachment_state(transport, first) == ('DETACHED', None, None)
+
+    second = prepare(transport, 'second-claude-reader', presentation='claude').json()
+    with stream(transport, second, protocol=CLAUDE_PRESENTATION_SUBPROTOCOL) as ws:
+        attach(ws, transport.scope)
+        assert ws.receive_bytes().startswith(b'Marker from')
+        ws.send_bytes(b'/exit\r')
+        with pytest.raises(WebSocketDisconnect):
+            ws.receive_bytes()
+    assert readers == ['opened', 'detached', 'opened', 'detached']
+    assert attachment_state(transport, second) == ('DETACHED', None, None)
 
 
 def test_authenticated_read_disconnect_and_replay_leave_work_untouched(transport):

@@ -221,6 +221,44 @@ def test_pi_attachment_selects_the_ticketed_transcript_and_detaches_locally(monk
         session.attach_session(call, binding, session_id='session-a', interactive=True, viewer_executable='another-viewer')
 
 
+def test_claude_attachment_reads_the_exact_session_and_detaches_locally(monkeypatch, capsys):
+    call = Catalog()
+    call.token = 'synthetic-cookie'
+    binding = BINDING | {'adapter_id': 'claude_stream'}
+    closes = []
+
+    def review(api, **selection):
+        assert api is call and selection['expected_session_generation'] == 7
+        assert selection['presentation'] == 'claude' and selection['scope']['session_id'] == 'session-a'
+        return 'claude-revision'
+
+    def read():
+        try:
+            return next(frames)
+        except StopIteration:
+            raise KeyboardInterrupt from None
+
+    @contextmanager
+    def attach(api, **selection):
+        assert api is call and selection['capability_revision'] == 'claude-revision'
+        assert selection['scope']['session_id'] == 'session-a' and selection['claude'] is True
+        try:
+            yield SimpleNamespace(attachment_id='claude-reader', read_terminal_output=read)
+        finally:
+            closes.append('claude-reader')
+
+    frames = iter([b'Working \xe2', b'\x9c\x93'])
+    monkeypatch.setattr(session, 'review_local_presentation', review)
+    monkeypatch.setattr(session, 'open_local_presentation', attach)
+    result = session.attach_session(call, binding, session_id='session-a', interactive=True)
+    assert result['attach_strategy'] == 'claude_local_read' and result['status'] == 'detached'
+    assert closes == ['claude-reader']
+    output = capsys.readouterr().out
+    assert 'Ctrl+C detaches' in output and 'Working ✓' in output
+    with pytest.raises(ConnectionError, match='read-only'):
+        session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
+
+
 def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch):
     call = Catalog()
     call.token = 'synthetic-cookie'
