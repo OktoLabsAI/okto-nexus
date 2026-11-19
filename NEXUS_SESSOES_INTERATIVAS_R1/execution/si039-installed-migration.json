@@ -1,0 +1,176 @@
+{
+  "candidate": {
+    "nexus": {
+      "version": "0.3.8",
+      "wheel_sha256": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+      "inspected_head": "6806580630cdfa5b4879f4d5bcbf589dbbbe556f",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+      "inspected_head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2"
+    },
+    "core": {
+      "version": "0.0.16",
+      "wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+      "inspected_head": "454c9700e0def181c81fe633857a25b48e125512",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8"
+    }
+  },
+  "migrated_databases": [
+    {
+      "test_database": "codex-recovered-resume",
+      "source_schema": 182,
+      "target_schema": 187,
+      "applied": [
+        183,
+        184,
+        185,
+        186,
+        187
+      ],
+      "second_apply": [],
+      "source_preserved": true,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "initial_and_upgraded_table_hashes": {
+        "execution_receipts": {
+          "rows": 4,
+          "sha256": "09d1336273c6afaddc122ae56f579f38e4140e0ea70e09729130ce0e20fe6ce8"
+        },
+        "execution_operations": {
+          "rows": 4,
+          "sha256": "ea5291eb57112a03233643185f9c403393496d1f26168ea13e4db2f59a909bcc"
+        },
+        "execution_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "0b06089bf9dc1480b81fa5c10381fc42e7b0377ab754d17875e52ccf9e05a2fa"
+        },
+        "execution_event_ingress": {
+          "rows": 7,
+          "sha256": "ecd31746b0c8ddcd4a8e71d1488bf1e523ba12693a48d11aa9118ba76436863d"
+        },
+        "session_interaction_inputs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "session_interaction_queues": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "embedded_codex_saved_contexts": {
+          "rows": 2,
+          "sha256": "6e468701fd92d0be4b812e2e7b0d6730afb2badfbc8b45daa821b0d60f9489f2"
+        }
+      },
+      "queue_states": {},
+      "inferred_adapter_for_legacy_saved_context": "codex_app_server"
+    },
+    {
+      "test_database": "pi-active-queued-input",
+      "source_schema": 186,
+      "target_schema": 187,
+      "applied": [
+        187
+      ],
+      "second_apply": [],
+      "source_preserved": true,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "initial_and_upgraded_table_hashes": {
+        "execution_receipts": {
+          "rows": 2,
+          "sha256": "35dbd17d98c865676fccc88394e32e951ae64817e2c9bd03382db606e3e49474"
+        },
+        "execution_operations": {
+          "rows": 2,
+          "sha256": "019e8db3ed99c391360438a1dd4b5109137cdaacfdc8dd2ec35fe6c1a19d5a4f"
+        },
+        "execution_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 1,
+          "sha256": "15cd78057c0b4cdf147afac4c5304fec993efda5a764f438e80b5ace823c329c"
+        },
+        "execution_event_ingress": {
+          "rows": 7,
+          "sha256": "30865c7f4f0b57115edbc98460223303f19de8705a23a0b521958e0ef211ae5b"
+        },
+        "session_interaction_inputs": {
+          "rows": 1,
+          "sha256": "5eafa784cedbcc62b5f41e9ef142cc9d091e6c777c2cc2badf4378ef4d505486"
+        },
+        "session_interaction_queues": {
+          "rows": 1,
+          "sha256": "dc0648da065dbfdee9209181c275a15506da45b2eebadca1ef725b720a59fdcf"
+        }
+      },
+      "queue_states": {
+        "QUEUED": 1
+      },
+      "inferred_adapter_for_legacy_saved_context": null
+    },
+    {
+      "test_database": "pi-closed-accepted-input",
+      "source_schema": 186,
+      "target_schema": 187,
+      "applied": [
+        187
+      ],
+      "second_apply": [],
+      "source_preserved": true,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "initial_and_upgraded_table_hashes": {
+        "execution_receipts": {
+          "rows": 6,
+          "sha256": "9a047fc789b47e6518b54dc8b0a1d6fed2397f9c7d8861fb996b9336874e0623"
+        },
+        "execution_operations": {
+          "rows": 4,
+          "sha256": "c76eb35283e01d69fa6fbdff1bed9b8b3eab1e80c2395588edcd8dea4b4783f8"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "63598be4ff6a6ba3be29886a98e636f962e05090b16a5744e098cea89bbaa78b"
+        },
+        "execution_sessions": {
+          "rows": 1,
+          "sha256": "e80498070b4fd67e12b4ed5ce24b037ffd980b4b27b9e459db6aa75f22ffc5e4"
+        },
+        "execution_event_ingress": {
+          "rows": 27,
+          "sha256": "364afe415858b43091521b67dbbf3aee57ed5d7d36b383e31637360dc66e6880"
+        },
+        "session_interaction_inputs": {
+          "rows": 1,
+          "sha256": "fc41719c11363e1629a7dc811e72cfe5d2953838dc413d0f1253fe7edcdce438"
+        },
+        "session_interaction_queues": {
+          "rows": 1,
+          "sha256": "c15b5f2ce752e8fa75e6f7965030651e686a0441d657d184152ccddce01f3ff6"
+        }
+      },
+      "queue_states": {
+        "ACCEPTED_NATIVE": 1
+      },
+      "inferred_adapter_for_legacy_saved_context": null
+    }
+  ],
+  "regressions": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "junit_sha256": "4494827fc75354b9ed66c7f1ad5bdd4b5c7222055fa10a8f107e3ca62f4678e7"
+  },
+  "historical_provider": "deterministic local peer",
+  "external_provider_campaign": "not_run"
+}

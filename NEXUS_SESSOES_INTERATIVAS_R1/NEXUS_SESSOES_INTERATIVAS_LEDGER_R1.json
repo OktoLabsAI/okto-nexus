@@ -2039,7 +2039,9 @@
       "status": "TODO",
       "evidence": [
         "execution/si024-capability-downgrade.md",
-        "execution/si024-capability-downgrade.json"
+        "execution/si024-capability-downgrade.json",
+        "execution/si039-installed-migration.md",
+        "execution/si039-installed-migration.json"
       ]
     },
     {
@@ -4910,7 +4912,10 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si039-installed-migration.md",
+        "execution/si039-installed-migration.json"
+      ]
     },
     {
       "id": "SI-T-I02",
