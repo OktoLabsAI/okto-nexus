@@ -33,7 +33,8 @@ def has_unresolved_interrupt(conn: Connection, session: SessionKey) -> bool:
     key = asdict(session)
     pending = conn.execute("""
         SELECT o.admission_state,o.binding_id,o.workspace_id,o.workspace_binding_id,o.subject_agent_id AS agent_id,
-            c.owner_generation AS session_owner_generation,c.target_ref AS native_turn_id,t.target_operation_id,t.target_stream_epoch,
+            c.owner_generation AS session_owner_generation,c.target_ref,t.target_operation_id,t.target_stream_epoch,
+            json_extract(o.semantic_payload,'$.target.kind') AS target_kind,
             r.stage AS control_stage
         FROM execution_operations o
         LEFT JOIN session_interaction_controls c USING (server_id,executor_id,operation_id)

@@ -149,9 +149,26 @@ def _active_start(uow, scope, adapter_id, native_start, event_type):
     return selected, start, json.loads(raw)['payload']
 
 
-def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision) -> str | None:
+def active_interrupt_target(uow, scope: InputScope, *, current_next_turn_revision):
     turn = active_native_turn(uow, scope, current_next_turn_revision=current_next_turn_revision)
-    if turn is None or turn.native_id != native_turn_id:
+    if turn is not None:
+        return turn
+    run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision)
+    if run is not None:
+        contract = get_control_targeting('pi_rpc', 'turn.interrupt')
+        if contract.supported and contract.native_turn_id == 'forbidden' and contract.requires_active_run:
+            return run
+    return None
+
+
+def control_target_ref(target: ExactNativeTurn | ExactPiRun) -> str:
+    return target.run_ref if isinstance(target, ExactPiRun) else target.native_id
+
+
+def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision,
+                       observed_run=False) -> str | None:
+    turn = active_interrupt_target(uow, scope, current_next_turn_revision=current_next_turn_revision)
+    if turn is None or isinstance(turn, ExactPiRun) != observed_run or control_target_ref(turn) != native_turn_id:
         return None
     return turn.revision
 

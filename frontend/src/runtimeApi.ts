@@ -251,8 +251,11 @@ export interface SessionInputQueuePage extends SessionInputQueueState {
   next_cursor: string | null;
 }
 
+type NativeTurnTarget = {kind: 'native_turn'; turn_id: string};
+type ObservedRunTarget = {kind: 'observed_run'; run_ref: string};
+
 export interface SessionInterruptTarget {
-  target: {kind: 'native_turn'; turn_id: string};
+  target: NativeTurnTarget | ObservedRunTarget;
   capability_revision: string;
   queue_revision: number;
 }
@@ -266,8 +269,8 @@ export interface SessionInterruptAvailability {
 export type SessionSteerTarget = Pick<SessionInterruptTarget, 'capability_revision' | 'queue_revision'> & {
   effect_revision: string;
 } & (
-  {effect: 'same_turn'; target: SessionInterruptTarget['target']} |
-  {effect: 'next_boundary'; target: {kind: 'observed_run'; run_ref: string}}
+  {effect: 'same_turn'; target: NativeTurnTarget} |
+  {effect: 'next_boundary'; target: ObservedRunTarget}
 );
 
 export interface QueuedSteerPreview {

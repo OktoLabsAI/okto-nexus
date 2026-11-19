@@ -1,6 +1,7 @@
 """Windows ConPTY, Nexus operator ticket, and the real Pi in one isolated run."""
 
 import argparse
+import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 import json
@@ -69,7 +70,7 @@ process.argv.push('--no-context-files', '--provider', 'nexus-fixture', '--model'
     peer = release / 'node_modules/@earendil-works/pi-ai/dist/providers/faux.js'
     signals = [root / f'release-turn-{index}' for index in range(len(responses))]
     controlled_responses = [
-        f'() => respond({json.dumps(str(signal))}, {json.dumps(answer)})'
+        f'(_context, options) => respond({json.dumps(str(signal))}, {json.dumps(answer)}, options?.signal)'
         for signal, answer in zip(signals, responses, strict=True)
     ]
     (agent / 'extensions' / 'synthetic-provider.js').write_text(f'''
@@ -79,9 +80,10 @@ import {{ setTimeout as delay }} from 'node:timers/promises';
 export default (pi) => {{
   const faux = fauxProvider({{ provider: 'nexus-fixture', api: 'nexus-fixture' }});
   pi.registerProvider(faux.provider);
-  async function respond(signal, answer) {{
+  async function respond(release, answer, signal) {{
     for (let count = 0; count < 1500; count++) {{
-      try {{ await access(signal); return fauxAssistantMessage(answer); }}
+      if (signal?.aborted) return fauxAssistantMessage(answer);
+      try {{ await access(release); return fauxAssistantMessage(answer); }}
       catch (error) {{ if (error.code !== 'ENOENT') throw error; }}
       await delay(30);
     }}
@@ -105,7 +107,7 @@ export default (pi) => {{
     }
 
 
-def admit_session(client, headers, workspace, app, provider_home, expected_candidate, *, steer):
+def admit_session(client, headers, workspace, app, provider_home, expected_candidate, *, steer, interrupt):
     inventory_owner = app.state.embedded_inventory_owner
     executor = '/v1/runtime/executors/' + inventory_owner.key.executor_id
 
@@ -147,7 +149,8 @@ def admit_session(client, headers, workspace, app, provider_home, expected_candi
     binding = response.json()
     response = client.post('/api/v1/harness/grants', headers=headers['operator'], json={
         'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
-        'actions': ['open', 'send', 'close'] + (['steer'] if steer else []), 'max_executions': 3,
+        'actions': ['open', 'send', 'close'] + (['steer'] if steer else []) + (['interrupt'] if interrupt else []),
+        'max_executions': 3,
         'expires_at': iso_plus(app.state.deps.clock.now_iso(), 600),
     })
     assert response.status_code == 200, response.text
@@ -207,9 +210,10 @@ def enqueue_follow_up(client, data, generation, token, *, presenter_address=None
     return read
 
 
-def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, steer_editor=False):
+def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, steer_editor=False, interrupt=False,
+        interrupt_surface='web'):
     sys.path.insert(0, str(conpty_helpers))
-    from okto_nexus.adapters.inbound.cli.session_commands import recover_pi_input
+    from okto_nexus.adapters.inbound.cli.session_commands import execute_session_command, recover_pi_input
     from owned_engine_probe import environment
     from pty_probe import ProbeConsole
     from session_command_probe import write_input
@@ -219,7 +223,7 @@ def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, ste
     workspace = root / 'workspace'
     workspace.mkdir()
     steering = steer or steer_editor
-    results = [RESULT, FOLLOW_UP_RESULT] if queue or steering else [RESULT]
+    results = [RESULT, FOLLOW_UP_RESULT] if queue or steering or interrupt else [RESULT]
     follow_up_text = EDITOR_REORIENTATION if steer_editor else (EDITOR_FOLLOW_UP if queue_surface == 'editor' else FOLLOW_UP)
     agent, signals, sandbox = isolated_provider(root, release, workspace, results)
     native_environment = ApprovedLocalLaunch.environment
@@ -267,7 +271,7 @@ def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, ste
             try:
                 wait_for(lambda: server.started, seconds=10)
                 binding = admit_session(client, headers, workspace, app, agent.parent.parent, expected_candidate,
-                                        steer=steering)
+                                        steer=steering, interrupt=interrupt)
                 setup = (deps, app, client, headers)
                 owner = app.state.embedded_dispatch_owner
                 print('Admitting the exact local Pi opening', flush=True)
@@ -362,6 +366,80 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert state['is_streaming'] and state['pending_message_count'] == 0
                 assert client.portal.call(owner.prove_native_presentation_owner, scope) == before
                 follow_up = None
+                if interrupt:
+                    print('Interrupting the reviewed Pi run with a continuation in the queue', flush=True)
+                    url = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
+                    generation = scope.generation.value
+                    query = {key: value for key, value in data.items() if key != 'session_id'}
+                    query['expected_session_generation'] = generation
+                    ui = {'X-Nexus-UI': '1'}
+                    follow_up = enqueue_follow_up(client, data, generation, token)
+
+                    def review_interrupt():
+                        response = client.get(url + '/interrupt', params=query, headers=ui)
+                        assert response.status_code == 200, response.text
+                        return response.json()['control']
+
+                    control = wait_for(review_interrupt, seconds=12)
+                    assert control['target']['kind'] == 'observed_run', control
+                    interrupt_body = {'scope': data, 'expected_session_generation': generation,
+                        'target': control['target'], 'capability_revision': control['capability_revision'],
+                        'expected_queue_revision': control['queue_revision'], 'client_intent_id': 'isolated-pi-interrupt'}
+
+                    def queue_page():
+                        response = client.get(url + '/inputs', params=query, headers=ui)
+                        assert response.status_code == 200, response.text
+                        return response.json()
+
+                    wrong = interrupt_body | {'target': {'kind': 'observed_run', 'run_ref': 'prun_' + '0' * 32}}
+                    assert client.post(url + '/interrupt', json=wrong, headers=ui).status_code == 409
+                    assert not queue_page()['paused']
+                    if interrupt_surface == 'cli':
+                        api = RemoteOperatorHTTP(address, token=token, server_id=data['server_id'])
+                        prompts = []
+
+                        def command(answer):
+                            return execute_session_command(api, binding, data['session_id'], 'interrupt', interactive=True,
+                                message_file=None, read=lambda prompt: prompts.append(prompt) or answer, write=lambda _: None)
+
+                        assert command('n')['state'] == 'cancelled'
+                        assert not queue_page()['paused']
+                        submitted = command('y')
+                        assert submitted['state'] == 'recorded', submitted
+                        assert prompts == ['Interrupt the selected Pi run and pause the queue? [y/N] '] * 2
+                        interrupted = submitted['receipt']
+                        interrupt_intent = submitted['client_intent_id']
+                        interrupt_receipt_path = '/terminal/interrupt/receipt'
+                    else:
+                        response = client.post(url + '/interrupt', json=interrupt_body, headers=ui)
+                        assert response.status_code == 202, response.text
+                        interrupted = response.json()
+                        interrupt_intent = interrupt_body['client_intent_id']
+                        interrupt_receipt_path = '/interrupt/receipt'
+                    assert queue_page()['paused']
+                    receipt(sent, 'CANCELLED')
+                    receipt(interrupted, 'SUBMITTED')
+
+                    def exact_receipt():
+                        result = client.get(url + interrupt_receipt_path, headers=ui,
+                            params=query | {'client_intent_id': interrupt_intent})
+                        assert result.status_code == 200, result.text
+                        return result.json()
+
+                    def confirmed_interrupt():
+                        evidence = exact_receipt()
+                        assert evidence['interrupt']['queue_paused'] and evidence['interrupt']['pending_count'] == 1
+                        return evidence if evidence['interrupt']['target_status'] == 'interrupted' else None
+
+                    wait_for(confirmed_interrupt, seconds=12)
+                    assert follow_up()['status'] == 'QUEUED' and follow_up()['operation_id'] is None
+                    assert client.portal.call(owner.prove_native_presentation_owner, scope) == before
+                    paused = wait_for(lambda: page if (page := queue_page())['pause_capability_revision'] else None, seconds=12)
+                    resumed = client.post(url + '/inputs/queue-state', headers=ui, json={
+                        'scope': data, 'expected_session_generation': generation, 'paused': False,
+                        'capability_revision': paused['pause_capability_revision'], 'expected_queue_revision': paused['queue_revision'],
+                    })
+                    assert resumed.status_code == 200 and resumed.json()['paused'] is False, resumed.text
                 if steer:
                     print('Reviewing and promoting an exact Pi run through the operator HTTP API', flush=True)
                     follow_up = enqueue_follow_up(client, data, scope.generation.value, token)
@@ -463,6 +541,27 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                         assert queued['status'] == 'QUEUED' and queued['operation_id'] is None, queued
                         state = client.portal.call(owner.read_native_pi_presentation_state, scope)
                         assert state['is_streaming'] and state['pending_message_count'] == 0
+                    if interrupt:
+                        await_text(second, FOLLOW_UP)
+                        successor = wait_for(review_interrupt, seconds=12)
+                        assert successor['target'] != control['target']
+                        stale = interrupt_body | {'expected_queue_revision': successor['queue_revision'],
+                                                  'client_intent_id': 'isolated-pi-old-run'}
+                        assert client.post(url + '/interrupt', json=stale, headers=ui).status_code == 409
+                        assert not queue_page()['paused']
+
+                        async def receive_stale_abort():
+                            local = await owner.sessions[data['session_id']]['executor']._runtime()
+                            peer = local._sessions[before[1].key].native._connector._transport
+                            return await asyncio.to_thread(peer.request, 'abort',
+                                {'nexus_expected_run_id': control['target']['run_ref']}, timeout_s=8)
+
+                        refused = client.portal.call(receive_stale_abort)
+                        assert refused['success'] is False and refused['nexus_refused_before_abort'] is True
+                        assert client.portal.call(owner.read_native_pi_presentation_state, scope)['is_streaming']
+                        if interrupt_surface == 'web':
+                            replay = client.post(url + '/interrupt', json=interrupt_body, headers=ui)
+                            assert replay.status_code == 200 and replay.json()['operation_id'] == interrupted['operation_id']
                     if steer_editor:
                         print('Reviewing the native Pi draft in Windows ConPTY', flush=True)
                         client.cookies.set('nexus_operator_session', token)
@@ -519,8 +618,8 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                         terminal_api = RemoteOperatorHTTP(address, token=token, server_id=data['server_id'])
                         assert recover_pi_input(terminal_api, data, generation,
                             editor_receipt['client_intent_id'])['receipt']['steer_boundary'] == 'awaiting_boundary'
-                    signals[0].touch()
-                    await_text(second, RESULT)
+                    signals[1 if interrupt else 0].touch()
+                    await_text(second, FOLLOW_UP_RESULT if interrupt else RESULT)
                     if steer:
                         wait_for(lambda: steer_facts() == expected_fact, seconds=12)
                         assert follow_up()['steer_boundary'] == 'applied'
@@ -533,7 +632,10 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                         write_input(second.input, b'\r')
                         signals[1].touch()
                         await_text(second, FOLLOW_UP_RESULT)
-                    receipt(sent, 'SUCCEEDED')
+                    if interrupt:
+                        receipt(follow_up(), 'SUCCEEDED')
+                    else:
+                        receipt(sent, 'SUCCEEDED')
                     if queue and follow_up:
                         await_text(second, follow_up_text.splitlines()[0])
                         delivery = follow_up()
@@ -552,7 +654,8 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * tickets
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == (1 if steering else len(results))
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.steer'").fetchone()[0] == int(steering)
-                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue or steering)
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.interrupt'").fetchone()[0] == int(interrupt)
+                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue or steering or interrupt)
                     if queue:
                         native_turn_events = [tuple(row) for row in uow.connection.execute("""
                             SELECT json_extract(payload_json,'$.native_type'),json_extract(payload_json,'$.operation_id')
@@ -571,12 +674,19 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert records[0]['id'] == before[0].native_session_id
                 messages = [record['message'] for record in records if record['type'] == 'message']
                 assert [message['role'] for message in messages] == ['system'] + ['user', 'assistant'] * len(results)
-                expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue or steering else [PROMPT, RESULT]
-                assert [message['content'][0]['text'] for message in messages[1:]] == expected
+                if interrupt:
+                    assert messages[2]['stopReason'] == 'aborted'
+                    kept = [messages[index]['content'][0]['text'] for index in (1, 3, 4)]
+                    assert kept == [PROMPT, FOLLOW_UP, FOLLOW_UP_RESULT]
+                else:
+                    expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue or steering else [PROMPT, RESULT]
+                    assert [message['content'][0]['text'] for message in messages[1:]] == expected
                 print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': tickets,
                                   'same_running_pi_process_after_detach': True, 'synthetic_responses': len(results),
                                   'confirmed_operator_steer_in_same_run': steering,
                                   'steer_surface': 'editor' if steer_editor else 'http' if steer else None,
+                                  'interrupt_paused_queue_and_refused_stale_run': interrupt,
+                                  'interrupt_surface': interrupt_surface if interrupt else None,
                                   'follow_up_queued_until_settled': queue,
                                   'queue_surface': queue_surface if queue else None,
                                   'canonical_close': 'SUCCEEDED', 'console_modes_restored': True}), flush=True)
@@ -594,9 +704,11 @@ if __name__ == '__main__':
     scenario.add_argument('--queue', action='store_true', help='Exercise the canonical queue with a synthetic follow-up.')
     scenario.add_argument('--steer', action='store_true', help='Promote queued text into a reviewed Pi boundary steer.')
     scenario.add_argument('--steer-editor', action='store_true', help='Review and confirm a native Pi draft.')
+    scenario.add_argument('--interrupt', action='store_true', help='Interrupt the exact Pi run with a durable queue barrier.')
     parser.add_argument('--queue-surface', choices=('web', 'presenter', 'editor'), default='web')
+    parser.add_argument('--interrupt-surface', choices=('web', 'cli'), default='web')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
         args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface,
-        steer=args.steer, steer_editor=args.steer_editor)
+        steer=args.steer, steer_editor=args.steer_editor, interrupt=args.interrupt, interrupt_surface=args.interrupt_surface)

@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `97502b5dbcea53bcbe184c67a8078ce334c2faf6`.
-The unpublished wheel SHA-256 is `b77e50336aa2927c83b3efb11511113c256a8a26205f8c3c5d98008ed2d81ac6`.
-The private Pi editor can snapshot a draft for review and clear it after verified consumption at a boundary.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `1c3dba15d316e95afb8b071dff2a6b53b4dfd12a`.
+The unpublished wheel SHA-256 is `7bec3adecff37352e22d2c6e40e7f1f881058cdb31e87d09e61fc64e4d25a6fe`.
+The reviewed hosted Pi RPC owner checks the approved run immediately before abort. Its terminal event retains the exact run.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency

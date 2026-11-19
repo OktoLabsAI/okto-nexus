@@ -101,7 +101,7 @@ def _review(call, url, scope, generation, command):
         raise _unavailable()
     native_turn = (target.keys() == {'kind', 'turn_id'} and target['kind'] == 'native_turn'
                    and _identifier(target['turn_id']))
-    pi_run = (command == 'steer' and target.keys() == {'kind', 'run_ref'} and target['kind'] == 'observed_run'
+    pi_run = (target.keys() == {'kind', 'run_ref'} and target['kind'] == 'observed_run'
               and isinstance(target['run_ref'], str) and PI_RUN_REF.fullmatch(target['run_ref']))
     if not (native_turn or pi_run):
         raise _unavailable()
@@ -188,7 +188,8 @@ def execute_session_command(call, binding, session_id, command, *, interactive, 
         if command == 'send':
             prompt = 'Queue this message for the next turn? [y/N] '
         elif body['target']['kind'] == 'observed_run':
-            prompt = 'Reorient the selected Pi run at its next available boundary? [y/N] '
+            prompt = ('Interrupt the selected Pi run and pause the queue? [y/N] ' if command == 'interrupt'
+                      else 'Reorient the selected Pi run at its next available boundary? [y/N] ')
         else:
             write('Turn ' + display_text(body['target']['turn_id']))
             prompt = ('Reorient this exact turn now? [y/N] ' if command == 'steer'

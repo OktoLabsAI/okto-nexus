@@ -134,7 +134,7 @@ class InterruptInput(QueueChange):
 
 
 class InterruptTargetView(_Document):
-    target: NativeTurnTarget
+    target: TurnTarget
     capability_revision: Identifier
     queue_revision: Revision
 

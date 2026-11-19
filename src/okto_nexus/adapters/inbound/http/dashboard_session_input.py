@@ -28,7 +28,7 @@ from ....application.session_interaction_queue_view import (
 )
 from ....application.session_interaction_receipts import read_session_input_receipt
 from ....application.execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
-from ....application.session_interaction_targets import active_native_turn
+from ....application.session_interaction_targets import ExactPiRun, active_interrupt_target
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.attention import digest
 from ....domain.session_interaction import InputAuthor
@@ -47,6 +47,7 @@ from .session_interaction_contract import (
     InterruptInput,
     InterruptTargetView,
     NativeTurnTarget,
+    ObservedRunTarget,
     QueuePauseChange,
 )
 
@@ -105,7 +106,7 @@ def _exact_view(factory, uow, *, context, access, document, scope):
 
 def _interrupt_target_for(state):
     next_turn = getattr(state, 'session_input_dispatch_options', {}).get('session_input_capability_revision')
-    return partial(active_native_turn, current_next_turn_revision=next_turn) if next_turn is not None else None
+    return partial(active_interrupt_target, current_next_turn_revision=next_turn) if next_turn is not None else None
 
 
 def review_exact_interrupt(uow, scope, target_for):
@@ -118,7 +119,9 @@ def review_exact_interrupt(uow, scope, target_for):
         SELECT revision FROM session_interaction_queues
         WHERE server_id=? AND executor_id=? AND session_id=?
     """, (scope.session.server_id, scope.session.executor_id, scope.session.session_id)).fetchone()
-    return InterruptTargetView(target=NativeTurnTarget(kind='native_turn', turn_id=target.native_id),
+    document = (ObservedRunTarget(kind='observed_run', run_ref=target.run_ref) if isinstance(target, ExactPiRun)
+                else NativeTurnTarget(kind='native_turn', turn_id=target.native_id))
+    return InterruptTargetView(target=document,
                                capability_revision=target.revision, queue_revision=row[0] if row else 0)
 
 
@@ -156,8 +159,8 @@ async def interrupt_response(session_id: str, body: InterruptInput, request: Req
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to interrupt a turn.')
     if body.scope.session_id != session_id or request.query_params:
         return _error(422, 'VALIDATION_ERROR', 'The interrupt must use the exact session scope.')
-    if not isinstance(body.target, NativeTurnTarget):
-        return _error(409, 'CONFLICT', 'An exact native turn is required by this control.')
+    observed_run = isinstance(body.target, ObservedRunTarget)
+    target_ref = body.target.run_ref if observed_run else body.target.turn_id
     state = request.app.state
     options = getattr(state, 'session_input_dispatch_options', {})
     if not options:
@@ -169,9 +172,9 @@ async def interrupt_response(session_id: str, body: InterruptInput, request: Req
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
         return request_exact_human_interrupt(factory=state.deps.connection_factory,
             access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
-            current_interrupt_target=partial(active_native_turn,
-                current_next_turn_revision=options['session_input_capability_revision']), scope=body.input_scope(),
-            author=InputAuthor(ref, surface), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
+            current_interrupt_target=_interrupt_target_for(state), scope=body.input_scope(),
+            author=InputAuthor(ref, surface), client_intent_id=body.client_intent_id, native_turn_id=target_ref,
+            observed_run=observed_run,
             capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
             fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
             verify_command=verify_command)
@@ -218,12 +221,12 @@ def build_router():
                 pi = (revision is not None and session['adapter_id'] == 'pi_rpc'
                       and session['kind'] == 'embedded')
                 mapping = read_managed_native_session(uow, scope) if pi else None
+                exact_control = revision is not None and (session['adapter_id'] == 'codex_app_server'
+                    or (mapping is not None and reviewed_pi_context(mapping)))
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,
-                        'interrupt_review_supported': revision is not None and session['adapter_id'] == 'codex_app_server',
-                        'steer_review_supported': revision is not None and (
-                            session['adapter_id'] == 'codex_app_server'
-                            or (mapping is not None and reviewed_pi_context(mapping))),
+                        'interrupt_review_supported': exact_control,
+                        'steer_review_supported': exact_control,
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}
 

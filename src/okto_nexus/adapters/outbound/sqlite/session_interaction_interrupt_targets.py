@@ -37,7 +37,13 @@ def interrupt_target_status(conn, exact, target):
     payload = event['payload']
     outcome = facts['delivery_outcome']
     terminal = {'interrupted': 'CANCELLED', 'failed': 'FAILED', 'success': 'SUCCEEDED'}
-    if (event.get('operation_id') != target['target_operation_id'] or payload.get('turn_id') != target['native_turn_id']
+    if target['target_kind'] == 'current_run' and event.get('native_type') == 'agent_settled':
+        reference = payload.get('hosted_pi_run_id')
+    elif target['target_kind'] == 'native_turn_id':
+        reference = payload.get('turn_id')
+    else:
+        return 'unconfirmed'
+    if (event.get('operation_id') != target['target_operation_id'] or reference is None or reference != target['target_ref']
             or payload.get('delivery_phase') != 'terminal' or payload.get('delivery_outcome') != outcome
             or terminal.get(outcome) != facts['stage']):
         return 'unconfirmed'

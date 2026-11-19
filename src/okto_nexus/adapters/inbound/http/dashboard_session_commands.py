@@ -18,8 +18,7 @@ from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import require_session_input_grant
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_targets import (
-    active_native_turn,
-    active_pi_run,
+    active_interrupt_target,
     steer_effect_revisions,
 )
 from ....bootstrap.execution_authority import build_execution_access
@@ -121,13 +120,13 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
         state, reason = 'denied_by_policy', 'Session interaction is disabled on this server.'
     send = _action('send', 'Send for next turn', 'Queue a message for the next eligible turn.', 'enqueue', state, reason)
 
-    turn = None
+    turn = (active_interrupt_target(uow, scope, current_next_turn_revision=revision_for)
+            if adapter in ('codex_app_server', 'pi_rpc') and revision is not None else None)
     interrupt_state, interrupt_reason = state, reason
-    if adapter == 'codex_app_server' and revision is not None:
+    if adapter in ('codex_app_server', 'pi_rpc') and revision is not None:
         if has_unresolved_interrupt(conn, scope.session):
             interrupt_state, interrupt_reason = 'disabled_for_state', 'An interruption is already pending.'
         else:
-            turn = active_native_turn(uow, scope, current_next_turn_revision=revision_for)
             if turn is None:
                 interrupt_state, interrupt_reason = 'disabled_for_state', 'There is no confirmed active turn.'
             else:
@@ -139,15 +138,12 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
     interrupt = _action('interrupt', 'Stop current turn', 'Interrupt the current turn and pause the message queue.',
                         'review_interrupt', interrupt_state, interrupt_reason)
 
-    pi_run = active_pi_run(uow, scope, current_next_turn_revision=revision_for) if (
-        adapter == 'pi_rpc' and revision is not None) else None
-    steer_target = turn or pi_run
-    steer_revisions = steer_effect_revisions(steer_target) if steer_target is not None else None
+    steer_revisions = steer_effect_revisions(turn) if turn is not None else None
     steer_state, steer_reason = state, reason
     if state == 'supported':
         if adapter not in ('codex_app_server', 'pi_rpc'):
             steer_state, steer_reason = 'unqualified', 'Reorientation is unavailable for this integration.'
-        elif has_unresolved_interrupt(conn, scope.session) or steer_target is None:
+        elif has_unresolved_interrupt(conn, scope.session) or turn is None:
             steer_state, steer_reason = 'disabled_for_state', 'There is no confirmed active run available for reorientation.'
         elif steer_revisions is None:
             steer_state, steer_reason = 'unqualified', 'There is no qualified reorientation effect for this turn.'

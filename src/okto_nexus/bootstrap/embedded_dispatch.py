@@ -735,31 +735,32 @@ class EmbeddedDispatchOwner:
         finally:
             self.active_operations.discard(frame['operation_id'])
 
-    def _steer_run_ref(self, frame):
+    def _control_run_ref(self, frame):
         """Resolve a local human control's retained run inside the canonical send cut."""
         with self.factory.unit_of_work(write=False) as uow:
             row = uow.connection.execute("""
-                SELECT c.target_ref,c.session_id,p.target_operation_id,p.target_stream_epoch,d.dispatch_state,
-                    o.intent_hash,s.stream_epoch
-                FROM session_interaction_inputs i
-                JOIN execution_operations o ON o.server_id=i.server_id AND o.executor_id=i.executor_id
-                  AND o.operation_id=i.operation_id
-                JOIN execution_dispatch_outbox d ON d.server_id=i.server_id AND d.executor_id=i.executor_id
-                  AND d.operation_id=i.operation_id
-                LEFT JOIN session_interaction_controls c ON c.server_id=i.server_id AND c.executor_id=i.executor_id
-                  AND c.operation_id=i.operation_id AND c.confirmed_effect_revision IS NOT NULL
+                SELECT c.target_ref,c.session_id,d.dispatch_state,o.intent_hash,s.stream_epoch,
+                    CASE WHEN o.action='turn.steer' THEN p.target_operation_id ELSE t.target_operation_id END AS target_op,
+                    CASE WHEN o.action='turn.steer' THEN p.target_stream_epoch ELSE t.target_stream_epoch END AS target_epoch
+                FROM execution_operations o
+                JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id)
+                LEFT JOIN session_interaction_inputs i USING(server_id,executor_id,operation_id)
+                LEFT JOIN session_interaction_controls c USING(server_id,executor_id,operation_id)
                 LEFT JOIN execution_sessions s ON s.server_id=c.server_id AND s.executor_id=c.executor_id
                   AND s.session_id=c.session_id AND s.owner_generation=c.owner_generation
                 LEFT JOIN session_interaction_pi_steer_targets p ON p.server_id=c.server_id AND p.executor_id=c.executor_id
                   AND p.operation_id=c.operation_id
-                WHERE i.server_id=:server_id AND i.executor_id=:executor_id AND i.operation_id=:operation_id
+                LEFT JOIN session_interaction_interrupt_targets t ON t.server_id=c.server_id AND t.executor_id=c.executor_id
+                  AND t.operation_id=c.operation_id
+                WHERE o.server_id=:server_id AND o.executor_id=:executor_id AND o.operation_id=:operation_id
+                  AND (c.operation_id IS NOT NULL OR i.operation_id IS NOT NULL)
             """, frame).fetchone()
             if row is None:
                 return None
             if (row['dispatch_state'] != 'SENDING' or row['intent_hash'] != frame['intent_hash']
                     or row['session_id'] != frame['session_id']
-                    or row['target_operation_id'] is None or row['stream_epoch'] != row['target_stream_epoch']):
-                raise CoreError('OPERATION_CONFLICT', 'embedded_pi_steer_binding')
+                    or row['target_op'] is None or row['stream_epoch'] != row['target_epoch']):
+                raise CoreError('OPERATION_CONFLICT', 'embedded_pi_control_binding')
             return row['target_ref']
 
     async def _execute(self, frame, *, continuation=None):
@@ -830,8 +831,8 @@ class EmbeddedDispatchOwner:
                 native_operation = r4_native_decision_operation(frame)
                 options = dict(applied_operation=native_operation)
             elif action in ("turn.steer", "turn.interrupt"):
-                run_ref = (await asyncio.to_thread(self._steer_run_ref, frame)
-                           if action == "turn.steer" and frame.get("expected_turn_id") is None else None)
+                run_ref = (await asyncio.to_thread(self._control_run_ref, frame)
+                           if frame.get("expected_turn_id") is None else None)
                 control = ControlOperation(frame["operation_id"], key, action.split(".")[1],
                     text=payload.get("text"), reason=payload.get("reason"), expected_turn_id=frame.get("expected_turn_id"),
                     expected_pi_run_id=run_ref)

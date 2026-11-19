@@ -1,0 +1,60 @@
+{
+  "task": "SI-025",
+  "task_status": "IN_PROGRESS",
+  "related_tests_added_evidence": ["SI-T-C12", "SI-T-C13"],
+  "source": {
+    "nexus_baseline": "50858ecf3e3b9f4014d365067c31cbb8ca37faf4",
+    "core": "1c3dba15d316e95afb8b071dff2a6b53b4dfd12a",
+    "connector_pin": "43697e03a59f0ff0ec890605c71084786cd50be0"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "931c1e60c7990033c50f6fca69fac13222533f0e676f6e52d349135581e4dc49",
+    "core_0.0.16_wheel_sha256": "7bec3adecff37352e22d2c6e40e7f1f881058cdb31e87d09e61fc64e4d25a6fe",
+    "connector_ci_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe": "si025-pi-terminal-e2e.py",
+    "probe_sha256": "af66e91a1db353b4f5645c4bb9baf4b6e1ac3a7a9cc361e11762dc1523f279ea"
+  },
+  "installed_real_pi_windows_conpty": {
+    "surfaces": ["web_api", "nexus_cli"],
+    "external_provider_requests": 0,
+    "wrong_run_http_status": 409,
+    "wrong_run_preserved_open_queue": true,
+    "cli_cancel_preserved_open_queue": true,
+    "terminal_proof_matches_each_run_start": true,
+    "canonical_operations_per_run_of_probe": {
+      "turn.interrupt": 1,
+      "turn.submit": 2
+    },
+    "canonical_interrupt_ack": "SUBMITTED",
+    "interrupted_turn_receipt": "CANCELLED",
+    "operator_target_outcome": "interrupted",
+    "pending_continuations_while_paused": 1,
+    "continuation_waited_for_explicit_resume": true,
+    "old_review_refused_while_successor_running": true,
+    "rpc_old_run_refused_before_abort": true,
+    "web_replay_recovered_original_operation": true,
+    "successor_receipt": "SUCCEEDED",
+    "same_running_pi_process_after_detach": true,
+    "canonical_close": "SUCCEEDED",
+    "console_modes_restored": true
+  },
+  "regressions": {
+    "installed_core": 91,
+    "installed_connector": 61,
+    "installed_nexus": 77,
+    "source_core_and_nexus_targeted": 88,
+    "frontend_node": 417,
+    "real_hosted_pi_correlated_steering_source": "PASS",
+    "core_and_nexus_strict_wheel_checks": "PASS",
+    "ci_manifest_and_consumer_pins": "PASS",
+    "nexus_offline_lock_check": "PASS",
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The process and Windows ConPTY viewer are real. Model responses are synthetic.",
+    "The dashboard is exercised through its API and frontend Node regressions. Browser interaction remains open.",
+    "The CLI probe uses the production CLI command handler and supplies the human confirmation as a test input.",
+    "Confirmation inside the attached Pi native editor, approvals, remote operation and real-provider campaigns remain open."
+  ]
+}

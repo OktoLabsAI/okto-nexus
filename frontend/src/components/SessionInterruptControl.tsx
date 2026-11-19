@@ -123,14 +123,16 @@ export function SessionInterruptControl({scope, canReview, commandReview, onAcce
     {!intent && !review && <button ref={controlButton} type="button" className="btn btn-secondary"
       disabled={busy} onClick={() => void run('review')}>Interrupt turn</button>}
     {review && <div className="space-y-2 rounded-md border p-2">
-      <p className="text-sm">Interrupt this turn and pause pending sends. You can resume the queue separately.</p>
+      <p className="text-sm">{review.target.target.kind === 'observed_run'
+        ? 'Interrupt this Pi execution and pause pending sends. You can resume the queue separately.'
+        : 'Interrupt this turn and pause pending sends. You can resume the queue separately.'}</p>
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-primary" disabled={busy || !canReview}
           onClick={() => void run('confirm')}>Confirm interrupt</button>
         <button ref={keepRunning} type="button" className="btn btn-secondary" onClick={() => {
           setReview(null);
           window.requestAnimationFrame(() => controlButton.current?.focus());
-        }}>Keep turn running</button>
+        }}>Keep running</button>
       </div>
     </div>}
     <div role="status" className="text-sm">

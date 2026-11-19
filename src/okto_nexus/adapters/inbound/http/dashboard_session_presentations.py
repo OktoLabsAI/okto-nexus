@@ -52,6 +52,7 @@ from .operator_auth import COOKIE, same_origin_request
 from .session_interaction_contract import (
     Identifier,
     InterruptTargetView,
+    NativeTurnTarget,
     ObservedRunTarget,
     PrepareAttachment,
     Revision,
@@ -315,7 +316,7 @@ async def _review_turn(state, services, active, history, request):
             return review_exact_interrupt(uow, active['scope'], _interrupt_target_for(state))
 
     target = await _worker(read)
-    if target is None or target.target.turn_id != request.turn_id:
+    if target is None or not isinstance(target.target, NativeTurnTarget) or target.target.turn_id != request.turn_id:
         return None
     return _ReviewedTurn(secrets.token_urlsafe(24), time.monotonic() + 45, request, target)
 
