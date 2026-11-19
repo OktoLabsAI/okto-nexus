@@ -1,0 +1,56 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "core_revision": "ebf75a63c611ae1da3c2008ae215301816f27694",
+  "connector_revision": "a07077da72e89ad5aaaf135b77a13c987b4dfa4e",
+  "artifacts_sha256": {
+    "core": "de7ea258bf86c72fb83dfc64c20d59070b97d92227ba5afec2adb31f07ea5367",
+    "connector": "d7934174c86d578ae5bf31a3b9aa9cc3ffc722d8b5b6497a2e81dbb9f89522ff"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "tools_enabled": false,
+    "normal": {
+      "fixture": "D:/nexus-si026-managed-launch-wheel-1795092017027",
+      "probe_sha256": "f2fa0681b2d5e63785cf30562d686677f08e47d805f27aeb9b0f6b093197fe63",
+      "observations_sha256": "f3f62d031f44e1021f9da917fd4c02c83fa6d9714b9f44796881058866f93a14",
+      "public_core_composition_native_factory": true,
+      "startup_hook_and_owned_process_matched": true,
+      "profile_guard_checks": 5,
+      "exact_saved_history_before_new_input": true,
+      "same_open_receipt_and_conflict_on_changed_uuid": true,
+      "same_owner_completed_without_reader": true,
+      "terminal_receipt": "SUCCEEDED",
+      "only_final_correlated_output_published": true,
+      "remaining_job_pids": []
+    },
+    "startup_unconfirmed": {
+      "fixture": "D:/nexus-si026-managed-refused-wheel-1795092017027",
+      "probe_sha256": "908c1ba76b165faedabacab8586382105b450ac914342fcc5b1d8889d955c248",
+      "observations_sha256": "7906d02588914c47876b4c771809a4ab397955e66eca23e99ed2b8e2f71c75a1",
+      "terminal_receipt": "FAILED",
+      "completion_code": "NATIVE_STARTUP_FAILED",
+      "owned_process_exited_before_return": true,
+      "same_receipt_without_second_spawn": true,
+      "model_calls_after_source": 0,
+      "remaining_job_pids": []
+    }
+  },
+  "regressions": {
+    "installed_core": 92,
+    "installed_connector_units_and_process_lifecycle": 83,
+    "installed_nexus_uncertain_delivery_and_saved_codex": 4,
+    "wrong_or_stale_grant_refused_before_provider_resolution": true,
+    "startup_rejects_wrong_bearer_source_uuid_workspace_or_transcript": true,
+    "generated_core_contracts_and_metadata": "PASS",
+    "vendor_hashes_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "limitations": [
+    "Used the product Core factory with an isolated host-grant supplier, loopback fake provider, and tools disabled.",
+    "The launcher currently accepts the reviewed Windows binary and explicit plan mode. Native approvals are not qualified on this terminal route.",
+    "Product successor admission and verification of effective configuration, presentation transport, and terminal turn controls are pending."
+  ]
+}
