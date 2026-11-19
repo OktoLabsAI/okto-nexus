@@ -1,0 +1,47 @@
+{
+  "task": "SI-022",
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-H01", "SI-T-H02", "SI-T-H03", "SI-T-H12"],
+  "source": {
+    "nexus_baseline": "5f58f545b39b3d4cc494d11b887eec305a47559f",
+    "connector_baseline": "87d69ab051b4519477bd18c419b3fb73f52dd3c4",
+    "connector_revision": "173d55b7c2e9c09cf316794bea1ce86765cb4378",
+    "core_baseline": "43a663efad7e0c4ca91970dc9b6a6e1432df88ae",
+    "core_revision": "8877114d50f515a7aac06e874b7ddb756d2f876c"
+  },
+  "artifacts": {
+    "core_0.0.16_wheel_sha256": "42e965c44c993d80e182f7207bf101f6afe34e43ab28eb75fc81274d3992a9a8",
+    "connector_0.0.15_wheel_sha256": "9911c380c3fac1ac3332e422a69b244b55b5451ed23778b24ab0ea2aab01c641",
+    "nexus_0.3.8_wheel_sha256": "abd50dbe6b94e366e57aa0b3c46898db9ecef82b7d1261ad6e2e48e3d3a9d72c",
+    "previous_core_wheel_sha256": "8468cd7c1778ce34d6b42841d5ec054dbe110ca0aba63bf16d382a59cd72c0ad",
+    "previous_connector_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "database_migration": null,
+    "immutable_r4_schemas_changed": false
+  },
+  "observed": {
+    "negotiated_on_existing_outbound_socket": true,
+    "agent_credential_and_wrong_owner_generation_refused_before_native_read": true,
+    "retained_opening_thread_stream_and_remote_cwd_confirmed": true,
+    "logout_while_native_read_pending_discarded_result": true,
+    "existing_turn_completed_after_revocation_of_viewer_login": true,
+    "native_sessions_opened_by_read": 0,
+    "operations_created_by_read": 0,
+    "responses_with_wrong_hash_or_connection_generation_rejected": true,
+    "late_reply_after_link_disconnect_did_not_restart_read": true,
+    "native_rpc_method_cannot_be_selected_by_request": true,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "installed_wheels": 20,
+    "connector_source_heartbeat_daemon_capacity_boundaries": 66,
+    "previous_connector_wheel_renewal_after_lost_expired_grant_response": "PASS",
+    "wheel_metadata_check": "PASS",
+    "offline_nexus_lock_check": "PASS"
+  },
+  "limitations": [
+    "Real HTTP, IPC and WSS ran in loopback on Windows. A test-only HTTP route called the same application service. No public route or attach strategy graph is activated by this milestone.",
+    "The native observation and binary qualification were fixture substitutes. This evidence does not qualify real Codex on a separate Connector host.",
+    "A separate legacy credential-rotation probe reached an interactive connection choice under captured stdin, so it does not establish credential-rotation compatibility.",
+    "Operator-facing remote attachments, TLS from a separate client, cursors, native terminal detach, remote writes and Pi/Claude remote presentation remain pending."
+  ]
+}

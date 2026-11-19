@@ -19,8 +19,10 @@ from nexus_connector_core import (
     PREOPEN_REFUSAL_REVISION,
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
+from nexus_connector_core.presentation_link import PRESENTATION_LINK_REVISION, PRESENTATION_RESULT
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
+from ....adapters.outbound.execution.presentation_link import PresentationLink
 from ....adapters.outbound.sqlite.execution_identity import (
     ensure_execution_installation,
 )
@@ -104,6 +106,9 @@ def build_router() -> APIRouter:
         generation: int | None = None
         pump = None
         capacity_client = capacity_host = None
+        presentation = None
+        presentations = ws.app.state.remote_codex_presentation.links
+        presentation_key = server_id, executor_id
         availability = ws.app.state.deps.runtime_availability
         resumable_disconnect = False
         resume_supported = False
@@ -398,11 +403,25 @@ def build_router() -> APIRouter:
             }
             if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
                 welcome['control_capabilities'].append(CAPACITY_CONTRACT_REVISION)
+            if (ws.app.state.deps.config.runtime_session_interaction_enabled
+                    and PRESENTATION_LINK_REVISION in hello['control_capabilities']):
+                welcome['control_capabilities'].append(PRESENTATION_LINK_REVISION)
             negotiated_capabilities = tuple(welcome['control_capabilities'])
             resumed = 'resume_connection_id' in hello
             if resume_supported:
                 welcome['resumed'] = resumed
             await _send_text(encode_r4_frame(welcome).decode("utf-8"))
+
+            if PRESENTATION_LINK_REVISION in negotiated_capabilities:
+                async def send_presentation(raw):
+                    await anyio.to_thread.run_sync(_verify)
+                    await _send_text(raw)
+
+                presentation = PresentationLink(_channel(), send_presentation)
+                prior = presentations.get(presentation_key)
+                if prior is not None:
+                    prior.disconnect()
+                presentations[presentation_key] = presentation
 
             if CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']:
                 from ....adapters.outbound.execution.capacity_link import CapacityLinkClient
@@ -472,6 +491,16 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
+                if frame['type'] == PRESENTATION_RESULT:
+                    if presentation is None or presentations.get(presentation_key) is not presentation:
+                        raise CoreError('STALE_GENERATION', 'presentation_link')
+                    try:
+                        await anyio.to_thread.run_sync(_verify)
+                    except OktoNexusError:
+                        await ws.close(code=4403)
+                        break
+                    presentation.accept_result(frame)
+                    continue
                 if frame['type'] == 'event.artifact.put':
                     from nexus_connector_core.event_artifacts import encode_event_artifact, artifact_ack
                     def _store_event_artifact():
@@ -775,6 +804,10 @@ def build_router() -> APIRouter:
                 ' > '.join(f'{frame.name}:{frame.lineno}' for frame in traceback.extract_tb(error.__traceback__)))
             await ws.close(code=4406)
         finally:
+            if presentation is not None:
+                presentation.disconnect()
+                if presentations.get(presentation_key) is presentation:
+                    del presentations[presentation_key]
             with anyio.CancelScope(shield=True):
                 await session_releases.stop()
                 await startup_refusals.stop()

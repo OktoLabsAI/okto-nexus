@@ -872,6 +872,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.state.auth = auth
     from .operator_auth import OperatorAuth, router as operator_auth_router
     app.state.operator_auth = OperatorAuth(deps.config.home_dir)
+    from ....application.remote_codex_presentation import RemoteCodexPresentation
+    app.state.remote_codex_presentation = RemoteCodexPresentation(
+        deps.connection_factory, authority_fence=app.state.operator_auth.authority_fence, clock=deps.clock)
     app.include_router(operator_auth_router())
     app.state.observability = observability
     app.state.search = search_service

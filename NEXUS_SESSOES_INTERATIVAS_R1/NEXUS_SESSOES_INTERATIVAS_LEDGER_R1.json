@@ -1078,8 +1078,11 @@
         "SI-T-H04",
         "SI-T-H12"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si022-remote-codex-context.md",
+        "execution/si022-remote-codex-context.json"
+      ]
     },
     {
       "id": "SI-023",
@@ -4165,7 +4168,9 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si022-remote-codex-context.json"
+      ]
     },
     {
       "id": "SI-T-H02",
@@ -4184,7 +4189,9 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si022-remote-codex-context.json"
+      ]
     },
     {
       "id": "SI-T-H03",
@@ -4203,7 +4210,9 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si022-remote-codex-context.json"
+      ]
     },
     {
       "id": "SI-T-H04",
@@ -4377,7 +4386,9 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si022-remote-codex-context.json"
+      ]
     },
     {
       "id": "SI-T-H13",
