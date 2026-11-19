@@ -1,0 +1,52 @@
+{
+  "tasks": ["SI-020", "SI-032"],
+  "scenario_evidence_partial": ["SI-T-H08", "SI-T-H09"],
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "efb978770765031732e74bfe9fd2e44278dcb1d2", "main": "8d77b50c", "behind_main": 0, "ahead_of_main": 443},
+    "connector": {"branch": "feature/v0.0.15", "head": "576e7045ae8104131c18235f3df707bda5d39b6c", "main": "a3017d9", "behind_main": 0, "ahead_of_main": 82},
+    "core": {"branch": "feature/v0.0.16", "head": "6ec6ace51bcca05272e5bb63098d862e5641dc70", "main": "19c99f1", "behind_main": 0, "ahead_of_main": 61},
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "installation": {
+    "platform": "Windows x64, nested Windows ConPTY, real local app-server, actual loopback HTTP/WebSocket and deterministic SSE",
+    "engine": {"version": "0.157.0", "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"},
+    "viewer": {"version": "0.170.0", "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"},
+    "nexus_0.3.8_wheel_sha256": "c8dd51e124176c9d3326cf61cf6540f313cf3c8cda585432248df183ea664437",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d"
+  },
+  "probe_directory": "%TEMP%/si032-viewer-death-1795105087936",
+  "probe_file": "test_viewer_exit_fenced.py",
+  "probe_sha256": "8f58c644a1529350c62cedd795325ec4083e0c52b6f6d2bee47c0a11f3244958",
+  "cases": [
+    {"cut": "console-close", "status": "PASS", "presenter_exit_code": 3221225786, "result_path": "confirmed-run/test_abrupt_viewer_exit_preser0/result.json", "result_sha256": "eaea6c5d266e38bf86dea1b00ee6a2f4f7ca7af47e9f37252d2973e5af60a5b4"},
+    {"cut": "presenter-kill", "status": "PASS", "presenter_exit_code": 222, "result_path": "confirmed-run/test_abrupt_viewer_exit_preser1/result.json", "result_sha256": "08efdcf9e7511292d1e22d8c4388f42de61090d597382e88c8131648e5096264"}
+  ],
+  "observed_in_each_case": {
+    "native_viewer_exit_confirmed_by_windows_handle": true,
+    "first_writer_receipt_detached_and_presentation_credentials_removed": true,
+    "second_writer_attached_without_takeover": true,
+    "same_engine_process_thread_turn_owner_generation_and_work_grant": true,
+    "same_queued_input_and_grant_before_and_after_cut": true,
+    "original_and_queued_turns_succeeded": true,
+    "native_turns_started_exactly_once_each": 2,
+    "native_interrupts": 0,
+    "native_steers": 0,
+    "canonical_close": "SUCCEEDED",
+    "loopback_model_requests": 2,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "installed_broker_and_cli_tests_passed": 36,
+    "offline_nexus_lock": "PASS",
+    "vendor_manifest_hashes": "PASS",
+    "remaining_probe_workers_observed": 0
+  },
+  "limitations": [
+    "The test uses local disposable operator authentication and an injected connection target. Product binding lookup, broker, WebSocket, app-server, frontend, queue and receipts are real.",
+    "The first attempt reached DETACHED in both cuts and stopped on an incorrect expectation that channel ID would be erased. The final probe checks the released writer and cleared credentials instead.",
+    "The test observed direct transport disconnect. Broker expiry is tested separately with a synthetic clock. Other harnesses, remote physical hosts and a network partition through lease expiry remain outside this evidence."
+  ],
+  "migration": "none"
+}

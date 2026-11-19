@@ -61,11 +61,11 @@ text in the Nexus queue. During a turn, Enter reviews reorientation and Esc
 reviews interruption. Confirming interruption pauses the queue. Nexus can also
 queue a message for the next turn while the harness is busy.
 
-Press Ctrl+] to detach. The session keeps its working directory, queue and
-running turn on its host. After a lost connection, run the same
-command to follow the same session from its committed history. If the status of
-a request is unclear, use the receipt reference printed in the terminal and
-the original operator login before sending again.
+Press Ctrl+] to detach. On Windows, closing the viewer's console also leaves
+the session, running turn and queue with the same executor while its authorization
+is valid. Run the same attach command to follow that session again. If a send
+was in progress when the viewer closed, check the receipt reference printed in
+the terminal with the original operator login before sending again.
 
 ```sh
 okto-nexus session receipt --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT

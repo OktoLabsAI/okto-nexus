@@ -1,0 +1,9 @@
+# SI-020 e SI-032 — Fechamento abrupto do visualizador Codex
+
+O Nexus instalado abriu uma sessão com o app-server Codex 0.157.0 real e um escritor com o Codex 0.170.0 em ConPTY. A primeira resposta ficou retida em loopback, e uma mensagem foi registrada pela API de fila enquanto o turno estava ativo. No primeiro ensaio, o Windows fechou o pseudoconsole do cliente. No segundo, o roteiro encerrou o processo cliente pelo handle aberto ao criá-lo. Cada ensaio usou uma sessão e um perfil descartáveis.
+
+Nos dois casos, o processo do visualizador nativo saiu. A desconexão descartou as credenciais da apresentação, e seu recibo ficou `DETACHED`. Um novo escritor abriu a mesma sessão sem transferência. O PID do app-server, a thread, o alvo do turno, a geração e a concessão produtiva foram preservados. A mensagem permaneceu na fila até o primeiro turno terminar, depois recebeu uma única entrega ao Codex com o mesmo ID e a mesma concessão. O turno original e o enfileirado registraram `SUCCEEDED`. O app-server saiu pelo fechamento canônico posterior. [Dados e hashes dos ensaios](si032-codex-abrupt-viewer-exit.json)
+
+O primeiro roteiro esperava que o broker apagasse o identificador do canal ao se desanexar. O broker o mantém no recibo. A repetição conferiu a liberação da escrita, o descarte de credenciais e os resultados dos dois turnos. Foram aprovados 36 testes de regressão do broker e do CLI com os pacotes instalados. O ensaio cobre o corte direto do transporte local no Windows. A expiração com o transporte silencioso tem evidência de broker com relógio controlado. A qualificação completa de SI-T-H08 e SI-T-H09 continua aberta.
+
+O guia agora explica o efeito de fechar o console e como voltar à mesma sessão. O marco dispensa migração. Para revertê-lo, reverta o commit de documentação e evidência do Nexus. [Guia do terminal](../../docs/terminal-work.md)

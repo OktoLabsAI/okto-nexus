@@ -1009,7 +1009,9 @@
       "evidence": [
         "execution/si020-pi-process-birth.md",
         "execution/si020-codex-keyboard-detach-windows.md",
-        "execution/si020-codex-keyboard-detach-windows.json"
+        "execution/si020-codex-keyboard-detach-windows.json",
+        "execution/si032-codex-abrupt-viewer-exit.md",
+        "execution/si032-codex-abrupt-viewer-exit.json"
       ]
     },
     {
@@ -1639,7 +1641,10 @@
         "SI-T-H11"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": [
+        "execution/si032-codex-abrupt-viewer-exit.md",
+        "execution/si032-codex-abrupt-viewer-exit.json"
+      ]
     },
     {
       "id": "SI-033",
@@ -4422,7 +4427,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si032-codex-abrupt-viewer-exit.md",
+        "execution/si032-codex-abrupt-viewer-exit.json"
+      ]
     },
     {
       "id": "SI-T-H09",
@@ -4441,7 +4449,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si032-codex-abrupt-viewer-exit.md",
+        "execution/si032-codex-abrupt-viewer-exit.json"
+      ]
     },
     {
       "id": "SI-T-H10",
