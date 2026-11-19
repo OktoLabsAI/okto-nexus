@@ -10,7 +10,7 @@ import {CanonicalInspection} from '../AttentionInspection';
 import {MetaHarnessComposer} from '../MetaHarnessComposer';
 import {RuntimeOperations} from '../RuntimeOperations';
 import {readContinuationContext} from './continuation';
-import type {HomeEntrySelection} from '../../homeEntryInspection';
+import {homeSessionTarget, occurrenceSession, type HomeAttentionReturn, type HomeEntrySelection} from '../../homeEntryInspection';
 import {HomeEntryInspection} from './HomeEntryInspection';
 
 export function HomeNewRequest({workspace, workspaces, onChanged}: {workspace: string; workspaces: WorkspaceListItem[]; onChanged: () => void}) {
@@ -26,10 +26,50 @@ export function HomeAttentionInspection({item, action, onClose, onChanged, refre
   return <CanonicalInspection target={attentionTarget(item, action)} item={item} action={action} onClose={onClose} onChanged={onChanged} refreshKey={refreshKey}/>;
 }
 
+export function HomeRestoredAttention({selection, onClose, onChanged}: {
+  selection: HomeAttentionReturn; onClose: () => void; onChanged: () => void;
+}) {
+  const [item, setItem] = useState<AttentionOccurrence | null>(null);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    const controller = new AbortController();
+    const revoke = () => {
+      controller.abort();
+      setItem(null);
+      setError('Operator access is required to review this request.');
+    };
+    window.addEventListener('nexus-auth-expired', revoke);
+    window.addEventListener('nexus-operator-logout', revoke);
+    void api.attentionItem(selection.attentionId, selection.workspace, controller.signal).then(({item: occurrence}) => {
+      if (controller.signal.aborted) return;
+      if (occurrence.attention_id !== selection.attentionId || occurrence.workspace_id !== selection.workspace ||
+          !occurrence.allowed_actions.includes(selection.action)) {
+        throw new Error('This request no longer offers the selected action.');
+      }
+      setItem(occurrence);
+    }).catch(() => {
+      if (!controller.signal.aborted) setError('This exact request is no longer available. Refresh Home to review current actions.');
+    });
+    return () => {
+      controller.abort();
+      window.removeEventListener('nexus-auth-expired', revoke);
+      window.removeEventListener('nexus-operator-logout', revoke);
+    };
+  }, [selection]);
+  if (!item) return error ? <p role="alert">{error}</p> : <p role="status">Revalidating the selected request…</p>;
+  const session = occurrenceSession(item, selection.serverId);
+  const target = session ? homeSessionTarget(session) : selection.target;
+  return <div className="space-y-4">
+    <HomeAttentionInspection item={item} action={selection.action} onClose={onClose} onChanged={onChanged}/>
+    {target && <HomeInspection target={target} serverId={selection.serverId} workspace={selection.workspace} onClose={onClose} onChanged={onChanged}/>}
+  </div>;
+}
+
 /** Opening is read-only. The original canonical inspector retains ownership of commands. */
-export function HomeInspection({target, serverId, workspace, continuation, onClose, onChanged,entrySelection,suppressOutput=false}: {
+export function HomeInspection({target, serverId, workspace, continuation, onClose, onChanged,entrySelection,onAttentionSelected,suppressOutput=false}: {
   target: HomeTarget; serverId: string; workspace: string | null; continuation?: boolean;
   entrySelection?:HomeEntrySelection;
+  onAttentionSelected?: (selection: HomeEntrySelection['attention']) => void;
   suppressOutput?:boolean;
   onClose: () => void; onChanged: () => void;
 }) {
@@ -55,7 +95,7 @@ export function HomeInspection({target, serverId, workspace, continuation, onClo
   }, [key, serverId, workspace, continuation]);
   return <div className="space-y-4">
     {error ? <p role="alert">{error}</p> : !resolved && <p role="status">Revalidating the exact canonical record…</p>}
-    {resolved && !continuation && (entrySelection?<HomeEntryInspection selection={entrySelection} target={target} serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged}
+    {resolved && !continuation && (entrySelection?<HomeEntryInspection selection={entrySelection} target={target} serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged} onAttentionSelected={onAttentionSelected}
       renderRecord={(related,continuing)=><HomeInspection key={JSON.stringify([related,continuing])} target={related} continuation={continuing} suppressOutput serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged}/>}/>
       :<CanonicalInspection target={homeInspectionTarget(resolved)} contextual suppressOutput={suppressOutput} onClose={onClose} onChanged={onChanged}/>)}
     {resolved && continuation && context && <RuntimeOperations agentId={context.session.scope.agent_id} binding={context.binding} canStart={false} continuationScope={context.session.scope}/>}

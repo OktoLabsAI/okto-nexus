@@ -403,6 +403,14 @@ def test_http_engine_combines_native_and_parked_with_consistent_pages_and_passiv
         assert unpack(client.get(base, params=dict(filters, workspace_id='foreign')))['total'] == 0
         item = next(item for item in complete['items'] if item['kind'] == kind)
         assert item['allowed_actions'] == ['inspect_approval'] + ([action] if action else [])
+        exact = base + '/' + item['attention_id']
+        scope_filter = {'workspace_id': scope['workspace_id']}
+        assert unpack(client.get(exact, params=scope_filter))['item'] == item
+        assert client.get(exact, params={'workspace_id': 'foreign'}).status_code == 404
+        assert client.get(exact + '-unknown', params=scope_filter).status_code == 404
+        assert client.get(exact, params=scope_filter,
+            headers={'x-api-key': app.state.test_agent_keys['subject']}).status_code == 403
+        assert domain_snapshot() == before
         marked = unpack(client.post(base + '/' + item['attention_id'] + '/seen', json={
             'source_revision': item['source_revision'], 'preference_revision': 0}))['item']
         assert marked['seen_state']['seen'] is True and marked['resolution'] == 'open'
@@ -417,6 +425,7 @@ def test_http_engine_combines_native_and_parked_with_consistent_pages_and_passiv
         expired, = historical['items']
         assert expired['attention_id'] == item['attention_id'] and expired['seen_state']['seen'] is True
         assert expired['resolution'] == 'expired' and expired['allowed_actions'] == ['inspect_approval']
+        assert unpack(client.get(exact, params=scope_filter))['item'] == expired
         assert domain_snapshot() == before
     finally:
         client.close()

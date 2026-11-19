@@ -53,6 +53,18 @@ class AttentionService:
         result.pop('next_cursor')
         return result
 
+    def get(self, *, context, attention_id, workspace_id=None):
+        identity(attention_id)
+        identity(workspace_id, optional=True)
+        with self.factory.unit_of_work(write=False) as uow:
+            self._authorize(uow, context)
+            now = stamp(self.clock.now_iso())
+            item = self.queries.get(uow, attention_id=attention_id, workspace_id=workspace_id,
+                                    now=now, config=deepcopy(self.config), access=self.access, context=context)
+            if item is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, 'The attention episode is no longer available. Refresh the view.', {})
+            return {"version": VERSION, "item": item, "observed_at": now}
+
     def _preference(self, *, context, attention_id, source_revision, preference_revision, seen=None, until=None, snooze=False):
         identity(attention_id)
         identity(source_revision)

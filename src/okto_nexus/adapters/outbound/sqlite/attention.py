@@ -220,8 +220,10 @@ class SqliteAttentionQueries:
                     unseen=aggregate['unseen'] or 0, snoozed=aggregate['snoozed'] or 0),
                 event_cursor=int(cursor[0]), event_low_watermark=cursor[1], next_change_at=aggregate['next_change_at'])
 
-    def get(self, uow, *, attention_id, now, config, access, context):
+    def get(self, uow, *, attention_id, now, config, access, context, workspace_id=None):
         filters = dict(state='all', seen='all')
+        if workspace_id is not None:
+            filters['workspace_id'] = workspace_id
         with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
             params['attention_id'] = attention_id
             rows = uow.connection.execute(sql + "SELECT item FROM filtered WHERE json_extract(item,'$.attention_id')=:attention_id LIMIT 2", params).fetchall()

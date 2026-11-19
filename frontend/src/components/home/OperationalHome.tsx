@@ -14,16 +14,17 @@ import {AgentActionModal,useAgentModalTransition} from '../AgentActionModal';
 import {PageContainer} from '../PageContainer';
 import {HomeProjectCard,HomeSummaryCards} from './HomeContextCards';
 import {workspaceDisplayName} from '../WorkspaceNames';
-import {HomeNewRequest, HomeInspection, HomeAttentionInspection} from './HomeInspection';
+import {HomeNewRequest, HomeInspection, HomeAttentionInspection, HomeRestoredAttention} from './HomeInspection';
 import {homeFocus,homeEntriesAnnouncementIds,isQuietEntries} from './HomeCards';
 import {HomeBoardCards,isQuietBoard} from './HomeBoardCards';
 import {HomeHarnessCard,HomeHarnessSignalCard} from './HomeHarnessCard';
-import type {HomeEntrySelection} from '../../homeEntryInspection';
+import type {HomeAttentionReturn, HomeEntrySelection} from '../../homeEntryInspection';
 import {initialHarnessSession,homeSessionRefKey,homeSessionOptionLabel,homeSessionTarget,assertHarnessSessionContext} from '../../homeEntryInspection';
 import {HomeSessionInspection} from './HomeSessionInspection';
 
 type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean;entrySelection?:HomeEntrySelection;connection?:HomeHarnessConnection}
   | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction}
+  | {kind: 'restored_attention'; selection: HomeAttentionReturn}
   | {kind:'harness';cardId:string|null;requests?:boolean};
 /** Only the authorized pre-filter inventory can prove the first-connection case. */
 export function isFirstHarnessEmpty(page:HomeEntryPage<HomeEntryGroup>|null,stale=false,filtered=false):boolean {
@@ -125,11 +126,12 @@ export function isFirstHarnessBoardEmpty(page:HomeBoard|HomeHarnessBoard|null,st
     count?.unit==='connections'&&count.total_is_exact===true&&count.value===0;
 }
 export function OperationalHome({workspace, workspaces, identityKey, refreshTick, latestEvent, streamStatus, onNavigate,
-  onAttentionChanged, onSetupAgent, onWorkspaceChange, registerLeaveGuard,presentationVersion:offeredPresentationVersion=1}: {
+  onAttentionChanged, onSetupAgent, onWorkspaceChange, registerLeaveGuard, attentionReturn, presentationVersion:offeredPresentationVersion=1}: {
   workspace: string; workspaces: WorkspaceListItem[]; identityKey: string; refreshTick: number;
   latestEvent: HomeInvalidation | null; streamStatus: HomeStreamStatus;
   onNavigate: (view: 'Agents' | 'Attention' | 'Graph' | 'Meta-harness') => void; onAttentionChanged: () => void; onSetupAgent: () => void;
   registerLeaveGuard: (guard: (() => boolean) | null) => void;
+  attentionReturn: {current: HomeAttentionReturn | null};
   onWorkspaceChange?:(id:string)=>void;
   presentationVersion?:1|2;
 }) {
@@ -182,6 +184,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     // Otherwise a later pause effect can remove the refocused old card.
     pause(manualPause);
     setPanel(null);
+    attentionReturn.current = null;
     const url = new URL(window.location.href);url.searchParams.delete('home_target');window.history.replaceState(null, '', url);
     window.requestAnimationFrame(() => {
       const scroll = scrollReturn.current;if (scroll?.element.isConnected) scroll.element.scrollTop = scroll.top;
@@ -190,7 +193,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       const destination=focusReturn.current?.isConnected?focusReturn.current:moved?.querySelector<HTMLElement>('[data-home-entry-open],button:not(:disabled),a[href]')??heading.current;
       try {destination?.focus({preventScroll:true});} finally {setRestoringFocus(false);}
     });
-  }, [manualPause,pause]);
+  }, [manualPause,pause,attentionReturn]);
   const dismiss = useCallback(() => {
     const dialog = document.querySelector<HTMLDialogElement>('[data-testid="home-detail"]');
     dialog?.dispatchEvent(new Event('cancel', {cancelable:true}));
@@ -202,6 +205,17 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     if (panel) window.addEventListener('beforeunload', beforeUnload);
     return () => {registerLeaveGuard(null);window.removeEventListener('beforeunload', beforeUnload);};
   }, [panel, dismiss, registerLeaveGuard]);
+  const rememberAttention = (selection: HomeEntrySelection['attention'], target?: HomeTarget) => {
+    attentionReturn.current = selection && snapshot ? {
+      attentionId: selection.item.attention_id, action: selection.action, serverId: snapshot.server_id,
+      workspace: selection.item.workspace_id, viewWorkspace: workspace, identityKey, target,
+    } : null;
+  };
+  const selectPanel = (next: Panel) => {
+    const selection = next.kind === 'attention' ? next : next.kind === 'target' ? next.entrySelection?.attention : undefined;
+    rememberAttention(selection, next.kind === 'target' ? next.target : undefined);
+    setPanel(next);
+  };
   const open = (next: Panel) => {
     if (panel) {dismiss();return;}
     focusReturn.current = document.activeElement as HTMLElement | null;
@@ -212,7 +226,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     if (next.kind === 'target') {
       const url = new URL(window.location.href);url.searchParams.set('home_target', encodeHomeTarget(next.target));window.history.pushState(null, '', url);
     }
-    setPanel(next);
+    selectPanel(next);
   };
   useEffect(() => {
     const pop = () => {
@@ -224,11 +238,21 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   }, [panel, dismiss]);
   useEffect(() => {
     if (initialTarget.current || !snapshot) return;initialTarget.current = true;
+    const selection = attentionReturn.current;
+    attentionReturn.current = null;
+    if (selection && selection.identityKey !== identityKey && selection.serverId === snapshot.server_id && selection.viewWorkspace === workspace) {
+      setPanel({kind:'restored_attention', selection});
+      return;
+    }
     const raw = new URL(window.location.href).searchParams.get('home_target');if (!raw) return;
     const target = decodeHomeTarget(raw);
     if (target) setPanel({kind:'target', target});else setNotice('The saved detail reference is invalid. No record was selected.');
-  }, [snapshot]);
-  useEffect(() => {if (state.status === 'forbidden' || state.status === 'disabled') {setPanel(null);setNotice('');}}, [state.status]);
+  }, [snapshot, attentionReturn, identityKey, workspace]);
+  useEffect(() => {
+    if (state.status === 'forbidden' || state.status === 'disabled') {
+      attentionReturn.current = null;setPanel(null);setNotice('');
+    }
+  }, [state.status, attentionReturn]);
   const changed = () => {refresh();onAttentionChanged();};
   const selectEntry=(entry:HomeHarnessChild,target:HomeTarget,attention?:HomeEntrySelection['attention'])=>{
     const selection:HomeEntrySelection={groupId:entry.group_id,revision:entry.entry_revision,entry,
@@ -318,14 +342,16 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
           onSessions={()=>{if(panel.cardId)loadHarnessSessions(panel.cardId);}} onRequests={()=>{if(panel.cardId)loadHarnessRequests(panel.cardId);}}
           onRefreshSessions={()=>{if(panel.cardId)refreshHarnessSessions(panel.cardId);}}
           onRefreshRequests={()=>{if(panel.cardId)refreshHarnessRequests(panel.cardId);}}
-          onRequest={item=>{const next=requestPanel(item);if(next)setPanel(next);}}
-          onConnection={target=>setPanel({kind:'target',target})}
+          onRequest={item=>{const next=requestPanel(item);if(next)selectPanel(next);}}
+          onConnection={target=>selectPanel({kind:'target',target})}
           renderSession={ref=>{const card=Object.values(snapshot.columns).flatMap(c=>c.items).find((c):c is HarnessCard=>c.kind==='harness'&&c.id===panel.cardId);
             return card?<HarnessSessionInspection key={homeSessionRefKey(ref)} sessionRef={ref} connection={card.connection}/>:<p>Connection context unavailable.</p>;}}
-          onEntry={entry=>{if(entry.target)setPanel(selectEntry(entry,entry.target));}}/>
+          onEntry={entry=>{if(entry.target)selectPanel(selectEntry(entry,entry.target));}}/>
         :panel.kind==='attention'?<HomeAttentionInspection item={panel.item} action={panel.action} onClose={close} onChanged={changed}/>
+          :panel.kind==='restored_attention'?<HomeRestoredAttention selection={panel.selection} onClose={close} onChanged={changed}/>
           :panel.connection&&panel.target.kind==='session'?<HarnessSessionInspection sessionRef={panel.target} connection={panel.connection}/>:
-            <HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} entrySelection={panel.entrySelection} onClose={close} onChanged={changed}/>}
+            <HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} entrySelection={panel.entrySelection}
+              onAttentionSelected={selection=>rememberAttention(selection,panel.target)} onClose={close} onChanged={changed}/>}
     </AgentActionModal>}
   </PageContainer>;
 }

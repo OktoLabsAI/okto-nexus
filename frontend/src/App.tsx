@@ -60,6 +60,7 @@ import { GraphView } from "./views/GraphView";
 import { HomeView } from "./views/HomeView";
 import {clearHomeContinuationRequests} from "./components/home/continuation";
 import {OperationalHome} from "./components/home/OperationalHome";
+import type {HomeAttentionReturn} from "./homeEntryInspection";
 import { AgentsView } from "./views/AgentsView";
 import { MessagesView } from "./views/MessagesView";
 import { HandoffsView } from "./views/HandoffsView";
@@ -98,6 +99,7 @@ type View = ViewId;
 export default function App() {
   const [status, setStatus] = useState<import("./api").OperatorStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const homeAttentionReturn = useRef<HomeAttentionReturn | null>(null);
   const refreshAuth = useCallback(() => {
     return api.operatorStatus().then(value => { setStatus(value); setError(null); })
       .catch(exc => setError((exc as Error).message));
@@ -105,7 +107,7 @@ export default function App() {
   useEffect(() => {
     sessionStorage.removeItem("okto_nexus_operator_key");
     void refreshAuth();
-    const expired = () => {clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);clearConversationDrafts();void refreshAuth();};
+    const expired = () => {homeAttentionReturn.current=null;clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);clearConversationDrafts();void refreshAuth();};
     const signedIn = () => {clearConversationDrafts();void refreshAuth();};
     window.addEventListener("nexus-auth-expired", expired);
     window.addEventListener("nexus-operator-login", signedIn);
@@ -118,7 +120,8 @@ export default function App() {
   if (!status) return <div className="p-6">Connecting…</div>;
   if (!status.authenticated) return <OperatorGate configured={status.configured} onUnlock={() => void refreshAuth()} />;
   return <Dashboard key={status.username || "local-operator"} identityKey={JSON.stringify([status.local, status.username])}
-    localOpen={status.local} signedIn={!!status.username} onLock={() => {
+    homeAttentionReturn={homeAttentionReturn} localOpen={status.local} signedIn={!!status.username} onLock={() => {
+    homeAttentionReturn.current=null;
     clearHomeContinuationRequests(sessionStorage);
     clearExactRuntimeRequests(sessionStorage);
     clearConversationDrafts();
@@ -169,11 +172,13 @@ function Dashboard({
   localOpen,
   signedIn,
   identityKey,
+  homeAttentionReturn,
 }: {
   onLock: () => void;
   localOpen: boolean;
   signedIn: boolean;
   identityKey: string;
+  homeAttentionReturn: {current: HomeAttentionReturn | null};
 }) {
   const { theme, toggle } = useTheme();
   const [view, setViewState] = useState<View>("Home");
@@ -855,7 +860,7 @@ function Dashboard({
           {view === 'Home' && <div className="h-full flex flex-col min-h-0">
             <div className="min-h-0 flex-1">
               {homeOperational && info?.features?.feature_home !== false
-                ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
+                ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey} attentionReturn={homeAttentionReturn}
                     presentationVersion={info?.home_presentation_versions?.includes(2)?2:1}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
                     onAttentionChanged={attention.refresh} onSetupAgent={openAddHarness} onWorkspaceChange={pickWorkspace} registerLeaveGuard={registerHomeLeaveGuard}/>

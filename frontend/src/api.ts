@@ -1223,6 +1223,9 @@ export const api = {
     call<AttentionPage>(`/api/v1/attention${attentionQuery(query)}`, {signal, cache: 'no-store'}),
   attentionSummary: (filters: AttentionFilters = {}, signal?: AbortSignal) =>
     call<AttentionSummary>(`/api/v1/attention/summary${attentionQuery(filters)}`, {signal, cache: 'no-store'}),
+  attentionItem: (id: string, workspace: string | null, signal?: AbortSignal) =>
+    call<AttentionPreferenceResponse>(`/api/v1/attention/${encodeURIComponent(id)}${attentionQuery({workspace_id: workspace ?? undefined})}`,
+      {signal, cache: 'no-store'}),
   attentionSeen: (id: string, body: AttentionSeenRequest, signal?: AbortSignal) =>
     call<AttentionPreferenceResponse>(`/api/v1/attention/${encodeURIComponent(id)}/seen`,
       {method: 'POST', body: JSON.stringify(body), signal}),

@@ -12,14 +12,19 @@ import {useAgentModalTransition} from '../AgentActionModal';
 import {HomeSessionInspection} from './HomeSessionInspection';
 import {AttentionRow,ResultRow} from './HomeCards';
 
-export function HomeEntryInspection({selection,target,serverId,workspace,onClose,onChanged,renderRecord}: {
+export function HomeEntryInspection({selection,target,serverId,workspace,onClose,onChanged,renderRecord,onAttentionSelected}: {
   selection:HomeEntrySelection;target:HomeTarget;serverId:string;workspace:string|null;onClose:()=>void;onChanged:()=>void;
   renderRecord:(target:HomeTarget,continuation:boolean)=>ReactNode;
+  onAttentionSelected?: (selection: HomeEntrySelection['attention']) => void;
 }) {
   const {entry}=selection;
   const transition=useAgentModalTransition();
   const [session,setSession]=useState<HomeSessionRef|null>(()=>selection.attention?occurrenceSession(selection.attention.item,serverId):initialEntrySession(entry,target));
   const [active,setActive]=useState<{item:AttentionOccurrence;action:AttentionAction}|null>(selection.attention??null);
+  const selectAttention = (value: typeof active) => {
+    setActive(value);
+    onAttentionSelected?.(value ?? undefined);
+  };
   const [record,setRecord]=useState({target,continuation:false});
   const [sessions,setSessions]=useState(entry.sessions),[attention,setAttention]=useState(entry.attention_preview),[results,setResults]=useState(entry.results_preview);
   const [cursors,setCursors]=useState({sessions:entry.sessions_cursor,attention:entry.attention_cursor,results:entry.results_cursor});
@@ -78,27 +83,27 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
     <section aria-label="Session in this activity" className="space-y-2">
       <h4 className="font-medium">Session</h4>
       {(sessions.length>1||entry.sessions_total===null||entry.has_more_sessions)&&<label className="block text-sm">Choose the exact session<select data-modal-passive className="block border rounded p-2 w-full bg-transparent" value={session?homeSessionRefKey(session):''}
-        onChange={event=>{const value=sessionOptions.find(ref=>homeSessionRefKey(ref)===event.target.value)??null;transition(()=>{setSession(value);setActive(null);setRecord({target:value?homeSessionTarget(value):target,continuation:false});});}}>
+        onChange={event=>{const value=sessionOptions.find(ref=>homeSessionRefKey(ref)===event.target.value)??null;transition(()=>{setSession(value);selectAttention(null);setRecord({target:value?homeSessionTarget(value):target,continuation:false});});}}>
         <option value="">Choose a session</option>{sessionOptions.map((ref,index)=><option key={homeSessionRefKey(ref)} value={homeSessionRefKey(ref)}>{homeSessionOptionLabel(ref,index)}</option>)}</select></label>}
       {!session&&<p className="text-sm text-surface-500">{entry.sessions_total===0?'No canonical session is linked to this activity.':'Select a session to inspect its exact output. No recent session is selected automatically.'}</p>}
       {session&&<ExactEntrySession key={homeSessionRefKey(session)} session={session} serverId={serverId} workspace={workspace}/>}
-      {session&&<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setRecord({target:homeSessionTarget(session),continuation:true});})}>Continue this exact session</button>}
+      {session&&<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{selectAttention(null);setRecord({target:homeSessionTarget(session),continuation:true});})}>Continue this exact session</button>}
       {cursors.sessions&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('sessions')}>Load more linked sessions</button>}
     </section>
     {entry.external.length>0&&<p className="text-sm">External reports do not provide native terminal capture. Open the retained source below for its evidence and limitations.</p>}
     {(attention.length>0||cursors.attention)&&<section aria-label="Questions and decisions in this activity"><h4 className="font-medium">Questions and decisions</h4>
       <ul>{attention.map(item=><AttentionRow key={item.attention_id} level={5} item={item} stale={preferencesStale} pending={pending.includes(item.attention_id)}
-        onOpen={(item,action)=>transition(()=>{setSession(occurrenceSession(item,serverId));setActive({item,action});})} onSeen={(item,seen)=>void preference(item,seen)} onSnooze={item=>void preference(item)}/>)}</ul>
+        onOpen={(item,action)=>transition(()=>{setSession(occurrenceSession(item,serverId));selectAttention({item,action});})} onSeen={(item,seen)=>void preference(item,seen)} onSnooze={item=>void preference(item)}/>)}</ul>
       {cursors.attention&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('attention')}>Load more related attention</button>}
       {active&&<CanonicalInspection key={active.item.attention_id} target={attentionTarget(active.item,active.action)} item={active.item} action={active.action} onClose={onClose} onChanged={onChanged}/>}
     </section>}
     {(results.length>0||cursors.results)&&<section aria-label="Deliveries in this activity"><h4 className="font-medium">Deliveries and artifacts</h4>
       <ul>{results.map(item=><ResultRow key={item.id} level={5} item={item} stale={preferencesStale||!!item.attention&&pending.includes(item.attention.attention_id)}
-        onOpen={next=>transition(()=>{setActive(null);setSession(initialEntrySession(entry,next));setRecord({target:next,continuation:false});})}
-        onContinue={next=>transition(()=>{setActive(null);setSession(initialEntrySession(entry,next));setRecord({target:next,continuation:true});})} onSeen={(item,seen)=>void preference(item,seen)}/>)}</ul>
+        onOpen={next=>transition(()=>{selectAttention(null);setSession(initialEntrySession(entry,next));setRecord({target:next,continuation:false});})}
+        onContinue={next=>transition(()=>{selectAttention(null);setSession(initialEntrySession(entry,next));setRecord({target:next,continuation:true});})} onSeen={(item,seen)=>void preference(item,seen)}/>)}</ul>
       {cursors.results&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('results')}>Load more related results</button>}
     </section>}
-    {active?<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setSession(initialEntrySession(entry,record.target));})}>Show work details</button>:
+    {active?<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{selectAttention(null);setSession(initialEntrySession(entry,record.target));})}>Show work details</button>:
       <section aria-label="Original record and canonical controls"><h4 className="font-medium mb-2">{record.continuation?'Continue this session':'Work details'}</h4>
         {renderRecord(record.target,record.continuation)}</section>}
   </section>;

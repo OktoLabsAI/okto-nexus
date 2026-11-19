@@ -81,6 +81,11 @@ def build_router():
     async def attention_summary(request: Request, filters: dict = Depends(_filters)):
         return await _call(request, "summary", allowed_query=filters_keys, filters=filters)
 
+    @router.get("/attention/{attention_id}")
+    async def attention_get(request: Request, attention_id: str, workspace_id: str | None = None):
+        return await _call(request, "get", allowed_query={"workspace_id"},
+                           attention_id=attention_id, workspace_id=workspace_id)
+
     @router.post("/attention/{attention_id}/seen")
     async def attention_seen(request: Request, attention_id: str, body: SeenBody):
         return await _call(request, "mark_seen", attention_id=attention_id, **body.model_dump())

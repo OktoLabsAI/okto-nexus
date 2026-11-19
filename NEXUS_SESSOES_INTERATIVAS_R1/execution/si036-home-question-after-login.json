@@ -1,0 +1,43 @@
+{
+  "task": "SI-036",
+  "evidence_status": "PARTIAL",
+  "source": {
+    "nexus_baseline": "daca4c16d70db9c8208c91ac32a0321a091cbd48",
+    "core_pin": "1c3dba15d316e95afb8b071dff2a6b53b4dfd12a",
+    "connector_pin": "43697e03a59f0ff0ec890605c71084786cd50be0"
+  },
+  "installed_artifact": {
+    "nexus_0.3.8_wheel_sha256": "7b23de5fb5f59f35670928510e4d5375abef02c75c16defea037e2ac54d12c93",
+    "dashboard_js_asset": "index-B7dTblKu.js",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "edge_version": "157.0.4341.60",
+    "browser_driver": "Playwright CLI on Windows"
+  },
+  "observed": {
+    "restored_after_real_operator_sign_in": true,
+    "fresh_lookup_used_exact_occurrence_and_original_project": true,
+    "approval_id_matched_pre_login_selection": true,
+    "decision_posts_before_explicit_response": 0,
+    "automatic_reopen_required_second_click": false,
+    "native_receipts_submitted": 3,
+    "native_extension_observed_three_exact_answers": true,
+    "attention_count_returned_to_zero": true,
+    "same_running_pi_process_after_detach": true,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "frontend_node_tests": 417,
+    "installed_backend_attention_tests": 59,
+    "final_wheel_http_cases_rechecked": 3,
+    "audited_sqlite_mutations_during_exact_read": 0,
+    "new_ruff_diagnostics": 0,
+    "offline_lock_check": "PASS",
+    "strict_twine_check": "PASS",
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The native Pi and Edge processes are real. The dialogs and model responses are controlled fixtures.",
+    "The browser exercised an operator question in operational Home and two questions from global Attention. Keyboard, screen-reader and human acceptance gates remain open."
+  ]
+}

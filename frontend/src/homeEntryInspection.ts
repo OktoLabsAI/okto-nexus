@@ -7,6 +7,15 @@ export interface HomeEntrySelection {
   presentationVersion?:1|2;
   attention?:{item:AttentionOccurrence;action:AttentionAction};
 }
+export interface HomeAttentionReturn {
+  attentionId: string;
+  action: AttentionAction;
+  serverId: string;
+  workspace: string | null;
+  viewWorkspace: string;
+  identityKey: string;
+  target?: HomeTarget;
+}
 export function entryInspectionQuery(selection:HomeEntrySelection,cursor:string|null):HomeEntryQuery {
   return {...selection.filters,...(cursor?{cursor}:{}),limit:10,preview:3,
     ...(selection.presentationVersion===2?{presentation_version:2 as const}:{})};
