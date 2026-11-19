@@ -264,6 +264,10 @@ def build_router():
     async def terminal_input_receipt(session_id: str, request: Request):
         return await input_receipt_for(session_id, request, 'nexus_cli')
 
+    @router.get('/presenter/inputs/receipt')
+    async def presenter_input_receipt(session_id: str, request: Request):
+        return await input_receipt_for(session_id, request, 'native_terminal')
+
     @router.get('/inputs')
     async def input_queue(session_id: str, request: Request):
         if not getattr(request.state, 'operator_session', False):

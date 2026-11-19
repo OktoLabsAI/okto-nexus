@@ -1,4 +1,4 @@
-"""Publish the local operator reader for reviewed hosted Pi sessions."""
+"""Publish the local operator presentation for reviewed hosted Pi sessions."""
 
 from dataclasses import asdict
 
@@ -10,6 +10,7 @@ from ..application.session_attachment_broker import SessionAttachmentBroker
 from ..domain.attention import digest
 from ..domain.presentation_protocol import LOCAL_PI_AUDIENCE
 from ..errors import OktoNexusError
+from .execution_authority import build_execution_access
 
 
 def publish_local_pi_presentations(app, dispatch):
@@ -17,6 +18,7 @@ def publish_local_pi_presentations(app, dispatch):
     if dispatch is None or not dispatch.host.pi_presentation_enabled:
         state.local_pi_presentations = None
         return
+    next_turn_revision = getattr(state, 'session_input_dispatch_options', {}).get('session_input_capability_revision')
 
     def available(mapping, scope):
         session = scope.session
@@ -24,7 +26,7 @@ def publish_local_pi_presentations(app, dispatch):
             session.server_id, session.executor_id, session.session_id)
 
     def revision(uow, scope, author, access, audience):
-        if author.surface != 'native_terminal' or access != 'read' or audience != LOCAL_PI_AUDIENCE:
+        if author.surface != 'native_terminal' or audience != LOCAL_PI_AUDIENCE:
             return None
         try:
             mapping = dispatch.read_native_presentation_mapping(uow, scope)
@@ -32,7 +34,12 @@ def publish_local_pi_presentations(app, dispatch):
             return None
         if not available(mapping, scope):
             return None
-        return 'sha256:' + digest({'mapping': asdict(mapping), 'audience': audience, 'access': access})
+        context = {'mapping': asdict(mapping), 'audience': audience, 'access': access}
+        if access == 'write':
+            if next_turn_revision is None or (input_revision := next_turn_revision(uow, scope)) is None:
+                return None
+            context['next_turn_revision'] = input_revision
+        return 'sha256:' + digest(context)
 
     async def prove(scope):
         mapping, proof = await dispatch.prove_native_presentation_owner(scope)
@@ -43,4 +50,5 @@ def publish_local_pi_presentations(app, dispatch):
     state.local_pi_presentations = LocalPiPresentations(
         SessionAttachmentBroker(state.deps.connection_factory, authority_fence=state.operator_auth.authority_fence,
                                 current_capability=revision),
-        prove, dispatch.open_native_pi_renderer)
+        prove, dispatch.open_native_pi_renderer,
+        build_execution_access(state.deps) if next_turn_revision is not None else None, next_turn_revision)

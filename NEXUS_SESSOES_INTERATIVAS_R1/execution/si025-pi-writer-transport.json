@@ -1,0 +1,56 @@
+{
+  "task": "SI-025",
+  "related_tests": ["SI-T-B22", "SI-T-G04", "SI-T-G18"],
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": "34ada93b6950587b3e37d8fd0c3c7780e0006f7c",
+    "core": "6a9a91a2e94c305adcafdb9e21ffc7e6139b1391",
+    "connector": "15b192bd9495e1fd336532795c094501bfdcd9a6"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "eb2cfba9bd81be47321b68a71547fc127a34130a9ef7abe7c35d9ee95dcdd58b",
+    "core_0.0.16_wheel_sha256": "9b8a0471a4ed352b4fd285f7c39f73026f0ec6ab854ee781e87b7b13531a19e0",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe_sha256": "21880acdbbe89ed787becea84162402172c594ff119b0e4d01c50885591700e5"
+  },
+  "installed_windows_probe": {
+    "command_suffix": "si025-pi-terminal-e2e.py --node <node.exe> --pi-release <release> --conpty-helpers <helpers> --queue --queue-surface presenter",
+    "result": "PASS",
+    "operator_tickets": ["read", "write", "read"],
+    "operator_tickets_final_state": "DETACHED",
+    "real_pi": true,
+    "actual_windows_conpty_for_readers": true,
+    "writer_used_installed_presentation_client": true,
+    "same_process_and_exact_session": true,
+    "replay_returned_same_receipt": true,
+    "receipt_recovered_after_writer_detach": true,
+    "other_login_and_other_surfaces_refused_receipt": true,
+    "queue_source": "native_terminal",
+    "durable_input_count": 1,
+    "event_order": ["agent_start", "agent_settled", "agent_start", "agent_settled"],
+    "event_sequences": [2, 15, 16, 27],
+    "successful_synthetic_turns": 2,
+    "final_input_status": "ACCEPTED_NATIVE",
+    "canonical_close": "SUCCEEDED",
+    "provider_requests": 0
+  },
+  "regressions": {
+    "installed_nexus_passed": 44,
+    "lost_reply_classified_as_possible_effect": true,
+    "twine_strict_passed": true,
+    "offline_lock_check_passed": true,
+    "installed_transport_modules_match_source": true
+  },
+  "native_editor_preflight": {
+    "pi_version": "0.87.1",
+    "result": "PASS",
+    "scope": "Standalone native CustomEditor with a synthetic terminal. Multiline Portuguese paste rendered and produced one submission on Enter.",
+    "production_transport_connected": false
+  },
+  "limitations": [
+    "The real-engine proof sends text through the production Python presentation client. Keyboard capture from the Pi native editor is still pending.",
+    "Writer takeover was tested over HTTP and WebSocket with a synthetic renderer. The real-engine proof uses sequential attachments.",
+    "The provider is synthetic. Steering, approval decisions and inference campaigns remain pending."
+  ]
+}

@@ -27,6 +27,7 @@ from okto_nexus.adapters.inbound.http.session_interaction_contract import (
     SteerTargetView,
 )
 from okto_nexus.adapters.outbound.local_presenter_client import (
+    _LocalPresenter,
     open_local_presentation,
     review_local_presentation,
 )
@@ -47,6 +48,7 @@ from okto_nexus.application.terminal_connection import ConnectionError
 from okto_nexus.application.execution_native_session_mapping import (
     _PI_PRESENTATION_BUILD, ManagedNativeSession, NativeLaunchBuild,
 )
+from okto_nexus.bootstrap import local_pi_presentations
 from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_presentations
 from okto_nexus.domain.presentation_protocol import PI_PRESENTATION_SUBPROTOCOL
 from okto_nexus.domain.session_interaction import InputAuthor
@@ -233,7 +235,7 @@ def test_disabled_and_unqualified_intents_are_refused(transport):
 
 
 @pytest.fixture
-def pi_presentation(transport):
+def pi_presentation(transport, monkeypatch):
     version, platform, architecture, fingerprint = _PI_PRESENTATION_BUILD
     build = NativeLaunchBuild(version, platform, architecture, 'sha256:' + 'a' * 64, fingerprint, 'qualified')
     mapping = ManagedNativeSession(transport.scope, 'open-pi', 'pi_rpc', 'native-pi', 'epoch', 'candidate',
@@ -270,12 +272,31 @@ def pi_presentation(transport):
         open_native_pi_renderer=open_renderer)
     transport.app.state.deps.connection_factory = transport.factory
     publish_local_pi_presentations(transport.app, dispatch)
+
+    def enable_input():
+        clock = SimpleNamespace(now_iso=lambda: '2026-01-01T00:00:00Z')
+        authority = SimpleNamespace(clock=clock)
+
+        def require_grant(_uow, *, scope, author, resolve_human, **_):
+            assert scope == transport.scope and resolve_human(author.authority_ref)
+            return 'fixture-grant', 1
+
+        state.input_revision = 'pi-input-revision'
+        transport.app.state.session_input_dispatch_options = {
+            'session_input_capability_revision': lambda *_: state.input_revision,
+        }
+        monkeypatch.setattr(local_pi_presentations, 'build_execution_access', lambda _: authority)
+        monkeypatch.setattr(session_interaction_authority, 'require_session_input_authority', require_grant)
+        publish_local_pi_presentations(transport.app, dispatch)
+        return transport.app.state.local_pi_presentations
+
+    state.enable_input = enable_input
     return state
 
 
-def _pi_review(transport):
+def _pi_review(transport, **options):
     return transport.client.post(PREFIX + f'/sessions/{transport.scope.session.session_id}/attachments:review',
-        headers={'x-nexus-ui': '1'}, json={**document(transport.scope), 'presentation': 'pi'})
+        headers={'x-nexus-ui': '1'}, json={**document(transport.scope), 'presentation': 'pi', **options})
 
 
 def _pi_prepare(transport, *, client_intent_id='pi-view', **options):
@@ -344,7 +365,74 @@ def test_pi_review_refuses_other_builds_writers_and_historical_runtime(transport
     assert _pi_review(transport).status_code == 409
 
 
-def test_pi_client_reads_binary_frames_over_loopback_and_detaches(transport, pi_presentation):
+def test_pi_writer_replaces_the_exact_writer_and_replays_only_one_queued_input(transport, pi_presentation):
+    service = pi_presentation.enable_input()
+    scope = transport.scope
+    reference = transport.auth.authority_reference(transport.token)
+    web = session_interaction_authority.enqueue_human_input(factory=transport.factory, access=service.execution_access,
+        authority_fence=transport.auth.authority_fence, current_capability_revision=service.next_turn_revision,
+        scope=scope, author=InputAuthor(reference, 'web'), client_intent_id='web-before-pi',
+        capability_revision=pi_presentation.input_revision, text='From the dashboard')
+
+    def review_writer():
+        response = _pi_review(transport, access='write')
+        assert response.status_code == 200, response.text
+        review = response.json()
+        assert review['attach_strategy'] == 'pi_local_write'
+        return review
+
+    def writer_offer(intent, review, *, takeover=False):
+        return prepare(transport, intent, presentation='pi', access='write', expected_writer_epoch=review['writer_epoch'],
+                       capability_revision=review['capability_revision'], takeover=takeover)
+
+    initial = review_writer()
+    assert initial['writer_occupied'] is False and initial['writer_epoch'] == 0
+    offer = writer_offer('pi-writer', initial).json()
+    payload = {'kind': 'enqueue', 'request_id': 1, 'client_intent_id': 'native-pi-input',
+               'capability_revision': initial['input_capability_revision'], 'content': {'type': 'text', 'text': 'From Pi'}}
+    reader = _pi_prepare(transport, client_intent_id='pi-reader').json()
+    with stream(transport, reader, protocol=PI_PRESENTATION_SUBPROTOCOL) as ws:
+        _prove_pi_ticket(ws, scope)
+        assert ws.receive_json()['access'] == 'read'
+        assert ws.receive_bytes()
+        ws.send_json(payload)
+        with pytest.raises(WebSocketDisconnect):
+            ws.receive_json()
+
+    with stream(transport, offer, protocol=PI_PRESENTATION_SUBPROTOCOL) as original:
+        _prove_pi_ticket(original, scope)
+        assert original.receive_json()['access'] == 'write'
+        assert original.receive_bytes()
+        original.send_json(payload)
+        receipt = original.receive_json()
+        assert receipt['status'] == 'QUEUED' and receipt['enqueue_sequence'] == web.sequence + 1
+        assert receipt['operation_id'] is None and receipt['possible_effect'] is False
+        current = review_writer()
+        assert current['writer_occupied'] is True and current['writer_epoch'] == 1
+        assert writer_offer('pi-no-takeover', current).status_code == 409
+        replacement = writer_offer('pi-next-writer', current, takeover=True).json()
+        with stream(transport, replacement, protocol=PI_PRESENTATION_SUBPROTOCOL) as successor:
+            _prove_pi_ticket(successor, scope)
+            assert successor.receive_json()['access'] == 'write'
+            assert successor.receive_bytes()
+            with pytest.raises(WebSocketDisconnect):
+                original.receive_json()
+            successor.send_json(payload | {'request_id': 2})
+            assert successor.receive_json() == receipt | {'request_id': 2}
+            successor.send_json(payload | {'request_id': 3, 'scope': document(transport.sibling)['scope']})
+            with pytest.raises(WebSocketDisconnect):
+                successor.receive_json()
+
+    assert attachment_state(transport, offer)[0] == 'REPLACED'
+    assert attachment_state(transport, replacement)[0] == 'DETACHED'
+    with transport.factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == 2
+
+
+@pytest.mark.parametrize('write', [False, True])
+def test_pi_client_reads_binary_frames_over_loopback_and_detaches(transport, pi_presentation, write):
+    if write:
+        pi_presentation.enable_input()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
         listener.bind(('127.0.0.1', 0))
         listener.listen()
@@ -361,10 +449,18 @@ def test_pi_client_reads_binary_frames_over_loopback_and_detaches(transport, pi_
             api = RemoteOperatorHTTP(f'http://{host}:{port}', token=transport.token,
                                      server_id=transport.scope.session.server_id)
             scope = document(transport.scope)
-            revision = review_local_presentation(api, **scope, presentation='pi')
+            reviewed = review_local_presentation(api, **scope, presentation='pi', write=write)
+            revision = reviewed.capability_revision if write else reviewed
             with open_local_presentation(api, **scope, capability_revision=revision,
-                                         client_intent_id='loopback-pi', pi_viewport=(80, 24)) as reader:
-                assert reader.read_pi_output() == b'\x1b[2JExact Pi renderer bytes\n'
+                                         client_intent_id='loopback-pi', pi_viewport=(80, 24),
+                                         writer=reviewed if write else None) as reader:
+                output = []
+                if write:
+                    receipt = reader.send_pi_input(intent='pi-loopback-input', text='Queue a message', output=output.append)
+                    assert receipt['status'] == 'QUEUED' and receipt['possible_effect'] is False
+                if not output:
+                    output.append(reader.read_pi_output())
+                assert output == [b'\x1b[2JExact Pi renderer bytes\n']
                 offer = {'attachment_id': reader.attachment_id}
                 assert attachment_state(transport, offer)[0] == 'ACTIVE'
         finally:
@@ -373,6 +469,21 @@ def test_pi_client_reads_binary_frames_over_loopback_and_detaches(transport, pi_
             assert not thread.is_alive()
     assert attachment_state(transport, offer) == ('DETACHED', None, None)
     assert pi_presentation.frames == [('open', 80, 24), ('detach', 80, 24)]
+
+
+def test_pi_input_with_lost_reply_requires_recovery_of_the_same_intent(monkeypatch):
+    link = _LocalPresenter(None, None, 'viewer', live_updates=True, input_revision='revision')
+    calls = []
+
+    def lost_reply(frame, **_):
+        calls.append(frame)
+        raise OSError('Reply lost')
+
+    monkeypatch.setattr(link, 'exchange', lost_reply)
+    with pytest.raises(ConnectionError) as raised:
+        link.send_pi_input(intent='original-intent', text='Queued once', output=lambda _: None)
+    assert raised.value.code == 'OUTCOME_UNKNOWN' and raised.value.possible_effect
+    assert [request['client_intent_id'] for request in calls] == ['original-intent']
 
 
 def test_writer_and_web_share_queue_with_exact_scope_and_idempotency(transport, monkeypatch):

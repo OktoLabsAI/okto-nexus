@@ -116,15 +116,21 @@ class _LocalPresenter:
         if not isinstance(event, AcceptConnection) or event.subprotocol != protocol:
             raise ValueError('Presentation subprotocol did not match')
 
-    def exchange(self, frame):
+    def exchange(self, frame, *, pi_output=None):
         raw = canonical_json(frame)
         if len(raw) > MAX_PRESENTATION_REQUEST_BYTES:
             raise ValueError('Presentation request too large')
         self._peer.settimeout(_TIMEOUT)
         self._peer.sendall(self._wire.send(TextMessage(data=raw.decode())))
         parts, received = [], 0
+        binary = bytearray()
         for event in self._events(time.monotonic() + _TIMEOUT):
-            if not isinstance(event, TextMessage):
+            if pi_output is not None and isinstance(event, BytesMessage) and not parts:
+                if output := _pi_fragment(binary, event):
+                    pi_output(output)
+                    binary.clear()
+                continue
+            if not isinstance(event, TextMessage) or binary:
                 raise TypeError('Unexpected presentation response')
             received += len(event.data.encode())
             if received > MAX_PRESENTATION_RESPONSE_BYTES:
@@ -143,17 +149,34 @@ class _LocalPresenter:
         while True:
             try:
                 for event in self._events(time.monotonic() + 1):
-                    if not isinstance(event, BytesMessage) or len(data) + len(event.data) > MAX_PI_PRESENTATION_BYTES:
-                        raise ValueError('Invalid Pi renderer frame')
-                    data.extend(event.data)
-                    if event.message_finished:
-                        if not data:
-                            raise ValueError('Empty Pi renderer frame')
-                        return bytes(data)
+                    if output := _pi_fragment(data, event):
+                        return output
             except TimeoutError:
                 continue
             except (OSError, ValueError, ProtocolError):
                 raise _unavailable() from None
+
+    def send_pi_input(self, *, intent, text, output):
+        """Record plain text on the canonical queue while rendering concurrent output."""
+        if self.input_revision is None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This Pi view is read-only.')
+        try:
+            receipt = self._request('enqueue', flat=True, pi_output=output, client_intent_id=intent,
+                                    capability_revision=self.input_revision, content={'type': 'text', 'text': text})
+            input_id = receipt['input_id']
+            status = InputDeliveryState(receipt['status'])
+            sequence = receipt['enqueue_sequence']
+            operation_id = receipt['operation_id']
+            if (not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id)
+                    or type(sequence) is not int or sequence < 1 or type(receipt['possible_effect']) is not bool
+                    or operation_id is not None and (not isinstance(operation_id, str) or not operation_id)):
+                raise ValueError
+        except (ConnectionError, KeyError, ValueError):
+            raise ConnectionError('OUTCOME_UNKNOWN',
+                'The queue receipt is unconfirmed. Recover the same message intent before sending again.',
+                possible_effect=True) from None
+        return {'input_id': input_id, 'status': status, 'enqueue_sequence': sequence,
+                'operation_id': operation_id, 'possible_effect': receipt['possible_effect']}
 
     def page(self, *, method, params):
         if method not in _HISTORY_METHODS:
@@ -279,10 +302,11 @@ class _LocalPresenter:
             raise CodexInputStatus('The interruption was refused. Check the queue before resuming it.')
         return False
 
-    def _request(self, kind, *, flat=False, **payload):
+    def _request(self, kind, *, flat=False, pi_output=None, **payload):
         self._request_id += 1
         try:
-            response = self.exchange({'kind': kind, 'request_id': self._request_id, **payload})
+            frame = {'kind': kind, 'request_id': self._request_id, **payload}
+            response = self.exchange(frame) if pi_output is None else self.exchange(frame, pi_output=pi_output)
             if (response.get('kind') != kind or type(response.get('request_id')) is not int
                     or response['request_id'] != self._request_id):
                 raise ValueError('The presentation response did not match the request')
@@ -293,6 +317,17 @@ class _LocalPresenter:
         except (OSError, TypeError, ValueError, ProtocolError, RecursionError):
             raise _unavailable() from None
         return response[kind]
+
+
+def _pi_fragment(data, event):
+    if not isinstance(event, BytesMessage) or len(data) + len(event.data) > MAX_PI_PRESENTATION_BYTES:
+        raise ValueError('Invalid Pi renderer frame')
+    data.extend(event.data)
+    if event.message_finished:
+        if not data:
+            raise ValueError('Empty Pi renderer frame')
+        return bytes(data)
+    return None
 
 
 def _unavailable():
@@ -321,8 +356,6 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
     _local_origin(api, scope)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     if presentation == 'pi':
-        if write:
-            raise _unavailable()
         state['presentation'] = 'pi'
     if write:
         state['access'] = 'write'
@@ -361,8 +394,6 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     access = 'write' if writer is not None else 'read'
     writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
-    if pi_viewport is not None and writer is not None:
-        raise _unavailable()
     pi_fields = {'presentation': 'pi'} if pi_viewport is not None else {}
     offer = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:prepare',
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,

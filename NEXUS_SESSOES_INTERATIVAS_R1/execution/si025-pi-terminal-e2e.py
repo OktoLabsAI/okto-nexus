@@ -15,9 +15,12 @@ import pytest
 import uvicorn
 from fastapi.testclient import TestClient
 
+from nexus_connector_core.discovery import candidate_pi_node_cli
 from nexus_connector_core.pi_extension_resource import pi_hosted_rpc_path
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.inbound.http.session_interaction_contract import ScopedSession
+from okto_nexus.adapters.outbound.local_presenter_client import open_local_presentation, review_local_presentation
+from okto_nexus.adapters.outbound.operator_client import RemoteOperatorHTTP
 from okto_nexus.application.execution_local_launch import ApprovedLocalLaunch
 from okto_nexus.application.execution_native_session_mapping import read_managed_native_session
 from okto_nexus.bootstrap.dependencies import bootstrap
@@ -98,7 +101,7 @@ export default (pi) => {{
     }
 
 
-def admit_session(client, headers, workspace, app, provider_home):
+def admit_session(client, headers, workspace, app, provider_home, expected_candidate):
     inventory_owner = app.state.embedded_inventory_owner
     executor = '/v1/runtime/executors/' + inventory_owner.key.executor_id
 
@@ -112,12 +115,12 @@ def admit_session(client, headers, workspace, app, provider_home):
         if view.get('freshness') != 'FRESH':
             return None
         inventory = view['snapshot']
-        selected = next((row for row in inventory['evidence'] if row['adapter_id'] == 'pi_rpc'), None)
-        if selected:
-            return inventory, selected
-        observation = next(row for row in inventory['observations'] if row['adapter_id'] == 'pi_rpc')
-        assert observation['state'] == 'PENDING', observation
-        return None
+        if any(row['state'] not in ('PRESENT', 'ABSENT') for row in inventory['observations']):
+            return None
+        selected = next((row for row in inventory['evidence']
+                         if row['candidate_ref'] == expected_candidate.installation_ref), None)
+        assert selected is not None, 'The approved Pi release is absent from the complete inventory'
+        return inventory, selected
 
     inventory, selected = wait_for(snapshot, seconds=300)
     response = client.post(executor + '/realizations', headers=headers['operator'], json={
@@ -147,7 +150,7 @@ def admit_session(client, headers, workspace, app, provider_home):
     return binding
 
 
-def enqueue_follow_up(client, data, generation, token):
+def enqueue_follow_up(client, data, generation, token, *, presenter_address=None, other_login=None):
     client.cookies.set('nexus_operator_session', token)
     path = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
     query = {key: value for key, value in data.items() if key != 'session_id'}
@@ -160,18 +163,38 @@ def enqueue_follow_up(client, data, generation, token):
         return view.json()['next_turn']['capability_revision']
 
     intent_id = 'isolated-pi-queued-follow-up'
-    body = {'scope': data, 'expected_session_generation': generation, 'client_intent_id': intent_id,
-            'capability_revision': wait_for(capability, seconds=10),
-            'content': [{'type': 'text', 'text': FOLLOW_UP}]}
-    response = client.post(path + '/inputs', json=body, headers=headers)
-    assert response.status_code == 202, response.text
-    queued = response.json()
+    if presenter_address is not None:
+        api = RemoteOperatorHTTP(presenter_address, token=token, server_id=data['server_id'])
+        scope = {'scope': data, 'expected_session_generation': generation}
+        writer = review_local_presentation(api, **scope, presentation='pi', write=True)
+        output = []
+        with open_local_presentation(api, **scope, capability_revision=writer.capability_revision,
+                                     client_intent_id='isolated-pi-writer', writer=writer, pi_viewport=(80, 24)) as link:
+            output.append(link.read_pi_output())
+            queued = link.send_pi_input(intent=intent_id, text=FOLLOW_UP, output=output.append)
+            replay = link.send_pi_input(intent=intent_id, text=FOLLOW_UP, output=output.append)
+            assert replay == queued and PROMPT.encode() in b''.join(output)
+        receipt_path = '/presenter/inputs/receipt'
+        selector = query | {'client_intent_id': intent_id}
+        for other_surface in ('/inputs/receipt', '/terminal/inputs/receipt'):
+            assert client.get(path + other_surface, params=selector, headers=headers).status_code == 404
+        client.cookies.set('nexus_operator_session', other_login)
+        assert client.get(path + receipt_path, params=selector, headers=headers).status_code == 404
+        client.cookies.set('nexus_operator_session', token)
+    else:
+        body = {'scope': data, 'expected_session_generation': generation, 'client_intent_id': intent_id,
+                'capability_revision': wait_for(capability, seconds=10),
+                'content': [{'type': 'text', 'text': FOLLOW_UP}]}
+        response = client.post(path + '/inputs', json=body, headers=headers)
+        assert response.status_code == 202, response.text
+        queued = response.json()
+        replay = client.post(path + '/inputs', json=body, headers=headers)
+        assert replay.status_code == 202 and replay.json()['input_id'] == queued['input_id'], replay.text
+        receipt_path = '/inputs/receipt'
     assert queued['status'] == 'QUEUED' and queued['operation_id'] is None and not queued['possible_effect'], queued
-    replay = client.post(path + '/inputs', json=body, headers=headers)
-    assert replay.status_code == 202 and replay.json()['input_id'] == queued['input_id'], replay.text
 
     def read():
-        response = client.get(path + '/inputs/receipt', params=query | {'client_intent_id': intent_id}, headers=headers)
+        response = client.get(path + receipt_path, params=query | {'client_intent_id': intent_id}, headers=headers)
         assert response.status_code == 200, response.text
         value = response.json()
         assert value['scope'] == data and value['input_id'] == queued['input_id'], value
@@ -180,7 +203,7 @@ def enqueue_follow_up(client, data, generation, token):
     return read
 
 
-def run(node, release, conpty_helpers, *, queue):
+def run(node, release, conpty_helpers, *, queue, queue_surface):
     sys.path.insert(0, str(conpty_helpers))
     from owned_engine_probe import environment
     from pty_probe import ProbeConsole
@@ -205,6 +228,11 @@ def run(node, release, conpty_helpers, *, queue):
         return approved | sandbox
 
     install_root = release.parent.parent
+    # Read the reviewed dependency closure before the inventory freshness clock
+    # starts. Core's regular discovery and selection still revalidate it.
+    print('Reading the exact Pi installation before starting the fixture server', flush=True)
+    selected_cli = release / 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js'
+    expected_candidate = candidate_pi_node_cli(node, selected_cli, trusted_roots=(node.parent, install_root))
     discovery, rest = split_discovery_args([
         '--harness-root', str(node.parent), '--harness-root', str(install_root),
         '--pi-install-root', str(install_root), '--pi-node', str(node),
@@ -231,7 +259,7 @@ def run(node, release, conpty_helpers, *, queue):
             listener_task = client.portal.start_task_soon(server.serve, [listener])
             try:
                 wait_for(lambda: server.started, seconds=10)
-                binding = admit_session(client, headers, workspace, app, agent.parent.parent)
+                binding = admit_session(client, headers, workspace, app, agent.parent.parent, expected_candidate)
                 setup = (deps, app, client, headers)
                 owner = app.state.embedded_dispatch_owner
                 print('Admitting the exact local Pi opening', flush=True)
@@ -323,7 +351,11 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 follow_up = None
                 if queue:
                     print('Enqueuing a follow-up while the Pi turn is streaming', flush=True)
-                    follow_up = enqueue_follow_up(client, data, scope.generation.value, token)
+                    presenter = queue_surface == 'presenter'
+                    follow_up = enqueue_follow_up(client, data, scope.generation.value, token,
+                        presenter_address=address if presenter else None,
+                        other_login=auth.login('operator', password) if presenter else None)
+                    wait_for(lambda: not active_attachment(), seconds=8)
 
                 with viewer('second-viewer') as second:
                     second_attachment = wait_for(active_attachment, seconds=15)[0]
@@ -351,7 +383,8 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 closed = admit(setup, binding, 'isolated-pi-close', 'runtime.close', session_id=data['session_id'])
                 receipt(closed, 'SUCCEEDED')
                 with deps.connection_factory.unit_of_work(write=False) as uow:
-                    assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * 2
+                    tickets = 3 if queue and queue_surface == 'presenter' else 2
+                    assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * tickets
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == len(results)
                     assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue)
                     if queue:
@@ -374,9 +407,10 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert [message['role'] for message in messages] == ['system'] + ['user', 'assistant'] * len(results)
                 expected = [PROMPT, RESULT, FOLLOW_UP, FOLLOW_UP_RESULT] if queue else [PROMPT, RESULT]
                 assert [message['content'][0]['text'] for message in messages[1:]] == expected
-                print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': 2,
+                print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': tickets,
                                   'same_running_pi_process_after_detach': True, 'synthetic_turns': len(results),
                                   'follow_up_queued_until_settled': queue,
+                                  'queue_surface': queue_surface if queue else None,
                                   'canonical_close': 'SUCCEEDED', 'console_modes_restored': True}), flush=True)
             finally:
                 server.should_exit = True
@@ -388,8 +422,9 @@ if __name__ == '__main__':
     parser.add_argument('--node', type=Path, required=True)
     parser.add_argument('--pi-release', type=Path, required=True)
     parser.add_argument('--conpty-helpers', type=Path, required=True)
-    parser.add_argument('--queue', action='store_true', help='Exercise the dashboard queue with a synthetic follow-up.')
+    parser.add_argument('--queue', action='store_true', help='Exercise the canonical queue with a synthetic follow-up.')
+    parser.add_argument('--queue-surface', choices=('web', 'presenter'), default='web')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
-        args.conpty_helpers.resolve(strict=True), queue=args.queue)
+        args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface)

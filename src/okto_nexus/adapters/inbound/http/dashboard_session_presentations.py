@@ -5,10 +5,11 @@ import secrets
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import AbstractAsyncContextManager, AsyncExitStack
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import partial
 from ipaddress import ip_address
 from typing import Annotated, Literal
+from weakref import WeakValueDictionary
 
 import anyio
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
@@ -78,6 +79,10 @@ class LocalPiPresentations:
     broker: SessionAttachmentBroker
     prove_owner: Callable[[InputScope], Awaitable[tuple[ManagedNativeSession, NativeSessionOwnerProof]]]
     open_renderer: Callable[..., AbstractAsyncContextManager[AsyncIterator[bytes]]]
+    execution_access: object | None = None
+    next_turn_revision: Callable[[object, InputScope], str | None] | None = None
+    renderer_locks: WeakValueDictionary[InputScope, asyncio.Lock] = field(default_factory=WeakValueDictionary,
+                                                                          repr=False, compare=False)
 
 
 class _Hello(ScopedSession):
@@ -113,13 +118,16 @@ class _UpdatesRequest(_Document):
     request_id: Revision
 
 
-class _EnqueueRequest(_Document):
+class _PiEnqueueRequest(_Document):
     kind: Literal['enqueue']
     request_id: Revision
-    thread_id: Identifier
     client_intent_id: Identifier
     capability_revision: Identifier
     content: TextInput
+
+
+class _EnqueueRequest(_PiEnqueueRequest):
+    thread_id: Identifier
 
 
 class _InputDeliveryRequest(_Document):
@@ -218,7 +226,10 @@ async def _worker(function, **arguments):
 
 
 async def _receive(ws: WebSocket):
-    message = await ws.receive()
+    return _decode(await ws.receive())
+
+
+def _decode(message):
     if message['type'] == 'websocket.disconnect':
         raise WebSocketDisconnect(message.get('code', 1000))
     wire = message.get('text')
@@ -244,8 +255,8 @@ def _matching_presenter(mapping, *, pi: bool) -> bool:
     return mapping.adapter_id == 'pi_rpc' if pi else mapping.codex_thread_id is not None
 
 
-def _verify_writer(state, services, active, uow, human):
-    if _services(state) is not services:
+def _verify_writer(state, services, active, uow, human, *, presentation='codex'):
+    if _services(state, presentation) is not services:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The presentation owner changed.', {})
     services.broker.require_writer_effect(uow, human, **active)
 
@@ -304,13 +315,17 @@ async def _confirm_turn(state, services, active, history, review, request):
 
 
 async def _enqueue(state, services, active, history, request):
-    broker = services.broker
     if active['attachment'].access != 'write' or services.next_turn_revision is None:
         raise ValueError('This presentation cannot enqueue input')
     await history.verify_input_thread(request.thread_id)
+    return await _record_presenter_input(state, services, active, request, presentation='codex')
+
+
+async def _record_presenter_input(state, services, active, request, *, presentation):
+    broker = services.broker
 
     def verify_presenter(uow, human):
-        _verify_writer(state, services, active, uow, human)
+        _verify_writer(state, services, active, uow, human, presentation=presentation)
 
     receipt = await _worker(enqueue_human_input, factory=broker.factory, access=services.execution_access,
         authority_fence=broker.authority_fence, current_capability_revision=services.next_turn_revision,
@@ -321,19 +336,27 @@ async def _enqueue(state, services, active, history, request):
 
 
 async def _present_pi(ws, services, active, hello):
+    access = active['attachment'].access
+    state = ws.app.state
+
     async def verify(*, renew=False):
-        if _services(ws.app.state, 'pi') is not services:
+        if _services(state, 'pi') is not services:
             raise ValueError('Presentation owner changed')
         await _worker(services.broker.refresh if renew else services.broker.require_active, **active)
-        if _services(ws.app.state, 'pi') is not services:
+        if _services(state, 'pi') is not services:
             raise ValueError('Presentation owner changed')
 
     async with AsyncExitStack() as stack:
         with anyio.fail_after(10):
+            # A replaced writer retires on its next broker check before the
+            # next viewer opens the single renderer slot.
+            lock = services.renderer_locks.setdefault(active['scope'], asyncio.Lock())
+            await stack.enter_async_context(lock)
+            await verify()
             frames = await stack.enter_async_context(services.open_renderer(
                 active['scope'], columns=hello.columns, rows=hello.rows))
             await verify()
-            await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': 'read'})
+            await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': access})
 
         inbound = asyncio.create_task(ws.receive())
         output = asyncio.ensure_future(anext(frames, None))
@@ -341,14 +364,24 @@ async def _present_pi(ws, services, active, hello):
         try:
             while True:
                 done, _ = await asyncio.wait((inbound, output), timeout=1, return_when=asyncio.FIRST_COMPLETED)
+                message = None
                 if inbound in done:
-                    if inbound.result()['type'] != 'websocket.disconnect':
-                        raise ValueError('The Pi presentation only accepts output')
-                    return
+                    message = inbound.result()
+                    if message['type'] == 'websocket.disconnect':
+                        return
                 renew = anyio.current_time() >= renewal
                 await verify(renew=renew)
                 if renew:
                     renewal = anyio.current_time() + _RENEW_SECONDS
+                if message is not None:
+                    if access != 'write' or services.next_turn_revision is None:
+                        raise ValueError('This presentation cannot enqueue input')
+                    request = _PiEnqueueRequest.model_validate(_decode(message))
+                    reply = await _record_presenter_input(state, services, active, request, presentation='pi')
+                    if _services(state, 'pi') is not services:
+                        break
+                    await _send(ws, {'request_id': request.request_id, **reply})
+                    inbound = asyncio.create_task(ws.receive())
                 if output not in done:
                     continue
                 data = output.result()
@@ -393,8 +426,6 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
             if not pi:
                 await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
         if pi:
-            if attachment.access != 'read':
-                raise ValueError('This renderer only supports reading')
             await _present_pi(ws, services, active, hello)
             return
         history = CodexPresenterHistoryChannel(broker=broker, prove_owner=services.prove_owner,
@@ -468,8 +499,8 @@ def build_router():
         pi = body.presentation == 'pi'
         services = _services(state, body.presentation)
         writing = body.access == 'write'
-        if (services is None or pi and writing
-                or not pi and (services.read_context is None or writing and services.next_turn_revision is None)):
+        if (services is None or writing and services.next_turn_revision is None
+                or not pi and services.read_context is None):
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         scope = body.input_scope()
         try:
@@ -497,9 +528,9 @@ def build_router():
                         return services.next_turn_revision(uow, scope)
 
                 revision = await _worker(input_revision)
-                if revision is None or _services(state) is not services:
+                if revision is None or _services(state, body.presentation) is not services:
                     raise CoreError('SESSION_CONFLICT', 'native_presentation')
-                details = {'attach_strategy': 'codex_local_write', 'capability_revision': reviewed.capability_revision,
+                details = {'attach_strategy': f'{body.presentation}_local_write', 'capability_revision': reviewed.capability_revision,
                     'writer_epoch': reviewed.epoch, 'writer_occupied': reviewed.occupied,
                     'input_capability_revision': revision}
         except OktoNexusError as error:
@@ -521,7 +552,7 @@ def build_router():
         pi = body.presentation == 'pi'
         services = _services(state, body.presentation)
         if (services is None or body.intent != 'attach_live'
-                or body.access == 'write' and (pi or services.next_turn_revision is None)):
+                or body.access == 'write' and services.next_turn_revision is None):
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         scope = body.input_scope()
         try:
