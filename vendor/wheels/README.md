@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `3c9055da67e701e3bcff32f2c1a17789eb4f6331`.
-The unpublished wheel SHA-256 is `31c1be3c3a0582201a907ac3aed85df8457b2e7c55b0b00dedd462d8feb1462b`.
-Hosted Pi steering checks the selected run at enqueue and journals queue admission and consumption under the same operation ID.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `0c8aae277fe58f281b55cedf80bd774f0dc2e975`.
+The unpublished wheel SHA-256 is `2515b37f1cad2a19ad08871d41c609d8b372a622821db243890d1b3b72c089bb`.
+The local receipt binding now covers the exact hosted Pi run and recovers under the existing R4 wire format.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency

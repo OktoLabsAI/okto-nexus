@@ -1,20 +1,29 @@
-"""Identify a controllable Codex turn from the current canonical stream."""
+"""Identify an exact control target from the current canonical stream."""
 
 import hashlib
 import json
 from dataclasses import dataclass
 
 from nexus_connector_core import get_control_targeting
+from nexus_connector_core.native.pi_steer_facts import valid_pi_run_id
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
-from .execution_native_session_mapping import read_managed_native_session
+from .execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
 
 
 @dataclass(frozen=True, slots=True)
 class ExactNativeTurn:
     native_id: str
+    operation_id: str
+    revision: str
+    stream_epoch: str
+
+
+@dataclass(frozen=True, slots=True)
+class ExactPiRun:
+    run_ref: str
     operation_id: str
     revision: str
     stream_epoch: str
@@ -32,8 +41,47 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     mapping = read_managed_native_session(uow, scope)
     if mapping is None or mapping.codex_thread_id is None or mapping.stream_epoch is None:
         return None
+    evidence = _active_start(uow, scope, mapping.adapter_id, 'turn/started', 'turn_state')
+    if evidence is None:
+        return None
+    selected, start, payload = evidence
+    turn = payload.get('turn_id')
+    details = payload.get('turn')
+    if (not isinstance(turn, str) or not 1 <= len(turn) <= 160 or not turn.isprintable()
+            or 'REDACTED' in turn or payload.get('thread_id') != mapping.codex_thread_id
+            or payload.get('threadId') != mapping.codex_thread_id
+            or not isinstance(details, dict) or details.get('id') != turn):
+        return None
+    revision = 'sha256:' + digest({'action': 'exact_native_turn.v1', 'capability': capability,
+        'operation_id': selected['operation_id'], 'epoch': selected['stream_epoch'], 'start': start['event_hash'],
+        'thread_configuration': mapping.codex_configuration_hash})
+    return ExactNativeTurn(turn, selected['operation_id'], revision, selected['stream_epoch'])
+
+
+def active_pi_run(uow, scope: InputScope, *, current_next_turn_revision) -> ExactPiRun | None:
+    """Prove the observed run on the reviewed embedded Pi owner."""
+    mapping = read_managed_native_session(uow, scope)
+    if mapping is None or mapping.stream_epoch is None or not reviewed_pi_context(mapping):
+        return None
+    capability = current_next_turn_revision(uow, scope)
+    if capability is None:
+        return None
+    evidence = _active_start(uow, scope, 'pi_rpc', 'agent_start', 'tool_activity')
+    if evidence is None:
+        return None
+    selected, start, payload = evidence
+    run = payload.get('hosted_pi_run_id')
+    if not valid_pi_run_id(run):
+        return None
+    revision = 'sha256:' + digest({'action': 'exact_hosted_pi_run.v1', 'capability': capability,
+        'opening': mapping.opening_operation_id, 'operation_id': selected['operation_id'],
+        'epoch': selected['stream_epoch'], 'start': start['event_hash']})
+    return ExactPiRun(run, selected['operation_id'], revision, selected['stream_epoch'])
+
+
+def _active_start(uow, scope, adapter_id, native_start, event_type):
     conn = uow.connection
-    scope_params = _scope_params(scope)
+    scope_params = _scope_params(scope) | {'adapter_id': adapter_id, 'native_start': native_start, 'event_type': event_type}
     active = conn.execute("""
         SELECT o.operation_id, s.stream_epoch, w.committed_contiguous
         FROM execution_sessions s
@@ -53,7 +101,8 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
           AND result.operation_id=o.operation_id
         WHERE s.server_id=:server_id AND s.executor_id=:executor_id AND s.session_id=:session_id
           AND s.owner_generation=:owner_generation AND s.binding_id=:binding_id AND s.workspace_id=:workspace_id
-          AND s.workspace_binding_id=:workspace_binding_id AND e.adapter_id='codex_app_server'
+          AND s.workspace_binding_id=:workspace_binding_id AND e.adapter_id=:adapter_id
+          AND (:adapter_id!='pi_rpc' OR x.kind='embedded')
           AND w.gap_state='none'
           AND o.action='turn.submit' AND o.admission_state='DISPATCHED' AND o.binding_id=:binding_id
           AND o.workspace_id=:workspace_id AND o.workspace_binding_id=:workspace_binding_id
@@ -61,6 +110,14 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
           AND r.stage IN ('SUBMITTED','ACCEPTED') AND r.source_connection_id=x.owner_instance_id
           AND r.source_connection_generation=x.generation AND result.terminal_sequence IS NULL
           AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=:owner_generation
+          AND (:adapter_id!='pi_rpc' OR NOT EXISTS (
+              SELECT 1 FROM execution_event_ingress finish
+              WHERE finish.server_id=s.server_id AND finish.executor_id=s.executor_id
+                AND finish.session_id=s.session_id AND finish.stream_epoch=s.stream_epoch
+                AND finish.event_type='turn_state' AND finish.sequence<=w.committed_contiguous
+                AND json_extract(finish.payload_json,'$.operation_id')=o.operation_id
+                AND json_extract(finish.payload_json,'$.payload.delivery_phase')='terminal'
+          ))
           AND NOT EXISTS (
               SELECT 1 FROM execution_event_ingress failure
               WHERE failure.server_id=s.server_id AND failure.executor_id=s.executor_id
@@ -77,9 +134,9 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
         SELECT payload_json,event_hash,sequence
         FROM execution_event_ingress
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
-          AND stream_epoch=:stream_epoch AND sequence<=:committed_contiguous AND event_type='turn_state'
+          AND stream_epoch=:stream_epoch AND sequence<=:committed_contiguous AND event_type=:event_type
           AND json_extract(payload_json,'$.operation_id')=:operation_id
-          AND json_extract(payload_json,'$.native_type')='turn/started'
+          AND json_extract(payload_json,'$.native_type')=:native_start
           AND json_extract(payload_json,'$.payload.delivery_phase')='started'
         LIMIT 2
     """, {**scope_params, **dict(selected)}).fetchall()
@@ -89,18 +146,7 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     raw = start['payload_json']
     if 'sha256:' + hashlib.sha256(raw.encode()).hexdigest() != start['event_hash']:
         return None
-    payload = json.loads(raw)['payload']
-    turn = payload.get('turn_id')
-    details = payload.get('turn')
-    if (not isinstance(turn, str) or not 1 <= len(turn) <= 160 or not turn.isprintable()
-            or 'REDACTED' in turn or payload.get('thread_id') != mapping.codex_thread_id
-            or payload.get('threadId') != mapping.codex_thread_id
-            or not isinstance(details, dict) or details.get('id') != turn):
-        return None
-    revision = 'sha256:' + digest({'action': 'exact_native_turn.v1', 'capability': capability,
-        'operation_id': selected['operation_id'], 'epoch': selected['stream_epoch'], 'start': start['event_hash'],
-        'thread_configuration': mapping.codex_configuration_hash})
-    return ExactNativeTurn(turn, selected['operation_id'], revision, selected['stream_epoch'])
+    return selected, start, json.loads(raw)['payload']
 
 
 def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision) -> str | None:
@@ -110,18 +156,26 @@ def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_n
     return turn.revision
 
 
-def steer_effect_revisions(turn: ExactNativeTurn) -> tuple[str, str] | None:
-    """Describe the installed Core contract for this proven Codex turn."""
-    contract = get_control_targeting('codex_app_server', 'turn.steer')
-    if not (contract.supported and contract.native_turn_id == 'required' and contract.requires_active_run
-            and contract.steer_timing == 'IMMEDIATE'):
+def steer_effect_revisions(turn: ExactNativeTurn | ExactPiRun) -> tuple[str, str] | None:
+    """Describe the installed Core contract for the proven target."""
+    if isinstance(turn, ExactPiRun):
+        adapter, native_id, timing, effect_name = 'pi_rpc', 'forbidden', 'NEXT_TURN_BOUNDARY', 'next_boundary'
+    else:
+        adapter, native_id, timing, effect_name = 'codex_app_server', 'required', 'IMMEDIATE', 'same_turn'
+    contract = get_control_targeting(adapter, 'turn.steer')
+    if not (contract.supported and contract.requires_active_run and
+            (contract.native_turn_id, contract.steer_timing) == (native_id, timing)):
         return None
     capability = 'sha256:' + digest({'target': turn.revision, 'contract': contract.to_dict()})
-    effect = 'sha256:' + digest({'capability': capability, 'effect': 'same_turn'})
+    effect = 'sha256:' + digest({'capability': capability, 'effect': effect_name})
     return capability, effect
 
 
-def steer_revisions(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision) -> tuple[str, str] | None:
+def steer_revisions(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision,
+                    observed_run=False) -> tuple[str, str] | ExactPiRun | None:
+    if observed_run:
+        run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision)
+        return run if run is not None and run.run_ref == native_turn_id else None
     turn = active_native_turn(uow, scope, current_next_turn_revision=current_next_turn_revision)
     if turn is None or turn.native_id != native_turn_id:
         return None

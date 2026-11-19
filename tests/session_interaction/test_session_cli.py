@@ -308,10 +308,12 @@ def test_detach_key_distinguishes_paste_and_other_win32_key_events():
     assert _TerminalKeys().read('\x1d\x1b[89;21;25;1;8;1_\x0e') == {'\x1d', '\x19', '\x0e'}
 
 
-def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatch, capsys):
+@pytest.mark.parametrize('pi_run', [False, True])
+def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatch, capsys, pi_run):
     scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {'session_id': 'session-a'}
     exact = {'scope': scope, 'session_owner_generation': 7}
-    target = {'kind': 'native_turn', 'turn_id': 'turn-one'}
+    target = ({'kind': 'observed_run', 'run_ref': 'prun_' + '1' * 32} if pi_run
+              else {'kind': 'native_turn', 'turn_id': 'turn-one'})
 
     class CommandServer(Catalog):
         token = 'fixture-login'
@@ -324,7 +326,8 @@ def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatc
                     'command_id': 'steer', 'handler': 'review_steer', 'state': 'supported', 'requires_confirmation': True}]}
             if path.endswith('/steer'):
                 return exact | {'control': {'target': target, 'queue_revision': 2, 'capability_revision': 'steer-1',
-                                           'effect_revision': 'effect-1', 'effect': 'same_turn'}}
+                                           'effect_revision': 'effect-1',
+                                           'effect': 'next_boundary' if pi_run else 'same_turn'}}
             if method == 'POST':
                 assert path.endswith('/terminal/commands:execute') and self.sent is None
                 self.sent = body
@@ -332,7 +335,9 @@ def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatc
             if path.endswith('/terminal/inputs/receipt'):
                 assert parse_qs(urlsplit(url).query)['client_intent_id'] == [self.sent['client_intent_id']]
                 assert parse_qs(urlsplit(url).query)['expected_session_generation'] == ['7']
-                return exact | {'input_id': 'input-original', 'status': 'DISPATCHING', 'reorientation': True}
+                boundary = {'steer_boundary': 'awaiting_boundary', 'steer_submitted': True, 'possible_effect': True,
+                            'operation_id': 'op-original'} if pi_run else {}
+                return exact | {'input_id': 'input-original', 'status': 'DISPATCHING', 'reorientation': True} | boundary
             return super().__call__(method, url, body)
 
     api = CommandServer()
@@ -349,7 +354,8 @@ def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatc
     assert api.sent['target'] == target and api.sent['confirmed_effect_revision'] == 'effect-1'
     assert api.sent['expected_queue_revision'] == 2 and api.sent['confirmed'] is True
     assert api.sent['content'] == [{'type': 'text', 'text': 'Text by the human operator'}]
-    assert 'The message is being delivered.' in capsys.readouterr().out
+    notice = 'Pi queued the reorientation for the next boundary.' if pi_run else 'The message is being delivered.'
+    assert notice in capsys.readouterr().out
     assert main(['session', 'receipt', *connection, '--intent', api.sent['client_intent_id'],
                  '--owner-generation', '7', '--json']) == 0
     assert json.loads(capsys.readouterr().out)['receipt']['input_id'] == 'input-original'

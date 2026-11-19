@@ -9,7 +9,8 @@ import {SessionInputQueue} from './SessionInputQueue';
 import {SessionInterruptControl} from './SessionInterruptControl';
 import {SessionSteerControl} from './SessionSteerControl';
 import {clearInterruptIntents} from '../sessionInterrupt';
-import {clearSteerReferences, readSteerReference, steerStorageKey, type SteerReference, type SteerSource} from '../sessionSteer';
+import {clearSteerReferences, readSteerReference, steerBoundaryLabel, steerStorageKey,
+  type SteerReference, type SteerSource} from '../sessionSteer';
 
 interface Draft {
   text: string;
@@ -440,8 +441,9 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       onInterrupt={revision => setInterruptCommand({revision})} onAccessLost={loseAccess}/>}
     {(draft.latest || draft.uncertain) && <p role="status" className="text-sm">
       {draft.uncertain ? (busy ? 'Checking message…' : 'Waiting for confirmation of this message.') :
-        draft.latest!.receipt.steer_submitted ? 'Reorientation sent. Harness acceptance is unconfirmed.' :
-          receiptLabel[draft.latest!.receipt.status]}</p>}
+        steerBoundaryLabel(draft.latest!.receipt.steer_boundary) ??
+          (draft.latest!.receipt.steer_submitted ? 'Reorientation sent. Harness acceptance is unconfirmed.' :
+            receiptLabel[draft.latest!.receipt.status])}</p>}
     {messageError && <p role="alert" className="text-sm">{messageError}</p>}
     {capability?.human_login_required === false && <>
       <SessionSteerControl scope={scope} available={steerAvailable} source={steerSource} pending={steerPending}

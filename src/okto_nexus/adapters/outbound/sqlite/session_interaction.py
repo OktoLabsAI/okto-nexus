@@ -83,7 +83,7 @@ def accept_input(
     text: str,
     now: datetime,
     verify_new_authority: Callable[[], tuple[str, int] | None],
-    steer: tuple[str, str, str] | None = None,
+    steer: tuple[str, ...] | None = None,
 ) -> QueuedReceipt:
     """Allocate a FIFO sequence and persist one input in the caller's transaction.
 

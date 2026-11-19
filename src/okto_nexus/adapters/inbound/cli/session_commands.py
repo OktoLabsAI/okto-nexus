@@ -16,6 +16,7 @@ from .native_input import display_text
 COMMANDS = ('send', 'steer', 'interrupt')
 INTENT = re.compile(r'terminal_(send|steer|interrupt)_[0-9a-f]{32}')
 PI_INPUT_INTENT = re.compile(r'pi_input_[0-9a-f]{32}')
+PI_RUN_REF = re.compile(r'prun_[0-9a-f]{32}')
 _HANDLERS = {'send': 'enqueue', 'steer': 'review_steer', 'interrupt': 'review_interrupt'}
 _DELIVERY_MESSAGES = {
     InputDeliveryState.DISPATCHING: 'The message is being delivered.',
@@ -95,12 +96,18 @@ def _review(call, url, scope, generation, command):
     if not _matches(checked, scope, generation) or not isinstance(control, dict):
         raise _unavailable()
     revision, queue, target = (control.get(key) for key in ('capability_revision', 'queue_revision', 'target'))
-    if (not _identifier(revision) or type(queue) is not int or queue < 0 or not isinstance(target, dict)
-            or target.keys() != {'kind', 'turn_id'} or target['kind'] != 'native_turn' or not _identifier(target['turn_id'])):
+    if not _identifier(revision) or type(queue) is not int or queue < 0 or not isinstance(target, dict):
+        raise _unavailable()
+    native_turn = (target.keys() == {'kind', 'turn_id'} and target['kind'] == 'native_turn'
+                   and _identifier(target['turn_id']))
+    pi_run = (command == 'steer' and target.keys() == {'kind', 'run_ref'} and target['kind'] == 'observed_run'
+              and isinstance(target['run_ref'], str) and PI_RUN_REF.fullmatch(target['run_ref']))
+    if not (native_turn or pi_run):
         raise _unavailable()
     body |= {'capability_revision': revision, 'expected_queue_revision': queue, 'target': target}
     if command == 'steer':
-        if control.get('effect') != 'same_turn' or not _identifier(control.get('effect_revision')):
+        if (control.get('effect') != ('next_boundary' if pi_run else 'same_turn')
+                or not _identifier(control.get('effect_revision'))):
             raise _unavailable()
         body['confirmed_effect_revision'] = control['effect_revision']
     return body
@@ -150,6 +157,17 @@ def _result(receipt, scope, generation, command, intent):
             message = 'Reorientation recorded.' if command == 'steer' else 'Message recorded in the Nexus session queue.'
         else:
             message = _DELIVERY_MESSAGES[state]
+        if command == 'steer':
+            boundary = receipt.get('steer_boundary')
+            if boundary in ('awaiting_boundary', 'applied', 'discarded'):
+                if not _identifier(receipt.get('operation_id')) or receipt.get('possible_effect') is not True:
+                    raise ConnectionError('SESSION_RECEIPT_UNCONFIRMED',
+                        'The reorientation receipt has an unconfirmed boundary.', possible_effect=True)
+                message = {'awaiting_boundary': 'Pi queued the reorientation for the next boundary.',
+                           'applied': 'Pi applied the reorientation.',
+                           'discarded': 'The run ended before Pi applied the reorientation.'}[boundary]
+            elif receipt.get('steer_submitted') is True:
+                message = 'Reorientation sent. Application is unconfirmed.'
     return {'state': 'recorded', 'message': message, 'command': command, 'client_intent_id': intent,
             'receipt': receipt}
 
@@ -168,6 +186,8 @@ def execute_session_command(call, binding, session_id, command, *, interactive, 
         write('Session ' + display_text(session_id))
         if command == 'send':
             prompt = 'Queue this message for the next turn? [y/N] '
+        elif body['target']['kind'] == 'observed_run':
+            prompt = 'Reorient the selected Pi run at its next available boundary? [y/N] '
         else:
             write('Turn ' + display_text(body['target']['turn_id']))
             prompt = ('Reorient this exact turn now? [y/N] ' if command == 'steer'

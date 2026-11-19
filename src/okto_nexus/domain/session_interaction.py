@@ -9,6 +9,7 @@ from .execution.keys import SessionKey, SessionOwnerGeneration
 MAX_INPUT_BYTES = 64 * 1024
 MAX_SQLITE_INTEGER = 2**63 - 1
 Surface = Literal["web", "nexus_cli", "native_terminal"]
+PiSteerBoundary = Literal["awaiting_boundary", "applied", "discarded"]
 
 
 def validate_input_text(text: str) -> str:
@@ -69,6 +70,7 @@ class QueuedReceipt:
     possible_effect: bool
     steer_submitted: bool = False
     reorientation: bool = False
+    steer_boundary: PiSteerBoundary | None = None
 
 
 # Ordinary dispatch, not explicit recovery or reconciliation of a receipt.

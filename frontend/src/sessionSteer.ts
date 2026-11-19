@@ -2,7 +2,8 @@ import type {InteractionScope, SessionInputReceipt, SessionSteerAvailability} fr
 import {assertInteractionScope, interactionKey} from './sessionConversation';
 
 export type SteerSource = {kind: 'draft'; text: string; catalogRevision?: string} | {kind: 'queue'; inputId: string};
-export type SteerReference = {kind: 'draft'; intent: string} | {kind: 'queue'; inputId: string};
+export type SteerReference = ({kind: 'draft'; intent: string} | {kind: 'queue'; inputId: string}) &
+  {awaitBoundary?: boolean};
 
 const prefix = 'okto-nexus:session-steer:';
 
@@ -13,10 +14,11 @@ export function steerStorageKey(scope: InteractionScope) {
 export function readSteerReference(storage: Storage, key: string): SteerReference | null {
   try {
     const value = JSON.parse(storage.getItem(key) ?? 'null');
+    const boundary = value?.awaitBoundary === true ? {awaitBoundary: true} : {};
     if (value?.kind === 'draft' && typeof value.intent === 'string' &&
-        /^ui_steer_[0-9a-f-]{36}$/.test(value.intent)) return {kind: 'draft', intent: value.intent};
+        /^ui_steer_[0-9a-f-]{36}$/.test(value.intent)) return {kind: 'draft', intent: value.intent, ...boundary};
     if (value?.kind === 'queue' && typeof value.inputId === 'string' &&
-        value.inputId.length > 0 && value.inputId.length <= 160) return {kind: 'queue', inputId: value.inputId};
+        value.inputId.length > 0 && value.inputId.length <= 160) return {kind: 'queue', inputId: value.inputId, ...boundary};
   } catch {
     return null;
   }
@@ -34,8 +36,10 @@ export function assertSteerPreview(value: SessionSteerAvailability, scope: Inter
   assertInteractionScope({...value.scope, session_owner_generation: value.session_owner_generation}, scope);
   const control = value.control;
   if (!control) return;
-  if (control.effect !== 'same_turn' || control.target?.kind !== 'native_turn' || !control.target.turn_id ||
-      !control.capability_revision || !control.effect_revision || !Number.isSafeInteger(control.queue_revision) ||
+  const exactTarget = (control.effect === 'same_turn' && control.target?.kind === 'native_turn' && control.target.turn_id) ||
+    (control.effect === 'next_boundary' && control.target?.kind === 'observed_run' &&
+      /^prun_[0-9a-f]{32}$/.test(control.target.run_ref));
+  if (!exactTarget || !control.capability_revision || !control.effect_revision || !Number.isSafeInteger(control.queue_revision) ||
       control.queue_revision < 0) throw new Error('The exact reorientation could not be verified.');
   if (source.kind === 'queue' && (value.queued_input?.input_id !== source.inputId ||
       !Number.isSafeInteger(value.queued_input.input_revision) || value.queued_input.input_revision < 0)) {
@@ -51,9 +55,22 @@ export function steerReceiptOutcome(receipt: SessionInputReceipt, scope: Interac
     return ['QUEUED', 'PAUSED'].includes(receipt.status) ? 'uncertain' : 'original-changed';
   }
   if (!receipt.operation_id) throw new Error('Invalid reorientation receipt.');
+  if (receipt.steer_boundary) {
+    if (!receipt.possible_effect) throw new Error('Invalid reorientation boundary receipt.');
+    return receipt.steer_boundary;
+  }
+  if (reference.awaitBoundary && receipt.steer_submitted) return 'boundary-unconfirmed';
   if (receipt.status === 'ACCEPTED_NATIVE') return 'accepted';
   if (receipt.steer_submitted === true && receipt.status === 'DISPATCHING') return 'submitted';
   if (receipt.status === 'REFUSED_BEFORE_SEND' && !receipt.possible_effect) return 'refused';
   if (receipt.status === 'DISPATCHING' && !receipt.possible_effect) return 'dispatching';
   return 'uncertain';
+}
+
+export function steerBoundaryLabel(boundary: SessionInputReceipt['steer_boundary']) {
+  switch (boundary) {
+    case 'applied': return 'Pi applied the reorientation.';
+    case 'discarded': return 'The run ended before Pi applied the reorientation.';
+    case 'awaiting_boundary': return 'Pi queued the reorientation for the next boundary.';
+  }
 }

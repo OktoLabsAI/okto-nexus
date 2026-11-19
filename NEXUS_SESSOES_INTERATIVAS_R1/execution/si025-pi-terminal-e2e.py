@@ -1,6 +1,7 @@
 """Windows ConPTY, Nexus operator ticket, and the real Pi in one isolated run."""
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 import json
 import logging
@@ -103,7 +104,7 @@ export default (pi) => {{
     }
 
 
-def admit_session(client, headers, workspace, app, provider_home, expected_candidate):
+def admit_session(client, headers, workspace, app, provider_home, expected_candidate, *, steer):
     inventory_owner = app.state.embedded_inventory_owner
     executor = '/v1/runtime/executors/' + inventory_owner.key.executor_id
 
@@ -145,7 +146,7 @@ def admit_session(client, headers, workspace, app, provider_home, expected_candi
     binding = response.json()
     response = client.post('/api/v1/harness/grants', headers=headers['operator'], json={
         'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
-        'actions': ['open', 'send', 'close'], 'max_executions': 3,
+        'actions': ['open', 'send', 'close'] + (['steer'] if steer else []), 'max_executions': 3,
         'expires_at': iso_plus(app.state.deps.clock.now_iso(), 600),
     })
     assert response.status_code == 200, response.text
@@ -205,7 +206,7 @@ def enqueue_follow_up(client, data, generation, token, *, presenter_address=None
     return read
 
 
-def run(node, release, conpty_helpers, *, queue, queue_surface):
+def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False):
     sys.path.insert(0, str(conpty_helpers))
     from owned_engine_probe import environment
     from pty_probe import ProbeConsole
@@ -215,7 +216,7 @@ def run(node, release, conpty_helpers, *, queue, queue_surface):
     print(f'Isolated Pi terminal proof directory {root}', flush=True)
     workspace = root / 'workspace'
     workspace.mkdir()
-    results = [RESULT, FOLLOW_UP_RESULT] if queue else [RESULT]
+    results = [RESULT, FOLLOW_UP_RESULT] if queue or steer else [RESULT]
     follow_up_text = EDITOR_FOLLOW_UP if queue_surface == 'editor' else FOLLOW_UP
     agent, signals, sandbox = isolated_provider(root, release, workspace, results)
     native_environment = ApprovedLocalLaunch.environment
@@ -262,7 +263,8 @@ def run(node, release, conpty_helpers, *, queue, queue_surface):
             listener_task = client.portal.start_task_soon(server.serve, [listener])
             try:
                 wait_for(lambda: server.started, seconds=10)
-                binding = admit_session(client, headers, workspace, app, agent.parent.parent, expected_candidate)
+                binding = admit_session(client, headers, workspace, app, agent.parent.parent, expected_candidate,
+                                        steer=steer)
                 setup = (deps, app, client, headers)
                 owner = app.state.embedded_dispatch_owner
                 print('Admitting the exact local Pi opening', flush=True)
@@ -354,6 +356,65 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert state['is_streaming'] and state['pending_message_count'] == 0
                 assert client.portal.call(owner.prove_native_presentation_owner, scope) == before
                 follow_up = None
+                if steer:
+                    print('Reviewing and promoting an exact Pi run through the operator HTTP API', flush=True)
+                    follow_up = enqueue_follow_up(client, data, scope.generation.value, token)
+                    pending = follow_up()
+                    assert pending['status'] == 'QUEUED'
+                    url = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
+                    generation = scope.generation.value
+                    query = {key: value for key, value in data.items() if key != 'session_id'}
+                    query |= {'input_id': pending['input_id'], 'expected_session_generation': generation}
+                    ui = {'X-Nexus-UI': '1'}
+
+                    def read_steer():
+                        review = client.get(url + '/steer', headers=ui, params=query)
+                        assert review.status_code == 200, review.text
+                        return review.json() if review.json()['control'] else None
+
+                    review = wait_for(read_steer, seconds=12)
+                    control = review['control']
+                    assert control['target']['kind'] == 'observed_run' and control['effect'] == 'next_boundary', control
+                    assert review['queued_input']['input_id'] == pending['input_id']
+                    promotion = {
+                        'scope': data, 'expected_session_generation': generation, 'target': control['target'],
+                        'capability_revision': control['capability_revision'],
+                        'expected_queue_revision': control['queue_revision'],
+                        'expected_input_revision': pending['input_revision'],
+                        'confirmed_effect_revision': control['effect_revision'],
+                    }
+                    path = url + '/inputs/' + pending['input_id'] + '/promote'
+                    wrong = promotion | {'target': {'kind': 'observed_run', 'run_ref': 'prun_' + '0' * 32}}
+                    assert client.post(path, json=wrong, headers=ui).status_code == 409
+                    assert follow_up() == pending
+                    with ThreadPoolExecutor(max_workers=2) as writers:
+                        attempts = [writers.submit(client.post, path, json=promotion, headers=ui) for _ in range(2)]
+                        responses = [attempt.result(timeout=10) for attempt in attempts]
+                    assert all(response.status_code == 202 for response in responses), [r.text for r in responses]
+                    delivery = responses[0].json()
+                    assert delivery['input_id'] == pending['input_id'] and delivery['operation_id']
+                    assert responses[1].json()['operation_id'] == delivery['operation_id']
+                    replay = client.post(path, json=promotion, headers=ui)
+                    assert replay.status_code == 202 and replay.json()['operation_id'] == delivery['operation_id']
+                    receipt(delivery, 'SUBMITTED')
+                    assert follow_up()['steer_submitted']
+
+                    def steer_facts():
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            return [tuple(row) for row in uow.connection.execute("""
+                                SELECT json_extract(payload_json,'$.payload.stage'),
+                                       json_extract(payload_json,'$.payload.run_id'),
+                                       json_extract(payload_json,'$.payload.turn_operation_id')
+                                FROM execution_event_ingress WHERE session_id=? AND stream_epoch=?
+                                  AND json_extract(payload_json,'$.native_type')='nexus_pi_steer'
+                                  AND json_extract(payload_json,'$.operation_id')=?
+                                ORDER BY sequence
+                            """, (data['session_id'], before[0].stream_epoch, delivery['operation_id']))]
+
+                    run_ref = control['target']['run_ref']
+                    expected_fact = [(stage, run_ref, sent['operation_id']) for stage in ('queued', 'consumed')]
+                    assert wait_for(steer_facts, seconds=12) == expected_fact[:1]
+                    assert follow_up()['steer_boundary'] == 'awaiting_boundary'
                 if queue:
                     print('Enqueuing a follow-up while the Pi turn is streaming', flush=True)
                     if queue_surface == 'editor':
@@ -391,15 +452,20 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     second_attachment = wait_for(active_attachment, seconds=15)[0]
                     assert second_attachment != first_attachment
                     await_text(second, PROMPT)
-                    if follow_up:
+                    if queue and follow_up:
                         queued = follow_up()
                         assert queued['status'] == 'QUEUED' and queued['operation_id'] is None, queued
                         state = client.portal.call(owner.read_native_pi_presentation_state, scope)
                         assert state['is_streaming'] and state['pending_message_count'] == 0
                     signals[0].touch()
                     await_text(second, RESULT)
+                    if steer:
+                        wait_for(lambda: steer_facts() == expected_fact, seconds=12)
+                        assert follow_up()['steer_boundary'] == 'applied'
+                        signals[1].touch()
+                        await_text(second, FOLLOW_UP_RESULT)
                     receipt(sent, 'SUCCEEDED')
-                    if follow_up:
+                    if queue and follow_up:
                         await_text(second, follow_up_text.splitlines()[0])
                         delivery = follow_up()
                         assert delivery['status'] in ('DISPATCHING', 'ACCEPTED_NATIVE') and delivery['operation_id'], delivery
@@ -415,8 +481,9 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     tickets = 3 if queue and queue_surface in ('presenter', 'editor') else 2
                     assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * tickets
-                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == len(results)
-                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue)
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == (1 if steer else len(results))
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.steer'").fetchone()[0] == int(steer)
+                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue or steer)
                     if queue:
                         native_turn_events = [tuple(row) for row in uow.connection.execute("""
                             SELECT json_extract(payload_json,'$.native_type'),json_extract(payload_json,'$.operation_id')
@@ -435,10 +502,11 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert records[0]['id'] == before[0].native_session_id
                 messages = [record['message'] for record in records if record['type'] == 'message']
                 assert [message['role'] for message in messages] == ['system'] + ['user', 'assistant'] * len(results)
-                expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue else [PROMPT, RESULT]
+                expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue or steer else [PROMPT, RESULT]
                 assert [message['content'][0]['text'] for message in messages[1:]] == expected
                 print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': tickets,
-                                  'same_running_pi_process_after_detach': True, 'synthetic_turns': len(results),
+                                  'same_running_pi_process_after_detach': True, 'synthetic_responses': len(results),
+                                  'confirmed_operator_steer_in_same_run': steer,
                                   'follow_up_queued_until_settled': queue,
                                   'queue_surface': queue_surface if queue else None,
                                   'canonical_close': 'SUCCEEDED', 'console_modes_restored': True}), flush=True)
@@ -452,9 +520,11 @@ if __name__ == '__main__':
     parser.add_argument('--node', type=Path, required=True)
     parser.add_argument('--pi-release', type=Path, required=True)
     parser.add_argument('--conpty-helpers', type=Path, required=True)
-    parser.add_argument('--queue', action='store_true', help='Exercise the canonical queue with a synthetic follow-up.')
+    scenario = parser.add_mutually_exclusive_group()
+    scenario.add_argument('--queue', action='store_true', help='Exercise the canonical queue with a synthetic follow-up.')
+    scenario.add_argument('--steer', action='store_true', help='Promote queued text into a reviewed Pi boundary steer.')
     parser.add_argument('--queue-surface', choices=('web', 'presenter', 'editor'), default='web')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
-        args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface)
+        args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface, steer=args.steer)

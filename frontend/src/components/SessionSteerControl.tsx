@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {runtimeApi, type InteractionScope, type SessionInputReceipt, type SessionSteerAvailability} from '../runtimeApi';
-import {assertSteerPreview, steerReceiptOutcome, steerStorageKey, type SteerReference, type SteerSource} from '../sessionSteer';
+import {assertSteerPreview, steerBoundaryLabel, steerReceiptOutcome, steerStorageKey,
+  type SteerReference, type SteerSource} from '../sessionSteer';
 
 export function SessionSteerControl({scope, available, source, pending, draftRetained, onCloseReview, onPending, onSubmitted,
   onAccessLost, onQueueChanged}: {
@@ -59,11 +60,25 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
     switch (steerReceiptOutcome(receipt, scope, reference)) {
       case 'accepted':
       case 'submitted':
+      case 'applied':
         callbacks.current.onSubmitted(reference, receipt);
         finish();
         callbacks.current.onQueueChanged();
-        setNotice(receipt.status === 'ACCEPTED_NATIVE' ? 'Reorientation was accepted by the harness.'
-          : 'Reorientation sent to the current turn. Harness acceptance is unconfirmed.');
+        setNotice(steerBoundaryLabel(receipt.steer_boundary) ?? (receipt.status === 'ACCEPTED_NATIVE'
+          ? 'Reorientation was accepted by the harness.'
+          : 'Reorientation sent to the current turn. Harness acceptance is unconfirmed.'));
+        break;
+      case 'awaiting_boundary':
+        setNotice(steerBoundaryLabel('awaiting_boundary')!);
+        break;
+      case 'boundary-unconfirmed':
+        setNotice('Reorientation sent. Waiting for Pi to confirm it entered the queue.');
+        break;
+      case 'discarded':
+        finish();
+        callbacks.current.onQueueChanged();
+        setNotice(steerBoundaryLabel('discarded')! + (reference.kind === 'draft' && callbacks.current.draftRetained
+          ? ' Your draft is available.' : ''));
         break;
       case 'refused':
         finish();
@@ -121,6 +136,7 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
     if (source.kind === 'queue' && !reviewed.queued_input) return;
     const reference: SteerReference = source.kind === 'draft'
       ? {kind: 'draft', intent: 'ui_steer_' + crypto.randomUUID()} : {kind: 'queue', inputId: source.inputId};
+    if (reviewed.control.effect === 'next_boundary') reference.awaitBoundary = true;
     try {
       window.sessionStorage.setItem(key, JSON.stringify(reference));
     } catch {
@@ -176,8 +192,11 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
           {reviewed.queued_input && <p className="text-sm whitespace-pre-wrap break-words">
             {reviewed.queued_input.text_preview}{reviewed.queued_input.truncated ? '…' : ''}
           </p>}
-          <p className="text-sm">{source.kind === 'draft' ? 'Send this draft to the current turn.' :
-            'Move this message out of the queue and send it to the current turn.'}</p>
+          <p className="text-sm">{reviewed.control.effect === 'next_boundary'
+            ? (source.kind === 'draft' ? 'Send this draft to Pi at the next available boundary of this run.'
+              : 'Move this message out of the next-turn queue so Pi can apply it at the next boundary of this run.')
+            : (source.kind === 'draft' ? 'Send this draft to the current turn.'
+              : 'Move this message out of the queue and send it to the current turn.')}</p>
         </>}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-primary" disabled={busy || !available || !reviewed?.control || !!reviewError}

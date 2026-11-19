@@ -1246,7 +1246,9 @@
         "execution/si025-pi-steer-boundary.md",
         "execution/si025-pi-steer-boundary.json",
         "execution/si025-pi-steer-facts.md",
-        "execution/si025-pi-steer-facts.json"
+        "execution/si025-pi-steer-facts.json",
+        "execution/si025-pi-operator-steer.md",
+        "execution/si025-pi-operator-steer.json"
       ]
     },
     {
@@ -2549,10 +2551,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si025-pi-steer-boundary.json",
-        "execution/si025-pi-steer-facts.json"
+        "execution/si025-pi-steer-facts.json",
+        "execution/si025-pi-operator-steer.json"
       ]
     },
     {

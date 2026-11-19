@@ -103,3 +103,11 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
     with factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT saved_resume_json FROM execution_sessions').fetchone()[0] is None
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+    schema_183 = MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 183))
+    assert schema_183.apply() == [183]
+    assert schema_183.apply() == []
+    assert retained() == original
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT target_ref FROM session_interaction_controls').fetchone()[0] == 'prior-opaque-turn'
+        assert uow.connection.execute('SELECT count(*) FROM session_interaction_pi_steer_targets').fetchone()[0] == 0
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()

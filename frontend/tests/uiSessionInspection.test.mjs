@@ -85,6 +85,9 @@ test('reorientation reviews freeze the supported effect, owner generation and qu
   assert.throws(()=>assertSteerPreview({...preview,session_owner_generation:4},scope,source));
   assert.throws(()=>assertSteerPreview({...preview,control:{...control,effect:'interrupt_replace'}},scope,source));
   assert.throws(()=>assertSteerPreview(preview,scope,{kind:'queue',inputId:'queued-b'}));
+  const pi={...control,effect:'next_boundary',target:{kind:'observed_run',run_ref:'prun_'+'a'.repeat(32)}};
+  assert.doesNotThrow(()=>assertSteerPreview({...preview,control:pi},scope,source));
+  assert.throws(()=>assertSteerPreview({...preview,control:{...pi,effect:'same_turn'}},scope,source));
 });
 
 test('a reorientation receipt never conflates queue dispatch, submission and native acceptance',()=>{
@@ -100,6 +103,13 @@ test('a reorientation receipt never conflates queue dispatch, submission and nat
   assert.equal(steerReceiptOutcome({...receipt,reorientation:false,status:'QUEUED'},scope,source),'uncertain');
   assert.equal(steerReceiptOutcome({...receipt,reorientation:false},scope,source),'original-changed');
   assert.throws(()=>steerReceiptOutcome({...receipt,input_id:'different'},scope,source));
+  const pi={...source,awaitBoundary:true};
+  const submitted={...receipt,possible_effect:true,steer_submitted:true};
+  assert.equal(steerReceiptOutcome(submitted,scope,pi),'boundary-unconfirmed');
+  for (const boundary of ['awaiting_boundary','applied','discarded']) {
+    assert.equal(steerReceiptOutcome({...submitted,steer_boundary:boundary},scope,pi),boundary);
+  }
+  assert.throws(()=>steerReceiptOutcome({...receipt,steer_boundary:'applied'},scope,pi));
 });
 
 test('reorientation stores only the exact recovery reference and clears its keys on logout',()=>{

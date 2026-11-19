@@ -21,6 +21,7 @@ from ....domain.session_interaction import (
     MAX_SQLITE_INTEGER,
     InputDeliveryState,
     InputScope,
+    PiSteerBoundary,
     validate_input_text,
 )
 
@@ -144,8 +145,11 @@ class InterruptAvailability(_Document):
     control: InterruptTargetView | None
 
 
-class SteerTargetView(InterruptTargetView):
-    effect: Literal["same_turn"]
+class SteerTargetView(_Document):
+    target: TurnTarget
+    capability_revision: Identifier
+    queue_revision: Revision
+    effect: Literal["same_turn", "next_boundary"]
     effect_revision: Identifier
 
 
@@ -175,6 +179,7 @@ class InputReceipt(_Document):
     possible_effect: bool
     steer_submitted: bool = False
     reorientation: bool = False
+    steer_boundary: PiSteerBoundary | None = None
 
     @model_validator(mode="after")
     def distinct_delivery_boundary(self) -> "InputReceipt":
@@ -188,6 +193,9 @@ class InputReceipt(_Document):
             raise ValueError("An unknown delivery must retain possible effect.")
         if not claimed and self.possible_effect:
             raise ValueError("This input state cannot represent a possible delivery.")
+        if self.steer_boundary is not None and (not self.reorientation or self.operation_id is None
+                                                 or not self.possible_effect):
+            raise ValueError("A Pi boundary status requires an admitted reorientation.")
         return self
 
 

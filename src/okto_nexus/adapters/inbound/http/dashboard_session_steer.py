@@ -21,6 +21,7 @@ from ....application.session_interaction_promotion import (
 )
 from ....application.session_interaction_targets import (
     active_native_turn,
+    active_pi_run,
     steer_effect_revisions,
 )
 from ....bootstrap.execution_authority import build_execution_access
@@ -38,6 +39,7 @@ from .identity_ctx import runtime_request_context
 from .operator_auth import COOKIE
 from .session_interaction_contract import (
     NativeTurnTarget,
+    ObservedRunTarget,
     PromoteInput,
     SteerAvailability,
     SteerInput,
@@ -55,12 +57,16 @@ def review_exact_steer(uow, scope, revision_for):
             or has_unresolved_interrupt(uow.connection, scope.session)):
         return None
     turn = active_native_turn(uow, scope, current_next_turn_revision=revision_for)
-    revisions = steer_effect_revisions(turn) if turn is not None else None
-    if turn is None or revisions is None:
+    run = active_pi_run(uow, scope, current_next_turn_revision=revision_for) if turn is None else None
+    proven = turn or run
+    revisions = steer_effect_revisions(proven) if proven is not None else None
+    if revisions is None:
         return None
-    return SteerTargetView(target=NativeTurnTarget(kind='native_turn', turn_id=turn.native_id),
+    target = (NativeTurnTarget(kind='native_turn', turn_id=turn.native_id) if turn is not None
+              else ObservedRunTarget(kind='observed_run', run_ref=run.run_ref))
+    return SteerTargetView(target=target,
         capability_revision=revisions[0], effect_revision=revisions[1], queue_revision=queue['revision'] if queue else 0,
-        effect='same_turn')
+        effect='next_boundary' if run is not None else 'same_turn')
 
 
 async def steer_response(session_id, body, request, operation, arguments, *, surface='web'):
@@ -68,8 +74,8 @@ async def steer_response(session_id, body, request, operation, arguments, *, sur
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to reorient a turn.')
     if body.scope.session_id != session_id or request.query_params:
         return _error(422, 'VALIDATION_ERROR', 'The reorientation must use the exact session scope.')
-    if not isinstance(body.target, NativeTurnTarget):
-        return _error(409, 'CONFLICT', 'An exact native turn is required for reorientation.')
+    observed = isinstance(body.target, ObservedRunTarget)
+    target_ref = body.target.run_ref if observed else body.target.turn_id
     state = request.app.state
     options = getattr(state, 'session_input_dispatch_options', {})
     if not options:
@@ -82,7 +88,7 @@ async def steer_response(session_id, body, request, operation, arguments, *, sur
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'No input is available for this login and session.')
         receipt = operation(factory=state.deps.connection_factory, access=build_execution_access(state.deps),
             authority_fence=options['session_input_authority_fence'], current_steer_revisions=options['session_steer_revisions'],
-            scope=body.input_scope(), author=InputAuthor(ref, surface), native_turn_id=body.target.turn_id,
+            scope=body.input_scope(), author=InputAuthor(ref, surface), native_turn_id=target_ref, observed_run=observed,
             capability_revision=body.capability_revision, confirmed_effect_revision=body.confirmed_effect_revision,
             expected_queue_revision=body.expected_queue_revision, fresh_publications=state.inventory_fresh_publications,
             remote_ready=protocol_info()['remote_execution_ready'], **arguments)

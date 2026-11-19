@@ -19,6 +19,7 @@ from ....application.session_interaction_authority import require_session_input_
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_targets import (
     active_native_turn,
+    active_pi_run,
     steer_effect_revisions,
 )
 from ....bootstrap.execution_authority import build_execution_access
@@ -138,18 +139,23 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
     interrupt = _action('interrupt', 'Stop current turn', 'Interrupt the current turn and pause the message queue.',
                         'review_interrupt', interrupt_state, interrupt_reason)
 
-    steer_revisions = steer_effect_revisions(turn) if turn is not None else None
+    pi_run = active_pi_run(uow, scope, current_next_turn_revision=revision_for) if (
+        adapter == 'pi_rpc' and revision is not None) else None
+    steer_target = turn or pi_run
+    steer_revisions = steer_effect_revisions(steer_target) if steer_target is not None else None
     steer_state, steer_reason = state, reason
     if state == 'supported':
-        if adapter != 'codex_app_server':
+        if adapter not in ('codex_app_server', 'pi_rpc'):
             steer_state, steer_reason = 'unqualified', 'Reorientation is unavailable for this integration.'
-        elif turn is None:
-            steer_state, steer_reason = 'disabled_for_state', interrupt_reason
+        elif has_unresolved_interrupt(conn, scope.session) or steer_target is None:
+            steer_state, steer_reason = 'disabled_for_state', 'There is no confirmed active run available for reorientation.'
         elif steer_revisions is None:
             steer_state, steer_reason = 'unqualified', 'There is no qualified reorientation effect for this turn.'
         elif is_input_queue_paused(conn, scope.session):
             steer_state, steer_reason = 'disabled_for_state', 'Resume the message queue first.'
-    steer = _action('steer', 'Reorient current turn', 'Send a message to the confirmed active turn.',
+    description = ('Send a message at the next boundary of the confirmed Pi run.' if adapter == 'pi_rpc'
+                   else 'Send a message to the confirmed active turn.')
+    steer = _action('steer', 'Reorient current turn', description,
                     'review_steer', steer_state, steer_reason)
 
     resume = _unavailable('resume', 'Resume saved session', 'Open a saved conversation.',

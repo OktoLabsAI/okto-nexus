@@ -16,13 +16,16 @@ def read_promotion_candidate(uow, *, scope, author, input_id):
     if not _current_session(uow.connection, params, require_active_lease=True):
         raise _conflict('INPUT_SESSION_CHANGED', 'The exact session is unavailable for reorientation.')
     row = uow.connection.execute("""
-        SELECT i.*,q.revision AS queue_revision,q.paused_owner_generation,c.native_turn_id,c.confirmed_effect_revision,
+        SELECT i.*,q.revision AS queue_revision,q.paused_owner_generation,c.target_ref,c.confirmed_effect_revision,
+               (p.operation_id IS NOT NULL) AS observed_pi_run,
                c.capability_revision AS steer_capability_revision,
                (c.confirmed_effect_revision IS NOT NULL AND d.dispatch_state='DISPATCHED'
                     AND r.stage='SUBMITTED') AS steer_submitted
         FROM session_interaction_inputs i
         JOIN session_interaction_queues q USING(server_id,executor_id,session_id)
         LEFT JOIN session_interaction_controls c USING(server_id,executor_id,session_id,operation_id)
+        LEFT JOIN session_interaction_pi_steer_targets p ON p.server_id=c.server_id AND p.executor_id=c.executor_id
+          AND p.operation_id=c.operation_id
         LEFT JOIN execution_dispatch_outbox d ON d.server_id=i.server_id AND d.executor_id=i.executor_id
           AND d.operation_id=i.operation_id
         LEFT JOIN execution_receipts r ON r.server_id=d.server_id AND r.executor_id=d.executor_id

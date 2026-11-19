@@ -27,6 +27,7 @@ from ....application.session_interaction_queue_view import (
     read_session_input_queue,
 )
 from ....application.session_interaction_receipts import read_session_input_receipt
+from ....application.execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
 from ....application.session_interaction_targets import active_native_turn
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.attention import digest
@@ -77,7 +78,8 @@ def _receipt_document(document, generation, receipt):
         input_id=receipt.input_id, enqueue_sequence=receipt.sequence, input_revision=receipt.input_revision,
         queue_revision=receipt.queue_revision, status=receipt.status, operation_id=receipt.operation_id,
         possible_effect=receipt.possible_effect, steer_submitted=receipt.steer_submitted,
-        reorientation=receipt.reorientation).model_dump(mode='json')
+        reorientation=receipt.reorientation, steer_boundary=receipt.steer_boundary).model_dump(
+            mode='json', exclude={'steer_boundary'} if receipt.steer_boundary is None else None)
 
 
 def _cancel_revision(_uow, scope):
@@ -203,7 +205,8 @@ def build_router():
             with factory.unit_of_work(write=False) as uow:
                 exact = _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
                 session = uow.connection.execute("""
-                    SELECT s.stream_epoch,e.adapter_id FROM execution_sessions s
+                    SELECT s.stream_epoch,e.adapter_id,x.kind FROM execution_sessions s
+                    JOIN execution_executors x USING(server_id,executor_id)
                     LEFT JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id
                       AND b.binding_id=s.binding_id
                     LEFT JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id
@@ -212,10 +215,15 @@ def build_router():
                     (scope.session.server_id, scope.session.executor_id, session_id),
                 ).fetchone()
                 revision = revision_for(uow, scope) if revision_for is not None else None
+                pi = (revision is not None and session['adapter_id'] == 'pi_rpc'
+                      and session['kind'] == 'embedded')
+                mapping = read_managed_native_session(uow, scope) if pi else None
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,
                         'interrupt_review_supported': revision is not None and session['adapter_id'] == 'codex_app_server',
-                        'steer_review_supported': revision is not None and session['adapter_id'] == 'codex_app_server',
+                        'steer_review_supported': revision is not None and (
+                            session['adapter_id'] == 'codex_app_server'
+                            or (mapping is not None and reviewed_pi_context(mapping))),
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}
 

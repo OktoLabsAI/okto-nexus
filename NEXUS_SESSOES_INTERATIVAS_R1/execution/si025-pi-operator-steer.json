@@ -1,0 +1,57 @@
+{
+  "task": "SI-025",
+  "task_status": "IN_PROGRESS",
+  "test": "SI-T-C04",
+  "test_status": "PASS",
+  "source": {
+    "nexus_baseline": "331fa6de0c0aec1b2ac55e6f3f2cdaeeeed0617b",
+    "core": "0c8aae277fe58f281b55cedf80bd774f0dc2e975",
+    "connector_pin": "6767fcb8c6bbdb848e1cc4a1e53817c9fe75f85c"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "44f5918220ffe4be32f507679f8245bc1117e405d2295b853cb9234f4c779ee9",
+    "core_0.0.16_wheel_sha256": "2515b37f1cad2a19ad08871d41c609d8b372a622821db243890d1b3b72c089bb",
+    "connector_ci_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe": "si025-pi-terminal-e2e.py --steer",
+    "probe_sha256": "24362bfa08b35316f5ff9b2e233b3322dc58655fec62f448ccfcaa4de734276b"
+  },
+  "installed_pi_windows_conpty": {
+    "external_provider_requests": 0,
+    "synthetic_responses": 2,
+    "wrong_run_http_status": 409,
+    "wrong_run_preserved_queue_entry": true,
+    "concurrent_confirmations": 2,
+    "duplicate_confirmations_share_operation": true,
+    "later_response_replay_shares_operation": true,
+    "canonical_turn_submissions": 1,
+    "canonical_steer_operations": 1,
+    "canonical_steer_ack": "SUBMITTED",
+    "operator_receipt_before_consumption": "awaiting_boundary",
+    "operator_receipt_after_consumption": "applied",
+    "agent_start_sequence": 2,
+    "steer_queued_sequence": 8,
+    "steer_consumed_sequence": 18,
+    "agent_settled_sequence": 28,
+    "same_native_history_and_owner_after_detach": true,
+    "console_modes_restored": true,
+    "canonical_close": "SUCCEEDED"
+  },
+  "regressions": {
+    "installed_core": 83,
+    "installed_connector": 61,
+    "installed_nexus": 43,
+    "source_nexus": 55,
+    "frontend_node": 417,
+    "upgrade_and_cli_subset": 3,
+    "frontend_production_build": "PASS",
+    "nexus_and_core_strict_wheel_checks": "PASS",
+    "nexus_offline_lock_check": "PASS",
+    "prior_interrupt_queue_and_control_preserved_by_migration_183": true
+  },
+  "limitations": [
+    "The real Pi uses synthetic model responses and loopback HTTP.",
+    "The installed probe steers through the HTTP promotion route. The CLI confirmation and receipt are exercised by automated tests with a fixture Server.",
+    "Browser interaction, explicit steer and interrupt inside the Pi editor, native approvals, remote operation and real-provider qualification remain open."
+  ]
+}

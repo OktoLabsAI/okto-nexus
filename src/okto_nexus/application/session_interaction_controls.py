@@ -80,7 +80,7 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
                 capability_revision=capability_revision, verify_authority=lambda: target.revision)
         else:
             prior = uow.connection.execute("""
-                SELECT session_id,owner_generation,authority_ref,surface,capability_revision,native_turn_id
+                SELECT session_id,owner_generation,authority_ref,surface,capability_revision,target_ref
                 FROM session_interaction_controls WHERE server_id=? AND executor_id=? AND operation_id=?
             """, identity).fetchone()
             if prior is None or tuple(prior) != control:
@@ -91,7 +91,7 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
         if existing is None:
             uow.connection.execute("""
                 INSERT INTO session_interaction_controls(server_id,executor_id,operation_id,session_id,owner_generation,
-                    authority_ref,surface,capability_revision,native_turn_id) VALUES (?,?,?,?,?,?,?,?,?)
+                    authority_ref,surface,capability_revision,target_ref) VALUES (?,?,?,?,?,?,?,?,?)
             """, (*identity, *control))
             uow.connection.execute("""
                 INSERT INTO session_interaction_interrupt_targets
@@ -112,7 +112,7 @@ def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, autho
                 or any(view['scope'][key] != value for key, value in exact.items() if key != 'session_owner_generation')):
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.', {})
         row = uow.connection.execute("""
-            SELECT o.operation_id, c.native_turn_id, t.target_operation_id, t.target_stream_epoch
+            SELECT o.operation_id, c.target_ref AS native_turn_id, t.target_operation_id, t.target_stream_epoch
             FROM execution_client_intents i
             JOIN execution_operations o ON o.server_id=i.server_id AND o.operation_id=i.operation_id
               AND o.actor_agent_id=i.actor_agent_id
@@ -156,7 +156,7 @@ def require_interrupt_send_authority(uow, *, access, control, scope, semantic, r
     if resolve_human is None or current_interrupt_revision is None:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The interrupt author cannot be verified for this send.', {})
     session = SessionKey(scope['server_id'], scope['executor_id'], scope['session_id'])
-    target = {'kind': 'native_turn_id', 'expected_turn_id': control['native_turn_id']}
+    target = {'kind': 'native_turn_id', 'expected_turn_id': control['target_ref']}
     if (control['session_id'] != session.session_id or control['owner_generation'] != scope['session_owner_generation']
             or semantic['action'] != 'turn.interrupt' or semantic['target'] != target
             or not is_input_queue_paused(uow.connection, session)):
@@ -165,5 +165,5 @@ def require_interrupt_send_authority(uow, *, access, control, scope, semantic, r
                                 resolve_human=resolve_human)
     exact = InputScope(session, SessionOwnerGeneration(scope['session_owner_generation']), scope['binding_id'],
                        scope['workspace_id'], scope['workspace_binding_id'], scope['agent_id'])
-    if current_interrupt_revision(uow, exact, control['native_turn_id']) != control['capability_revision']:
+    if current_interrupt_revision(uow, exact, control['target_ref']) != control['capability_revision']:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact interrupt capability changed before send.', {})
