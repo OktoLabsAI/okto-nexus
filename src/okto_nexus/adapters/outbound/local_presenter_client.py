@@ -46,6 +46,7 @@ from .operator_client import server_origin
 
 _HISTORY_METHODS = ('thread/turns/list', 'thread/items/list')
 _TIMEOUT = 10
+_PI_KEEPALIVE_SECONDS = 20
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,6 +67,7 @@ class _LocalPresenter:
         self._on_intent = on_intent
         self._request_id = 0
         self._pi_binary = bytearray()
+        self._pi_keepalive_at = None
 
     def close(self):
         """Stop this presentation socket, including an in-flight read."""
@@ -122,12 +124,27 @@ class _LocalPresenter:
         if not isinstance(event, AcceptConnection) or event.subprotocol != protocol:
             raise ValueError('Presentation subprotocol did not match')
 
-    def exchange(self, frame, *, pi_output=None):
+    def _send_frame(self, frame):
         raw = canonical_json(frame)
         if len(raw) > MAX_PRESENTATION_REQUEST_BYTES:
             raise ValueError('Presentation request too large')
         self._peer.settimeout(_TIMEOUT)
         self._peer.sendall(self._wire.send(TextMessage(data=raw.decode())))
+
+    def start_pi_keepalive(self):
+        self._pi_keepalive_at = time.monotonic() + _PI_KEEPALIVE_SECONDS
+
+    def _keep_pi_alive(self):
+        if self._pi_keepalive_at is not None and time.monotonic() >= self._pi_keepalive_at:
+            try:
+                self._send_frame({'kind': 'keepalive'})
+            except (OSError, ProtocolError):
+                raise _unavailable() from None
+            self.start_pi_keepalive()
+
+    def exchange(self, frame, *, pi_output=None):
+        self._keep_pi_alive()
+        self._send_frame(frame)
         parts, received = [], 0
         binary = self._pi_binary
         for event in self._events(time.monotonic() + _TIMEOUT):
@@ -159,6 +176,7 @@ class _LocalPresenter:
 
     def poll_pi_output(self, timeout: float) -> bytes | None:
         try:
+            self._keep_pi_alive()
             for event in self._events(time.monotonic() + timeout):
                 if output := _pi_fragment(self._pi_binary, event):
                     self._pi_binary.clear()
@@ -511,10 +529,12 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
                  'intent': 'attach_live', 'access': access} | writer_fields | presentation)
     attachment_id, ticket = offer.get('attachment_id'), offer.get('ticket')
     live_updates = offer.get('live_updates', False)
+    pi_keepalive = offer.get('pi_keepalive', False)
     if (type(offer.get('version')) is not int or offer['version'] != 1 or offer.get('state') != 'PREPARED'
             or not isinstance(attachment_id, str) or not re.fullmatch(r'att_[0-9a-f]{32}', attachment_id)
             or not isinstance(ticket, str) or not re.fullmatch(r'[A-Za-z0-9_-]{43}', ticket)
-            or type(live_updates) is not bool):
+            or type(live_updates) is not bool or type(pi_keepalive) is not bool
+            or pi_keepalive and protocol != REMOTE_PI_SUBPROTOCOL):
         raise _unavailable()
     with ExitStack() as stack:
         try:
@@ -539,6 +559,8 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
             result = link.exchange({'kind': 'prove', 'challenge': nonce})
             if result != {'kind': 'attached', 'attachment_id': attachment_id, 'access': access}:
                 raise ValueError('Invalid presentation receipt')
+            if pi_keepalive:
+                link.start_pi_keepalive()
         except (OSError, TypeError, ValueError, ProtocolError, RecursionError):
             raise _unavailable() from None
         yield link

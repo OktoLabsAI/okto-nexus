@@ -113,6 +113,13 @@ reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
 
+For a remote Pi session, use a Nexus CLI build that supports idle presentation
+renewal. The reader and editor renew their presentation while waiting for output
+or input. When the client stops exchanging messages with Nexus, its presentation
+expires and the executor keeps the work and queue. Attach again to the same
+session to resume watching. Older readers that send no application messages
+expire after two minutes on a Server with this behavior.
+
 ## Follow or reorient a managed Claude session
 
 On Windows, a local Claude session resumed into the Core-managed terminal

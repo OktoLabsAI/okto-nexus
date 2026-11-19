@@ -1,0 +1,63 @@
+{
+  "tasks": ["SI-022", "SI-025", "SI-032"],
+  "scenario_evidence_partial": ["SI-T-G08", "SI-T-H09", "SI-T-H12"],
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "e13923a06a1ed6e4ed2d3d120fd09ce16ca0e6db", "main": "8d77b50c", "behind_main": 0, "ahead_of_main": 445},
+    "connector": {"branch": "feature/v0.0.15", "head": "576e7045ae8104131c18235f3df707bda5d39b6c", "main": "a3017d9", "behind_main": 0, "ahead_of_main": 82},
+    "core": {"branch": "feature/v0.0.16", "head": "6ec6ace51bcca05272e5bb63098d862e5641dc70", "main": "19c99f1", "behind_main": 0, "ahead_of_main": 61},
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "artifacts": {
+    "prior_nexus_0.3.8_wheel_sha256": "4473a7ed7574752e1269ff33eda7fe614cdf4eab8b9f997019b7b38d763f2e63",
+    "nexus_0.3.8_wheel_sha256": "47513410d60202bee7792a9b9bea687fe4e1acbe605a6d7384f1979747832921",
+    "nexus_0.3.8_sdist_sha256": "7de9d45f2979aaa134c23976526cdb2d12afa98425b9dc1f7680c3ce1955ee05",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "changed_modules_match_installed_wheel": true,
+    "strict_twine": "PASS",
+    "offline_nexus_lock": "PASS"
+  },
+  "regression": {
+    "test": "tests/execution_r4/test_remote_pi_presentation.py::test_remote_pi_viewer_and_editor_keep_the_connector_owner_and_queue",
+    "prior_wheel_expected_failures": 2,
+    "observed_prior_failure": "Both silent reader and silent writer deadlines advanced after the app became silent, while transport ping still succeeded.",
+    "fixed_wheel_regressions_passed": 71,
+    "ruff_new_findings_relative_to_baseline": 0
+  },
+  "probe_directory": "%TEMP%/si022-pi-keepalive-1795106423834",
+  "native_expiry_probe": {
+    "status": "PASS",
+    "scope": "Real Connector-owned Pi 0.87.1 on Windows x64 with Windows ConPTY, installed Nexus and Connector, fixture provider and loopback transports",
+    "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "probe_file": "test_pi_remote_keepalive_e2e.py",
+    "probe_sha256": "2bbc713bc44af8b295d2f4ae2725421146e7e1eef8f7ef89b4e16de673769bf0",
+    "connector_fixture_sha256": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "observation_file": "real-owner/proof.json",
+    "observation_sha256": "f6351ae2f08d77149b8487a8f5038ce6c27aa171c098a1d44477c7cd39eb6b69",
+    "socket_ping_succeeded_without_renewing_silent_writer": true,
+    "replacement_writer_and_reader_renewed_with_no_keys": true,
+    "same_native_process_session_and_productive_grant": true,
+    "queued_input_delivered_once_and_original_receipt_recovered": true,
+    "native_user_messages": 2,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_requests": 0,
+    "remaining_probe_workers_observed": 0
+  },
+  "mixed_package_probe": {
+    "status": "PASS",
+    "scope": "New Nexus CLI with old Nexus Server and unchanged Connector, real Pi 0.87.1 and Windows ConPTY, same Windows host",
+    "probe_file": "mixed/test_mixed_pi_packages.py",
+    "probe_sha256": "a6ccdcd80c9d1ed452220b012907832e757c13e7c6e72d3f72131fd888dddbe1",
+    "reviewed_interrupt_paused_queue_and_preserved_session": true,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_requests": 0
+  },
+  "limitations": [
+    "Negotiation is optional for the new client against the old Server. Against the updated Server, a legacy passive reader expires at the presentation deadline.",
+    "Early native probes waited for final admission before releasing the model fixture and then looked up the correlated operation at the wrong level. Another disposable setup saw a dispatch connection loss during opening. The independent successful run waited for fresh executor inventory and released the model fixture only after the exact native start was recorded.",
+    "Presentation-time advancement is controlled in the expiry probes. Cross-machine and paid provider scopes remain open."
+  ],
+  "migration": "none"
+}

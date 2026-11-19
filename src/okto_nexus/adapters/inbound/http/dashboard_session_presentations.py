@@ -540,6 +540,7 @@ async def _reply_pi(ws, request, value):
 async def _present_pi(ws, services, active, hello, *, presentation):
     access = active['attachment'].access
     state = ws.app.state
+    remote = presentation == 'pi_remote'
 
     async def verify(*, renew=False):
         if _services(state, presentation) is not services:
@@ -578,19 +579,23 @@ async def _present_pi(ws, services, active, hello, *, presentation):
         try:
             while True:
                 done, _ = await asyncio.wait((inbound, output), timeout=1, return_when=asyncio.FIRST_COMPLETED)
-                message = None
-                if inbound in done:
+                received = inbound in done
+                raw = None
+                if received:
                     message = inbound.result()
                     if message['type'] == 'websocket.disconnect':
                         return
-                renew = anyio.current_time() >= renewal
+                    raw = _decode(message)
+                    inbound = asyncio.create_task(ws.receive())
+                keepalive = remote and raw == {'kind': 'keepalive'}
+                renewal_due = anyio.current_time() >= renewal
+                renew = renewal_due and (not remote or keepalive)
                 await verify(renew=renew)
                 if renew:
                     renewal = anyio.current_time() + _RENEW_SECONDS
-                if message is not None:
+                if received and not keepalive:
                     if access != 'write' or services.next_turn_revision is None:
                         raise ValueError('This presentation cannot enqueue input')
-                    raw = _decode(message)
                     if pending is not None:
                         raise ValueError('The draft editor already has a pending request')
                     kind = raw.get('kind') if isinstance(raw, dict) else None
@@ -649,7 +654,9 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                         if _services(state, presentation) is not services:
                             break
                         await _send(ws, {'request_id': request.request_id, **reply})
-                    inbound = asyncio.create_task(ws.receive())
+                    if remote and renewal_due:
+                        await verify(renew=True)
+                        renewal = anyio.current_time() + _RENEW_SECONDS
                 if output not in done:
                     continue
                 data = output.result()
@@ -936,8 +943,10 @@ def build_router():
             return _runtime_error(error)
         except CoreError:
             return _error(409, 'CONFLICT', 'This presentation is currently unavailable.')
+        features = {'pi_keepalive': True} if body.presentation == 'pi_remote' else {}
         return JSONResponse({'version': 1, 'attachment_id': offer.attachment_id, 'state': offer.state,
-                             'ticket': offer.ticket, 'live_updates': True if terminal else services.live_updates},
+                             'ticket': offer.ticket, 'live_updates': True if terminal else services.live_updates,
+                             **features},
                             status_code=201 if offer.ticket else 200, headers=_HEADERS)
 
     @router.websocket('/attachments/{attachment_id}/stream')
