@@ -831,6 +831,9 @@ class EmbeddedDispatchOwner:
                         payload['adapter_id'], payload.get('harness_settings', {}))),context)
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
+                if prepared.intent.adapter_id in {'claude_stream', 'codex_app_server'}:
+                    from ..application.execution_saved_resume import saved_opening_profile
+                    session['opening_profile'] = saved_opening_profile(prepared)
                 if executor.saved_resume is not None:
                     options['resume_thread_id'] = executor.saved_resume.thread_id
                 continuation['options'] = options
@@ -881,6 +884,7 @@ class EmbeddedDispatchOwner:
                     reviewed_claude=control.expected_claude_operation_id is not None)
             elif action == "runtime.close":
                 await self.saved_contexts.capture(frame, runtime, executor.workspace_root,
+                                                 opening_profile=session.get('opening_profile'),
                                                  lease_deadline=context.lease_deadline_monotonic)
                 receipt = await runtime.close(r4_close_operation(frame),context,wait_for_completion=True)
             elif action in ("approval.decide", "input.provide"):

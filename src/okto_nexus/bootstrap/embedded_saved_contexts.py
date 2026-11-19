@@ -14,6 +14,7 @@ from nexus_connector_core import (
     SessionKey,
     project_r4_bound_receipt,
     project_r4_resource_release,
+    validate_r4_receipt_binding,
 )
 from nexus_connector_core.native.codex_rollout import observe_rollout
 from nexus_connector_core.native.claude_saved_history import ClaudeSavedHistory, observe_claude_saved_history
@@ -68,7 +69,7 @@ class EmbeddedSavedContexts:
         self.owner = owner
         self._after = 0
 
-    async def capture(self, frame, runtime, workspace_root, *, lease_deadline):
+    async def capture(self, frame, runtime, workspace_root, *, lease_deadline, opening_profile=None):
         """Observe while the source is still owned. A missing observation cannot block close."""
         if not self.owner.deps.config.runtime_session_interaction_enabled:
             return
@@ -89,7 +90,7 @@ class EmbeddedSavedContexts:
                     if reviewed_codex_context(mapping):
                         observed = await runtime.read_live_codex_rollout(
                             runtime_scope, target, mapping.codex_thread_id, **connection)
-                    elif reviewed_claude_saved_context(mapping):
+                    elif opening_profile is not None and reviewed_claude_saved_context(mapping):
                         history = mapping.claude_history
                         observed = await runtime.read_live_claude_saved_history(
                             runtime_scope, target, history.session_uuid, history.operation_id, **connection)
@@ -107,11 +108,15 @@ class EmbeddedSavedContexts:
                 if mapping.adapter_id == 'claude_stream':
                     if saved.workspace != root or saved.session_uuid != mapping.claude_history.session_uuid:
                         return
-                    provider = {'history': asdict(saved), 'terminal': asdict(mapping.claude_history)}
+                    provider = {
+                        'history': asdict(saved), 'terminal': asdict(mapping.claude_history),
+                    }
                 else:
                     if saved.thread_id != mapping.codex_thread_id:
                         return
                     provider = {'configuration_hash': mapping.codex_configuration_hash, 'rollout': asdict(saved)}
+                if opening_profile is not None:
+                    provider['opening_profile'] = dict(opening_profile)
                 await asyncio.to_thread(self._record, scope, runtime_scope, mapping, frame['operation_id'],
                                         proof, provider, root)
         except (CoreError, TimeoutError, ValueError, OSError, sqlite3.Error):
@@ -126,6 +131,19 @@ class EmbeddedSavedContexts:
         with owner.factory.unit_of_work() as uow:
             if owner._native_presentation_mapping(scope, runtime_scope, uow=uow) != mapping:
                 return
+            if 'opening_profile' in provider:
+                opening = uow.connection.execute("""
+                    SELECT binding_json FROM execution_local_publications
+                    WHERE server_id=? AND executor_id=? AND session_id=? AND operation_id=?
+                """, (proof.key.server_id, proof.key.executor_id, proof.key.session_id,
+                      proof.target.opening_operation_id)).fetchone()
+                if opening is None or opening['binding_json'] is None:
+                    return
+                bound = validate_r4_receipt_binding(json.loads(opening['binding_json']))
+                if (bound['action'] != 'runtime.open' or bound['source']['operation_id'] != proof.target.opening_operation_id
+                        or bound['source']['session_id'] != proof.key.session_id):
+                    return
+                provider['opening_binding_digest'] = bound['digest']
             # Host file identities can exceed the R4 wire's integer range.
             witness = json.dumps({
                 'scope': runtime_scope, 'launch_build': asdict(mapping.launch_build),
@@ -204,7 +222,13 @@ class EmbeddedSavedContexts:
                 raise CoreError('SCOPE_MISMATCH', 'saved_context')
             opening = await journal.get_receipt(OperationKey(key.server_id, key.executor_id, claim.opening_operation_id))
             slot = await ledger.owned_slot_state(key)
-            return project_r4_resource_release(json.loads(candidate['opening_binding']), claim, slot, opening)
+            opening_binding = json.loads(candidate['opening_binding'])
+            observed_digest = witness.get('opening_binding_digest')
+            if ((candidate['adapter_id'] == 'claude_stream' and (
+                    type(witness.get('opening_profile')) is not dict or observed_digest is None))
+                    or (observed_digest is not None and opening_binding['digest'] != observed_digest)):
+                raise CoreError('SCOPE_MISMATCH', 'saved_context')
+            return project_r4_resource_release(opening_binding, claim, slot, opening)
 
         fact = await host.with_history(executor_id=key.executor_id, session_id=key.session_id, read=retirement)
         if candidate['adapter_id'] == 'claude_stream':
@@ -238,6 +262,7 @@ class EmbeddedSavedContexts:
                     source['workspace_id'], source['workspace_binding_id'], source['agent_id'])
                 mapping = read_managed_native_session(uow, scope)
                 if (mapping is None or not reviewed_claude_saved_context(mapping)
+                        or asdict(mapping.launch_build) != witness['launch_build']
                         or asdict(mapping.claude_history) != witness['terminal']):
                     release_digest = None
             uow.connection.execute("""

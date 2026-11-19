@@ -16,6 +16,7 @@ from ..application.execution_saved_resume import (
     require_saved_source_exclusive,
     require_saved_source_settled,
     rollout_evidence,
+    saved_opening_profile,
     saved_source,
 )
 from ..errors import OktoNexusError
@@ -90,6 +91,11 @@ class SavedCodexOpening:
     def _check_file(self, prepared):
         if self._read_source() != self.witness or Path(prepared.cwd) != Path(self.witness['workspace_root']):
             raise _refuse()
+        prior = self.witness.get('opening_profile')
+        if prior is not None:
+            current = saved_opening_profile(prepared)
+            if any(current.get(key) != prior.get(key) for key in ('root_fingerprint', 'resume_configuration_sha256')):
+                raise _refuse()
         location = Path(self.rollout.state_home).joinpath(*self.rollout.relative_path)
         current = observe_rollout(self.rollout.state_home, str(location), self.thread_id, prepared.cwd)
         if current != self.rollout:

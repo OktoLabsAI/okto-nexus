@@ -2,10 +2,12 @@
 
 import hashlib
 import json
+from dataclasses import replace
 
 import pytest
-from nexus_connector_core import CoreError
+from nexus_connector_core import CoreError, LaunchIntent, PreparedLaunch
 
+from okto_nexus.application.execution_saved_resume import saved_opening_profile
 from okto_nexus.bootstrap.embedded_codex_resume import _publish_rollout
 
 
@@ -40,3 +42,18 @@ def test_private_successor_publishes_only_exact_self_contained_rollout(tmp_path,
     assert destination.stat().st_ino == identity and destination.stat().st_nlink == 1
     assert not (new_home / 'auth.json').exists() and not list(new_home.rglob('.nexus-rollout-*'))
     assert (new_home / 'config.toml').read_text() == 'successor settings'
+
+
+def test_saved_profile_allows_a_fresh_capability_but_keeps_model_and_credentials_exact(tmp_path):
+    intent = LaunchIntent('agent', 'workspace', 'codex_app_server', model='chosen-model')
+    executable = str(tmp_path / 'codex.exe')
+    # Codex receives its model in thread/resume, outside argv.
+    prepared = PreparedLaunch(intent, None, (executable, 'app-server'), str(tmp_path), str(tmp_path),
+                              'root-exact', 'old-profile', ('approved-credential', 'mcp-cap:old'))
+    old = saved_opening_profile(prepared)['resume_configuration_sha256']
+    successor = replace(prepared, profile_fingerprint='new-profile',
+                        secret_refs=('approved-credential', 'mcp-cap:new'))
+    assert saved_opening_profile(successor)['resume_configuration_sha256'] == old
+    for changed in (replace(successor, intent=replace(intent, model='different-model')),
+                    replace(successor, secret_refs=('changed-credential', 'mcp-cap:new'))):
+        assert saved_opening_profile(changed)['resume_configuration_sha256'] != old

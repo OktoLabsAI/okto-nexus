@@ -1,0 +1,76 @@
+{
+  "tasks": ["SI-023", "SI-026"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "b064c9177372e83ab1070c9054b7df6a455b4f62",
+    "connector": "b8f13afa3bc6ebe9bc085a94fb305bbf460add4d",
+    "core": "945e09afd70b7b69092ca1560649d4365816ad0a"
+  },
+  "nexus_wheel_sha256": "1b709acd32cd74a18e65d6037eb5d7718106d4f473f6ef16b6b8cf6f6de5a0bb",
+  "regressions": {
+    "source_saved_context_and_codex_resume": 12,
+    "installed_saved_context_and_codex_resume": 13,
+    "existing_codex_without_opening_fingerprint_readable": true,
+    "fresh_mcp_capability_does_not_change_resume_configuration": true,
+    "model_and_stable_credential_drift_detected": true,
+    "claude_build_drift_during_close_prevents_verification": true,
+    "strict_wheel_metadata_and_offline_lock": "PASS"
+  },
+  "native_build": {
+    "version": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "platform": "Windows x64",
+    "external_model_requests": 0,
+    "personal_account_used": false
+  },
+  "scenarios": [
+    {
+      "scenario": "stream_resume_discriminates_missing_history_but_initialize_omits_uuid",
+      "known_context_initialize": "SUCCEEDED",
+      "missing_context_initialize": "REFUSED",
+      "known_context_uuid_in_initialize": false,
+      "model_requests_after_source_exit_without_context_usage": 0,
+      "fixture": "%TEMP%/nexus-si026-claude-stream-resume-hook-1795085771841",
+      "probe_sha256": "bba6079af3ecbdece370832a4dbc1982a675e688eaea622956118f15de63ef0b",
+      "observations_sha256": "433893b6107817a68cebdef5d80b5afe59d7df850b4e68decf04e47074e24fc1"
+    },
+    {
+      "scenario": "get_context_usage_is_not_a_no_provider_identity_probe",
+      "count_tokens_requests_to_loopback": 17,
+      "initial_fixture_assertion_of_no_requests_failed": true,
+      "fixture": "%TEMP%/nexus-si026-claude-resume-stream-1795085712893",
+      "observations_sha256": "cc5ccd4682618c37c2cc4fd5311b6c4be3a3ebf8b7cd3cc046d1de67fdeec6e7"
+    },
+    {
+      "scenario": "background_prompt_hook_fails_closed_on_http_503",
+      "prompt_guard_options": {"onFailure": "block"},
+      "hook_responses": [503],
+      "streaming_model_requests_after_source_exit": 0,
+      "native_denial_observed": true,
+      "fixture": "%TEMP%/nexus-si026-claude-native-guard-1795085903162",
+      "probe_sha256": "9b859d62485ec4f7841a2a7a8808b913a229c0be1a4038f3454b31fcfb30ed81",
+      "observations_sha256": "bac1be46577b89bb6f4df24b362766c01836a1ed2f24fd4f6bd0cd907443457d"
+    },
+    {
+      "scenario": "owned_conpty_retains_exact_history_and_blocks_failed_or_spent_prompt_grant",
+      "process_handle_pid_matched_native_catalog": true,
+      "exact_native_uuid_before_new_prompt": true,
+      "history_rendered_without_a_prompt": true,
+      "hook_responses": [503, 200, 503],
+      "streaming_model_requests_after_source_exit": 1,
+      "authorized_prompt_context_retained_on_same_process": true,
+      "replayed_prompt_blocked_without_another_request": true,
+      "tools_in_model_requests": 0,
+      "native_exit_code": 0,
+      "remaining_fixture_processes": 0,
+      "fixture": "D:/nexus-si026-gated-replay-1795086445125",
+      "probe_sha256": "e8115ab9435b091a8e15c788524595eeadb1f78aecd64f8374e3f248d4468f4e",
+      "observations_sha256": "e1609edbb852889ee8b7c86daec627d6bacdb120cbe6c74e1ebe88e1b02aea0f"
+    }
+  ],
+  "limitations": [
+    "The hook authority belongs to the fixture. Production admission, native control of tools and turns, and presentation detach for this owner are pending.",
+    "An initial terminal probe under the Windows account directory hit Claude's external import confirmation. The passing probe used a disposable project outside that directory.",
+    "The profile evidence covers admitted launch inputs. The native realization must also revalidate the approved effective configuration and protected hook before work is admitted."
+  ]
+}

@@ -58,7 +58,7 @@ def interactive_runtime(monkeypatch, request):
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
-@pytest.mark.parametrize('condition', ['normal_close', 'replaced_history', 'later_unverified_result'])
+@pytest.mark.parametrize('condition', ['normal_close', 'replaced_history', 'changed_build', 'later_unverified_result'])
 def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_runtime, local_setup, condition, monkeypatch):
     import re
 
@@ -174,18 +174,27 @@ def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_run
         assert stored() == witness
         if condition == 'replaced_history':
             history.write_bytes(payload.replace('private content', 'unreviewed').encode())
+        if condition == 'changed_build':
+            with factory.unit_of_work() as uow:
+                changed = replace(reviewed, build_identity='sha256:' + 'a' * 64)
+                uow.connection.execute('UPDATE execution_sessions SET native_launch_build_json=? WHERE session_id=?',
+                                       (json.dumps(asdict(changed)), session))
         return await original_close()
 
     monkeypatch.setattr(native.native, 'close', close_source)
     close = admit(setup, binding, 'claude-history-close', 'runtime.close', session_id=session)
     wait_receipt(setup, close, stages=('SUCCEEDED',))
-    status = 'FILE_CHANGED' if condition == 'replaced_history' else 'VERIFIED'
+    status = 'VERIFIED' if condition == 'normal_close' else 'FILE_CHANGED'
     eventually(lambda: stored() and stored()['status'] == status)
     witness = stored()
     assert len(captured) == 1 and native.native.stopped and mapping().claude_history == proof
     assert witness['close_operation_id'] == close['operation_id']
     assert 'private content' not in witness['witness_json']
-    assert json.loads(witness['witness_json'])['terminal'] == asdict(proof)
+    retained = json.loads(witness['witness_json'])
+    assert retained['terminal'] == asdict(proof)
+    assert retained['opening_profile']['profile_fingerprint'].startswith('sha256:')
+    assert retained['opening_profile']['root_fingerprint'].startswith(root + '|')
+    assert retained['opening_binding_digest'].startswith('sha256:')
     assert bool(witness['release_digest']) == (status == 'VERIFIED')
 
 
@@ -904,7 +913,7 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
 
 @pytest.mark.parametrize('condition,expected', [
     ('intact', 'VERIFIED'), ('changed', 'FILE_CHANGED'), ('interrupted_verification', 'VERIFIED'),
-    ('no_live_evidence', None), ('unreleased_slot', 'CAPTURED'),
+    ('no_live_evidence', None), ('unreleased_slot', 'CAPTURED'), ('legacy_witness', 'VERIFIED'),
 ])
 def test_saved_codex_context_requires_retirement_and_same_history(
         interactive_runtime, tmp_path, monkeypatch, condition, expected):
@@ -1027,7 +1036,14 @@ def test_saved_codex_context_requires_retirement_and_same_history(
         # End the injected observation failure before the fixture drains its
         # independent Core stores at service shutdown.
         monkeypatch.setattr(ledger, 'owned_slot_state', current)
-    if condition == 'intact':
+    if condition == 'legacy_witness':
+        before_profile_attestation = json.loads(stored()['witness_json'])
+        del before_profile_attestation['opening_profile']
+        del before_profile_attestation['opening_binding_digest']
+        with factory.unit_of_work() as uow:
+            uow.connection.execute('UPDATE embedded_saved_contexts SET witness_json=? WHERE session_id=?',
+                                   (json.dumps(before_profile_attestation), session))
+    if condition in ('intact', 'legacy_witness'):
         _exercise_saved_resume_admission(setup, binding, source.scope, native)
 
 
