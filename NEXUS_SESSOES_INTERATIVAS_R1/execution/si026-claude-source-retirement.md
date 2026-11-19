@@ -1,0 +1,9 @@
+# SI-023 e SI-026 — Encerramento da origem Claude
+
+O Core observa o histórico JSONL da operação terminal que confirmou o UUID da conversa. A leitura usa o perfil do processo, o diretório do projeto e a identidade do proprietário da sessão. O Nexus captura a observação durante o fechamento normal e exige o recibo canônico, a geração original e a liberação do recurso antes de persistir a evidência. O registro guarda identificadores e hashes no host.
+
+O Claude Code 2.1.328 acrescentou um registro de uso ao encerrar. O verificador exige o mesmo arquivo, o mesmo espaço de trabalho e o hash integral dos bytes observados antes do fechamento. Depois desses bytes, aceita somente o formato de registro de uso observado para o mesmo UUID. Um novo turno, uma substituição de arquivo ou uma alteração do conteúdo invalidam a evidência.
+
+O ensaio Windows com o wheel do Core iniciou o Claude nativo em um perfil descartável. O Core recusou UUID e operação divergentes e verificou o arquivo antes e depois do encerramento. Em seguida, o ensaio abriu uma sessão nativa em segundo plano pelo mesmo UUID, exibiu o histórico e saiu do visualizador mantendo o processo. O servidor de loopback recebeu apenas o turno que criou o histórico. O ensaio exercitou a ponte do Core. Os testes do Nexus exercitaram a persistência e os comprovantes de liberação com um processo simulado. [Cenários, revisões e hashes](si026-claude-source-retirement.json)
+
+A migração 185 mantém as linhas existentes como Codex e adiciona o tipo de adaptador. O rollback da aplicação exige restaurar o backup anterior à migração e os pins correspondentes em conjunto. A retomada nativa do Claude segue em andamento. A próxima etapa é admitir uma única sessão sucessora, conferir novamente o histórico e aplicar a autorização e as configurações exatas à abertura.

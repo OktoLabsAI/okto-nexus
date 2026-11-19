@@ -16,8 +16,13 @@ from nexus_connector_core import (
     project_r4_resource_release,
 )
 from nexus_connector_core.native.codex_rollout import observe_rollout
+from nexus_connector_core.native.claude_saved_history import ClaudeSavedHistory, observe_claude_saved_history
 
-from ..application.execution_native_session_mapping import reviewed_codex_context
+from ..application.execution_native_session_mapping import (
+    read_managed_native_session,
+    reviewed_claude_saved_context,
+    reviewed_codex_context,
+)
 from ..application.execution_saved_resume import rollout_evidence
 from ..domain.execution.keys import SessionKey as DomainSessionKey
 from ..domain.execution.keys import SessionOwnerGeneration
@@ -30,7 +35,7 @@ _LOG = logging.getLogger(__name__)
 _READY = """
     SELECT c.*, close.binding_json AS close_binding,
            opening.binding_json AS opening_binding, r.canonical_frame, r.receipt_revision
-    FROM embedded_codex_saved_contexts c
+    FROM embedded_saved_contexts c
     JOIN execution_sessions s USING (server_id, executor_id, session_id)
     JOIN execution_local_publications close
       ON close.server_id=c.server_id AND close.executor_id=c.executor_id
@@ -51,14 +56,14 @@ _READY = """
       AND s.open_operation_id=c.opening_operation_id AND s.owner_generation=c.owner_generation
       AND s.stream_epoch=c.stream_epoch AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED'
       AND operation.action='runtime.close' AND r.stage='SUCCEEDED' AND r.possible_effect=1
-      AND NOT EXISTS (SELECT 1 FROM embedded_codex_saved_contexts verified
+      AND NOT EXISTS (SELECT 1 FROM embedded_saved_contexts verified
           WHERE verified.server_id=c.server_id AND verified.executor_id=c.executor_id
             AND verified.session_id=c.session_id AND verified.owner_generation=c.owner_generation
             AND verified.status='VERIFIED')
 """
 
 
-class EmbeddedCodexSavedContexts:
+class EmbeddedSavedContexts:
     def __init__(self, owner):
         self.owner = owner
         self._after = 0
@@ -79,31 +84,44 @@ class EmbeddedCodexSavedContexts:
         try:
             async with asyncio.timeout(budget):
                 async with self.owner._native_presentation_context(scope) as (runtime_scope, mapping, target, channel):
-                    if not reviewed_codex_context(mapping):
+                    connection = dict(connection_id=channel.connection_id,
+                                      connection_generation=channel.connection_generation)
+                    if reviewed_codex_context(mapping):
+                        observed = await runtime.read_live_codex_rollout(
+                            runtime_scope, target, mapping.codex_thread_id, **connection)
+                    elif reviewed_claude_saved_context(mapping):
+                        history = mapping.claude_history
+                        observed = await runtime.read_live_claude_saved_history(
+                            runtime_scope, target, history.session_uuid, history.operation_id, **connection)
+                    else:
                         return
-                    observed = await runtime.read_live_codex_rollout(
-                        runtime_scope, target, mapping.codex_thread_id, connection_id=channel.connection_id,
-                        connection_generation=channel.connection_generation)
                 if observed is None:
                     return
-                proof, rollout = observed
+                proof, saved = observed
                 if (proof.key != SessionKey(**asdict(scope.session)) or proof.target != target
                         or proof.owner_generation != scope.generation.value
                         or (proof.connection_id, proof.connection_generation) != (channel.connection_id,
-                                                                                   channel.connection_generation)
-                        or rollout.thread_id != mapping.codex_thread_id):
+                                                                                   channel.connection_generation)):
                     return
                 root = str(await asyncio.to_thread(Path(workspace_root).resolve, strict=True))
+                if mapping.adapter_id == 'claude_stream':
+                    if saved.workspace != root or saved.session_uuid != mapping.claude_history.session_uuid:
+                        return
+                    provider = {'history': asdict(saved), 'terminal': asdict(mapping.claude_history)}
+                else:
+                    if saved.thread_id != mapping.codex_thread_id:
+                        return
+                    provider = {'configuration_hash': mapping.codex_configuration_hash, 'rollout': asdict(saved)}
                 await asyncio.to_thread(self._record, scope, runtime_scope, mapping, frame['operation_id'],
-                                        proof, rollout, root)
+                                        proof, provider, root)
         except (CoreError, TimeoutError, ValueError, OSError, sqlite3.Error):
-            _LOG.debug('Saved Codex history observation deferred or unavailable.')
+            _LOG.debug('Saved native history observation deferred or unavailable.')
         except OktoNexusError as error:
             # Optional evidence cannot turn an authorized canonical close into
             # subject-wide containment when the read fence or storage changed.
-            _LOG.debug('Saved Codex history observation refused: code=%s', error.code.value)
+            _LOG.debug('Saved native history observation refused: code=%s', error.code.value)
 
-    def _record(self, scope, runtime_scope, mapping, close_id, proof, rollout, root):
+    def _record(self, scope, runtime_scope, mapping, close_id, proof, provider, root):
         owner = self.owner
         with owner.factory.unit_of_work() as uow:
             if owner._native_presentation_mapping(scope, runtime_scope, uow=uow) != mapping:
@@ -111,18 +129,17 @@ class EmbeddedCodexSavedContexts:
             # Host file identities can exceed the R4 wire's integer range.
             witness = json.dumps({
                 'scope': runtime_scope, 'launch_build': asdict(mapping.launch_build),
-                'configuration_hash': mapping.codex_configuration_hash,
-                'process': asdict(proof.process), 'rollout': asdict(rollout), 'workspace_root': root,
+                'process': asdict(proof.process), 'workspace_root': root, **provider,
             }, separators=(',', ':'), allow_nan=False)
             uow.connection.execute("""
-                INSERT INTO embedded_codex_saved_contexts (
+                INSERT INTO embedded_saved_contexts (
                     server_id, executor_id, session_id, owner_generation, opening_operation_id,
-                    close_operation_id, stream_epoch, witness_json, captured_at, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'CAPTURED')
+                    close_operation_id, stream_epoch, witness_json, captured_at, adapter_id, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'CAPTURED')
                 ON CONFLICT(server_id, executor_id, close_operation_id) DO NOTHING
             """, (proof.key.server_id, proof.key.executor_id, proof.key.session_id, proof.owner_generation,
                   proof.target.opening_operation_id, close_id, proof.target.stream_epoch, witness,
-                  owner.deps.clock.now_iso()))
+                  owner.deps.clock.now_iso(), mapping.adapter_id))
 
     def _ready(self, uow, close_id):
         channel = self.owner.channel
@@ -137,7 +154,7 @@ class EmbeddedCodexSavedContexts:
             if close_id is not None:
                 return None, self._ready(uow, close_id)
             row = uow.connection.execute("""
-                SELECT rowid, close_operation_id FROM embedded_codex_saved_contexts
+                SELECT rowid, close_operation_id FROM embedded_saved_contexts
                 WHERE server_id=? AND executor_id=? AND status='CAPTURED' AND rowid>?
                 ORDER BY rowid LIMIT 1
             """, (owner.channel.server_id, owner.channel.executor_id, self._after)).fetchone()
@@ -155,10 +172,10 @@ class EmbeddedCodexSavedContexts:
                 if candidate is not None:
                     await self._verify(candidate)
         except (CoreError, TimeoutError, ValueError, TypeError, KeyError, OSError, sqlite3.Error):
-            _LOG.debug('Saved Codex history verification deferred or unavailable.')
+            _LOG.debug('Saved native history verification deferred or unavailable.')
         except OktoNexusError as error:
             if error.code == ErrorCode.DB_ERROR and not error.retryable:
-                _LOG.warning('Saved Codex history verification could not persist evidence.')
+                _LOG.warning('Saved native history verification could not persist evidence.')
 
     async def _verify(self, candidate):
         host = self.owner.host
@@ -170,40 +187,62 @@ class EmbeddedCodexSavedContexts:
         async def retirement(journal):
             bound = json.loads(candidate['close_binding'])
             if bound['action'] != 'runtime.close':
-                raise CoreError('SCOPE_MISMATCH', 'saved_codex_context')
+                raise CoreError('SCOPE_MISMATCH', 'saved_context')
             close = await journal.get_receipt(close_key)
             closing = project_r4_bound_receipt(bound, close,
                 key=close_key, receipt_revision=candidate['receipt_revision'])
             birth = await journal.get_process_birth(key)
             if (closing != json.loads(candidate['canonical_frame']) or birth is None
                     or asdict(birth) != witness['process']):
-                raise CoreError('SCOPE_MISMATCH', 'saved_codex_context')
+                raise CoreError('SCOPE_MISMATCH', 'saved_context')
             page = await journal.claimed_sessions(key.server_id, key.executor_id, limit=2)
             if len(page.claims) != 1 or page.next_after_rowid is not None:
-                raise CoreError('RECONCILIATION_REQUIRED', 'saved_codex_context')
+                raise CoreError('RECONCILIATION_REQUIRED', 'saved_context')
             claim = page.claims[0]
             if (claim.key != key or claim.opening_operation_id != candidate['opening_operation_id']
                     or claim.opening_owner_generation != candidate['owner_generation']):
-                raise CoreError('SCOPE_MISMATCH', 'saved_codex_context')
+                raise CoreError('SCOPE_MISMATCH', 'saved_context')
             opening = await journal.get_receipt(OperationKey(key.server_id, key.executor_id, claim.opening_operation_id))
             slot = await ledger.owned_slot_state(key)
             return project_r4_resource_release(json.loads(candidate['opening_binding']), claim, slot, opening)
 
         fact = await host.with_history(executor_id=key.executor_id, session_id=key.session_id, read=retirement)
-        prior = rollout_evidence(witness['rollout'])
-        path = Path(prior.state_home).joinpath(*prior.relative_path)
-        checked = await asyncio.to_thread(observe_rollout, prior.state_home, str(path),
-                                          prior.thread_id, witness['workspace_root'])
-        await asyncio.to_thread(self._resolve, candidate, fact['proof_digest'] if checked == prior else None)
+        if candidate['adapter_id'] == 'claude_stream':
+            history = witness['history']
+            prior = ClaudeSavedHistory(**(history | {key: tuple(history[key]) for key in (
+                'home_identity', 'workspace_identity', 'file_identity')}))
+            checked = await asyncio.to_thread(observe_claude_saved_history, prior.state_home, prior.session_uuid,
+                                              prior.workspace, before_close=prior)
+            digest = fact['proof_digest'] if checked is not None else None
+            if checked is not None:
+                witness['history'] = asdict(checked)
+        else:
+            prior = rollout_evidence(witness['rollout'])
+            path = Path(prior.state_home).joinpath(*prior.relative_path)
+            checked = await asyncio.to_thread(observe_rollout, prior.state_home, str(path),
+                                              prior.thread_id, witness['workspace_root'])
+            digest = fact['proof_digest'] if checked == prior else None
+        await asyncio.to_thread(self._resolve, candidate, digest, witness)
 
-    def _resolve(self, candidate, release_digest):
+    def _resolve(self, candidate, release_digest, witness):
         owner = self.owner
         with owner.factory.unit_of_work() as uow:
             owner.verify(uow=uow)
             if self._ready(uow, candidate['close_operation_id']) != candidate:
                 return
+            if release_digest and candidate['adapter_id'] == 'claude_stream':
+                source = witness['scope']
+                scope = InputScope(
+                    DomainSessionKey(candidate['server_id'], candidate['executor_id'], candidate['session_id']),
+                    SessionOwnerGeneration(candidate['owner_generation']), source['binding_id'],
+                    source['workspace_id'], source['workspace_binding_id'], source['agent_id'])
+                mapping = read_managed_native_session(uow, scope)
+                if (mapping is None or not reviewed_claude_saved_context(mapping)
+                        or asdict(mapping.claude_history) != witness['terminal']):
+                    release_digest = None
             uow.connection.execute("""
-                UPDATE embedded_codex_saved_contexts SET status=?, resolved_at=?, release_digest=?
+                UPDATE embedded_saved_contexts SET status=?, resolved_at=?, release_digest=?, witness_json=?
                 WHERE server_id=? AND executor_id=? AND close_operation_id=? AND status='CAPTURED'
             """, ('VERIFIED' if release_digest else 'FILE_CHANGED', owner.deps.clock.now_iso(), release_digest,
+                  json.dumps(witness, separators=(',', ':'), allow_nan=False) if release_digest else candidate['witness_json'],
                   candidate['server_id'], candidate['executor_id'], candidate['close_operation_id']))

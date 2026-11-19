@@ -58,10 +58,16 @@ def interactive_runtime(monkeypatch, request):
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
-@pytest.mark.parametrize('later_unverified_result', [False, True])
-def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_runtime, local_setup, later_unverified_result):
+@pytest.mark.parametrize('condition', ['normal_close', 'replaced_history', 'later_unverified_result'])
+def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_runtime, local_setup, condition, monkeypatch):
+    import re
+
+    from nexus_connector_core import OperationKey, ProcessBirthEvidence
+    from nexus_connector_core.native import process
+    from nexus_connector_core.native.claude_saved_history import observe_claude_saved_history
+
     setup, binding, native = interactive_runtime
-    deps, _, client, *_ = setup
+    deps, app, client, *_, workspace_root = setup
     opened = admit(setup, binding, 'claude-history-open', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)
     selected = opened['scope']
@@ -114,13 +120,73 @@ def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_run
     with factory.unit_of_work(write=False) as uow:
         assert read_managed_native_session(uow, replace(scope, generation=SessionOwnerGeneration(
             scope.generation.value + 1))) is None
-    if later_unverified_result:
+    if condition == 'later_unverified_result':
         turn('legacy-without-proof', False)
         assert mapping().claude_history is None
-    else:
-        close = admit(setup, binding, 'claude-history-close', 'runtime.close', session_id=session)
-        wait_receipt(setup, close, stages=('SUCCEEDED',))
-        assert mapping().claude_history == proof
+        return
+
+    reviewed = replace(mapping().launch_build, version='2.1.328', platform='win32',
+        content_fingerprint='sha256:551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839')
+    with factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE execution_sessions SET native_launch_build_json=? WHERE session_id=?',
+                               (json.dumps(asdict(reviewed)), session))
+    owner = app.state.embedded_dispatch_owner
+    server, executor = scope.session.server_id, scope.session.executor_id
+    _, journal = owner.host._runtime_tasks[(executor, session)].result()
+    birth = ProcessBirthEvidence('win32', 1234, 'filetime:12345678', 'windows_job')
+    client.portal.call(journal.record_process_birth,
+                       OperationKey(server, executor, opened['operation_id']), session, birth)
+    native.native.owned_process_birth = birth
+    monkeypatch.setattr(process, 'observe_recorded_process_birth',
+                        lambda evidence: 'MATCHING_LIVE' if evidence == birth else 'DIFFERENT_BIRTH')
+
+    root = str(workspace_root.resolve())
+    home = workspace_root.parent / 'private-claude-fixture'
+    folder = re.sub(r'[^A-Za-z0-9]', '-', root)
+    history = home / 'projects' / folder / f'{history_uuid}.jsonl'
+    history.parent.mkdir(parents=True)
+    payload = ''.join(json.dumps({
+        'type': kind, 'sessionId': history_uuid, 'cwd': root, 'isSidechain': False,
+        'message': {'role': kind, 'content': 'private content'},
+    }) + '\n' for kind in ('user', 'assistant'))
+    history.write_bytes(payload.encode())
+
+    async def read_claude(session_uuid, operation_id):
+        assert (session_uuid, operation_id) == (history_uuid, operation) and not native.native.stopped
+        return observe_claude_saved_history(str(home), session_uuid, root)
+
+    monkeypatch.setattr(native.native, 'read_owned_claude_history', read_claude, raising=False)
+
+    def stored():
+        with factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT * FROM embedded_saved_contexts WHERE session_id=?',
+                                         (session,)).fetchone()
+            return dict(row) if row else None
+
+    original_close = native.native.close
+    captured = []
+
+    async def close_source():
+        witness = stored()
+        assert witness['adapter_id'] == 'claude_stream' and witness['status'] == 'CAPTURED'
+        captured.append(witness)
+        await owner.saved_contexts.reconcile(witness['close_operation_id'])
+        assert stored() == witness
+        if condition == 'replaced_history':
+            history.write_bytes(payload.replace('private content', 'unreviewed').encode())
+        return await original_close()
+
+    monkeypatch.setattr(native.native, 'close', close_source)
+    close = admit(setup, binding, 'claude-history-close', 'runtime.close', session_id=session)
+    wait_receipt(setup, close, stages=('SUCCEEDED',))
+    status = 'FILE_CHANGED' if condition == 'replaced_history' else 'VERIFIED'
+    eventually(lambda: stored() and stored()['status'] == status)
+    witness = stored()
+    assert len(captured) == 1 and native.native.stopped and mapping().claude_history == proof
+    assert witness['close_operation_id'] == close['operation_id']
+    assert 'private content' not in witness['witness_json']
+    assert json.loads(witness['witness_json'])['terminal'] == asdict(proof)
+    assert bool(witness['release_digest']) == (status == 'VERIFIED')
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
@@ -846,7 +912,7 @@ def test_saved_codex_context_requires_retirement_and_same_history(
     from nexus_connector_core.native import process
     from nexus_connector_core.native.codex_rollout import observe_rollout
 
-    from okto_nexus.bootstrap.embedded_codex_saved_contexts import EmbeddedCodexSavedContexts
+    from okto_nexus.bootstrap.embedded_saved_contexts import EmbeddedSavedContexts
 
     setup, binding, native = interactive_runtime
     deps, app, client, *_, workspace_root = setup
@@ -904,7 +970,7 @@ def test_saved_codex_context_requires_retirement_and_same_history(
 
     def stored():
         with factory.unit_of_work(write=False) as uow:
-            rows = uow.connection.execute('SELECT * FROM embedded_codex_saved_contexts WHERE session_id=?',
+            rows = uow.connection.execute('SELECT * FROM embedded_saved_contexts WHERE session_id=?',
                                           (session,)).fetchall()
             assert len(rows) <= 1
             return dict(rows[0]) if rows else None
@@ -915,7 +981,7 @@ def test_saved_codex_context_requires_retirement_and_same_history(
     async def close():
         evidence = stored()
         witnessed.append(evidence['status'] if evidence else None)
-        await owner.saved_codex_contexts.reconcile(evidence['close_operation_id'] if evidence else None)
+        await owner.saved_contexts.reconcile(evidence['close_operation_id'] if evidence else None)
         assert stored() == evidence
         if condition == 'changed':
             with path.open('a', encoding='utf-8') as stream:
@@ -926,7 +992,7 @@ def test_saved_codex_context_requires_retirement_and_same_history(
     if condition == 'interrupted_verification':
         def cannot_commit(*_args):
             raise OSError('Synthetic interruption before committing the verification.')
-        monkeypatch.setattr(owner.saved_codex_contexts, '_resolve', cannot_commit)
+        monkeypatch.setattr(owner.saved_contexts, '_resolve', cannot_commit)
     if condition == 'unreleased_slot':
         ledger = client.portal.call(owner.host._ledger)
         current = ledger.owned_slot_state
@@ -945,7 +1011,7 @@ def test_saved_codex_context_requires_retirement_and_same_history(
     if condition == 'interrupted_verification':
         assert stored()['status'] == 'CAPTURED'
         # A new reconciler uses only the persisted candidate and exact receipts.
-        client.portal.call(EmbeddedCodexSavedContexts(owner).reconcile)
+        client.portal.call(EmbeddedSavedContexts(owner).reconcile)
     if expected is None:
         assert stored() is None
     else:

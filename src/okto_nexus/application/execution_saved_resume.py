@@ -29,11 +29,11 @@ def require_saved_resume_operator(*, actor, context, enabled):
 def saved_source(conn, scope, source_session_id, source_generation):
     row = conn.execute("""
         SELECT c.witness_json, c.close_operation_id, c.release_digest
-        FROM embedded_codex_saved_contexts c
+        FROM embedded_saved_contexts c
         JOIN execution_sessions s USING (server_id, executor_id, session_id)
         JOIN execution_executors e USING (server_id, executor_id)
         WHERE c.server_id=? AND c.executor_id=? AND c.session_id=? AND c.owner_generation=?
-          AND c.status='VERIFIED' AND e.kind='embedded' AND s.binding_id=?
+          AND c.status='VERIFIED' AND c.adapter_id='codex_app_server' AND e.kind='embedded' AND s.binding_id=?
           AND s.workspace_id=? AND s.workspace_binding_id=? AND s.owner_generation=c.owner_generation
           AND s.open_operation_id=c.opening_operation_id AND s.stream_epoch=c.stream_epoch
           AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED'

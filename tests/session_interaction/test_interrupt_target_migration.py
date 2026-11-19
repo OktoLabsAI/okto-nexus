@@ -111,3 +111,22 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
         assert uow.connection.execute('SELECT target_ref FROM session_interaction_controls').fetchone()[0] == 'prior-opaque-turn'
         assert uow.connection.execute('SELECT count(*) FROM session_interaction_pi_steer_targets').fetchone()[0] == 0
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+    assert MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 184)).apply() == [184]
+    with factory.unit_of_work() as uow:
+        _store_operation(uow, scope, 'legacy-close', 'runtime.close')
+        uow.connection.execute("""
+            INSERT INTO embedded_codex_saved_contexts (server_id, executor_id, session_id, owner_generation,
+                opening_operation_id, close_operation_id, stream_epoch, witness_json, captured_at,
+                status, resolved_at, release_digest)
+            VALUES (?, ?, ?, ?, 'legacy-open', 'legacy-close', 'legacy-stream', '{"legacy":true}', 't',
+                'VERIFIED', 'u', 'legacy-release')
+        """, (*key, scope.session.session_id, scope.generation.value))
+        old_witness = tuple(uow.connection.execute('SELECT * FROM embedded_codex_saved_contexts').fetchone())
+    current = MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 185))
+    assert current.apply() == [185]
+    assert current.apply() == []
+    assert retained() == original
+    with factory.unit_of_work(write=False) as uow:
+        assert tuple(uow.connection.execute('SELECT * FROM embedded_saved_contexts').fetchone()) == (
+            *old_witness, 'codex_app_server')
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()

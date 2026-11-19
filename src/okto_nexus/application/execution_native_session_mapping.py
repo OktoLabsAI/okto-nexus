@@ -86,6 +86,19 @@ def reviewed_codex_context(mapping: ManagedNativeSession) -> bool:
             and (build.version, build.platform, build.architecture, build.content_fingerprint) == _CODEX_STATE_ENGINE)
 
 
+_CLAUDE_SAVED_ENGINE = (
+    '2.1.328', 'win32', 'x86_64',
+    'sha256:551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839',
+)
+
+
+def reviewed_claude_saved_context(mapping: ManagedNativeSession) -> bool:
+    build = mapping.launch_build
+    return (mapping.adapter_id == 'claude_stream' and mapping.claude_history is not None
+            and build is not None
+            and (build.version, build.platform, build.architecture, build.content_fingerprint) == _CLAUDE_SAVED_ENGINE)
+
+
 # Portable identity of the full Node and Pi dependency closure exercised by
 # the Windows hosted-renderer proof. The Core independently guards launch.
 _PI_PRESENTATION_BUILD = (

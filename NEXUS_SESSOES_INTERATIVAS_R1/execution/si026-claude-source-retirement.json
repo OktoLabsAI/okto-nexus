@@ -1,0 +1,52 @@
+{
+  "tasks": ["SI-023", "SI-026"],
+  "status": "IN_PROGRESS",
+  "baselines": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "84ff3c2d7639bfb8a0e27c6a1f613da4b0dfe22e", "main": "8d77b50c00b417c86818d027aed7497fababac34", "main_only_commits": 0, "feature_only_commits": 422},
+    "connector": {"branch": "feature/v0.0.15", "head": "ab92c4f15897ff8b5c566646211fffd4bf12dce0", "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2", "main_only_commits": 0, "feature_only_commits": 65},
+    "core": {"branch": "feature/v0.0.16", "head": "54fa620514bfe585871de45766a1d5d54205667b", "main": "19c99f15b17ae994653ad9e190964229a0e296e8", "main_only_commits": 0, "feature_only_commits": 44}
+  },
+  "delivered_dependency_revisions": {
+    "connector": "b8f13afa3bc6ebe9bc085a94fb305bbf460add4d",
+    "core": "945e09afd70b7b69092ca1560649d4365816ad0a"
+  },
+  "validated_artifacts_sha256": {
+    "nexus": "94b284fea1f50f6601f5cbcdfba437c2e7202be9e6200ffc0da991a7961f7bd9",
+    "connector": "40004bface3075c1541410853c5f26f039e2f6586f0cfb71e37a016b5fff2a82",
+    "core": "6feb5fab77a8b9ddb9dfd1343317caf0c7f3557d70336b98579d22c4d54c5d81"
+  },
+  "regressions": {
+    "installed_core_exact_history_codex_rollout_and_stream_protocol": 44,
+    "installed_connector_boundaries_daemon_execution_control_and_lifecycle": 83,
+    "installed_nexus_session_input_and_remote_claude_control": 19,
+    "installed_nexus_database_migrations": 8,
+    "source_nexus_saved_context_scenarios": 8,
+    "generated_core_contracts": "PASS",
+    "strict_wheel_metadata_and_offline_lock": "PASS",
+    "connector_test_recovery": "The first child-process run stripped PYTHONPATH and could not import the target-only installation. Repeating with both wheels installed into a disposable virtual environment passed the lifecycle cases."
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "live_core_observation_matches_file": true,
+    "wrong_native_uuid_and_operation_refused": true,
+    "source_file_identity_before_after_is_same": true,
+    "source_history_prefix_matches_on_close": true,
+    "observed_close_suffix": "cost-state",
+    "retired_history_matches_closed_file": true,
+    "background_owner_reopened_exact_uuid": true,
+    "background_owner_preserved_after_detach": true,
+    "loopback_model_request_count": 1,
+    "loopback_model_requests_on_reopen": 0,
+    "external_model_requests": 0,
+    "isolated_job_empty_after_stop": true,
+    "fixture": "%TEMP%/nexus-si026-claude-retirement-wheel-1795085328016",
+    "fixture_sha256": "1af8d806998781d05ba480a4ae0ee388c9ecc7f5c7197fea5c2e5d0e19577817",
+    "observations_sha256": "f0175b578d691833aa51a3651680df4d890d287272142154d6a1e9a1abf23fab"
+  },
+  "limitations": [
+    "Source capture is scoped to the reviewed Windows x86-64 Claude executable, an explicit state home and the locally verified project path format.",
+    "The real Claude probe exercised the installed Core bridge with a real owned process. The durable Nexus retirement test used synthetic process evidence and a real Core journal.",
+    "No Claude successor admission, automatic launch, presentation capability, or authority is enabled by the retirement observation."
+  ]
+}
