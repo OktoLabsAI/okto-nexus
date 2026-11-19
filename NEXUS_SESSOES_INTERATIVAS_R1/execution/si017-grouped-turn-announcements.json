@@ -1,0 +1,97 @@
+{
+  "tasks": [
+    "SI-017",
+    "SI-036"
+  ],
+  "test": "SI-T-E14",
+  "evidence_status": "PARTIAL_TEST_COVERAGE",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "f75a0dcd157904cfb84b0127a891a60155944074",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 461
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "pins": {
+      "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+      "connector_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d"
+    },
+    "worktrees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "candidate": {
+    "wheel_sha256": "97cd09942827a21e5c4d291a23feee7428380c03015678f2ed21158c58de9f8d",
+    "sdist_sha256": "e196d6a1ce1f3fc54c5f97a8c4b66b06be51e6f68b9a2eef2cf1917c27ac64f7",
+    "dashboard_asset": "index-CL82rz9f.js",
+    "dashboard_sha256": "de533b687c53d17bcafcc9411018b3a27ab52b4936010b1df85d2cc34c175a06"
+  },
+  "checks": {
+    "frontend_tests_passed": 421,
+    "source_python_tests_passed": 36,
+    "installed_python_tests_passed": 36,
+    "uv_lock_check": true,
+    "vite_build": true,
+    "twine_strict": true
+  },
+  "environment": "Windows, Chromium via Playwright CLI, installed Nexus, loopback, copied database with synthetic live events and no grant for mutations",
+  "qualification": {
+    "screen_reader_tested": false,
+    "manual_acceptance": false
+  },
+  "observations": {
+    "fixture_only": true,
+    "provider_calls": 0,
+    "native_harnesses_started": 0,
+    "api": {
+      "historic_terminal_count": 1,
+      "fragments": 24,
+      "canonical_new_terminal_count": 2,
+      "duplicate_terminal_projected": false
+    },
+    "browser": {
+      "open": {
+        "historicNotices": 0,
+        "focusedRegion": "Conversation messages",
+        "accessibilityRole": "status",
+        "live": "polite",
+        "atomic": true
+      },
+      "fragments": {
+        "visibleFragments": 24,
+        "terminalNotices": 0,
+        "newMessageNotices": 0,
+        "focusPreserved": true
+      },
+      "first": {
+        "turnNotices": [
+          "Turn finished."
+        ],
+        "focusPreserved": true
+      },
+      "duplicate": {
+        "duplicateAnnouncements": 0,
+        "focusPreserved": true
+      },
+      "second": {
+        "turnNotices": [
+          "Turn finished.",
+          "Turn finished."
+        ],
+        "newMessageNotices": 0,
+        "focusPreserved": true
+      }
+    }
+  }
+}

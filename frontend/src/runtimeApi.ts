@@ -319,6 +319,7 @@ export interface SessionConversationPage {
   scope: InteractionScope;
   stream_epoch: string | null;
   updates: ConversationUpdate[];
+  turn_outcomes?: {sequence: number; outcome: 'success' | 'failed' | 'interrupted'}[];
   next_after_sequence: number;
   committed_contiguous: number;
   gap_pending: boolean;

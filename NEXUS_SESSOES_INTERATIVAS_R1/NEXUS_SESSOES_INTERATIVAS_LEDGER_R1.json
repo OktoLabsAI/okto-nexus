@@ -910,7 +910,9 @@
         "execution/si036-browser-scroll-ime.md",
         "execution/si036-browser-scroll-ime.json",
         "execution/si012-codex-live-conversation.md",
-        "execution/si012-codex-live-conversation.json"
+        "execution/si012-codex-live-conversation.json",
+        "execution/si017-grouped-turn-announcements.md",
+        "execution/si017-grouped-turn-announcements.json"
       ]
     },
     {
@@ -1889,7 +1891,9 @@
         "execution/si013-next-turn-label.md",
         "execution/si013-next-turn-label.json",
         "execution/si036-mobile-native-zoom.md",
-        "execution/si036-mobile-native-zoom.json"
+        "execution/si036-mobile-native-zoom.json",
+        "execution/si017-grouped-turn-announcements.md",
+        "execution/si017-grouped-turn-announcements.json"
       ]
     },
     {
@@ -3602,7 +3606,10 @@
         "SI-R21"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si017-grouped-turn-announcements.md",
+        "execution/si017-grouped-turn-announcements.json"
+      ]
     },
     {
       "id": "SI-T-E15",

@@ -147,6 +147,30 @@ def _updates(event: dict):
         }
 
 
+def _turn_outcomes(connection, *, scope, stream_epoch, events):
+    terminal = {
+        event["sequence"]: event["operation_id"] for event in events
+        if event["category"] == "turn_state"
+        and event["payload"].get("delivery_phase") == "terminal"
+        and _native_id(event.get("operation_id"))
+    }
+    if not terminal:
+        return []
+    operations = tuple(dict.fromkeys(terminal.values()))
+    placeholders = ",".join("?" for _ in operations)
+    rows = connection.execute(
+        "SELECT operation_id,terminal_sequence,delivery_outcome FROM execution_results "
+        "WHERE server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? "
+        "AND delivery_outcome IN ('success','failed','interrupted') "
+        f"AND operation_id IN ({placeholders}) ORDER BY terminal_sequence",
+        (scope.session.server_id, scope.session.executor_id, scope.session.session_id, stream_epoch, *operations),
+    )
+    return [
+        {"sequence": sequence, "outcome": outcome}
+        for operation, sequence, outcome in rows if terminal.get(sequence) == operation
+    ]
+
+
 def read_session_interaction_transcript(
     factory, *, scope: InputScope, context, access, stream_epoch=None,
     after_sequence=0, limit=MAX_SCAN_EVENTS,
@@ -166,26 +190,29 @@ def read_session_interaction_transcript(
     if after_sequence != 0 and stream_epoch is None:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "A transcript cursor requires its stream epoch.", {})
 
-    page = read_execution_events(
-        factory, server_id=scope.session.server_id, executor_id=scope.session.executor_id,
-        session_id=scope.session.session_id, context=context, access=access,
-        stream_epoch=stream_epoch, after_sequence=after_sequence, limit=limit,
-        hydrate_artifacts=False, report_missing_history=True,
-    )
-    actual_scope = page["scope"]
-    if (
-        actual_scope["binding_id"] != scope.binding_id
-        or actual_scope["workspace_id"] != scope.workspace_id
-        or actual_scope["workspace_binding_id"] != scope.workspace_binding_id
-        or actual_scope["agent_id"] != scope.agent_id
-        or actual_scope["session_owner_generation"] != scope.generation.value
-    ):
-        raise OktoNexusError(ErrorCode.NOT_FOUND, "The session was not found in this scope.", {})
+    with factory.unit_of_work(write=False) as uow:
+        page = read_execution_events(
+            factory, server_id=scope.session.server_id, executor_id=scope.session.executor_id,
+            session_id=scope.session.session_id, context=context, access=access,
+            stream_epoch=stream_epoch, after_sequence=after_sequence, limit=limit,
+            hydrate_artifacts=False, report_missing_history=True, _uow=uow,
+        )
+        actual_scope = page["scope"]
+        if (
+            actual_scope["binding_id"] != scope.binding_id
+            or actual_scope["workspace_id"] != scope.workspace_id
+            or actual_scope["workspace_binding_id"] != scope.workspace_binding_id
+            or actual_scope["agent_id"] != scope.agent_id
+            or actual_scope["session_owner_generation"] != scope.generation.value
+        ):
+            raise OktoNexusError(ErrorCode.NOT_FOUND, "The session was not found in this scope.", {})
+        outcomes = _turn_outcomes(uow.connection, scope=scope, stream_epoch=page["stream_epoch"], events=page["events"])
 
     return {
         "scope": actual_scope,
         "stream_epoch": page["stream_epoch"],
         "updates": [update for event in page["events"] for update in _updates(event)],
+        "turn_outcomes": outcomes,
         "next_after_sequence": page["next_after_sequence"],
         "committed_contiguous": page["committed_contiguous"],
         "gap_pending": page["gap_pending"],

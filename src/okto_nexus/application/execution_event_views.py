@@ -1,6 +1,7 @@
 """Authorized, bounded replay of committed canonical events, without a runtime."""
 import hashlib
 import json
+from contextlib import nullcontext
 
 from ..errors import ErrorCode, OktoNexusError
 from .execution_session_views import read_execution_session
@@ -12,8 +13,8 @@ PAGE_BYTES = 512 * 1024
 
 def read_execution_events(factory, *, server_id, session_id, context, access,
                           executor_id=None, stream_epoch=None, after_sequence=0, limit=200,
-                          hydrate_artifacts=True, report_missing_history=False):
-    with factory.unit_of_work(write=False) as uow:
+                          hydrate_artifacts=True, report_missing_history=False, _uow=None):
+    with nullcontext(_uow) if _uow is not None else factory.unit_of_work(write=False) as uow:
         view = read_execution_session(factory, server_id=server_id, session_id=session_id,
             context=context, access=access, executor_id=executor_id, _uow=uow)
         if (type(after_sequence) is not int or not 0 <= after_sequence <= 9007199254740991

@@ -26,7 +26,7 @@ function load(url){
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
 const {SessionExecutionPanel}=load(new URL('../src/components/SessionExecutionPanel.tsx',import.meta.url));
-const {assertConversationPage,assertConversationPosition,applyConversationUpdates,
+const {assertConversationPage,assertConversationPosition,applyConversationUpdates,liveTurnAnnouncement,
   interactionKey,inputIntentStorageKey,readInputIntent,clearInputIntents}=
   load(new URL('../src/sessionConversation.ts',import.meta.url));
 const {interruptStatus,canDismissInterrupt,interruptStorageKey,clearInterruptIntents}=load(new URL('../src/sessionInterrupt.ts',import.meta.url));
@@ -228,6 +228,19 @@ test('conversation cursor reports its next missing committed sequence without of
   assert.throws(()=>assertConversationPage({...page,history_gap:9},scope,7,'epoch'));
   assert.throws(()=>assertConversationPage({...page,committed_contiguous:7},scope,7,'epoch'));
   assert.throws(()=>assertConversationPage({...page,has_more:true},scope,6,'epoch'));
+});
+
+test('conversation announces new verified turn outcomes as one message per page',()=>{
+  const scope=session().scope;
+  const page={scope,stream_epoch:'epoch',next_after_sequence:12,committed_contiguous:12,
+    has_more:false,updates:[],turn_outcomes:[{sequence:8,outcome:'success'},{sequence:11,outcome:'interrupted'}]};
+  assert.doesNotThrow(()=>assertConversationPage(page,scope,7,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,turn_outcomes:[...page.turn_outcomes,page.turn_outcomes[1]]},scope,7,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,turn_outcomes:[{sequence:13,outcome:'success'}]},scope,7,'epoch'));
+  assert.equal(liveTurnAnnouncement(page,12),null);
+  assert.deepEqual(liveTurnAnnouncement(page,7),{sequence:11,text:'2 turns ended.'});
+  assert.deepEqual(liveTurnAnnouncement(page,8),{sequence:11,text:'Turn interrupted.'});
+  assert.equal(liveTurnAnnouncement({...page,turn_outcomes:undefined},7),null);
 });
 
 test('conversation reconciles deltas and snapshots by message identity with stable prior rows',()=>{

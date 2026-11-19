@@ -2,7 +2,7 @@ import {useEffect, useId, useLayoutEffect, useRef, useState} from 'react';
 import {runtimeApi, type InteractionScope, type SessionConversationPosition, type SessionInputReceipt,
   type SessionInteraction} from '../runtimeApi';
 import {applyConversationUpdates, assertConversationPage, assertConversationPosition, assertInteractionScope, clearInputIntents,
-  inputIntentStorageKey, interactionKey, readInputIntent, receiptLabel, type ConversationMessage} from '../sessionConversation';
+  inputIntentStorageKey, interactionKey, liveTurnAnnouncement, readInputIntent, receiptLabel, type ConversationMessage} from '../sessionConversation';
 import {OperatorSignIn} from './OperatorSignIn';
 import {SessionCommandPicker} from './SessionCommandPicker';
 import {SessionInputQueue} from './SessionInputQueue';
@@ -43,11 +43,12 @@ interface History {
   gap: boolean;
   missingHistory: boolean;
   incomplete: boolean;
+  announceAfter: number;
 }
 
 function emptyHistory(epoch: string | null = null): History {
   return {messages: new Map(), epoch, after: 0, ready: false, more: false, gap: false,
-    missingHistory: false, incomplete: false};
+    missingHistory: false, incomplete: false, announceAfter: 0};
 }
 
 function errorStatus(error: unknown) {
@@ -70,6 +71,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
   const [messageError, setMessageError] = useState('');
   const [busy, setBusy] = useState(false);
   const [newMessages, setNewMessages] = useState(false);
+  const [turnAnnouncement, setTurnAnnouncement] = useState<ReturnType<typeof liveTurnAnnouncement>>(null);
   const [queueRefresh, setQueueRefresh] = useState(0);
   const [steerSource, setSteerSource] = useState<SteerSource | null>(null);
   const [interruptCommand, setInterruptCommand] = useState<{revision: string} | null>(null);
@@ -130,6 +132,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
   }
 
   useEffect(() => {
+    if (!visible) setTurnAnnouncement(null);
     const controller = new AbortController();
     let timer: number | undefined;
     let inFlight = false;
@@ -159,6 +162,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       setInteraction(null);
       view.current = emptyHistory();
       setHistory(view.current);
+      setTurnAnnouncement(null);
       setReading('The exact session is unavailable. Reopen its context.');
     }
 
@@ -188,10 +192,13 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
           const page = await runtimeApi.sessionConversation(scope, current.after, current.epoch, signal);
           if (signal.aborted) return;
           assertConversationPage(page, scope, current.after, current.epoch);
+          const announcement = current.ready ? liveTurnAnnouncement(page, current.announceAfter) : null;
+          if (announcement || !current.ready) setTurnAnnouncement(announcement);
           view.current = {messages: page.updates.length ? applyConversationUpdates(current.messages, page.updates) : current.messages,
             epoch: page.stream_epoch,
             after: page.next_after_sequence, ready: true, more: page.has_more, gap: page.gap_pending,
-            missingHistory: page.history_gap != null, incomplete: !page.history_complete};
+            missingHistory: page.history_gap != null, incomplete: !page.history_complete,
+            announceAfter: current.ready ? Math.max(current.announceAfter, page.next_after_sequence) : page.committed_contiguous};
           if (current.ready && !following.current && page.updates.length && !includeNext) setNewMessages(true);
           setHistory(view.current);
         }
@@ -396,6 +403,9 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       <p className="text-xs text-surface-500">Earlier native history may be unavailable.</p>}
     {history.more && <button className="btn btn-secondary" type="button" onClick={() => polling.current()}>Load more messages</button>}
     <p className="sr-only" role="status">{newMessages ? 'New messages available.' : ''}</p>
+    <p className="sr-only" role="status" aria-atomic="true">
+      {visible && turnAnnouncement && <span key={turnAnnouncement.sequence}>{turnAnnouncement.text}</span>}
+    </p>
     {newMessages && <button className="btn btn-secondary" type="button" onClick={() => {
       following.current = true;
       if (scroll.current) {

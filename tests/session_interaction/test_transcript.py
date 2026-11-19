@@ -49,6 +49,9 @@ def stream(monkeypatch):
                 server_id, executor_id, session_id, stream_epoch, sequence,
                 event_hash, payload_json, received_at
             );
+            CREATE TABLE execution_results (
+                server_id, executor_id, session_id, stream_epoch, operation_id, terminal_sequence, delivery_outcome
+            );
             INSERT INTO execution_sessions VALUES ('server', 'executor', 'session', 'epoch');
         """)
 
@@ -93,6 +96,10 @@ def stream(monkeypatch):
             db.execute("INSERT INTO execution_event_watermarks VALUES (?, ?, ?, ?, ?, ?)",
                        (*keys.values(), epoch, committed, gap))
 
+        def result(operation, sequence, outcome, *, epoch="epoch", session="session"):
+            db.execute("INSERT INTO execution_results VALUES ('server','executor',?,?,?,?,?)",
+                       (session, epoch, operation, sequence, outcome))
+
         def read(**query):
             options = {"scope": scope, "context": context, "access": access, **query}
             return read_session_interaction_transcript(factory, **options)
@@ -112,7 +119,7 @@ def stream(monkeypatch):
                                                   after_sequence=sequence, active_turn=active_turn)
             return read_codex_history_snapshot(factory, mapping=mapping, context=context, access=access)
 
-        yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope, history=history)
+        yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope, history=history, result=result)
     db.close()
 
 
@@ -328,6 +335,22 @@ def test_large_history_returns_a_bounded_repeatable_page(stream):
         assert page["next_after_sequence"] == stop - 1 and page["committed_contiguous"] == 10_000
         assert [item["sequence"] for item in page["updates"]] == list(range(start, stop))
     assert len({item["message_id"] for item in first["updates"] + second["updates"]}) == 2 * MAX_SCAN_EVENTS
+
+
+def test_turn_outcomes_require_the_exact_projected_terminal_fact_on_this_page(stream):
+    for sequence, operation in enumerate(("completed", "completed", "no-result", "other-session", "other-epoch", "cancelled"), 1):
+        stream.store(sequence, "fixture.terminal", "turn_state", {"delivery_phase": "terminal"}, operation_id=operation)
+    stream.result("completed", 1, "success")
+    stream.result("other-session", 4, "success", session="another")
+    stream.result("other-epoch", 5, "success", epoch="another")
+    stream.result("cancelled", 6, "interrupted")
+    stream.watermark(6)
+
+    first = stream.read(limit=2)
+    assert first["turn_outcomes"] == [{"sequence": 1, "outcome": "success"}]
+    second = stream.read(stream_epoch=first["stream_epoch"], after_sequence=first["next_after_sequence"])
+    assert second["turn_outcomes"] == [{"sequence": 6, "outcome": "interrupted"}]
+    assert first["updates"] == second["updates"] == []
 
 
 def test_only_text_parts_are_projected_and_their_size_is_bounded(stream):

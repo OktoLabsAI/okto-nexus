@@ -33,12 +33,17 @@ export function assertInteractionScope(actual: InteractionScope, expected: Inter
 export function assertConversationPage(page: SessionConversationPage, scope: InteractionScope, after: number, epoch: string | null) {
   assertInteractionScope(page.scope, scope);
   const gap = page.history_gap;
+  const outcomes = page.turn_outcomes;
   if ((epoch !== null && page.stream_epoch !== epoch) ||
       !Number.isSafeInteger(page.next_after_sequence) || page.next_after_sequence < after ||
       !Number.isSafeInteger(page.committed_contiguous) || page.committed_contiguous < page.next_after_sequence ||
       (page.has_more && page.next_after_sequence === after) ||
       (gap != null && (!Number.isSafeInteger(gap) || gap !== page.next_after_sequence + 1 ||
         gap > page.committed_contiguous || page.has_more)) ||
+      (outcomes !== undefined && (!Array.isArray(outcomes) || outcomes.length > 50 ||
+        outcomes.some((result, index) => !result || !Number.isSafeInteger(result.sequence) ||
+          result.sequence <= (index ? outcomes[index - 1].sequence : after) ||
+          result.sequence > page.next_after_sequence || !['success', 'failed', 'interrupted'].includes(result.outcome)))) ||
       page.updates.length > 400 || page.updates.some(update => !Number.isSafeInteger(update.sequence) ||
         update.sequence <= after || update.sequence > page.next_after_sequence ||
         !['append', 'replace'].includes(update.change) || !['user', 'assistant'].includes(update.role) ||
@@ -48,6 +53,14 @@ export function assertConversationPage(page: SessionConversationPage, scope: Int
         !(update.text === null || typeof update.text === 'string'))) {
     throw new Error('The conversation page did not match its cursor.');
   }
+}
+
+export function liveTurnAnnouncement(page: SessionConversationPage, after: number) {
+  const outcomes = page.turn_outcomes?.filter(result => result.sequence > after) ?? [];
+  if (!outcomes.length) return null;
+  const last = outcomes[outcomes.length - 1];
+  const labels = {success: 'Turn finished.', failed: 'Turn failed.', interrupted: 'Turn interrupted.'};
+  return {sequence: last.sequence, text: outcomes.length === 1 ? labels[last.outcome] : `${outcomes.length} turns ended.`};
 }
 
 export function assertConversationPosition(position: SessionConversationPosition, scope: InteractionScope) {
