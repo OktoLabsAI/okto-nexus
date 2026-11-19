@@ -20,6 +20,7 @@ from ....application.session_interaction_promotion import (
     steer_human_input,
 )
 from ....application.session_interaction_targets import (
+    active_claude_operation,
     active_native_turn,
     active_pi_run,
     steer_effect_revisions,
@@ -38,6 +39,7 @@ from .dashboard_session_input import (
 from .identity_ctx import runtime_request_context
 from .operator_auth import COOKIE
 from .session_interaction_contract import (
+    ClaudeOperationTarget,
     NativeTurnTarget,
     ObservedRunTarget,
     PromoteInput,
@@ -58,15 +60,23 @@ def review_exact_steer(uow, scope, revision_for):
         return None
     turn = active_native_turn(uow, scope, current_next_turn_revision=revision_for)
     run = active_pi_run(uow, scope, current_next_turn_revision=revision_for) if turn is None else None
-    proven = turn or run
+    claude = active_claude_operation(uow, scope, current_next_turn_revision=revision_for) if not (turn or run) else None
+    proven = turn or run or claude
     revisions = steer_effect_revisions(proven) if proven is not None else None
     if revisions is None:
         return None
-    target = (NativeTurnTarget(kind='native_turn', turn_id=turn.native_id) if turn is not None
-              else ObservedRunTarget(kind='observed_run', run_ref=run.run_ref))
+    if claude is not None:
+        target = ClaudeOperationTarget(kind='claude_operation', operation_id=claude.operation_id)
+        effect = 'interrupt_then_send'
+    elif run is not None:
+        target = ObservedRunTarget(kind='observed_run', run_ref=run.run_ref)
+        effect = 'next_boundary'
+    else:
+        target = NativeTurnTarget(kind='native_turn', turn_id=turn.native_id)
+        effect = 'same_turn'
     return SteerTargetView(target=target,
         capability_revision=revisions[0], effect_revision=revisions[1], queue_revision=queue['revision'] if queue else 0,
-        effect='next_boundary' if run is not None else 'same_turn')
+        effect=effect)
 
 
 async def steer_response(session_id, body, request, operation, arguments, *, surface='web'):
@@ -75,7 +85,8 @@ async def steer_response(session_id, body, request, operation, arguments, *, sur
     if body.scope.session_id != session_id or request.query_params:
         return _error(422, 'VALIDATION_ERROR', 'The reorientation must use the exact session scope.')
     observed = isinstance(body.target, ObservedRunTarget)
-    target_ref = body.target.run_ref if observed else body.target.turn_id
+    claude = isinstance(body.target, ClaudeOperationTarget)
+    target_ref = body.target.operation_id if claude else body.target.run_ref if observed else body.target.turn_id
     state = request.app.state
     options = getattr(state, 'session_input_dispatch_options', {})
     if not options:
@@ -89,6 +100,7 @@ async def steer_response(session_id, body, request, operation, arguments, *, sur
         receipt = operation(factory=state.deps.connection_factory, access=build_execution_access(state.deps),
             authority_fence=options['session_input_authority_fence'], current_steer_revisions=options['session_steer_revisions'],
             scope=body.input_scope(), author=InputAuthor(ref, surface), native_turn_id=target_ref, observed_run=observed,
+            claude_operation=claude,
             capability_revision=body.capability_revision, confirmed_effect_revision=body.confirmed_effect_revision,
             expected_queue_revision=body.expected_queue_revision, fresh_publications=state.inventory_fresh_publications,
             remote_ready=protocol_info()['remote_execution_ready'], **arguments)

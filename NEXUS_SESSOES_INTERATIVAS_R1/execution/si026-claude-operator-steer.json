@@ -1,0 +1,56 @@
+{
+  "task": "SI-026",
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-C05", "SI-T-C06", "SI-T-C07"],
+  "source": {
+    "nexus_baseline": "ae39ca502a48787412e1f8760eabff2aeeff38ed",
+    "connector_pin_revision": "87d69ab051b4519477bd18c419b3fb73f52dd3c4",
+    "core_revision": "43a663efad7e0c4ca91970dc9b6a6e1432df88ae"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "55fa1d983bb0fc147cb3388b2ee7f0c4f2ba86c098dd4f536fe3b8c72adcc4e2",
+    "core_0.0.16_wheel_sha256": "8468cd7c1778ce34d6b42841d5ec054dbe110ca0aba63bf16d382a59cd72c0ad",
+    "database_migration": 184,
+    "migration_strategy": "additive"
+  },
+  "http": {
+    "target": "original canonical Claude operation and stream, with live authority and reviewed queue revision",
+    "before_native_generation": "no review",
+    "foreign_operation": 409,
+    "concurrent_confirmations_per_case": 2,
+    "native_dispatches_per_case": 1,
+    "cases": [
+      {"input": "draft", "interruption": "confirmed", "replacement": "submitted", "terminal_receipt": "ACCEPTED_NATIVE"},
+      {"input": "queued message", "interruption": "submitted", "replacement": "not_sent", "terminal_receipt": "DELIVERY_UNKNOWN"},
+      {"input": "draft", "interruption": "confirmed", "replacement": "write_unknown",
+       "initial_receipt": "DELIVERY_UNKNOWN", "late_receipt": "ACCEPTED_NATIVE"}
+    ],
+    "uncertain_recovery_replays_no_native_effect": true
+  },
+  "browser": {
+    "name": "Microsoft Edge",
+    "platform": "Windows",
+    "surface": "installed Nexus wheel, operational Home, exact work drawer",
+    "authority": "disposable signed-in operator",
+    "cancel_kept_draft": true,
+    "cancel_native_dispatches": 0,
+    "confirmed_request_responses_dropped": 1,
+    "receipt_check_and_reload_preserved_uncertainty": true,
+    "late_result_reconciled_in_place": true,
+    "total_native_dispatches_to_fixture": 1,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "installed_nexus_final": 6,
+    "source_runtime_and_embedded_before_late_receipt_fix": 45,
+    "frontend_node": 417,
+    "frontend_production_build": "PASS",
+    "strict_wheel_check": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "limitations": [
+    "The operator fixture injects synthetic runtime events. Separate prior Core evidence drives a subprocess that speaks simulated Claude stream-json.",
+    "Claude terminal attach, shared production configuration, remote Connector transport, and live inference are outside the scope of this evidence.",
+    "Browser automation establishes the tested controls and text. Human and screen-reader validation remain separate."
+  ]
+}

@@ -11,6 +11,10 @@ from ....adapters.outbound.execution.core_inventory import protocol_info
 from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
     has_unresolved_interrupt,
 )
+from ....application.execution_native_session_mapping import (
+    read_managed_native_session,
+    reviewed_pi_context,
+)
 from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import (
     cancel_human_input,
@@ -27,8 +31,10 @@ from ....application.session_interaction_queue_view import (
     read_session_input_queue,
 )
 from ....application.session_interaction_receipts import read_session_input_receipt
-from ....application.execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
-from ....application.session_interaction_targets import ExactPiRun, active_interrupt_target
+from ....application.session_interaction_targets import (
+    ExactPiRun,
+    active_interrupt_target,
+)
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.attention import digest
 from ....domain.session_interaction import InputAuthor
@@ -79,8 +85,9 @@ def _receipt_document(document, generation, receipt):
         input_id=receipt.input_id, enqueue_sequence=receipt.sequence, input_revision=receipt.input_revision,
         queue_revision=receipt.queue_revision, status=receipt.status, operation_id=receipt.operation_id,
         possible_effect=receipt.possible_effect, steer_submitted=receipt.steer_submitted,
-        reorientation=receipt.reorientation, steer_boundary=receipt.steer_boundary).model_dump(
-            mode='json', exclude={'steer_boundary'} if receipt.steer_boundary is None else None)
+        reorientation=receipt.reorientation, steer_boundary=receipt.steer_boundary,
+        steer_compound=receipt.steer_compound).model_dump(mode='json', exclude={
+            name for name in ('steer_boundary', 'steer_compound') if getattr(receipt, name) is None})
 
 
 def _cancel_revision(_uow, scope):
@@ -223,10 +230,13 @@ def build_router():
                 mapping = read_managed_native_session(uow, scope) if pi else None
                 exact_control = revision is not None and (session['adapter_id'] == 'codex_app_server'
                     or (mapping is not None and reviewed_pi_context(mapping)))
+                claude_steer = (revision is not None and session['adapter_id'] == 'claude_stream'
+                    and session['kind'] == 'embedded'
+                    and read_managed_native_session(uow, scope) is not None)
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,
                         'interrupt_review_supported': exact_control,
-                        'steer_review_supported': exact_control,
+                        'steer_review_supported': exact_control or claude_steer,
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}
 

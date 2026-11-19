@@ -18,6 +18,7 @@ def read_promotion_candidate(uow, *, scope, author, input_id):
     row = uow.connection.execute("""
         SELECT i.*,q.revision AS queue_revision,q.paused_owner_generation,c.target_ref,c.confirmed_effect_revision,
                (p.operation_id IS NOT NULL) AS observed_pi_run,
+               (cl.operation_id IS NOT NULL) AS observed_claude_operation,
                c.capability_revision AS steer_capability_revision,
                (c.confirmed_effect_revision IS NOT NULL AND d.dispatch_state='DISPATCHED'
                     AND r.stage='SUBMITTED') AS steer_submitted
@@ -26,6 +27,8 @@ def read_promotion_candidate(uow, *, scope, author, input_id):
         LEFT JOIN session_interaction_controls c USING(server_id,executor_id,session_id,operation_id)
         LEFT JOIN session_interaction_pi_steer_targets p ON p.server_id=c.server_id AND p.executor_id=c.executor_id
           AND p.operation_id=c.operation_id
+        LEFT JOIN session_interaction_claude_steer_targets cl ON cl.server_id=c.server_id AND cl.executor_id=c.executor_id
+          AND cl.operation_id=c.operation_id
         LEFT JOIN execution_dispatch_outbox d ON d.server_id=i.server_id AND d.executor_id=i.executor_id
           AND d.operation_id=i.operation_id
         LEFT JOIN execution_receipts r ON r.server_id=d.server_id AND r.executor_id=d.executor_id

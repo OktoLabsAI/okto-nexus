@@ -30,6 +30,7 @@ from nexus_connector_core import (
     r4_native_decision_operation,
     validate_harness_settings,
 )
+from nexus_connector_core.native.adapter_types import NativeAdapterError
 from nexus_connector_core.protocol import canonical_json
 from pydantic import ValidationError
 
@@ -740,8 +741,10 @@ class EmbeddedDispatchOwner:
         with self.factory.unit_of_work(write=False) as uow:
             row = uow.connection.execute("""
                 SELECT c.target_ref,c.session_id,d.dispatch_state,o.intent_hash,s.stream_epoch,
-                    CASE WHEN o.action='turn.steer' THEN p.target_operation_id ELSE t.target_operation_id END AS target_op,
-                    CASE WHEN o.action='turn.steer' THEN p.target_stream_epoch ELSE t.target_stream_epoch END AS target_epoch
+                    CASE WHEN o.action='turn.steer' THEN COALESCE(p.target_operation_id, cl.target_operation_id) ELSE t.target_operation_id END AS target_op,
+                    CASE WHEN o.action='turn.steer' THEN COALESCE(p.target_stream_epoch, cl.target_stream_epoch) ELSE t.target_stream_epoch END AS target_epoch,
+                    (cl.operation_id IS NOT NULL) AS claude_steer,
+                    (p.operation_id IS NOT NULL AND cl.operation_id IS NOT NULL) AS conflicting
                 FROM execution_operations o
                 JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id)
                 LEFT JOIN session_interaction_inputs i USING(server_id,executor_id,operation_id)
@@ -750,6 +753,8 @@ class EmbeddedDispatchOwner:
                   AND s.session_id=c.session_id AND s.owner_generation=c.owner_generation
                 LEFT JOIN session_interaction_pi_steer_targets p ON p.server_id=c.server_id AND p.executor_id=c.executor_id
                   AND p.operation_id=c.operation_id
+                LEFT JOIN session_interaction_claude_steer_targets cl ON cl.server_id=c.server_id AND cl.executor_id=c.executor_id
+                  AND cl.operation_id=c.operation_id
                 LEFT JOIN session_interaction_interrupt_targets t ON t.server_id=c.server_id AND t.executor_id=c.executor_id
                   AND t.operation_id=c.operation_id
                 WHERE o.server_id=:server_id AND o.executor_id=:executor_id AND o.operation_id=:operation_id
@@ -759,9 +764,11 @@ class EmbeddedDispatchOwner:
                 return None
             if (row['dispatch_state'] != 'SENDING' or row['intent_hash'] != frame['intent_hash']
                     or row['session_id'] != frame['session_id']
-                    or row['target_op'] is None or row['stream_epoch'] != row['target_epoch']):
-                raise CoreError('OPERATION_CONFLICT', 'embedded_pi_control_binding')
-            return row['target_ref']
+                    or row['target_op'] is None or row['stream_epoch'] != row['target_epoch'] or row['conflicting']
+                    or (row['claude_steer'] and row['target_ref'] != row['target_op'])):
+                raise CoreError('OPERATION_CONFLICT', 'embedded_control_binding')
+            argument = 'expected_claude_operation_id' if row['claude_steer'] else 'expected_pi_run_id'
+            return {argument: row['target_ref']}
 
     async def _execute(self, frame, *, continuation=None):
         continuation = {} if continuation is None else continuation
@@ -831,12 +838,12 @@ class EmbeddedDispatchOwner:
                 native_operation = r4_native_decision_operation(frame)
                 options = dict(applied_operation=native_operation)
             elif action in ("turn.steer", "turn.interrupt"):
-                run_ref = (await asyncio.to_thread(self._control_run_ref, frame)
+                run_target = (await asyncio.to_thread(self._control_run_ref, frame)
                            if frame.get("expected_turn_id") is None else None)
                 control = ControlOperation(frame["operation_id"], key, action.split(".")[1],
                     text=payload.get("text"), reason=payload.get("reason"), expected_turn_id=frame.get("expected_turn_id"),
-                    expected_pi_run_id=run_ref)
-                if run_ref is not None:
+                    **(run_target or {}))
+                if run_target is not None:
                     options = dict(applied_operation=control)
             if action == "runtime.open":
                 context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
@@ -870,7 +877,8 @@ class EmbeddedDispatchOwner:
                 receipt = await self._command_receipt(frame, lambda: runtime.submit(
                     TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context))
             elif action in ("turn.steer","turn.interrupt"):
-                receipt = await self._command_receipt(frame, lambda: runtime.control(control, context))
+                receipt = await self._command_receipt(frame, lambda: runtime.control(control, context),
+                    reviewed_claude=control.expected_claude_operation_id is not None)
             elif action == "runtime.close":
                 await self.saved_codex_contexts.capture(frame, runtime, executor.workspace_root,
                                                        lease_deadline=context.lease_deadline_monotonic)
@@ -902,7 +910,7 @@ class EmbeddedDispatchOwner:
                 self.sessions.pop(key, None)
                 await self.saved_codex_contexts.reconcile(frame['operation_id'])
 
-    async def _command_receipt(self, frame, invoke):
+    async def _command_receipt(self, frame, invoke, *, reviewed_claude=False):
         try:
             return await invoke()
         except OperationCapacityDeferred:
@@ -912,20 +920,27 @@ class EmbeddedDispatchOwner:
             # records this bound fact in Server before it becomes observable;
             # the Core journal's containment reserve remains untouched.
             return error.refusal
-        except CoreError as error:
-            # A stale target or another proved pre-write refusal belongs to
-            # this command. It must not contain unrelated work in a healthy
-            # session. Exception flags alone cannot establish that proof.
-            if error.possible_effect or not error.retry_safe:
+        except (CoreError, NativeAdapterError) as error:
+            refused = isinstance(error, CoreError) and error.retry_safe and not error.possible_effect
+            uncertain = reviewed_claude and (
+                (isinstance(error, CoreError) and error.code == 'OUTCOME_UNKNOWN' and error.possible_effect)
+                or (isinstance(error, NativeAdapterError) and error.details.get('not_sent') is not True))
+            if not (refused or uncertain):
                 raise
             receipt = await self.host.historical_receipt(session_id=frame['session_id'],
                 key=OperationKey(frame['server_id'], frame['executor_id'], frame['operation_id']))
-            if (receipt is None or receipt.stage != 'FAILED' or receipt.possible_effect
-                    or not receipt.retry_safe or receipt.error_code != error.code
-                    or receipt.operation_id != frame['operation_id']
+            if (receipt is None or receipt.operation_id != frame['operation_id']
                     or receipt.session_id != frame['session_id']):
                 raise
-            return receipt
+            if (refused and receipt.stage == 'FAILED' and not receipt.possible_effect
+                    and receipt.retry_safe and receipt.error_code == error.code):
+                return receipt
+            # Retain the reader for the exact reviewed compound action. The
+            # journal withholds retries while this receipt has possible effect.
+            if (uncertain and receipt.possible_effect and not receipt.retry_safe
+                    and receipt.stage in {'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED', 'CANCELLED'}):
+                return receipt
+            raise
 
     async def _publish(self, binding, receipt):
         source = binding["source"]

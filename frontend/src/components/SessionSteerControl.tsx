@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {runtimeApi, type InteractionScope, type SessionInputReceipt, type SessionSteerAvailability} from '../runtimeApi';
-import {assertSteerPreview, steerBoundaryLabel, steerReceiptOutcome, steerStorageKey,
+import {assertSteerPreview, claudeSteerLabel, steerBoundaryLabel, steerReceiptOutcome, steerStorageKey,
   type SteerReference, type SteerSource} from '../sessionSteer';
 
 export function SessionSteerControl({scope, available, source, pending, draftRetained, onCloseReview, onPending, onSubmitted,
@@ -64,9 +64,13 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
         callbacks.current.onSubmitted(reference, receipt);
         finish();
         callbacks.current.onQueueChanged();
-        setNotice(steerBoundaryLabel(receipt.steer_boundary) ?? (receipt.status === 'ACCEPTED_NATIVE'
+        setNotice(claudeSteerLabel(receipt.steer_compound, receipt.status === 'ACCEPTED_NATIVE') ??
+          steerBoundaryLabel(receipt.steer_boundary) ?? (receipt.status === 'ACCEPTED_NATIVE'
           ? 'Reorientation was accepted by the harness.'
           : 'Reorientation sent to the current turn. Harness acceptance is unconfirmed.'));
+        break;
+      case 'compound-pending':
+        setNotice(claudeSteerLabel(receipt.steer_compound)!);
         break;
       case 'awaiting_boundary':
         setNotice(steerBoundaryLabel('awaiting_boundary')!);
@@ -137,6 +141,7 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
     const reference: SteerReference = source.kind === 'draft'
       ? {kind: 'draft', intent: 'ui_steer_' + crypto.randomUUID()} : {kind: 'queue', inputId: source.inputId};
     if (reviewed.control.effect === 'next_boundary') reference.awaitBoundary = true;
+    if (reviewed.control.effect === 'interrupt_then_send') reference.awaitCompound = true;
     try {
       window.sessionStorage.setItem(key, JSON.stringify(reference));
     } catch {
@@ -192,7 +197,11 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
           {reviewed.queued_input && <p className="text-sm whitespace-pre-wrap break-words">
             {reviewed.queued_input.text_preview}{reviewed.queued_input.truncated ? '…' : ''}
           </p>}
-          <p className="text-sm">{reviewed.control.effect === 'next_boundary'
+          <p className="text-sm">{reviewed.control.effect === 'interrupt_then_send'
+            ? (source.kind === 'draft'
+              ? 'Interrupt this Claude turn. Send your draft as a new turn once the interruption is confirmed.'
+              : 'Move this message out of the queue and interrupt this Claude turn. Send the message as a new turn once the interruption is confirmed.')
+            : reviewed.control.effect === 'next_boundary'
             ? (source.kind === 'draft' ? 'Send this draft to Pi at the next available boundary of this run.'
               : 'Move this message out of the next-turn queue so Pi can apply it at the next boundary of this run.')
             : (source.kind === 'draft' ? 'Send this draft to the current turn.'
@@ -200,7 +209,8 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
         </>}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-primary" disabled={busy || !available || !reviewed?.control || !!reviewError}
-          onClick={() => void confirm()}>Confirm reorientation</button>
+          onClick={() => void confirm()}>{reviewed?.control?.effect === 'interrupt_then_send'
+            ? 'Interrupt and send' : 'Confirm reorientation'}</button>
         <button ref={cancel} type="button" className="btn btn-secondary" onClick={onCloseReview}>Cancel review</button>
       </div>
     </div>}

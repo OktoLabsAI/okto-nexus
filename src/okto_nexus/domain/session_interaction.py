@@ -12,6 +12,12 @@ Surface = Literal["web", "nexus_cli", "native_terminal"]
 PiSteerBoundary = Literal["awaiting_boundary", "applied", "discarded"]
 
 
+@dataclass(frozen=True, slots=True)
+class ClaudeSteerReceipt:
+    interruption: Literal["submitted", "confirmed", "write_unknown"]
+    replacement: Literal["pending", "submitted", "not_sent", "write_unknown"]
+
+
 def validate_input_text(text: str) -> str:
     if not text.strip():
         raise ValueError("Enter a message.")
@@ -71,6 +77,7 @@ class QueuedReceipt:
     steer_submitted: bool = False
     reorientation: bool = False
     steer_boundary: PiSteerBoundary | None = None
+    steer_compound: ClaudeSteerReceipt | None = None
 
 
 # Ordinary dispatch, not explicit recovery or reconciliation of a receipt.

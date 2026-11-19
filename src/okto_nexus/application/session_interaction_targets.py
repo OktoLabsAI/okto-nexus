@@ -10,7 +10,10 @@ from nexus_connector_core.native.pi_steer_facts import valid_pi_run_id
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
-from .execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
+from .execution_native_session_mapping import (
+    read_managed_native_session,
+    reviewed_pi_context,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -24,6 +27,13 @@ class ExactNativeTurn:
 @dataclass(frozen=True, slots=True)
 class ExactPiRun:
     run_ref: str
+    operation_id: str
+    revision: str
+    stream_epoch: str
+
+
+@dataclass(frozen=True, slots=True)
+class ExactClaudeOperation:
     operation_id: str
     revision: str
     stream_epoch: str
@@ -79,9 +89,40 @@ def active_pi_run(uow, scope: InputScope, *, current_next_turn_revision) -> Exac
     return ExactPiRun(run, selected['operation_id'], revision, selected['stream_epoch'])
 
 
-def _active_start(uow, scope, adapter_id, native_start, event_type):
+def active_claude_operation(uow, scope: InputScope, *, current_next_turn_revision) -> ExactClaudeOperation | None:
+    mapping = read_managed_native_session(uow, scope)
+    if mapping is None or mapping.adapter_id != 'claude_stream' or mapping.stream_epoch is None:
+        return None
+    capability = current_next_turn_revision(uow, scope)
+    if capability is None:
+        return None
+    unknown = uow.connection.execute("""
+        SELECT 1
+        FROM session_interaction_inputs i
+        JOIN session_interaction_claude_steer_targets p USING(server_id,executor_id,operation_id)
+        WHERE i.server_id=:server_id AND i.executor_id=:executor_id AND i.session_id=:session_id
+          AND i.owner_generation=:owner_generation AND p.target_stream_epoch=:stream_epoch
+          AND i.status='DELIVERY_UNKNOWN'
+        LIMIT 1
+    """, _scope_params(scope) | {'stream_epoch': mapping.stream_epoch}).fetchone()
+    if unknown is not None:
+        return None
+    evidence = _active_start(uow, scope, 'claude_stream', 'nexus_claude_generating', 'tool_activity', phase=None)
+    if evidence is None:
+        return None
+    selected, start, payload = evidence
+    if type(payload.get('schema_version')) is not int or payload['schema_version'] != 1:
+        return None
+    revision = 'sha256:' + digest({'action': 'exact_claude_operation.v1', 'capability': capability,
+        'opening': mapping.opening_operation_id, 'operation_id': selected['operation_id'],
+        'epoch': selected['stream_epoch'], 'generating': start['event_hash']})
+    return ExactClaudeOperation(selected['operation_id'], revision, selected['stream_epoch'])
+
+
+def _active_start(uow, scope, adapter_id, native_start, event_type, *, phase='started'):
     conn = uow.connection
-    scope_params = _scope_params(scope) | {'adapter_id': adapter_id, 'native_start': native_start, 'event_type': event_type}
+    scope_params = _scope_params(scope) | {'adapter_id': adapter_id, 'native_start': native_start,
+                                          'event_type': event_type, 'phase': phase}
     active = conn.execute("""
         SELECT o.operation_id, s.stream_epoch, w.committed_contiguous
         FROM execution_sessions s
@@ -102,15 +143,16 @@ def _active_start(uow, scope, adapter_id, native_start, event_type):
         WHERE s.server_id=:server_id AND s.executor_id=:executor_id AND s.session_id=:session_id
           AND s.owner_generation=:owner_generation AND s.binding_id=:binding_id AND s.workspace_id=:workspace_id
           AND s.workspace_binding_id=:workspace_binding_id AND e.adapter_id=:adapter_id
-          AND (:adapter_id!='pi_rpc' OR x.kind='embedded')
+          AND (:adapter_id NOT IN ('pi_rpc','claude_stream') OR x.kind='embedded')
           AND w.gap_state='none'
-          AND o.action='turn.submit' AND o.admission_state='DISPATCHED' AND o.binding_id=:binding_id
+          AND (o.action='turn.submit' OR (:adapter_id='claude_stream' AND o.action='turn.steer'))
+          AND o.admission_state='DISPATCHED' AND o.binding_id=:binding_id
           AND o.workspace_id=:workspace_id AND o.workspace_binding_id=:workspace_binding_id
           AND o.subject_agent_id=:agent_id AND d.dispatch_state='DISPATCHED'
           AND r.stage IN ('SUBMITTED','ACCEPTED') AND r.source_connection_id=x.owner_instance_id
           AND r.source_connection_generation=x.generation AND result.terminal_sequence IS NULL
           AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=:owner_generation
-          AND (:adapter_id!='pi_rpc' OR NOT EXISTS (
+          AND (:adapter_id NOT IN ('pi_rpc','claude_stream') OR NOT EXISTS (
               SELECT 1 FROM execution_event_ingress finish
               WHERE finish.server_id=s.server_id AND finish.executor_id=s.executor_id
                 AND finish.session_id=s.session_id AND finish.stream_epoch=s.stream_epoch
@@ -137,7 +179,7 @@ def _active_start(uow, scope, adapter_id, native_start, event_type):
           AND stream_epoch=:stream_epoch AND sequence<=:committed_contiguous AND event_type=:event_type
           AND json_extract(payload_json,'$.operation_id')=:operation_id
           AND json_extract(payload_json,'$.native_type')=:native_start
-          AND json_extract(payload_json,'$.payload.delivery_phase')='started'
+          AND json_extract(payload_json,'$.payload.delivery_phase') IS :phase
         LIMIT 2
     """, {**scope_params, **dict(selected)}).fetchall()
     if len(started) != 1:
@@ -173,10 +215,12 @@ def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_n
     return turn.revision
 
 
-def steer_effect_revisions(turn: ExactNativeTurn | ExactPiRun) -> tuple[str, str] | None:
+def steer_effect_revisions(turn: ExactNativeTurn | ExactPiRun | ExactClaudeOperation) -> tuple[str, str] | None:
     """Describe the installed Core contract for the proven target."""
     if isinstance(turn, ExactPiRun):
         adapter, native_id, timing, effect_name = 'pi_rpc', 'forbidden', 'NEXT_TURN_BOUNDARY', 'next_boundary'
+    elif isinstance(turn, ExactClaudeOperation):
+        adapter, native_id, timing, effect_name = 'claude_stream', 'forbidden', 'IMMEDIATE', 'interrupt_then_send'
     else:
         adapter, native_id, timing, effect_name = 'codex_app_server', 'required', 'IMMEDIATE', 'same_turn'
     contract = get_control_targeting(adapter, 'turn.steer')
@@ -189,7 +233,10 @@ def steer_effect_revisions(turn: ExactNativeTurn | ExactPiRun) -> tuple[str, str
 
 
 def steer_revisions(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision,
-                    observed_run=False) -> tuple[str, str] | ExactPiRun | None:
+                    observed_run=False, claude_operation=False) -> tuple[str, str] | ExactPiRun | ExactClaudeOperation | None:
+    if claude_operation:
+        turn = active_claude_operation(uow, scope, current_next_turn_revision=current_next_turn_revision)
+        return turn if turn is not None and turn.operation_id == native_turn_id else None
     if observed_run:
         run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision)
         return run if run is not None and run.run_ref == native_turn_id else None

@@ -230,6 +230,10 @@ export interface SessionInputReceipt {
   reorientation?: boolean;
   steer_submitted?: boolean;
   steer_boundary?: 'awaiting_boundary' | 'applied' | 'discarded';
+  steer_compound?: {
+    interruption: 'submitted' | 'confirmed' | 'write_unknown';
+    replacement: 'pending' | 'submitted' | 'not_sent' | 'write_unknown';
+  };
 }
 
 export interface SessionInputQueueItem extends SessionInputReceipt {
@@ -270,7 +274,8 @@ export type SessionSteerTarget = Pick<SessionInterruptTarget, 'capability_revisi
   effect_revision: string;
 } & (
   {effect: 'same_turn'; target: NativeTurnTarget} |
-  {effect: 'next_boundary'; target: ObservedRunTarget}
+  {effect: 'next_boundary'; target: ObservedRunTarget} |
+  {effect: 'interrupt_then_send'; target: {kind: 'claude_operation'; operation_id: string}}
 );
 
 export interface QueuedSteerPreview {

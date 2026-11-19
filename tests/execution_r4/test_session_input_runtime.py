@@ -1,6 +1,7 @@
 """Exercise the serve-owned queue against real R4/Core with a synthetic peer."""
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, replace
 from functools import partial
 
@@ -54,6 +55,138 @@ def interactive_runtime(monkeypatch, request):
     monkeypatch.setattr(local_realization, 'InstallationCandidate', qualified_candidate)
     monkeypatch.setattr(availability, 'qualified_build', lambda *_args, **_kwargs: True)
     return connect_local(request.getfixturevalue('local_setup'))
+
+
+@pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
+@pytest.mark.parametrize('replacement', ['submitted', 'not_sent', 'write_unknown'])
+def test_dashboard_reviews_and_recovers_exact_claude_reorientation(interactive_runtime, local_setup, replacement):
+    from nexus_connector_core.native.adapter_types import (
+        ErrorCode,
+        NativeAdapterError,
+        ReplacementNotSentAfterInterrupt,
+    )
+
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'claude-review-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    generation = opened['scope']['session_owner_generation']
+    exact = {key: opened['scope'][key] for key in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                                  'workspace_binding_id', 'agent_id', 'session_id')}
+    session = exact['session_id']
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('claude-review-fixture', 'fixture-password-long', local=True)
+    client.cookies.set('nexus_operator_session', auth.login('claude-review-fixture', 'fixture-password-long'))
+
+    def preview():
+        response = client.get(path + '/steer', params=query)
+        assert response.status_code == 200, response.text
+        return response.json()['control']
+
+    assert preview() is None
+    active = admit(setup, binding, 'claude-active-turn', 'turn.submit', session_id=session, text='Synthetic turn')
+    wait_receipt(setup, active)
+    active_id = active['operation_id']
+    assert preview() is None
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                       (session,)).fetchone()[0]
+
+    def event(kind, native_type, payload, operation_id):
+        return RuntimeEvent(exact['server_id'], exact['executor_id'], session, epoch, 0,
+                            kind, native_type, payload, operation_id=operation_id)
+
+    client.portal.call(native.native.queue.put,
+                       event('tool_activity', 'nexus_claude_generating', {'schema_version': 1}, active_id))
+    eventually(preview)
+    control = preview()
+    assert control['effect'] == 'interrupt_then_send'
+    assert control['target'] == {'kind': 'claude_operation', 'operation_id': active_id}
+    interaction = client.get(path + '/interaction', params=query).json()
+    assert interaction['steer_review_supported'] is True
+    base = {'scope': exact, 'expected_session_generation': generation}
+    selector = {'client_intent_id': 'claude-review-send'}
+    content = {'content': [{'type': 'text', 'text': 'Synthetic replacement'}]}
+    route = path + '/steer'
+    action = selector | content
+    if replacement == 'not_sent':
+        queued = client.post(path + '/inputs', headers=ui, json=base | action | {
+            'capability_revision': interaction['next_turn']['capability_revision'],
+        })
+        assert queued.status_code == 202, queued.text
+        entry = queued.json()
+        route = f"{path}/inputs/{entry['input_id']}/promote"
+        selector = {'input_id': entry['input_id']}
+        response = client.get(path + '/steer', params=query | selector)
+        assert response.status_code == 200, response.text
+        queued_review = response.json()
+        control = queued_review['control']
+        assert control['target']['operation_id'] == active_id
+        assert queued_review['queued_input']['text_preview'] == 'Synthetic replacement'
+        action = {'expected_input_revision': queued_review['queued_input']['input_revision']}
+
+    effects = []
+    original_send = native.native.send
+
+    async def record_send(verb, payload, operation_id, *, expected_turn_id=None):
+        if verb == 'steer':
+            effects.append((operation_id, payload['expected_claude_operation_id']))
+            stages = ['interrupt_submitted']
+            if replacement != 'not_sent':
+                stages.append('interrupt_confirmed')
+            stages.append('replacement_' + replacement)
+            for stage in stages:
+                await native.native.queue.put(event('tool_activity', 'nexus_claude_steer', {
+                    'stage': stage, 'interrupt_request_id': 'fixture-interrupt', 'turn_operation_id': active_id,
+                }, operation_id))
+            if replacement == 'not_sent':
+                raise ReplacementNotSentAfterInterrupt()
+            if replacement == 'write_unknown':
+                raise NativeAdapterError(ErrorCode.INTERNAL_ERROR, 'Synthetic replacement write failure')
+        return await original_send(verb, payload, operation_id, expected_turn_id=expected_turn_id)
+
+    native.native.send = record_send
+    body = base | {'capability_revision': control['capability_revision'],
+            'target': control['target'], 'expected_queue_revision': control['queue_revision'],
+            'confirmed_effect_revision': control['effect_revision']} | action
+
+    def confirm(document):
+        return client.post(route, headers=ui, json=document)
+
+    assert confirm(body | {'target': {'kind': 'claude_operation', 'operation_id': 'op_' + '0' * 32}}).status_code == 409
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        first, second = list(pool.map(confirm, (body, body)))
+    assert first.status_code == second.status_code == 202, (first.text, second.text)
+    operation_id = first.json()['operation_id']
+    assert second.json()['operation_id'] == operation_id
+
+    def receipt():
+        response = client.get(path + '/inputs/receipt', params=query | selector)
+        assert response.status_code == 200, response.text
+        assert 'Synthetic replacement' not in response.text and 'fixture-interrupt' not in response.text
+        return response.json()
+
+    expected = {'interruption': 'submitted' if replacement == 'not_sent' else 'confirmed', 'replacement': replacement}
+    eventually(lambda: receipt().get('steer_compound') == expected)
+    retained = receipt()
+    assert retained['possible_effect'] and retained['operation_id'] == operation_id
+    if replacement != 'submitted':
+        eventually(lambda: receipt()['status'] == 'DELIVERY_UNKNOWN')
+        assert preview() is None
+        assert receipt()['steer_compound'] == expected
+        replay = confirm(body)
+        assert replay.status_code == 202 and replay.json()['operation_id'] == operation_id
+    if replacement == 'submitted':
+        assert retained['status'] == 'DISPATCHING'
+    if replacement != 'not_sent':
+        client.portal.call(native.native.queue.put, event('turn_state', 'fixture.claude.replacement_finished',
+                                {'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id))
+        eventually(lambda: receipt()['status'] == 'ACCEPTED_NATIVE')
+    assert effects == [(operation_id, active_id)]
 
 
 def test_server_dispatches_queue_after_busy_boundary_without_handoff_acquisition(interactive_runtime):

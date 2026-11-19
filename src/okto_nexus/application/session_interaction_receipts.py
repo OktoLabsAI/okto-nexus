@@ -1,7 +1,12 @@
 """Recover the current receipt of a previously accepted input without replay."""
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
-from ..adapters.outbound.sqlite.session_interaction_pi_steer import read_pi_steer_boundary
+from ..adapters.outbound.sqlite.session_interaction_claude_steer import (
+    read_claude_steer_receipt,
+)
+from ..adapters.outbound.sqlite.session_interaction_pi_steer import (
+    read_pi_steer_boundary,
+)
 from ..domain.runtime_context import RuntimeRequestContext
 from ..domain.session_interaction import (
     InputAuthor,
@@ -86,4 +91,6 @@ def read_session_input_receipt(
             steer_submitted=bool(row["steer_submitted"]), reorientation=bool(row["reorientation"]),
             steer_boundary=read_pi_steer_boundary(uow, scope=scope, operation_id=row["operation_id"])
                 if row["reorientation"] else None,
+            steer_compound=read_claude_steer_receipt(uow, scope=scope, operation_id=row["operation_id"])
+                if row["reorientation"] and row["possible_effect"] else None,
         )

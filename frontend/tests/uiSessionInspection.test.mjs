@@ -88,6 +88,9 @@ test('reorientation reviews freeze the supported effect, owner generation and qu
   const pi={...control,effect:'next_boundary',target:{kind:'observed_run',run_ref:'prun_'+'a'.repeat(32)}};
   assert.doesNotThrow(()=>assertSteerPreview({...preview,control:pi},scope,source));
   assert.throws(()=>assertSteerPreview({...preview,control:{...pi,effect:'same_turn'}},scope,source));
+  const claude={...control,effect:'interrupt_then_send',target:{kind:'claude_operation',operation_id:'op_'+'a'.repeat(32)}};
+  assert.doesNotThrow(()=>assertSteerPreview({...preview,control:claude},scope,source));
+  assert.throws(()=>assertSteerPreview({...preview,control:{...claude,target:control.target}},scope,source));
 });
 
 test('a reorientation receipt never conflates queue dispatch, submission and native acceptance',()=>{
@@ -110,6 +113,20 @@ test('a reorientation receipt never conflates queue dispatch, submission and nat
     assert.equal(steerReceiptOutcome({...submitted,steer_boundary:boundary},scope,pi),boundary);
   }
   assert.throws(()=>steerReceiptOutcome({...receipt,steer_boundary:'applied'},scope,pi));
+  const claude={...source,awaitCompound:true};
+  assert.equal(steerReceiptOutcome(submitted,scope,claude),'uncertain');
+  const interrupted={...submitted,steer_compound:{interruption:'confirmed',replacement:'pending'}};
+  assert.equal(steerReceiptOutcome(interrupted,scope,claude),'compound-pending');
+  assert.equal(steerReceiptOutcome({...interrupted,status:'DELIVERY_UNKNOWN',
+    steer_compound:{interruption:'submitted',replacement:'not_sent'}},scope,claude),'compound-pending');
+  const replacement={...interrupted,steer_compound:{interruption:'confirmed',replacement:'submitted'}};
+  assert.equal(steerReceiptOutcome(replacement,scope,claude),'compound-pending');
+  assert.equal(steerReceiptOutcome({...replacement,status:'ACCEPTED_NATIVE'},scope,claude),'accepted');
+  const uncertainWrite={...replacement,steer_compound:{interruption:'confirmed',replacement:'write_unknown'}};
+  assert.equal(steerReceiptOutcome({...uncertainWrite,status:'DELIVERY_UNKNOWN'},scope,claude),'compound-pending');
+  assert.equal(steerReceiptOutcome({...uncertainWrite,status:'ACCEPTED_NATIVE'},scope,claude),'accepted');
+  assert.throws(()=>steerReceiptOutcome({...replacement,
+    steer_compound:{interruption:'submitted',replacement:'submitted'}},scope,claude));
 });
 
 test('reorientation stores only the exact recovery reference and clears its keys on logout',()=>{
@@ -120,6 +137,8 @@ test('reorientation stores only the exact recovery reference and clears its keys
   const storage={get length(){return items.size;},key:index=>[...items.keys()][index],getItem:key=>items.get(key),
     removeItem:key=>items.delete(key)};
   assert.deepEqual(readSteerReference(storage,key),{kind:'queue',inputId:'queued-a'});
+  items.set(key,JSON.stringify({kind:'queue',inputId:'queued-a',text:'ignored',awaitCompound:true}));
+  assert.deepEqual(readSteerReference(storage,key),{kind:'queue',inputId:'queued-a',awaitCompound:true});
   assert.equal(readSteerReference(storage,other),null);
   clearSteerReferences(storage);
   assert.deepEqual([...items.keys()],['keep']);

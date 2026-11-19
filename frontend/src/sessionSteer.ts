@@ -3,7 +3,7 @@ import {assertInteractionScope, interactionKey} from './sessionConversation';
 
 export type SteerSource = {kind: 'draft'; text: string; catalogRevision?: string} | {kind: 'queue'; inputId: string};
 export type SteerReference = ({kind: 'draft'; intent: string} | {kind: 'queue'; inputId: string}) &
-  {awaitBoundary?: boolean};
+  {awaitBoundary?: boolean; awaitCompound?: boolean};
 
 const prefix = 'okto-nexus:session-steer:';
 
@@ -14,11 +14,12 @@ export function steerStorageKey(scope: InteractionScope) {
 export function readSteerReference(storage: Storage, key: string): SteerReference | null {
   try {
     const value = JSON.parse(storage.getItem(key) ?? 'null');
-    const boundary = value?.awaitBoundary === true ? {awaitBoundary: true} : {};
+    const mode = value?.awaitCompound === true ? {awaitCompound: true} :
+      value?.awaitBoundary === true ? {awaitBoundary: true} : {};
     if (value?.kind === 'draft' && typeof value.intent === 'string' &&
-        /^ui_steer_[0-9a-f-]{36}$/.test(value.intent)) return {kind: 'draft', intent: value.intent, ...boundary};
+        /^ui_steer_[0-9a-f-]{36}$/.test(value.intent)) return {kind: 'draft', intent: value.intent, ...mode};
     if (value?.kind === 'queue' && typeof value.inputId === 'string' &&
-        value.inputId.length > 0 && value.inputId.length <= 160) return {kind: 'queue', inputId: value.inputId, ...boundary};
+        value.inputId.length > 0 && value.inputId.length <= 160) return {kind: 'queue', inputId: value.inputId, ...mode};
   } catch {
     return null;
   }
@@ -38,7 +39,9 @@ export function assertSteerPreview(value: SessionSteerAvailability, scope: Inter
   if (!control) return;
   const exactTarget = (control.effect === 'same_turn' && control.target?.kind === 'native_turn' && control.target.turn_id) ||
     (control.effect === 'next_boundary' && control.target?.kind === 'observed_run' &&
-      /^prun_[0-9a-f]{32}$/.test(control.target.run_ref));
+      /^prun_[0-9a-f]{32}$/.test(control.target.run_ref)) ||
+    (control.effect === 'interrupt_then_send' && control.target?.kind === 'claude_operation' &&
+      typeof control.target.operation_id === 'string' && /^op_[0-9a-f]{32}$/.test(control.target.operation_id));
   if (!exactTarget || !control.capability_revision || !control.effect_revision || !Number.isSafeInteger(control.queue_revision) ||
       control.queue_revision < 0) throw new Error('The exact reorientation could not be verified.');
   if (source.kind === 'queue' && (value.queued_input?.input_id !== source.inputId ||
@@ -55,6 +58,21 @@ export function steerReceiptOutcome(receipt: SessionInputReceipt, scope: Interac
     return ['QUEUED', 'PAUSED'].includes(receipt.status) ? 'uncertain' : 'original-changed';
   }
   if (!receipt.operation_id) throw new Error('Invalid reorientation receipt.');
+  if (reference.awaitCompound || receipt.steer_compound) {
+    if (!reference.awaitCompound || receipt.steer_boundary || (receipt.steer_compound && !receipt.possible_effect)) {
+      throw new Error('Invalid Claude reorientation receipt.');
+    }
+    if (receipt.status === 'REFUSED_BEFORE_SEND' && !receipt.possible_effect) return 'refused';
+    const stages = receipt.steer_compound;
+    if (!stages) return receipt.status === 'DISPATCHING' && !receipt.possible_effect ? 'dispatching' : 'uncertain';
+    if (!claudeSteerLabel(stages) ||
+        (stages.interruption !== 'confirmed' && !['pending', 'not_sent'].includes(stages.replacement))) {
+      throw new Error('Invalid Claude reorientation stages.');
+    }
+    return receipt.status === 'ACCEPTED_NATIVE' && stages.interruption === 'confirmed' &&
+      ['submitted', 'write_unknown'].includes(stages.replacement)
+      ? 'accepted' : 'compound-pending';
+  }
   if (receipt.steer_boundary) {
     if (!receipt.possible_effect) throw new Error('Invalid reorientation boundary receipt.');
     return receipt.steer_boundary;
@@ -65,6 +83,23 @@ export function steerReceiptOutcome(receipt: SessionInputReceipt, scope: Interac
   if (receipt.status === 'REFUSED_BEFORE_SEND' && !receipt.possible_effect) return 'refused';
   if (receipt.status === 'DISPATCHING' && !receipt.possible_effect) return 'dispatching';
   return 'uncertain';
+}
+
+export function claudeSteerLabel(stages: SessionInputReceipt['steer_compound'], accepted = false) {
+  if (!stages) return;
+  const interruption = {
+    submitted: stages.replacement === 'not_sent'
+      ? 'Interruption sent. Confirmation unavailable.' : 'Interruption sent. Confirmation pending.',
+    confirmed: 'Interruption confirmed.',
+    write_unknown: 'Interruption delivery is uncertain.',
+  }[stages.interruption];
+  const replacement = {
+    pending: 'Waiting for the new message to be sent.',
+    submitted: 'New message sent.',
+    not_sent: 'New message was not sent.',
+    write_unknown: accepted ? 'Claude accepted the new message.' : 'New message delivery is uncertain.',
+  }[stages.replacement];
+  if (interruption && replacement) return interruption + ' ' + replacement;
 }
 
 export function steerBoundaryLabel(boundary: SessionInputReceipt['steer_boundary']) {

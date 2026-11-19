@@ -3,7 +3,12 @@
 from dataclasses import asdict
 
 from ..adapters.outbound.sqlite.session_interaction import accept_input
-from ..adapters.outbound.sqlite.session_interaction_pi_steer import read_pi_steer_boundary
+from ..adapters.outbound.sqlite.session_interaction_claude_steer import (
+    read_claude_steer_receipt,
+)
+from ..adapters.outbound.sqlite.session_interaction_pi_steer import (
+    read_pi_steer_boundary,
+)
 from ..adapters.outbound.sqlite.session_interaction_promotion import (
     link_promoted_input,
     read_promotion_candidate,
@@ -28,13 +33,17 @@ from .session_interaction_authority import (
     require_human_queue_control,
     require_session_input_authority,
 )
-from .session_interaction_targets import ExactPiRun, steer_effect_revisions
+from .session_interaction_targets import (
+    ExactClaudeOperation,
+    ExactPiRun,
+    steer_effect_revisions,
+)
 
 
 def promote_queued_human_input(*, factory, access, authority_fence, current_steer_revisions,
                                scope, author, input_id, native_turn_id, capability_revision,
                                confirmed_effect_revision, expected_queue_revision, expected_input_revision,
-                               fresh_publications, remote_ready, observed_run=False):
+                               fresh_publications, remote_ready, observed_run=False, claude_operation=False):
     _validate_ids(input_id, native_turn_id, capability_revision, confirmed_effect_revision)
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         context = require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
@@ -42,13 +51,14 @@ def promote_queued_human_input(*, factory, access, authority_fence, current_stee
             resolve_human=resolve_human, current_steer_revisions=current_steer_revisions,
             input_id=input_id, native_turn_id=native_turn_id, revisions=(capability_revision, confirmed_effect_revision),
             expected_queue_revision=expected_queue_revision, expected_input_revision=expected_input_revision,
-            fresh_publications=fresh_publications, remote_ready=remote_ready, observed_run=observed_run)
+            fresh_publications=fresh_publications, remote_ready=remote_ready,
+            observed_run=observed_run, claude_operation=claude_operation)
 
 
 def steer_human_input(*, factory, access, authority_fence, current_steer_revisions,
                       scope, author, client_intent_id, text, native_turn_id, capability_revision,
                       confirmed_effect_revision, expected_queue_revision, fresh_publications, remote_ready,
-                      verify_command=None, verify_presenter=None, observed_run=False):
+                      verify_command=None, verify_presenter=None, observed_run=False, claude_operation=False):
     """Accept and link new text in one writer, with no observable FIFO intake on refusal."""
     _validate_ids(client_intent_id, native_turn_id, capability_revision, confirmed_effect_revision)
     _require_plain_text(text)
@@ -70,7 +80,11 @@ def steer_human_input(*, factory, access, authority_fence, current_steer_revisio
             return require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                                     author=author, resolve_human=resolve_human)
 
-        fingerprint_target = ('observed_run', native_turn_id, *revisions) if observed_run else (native_turn_id, *revisions)
+        fingerprint_target = (native_turn_id, *revisions)
+        if observed_run:
+            fingerprint_target = ('observed_run', *fingerprint_target)
+        elif claude_operation:
+            fingerprint_target = ('claude_operation', *fingerprint_target)
         admitted = accept_input(uow, scope=scope, author=author, client_intent_id=client_intent_id,
             capability_revision=capability_revision, text=text, now=stamp(access.clock.now_iso()),
             verify_new_authority=verify_intake, steer=fingerprint_target)
@@ -78,7 +92,8 @@ def steer_human_input(*, factory, access, authority_fence, current_steer_revisio
             resolve_human=resolve_human, current_steer_revisions=current_steer_revisions,
             input_id=admitted.input_id, native_turn_id=native_turn_id, revisions=revisions,
             expected_queue_revision=admitted.queue_revision, expected_input_revision=admitted.input_revision,
-            fresh_publications=fresh_publications, remote_ready=remote_ready, observed_run=observed_run)
+            fresh_publications=fresh_publications, remote_ready=remote_ready,
+            observed_run=observed_run, claude_operation=claude_operation)
 
 
 def _validate_ids(*values):
@@ -93,23 +108,26 @@ def _require_plain_text(text):
 
 def _promote(uow, *, factory, access, scope, author, context, resolve_human, current_steer_revisions,
              input_id, native_turn_id, revisions, expected_queue_revision, expected_input_revision,
-             fresh_publications, remote_ready, observed_run):
+             fresh_publications, remote_ready, observed_run, claude_operation):
     row = read_promotion_candidate(uow, scope=scope, author=author, input_id=input_id)
     if row['confirmed_effect_revision'] is not None:
         retained = (row['steer_capability_revision'], row['confirmed_effect_revision'])
-        if retained != revisions or row['target_ref'] != native_turn_id or bool(row['observed_pi_run']) != observed_run:
+        if (retained != revisions or row['target_ref'] != native_turn_id or bool(row['observed_pi_run']) != observed_run
+                or bool(row['observed_claude_operation']) != claude_operation):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The retained reorientation targets a different effect.', {})
         return QueuedReceipt(input_id, row['enqueue_sequence'], row['input_revision'], row['queue_revision'],
                              InputDeliveryState(row['status']), row['operation_id'], bool(row['possible_effect']),
                              steer_submitted=bool(row['steer_submitted']), reorientation=True,
                              steer_boundary=read_pi_steer_boundary(uow, scope=scope, operation_id=row['operation_id'])
-                                 if observed_run else None)
+                                 if observed_run else None,
+                             steer_compound=read_claude_steer_receipt(uow, scope=scope, operation_id=row['operation_id'])
+                                 if claude_operation and row['possible_effect'] else None)
     require_promotable_input(uow, scope=scope, row=row, now=stamp(access.clock.now_iso()),
         expected_queue_revision=expected_queue_revision, expected_input_revision=expected_input_revision)
     _require_plain_text(row['content'])
     proven_run = _require_authority(uow, factory=factory, access=access, linked=row, scope=scope, author=author,
         resolve_human=resolve_human, current_steer_revisions=current_steer_revisions,
-        native_turn_id=native_turn_id, revisions=revisions, observed_run=observed_run)
+        native_turn_id=native_turn_id, revisions=revisions, observed_run=observed_run, claude_operation=claude_operation)
     borrowed = DeliveryTransactionFactory(uow)
     options = {'actor_agent_id': 'operator', 'context': context, 'access': access,
                'fresh_publications': fresh_publications, 'remote_ready': remote_ready}
@@ -117,7 +135,7 @@ def _promote(uow, *, factory, access, scope, author, context, resolve_human, cur
         'client_intent_id': 'session-input-steer-' + input_id, 'intent': 'turn.steer',
         'agent_id': scope.agent_id, 'binding_id': scope.binding_id, 'workspace_binding_id': scope.workspace_binding_id,
         'session_id': scope.session.session_id, 'text': row['content'],
-        'target': _wire_target(native_turn_id, observed_run),
+        'target': _wire_target(native_turn_id, observed_run or claude_operation),
     }, **options)
     exact = {**asdict(scope.session), 'binding_id': scope.binding_id, 'workspace_id': scope.workspace_id,
              'workspace_binding_id': scope.workspace_binding_id, 'agent_id': scope.agent_id,
@@ -137,8 +155,10 @@ def _promote(uow, *, factory, access, scope, author, context, resolve_human, cur
     """, (scope.session.server_id, scope.session.executor_id, operation_id, scope.session.session_id,
           scope.generation.value, author.authority_ref, author.surface, revisions[0], native_turn_id, revisions[1]))
     if proven_run is not None:
-        uow.connection.execute("""
-            INSERT INTO session_interaction_pi_steer_targets
+        table = ('session_interaction_claude_steer_targets' if claude_operation
+                 else 'session_interaction_pi_steer_targets')
+        uow.connection.execute(f"""
+            INSERT INTO {table}
                 (server_id,executor_id,operation_id,target_operation_id,target_stream_epoch) VALUES (?,?,?,?,?)
         """, (scope.session.server_id, scope.session.executor_id, operation_id, proven_run.operation_id,
               proven_run.stream_epoch))
@@ -146,14 +166,17 @@ def _promote(uow, *, factory, access, scope, author, context, resolve_human, cur
 
 
 def _require_authority(uow, *, factory, access, linked, scope, author, resolve_human,
-                       current_steer_revisions, native_turn_id, revisions, observed_run):
+                       current_steer_revisions, native_turn_id, revisions, observed_run, claude_operation=False):
     if has_unresolved_interrupt(uow.connection, scope.session):
         raise OktoNexusError(ErrorCode.CONFLICT, 'An interrupt is pending in this session.', {})
     options = {'observed_run': True} if observed_run else {}
+    if claude_operation:
+        options['claude_operation'] = True
     review = current_steer_revisions(uow, scope, native_turn_id, **options) if current_steer_revisions else None
-    run = review if isinstance(review, ExactPiRun) else None
+    run = review if isinstance(review, (ExactPiRun, ExactClaudeOperation)) else None
     actual = steer_effect_revisions(run) if run is not None else review
-    if actual != revisions or (run is not None) != observed_run:
+    if (actual != revisions or isinstance(run, ExactPiRun) != observed_run
+            or isinstance(run, ExactClaudeOperation) != claude_operation):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact reorientation capability or effect changed.', {})
     grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                             author=author, resolve_human=resolve_human)
@@ -162,8 +185,8 @@ def _require_authority(uow, *, factory, access, linked, scope, author, resolve_h
     return run
 
 
-def _wire_target(target_ref, observed_run):
-    if observed_run:
+def _wire_target(target_ref, observed):
+    if observed:
         return {'kind': 'current_run', 'expected_turn_id': None}
     return {'kind': 'native_turn_id', 'expected_turn_id': target_ref}
 
@@ -172,10 +195,16 @@ def require_promoted_send_authority(uow, *, factory, access, linked, control, sc
                                     resolve_human, current_steer_revisions):
     if resolve_human is None:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The reorientation author cannot be verified.', {})
-    proof = uow.connection.execute("""
-        SELECT target_operation_id,target_stream_epoch FROM session_interaction_pi_steer_targets
+    proofs = uow.connection.execute("""
+        SELECT target_operation_id,target_stream_epoch,'pi_rpc' AS adapter FROM session_interaction_pi_steer_targets
         WHERE server_id=? AND executor_id=? AND operation_id=?
-    """, (scope['server_id'], scope['executor_id'], linked['operation_id'])).fetchone()
+        UNION ALL
+        SELECT target_operation_id,target_stream_epoch,'claude_stream' FROM session_interaction_claude_steer_targets
+        WHERE server_id=? AND executor_id=? AND operation_id=?
+    """, (scope['server_id'], scope['executor_id'], linked['operation_id']) * 2).fetchall()
+    if len(proofs) > 1:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The retained reorientation has conflicting targets.', {})
+    proof = proofs[0] if proofs else None
     if (control is None or not control['confirmed_effect_revision'] or linked['status'] != 'DISPATCHING'
             or linked['possible_effect'] or linked['capacity_state'] is not None
             or control['authority_ref'] != linked['authority_ref'] or control['surface'] != linked['surface']
@@ -194,6 +223,8 @@ def require_promoted_send_authority(uow, *, factory, access, linked, control, sc
     run = _require_authority(uow, factory=factory, access=access, linked=linked, scope=exact,
         author=InputAuthor(linked['authority_ref'], linked['surface']), resolve_human=resolve_human,
         current_steer_revisions=current_steer_revisions, native_turn_id=control['target_ref'],
-        revisions=(control['capability_revision'], control['confirmed_effect_revision']), observed_run=proof is not None)
-    if run is not None and (run.operation_id, run.stream_epoch) != tuple(proof):
+        revisions=(control['capability_revision'], control['confirmed_effect_revision']),
+        observed_run=proof is not None and proof['adapter'] == 'pi_rpc',
+        claude_operation=proof is not None and proof['adapter'] == 'claude_stream')
+    if run is not None and (run.operation_id, run.stream_epoch) != (proof['target_operation_id'], proof['target_stream_epoch']):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The reviewed run no longer owns the reorientation.', {})

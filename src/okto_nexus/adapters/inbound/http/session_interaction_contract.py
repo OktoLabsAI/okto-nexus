@@ -19,6 +19,7 @@ from ....domain.execution.keys import SessionKey, SessionOwnerGeneration
 from ....domain.session_interaction import (
     MAX_INPUT_BYTES,
     MAX_SQLITE_INTEGER,
+    ClaudeSteerReceipt,
     InputDeliveryState,
     InputScope,
     PiSteerBoundary,
@@ -105,8 +106,16 @@ class ObservedRunTarget(_Document):
 TurnTarget = Annotated[NativeTurnTarget | ObservedRunTarget, Field(discriminator="kind")]
 
 
+class ClaudeOperationTarget(_Document):
+    kind: Literal["claude_operation"]
+    operation_id: Identifier
+
+
+SteerTarget = Annotated[NativeTurnTarget | ObservedRunTarget | ClaudeOperationTarget, Field(discriminator="kind")]
+
+
 class SteerInput(InputRequest):
-    target: TurnTarget
+    target: SteerTarget
     confirmed_effect_revision: Identifier
     expected_queue_revision: Revision
 
@@ -124,7 +133,7 @@ class CancelInput(QueueChange):
 
 
 class PromoteInput(CancelInput):
-    target: TurnTarget
+    target: SteerTarget
     confirmed_effect_revision: Identifier
 
 
@@ -146,10 +155,10 @@ class InterruptAvailability(_Document):
 
 
 class SteerTargetView(_Document):
-    target: TurnTarget
+    target: SteerTarget
     capability_revision: Identifier
     queue_revision: Revision
-    effect: Literal["same_turn", "next_boundary"]
+    effect: Literal["same_turn", "next_boundary", "interrupt_then_send"]
     effect_revision: Identifier
 
 
@@ -180,6 +189,7 @@ class InputReceipt(_Document):
     steer_submitted: bool = False
     reorientation: bool = False
     steer_boundary: PiSteerBoundary | None = None
+    steer_compound: ClaudeSteerReceipt | None = None
 
     @model_validator(mode="after")
     def distinct_delivery_boundary(self) -> "InputReceipt":
@@ -196,6 +206,9 @@ class InputReceipt(_Document):
         if self.steer_boundary is not None and (not self.reorientation or self.operation_id is None
                                                  or not self.possible_effect):
             raise ValueError("A Pi boundary status requires an admitted reorientation.")
+        if self.steer_compound is not None and (not self.reorientation or self.operation_id is None
+                                                or not self.possible_effect or self.steer_boundary is not None):
+            raise ValueError("Claude progress requires its admitted compound reorientation.")
         return self
 
 
