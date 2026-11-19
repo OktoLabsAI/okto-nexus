@@ -50,7 +50,7 @@ from .session_interaction_contract import (
 )
 
 
-def review_exact_steer(uow, scope, revision_for):
+def review_exact_steer(uow, scope, revision_for, *, remote_control_host=None):
     queue = uow.connection.execute("""
         SELECT revision,paused_owner_generation FROM session_interaction_queues
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
@@ -59,7 +59,8 @@ def review_exact_steer(uow, scope, revision_for):
             or has_unresolved_interrupt(uow.connection, scope.session)):
         return None
     turn = active_native_turn(uow, scope, current_next_turn_revision=revision_for)
-    run = active_pi_run(uow, scope, current_next_turn_revision=revision_for) if turn is None else None
+    run = (active_pi_run(uow, scope, current_next_turn_revision=revision_for, remote_control_host=remote_control_host)
+           if turn is None else None)
     claude = active_claude_operation(uow, scope, current_next_turn_revision=revision_for) if not (turn or run) else None
     proven = turn or run or claude
     revisions = steer_effect_revisions(proven) if proven is not None else None
@@ -134,7 +135,8 @@ def build_router():
         def read():
             with factory.unit_of_work(write=False) as uow:
                 _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
-                control = review_exact_steer(uow, scope, options.get('session_input_capability_revision'))
+                control = review_exact_steer(uow, scope, options.get('session_input_capability_revision'),
+                    remote_control_host=state.deps.runtime_availability.current_host)
                 queued_input = None
                 if control is not None and input_id is not None:
                     auth = state.operator_auth

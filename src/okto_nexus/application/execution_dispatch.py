@@ -11,6 +11,7 @@ import secrets
 from typing import Mapping
 
 from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
+from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION, encode_pi_run_control
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
@@ -56,6 +57,7 @@ class AuthorizedDispatch:
     grant_id: str
     scope: dict
     frame: dict = field(repr=False)
+    wire_extension: bytes | None = field(default=None, repr=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -682,6 +684,14 @@ def begin_execution_send(
                                   "The dispatch intent has a different scope.", {})
         try:
             frame = decode_r4_frame(canonical_json(frame))
+            wire_extension = None
+            if (binding['kind'] == 'remote' and linked_control is not None
+                    and row['action'] in ('turn.steer', 'turn.interrupt')
+                    and semantic['target']['kind'] == 'current_run'):
+                if (binding['adapter_id'] != 'pi_rpc' or channel is None
+                        or PI_RUN_CONTROL_REVISION not in channel.control_capabilities):
+                    raise OktoNexusError(ErrorCode.CONFLICT, 'The connected owner cannot target the reviewed run.', {})
+                wire_extension = encode_pi_run_control(frame, linked_control['target_ref'])
         except CoreError as exc:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "The dispatch operation is incompatible with the Core contract.", {}) from exc
@@ -718,4 +728,4 @@ def begin_execution_send(
         return AuthorizedDispatch(
             reservation, semantic, lease["lease_id"],
             lease["lease_serial"], lease["connection_generation"],
-            lease["connection_id"], lease["grant_id"], scope, frame)
+            lease["connection_id"], lease["grant_id"], scope, frame, wire_extension)

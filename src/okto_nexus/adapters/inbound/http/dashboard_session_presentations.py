@@ -439,7 +439,8 @@ def _review_pi_control(state, services, active, request, text=None):
         if services.next_turn_revision(uow, active['scope']) != request.capability_revision:
             return None
         if steering:
-            target = review_exact_steer(uow, active['scope'], services.next_turn_revision)
+            target = review_exact_steer(uow, active['scope'], services.next_turn_revision,
+                remote_control_host=state.deps.runtime_availability.current_host)
             if target is not None and target.effect != 'next_boundary':
                 return None
         else:
@@ -603,9 +604,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                     elif hello.editor and kind in ('steer_review', 'interrupt_review'):
                         review = None
                         request = _PiControlReviewRequest.model_validate(raw)
-                        if presentation == 'pi_remote':
-                            await _reply_pi(ws, request, _pi_review_reply(None))
-                        elif kind == 'steer_review' and admitted_steer is None:
+                        if kind == 'steer_review' and admitted_steer is None:
                             pending = request
                             await edit('snapshot', text=None)
                         else:

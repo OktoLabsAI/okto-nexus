@@ -63,8 +63,10 @@ async def start_runtime_services(app, *, native_factory=None):
     app.state.session_input_dispatch_options = {
         'session_input_authority_fence': authority_fence,
         'session_input_capability_revision': input_revision,
-        'session_interrupt_capability_revision': partial(interrupt_revision, current_next_turn_revision=input_revision),
-        'session_steer_revisions': partial(steer_revisions, current_next_turn_revision=input_revision),
+        'session_interrupt_capability_revision': partial(interrupt_revision, current_next_turn_revision=input_revision,
+            remote_control_host=deps.runtime_availability.current_host),
+        'session_steer_revisions': partial(steer_revisions, current_next_turn_revision=input_revision,
+            remote_control_host=deps.runtime_availability.current_host),
     } if input_enabled else {}
     remote_codex = app.state.remote_codex_presentation
     remote_next_turn = input_revision if input_enabled else None

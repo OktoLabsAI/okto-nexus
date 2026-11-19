@@ -208,9 +208,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
               f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
         if writer:
             print('Enter records your message in the session queue.')
-            if not remote:
-                print('Ctrl+R reviews reorientation at the next available boundary.')
-                print('Ctrl+X reviews interruption and pauses the queue after confirmation.')
+            print('Ctrl+R reviews reorientation at the next available boundary.')
+            print('Ctrl+X reviews interruption and pauses the queue after confirmation.')
             print(f'Receipt recovery uses session generation {generation}.')
         print('Ctrl+C detaches this viewer.', flush=True)
 

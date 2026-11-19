@@ -113,7 +113,8 @@ def _exact_view(factory, uow, *, context, access, document, scope):
 
 def _interrupt_target_for(state):
     next_turn = getattr(state, 'session_input_dispatch_options', {}).get('session_input_capability_revision')
-    return partial(active_interrupt_target, current_next_turn_revision=next_turn) if next_turn is not None else None
+    return partial(active_interrupt_target, current_next_turn_revision=next_turn,
+        remote_control_host=state.deps.runtime_availability.current_host) if next_turn is not None else None
 
 
 def review_exact_interrupt(uow, scope, target_for):

@@ -99,8 +99,10 @@ okto-nexus session receipt --id HARNESS_ID --session-id SESSION_ID --operator-pr
 
 For Pi hosted by Connector, the same commands use the selected Nexus server.
 Pass the exact `--workspace-id` with the Harness ID and use HTTPS from a
-different machine. The remote editor supports drafting and queuing text.
-Reorientation and interruption in the Pi editor require a locally hosted run.
+different machine. Enter queues text on the selected session. Ctrl+R reviews
+reorientation at the next boundary and Ctrl+X reviews interruption of the
+current run. The review requires a confirmed active run and a Connector that
+supports exact-run controls. Confirming interruption pauses the session queue.
 
 ## Request identity and authorization
 

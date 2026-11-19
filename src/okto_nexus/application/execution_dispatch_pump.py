@@ -183,7 +183,7 @@ class ExecutionDispatchPump:
                     reservation = None
                     if self._stopping.is_set():
                         break
-                    await self.send(authorized.frame)
+                    await self.send(getattr(authorized, 'wire_extension', None) or authorized.frame)
         except Exception as error:
             self.error = error
             try:

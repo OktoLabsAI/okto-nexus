@@ -19,6 +19,7 @@ from nexus_connector_core import (
     PREOPEN_REFUSAL_REVISION,
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
+from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
 from nexus_connector_core.presentation_link import (
     PI_PRESENTATION_LINK_REVISION, PI_PRESENTATION_RESULT, PRESENTATION_LINK_REVISION, PRESENTATION_RESULT,
 )
@@ -127,7 +128,8 @@ def build_router() -> APIRouter:
 
         async def _send_operation(frame):
             # The pump holds the same writer lock used by protocol replies.
-            await asyncio.wait_for(ws.send_text(encode_r4_frame(frame).decode("utf-8")), timeout=5)
+            raw = frame if isinstance(frame, bytes) else encode_r4_frame(frame)
+            await asyncio.wait_for(ws.send_text(raw.decode("utf-8")), timeout=5)
 
         async def _close_dispatch_link():
             error = pump.error if pump is not None else None
@@ -412,6 +414,9 @@ def build_router() -> APIRouter:
                     and ws.app.state.deps.config.feature_harness_integrations
                     and PI_PRESENTATION_LINK_REVISION in hello['control_capabilities']):
                 welcome['control_capabilities'].append(PI_PRESENTATION_LINK_REVISION)
+                if (CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']
+                        and PI_RUN_CONTROL_REVISION in hello['control_capabilities']):
+                    welcome['control_capabilities'].append(PI_RUN_CONTROL_REVISION)
             negotiated_capabilities = tuple(welcome['control_capabilities'])
             resumed = 'resume_connection_id' in hello
             if resume_supported:

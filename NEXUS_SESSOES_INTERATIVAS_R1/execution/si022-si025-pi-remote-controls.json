@@ -1,0 +1,44 @@
+{
+  "tasks": ["SI-022", "SI-025"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "a4ed0431e01a934c4f82e746a41f0730793b298e",
+    "core_revision": "b6ab195a3f3880f8613e9fd338408b7347d33393",
+    "connector_revision": "07238ae203b51510c2b4bf6e341d8fd9b9ad39c2"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "3143057bc32f0c67f46e5a1ed6f624585f589ccd3e3efe129a9eb674610ed013",
+    "core_0.0.16_wheel_sha256": "79e2b99c771fded2cc8a6e938a9edad861a318db4e8a7bc214470becab3be570",
+    "connector_0.0.15_wheel_sha256": "54cb7eeb0814ea60f0b3293a8ce91f5d9d513e3cd6f2e00b8b3a991189fbeb63",
+    "database_migration": null
+  },
+  "regressions": {
+    "core_control_codec_and_receipt_binding": 23,
+    "connector_control_ingress": 29,
+    "connector_ingress_negotiation_and_daemon_execution_before_new_cases": 71,
+    "nexus_dispatch_and_interaction": 40,
+    "nexus_remote_pi_presentation_and_session_capabilities": 41,
+    "installed_nexus_remote_pi_remote_codex_and_dispatch": 17,
+    "generated_contracts": "PASS",
+    "offline_lock_check": "PASS",
+    "strict_wheel_check": "PASS"
+  },
+  "native_windows_loopback": {
+    "pi_version": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "source_scenarios_passed": 2,
+    "installed_wheel_scenarios_passed": 2,
+    "external_provider_requests": 0,
+    "same_process_and_session_after_detach": true,
+    "console_modes_restored": true,
+    "steer_reused_admitted_turn_and_consumed_one_draft": true,
+    "interrupt_stopped_reviewed_run_and_paused_queue": true,
+    "canonical_close": "SUCCEEDED",
+    "fixture_root": "%TEMP%/nexus-si-remote-pi-controls-1795079548570",
+    "fixture_sha256": "4adafc0ac2166f7f5daab51917bde689078fd8684df06c9d149f9f029e0c5733"
+  },
+  "limitations": [
+    "The native qualification uses an actual Pi executable with a synthetic provider on the same Windows machine as Nexus and Connector.",
+    "Cross-machine qualification and the remaining SI-022 and SI-025 gates remain open."
+  ]
+}

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from nexus_connector_core import get_control_targeting
 from nexus_connector_core.native.pi_steer_facts import valid_pi_run_id
+from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.attention import digest
@@ -68,15 +69,18 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     return ExactNativeTurn(turn, selected['operation_id'], revision, selected['stream_epoch'])
 
 
-def active_pi_run(uow, scope: InputScope, *, current_next_turn_revision) -> ExactPiRun | None:
-    """Prove the observed run on the reviewed embedded Pi owner."""
+def active_pi_run(uow, scope: InputScope, *, current_next_turn_revision,
+                  remote_control_host=None) -> ExactPiRun | None:
+    """Prove the observed run on the current, reviewed Pi owner."""
     mapping = read_managed_native_session(uow, scope)
     if mapping is None or mapping.stream_epoch is None or not reviewed_pi_context(mapping):
         return None
     capability = current_next_turn_revision(uow, scope)
     if capability is None:
         return None
-    evidence = _active_start(uow, scope, 'pi_rpc', 'agent_start', 'tool_activity')
+    host = remote_control_host(scope.session.server_id, scope.session.executor_id) if remote_control_host else None
+    channel = host.channel if host is not None and PI_RUN_CONTROL_REVISION in host.channel.control_capabilities else None
+    evidence = _active_start(uow, scope, 'pi_rpc', 'agent_start', 'tool_activity', remote_pi_channel=channel)
     if evidence is None:
         return None
     selected, start, payload = evidence
@@ -119,10 +123,12 @@ def active_claude_operation(uow, scope: InputScope, *, current_next_turn_revisio
     return ExactClaudeOperation(selected['operation_id'], revision, selected['stream_epoch'])
 
 
-def _active_start(uow, scope, adapter_id, native_start, event_type, *, phase='started'):
+def _active_start(uow, scope, adapter_id, native_start, event_type, *, phase='started', remote_pi_channel=None):
     conn = uow.connection
     scope_params = _scope_params(scope) | {'adapter_id': adapter_id, 'native_start': native_start,
-                                          'event_type': event_type, 'phase': phase}
+        'event_type': event_type, 'phase': phase,
+        'pi_connection_id': remote_pi_channel.connection_id if remote_pi_channel is not None else None,
+        'pi_connection_generation': remote_pi_channel.connection_generation if remote_pi_channel is not None else None}
     active = conn.execute("""
         SELECT o.operation_id, s.stream_epoch, w.committed_contiguous
         FROM execution_sessions s
@@ -143,7 +149,9 @@ def _active_start(uow, scope, adapter_id, native_start, event_type, *, phase='st
         WHERE s.server_id=:server_id AND s.executor_id=:executor_id AND s.session_id=:session_id
           AND s.owner_generation=:owner_generation AND s.binding_id=:binding_id AND s.workspace_id=:workspace_id
           AND s.workspace_binding_id=:workspace_binding_id AND e.adapter_id=:adapter_id
-          AND (:adapter_id NOT IN ('pi_rpc','claude_stream') OR x.kind='embedded')
+          AND (:adapter_id NOT IN ('pi_rpc','claude_stream') OR x.kind='embedded'
+               OR (:adapter_id='pi_rpc' AND x.kind='remote' AND x.owner_instance_id=:pi_connection_id
+                   AND x.generation=:pi_connection_generation))
           AND w.gap_state='none'
           AND (o.action='turn.submit' OR (:adapter_id='claude_stream' AND o.action='turn.steer'))
           AND o.admission_state='DISPATCHED' AND o.binding_id=:binding_id
@@ -191,11 +199,12 @@ def _active_start(uow, scope, adapter_id, native_start, event_type, *, phase='st
     return selected, start, json.loads(raw)['payload']
 
 
-def active_interrupt_target(uow, scope: InputScope, *, current_next_turn_revision):
+def active_interrupt_target(uow, scope: InputScope, *, current_next_turn_revision, remote_control_host=None):
     turn = active_native_turn(uow, scope, current_next_turn_revision=current_next_turn_revision)
     if turn is not None:
         return turn
-    run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision)
+    run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision,
+                        remote_control_host=remote_control_host)
     if run is not None:
         contract = get_control_targeting('pi_rpc', 'turn.interrupt')
         if contract.supported and contract.native_turn_id == 'forbidden' and contract.requires_active_run:
@@ -208,8 +217,9 @@ def control_target_ref(target: ExactNativeTurn | ExactPiRun) -> str:
 
 
 def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision,
-                       observed_run=False) -> str | None:
-    turn = active_interrupt_target(uow, scope, current_next_turn_revision=current_next_turn_revision)
+                       observed_run=False, remote_control_host=None) -> str | None:
+    turn = active_interrupt_target(uow, scope, current_next_turn_revision=current_next_turn_revision,
+                                   remote_control_host=remote_control_host)
     if turn is None or isinstance(turn, ExactPiRun) != observed_run or control_target_ref(turn) != native_turn_id:
         return None
     return turn.revision
@@ -233,12 +243,14 @@ def steer_effect_revisions(turn: ExactNativeTurn | ExactPiRun | ExactClaudeOpera
 
 
 def steer_revisions(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision,
-                    observed_run=False, claude_operation=False) -> tuple[str, str] | ExactPiRun | ExactClaudeOperation | None:
+                    observed_run=False, claude_operation=False,
+                    remote_control_host=None) -> tuple[str, str] | ExactPiRun | ExactClaudeOperation | None:
     if claude_operation:
         turn = active_claude_operation(uow, scope, current_next_turn_revision=current_next_turn_revision)
         return turn if turn is not None and turn.operation_id == native_turn_id else None
     if observed_run:
-        run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision)
+        run = active_pi_run(uow, scope, current_next_turn_revision=current_next_turn_revision,
+                            remote_control_host=remote_control_host)
         return run if run is not None and run.run_ref == native_turn_id else None
     turn = active_native_turn(uow, scope, current_next_turn_revision=current_next_turn_revision)
     if turn is None or turn.native_id != native_turn_id:

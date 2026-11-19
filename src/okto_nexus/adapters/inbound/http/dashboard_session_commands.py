@@ -102,7 +102,7 @@ def _productive_availability(uow, *, factory, access, scope, context, revision):
         uow, factory=factory, access=access, scope=scope, context=context))
 
 
-def read_command_catalog(uow, *, factory, access, scope, document, context, options):
+def read_command_catalog(uow, *, factory, access, scope, document, context, options, remote_control_host=None):
     exact = _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
     conn = uow.connection
     endpoint = conn.execute("""
@@ -120,7 +120,8 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
         state, reason = 'denied_by_policy', 'Session interaction is disabled on this server.'
     send = _action('send', 'Send for next turn', 'Queue a message for the next eligible turn.', 'enqueue', state, reason)
 
-    turn = (active_interrupt_target(uow, scope, current_next_turn_revision=revision_for)
+    turn = (active_interrupt_target(uow, scope, current_next_turn_revision=revision_for,
+                                    remote_control_host=remote_control_host)
             if adapter in ('codex_app_server', 'pi_rpc') and revision is not None else None)
     interrupt_state, interrupt_reason = state, reason
     if adapter in ('codex_app_server', 'pi_rpc') and revision is not None:
@@ -187,8 +188,9 @@ def build_router():
 
         def read():
             with factory.unit_of_work(write=False) as uow:
-                return read_command_catalog(uow, factory=factory, access=access, scope=scope, document=document,
-                    context=context, options=options).model_dump(mode='json')
+                catalog = read_command_catalog(uow, factory=factory, access=access, scope=scope, document=document,
+                    context=context, options=options, remote_control_host=state.deps.runtime_availability.current_host)
+                return catalog.model_dump(mode='json')
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
@@ -209,7 +211,7 @@ def build_router():
 
         def verify_command(uow):
             catalog = read_command_catalog(uow, factory=factory, access=access, scope=scope, document=body.scope,
-                                           context=context, options=options)
+                context=context, options=options, remote_control_host=state.deps.runtime_availability.current_host)
             if catalog.capability_revision != body.catalog_revision:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'Session commands changed. Review the current action again.', {})
             action = next(item for item in catalog.items if item.command_id == body.command)
