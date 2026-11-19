@@ -2045,7 +2045,9 @@
         "execution/si024-capability-downgrade.md",
         "execution/si024-capability-downgrade.json",
         "execution/si039-installed-migration.md",
-        "execution/si039-installed-migration.json"
+        "execution/si039-installed-migration.json",
+        "execution/si039-codex-build-capabilities.md",
+        "execution/si039-codex-build-capabilities.json"
       ]
     },
     {
@@ -5023,7 +5025,9 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si027-pi-installation-gate.json"
+        "execution/si027-pi-installation-gate.json",
+        "execution/si039-codex-build-capabilities.md",
+        "execution/si039-codex-build-capabilities.json"
       ]
     },
     {

@@ -1,0 +1,60 @@
+{
+  "scenario": "SI-T-I06",
+  "core_version": "0.0.16",
+  "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+  "probe": {
+    "app_server_processes_started": 0,
+    "core_version": "0.0.16",
+    "executables_probed": 2,
+    "inference_requests": 0,
+    "observations": {
+      "0.157.0": {
+        "adapter_id": "codex_app_server",
+        "architecture": "x86_64",
+        "build_identity": "sha256:0bf80fe3ec18c1061c053a3e0f43dd07430ef53827ccd822a649246897526535",
+        "capability_report": null,
+        "containment": "available",
+        "content_fingerprint": "sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+        "exact_build_conversation_grant": true,
+        "platform": "win32",
+        "qualification": "qualified",
+        "qualified_control_actions": [
+          "turn.interrupt",
+          "turn.steer"
+        ],
+        "reasons": [],
+        "source": "explicit",
+        "state": "READY_FOR_RUNTIME",
+        "support_status": "managed_supported",
+        "trust": "selected",
+        "version": "0.157.0"
+      },
+      "0.170.0": {
+        "adapter_id": "codex_app_server",
+        "architecture": "x86_64",
+        "build_identity": "sha256:cd70a49dff04aea1dfcdef680ced0573e5ee1c24787a246c8239e21810e51b8c",
+        "capability_report": null,
+        "containment": "available",
+        "content_fingerprint": "sha256:8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+        "exact_build_conversation_grant": false,
+        "platform": "win32",
+        "qualification": "unqualified",
+        "qualified_control_actions": [],
+        "reasons": [],
+        "source": "explicit",
+        "state": "READY_FOR_RUNTIME",
+        "support_status": "managed_supported",
+        "trust": "selected",
+        "version": "0.170.0"
+      }
+    },
+    "platform": "win32",
+    "snapshot_format_version": 3
+  },
+  "regressions": {
+    "failed": 0,
+    "passed": 16,
+    "junit_sha256": "3439e29370083c6e7c71c0d6d45135460d2c03b42c3fbdd7e8e0b501e4cade44"
+  },
+  "external_provider_campaign": "not_run"
+}
