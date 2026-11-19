@@ -1,0 +1,66 @@
+{
+  "tasks": ["SI-025", "SI-027"],
+  "scenario_evidence_partial": ["SI-T-I06"],
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "b7a0862be742ac3d65808deb84c282834a42a9a0", "main": "8d77b50c", "behind_main": 0, "ahead_of_main": 441},
+    "connector": {"branch": "feature/v0.0.15", "head": "d38cedfd1b9a28c2bc64027ec49a77366ff0f5b3", "main": "a3017d9", "behind_main": 0, "ahead_of_main": 81},
+    "core": {"branch": "feature/v0.0.16", "head": "1dae685cc6c76ca81bdde1021be51ad0e2ef7145", "main": "19c99f1", "behind_main": 0, "ahead_of_main": 60},
+    "working_trees": "clean"
+  },
+  "delivered_revisions": {
+    "core": "6ec6ace51bcca05272e5bb63098d862e5641dc70",
+    "connector": "576e7045ae8104131c18235f3df707bda5d39b6c"
+  },
+  "wheel_sha256": {
+    "okto_nexus_connector_core-0.0.16-py3-none-any.whl": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "okto_nexus_connector-0.0.15-py3-none-any.whl": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "okto_nexus-0.3.8-py3-none-any.whl": "4cba342aa510967c58477ba08981fe40d5f1a7b21d901f959cd32f3d290e4b22"
+  },
+  "regression": {
+    "test": "tests/test_pi_extracted.py::test_hosted_pi_requires_the_selected_reviewed_node_and_cli",
+    "baseline_wheel_sha256": "a87fd2a37e1090d753b21d10e375c387577795d2e90159892a79b6c3b3bc7471",
+    "baseline_result": "Expected failure: the same version and Node with a different installation digest did not raise CoreError.",
+    "fixed_result": "The same version with an unknown installation digest returns CAPABILITY_UNSUPPORTED before checking Node or locating the hosted launcher. The reviewed digest still resolves the packaged launcher.",
+    "core_source_passed": 20,
+    "core_installed_passed": 36,
+    "connector_installed_passed": 92,
+    "nexus_installed_passed": 65,
+    "nexus_campaign_only_browser_tests_skipped": 14,
+    "strict_twine_artifacts_passed": 6,
+    "nexus_offline_lock_check": "PASS"
+  },
+  "native_windows_local": {
+    "test": "PASS",
+    "platform": "Windows x64 with ConPTY",
+    "pi": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe": "execution/si025-pi-terminal-e2e.py --queue --queue-surface editor",
+    "probe_sha256": "50d57dab0717a55c298e6dfd10ed878c203e07460650d1103e4024b92e3311fa",
+    "synthetic_model_responses": 2,
+    "external_provider_calls": 0,
+    "editor_follow_up_waited_until_first_turn_settled": true,
+    "process_and_native_session_preserved_during_detach": true,
+    "console_modes_restored": true,
+    "canonical_close": "SUCCEEDED"
+  },
+  "native_windows_connector_loopback": {
+    "test": "PASS",
+    "scenario": "Connector Pi editor reviewed interrupt with a real Pi 0.87.1 process",
+    "probe_sha256": "4adafc0ac2166f7f5daab51917bde689078fd8684df06c9d149f9f029e0c5733",
+    "fixture_helper_sha256": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "reviewed_run_interrupted_and_queue_paused": true,
+    "native_user_messages": 1,
+    "external_provider_calls": 0,
+    "process_and_native_session_preserved_during_detach": true,
+    "console_modes_restored": true,
+    "canonical_close": "SUCCEEDED"
+  },
+  "limitations": [
+    "The negative regression uses a controlled candidate identity. The native process probe uses the exact reviewed Pi installation and an isolated in-process model fixture.",
+    "The local probe covers editor queue, detach and reattach with installed wheels. The Connector interrupt probe used loopback on the same Windows host. Both use disposable profiles and synthetic responses.",
+    "The installed Nexus suite skipped the 14 browser tests gated by OKTO_NEXUS_UI_CAMPAIGN. Its Starlette and WebSocket dependencies reported deprecation warnings.",
+    "The full I06 scenario and SI-027 qualification remain open. The matrix links earlier evidence at its original scope."
+  ],
+  "migration": "none",
+  "rollback": "Revert the Nexus and Connector vendored wheels, then revert the Core check together with its regression."
+}

@@ -1300,7 +1300,8 @@
         "execution/si022-pi-remote-terminal.md",
         "execution/si022-pi-remote-terminal.json",
         "execution/si022-si025-pi-remote-controls.md",
-        "execution/si022-si025-pi-remote-controls.json"
+        "execution/si022-si025-pi-remote-controls.json",
+        "execution/si027-pi-installation-gate.json"
       ]
     },
     {
@@ -1432,7 +1433,9 @@
       "status": "TODO",
       "evidence": [
         "execution/si024-capability-downgrade.md",
-        "execution/si024-capability-downgrade.json"
+        "execution/si024-capability-downgrade.json",
+        "execution/si027-session-capability-matrix.md",
+        "execution/si027-pi-installation-gate.json"
       ]
     },
     {
@@ -4765,7 +4768,9 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si027-pi-installation-gate.json"
+      ]
     },
     {
       "id": "SI-T-I07",
