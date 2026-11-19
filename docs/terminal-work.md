@@ -70,10 +70,10 @@ Use the operator's Nexus server address over HTTPS from another machine.
 
 On a Connector host with the Nexus CLI and a saved human operator login,
 `okto-nexus-connector connect -i --operator-profile OPERATOR` offers the native
-Codex viewer after the connection is confirmed. Without `-i`, the Connector
-asks in a terminal and defaults to No. Use `connect --no-interactive` to skip
-the offer. The result includes an exact command for the confirmed binding so
-you can attach later without repeating setup.
+viewer for a confirmed Codex or Pi connection. Without `-i`, the Connector asks
+in a terminal and defaults to No. Use `connect --no-interactive` to skip the
+offer. The result includes an exact command for the confirmed binding so you
+can attach later without repeating setup.
 
 ## Native Pi viewer on Windows
 
