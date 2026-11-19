@@ -7,7 +7,7 @@ import random
 import secrets
 import sqlite3
 import time
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack, aclosing, asynccontextmanager
 from dataclasses import asdict
 from datetime import datetime
 
@@ -263,6 +263,28 @@ class EmbeddedDispatchOwner:
             if not isinstance(state, dict) or state.get('native_session_id') != mapping.native_session_id:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation_read')
         return state
+
+    @asynccontextmanager
+    async def open_native_pi_renderer(self, scope: InputScope, *, columns: int, rows: int):
+        """Keep output bound to the opening's canonical mapping for a trusted caller."""
+        async with AsyncExitStack() as stack:
+            async with self._native_presentation_context(scope) as selected:
+                runtime_scope, mapping, target, channel = selected
+                if mapping.adapter_id != 'pi_rpc':
+                    raise CoreError('CAPABILITY_UNSUPPORTED', 'pi_renderer')
+                frames = await stack.enter_async_context(self.host.open_r4_pi_renderer(runtime_scope, target,
+                    connection_id=channel.connection_id, connection_generation=channel.connection_generation,
+                    columns=columns, rows=rows))
+
+            async def output():
+                async for frame in frames:
+                    async with self._native_presentation_context(scope) as current:
+                        if current != selected:
+                            raise CoreError('STALE_GENERATION', 'pi_renderer')
+                    yield frame
+
+            async with aclosing(output()) as guarded:
+                yield guarded
 
     def _presentation_session_live(self, key, session):
         return (session is not None and self.sessions.get(key) is session

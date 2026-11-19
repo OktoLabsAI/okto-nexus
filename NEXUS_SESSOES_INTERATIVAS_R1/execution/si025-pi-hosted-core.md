@@ -11,3 +11,5 @@ As duas provas passaram com código-fonte e com os wheels instalados. Também pa
 Para reproduzir, execute `python NEXUS_SESSOES_INTERATIVAS_R1/execution/si025-pi-observer-probe.py --node <node.exe> --pi-release <raiz-do-release> --hosted-core`, com o Nexus 0.3.8 e o Core 0.0.16 da evidência disponíveis no interpretador. Use `--cli-owner --core` no lugar de `--hosted-core` para o ensaio com o renderer.
 
 A etapa dispensa migração. A reversão coordenada dos commits restaura os pins anteriores. A SI-025 segue em andamento e a opção de abertura continua restrita à composição confiável. Falta ligar a sessão hospedada ao canal autenticado do Nexus e validar entrada, fila, aprovações e detach em terminal real.
+
+O script histórico é o de `90b5ca931436a99b70c5ea21fcb78c336e63af1f`. A versão atual também valida a conexão ao renderer privado. [Canal privado do Pi](si025-pi-private-renderer.md)

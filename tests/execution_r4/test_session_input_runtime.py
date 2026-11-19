@@ -507,6 +507,13 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     with pytest.raises(CoreError, match='CAPABILITY_UNSUPPORTED'):
         client.portal.call(owner.read_native_pi_presentation_state, scope)
 
+    async def attach_pi():
+        async with owner.open_native_pi_renderer(scope, columns=100, rows=36):
+            pytest.fail('Codex exposed a Pi renderer')
+
+    with pytest.raises(CoreError, match='CAPABILITY_UNSUPPORTED'):
+        client.portal.call(attach_pi)
+
     presentation = {'thread_id': thread, 'status': 'active'}
 
     async def read_thread(thread_id):

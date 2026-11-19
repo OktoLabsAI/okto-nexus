@@ -11,6 +11,7 @@ import asyncio
 import hashlib
 from dataclasses import replace
 from collections.abc import Awaitable, Callable, Mapping
+from contextlib import aclosing, asynccontextmanager
 from pathlib import Path
 
 from nexus_connector_core import (
@@ -114,6 +115,32 @@ class EmbeddedRuntimeHost:
             connection_id: str, connection_generation: int) -> dict:
         return await self._read_r4_native_presentation(scope, target, "read_live_pi_session",
             connection_id=connection_id, connection_generation=connection_generation)
+
+    @asynccontextmanager
+    async def open_r4_pi_renderer(self, scope: Mapping, target: NativeSessionTarget, *,
+                                  connection_id: str, connection_generation: int, columns: int, rows: int):
+        stage = 'pi_renderer'
+        key, selection, task = self._existing_presentation_runtime(scope, stage)
+        attach = getattr(task.result()[0], 'open_live_pi_renderer', None)
+        if not callable(attach):
+            raise CoreError('CAPABILITY_UNSUPPORTED', stage)
+
+        def verify():
+            if (self._draining or self._closing or self._runtime_tasks.get(key) is not task
+                    or self._selections.get(key) is not selection):
+                raise CoreError('STALE_GENERATION', stage)
+
+        async with attach(scope, target, connection_id=connection_id, connection_generation=connection_generation,
+                          columns=columns, rows=rows) as frames:
+            verify()
+
+            async def output():
+                async for frame in frames:
+                    verify()
+                    yield frame
+
+            async with aclosing(output()) as guarded:
+                yield guarded
 
     async def _read_r4_native_presentation(self, scope, target, reader_name, *args,
                                            connection_id, connection_generation):

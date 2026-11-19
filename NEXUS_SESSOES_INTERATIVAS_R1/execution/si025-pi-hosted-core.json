@@ -1,6 +1,7 @@
 {
   "task": "SI-025",
   "status": "IN_PROGRESS",
+  "fixture_revision": "90b5ca931436a99b70c5ea21fcb78c336e63af1f",
   "scope": "Trusted Core composition on Windows x64 with Pi 0.87.1 and the reviewed Node 24.15.0. Hosted startup and renderer observations use disposable profiles.",
   "baseline": {
     "nexus": "f1003fc9e844d31858c4d1b90159b5e60f2700e1",

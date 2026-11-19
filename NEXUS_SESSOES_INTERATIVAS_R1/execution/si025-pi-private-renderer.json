@@ -1,0 +1,49 @@
+{
+  "task": "SI-025",
+  "status": "IN_PROGRESS",
+  "scope": "Private Core-to-Pi loopback transport and trusted Nexus renderer reader on Windows x64, with Pi 0.87.1 and Node 24.15.0.",
+  "baseline": {
+    "nexus": "90b5ca931436a99b70c5ea21fcb78c336e63af1f",
+    "core": "59a472aaa9d5a83f28be11841c65b48d1b0218df",
+    "connector": "cbd83e4641dc5f2b44947c7fb5e76552fba6d785"
+  },
+  "artifacts": {
+    "core_revision": "1a66105428f983f2ed83fca408180e2c50ab926f",
+    "connector_pin_revision": "2b4b12031f003e2d63a843d6b26f797456e0db1d",
+    "core_0.0.16_wheel_sha256": "b8fe2ca4ed01a18da22ec78861da2c2dd6f3f66b4423b17d08f896a261ffe813",
+    "nexus_0.3.8_wheel_sha256": "f8e340c89f7d1b438c52997ff6ba2552e376de8b83d9021b21a1d186aa5cf01e",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "hosted_rpc_js_sha256": "ebab6823f4fc4f83ed9a7a83ac70e43d085da9228220533a4ee4b772ed11a0f3",
+    "hosted_renderer_js_sha256": "03f73b16e744e7c3343bc442d057f02eeed747947ccdceb6495b52811ce5582d",
+    "probe_python_sha256": "b8c1036275ecdbfc4f7ecadeab94795ab7d70498311c0d5e16869c28238ced74",
+    "probe_js_sha256": "ea3746a16c952c2a45f021b02a0a07c1bb5552a0e7449b0cd8dd23eb881b8be6"
+  },
+  "observations": {
+    "source_active_turn": "PASS",
+    "installed_active_turn": "PASS",
+    "installed_idle": "PASS",
+    "core_production_factory_owned_the_native_process": true,
+    "trusted_nexus_host_read_the_renderer": true,
+    "exact_pi_session_stayed_streaming_during_detach": true,
+    "same_opening_receipt_and_process_after_reattach": true,
+    "canonically_admitted_synthetic_turns": 1,
+    "exact_persisted_history_with_one_prompt_and_result": true,
+    "foreign_session_and_concurrent_viewer_refused": true,
+    "core_close_stage": "SUCCEEDED"
+  },
+  "regressions": {
+    "core_installed_passed": 57,
+    "connector_installed_passed": 103,
+    "nexus_installed_passed": 23,
+    "shared_core_wheel_and_ci_manifest_verified": true,
+    "wrong_key_and_reflected_proof_refused": true,
+    "osc_clipboard_links_and_device_reports_filtered": true,
+    "over_limit_output_detached_only_the_viewer": true,
+    "twine_strict_passed": ["Core wheel", "Core sdist", "Nexus wheel"],
+    "nexus_lock_check_passed": true
+  },
+  "limitations": [
+    "The real hosted Pi uses a disposable profile, a synthetic provider and a network-denying preload. The trusted Nexus runtime registry is composed by the fixture and the test captures bytes in memory.",
+    "The transcript has a bounded viewport. Public operator admission, the terminal client, input, multi-surface queue and permission actions need further qualification. SI-T-G04 and SI-T-G18 retain their existing status."
+  ]
+}

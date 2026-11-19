@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import threading
 import time
+from contextlib import asynccontextmanager
 from dataclasses import replace
 from pathlib import Path
 from queue import Empty, Queue
@@ -103,7 +104,7 @@ async def wait_for_turn(journal, operation_key):
             await asyncio.sleep(.03)
 
 
-async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted_cli=None):
+async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted_cli=None, hosted_turn=False):
     from nexus_connector_core import (
         R4_PREVIEW_REVISION,
         CloseOperation,
@@ -194,8 +195,9 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
         })
         context = installed.context
         if hosted_cli:
-            intent = LaunchIntent('agent', 'workspace', 'pi_rpc', model='gpt-4.1-mini',
-                                  harness_settings=HarnessSettings(provider='openai'))
+            provider, model = ('nexus-fixture', 'faux-1') if hosted_turn else ('openai', 'gpt-4.1-mini')
+            intent = LaunchIntent('agent', 'workspace', 'pi_rpc', model=model,
+                                  harness_settings=HarnessSettings(provider=provider))
             prepared = await runtime.prepare(intent, context)
             opened = await runtime.open(OpenOperation('pi-probe-open', key.session_id, 'epoch', prepared), context)
             assert opened.stage == 'SUBMITTED', opened
@@ -207,14 +209,17 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
             }
             assert proof.process == await journal.get_process_birth(key)
             assert await journal.get_process_launch(key)
+            renderer_facts = await exercise_hosted_renderer(runtime, host, journal, scope, target, channel,
+                                                            context, turn, checkpoints, active_turn=hosted_turn)
+            assert proof == await runtime.prove_live_native_session(scope, target, **channel)
             closed = await runtime.close(
                 CloseOperation('pi-probe-close', key.session_id, 'End isolated probe', ShutdownPolicy(1, 1)),
                 context, wait_for_completion=True,
             )
             assert closed.stage == 'SUCCEEDED', closed
-            return {'core': __version__, 'production_factory': True, 'hosted_rpc_readiness': True,
+            return {'core': __version__, 'production_factory': True, 'hosted_rpc_readiness': True, **renderer_facts,
                     'r4_live_process_proof': True, 'core_close_stage': closed.stage,
-                    'turns_submitted': 0}, None
+                    'turns_submitted': int(hosted_turn)}, opened.native_id
         prepared = await runtime.prepare(LaunchIntent('agent', 'workspace', 'pi_rpc'), context)
         with patch.object(runtime_bridge, 'load_adapter', fixture_adapter):
             opened = await runtime.open(OpenOperation('pi-probe-open', key.session_id, 'epoch', prepared), context)
@@ -287,6 +292,69 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
         journal.close()
 
 
+async def exercise_hosted_renderer(runtime, host, journal, scope, target, channel, context, turn, checkpoints,
+                                   *, active_turn):
+    from nexus_connector_core import CoreError, OperationKey
+
+    @asynccontextmanager
+    async def attach():
+        async with host.open_r4_pi_renderer(scope, target, **channel, columns=100, rows=36) as frames:
+            yield frames
+
+    async def observe(frames, expected=None):
+        async with asyncio.timeout(10):
+            output = bytearray()
+            async for chunk in frames:
+                output.extend(chunk)
+                assert len(output) <= 256 * 1024
+                if expected is None or expected.encode() in output:
+                    return
+        raise AssertionError('Pi renderer disconnected before producing the expected output')
+
+    try:
+        async with host.open_r4_pi_renderer(scope, replace(target, native_session_id='sibling'),
+                                          **channel, columns=100, rows=36):
+            raise AssertionError('Foreign native session admitted')
+    except CoreError as error:
+        assert error.code == 'SESSION_CONFLICT'
+
+    async with attach() as first:
+        await observe(first)
+        try:
+            async with attach():
+                raise AssertionError('Second concurrent renderer admitted')
+        except CoreError as error:
+            assert error.code == 'NATIVE_UNAVAILABLE'
+        if active_turn:
+            submitted = await runtime.submit(turn, context)
+            assert submitted.stage == 'SUBMITTED'
+            await observe(first, PROMPT)
+            assert (await runtime.read_live_pi_session(scope, target, **channel))['is_streaming']
+
+    # Wait for the socket close to reach the renderer before requesting the same owner again.
+    if active_turn:
+        detached = await runtime.read_live_pi_session(scope, target, **channel)
+        assert detached['native_session_id'] == target.native_session_id and detached['is_streaming']
+    deadline = time.monotonic() + 5
+    while True:
+        try:
+            async with attach() as second:
+                await observe(second, PROMPT if active_turn else None)
+                if active_turn:
+                    assert await runtime.submit(turn, context) == submitted
+                    (checkpoints / 'release-hosted-turn').touch()
+                    await observe(second, RESULT)
+            break
+        except CoreError as error:
+            if error.code != 'NATIVE_UNAVAILABLE' or time.monotonic() >= deadline:
+                raise
+            await asyncio.sleep(.03)
+    if active_turn:
+        await wait_for_turn(journal, OperationKey(scope['server_id'], scope['executor_id'], turn.operation_id))
+    return {'renderer_reattached': True, 'foreign_and_second_viewer_refused': True,
+            'renderer_saw_turn_across_detach': active_turn}
+
+
 def fingerprints(node, release, script):
     namespace = release / 'node_modules' / '@earendil-works'
     installed = namespace / 'pi-coding-agent'
@@ -305,7 +373,7 @@ def fingerprints(node, release, script):
     return {name: hashlib.sha256(file.read_bytes()).hexdigest() for name, file in inputs.items()}
 
 
-def run(node, release, *, core, cli_owner, hosted_core):
+def run(node, release, *, core, cli_owner, hosted_core, hosted_turn):
     root = Path(tempfile.mkdtemp(prefix='nexus-si-pi-observer-')).resolve()
     script = root / 'probe.mjs'
     shutil.copyfile(Path(__file__).with_suffix('.mjs'), script)
@@ -363,17 +431,48 @@ def run(node, release, *, core, cli_owner, hosted_core):
             'const denyNetwork = () => { throw new Error("Network forbidden in the hosted Pi probe"); };\n'
             'net.Socket.prototype.connect = denyNetwork;\n'
             'globalThis.fetch = denyNetwork;\n'
-            'process.argv.push("--no-context-files");\n', encoding='utf-8',
+            'process.argv.push("--no-context-files");\n'
+            + ('process.argv.push("--api-key", "synthetic-fixture-token");\n' if hosted_turn else ''),
+            encoding='utf-8',
         )
-        env['OPENAI_API_KEY'] = 'synthetic-fixture-key'
+        if hosted_turn:
+            extension = agent / 'extensions' / 'synthetic-provider.js'
+            extension.parent.mkdir()
+            provider = release / 'node_modules/@earendil-works/pi-ai/dist/providers/faux.js'
+            extension.write_text(
+                f'import {{ fauxProvider, fauxAssistantMessage }} from {json.dumps(provider.as_uri())};\n'
+                'import { access } from "node:fs/promises";\n'
+                'import { setTimeout as delay } from "node:timers/promises";\n'
+                'export default (pi) => {\n'
+                '  const faux = fauxProvider({ provider: "nexus-fixture", api: "nexus-fixture" });\n'
+                '  pi.registerProvider(faux.provider);\n'
+                '  faux.setResponses([async () => {\n'
+                '    for (let count = 0; count < 500; count++) {\n'
+                f'      try {{ await access({json.dumps(str(checkpoints / "release-hosted-turn"))});'
+                f' return fauxAssistantMessage({json.dumps(RESULT)}); }}\n'
+                '      catch (error) { if (error.code !== "ENOENT") throw error; }\n'
+                '      await delay(30);\n'
+                '    }\n'
+                '    throw new Error("Hosted renderer probe did not release the turn");\n'
+                '  }]);\n'
+                '};\n', encoding='utf-8',
+            )
+        else:
+            env['OPENAI_API_KEY'] = 'synthetic-fixture-key'
         env['NODE_OPTIONS'] = ' '.join((
             '--permission', f'--allow-fs-read="{release.as_posix()}"', f'--allow-fs-read="{root.as_posix()}"',
             f'--allow-fs-read="{hosted.parent.as_posix()}"', f'--allow-fs-write="{root.as_posix()}"',
             f'--import={preload.as_uri()}',
         ))
-        report, _ = asyncio.run(exercise_core(argv, env, root, checkpoints, None, hosted_cli=cli))
-        assert not list((agent / 'sessions').rglob('*.jsonl'))
-        report['no_persisted_turn'] = True
+        report, session_id = asyncio.run(exercise_core(argv, env, root, checkpoints, None, hosted_cli=cli,
+                                                       hosted_turn=hosted_turn))
+        histories = list((agent / 'sessions').rglob('*.jsonl'))
+        if hosted_turn:
+            assert len(histories) == 1
+            verify_history(agent / 'sessions', histories[0], session_id)
+        else:
+            assert not histories
+        report['exact_persisted_history'] = True
         report['hosted_rpc_sha256'] = hashlib.sha256(hosted.read_bytes()).hexdigest()
         print(json.dumps(report, sort_keys=True))
         return
@@ -408,8 +507,11 @@ if __name__ == '__main__':
     parser.add_argument('--core', action='store_true', help='Drive the Pi process through the installed Core 0.0.16')
     parser.add_argument('--cli-owner', action='store_true', help='Use the official unbundled Pi CLI to open the owner')
     parser.add_argument('--hosted-core', action='store_true', help='Open the packaged owner via the real Core composition')
+    parser.add_argument('--hosted-turn', action='store_true', help='Exercise the private renderer with one synthetic turn')
     args = parser.parse_args()
     if args.hosted_core and (args.core or args.cli_owner):
-        parser.error('--hosted-core is a standalone no-prompt probe')
+        parser.error('--hosted-core selects the real Core launch path')
+    if args.hosted_turn and not args.hosted_core:
+        parser.error('--hosted-turn requires --hosted-core')
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
-        core=args.core, cli_owner=args.cli_owner, hosted_core=args.hosted_core)
+        core=args.core, cli_owner=args.cli_owner, hosted_core=args.hosted_core, hosted_turn=args.hosted_turn)
