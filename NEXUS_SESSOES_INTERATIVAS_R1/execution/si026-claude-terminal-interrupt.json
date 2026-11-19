@@ -1,0 +1,51 @@
+{
+  "tasks": ["SI-011", "SI-026"],
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "9a603928", "main": "8d77b50c"},
+    "connector": {"branch": "feature/v0.0.15", "head": "6fe4d5d", "main": "a3017d9"},
+    "core": {"branch": "feature/v0.0.16", "head": "6402390", "main": "19c99f1"}
+  },
+  "core_revision": "f09baadec578d2dadb34579603e29f112cf92467",
+  "connector_revision": "0a2bab512b3429f7535833da046d934b6b36e09a",
+  "artifacts_sha256": {
+    "core": "cf2604d2ec41474e9dd41ca98379f9b566ebc36735d51deb419fee4c09ebbdd3",
+    "connector": "2072f560c88256ffce3b0feaa8ee30cfca3271420ab341933268b120448fcab8",
+    "nexus": "fd85dd44814063c7d1b68e26d72cad692881f3dcbc69707347906d3eec9ba99f"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "source_fixture": "D:/nexus-si026-interrupt-live-1795097579259",
+    "installed_fixture": "D:/nexus-si026-interrupt-installed-1795097690388",
+    "probe_sha256": "64badab234d748dc20741aa5f84450a5def992885fdd46ebc57ed1bc1626b508",
+    "observations_sha256": "06030285f34d455dc2ef187ca5cff9a77363fefcc0540f507e9df2801864cc3d",
+    "review_while_prompt_hook_held": false,
+    "review_before_provider_response": false,
+    "divergent_queue_revision_status": 409,
+    "escape_writes": 1,
+    "queue_barrier_at_native_write": true,
+    "control_delivery_receipt": "SUBMITTED",
+    "original_turn_receipt": "CANCELLED",
+    "queue_paused_after_cancellation": true,
+    "replay_recovered_original_control": true,
+    "explicit_queue_resume": {"pending_inputs_sent": 1, "same_process": true, "next_turn_receipt": "SUCCEEDED"},
+    "remaining_job_pids": []
+  },
+  "verification": {
+    "installed_core_tests": 46,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 10,
+    "frontend_node_tests": 417,
+    "frontend_build": "passed",
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed"
+  },
+  "limitations": [
+    "Native qualification covers the exact recorded Windows build and the reviewed plan profile with tools denied and default keys.",
+    "The operator workflow was exercised over the actual product API. CLI receipt recovery was simulated in a focused test.",
+    "Managed terminal compound steer, native approvals, and browser verification remain pending."
+  ],
+  "migration": "none"
+}

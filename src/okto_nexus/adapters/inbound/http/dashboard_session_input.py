@@ -33,6 +33,7 @@ from ....application.session_interaction_queue_view import (
 )
 from ....application.session_interaction_receipts import read_session_input_receipt
 from ....application.session_interaction_targets import (
+    ExactClaudeOperation,
     ExactPiRun,
     active_interrupt_target,
     negotiated_control_channel,
@@ -45,6 +46,7 @@ from .identity_ctx import get_authenticated_agent, runtime_request_context
 from .operator_auth import COOKIE
 from .session_interaction_contract import (
     CancelInput,
+    ClaudeOperationTarget,
     EnqueueInput,
     ExactSessionScope,
     InputQueueEntry,
@@ -129,8 +131,12 @@ def review_exact_interrupt(uow, scope, target_for):
         SELECT revision FROM session_interaction_queues
         WHERE server_id=? AND executor_id=? AND session_id=?
     """, (scope.session.server_id, scope.session.executor_id, scope.session.session_id)).fetchone()
-    document = (ObservedRunTarget(kind='observed_run', run_ref=target.run_ref) if isinstance(target, ExactPiRun)
-                else NativeTurnTarget(kind='native_turn', turn_id=target.native_id))
+    if isinstance(target, ExactClaudeOperation):
+        document = ClaudeOperationTarget(kind='claude_operation', operation_id=target.operation_id)
+    elif isinstance(target, ExactPiRun):
+        document = ObservedRunTarget(kind='observed_run', run_ref=target.run_ref)
+    else:
+        document = NativeTurnTarget(kind='native_turn', turn_id=target.native_id)
     return InterruptTargetView(target=document,
                                capability_revision=target.revision, queue_revision=row[0] if row else 0)
 
@@ -170,7 +176,8 @@ async def interrupt_response(session_id: str, body: InterruptInput, request: Req
     if body.scope.session_id != session_id or request.query_params:
         return _error(422, 'VALIDATION_ERROR', 'The interrupt must use the exact session scope.')
     observed_run = isinstance(body.target, ObservedRunTarget)
-    target_ref = body.target.run_ref if observed_run else body.target.turn_id
+    claude_operation = isinstance(body.target, ClaudeOperationTarget)
+    target_ref = body.target.operation_id if claude_operation else body.target.run_ref if observed_run else body.target.turn_id
     state = request.app.state
     options = getattr(state, 'session_input_dispatch_options', {})
     if not options:
@@ -184,7 +191,7 @@ async def interrupt_response(session_id: str, body: InterruptInput, request: Req
             access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
             current_interrupt_target=_interrupt_target_for(state), scope=body.input_scope(),
             author=InputAuthor(ref, surface), client_intent_id=body.client_intent_id, native_turn_id=target_ref,
-            observed_run=observed_run,
+            observed_run=observed_run, claude_operation=claude_operation,
             capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
             fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
             verify_command=verify_command)
@@ -241,9 +248,12 @@ def build_router():
                     or (mapping is not None and reviewed_pi_context(mapping)))
                 claude_steer = (revision is not None and adapter == 'claude_stream' and supported_owner
                     and read_managed_native_session(uow, scope) is not None)
+                claude_interrupt = (claude_steer and session['kind'] == 'embedded'
+                    and isinstance(active_interrupt_target(uow, scope, current_next_turn_revision=revision_for),
+                                   ExactClaudeOperation))
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,
-                        'interrupt_review_supported': exact_control,
+                        'interrupt_review_supported': exact_control or claude_interrupt,
                         'steer_review_supported': exact_control or claude_steer,
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
                                       'human_login_required': not signed_in}}

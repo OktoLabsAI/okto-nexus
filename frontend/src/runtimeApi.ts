@@ -257,9 +257,10 @@ export interface SessionInputQueuePage extends SessionInputQueueState {
 
 type NativeTurnTarget = {kind: 'native_turn'; turn_id: string};
 type ObservedRunTarget = {kind: 'observed_run'; run_ref: string};
+type ClaudeOperationTarget = {kind: 'claude_operation'; operation_id: string};
 
 export interface SessionInterruptTarget {
-  target: NativeTurnTarget | ObservedRunTarget;
+  target: NativeTurnTarget | ObservedRunTarget | ClaudeOperationTarget;
   capability_revision: string;
   queue_revision: number;
 }
@@ -275,7 +276,7 @@ export type SessionSteerTarget = Pick<SessionInterruptTarget, 'capability_revisi
 } & (
   {effect: 'same_turn'; target: NativeTurnTarget} |
   {effect: 'next_boundary'; target: ObservedRunTarget} |
-  {effect: 'interrupt_then_send'; target: {kind: 'claude_operation'; operation_id: string}}
+  {effect: 'interrupt_then_send'; target: ClaudeOperationTarget}
 );
 
 export interface QueuedSteerPreview {

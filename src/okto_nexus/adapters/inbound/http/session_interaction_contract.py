@@ -103,15 +103,13 @@ class ObservedRunTarget(_Document):
     run_ref: Identifier
 
 
-TurnTarget = Annotated[NativeTurnTarget | ObservedRunTarget, Field(discriminator="kind")]
-
-
 class ClaudeOperationTarget(_Document):
     kind: Literal["claude_operation"]
     operation_id: Identifier
 
 
-SteerTarget = Annotated[NativeTurnTarget | ObservedRunTarget | ClaudeOperationTarget, Field(discriminator="kind")]
+TurnTarget = Annotated[NativeTurnTarget | ObservedRunTarget | ClaudeOperationTarget, Field(discriminator="kind")]
+SteerTarget = TurnTarget
 
 
 class SteerInput(InputRequest):

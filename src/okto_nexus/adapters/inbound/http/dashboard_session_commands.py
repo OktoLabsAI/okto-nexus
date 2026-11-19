@@ -123,9 +123,9 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
 
     turn = (active_interrupt_target(uow, scope, current_next_turn_revision=revision_for,
                                     remote_control_host=remote_control_host)
-            if adapter in ('codex_app_server', 'pi_rpc') and revision is not None else None)
+            if adapter in ('codex_app_server', 'pi_rpc', 'claude_stream') and revision is not None else None)
     interrupt_state, interrupt_reason = state, reason
-    if adapter in ('codex_app_server', 'pi_rpc') and revision is not None:
+    if adapter in ('codex_app_server', 'pi_rpc', 'claude_stream') and revision is not None:
         if has_unresolved_interrupt(conn, scope.session):
             interrupt_state, interrupt_reason = 'disabled_for_state', 'An interruption is already pending.'
         else:

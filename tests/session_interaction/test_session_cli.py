@@ -473,6 +473,47 @@ def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatc
     assert json.loads(capsys.readouterr().out)['receipt']['input_id'] == 'input-original'
 
 
+def test_claude_interrupt_cli_confirms_the_operation_and_recovers_the_only_receipt():
+    scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {'session_id': 'session-a'}
+    exact = {'scope': scope, 'session_owner_generation': 7}
+    target = {'kind': 'claude_operation', 'operation_id': 'op_' + '1' * 32}
+
+    class CommandServer(Catalog):
+        token = 'fixture-login'
+        sent = None
+
+        def __call__(self, method, url, body=None):
+            path = urlsplit(url).path
+            if path.endswith('/commands'):
+                return exact | {'version': 1, 'capability_revision': 'catalog-1', 'items': [{
+                    'command_id': 'interrupt', 'handler': 'review_interrupt', 'state': 'supported',
+                    'requires_confirmation': True}]}
+            if path.endswith('/interrupt'):
+                return exact | {'control': {'target': target, 'queue_revision': 2, 'capability_revision': 'stop-1'}}
+            if method == 'POST':
+                assert path.endswith('/terminal/commands:execute') and self.sent is None
+                self.sent = body
+                raise session.ConnectionError('OUTCOME_UNKNOWN', 'Simulated lost response.', possible_effect=True)
+            if path.endswith('/terminal/interrupt/receipt'):
+                assert parse_qs(urlsplit(url).query)['client_intent_id'] == [self.sent['client_intent_id']]
+                return {'scope': scope | {'session_owner_generation': 7}, 'operation_id': 'original-control',
+                        'interrupt': {'target_status': 'interrupted', 'queue_paused': True}}
+            return super().__call__(method, url, body)
+
+    api = CommandServer()
+    prompts = []
+
+    def confirm(prompt):
+        prompts.append(prompt)
+        return 'yes'
+
+    result = session.execute_session_command(api, BINDING, 'session-a', 'interrupt', interactive=True,
+                                             message_file=None, read=confirm, write=lambda _: None)
+    assert prompts == ['Interrupt the current Claude turn and pause the queue? [y/N] ']
+    assert api.sent['target'] == target and api.sent['confirmed'] is True and 'content' not in api.sent
+    assert result['receipt']['operation_id'] == 'original-control' and 'queue is paused' in result['message']
+
+
 @pytest.mark.parametrize(('stage', 'successor_state', 'exit_code'), [
     ('SUBMITTED', None, 0),
     ('SUBMISSION_STARTED', 'OPEN_PENDING', 0),

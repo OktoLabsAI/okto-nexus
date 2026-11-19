@@ -648,7 +648,7 @@ def begin_execution_send(
             from .session_interaction_controls import require_interrupt_send_authority
             require_interrupt_send_authority(uow, access=access, control=linked_control, scope=scope,
                 semantic=semantic, resolve_human=resolve_session_input_human,
-                current_interrupt_revision=session_interrupt_capability_revision)
+                current_interrupt_revision=session_interrupt_capability_revision, adapter_id=binding['adapter_id'])
         # The operator initiates and remains audited; execution still consumes
         # the represented subject's separately issued canonical grant.
         actor = access.agents.get(uow, row['subject_agent_id'])

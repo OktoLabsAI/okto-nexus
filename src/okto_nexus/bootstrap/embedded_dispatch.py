@@ -764,10 +764,13 @@ class EmbeddedDispatchOwner:
                 SELECT c.target_ref,c.session_id,d.dispatch_state,o.intent_hash,s.stream_epoch,
                     CASE WHEN o.action='turn.steer' THEN COALESCE(p.target_operation_id, cl.target_operation_id) ELSE t.target_operation_id END AS target_op,
                     CASE WHEN o.action='turn.steer' THEN COALESCE(p.target_stream_epoch, cl.target_stream_epoch) ELSE t.target_stream_epoch END AS target_epoch,
-                    (cl.operation_id IS NOT NULL) AS claude_steer,
+                    (cl.operation_id IS NOT NULL OR
+                     (o.action='turn.interrupt' AND e.adapter_id='claude_stream')) AS claude_control,
                     (p.operation_id IS NOT NULL AND cl.operation_id IS NOT NULL) AS conflicting
                 FROM execution_operations o
                 JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id)
+                JOIN execution_bindings b USING(server_id,executor_id,binding_id)
+                JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id
                 LEFT JOIN session_interaction_inputs i USING(server_id,executor_id,operation_id)
                 LEFT JOIN session_interaction_controls c USING(server_id,executor_id,operation_id)
                 LEFT JOIN execution_sessions s ON s.server_id=c.server_id AND s.executor_id=c.executor_id
@@ -786,9 +789,9 @@ class EmbeddedDispatchOwner:
             if (row['dispatch_state'] != 'SENDING' or row['intent_hash'] != frame['intent_hash']
                     or row['session_id'] != frame['session_id']
                     or row['target_op'] is None or row['stream_epoch'] != row['target_epoch'] or row['conflicting']
-                    or (row['claude_steer'] and row['target_ref'] != row['target_op'])):
+                    or (row['claude_control'] and row['target_ref'] != row['target_op'])):
                 raise CoreError('OPERATION_CONFLICT', 'embedded_control_binding')
-            argument = 'expected_claude_operation_id' if row['claude_steer'] else 'expected_pi_run_id'
+            argument = 'expected_claude_operation_id' if row['claude_control'] else 'expected_pi_run_id'
             return {argument: row['target_ref']}
 
     async def _execute(self, frame, *, continuation=None):

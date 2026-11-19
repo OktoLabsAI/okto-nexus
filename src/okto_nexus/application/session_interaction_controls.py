@@ -22,7 +22,7 @@ from .execution_domain_delivery import DeliveryTransactionFactory
 from .execution_intents import resolve_execution_intent
 from .execution_session_views import read_execution_session
 from .session_interaction_authority import require_human_queue_control
-from .session_interaction_targets import ExactPiRun, control_target_ref
+from .session_interaction_targets import control_target_ref, matches_interrupt_target
 
 
 def _intent_key(author, client_intent_id):
@@ -38,7 +38,7 @@ def _exact_scope(scope):
 def request_exact_human_interrupt(*, factory, access, authority_fence, current_interrupt_target,
                                   scope, author, client_intent_id, native_turn_id, capability_revision,
                                   expected_queue_revision, fresh_publications, remote_ready, verify_command=None,
-                                  verify_presenter=None, observed_run=False):
+                                  verify_presenter=None, observed_run=False, claude_operation=False):
     """Route an exact native target through the existing R4 interrupt path."""
     if type(native_turn_id) is not str or not 1 <= len(native_turn_id) <= 160 or not native_turn_id.isprintable():
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'An exact native turn ID is required.', {})
@@ -55,7 +55,7 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
             'client_intent_id': _intent_key(author, client_intent_id), 'intent': 'turn.interrupt', 'agent_id': scope.agent_id,
             'binding_id': scope.binding_id, 'workspace_binding_id': scope.workspace_binding_id,
             'session_id': scope.session.session_id,
-            'target': _interrupt_wire_target(native_turn_id, observed_run),
+            'target': _interrupt_wire_target(native_turn_id, observed_run or claude_operation),
         }, **common)
         if any(resolved['scope'].get(key) != value for key, value in _exact_scope(scope).items()):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The interrupt belongs to a different session scope.', {})
@@ -75,8 +75,8 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
             if has_unresolved_interrupt(uow.connection, scope.session):
                 raise OktoNexusError(ErrorCode.CONFLICT, 'An interrupt is already pending in this session.', {})
             target = current_interrupt_target(uow, scope)
-            if (target is None or isinstance(target, ExactPiRun) != observed_run
-                    or control_target_ref(target) != native_turn_id or target.revision != capability_revision):
+            if (not matches_interrupt_target(target, native_turn_id, observed_run=observed_run,
+                                            claude_operation=claude_operation) or target.revision != capability_revision):
                 raise OktoNexusError(ErrorCode.CONFLICT, 'The exact interrupt target changed.', {})
             set_input_queue_paused(uow, scope=scope, paused=True, expected_queue_revision=expected_queue_revision,
                 capability_revision=capability_revision, verify_authority=lambda: target.revision)
@@ -160,12 +160,12 @@ def _interrupt_wire_target(ref, observed_run):
 
 
 def require_interrupt_send_authority(uow, *, access, control, scope, semantic, resolve_human,
-                                     current_interrupt_revision):
+                                     current_interrupt_revision, adapter_id=None):
     if resolve_human is None or current_interrupt_revision is None:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The interrupt author cannot be verified for this send.', {})
     session = SessionKey(scope['server_id'], scope['executor_id'], scope['session_id'])
-    observed_run = semantic['target']['kind'] == 'current_run'
-    target = _interrupt_wire_target(control['target_ref'], observed_run)
+    current_run = semantic['target']['kind'] == 'current_run'
+    target = _interrupt_wire_target(control['target_ref'], current_run)
     if (control['session_id'] != session.session_id or control['owner_generation'] != scope['session_owner_generation']
             or semantic['action'] != 'turn.interrupt' or semantic['target'] != target
             or not is_input_queue_paused(uow.connection, session)):
@@ -174,6 +174,6 @@ def require_interrupt_send_authority(uow, *, access, control, scope, semantic, r
                                 resolve_human=resolve_human)
     exact = InputScope(session, SessionOwnerGeneration(scope['session_owner_generation']), scope['binding_id'],
                        scope['workspace_id'], scope['workspace_binding_id'], scope['agent_id'])
-    options = {'observed_run': True} if observed_run else {}
+    options = ({'claude_operation': True} if adapter_id == 'claude_stream' else {'observed_run': True}) if current_run else {}
     if current_interrupt_revision(uow, exact, control['target_ref'], **options) != control['capability_revision']:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact interrupt capability changed before send.', {})

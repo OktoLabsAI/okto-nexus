@@ -221,18 +221,36 @@ def active_interrupt_target(uow, scope: InputScope, *, current_next_turn_revisio
         contract = get_control_targeting('pi_rpc', 'turn.interrupt')
         if contract.supported and contract.native_turn_id == 'forbidden' and contract.requires_active_run:
             return run
-    return None
+    evidence = _active_start(uow, scope, 'claude_stream', 'core.claude_terminal_generating', 'tool_activity', phase=None)
+    if evidence is None:
+        return None
+    selected, start, payload = evidence
+    if type(payload.get('schema_version')) is not int or payload['schema_version'] != 1 or payload.get('interruptible') is not True:
+        return None
+    capability = current_next_turn_revision(uow, scope)
+    if capability is None:
+        return None
+    revision = 'sha256:' + digest({'action': 'claude_terminal_interrupt.v1', 'capability': capability,
+        'operation_id': selected['operation_id'], 'epoch': selected['stream_epoch'], 'generating': start['event_hash']})
+    return ExactClaudeOperation(selected['operation_id'], revision, selected['stream_epoch'])
 
 
-def control_target_ref(target: ExactNativeTurn | ExactPiRun) -> str:
+def control_target_ref(target: ExactNativeTurn | ExactPiRun | ExactClaudeOperation) -> str:
+    if isinstance(target, ExactClaudeOperation):
+        return target.operation_id
     return target.run_ref if isinstance(target, ExactPiRun) else target.native_id
 
 
+def matches_interrupt_target(target, reference, *, observed_run=False, claude_operation=False):
+    return (target is not None and isinstance(target, ExactPiRun) == observed_run
+            and isinstance(target, ExactClaudeOperation) == claude_operation and control_target_ref(target) == reference)
+
+
 def interrupt_revision(uow, scope: InputScope, native_turn_id: str, *, current_next_turn_revision,
-                       observed_run=False, remote_control_host=None) -> str | None:
+                       observed_run=False, claude_operation=False, remote_control_host=None) -> str | None:
     turn = active_interrupt_target(uow, scope, current_next_turn_revision=current_next_turn_revision,
                                    remote_control_host=remote_control_host)
-    if turn is None or isinstance(turn, ExactPiRun) != observed_run or control_target_ref(turn) != native_turn_id:
+    if not matches_interrupt_target(turn, native_turn_id, observed_run=observed_run, claude_operation=claude_operation):
         return None
     return turn.revision
 

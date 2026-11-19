@@ -106,7 +106,7 @@ def _review(call, url, scope, generation, command):
                    and _identifier(target['turn_id']))
     pi_run = (target.keys() == {'kind', 'run_ref'} and target['kind'] == 'observed_run'
               and isinstance(target['run_ref'], str) and PI_RUN_REF.fullmatch(target['run_ref']))
-    claude_turn = (command == 'steer' and target.keys() == {'kind', 'operation_id'}
+    claude_turn = (target.keys() == {'kind', 'operation_id'}
                    and target['kind'] == 'claude_operation' and _identifier(target['operation_id']))
     if not (native_turn or pi_run or claude_turn):
         raise _unavailable()
@@ -224,7 +224,8 @@ def execute_session_command(call, binding, session_id, command, *, interactive, 
             prompt = ('Interrupt the selected Pi run and pause the queue? [y/N] ' if command == 'interrupt'
                       else 'Reorient the selected Pi run at its next available boundary? [y/N] ')
         elif body['target']['kind'] == 'claude_operation':
-            prompt = 'Interrupt the current Claude turn and send this replacement message? [y/N] '
+            prompt = ('Interrupt the current Claude turn and pause the queue? [y/N] ' if command == 'interrupt'
+                      else 'Interrupt the current Claude turn and send this replacement message? [y/N] ')
         else:
             write('Turn ' + display_text(body['target']['turn_id']))
             prompt = ('Reorient this exact turn now? [y/N] ' if command == 'steer'
