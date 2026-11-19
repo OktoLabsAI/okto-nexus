@@ -39,6 +39,7 @@ _CONNECT_SECONDS = 30
 _FRAME_SECONDS = 5
 _POLL_SECONDS = .2
 _UPDATE_SECONDS = .5
+_INTERRUPT_OBSERVATION_SECONDS = 20
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,7 +50,7 @@ class CodexRelayEndpoint:
     connected: threading.Event = field(repr=False, compare=False)
 
 
-class ViewerSteerConfirmation:
+class ViewerTurnConfirmation:
     """Collect one explicit key choice outside the native viewer's input stream."""
 
     def __init__(self, report):
@@ -57,12 +58,18 @@ class ViewerSteerConfirmation:
         self._lock = threading.Lock()
         self._answer = None
 
-    def ask(self, turn_id, text, stop):
+    def steer(self, turn_id, text, stop):
+        return self._ask('Reorient turn ' + display_text(turn_id) + ' with this message?\n'
+                         + display_text(text[:240]) + (' …' if len(text) > 240 else ''), stop)
+
+    def interrupt(self, turn_id, stop):
+        return self._ask('Interrupt turn ' + display_text(turn_id) + '?\n'
+                         'This pauses the session queue. The session stays open.', stop)
+
+    def _ask(self, message, stop):
         answer = Queue(maxsize=1)
         with self._lock:
-            self._report('Reorient turn ' + display_text(turn_id) + ' with this message?\n'
-                         + display_text(text[:240]) + (' …' if len(text) > 240 else '')
-                         + '\nCtrl+Y confirms. Ctrl+N cancels. Ctrl+] detaches.')
+            self._report(message + '\nCtrl+Y confirms. Ctrl+N cancels. Ctrl+] detaches.')
             self._answer = answer
         try:
             deadline = time.monotonic() + 30
@@ -138,6 +145,7 @@ def _notice(peer, wire, frame):
 def _viewer(peer, wire, protocol, stop, link, report_input_status):
     parts, size, deadline = [], 0, None
     next_update = 0.0
+    interrupt_deadline = 0.0
 
     def follow():
         nonlocal next_update
@@ -146,6 +154,19 @@ def _viewer(peer, wire, protocol, stop, link, report_input_status):
                 or time.monotonic() < next_update):
             return
         next_update = time.monotonic() + _UPDATE_SECONDS
+        if protocol.pending_interrupt is not None:
+            request_id, pending = protocol.pending_interrupt
+            try:
+                if time.monotonic() >= interrupt_deadline:
+                    raise CodexInputStatus('Interruption is unconfirmed. Check the Nexus session and its queue.')
+                if link.confirm_interrupt(thread_id=protocol.context.thread_id, intent=pending.intent):
+                    protocol.pending_interrupt = None
+                    report_input_status('Selected turn interrupted. Resume the queue in Nexus when ready.')
+                    _reply(peer, wire, {'id': request_id, 'result': {}})
+            except CodexInputStatus as status:
+                protocol.pending_interrupt = None
+                report_input_status(str(status))
+                _reply(peer, wire, {'id': request_id, 'error': {'code': -32000, 'message': str(status)}})
         if protocol.pending_delivery is not None:
             request_id, pending = protocol.pending_delivery
             if pending.input_id is not None:
@@ -196,9 +217,17 @@ def _viewer(peer, wire, protocol, stop, link, report_input_status):
             continue
         link.ensure_open()
         previous_delivery = protocol.pending_delivery
-        response = protocol.handle(strict_json(''.join(parts)))
+        previous_interrupt = protocol.pending_interrupt
+        request = strict_json(''.join(parts))
+        response = protocol.handle(request)
         if response is not None:
+            error = response.get('error', {})
+            if (error.get('code') == -32000 and isinstance(request, dict) and request.get('method') == 'turn/interrupt'):
+                report_input_status(error['message'])
             _reply(peer, wire, response)
+        elif protocol.pending_interrupt is not previous_interrupt:
+            interrupt_deadline = time.monotonic() + _INTERRUPT_OBSERVATION_SECONDS
+            report_input_status(protocol.pending_interrupt[1].message)
         elif protocol.pending_delivery is not previous_delivery:
             report_input_status(protocol.pending_delivery[1].message)
         if protocol.detached:
@@ -249,10 +278,13 @@ def local_codex_relay(link, *, viewer_home, platform_os, report_input_status=lam
         stop = threading.Event()
         connected = threading.Event()
         writable = getattr(link, 'input_revision', None)
-        steer = (partial(link.steer, confirm=lambda turn, text: confirmation.ask(turn, text, stop))
+        steer = (partial(link.steer, confirm=partial(confirmation.steer, stop=stop))
                  if writable and confirmation is not None else None)
+        interrupt = (partial(link.interrupt, confirm=partial(confirmation.interrupt, stop=stop))
+                     if writable and confirmation is not None else None)
         protocol = CodexViewerProtocol(context=context, read_page=link.page, viewer_home=viewer_home,
-            platform_os=platform_os, send_next_turn=link.send_next_turn if writable else None, steer=steer)
+            platform_os=platform_os, send_next_turn=link.send_next_turn if writable else None,
+            steer=steer, interrupt=interrupt)
 
         def serve():
             try:

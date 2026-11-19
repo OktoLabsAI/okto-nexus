@@ -36,7 +36,8 @@ def _exact_scope(scope):
 
 def request_exact_human_interrupt(*, factory, access, authority_fence, current_interrupt_target,
                                   scope, author, client_intent_id, native_turn_id, capability_revision,
-                                  expected_queue_revision, fresh_publications, remote_ready, verify_command=None):
+                                  expected_queue_revision, fresh_publications, remote_ready, verify_command=None,
+                                  verify_presenter=None):
     """Route an exact native target through the existing R4 interrupt path."""
     if type(native_turn_id) is not str or not 1 <= len(native_turn_id) <= 160 or not native_turn_id.isprintable():
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'An exact native turn ID is required.', {})
@@ -44,6 +45,8 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'An interrupt client intent ID is required.', {})
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         context = require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
+        if verify_presenter is not None:
+            verify_presenter(uow, resolve_human)
         borrowed = DeliveryTransactionFactory(uow)
         common = {'actor_agent_id': 'operator', 'context': context, 'access': access,
                   'fresh_publications': fresh_publications, 'remote_ready': remote_ready}

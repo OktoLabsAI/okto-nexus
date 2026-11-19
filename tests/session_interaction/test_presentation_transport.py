@@ -19,6 +19,11 @@ from wsproto.events import AcceptConnection, RejectConnection, Request, TextMess
 from okto_nexus.adapters.inbound.cli.codex_viewer_relay import local_codex_relay
 from okto_nexus.adapters.inbound.http import dashboard_session_presentations
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE, OperatorAuth
+from okto_nexus.adapters.inbound.http.session_interaction_contract import (
+    InterruptTargetView,
+    NativeTurnTarget,
+    SteerTargetView,
+)
 from okto_nexus.adapters.outbound.local_presenter_client import (
     open_local_presentation,
     review_local_presentation,
@@ -31,6 +36,7 @@ from okto_nexus.application import (
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
 from okto_nexus.application.codex_viewer_protocol import (
     CodexPendingInput,
+    CodexPendingInterrupt,
     CodexViewerContext,
     CodexViewerProtocol,
 )
@@ -288,6 +294,55 @@ def test_writer_and_web_share_queue_with_exact_scope_and_idempotency(transport, 
     assert grants == ['web', 'native_terminal']
 
 
+def test_review_confirmation_admits_only_the_control_that_was_reviewed(transport, monkeypatch):
+    app = transport.app
+    app.state.local_codex_presentations = replace(app.state.local_codex_presentations,
+        next_turn_revision=lambda *_: 'input-revision')
+    app.state.session_input_dispatch_options = {
+        'session_input_capability_revision': lambda *_: 'input-revision',
+        'session_steer_revisions': lambda *_: ('capability', 'effect'),
+    }
+    app.state.inventory_fresh_publications = None
+    target = NativeTurnTarget(kind='native_turn', turn_id=THREAD)
+    exact = {'target': target, 'capability_revision': 'capability', 'queue_revision': 0}
+    monkeypatch.setattr(dashboard_session_presentations, 'review_exact_interrupt',
+                        lambda *_: InterruptTargetView(**exact))
+    monkeypatch.setattr(dashboard_session_presentations, 'review_exact_steer',
+                        lambda *_: SteerTargetView(**exact, effect='same_turn', effect_revision='effect'))
+    effects = []
+
+    def steer(**review):
+        effects.append(('steer', review['native_turn_id'], review['text']))
+        return SimpleNamespace(input_id='fixture-input')
+
+    def interrupt(**review):
+        effects.append(('interrupt', review['native_turn_id']))
+
+    monkeypatch.setattr(dashboard_session_presentations, 'steer_human_input', steer)
+    monkeypatch.setattr(dashboard_session_presentations, 'request_exact_human_interrupt', interrupt)
+    offer = prepare(transport, 'reviewer', access='write', expected_writer_epoch=0).json()
+    with stream(transport, offer) as ws:
+        attach(ws, transport.scope)
+
+        def exchange(kind, request_id, **payload):
+            ws.send_json({'kind': kind, 'request_id': request_id, **payload})
+            return ws.receive_json()[kind]
+
+        scope = {'thread_id': THREAD, 'turn_id': THREAD, 'client_intent_id': 'native-control'}
+        message = {'content': {'type': 'text', 'text': 'Use a different file'}}
+        review = exchange('steer_review', 1, **scope, **message)
+        assert exchange('interrupt_confirm', 2, review_id=review['review_id']) == {'status': 'refused'}
+        assert exchange('steer_confirm', 3, review_id=review['review_id']) == {'status': 'refused'}
+        assert not effects
+        review = exchange('steer_review', 4, **scope, **message)
+        assert exchange('steer_confirm', 5, review_id=review['review_id']) == {
+            'status': 'recorded', 'input_id': 'fixture-input'}
+        review = exchange('interrupt_review', 6, **scope)
+        assert exchange('interrupt_confirm', 7, review_id=review['review_id']) == {'status': 'recorded'}
+        assert exchange('interrupt_confirm', 8, review_id=review['review_id']) == {'status': 'refused'}
+    assert effects == [('steer', THREAD, 'Use a different file'), ('interrupt', THREAD)]
+
+
 @pytest.mark.parametrize('change', ['different-thread', 'owner-replaced', 'operator-logout'])
 def test_context_requires_matching_thread_and_authority_throughout_read(transport, tmp_path, change):
     service = transport.app.state.local_codex_presentations
@@ -516,3 +571,33 @@ def test_native_steer_projects_only_the_exact_turn_and_text(tmp_path):
     protocol.pending_delivery = None
     assert 'reviewed for reorientation' in protocol.handle({'id': 4, 'method': 'turn/start',
         'params': {key: value for key, value in body.items() if key != 'expectedTurnId'}})['error']['message']
+
+
+def test_native_interrupt_requires_an_exact_target_and_uses_a_separate_receipt(tmp_path):
+    calls = []
+    target = 'cb17abba-cc2d-4d15-86fc-bc4d802f14ed'
+
+    def interrupt(**kwargs):
+        calls.append(kwargs)
+        return CodexPendingInterrupt(kwargs['intent'], 'Interruption recorded')
+
+    protocol = CodexViewerProtocol(context=viewer_context(tmp_path), viewer_home=str(tmp_path), platform_os='windows',
+        read_page=lambda **_: {'data': [], 'nextCursor': None},
+        send_next_turn=lambda **_: pytest.fail('A control must not send a new turn'), interrupt=interrupt)
+    body = {'threadId': THREAD, 'turnId': target}
+    request = {'id': 3, 'method': 'turn/interrupt', 'params': body}
+    protocol.handle({'id': 1, 'method': 'initialize'})
+    assert 'error' in protocol.handle(request)
+    protocol.handle({'id': 2, 'method': 'thread/read', 'params': {'threadId': THREAD, 'includeTurns': True}})
+    for change in ({'threadId': target}, {'turnId': 'latest'}, {'text': 'stop'}):
+        assert 'error' in protocol.handle(request | {'params': body | change})
+    assert not calls
+    preceding = (4, CodexPendingInput('pending', 'Reorientation recorded', steer_target=target))
+    protocol.pending_delivery = preceding
+    assert protocol.handle(request) is None
+    assert protocol.pending_delivery == preceding
+    assert len(calls) == 1
+    assert calls[0] == {'thread_id': THREAD, 'turn_id': target, 'intent': protocol.pending_interrupt[1].intent}
+    assert calls[0]['intent'].startswith('codex_interrupt_')
+    assert 'awaiting confirmation' in protocol.handle(request | {'id': 5})['error']['message']
+    assert len(calls) == 1

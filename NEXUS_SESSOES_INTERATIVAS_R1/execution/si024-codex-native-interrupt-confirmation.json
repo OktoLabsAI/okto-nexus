@@ -1,0 +1,64 @@
+{
+  "tasks": ["SI-011", "SI-021", "SI-024"],
+  "scope": "Windows local native presentation with explicit interrupt review, using isolated runtime and authenticated operator",
+  "test_scope": {
+    "SI-T-C12": "additional controlled evidence for durable pause before send",
+    "SI-T-C13": "additional controlled evidence for obsolete review with successor running",
+    "SI-T-C15": "additional controlled evidence for explicit resume on the same thread",
+    "SI-T-C19": "additional controlled evidence for structured native control"
+  },
+  "artifacts": {
+    "directory": "%TEMP%/nexus-si-native-controls-build-d96caf7816c24cb594b34a48ad975fb8",
+    "nexus_wheel_sha256": "4d26c596044094da6a90e2103328131fd86384a9bf490c9ab6f0a8ec6768247c",
+    "nexus_sdist_sha256": "954b637f033f6987f0e4c6be8c27bd6efe28dba667b91bc0bf8f70ce1f545635",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "strict_twine": "PASS",
+    "changed_application_modules_matched_to_wheel": 9,
+    "lock_check": "PASS",
+    "changed_file_ruff": "PASS",
+    "repository_ruff": "Existing findings in unchanged files"
+  },
+  "installed_steer_regression": {
+    "run": "%TEMP%/nexus-si-fixed-native-steer-c7bdf0f3b77e4497a4bac0ad8d0f7f95",
+    "result": "PASS",
+    "native_steers": 1,
+    "native_interrupts": 0,
+    "external_provider_calls": 0
+  },
+  "source_steer_regression": {
+    "run": "%TEMP%/nexus-si-fixed-steer-ready-source-2b9188d8173441a6b2b6f2e66629dfc9",
+    "result": "PASS"
+  },
+  "supporting_regressions": {"source": 42, "installed": 42},
+  "native_case": {
+    "fixture": "%TEMP%/nexus-si-native-interrupt-source-3507e6b3410c441f845bc809941ac58e/test_native_interrupt.py",
+    "fixture_sha256": "69db02d9c428bb9e45eab99d2bbed04d9c72f6d031fae32f7047696572b6ecd4",
+    "installed_run": "%TEMP%/nexus-si-fixed-native-interrupt-d173d615e9c84ba389314bd36cc40655",
+    "frontend": "Codex 0.170.0",
+    "frontend_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "source_result": "PASS",
+    "installed_result": "PASS",
+    "observations_per_run": {
+      "cancelled_without_native_call_or_queue_pause": true,
+      "stale_old_turn_refused_while_successor_running": true,
+      "verify_pause_before_native_send": true,
+      "interruption_confirmed_from_exact_target_receipt": true,
+      "same_thread_continued_on_explicit_resume": true,
+      "native_interrupts": 1,
+      "native_turn_starts": 3,
+      "loopback_model_calls": 3,
+      "external_provider_calls": 0
+    },
+    "sqlite_after_installed_shutdown": {
+      "operations": {"runtime.close": 1, "runtime.open": 1, "turn.interrupt": 1, "turn.submit": 3},
+      "inputs": [{"surface": "web", "status": "ACCEPTED_NATIVE", "with_grant_and_revision": true}],
+      "control_surfaces": {"native_terminal": 1},
+      "retained_interrupt_targets": 1,
+      "closed_sessions": 1,
+      "detached_attachments": 3
+    }
+  },
+  "limitations": ["No remote transport, other harness, or external provider test", "No human usability test"]
+}

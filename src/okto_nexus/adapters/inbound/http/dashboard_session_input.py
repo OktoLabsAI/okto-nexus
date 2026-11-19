@@ -106,6 +106,20 @@ def _interrupt_target_for(state):
     return partial(active_native_turn, current_next_turn_revision=next_turn) if next_turn is not None else None
 
 
+def review_exact_interrupt(uow, scope, target_for):
+    if target_for is None or has_unresolved_interrupt(uow.connection, scope.session):
+        return None
+    target = target_for(uow, scope)
+    if target is None:
+        return None
+    row = uow.connection.execute("""
+        SELECT revision FROM session_interaction_queues
+        WHERE server_id=? AND executor_id=? AND session_id=?
+    """, (scope.session.server_id, scope.session.executor_id, scope.session.session_id)).fetchone()
+    return InterruptTargetView(target=NativeTurnTarget(kind='native_turn', turn_id=target.native_id),
+                               capability_revision=target.revision, queue_revision=row[0] if row else 0)
+
+
 async def enqueue_input_response(session_id: str, body: EnqueueInput, request: Request, *, verify_command=None,
                                  surface='web'):
     if not getattr(request.state, 'operator_session', False):
@@ -379,18 +393,7 @@ def build_router():
         def read():
             with factory.unit_of_work(write=False) as uow:
                 _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
-                target = None
-                if target_for is not None and not has_unresolved_interrupt(uow.connection, scope.session):
-                    target = target_for(uow, scope)
-                control = None
-                if target is not None:
-                    row = uow.connection.execute("""
-                        SELECT revision FROM session_interaction_queues
-                        WHERE server_id=? AND executor_id=? AND session_id=?
-                    """, (scope.session.server_id, scope.session.executor_id, session_id)).fetchone()
-                    control = InterruptTargetView(
-                        target=NativeTurnTarget(kind='native_turn', turn_id=target.native_id),
-                        capability_revision=target.revision, queue_revision=row[0] if row else 0)
+                control = review_exact_interrupt(uow, scope, target_for)
                 return InterruptAvailability(scope=document, session_owner_generation=scope.generation.value,
                                              control=control).model_dump(mode='json')
 

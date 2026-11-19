@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from pathlib import PurePosixPath, PureWindowsPath
 from typing import Annotated, Literal
+from uuid import uuid4
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, JsonValue
 
@@ -70,6 +71,12 @@ class CodexPendingInput:
     steer_target: str | None = None
 
 
+@dataclass(frozen=True)
+class CodexPendingInterrupt:
+    intent: str
+    message: str
+
+
 def _printable(value: str) -> str:
     if not value.isprintable():
         raise ValueError('Invalid viewer metadata text.')
@@ -131,17 +138,19 @@ class CodexViewerProtocol:
     """Terminate native RPC locally and project reviewed reads and input."""
 
     def __init__(self, *, context: CodexViewerContext, read_page, viewer_home: str, platform_os: str,
-                 send_next_turn=None, steer=None):
+                 send_next_turn=None, steer=None, interrupt=None):
         self.context = context
         self._read_page = read_page
         self._viewer_home = viewer_home
         self._platform_os = platform_os
         self._send_next_turn = send_next_turn
         self._steer = steer
+        self._interrupt = interrupt
         self._initialized = False
         self.detached = False
         self.following = False
         self.pending_delivery = None
+        self.pending_interrupt = None
         self._steer_message_ids = set()
 
     def handle(self, request):
@@ -169,6 +178,9 @@ class CodexViewerProtocol:
         if isinstance(result, CodexPendingInput):
             self.pending_delivery = (request_id, result)
             return None
+        if isinstance(result, CodexPendingInterrupt):
+            self.pending_interrupt = (request_id, result)
+            return None
         if result is None:
             return self._error(request_id, -32601, 'This method is unavailable in the local viewer.')
         return {'id': request_id, 'result': result}
@@ -181,6 +193,13 @@ class CodexViewerProtocol:
                     'platformOs': self._platform_os}
         if not self._initialized or self.detached:
             return None
+        if method == 'turn/interrupt' and self._interrupt is not None and self.following:
+            turn_id = params.get('turnId')
+            if params != {'threadId': self.context.thread_id, 'turnId': turn_id} or not _exact_uuid(turn_id, turn_id):
+                raise CodexInputStatus('Interruption requires the exact active turn.')
+            if self.pending_interrupt is not None:
+                raise CodexInputStatus('An interruption is awaiting confirmation in the Nexus session.')
+            return self._interrupt(thread_id=self.context.thread_id, turn_id=turn_id, intent='codex_interrupt_' + uuid4().hex)
         if self._send_next_turn is not None:
             if method == 'turn/start' and self.following:
                 if self.pending_delivery is not None:

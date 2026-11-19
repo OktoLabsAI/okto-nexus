@@ -14,7 +14,7 @@ from nexus_connector_core.discovery import candidate, discover_path
 
 from ....application.terminal_connection import ConnectionError
 from ....domain.presentation_protocol import CODEX_VIEWER_WINDOWS_SHA256
-from .codex_viewer_relay import ViewerSteerConfirmation, local_codex_relay
+from .codex_viewer_relay import ViewerTurnConfirmation, local_codex_relay
 
 _AUTH_VARIABLE = 'NEXUS_CODEX_VIEWER_TOKEN'
 
@@ -78,7 +78,7 @@ def present_codex(link, executable):
             project = root / 'project'
             project.mkdir()
             environment = _environment(root / 'profile', f'http://127.0.0.1:{deny_proxy.getsockname()[1]}')
-            confirmation = ViewerSteerConfirmation(_report_input_status) if getattr(link, 'input_revision', None) else None
+            confirmation = ViewerTurnConfirmation(_report_input_status) if getattr(link, 'input_revision', None) else None
             with local_codex_relay(link, viewer_home=environment['CODEX_HOME'], platform_os='windows',
                                    report_input_status=_report_input_status, confirmation=confirmation) as endpoint:
                 thread_id = str(UUID(endpoint.thread_id))

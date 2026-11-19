@@ -622,7 +622,9 @@
         "execution/si011-pause-and-exact-interrupt.md",
         "execution/si014-queue-pause-and-resume.md",
         "execution/si011-dashboard-interrupt-api.md",
-        "execution/si014-home-exact-interrupt.md"
+        "execution/si014-home-exact-interrupt.md",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {
@@ -1039,7 +1041,9 @@
         "execution/si030-terminal-session-controls.md",
         "execution/si030-terminal-session-controls.json",
         "execution/si024-codex-native-steer-confirmation.md",
-        "execution/si024-codex-native-steer-confirmation.json"
+        "execution/si024-codex-native-steer-confirmation.json",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {
@@ -1169,7 +1173,9 @@
         "execution/si020-codex-keyboard-detach-windows.md",
         "execution/si020-codex-keyboard-detach-windows.json",
         "execution/si024-codex-native-steer-confirmation.md",
-        "execution/si024-codex-native-steer-confirmation.json"
+        "execution/si024-codex-native-steer-confirmation.json",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {
@@ -2652,7 +2658,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si024-codex-interrupt-queue-windows.json",
-        "execution/si024-codex-interrupt-queue-windows.md"
+        "execution/si024-codex-interrupt-queue-windows.md",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {
@@ -2673,7 +2681,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si024-codex-interrupt-queue-windows.json",
-        "execution/si024-codex-interrupt-queue-windows.md"
+        "execution/si024-codex-interrupt-queue-windows.md",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {
@@ -2715,7 +2725,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si024-codex-interrupt-queue-windows.json",
-        "execution/si024-codex-interrupt-queue-windows.md"
+        "execution/si024-codex-interrupt-queue-windows.md",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {
@@ -2790,7 +2802,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si030-terminal-session-controls.md",
-        "execution/si030-terminal-session-controls.json"
+        "execution/si030-terminal-session-controls.json",
+        "execution/si024-codex-native-interrupt-confirmation.md",
+        "execution/si024-codex-native-interrupt-confirmation.json"
       ]
     },
     {

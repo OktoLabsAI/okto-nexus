@@ -21,6 +21,7 @@ from ....application.codex_viewer_protocol import CodexViewerContext
 from ....application.execution_native_session_mapping import ManagedNativeSession
 from ....application.session_attachment_broker import SessionAttachmentBroker
 from ....application.session_interaction_authority import enqueue_human_input
+from ....application.session_interaction_controls import request_exact_human_interrupt
 from ....application.session_interaction_promotion import steer_human_input
 from ....domain.presentation_protocol import (
     LOCAL_CODEX_AUDIENCE,
@@ -30,12 +31,19 @@ from ....domain.presentation_protocol import (
 )
 from ....domain.session_interaction import InputAuthor, InputScope
 from ....errors import ErrorCode, OktoNexusError
-from .dashboard_session_input import _HEADERS, _error, _runtime_error
+from .dashboard_session_input import (
+    _HEADERS,
+    _error,
+    _interrupt_target_for,
+    _runtime_error,
+    review_exact_interrupt,
+)
 from .dashboard_session_steer import review_exact_steer
 from .executor_link import _safe_transport
 from .operator_auth import COOKIE, same_origin_request
 from .session_interaction_contract import (
     Identifier,
+    InterruptTargetView,
     PrepareAttachment,
     Revision,
     ScopedSession,
@@ -103,31 +111,46 @@ class _InputDeliveryRequest(_Document):
     input_id: Identifier
 
 
-class _SteerReviewRequest(_Document):
-    kind: Literal['steer_review']
+class _TurnReviewRequest(_Document):
     request_id: Revision
     thread_id: Identifier
     turn_id: Identifier
     client_intent_id: Identifier
+
+
+class _SteerReviewRequest(_TurnReviewRequest):
+    kind: Literal['steer_review']
     content: TextInput
 
 
-class _SteerConfirmRequest(_Document):
-    kind: Literal['steer_confirm']
+class _InterruptReviewRequest(_TurnReviewRequest):
+    kind: Literal['interrupt_review']
+
+
+class _TurnConfirmRequest(_Document):
+    kind: Literal['steer_confirm', 'interrupt_confirm']
     request_id: Revision
     review_id: Identifier
 
 
+class _InterruptReceiptRequest(_Document):
+    kind: Literal['interrupt_receipt']
+    request_id: Revision
+    thread_id: Identifier
+    client_intent_id: Identifier
+
+
 @dataclass(frozen=True, slots=True)
-class _ReviewedSteer:
+class _ReviewedTurn:
     id: str
     expires: float
-    request: _SteerReviewRequest
-    target: SteerTargetView
+    request: _SteerReviewRequest | _InterruptReviewRequest
+    target: SteerTargetView | InterruptTargetView
 
 
 _REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest
-                                 | _InputDeliveryRequest | _SteerReviewRequest | _SteerConfirmRequest,
+                                 | _InputDeliveryRequest | _SteerReviewRequest | _InterruptReviewRequest
+                                 | _TurnConfirmRequest | _InterruptReceiptRequest,
                                  Field(discriminator='kind')])
 
 
@@ -204,41 +227,52 @@ def _verify_writer(state, services, active, uow, human):
     services.broker.require_writer_effect(uow, human, **active)
 
 
-async def _review_steer(services, active, history, request):
+async def _review_turn(state, services, active, history, request):
     if active['attachment'].access != 'write' or services.next_turn_revision is None:
         return None
     await history.verify_input_thread(request.thread_id)
 
     def read():
         with services.broker.factory.unit_of_work(write=False) as uow:
-            return review_exact_steer(uow, active['scope'], services.next_turn_revision)
+            if isinstance(request, _SteerReviewRequest):
+                return review_exact_steer(uow, active['scope'], services.next_turn_revision)
+            return review_exact_interrupt(uow, active['scope'], _interrupt_target_for(state))
 
     target = await _worker(read)
     if target is None or target.target.turn_id != request.turn_id:
         return None
-    return _ReviewedSteer(secrets.token_urlsafe(24), time.monotonic() + 45, request, target)
+    return _ReviewedTurn(secrets.token_urlsafe(24), time.monotonic() + 45, request, target)
 
 
-async def _confirm_steer(state, services, active, history, review, request):
-    revisions = getattr(state, 'session_input_dispatch_options', {}).get('session_steer_revisions')
-    if review is None or request.review_id != review.id or time.monotonic() >= review.expires or revisions is None:
+async def _confirm_turn(state, services, active, history, review, request):
+    if (review is None or request.review_id != review.id or time.monotonic() >= review.expires
+            or (request.kind == 'steer_confirm') != isinstance(review.request, _SteerReviewRequest)):
         return {'status': 'refused'}
     await history.verify_input_thread(review.request.thread_id)
 
     def cut(uow, human):
         if time.monotonic() >= review.expires:
-            raise OktoNexusError(ErrorCode.CONFLICT, 'The reorientation review expired.', {})
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The turn review expired.', {})
         _verify_writer(state, services, active, uow, human)
 
+    common = {'factory': services.broker.factory, 'access': services.execution_access,
+        'authority_fence': services.broker.authority_fence, 'scope': active['scope'], 'author': active['author'],
+        'client_intent_id': review.request.client_intent_id, 'native_turn_id': review.request.turn_id,
+        'capability_revision': review.target.capability_revision, 'expected_queue_revision': review.target.queue_revision,
+        'fresh_publications': state.inventory_fresh_publications, 'remote_ready': protocol_info()['remote_execution_ready'],
+        'verify_presenter': cut}
     try:
-        receipt = await _worker(steer_human_input, factory=services.broker.factory,
-            access=services.execution_access, authority_fence=services.broker.authority_fence,
-            current_steer_revisions=revisions, scope=active['scope'], author=active['author'],
-            client_intent_id=review.request.client_intent_id, native_turn_id=review.request.turn_id,
-            capability_revision=review.target.capability_revision, confirmed_effect_revision=review.target.effect_revision,
-            expected_queue_revision=review.target.queue_revision, text=review.request.content.text,
-            fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
-            verify_presenter=cut)
+        if isinstance(review.request, _InterruptReviewRequest):
+            target_for = _interrupt_target_for(state)
+            if target_for is None:
+                return {'status': 'refused'}
+            await _worker(request_exact_human_interrupt, current_interrupt_target=target_for, **common)
+            return {'status': 'recorded'}
+        revisions = getattr(state, 'session_input_dispatch_options', {}).get('session_steer_revisions')
+        if revisions is None or not isinstance(review.target, SteerTargetView):
+            return {'status': 'refused'}
+        receipt = await _worker(steer_human_input, current_steer_revisions=revisions,
+            confirmed_effect_revision=review.target.effect_revision, text=review.request.content.text, **common)
     except OktoNexusError as error:
         if error.code in (ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED, ErrorCode.VALIDATION_ERROR, ErrorCode.NOT_FOUND):
             return {'status': 'refused'}
@@ -310,14 +344,18 @@ async def _present(ws, services, author, attachment_id, ticket):
                 reply = await _enqueue(ws.app.state, services, active, history, request)
             elif isinstance(request, _InputDeliveryRequest):
                 reply = {'kind': 'input_delivery', 'input_delivery': await history.input_delivery(request.input_id)}
-            elif isinstance(request, _SteerReviewRequest):
-                reviewed = await _review_steer(services, active, history, request)
+            elif isinstance(request, _TurnReviewRequest):
+                reviewed = await _review_turn(ws.app.state, services, active, history, request)
                 control = {'review_id': reviewed.id, 'turn_id': request.turn_id} if reviewed else {}
-                reply = {'kind': 'steer_review', 'steer_review': control}
-            elif isinstance(request, _SteerConfirmRequest):
+                reply = {'kind': request.kind, request.kind: control}
+            elif isinstance(request, _TurnConfirmRequest):
                 review, reviewed = reviewed, None
-                control = await _confirm_steer(ws.app.state, services, active, history, review, request)
-                reply = {'kind': 'steer_confirm', 'steer_confirm': control}
+                control = await _confirm_turn(ws.app.state, services, active, history, review, request)
+                reply = {'kind': request.kind, request.kind: control}
+            elif isinstance(request, _InterruptReceiptRequest):
+                receipt = await history.interrupt_receipt(thread_id=request.thread_id, intent=request.client_intent_id,
+                    current_interrupt_target=_interrupt_target_for(ws.app.state))
+                reply = {'kind': 'interrupt_receipt', 'interrupt_receipt': receipt}
             else:
                 if not services.live_updates:
                     raise ValueError('Presentation updates are unavailable')

@@ -25,6 +25,7 @@ from wsproto.utilities import ProtocolError
 from ...application.codex_viewer_protocol import (
     CodexInputStatus,
     CodexPendingInput,
+    CodexPendingInterrupt,
     CodexViewerContext,
 )
 from ...application.terminal_connection import PREFIX, ConnectionError
@@ -186,16 +187,21 @@ class _LocalPresenter:
             return turn
         return None
 
-    def steer(self, *, thread_id, turn_id, intent, text, confirm):
+    def _review_turn(self, action, *, thread_id, turn_id, intent, **payload):
         try:
-            review = self._request('steer_review', thread_id=thread_id, turn_id=turn_id,
-                                  client_intent_id=intent, content={'type': 'text', 'text': text})
+            review = self._request(action + '_review', thread_id=thread_id, turn_id=turn_id,
+                                  client_intent_id=intent, **payload)
         except ConnectionError:
-            raise CodexInputStatus('The exact reorientation review is unavailable.') from None
+            raise CodexInputStatus('The exact turn review is unavailable.') from None
         review_id = review.get('review_id')
         if (not isinstance(review_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]{32}', review_id)
                 or review.get('turn_id') != turn_id):
-            raise CodexInputStatus('The selected turn is unavailable for reorientation.')
+            raise CodexInputStatus('The selected turn is unavailable for this control.')
+        return review_id
+
+    def steer(self, *, thread_id, turn_id, intent, text, confirm):
+        review_id = self._review_turn('steer', thread_id=thread_id, turn_id=turn_id, intent=intent,
+                                      content={'type': 'text', 'text': text})
         if not confirm(turn_id, text):
             raise CodexInputStatus('Reorientation cancelled.')
         try:
@@ -223,6 +229,34 @@ class _LocalPresenter:
         if status is InputDeliveryState.ACCEPTED_NATIVE:
             return True
         raise CodexInputStatus('Reorientation recorded. Check the Nexus session for its delivery status.')
+
+    def interrupt(self, *, thread_id, turn_id, intent, confirm):
+        review_id = self._review_turn('interrupt', thread_id=thread_id, turn_id=turn_id, intent=intent)
+        if not confirm(turn_id):
+            raise CodexInputStatus('Interruption cancelled.')
+        message = 'Interruption is unconfirmed. Check the Nexus session and its queue before trying again.'
+        try:
+            result = self._request('interrupt_confirm', review_id=review_id)
+        except ConnectionError:
+            return CodexPendingInterrupt(intent, message)
+        if result == {'status': 'refused'}:
+            raise CodexInputStatus('The interrupt review is no longer valid. This request did not interrupt the turn.')
+        if result == {'status': 'recorded'}:
+            message = 'Interruption recorded. The queue is paused while the selected turn is checked.'
+        return CodexPendingInterrupt(intent, message)
+
+    def confirm_interrupt(self, *, thread_id, intent):
+        try:
+            result = self._request('interrupt_receipt', thread_id=thread_id, client_intent_id=intent)
+        except ConnectionError:
+            raise CodexInputStatus('Interruption is unconfirmed. Check the Nexus session and its queue.') from None
+        if result.get('target_status') == 'interrupted' and result.get('refused') is False:
+            return True
+        if result.get('target_status') == 'finished' and result.get('refused') is False:
+            raise CodexInputStatus('The selected turn finished. Check the queue before resuming it.')
+        if result.get('refused') is True:
+            raise CodexInputStatus('The interruption was refused. Check the queue before resuming it.')
+        return False
 
     def _request(self, kind, *, flat=False, **payload):
         self._request_id += 1

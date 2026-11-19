@@ -13,6 +13,7 @@ from .codex_presenter_history import (
 )
 from .codex_presenter_requests import codex_history_page
 from .codex_viewer_protocol import CodexViewerContext
+from .session_interaction_controls import read_human_interrupt_receipt
 from .session_interaction_receipts import read_session_input_receipt
 
 
@@ -76,6 +77,23 @@ class CodexPresenterHistoryChannel:
             return {'input_id': receipt.input_id, 'status': receipt.status, 'turn': turn}
 
         async with self._bound_owner() as mapping:
+            return await asyncio.to_thread(read, mapping)
+
+    async def interrupt_receipt(self, *, thread_id, intent, current_interrupt_target):
+        if self._subject['attachment'].access != 'write':
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The presentation cannot read interrupt receipts.', {})
+
+        def read(mapping):
+            with self._broker.authority_fence() as human:
+                operation = read_human_interrupt_receipt(self._broker.factory, access=self._access, resolve_human=human,
+                    scope=mapping.scope, author=self._subject['author'], client_intent_id=intent,
+                    current_interrupt_target=current_interrupt_target)
+            return {'target_status': operation['interrupt']['target_status'],
+                    'refused': bool(operation['error'] and not operation['possible_effect'])}
+
+        async with self._bound_owner() as mapping:
+            if thread_id != mapping.codex_thread_id:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The exact Codex thread is unavailable.', {})
             return await asyncio.to_thread(read, mapping)
 
     async def viewer_context(self, read_context, *, can_follow=False):
