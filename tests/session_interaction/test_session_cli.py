@@ -9,7 +9,7 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from okto_nexus.adapters.inbound.cli import session
+from okto_nexus.adapters.inbound.cli import codex_viewer_process, session
 from okto_nexus.adapters.inbound.cli.main import main
 from okto_nexus.application.terminal_connection import ConnectionError
 
@@ -188,6 +188,28 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
     output = capsys.readouterr().out
     assert 'Press Ctrl+] to detach' in output and 'Session session-a' in output and 'Viewer detached' in output
     assert catalog.token not in output
+
+
+@pytest.mark.parametrize('write', [False, True])
+def test_unreviewed_codex_viewer_is_refused_before_attachment(monkeypatch, capsys, write):
+    catalog = Catalog()
+    catalog.token = 'synthetic-cookie'
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    monkeypatch.setattr(session, 'review_local_presentation', lambda *args, **kwargs: 'fresh-revision')
+    monkeypatch.setattr(session, 'open_local_presentation',
+                        lambda *args, **kwargs: pytest.fail('Unexpected attachment offer'))
+    monkeypatch.setattr(session, 'present_codex', lambda *args: pytest.fail('Unexpected viewer launch'))
+    monkeypatch.setattr(codex_viewer_process, 'os', SimpleNamespace(name='nt'))
+    monkeypatch.setattr(codex_viewer_process.platform, 'machine', lambda: 'AMD64')
+    monkeypatch.setattr(codex_viewer_process, 'candidate',
+                        lambda *args, **kwargs: SimpleNamespace(fingerprint='sha256:' + 'a' * 64))
+
+    args = ['session', 'attach', '--id', 'reviewer', '--session-id', 'session-a', '--viewer-executable', 'codex.exe']
+    assert main(args + (['--write'] if write else [])) == 3
+    assert capsys.readouterr().out.startswith('Use --viewer-executable with the reviewed Codex 0.170.0.')
 
 
 def test_pi_attachment_selects_the_ticketed_transcript_and_detaches_locally(monkeypatch, capsys):

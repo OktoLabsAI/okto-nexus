@@ -32,7 +32,7 @@ def select_viewer(executable=None):
                if item.fingerprint == 'sha256:' + CODEX_VIEWER_WINDOWS_SHA256]
     if len(matches) != 1:
         raise ConnectionError('VIEWER_BUILD_UNAVAILABLE',
-                              'Select the reviewed Codex 0.170.0 executable with --viewer-executable.')
+                              'Use --viewer-executable with the reviewed Codex 0.170.0.')
     return matches[0]
 
 

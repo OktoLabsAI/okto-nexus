@@ -24,4 +24,6 @@ A habilitação continua condicionada à instalação atual, à geração da ses
 
 Com o novo wheel, o Core recusou uma identidade diferente para a mesma versão do Pi e aceitou a identidade revisada. Os pacotes instalados passaram pela fila do editor local e pela interrupção revisada no editor via Connector. Os dois ensaios usaram o Pi real, preservaram a sessão no detach e encerraram o processo pelo fluxo canônico. [Resultados e hashes](si027-pi-installation-gate.json)
 
+No caso Codex local, a compilação do app-server foi recusada em leitura e escrita quando selecionada como visualizador. O visualizador revisado anexou à thread original e exibiu o resultado do turno, que continuou durante as recusas. [Recusa de visualizador incompatível](si027-codex-viewer-refusal.md)
+
 A matriz consolida a evidência existente enquanto SI-024, SI-025 e SI-026 permanecem em qualificação. As capacidades históricas e combinações fora da tabela conservam seus registros e seus gates de runtime. O ledger mantém os cenários com prova parcial e as limitações da campanha.

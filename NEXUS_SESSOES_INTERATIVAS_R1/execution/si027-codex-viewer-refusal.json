@@ -1,0 +1,56 @@
+{
+  "tasks": ["SI-024", "SI-027"],
+  "scenario_evidence_partial": ["SI-T-G12"],
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "1dbaf2debc3e9a0df2feda44bcda49201fe119cc", "main": "8d77b50c", "behind_main": 0, "ahead_of_main": 442},
+    "connector": {"branch": "feature/v0.0.15", "head": "576e7045ae8104131c18235f3df707bda5d39b6c", "main": "a3017d9", "behind_main": 0, "ahead_of_main": 82},
+    "core": {"branch": "feature/v0.0.16", "head": "6ec6ace51bcca05272e5bb63098d862e5641dc70", "main": "19c99f1", "behind_main": 0, "ahead_of_main": 61},
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "c8dd51e124176c9d3326cf61cf6540f313cf3c8cda585432248df183ea664437",
+    "nexus_0.3.8_sdist_sha256": "a923e89771fda275c72590ef2bdeead61ffef36bf60d64486b65e19e0ec36960",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "installed_cli_module_matches_source": true
+  },
+  "controlled_native_probe": {
+    "status": "PASS",
+    "scope": "Windows x64, real embedded app-server and frontend in ConPTY, loopback HTTP and SSE, disposable human operator session",
+    "engine_and_refused_viewer": {"version": "0.157.0", "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"},
+    "accepted_viewer": {"version": "0.170.0", "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"},
+    "probe_directory": "%TEMP%/si027-viewer-qualification-1795104396211",
+    "probe_sha256": "3c44e240f82e12b95f1c184a244d408c2ad0793625174c6a8e7def18dcbcc289",
+    "result_sha256": "aa7657ba0958a4c8e06534dcff7a92c8b9de368d71496e7fe54f49ed1c5cd152",
+    "refusal_diagnostic_sha256_each": "e68bde243d5ba6ea2566388ffeb98ce5f9c76982d52a257baa23a5e70e8cb478",
+    "reviewed_launch_record_sha256": "74559430a17cbb4d98c5cb6267f0b1fbae714e1dc1b7662faa95296a9aa144d0",
+    "refused_read_and_write_exit_code": 3,
+    "refusal_code": "VIEWER_BUILD_UNAVAILABLE",
+    "launches_and_attachment_rows_during_refusals": 0,
+    "queue_and_operations_unchanged_during_refusals": true,
+    "same_process_thread_and_turn_after_refusals": true,
+    "reviewed_viewer_rendered_result_and_detached": true,
+    "console_modes_restored": true,
+    "native_turn_starts": 1,
+    "native_interrupts": 0,
+    "native_steers": 0,
+    "loopback_model_requests": 1,
+    "external_provider_calls": 0,
+    "turn_and_close_receipts": "SUCCEEDED",
+    "remaining_probe_workers_observed": 0
+  },
+  "regressions": {
+    "source_cli_tests_passed": 30,
+    "installed_cli_tests_passed": 32,
+    "ruff": "PASS",
+    "offline_lock": "PASS",
+    "strict_twine_wheel_and_sdist": "PASS"
+  },
+  "limitations": [
+    "The test injects the disposable configured operator target. Binding lookup, exact session review, presentation broker, CLI selection, app-server and frontend launch use the installed product.",
+    "The initial probe expected the internal code to appear in the human console. The fixed probe observes the code separately and verifies the shortened instruction in ConPTY. The first retry also reused a disposable project directory, so the installed run used a fresh directory.",
+    "The installed regressions reported dependency deprecation warnings. The controlled local probe covers only the stated installation, without the external provider campaign required by SI-T-G12."
+  ],
+  "migration": "none"
+}

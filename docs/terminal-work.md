@@ -39,25 +39,30 @@ the exact `work chat` command. Run it from the project directory with the
 matching saved connection profile. Opening the prompt lets you inspect and
 continue that session. Entering a new message is a separate action.
 
-## Follow a Codex session hosted by Connector
+## Follow a live Codex session
 
 Use a saved human operator login for the Nexus server and select the exact
 workspace, Harness ID and session. The viewer requires the reviewed
-Codex 0.170.0 Windows x64 frontend and a compatible Connector-hosted app-server.
+Codex 0.170.0 Windows x64 frontend and a compatible local or Connector-hosted
+app-server.
 
 ```sh
 okto-nexus session attach --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
 okto-nexus session attach --write --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
 
-The default is read-only. `--write` also requires current Connector capacity
-and an execution grant for the selected session. Enter while idle records plain
+If Nexus asks for `--viewer-executable`, pass the absolute path to the reviewed
+frontend and retry the same session. A refused viewer leaves the running turn
+available in Home and for later attachment.
+
+The default is read-only. `--write` also requires current executor capacity and
+an execution grant for the selected session. Enter while idle records plain
 text in the Nexus queue. During a turn, Enter reviews reorientation and Esc
 reviews interruption. Confirming interruption pauses the queue. Nexus can also
 queue a message for the next turn while the harness is busy.
 
 Press Ctrl+] to detach. The session keeps its working directory, queue and
-running turn on the Connector host. After a lost connection, run the same
+running turn on its host. After a lost connection, run the same
 command to follow the same session from its committed history. If the status of
 a request is unclear, use the receipt reference printed in the terminal and
 the original operator login before sending again.
@@ -104,7 +109,16 @@ reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
 
-## Reorient a managed Claude session
+## Follow or reorient a managed Claude session
+
+On Windows, a local Claude session resumed into the Core-managed terminal
+can be followed in a read-only viewer. Press Ctrl+C to leave the viewer while
+the managed terminal and its work continue. Use Home or the explicit session
+commands to control work.
+
+```sh
+okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
+```
 
 From an interactive terminal, review a reorientation for the selected session.
 Claude needs a confirmed active turn. The command asks you to confirm interrupting
