@@ -11,6 +11,7 @@ from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
+from ..adapters.outbound.sqlite.execution_native_sources import read_native_turn_source
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
 from .execution_binding_proposals import _agent_guard
@@ -232,8 +233,9 @@ class ExecutionNativeDecisions:
         now = _stamp(self.access.clock.now_iso())
         endpoint = self.access.endpoints.get(uow, authority['endpoint_id'])
         profile = self.access.endpoints.profile(uow, endpoint['profile_id']) if endpoint and endpoint['profile_id'] else None
-        source = conn.execute("SELECT * FROM execution_operations WHERE server_id=? AND executor_id=? AND operation_id=?",
-                              (scope["server_id"], scope["executor_id"], row["source_operation_id"])).fetchone()
+        source = read_native_turn_source(conn, server_id=scope["server_id"], executor_id=scope["executor_id"],
+            session_id=scope["session_id"], operation_id=row["source_operation_id"],
+            owner_generation=scope["session_owner_generation"], stream_epoch=row["stream_epoch"])
         receipt = conn.execute("SELECT stage FROM execution_receipts WHERE server_id=? AND executor_id=? AND operation_id=? "
                                "ORDER BY receipt_revision DESC LIMIT 1",
                                (scope["server_id"], scope["executor_id"], row["source_operation_id"])).fetchone()

@@ -1,6 +1,8 @@
 """Resolve native question recipients from admitted work, never client hints."""
 import json
 
+from ..adapters.outbound.sqlite.execution_native_sources import read_native_turn_source
+
 
 def native_permission(kind, method, metadata):
     return kind != 'native_input' or (method == 'mcpServer/elicitation/request'
@@ -33,10 +35,9 @@ def native_question_recipient(conn, request):
     if permission:
         return recipient_from_facts(permission=True, source_exists=False, source_actor=None,
             domain_link_exists=False, domain_sender=None)
-    source = conn.execute(
-        "SELECT actor_agent_id FROM execution_operations WHERE server_id=? "
-        "AND executor_id=? AND operation_id=? AND action='turn.submit'",
-        (request["server_id"], request["executor_id"], request["source_operation_id"])).fetchone()
+    source = read_native_turn_source(conn, server_id=request["server_id"], executor_id=request["executor_id"],
+        session_id=request["session_id"], operation_id=request["source_operation_id"],
+        owner_generation=request["session_owner_generation"], stream_epoch=request["stream_epoch"])
     delivery = conn.execute(
         "SELECT m.from_agent_id FROM execution_domain_deliveries x "
         "LEFT JOIN delivery_outbox d ON d.operation_id=x.domain_operation_id "
@@ -44,5 +45,5 @@ def native_question_recipient(conn, request):
         "WHERE x.server_id=? AND x.executor_id=? AND x.operation_id=?",
         (request["server_id"], request["executor_id"], request["source_operation_id"])).fetchone()
     return recipient_from_facts(permission=False, source_exists=source is not None,
-        source_actor=source[0] if source else None, domain_link_exists=delivery is not None,
+        source_actor=source["actor_agent_id"] if source else None, domain_link_exists=delivery is not None,
         domain_sender=delivery[0] if delivery else None)

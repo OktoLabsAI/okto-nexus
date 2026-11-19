@@ -1,0 +1,91 @@
+{
+  "tasks": ["SI-010", "SI-026"],
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "06fe2dd0", "main": "8d77b50c", "ahead_of_main": 437},
+    "connector": {"branch": "feature/v0.0.15", "head": "c5735dc", "main": "a3017d9", "ahead_of_main": 79},
+    "core": {"branch": "feature/v0.0.16", "head": "ec8e6f7", "main": "19c99f1", "ahead_of_main": 58},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "artifacts_sha256": {
+    "nexus": "e77f141165e996a3797cde8dba9d496cb549d21f4995486fdbc5583493f2deb4",
+    "connector": "92ea029351cb4146e21c74a04241f3bf7740cc146b756edd0fd5552e0be3a4be",
+    "core": "c76c9544bace90f74f09df86acd8eb1627a0ee8c251dc773aff50db64514034b"
+  },
+  "product_api_with_synthetic_peer": {
+    "test": "tests/execution_r4/test_session_input_runtime.py::test_dashboard_reviews_and_recovers_exact_claude_reorientation[question-claude_stream]",
+    "original_turn": "CANCELLED",
+    "correlated_to_reviewed_replacement": true,
+    "operator_question_visible": true,
+    "attention_action": "respond_native",
+    "different_actor_http_status": 403,
+    "different_generation_or_stream_rejected": true,
+    "native_replies": 1,
+    "replay_returned_same_decision": true
+  },
+  "native_hook_probe": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "platform": "win32",
+    "provider": "loopback SSE fixture",
+    "external_model_calls": 0,
+    "native_profile": "temporary plan profile with only the tool under test enabled",
+    "remaining_job_pids": [],
+    "hook_expiry": {
+      "root": "D:/nexus-si026-decision-expiry-1795099846800",
+      "probe_sha256": "f1d90302712394518afb0ddbea177caf63ca5440acc2842aaece71581f1fc6f8",
+      "read_observations_sha256": "046e96ce28a7592bd61fb4c393f779509fdec5b6f3fdfacc5376cef375c94f38",
+      "question_observations_sha256": "501d1f267ad3993cf568df96351ce89a55488a6cca890cdc7c289807723b8fa3",
+      "observed_native_result": "Both tools returned an error on hook timeout with onFailure block."
+    },
+    "cases": [
+      {
+        "case": "Read approval",
+        "hook": "PermissionRequest",
+        "root": "D:/nexus-si026-decision-probe-1795099006611/read-allow",
+        "probe_sha256": "2cd2d23de2821bc2b2d0f6859d9203da23754ba265d99d760ec4523f17028bc6",
+        "observations_sha256": "4f460436df23b968983ef7a754c7d3f0bd177f4b85db07908513b8789c045ce2",
+        "prompt_id_present": true,
+        "tool_use_id_present": false,
+        "observed_native_result": "The synthetic file marker appeared in the tool result."
+      },
+      {
+        "case": "Read denial",
+        "hook": "PermissionRequest",
+        "root": "D:/nexus-si026-decision-native-1795099452443/read-deny",
+        "probe_sha256": "d1ed815087a80ed33935cc6e475e34e50ad84fcce34a470fd8f539af91b803c8",
+        "observations_sha256": "52708cf87e1dd2b0dd945a3d886b924aa87deb24097fe680adfdf502b6ed54aa",
+        "prompt_id_present": true,
+        "tool_use_id_present": false,
+        "observed_native_result": "Native tool error carried the denial and omitted the file marker."
+      },
+      {
+        "case": "AskUserQuestion response",
+        "hook": "PreToolUse",
+        "root": "D:/nexus-si026-decision-native-1795099452443/ask-allow",
+        "probe_sha256": "d1ed815087a80ed33935cc6e475e34e50ad84fcce34a470fd8f539af91b803c8",
+        "observations_sha256": "b52052475fb99be954d705355773864d0307499923ba6d2198013868e053cceb",
+        "prompt_id_present": true,
+        "tool_use_id_present": true,
+        "observed_native_result": "The exact Blue answer appeared in the correlated tool result."
+      }
+    ]
+  },
+  "verification": {
+    "source_decision_and_attention_tests": 83,
+    "installed_attention_tests": 51,
+    "installed_native_decision_tests": 50,
+    "installed_embedded_steer_and_interrupt_tests": 7,
+    "installed_remote_steer_tests": 1,
+    "remote_steer_first_run": "The parallel run lost the control link while waiting for the late result. The isolated rerun passed.",
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed",
+    "ruff_touched_files": "27 existing findings, no new findings"
+  },
+  "limitations": [
+    "The native probe responded directly to the hooks. Product API verification used a synthetic peer.",
+    "Exact-build managed terminal hook integration, reviewed tool-enabled profiles, and browser qualification remain pending."
+  ],
+  "migration": "none"
+}

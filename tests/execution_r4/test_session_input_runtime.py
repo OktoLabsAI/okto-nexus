@@ -291,8 +291,8 @@ def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_run
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
-@pytest.mark.parametrize('replacement', ['submitted', 'not_sent', 'write_unknown'])
-def test_dashboard_reviews_and_recovers_exact_claude_reorientation(interactive_runtime, local_setup, replacement):
+@pytest.mark.parametrize('case', ['submitted', 'not_sent', 'write_unknown', 'question'])
+def test_dashboard_reviews_and_recovers_exact_claude_reorientation(interactive_runtime, local_setup, case):
     from nexus_connector_core.native.adapter_types import (
         ErrorCode,
         NativeAdapterError,
@@ -300,7 +300,10 @@ def test_dashboard_reviews_and_recovers_exact_claude_reorientation(interactive_r
     )
 
     setup, binding, native = interactive_runtime
-    deps, app, client, *_ = setup
+    deps, app, client, headers, *_ = setup
+    replacement = 'submitted' if case == 'question' else case
+    if case == 'question':
+        deps.config.feature_hitl = True
     opened = admit(setup, binding, 'claude-review-open', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)
     generation = opened['scope']['session_owner_generation']
@@ -415,11 +418,80 @@ def test_dashboard_reviews_and_recovers_exact_claude_reorientation(interactive_r
         assert replay.status_code == 202 and replay.json()['operation_id'] == operation_id
     if replacement == 'submitted':
         assert retained['status'] == 'DISPATCHING'
+    if case == 'question':
+        client.portal.call(native.native.queue.put, event('turn_state', 'fixture.claude.interrupted',
+            {'delivery_phase': 'terminal', 'delivery_outcome': 'interrupted'}, active_id))
+        wait_receipt(setup, active, stages=('CANCELLED',))
+        _exercise_claude_replacement_question(deps, client, headers, native.native, exact, generation, epoch,
+                                             operation_id, event)
     if replacement != 'not_sent':
         client.portal.call(native.native.queue.put, event('turn_state', 'fixture.claude.replacement_finished',
                                 {'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id))
         eventually(lambda: receipt()['status'] == 'ACCEPTED_NATIVE')
     assert effects == [(operation_id, active_id)]
+
+
+def _exercise_claude_replacement_question(deps, client, headers, native, scope, generation, epoch, operation_id, event):
+    from okto_nexus.adapters.outbound.sqlite.execution_native_sources import (
+        read_native_turn_source,
+    )
+
+    request = {
+        'schema_version': 1, 'request_id': 'fixture-claude-question', 'request_hash': 'c' * 64,
+        'method': 'control_request:can_use_tool', 'local_generation': 2, 'params': {
+            'tool_name': 'AskUserQuestion', 'tool_use_id': 'fixture-tool', 'input': {'questions': [{
+                'question': 'Which fixture marker?', 'header': 'Marker', 'multiSelect': False,
+                'options': [{'label': 'Blue', 'description': 'Blue marker'},
+                            {'label': 'Green', 'description': 'Green marker'}],
+            }]},
+        },
+    }
+    replies = []
+
+    async def reply(native_request, decision, response):
+        replies.append((native_request['request_id'], native_request['local_generation'], decision, dict(response)))
+
+    native.reply_native_approval = reply
+    client.portal.call(native.queue.put, event('input_request', request['method'],
+        {'native_approval': request, 'native_approval_display': request}, operation_id))
+
+    def pending_for(actor):
+        response = client.get('/v1/runtime/input-requests', headers=headers[actor])
+        assert response.status_code == 200, response.text
+        return response.json()['items']
+
+    eventually(lambda: pending_for('operator'))
+    item, = pending_for('operator')
+    details = item['request_payload']['kwargs']
+    assert details['recipient_agent_id'] == 'operator' and pending_for('subject') == []
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        source = {key: scope[key] for key in ('server_id', 'executor_id', 'session_id')} | {'operation_id': operation_id}
+        conn = uow.connection
+        row = conn.execute('SELECT source_operation_id FROM execution_native_requests WHERE canonical_request_id=?',
+                           (details['approval_key']['canonical_request_id'],)).fetchone()
+        assert row['source_operation_id'] == operation_id
+        assert read_native_turn_source(conn, **source, owner_generation=generation, stream_epoch=epoch)
+        assert read_native_turn_source(conn, **source, owner_generation=generation + 1, stream_epoch=epoch) is None
+        assert read_native_turn_source(conn, **source, owner_generation=generation, stream_epoch='foreign') is None
+
+    attention = client.get('/api/v1/attention', params={
+        'workspace_id': scope['workspace_id'], 'kind': 'native_question_pending',
+    }, headers={'x-api-key': headers['operator']['Authorization'].removeprefix('Bearer ')})
+    assert attention.status_code == 200, attention.text
+    question, = attention.json()['data']['items']
+    assert question['allowed_actions'] == ['inspect_approval', 'respond_native']
+
+    answer = {'answers': {'Which fixture marker?': 'Blue'}}
+    decision = {key: details[key] for key in ('approval_key', 'expected_revision', 'request_hash', 'cas_token')}
+    decision.update(client_intent_id='claude-replacement-answer', decision='approve', response=answer)
+    decision_path = '/v1/runtime/approval-decisions'
+    assert client.post(decision_path, headers=headers['subject'], json=decision).status_code == 403
+    response = client.post(decision_path, headers=headers['operator'], json=decision)
+    assert response.status_code == 202, response.text
+    recovered = client.post(decision_path, headers=headers['operator'], json=decision)
+    assert recovered.status_code == 200 and recovered.json()['decision_id'] == response.json()['decision_id']
+    eventually(lambda: bool(replies))
+    assert replies == [(request['request_id'], request['local_generation'], 'accept', answer)]
 
 
 def test_server_dispatches_queue_after_busy_boundary_without_handoff_acquisition(interactive_runtime):

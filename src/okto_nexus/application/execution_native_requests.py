@@ -11,6 +11,7 @@ from nexus_connector_core import (
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.harness.event_journal import redact
+from ..adapters.outbound.sqlite.execution_native_sources import read_native_turn_source
 
 
 _SCOPE = (
@@ -56,10 +57,9 @@ def project_native_request(conn, *, event, session, channel, received_at, uow=No
     if (type(native_hash) is not str or len(native_hash) != 64 or
             any(c not in "0123456789abcdef" for c in native_hash)):
         raise ValueError("The native request hash is invalid.")
-    operation = conn.execute(
-        "SELECT * FROM execution_operations WHERE server_id=? AND executor_id=? "
-        "AND session_id=? AND operation_id=?", (*key[:3], operation_id)).fetchone()
-    if operation is None or operation["action"] != "turn.submit":
+    operation = read_native_turn_source(conn, server_id=key[0], executor_id=key[1], session_id=key[2],
+        operation_id=operation_id, stream_epoch=key[3])
+    if operation is None:
         raise ValueError("The native request has no admitted turn.")
     scope = json.loads(operation["expected_revisions_json"])
     if not isinstance(scope, dict) or any(name not in scope for name in _SCOPE):

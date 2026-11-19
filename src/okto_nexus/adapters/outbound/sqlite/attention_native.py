@@ -1,6 +1,8 @@
 """One relational facts query for canonical native attention; no per-item I/O."""
 import json
 
+from .execution_native_sources import native_turn_source_predicate
+
 # Native operational frames are validated against workspace-bound operations.
 WORKSPACE_BOUND = True
 
@@ -162,6 +164,7 @@ SELECT json_object(
 FROM requests r
 LEFT JOIN approvals ap ON ap.approval_id=r.canonical_request_id
 LEFT JOIN execution_operations turn ON turn.server_id=r.server_id AND turn.executor_id=r.executor_id AND turn.operation_id=r.source_operation_id
+    AND turn.session_id=r.session_id AND {native_turn_source_predicate(generation='r.session_owner_generation', epoch='r.stream_epoch')}
 LEFT JOIN execution_domain_deliveries x ON x.server_id=r.server_id AND x.executor_id=r.executor_id AND x.operation_id=r.source_operation_id
 LEFT JOIN delivery_outbox d ON d.operation_id=x.domain_operation_id
 LEFT JOIN messages msg ON msg.message_id=d.message_id

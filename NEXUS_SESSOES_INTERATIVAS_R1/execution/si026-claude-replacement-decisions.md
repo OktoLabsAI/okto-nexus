@@ -1,0 +1,11 @@
+# SI-010 e SI-026 — Pedidos nativos no turno substituto do Claude
+
+Uma reorientação Claude pode iniciar um turno novo. O Nexus agora aceita pedidos nativos desse turno quando a confirmação de efeito vincula a operação substituta à sessão, à geração e ao stream exatos. A mesma verificação vale ao registrar o pedido, identificar o destinatário, mostrar a ação em Attention e despachar a resposta. Os turnos de envio comum mantêm seu caminho de autorização.
+
+O teste de integração usou a API do produto e um peer sintético. O operador reorientou o turno, observou o cancelamento do anterior e recebeu uma pergunta do substituto. A pergunta apareceu somente para seu destinatário e a resposta chegou uma vez ao peer. A mesma confirmação recuperou a decisão registrada. O teste rejeitou o outro ator, outra geração e outro stream.
+
+Passaram 109 testes com os pacotes instalados, cobrindo decisões, Attention, reorientação e interrupção. O teste do Connector remoto perdeu o canal durante a espera pelo resultado tardio na execução paralela e passou na repetição isolada. Passaram também a validação estrita do wheel e a checagem offline do lock. O lint dos arquivos modificados manteve as 27 ocorrências anteriores.
+
+Em ensaios separados, o Claude Code 2.1.328 real retomou sessões descartáveis no Windows com um provedor SSE simulado em loopback. O hook `PermissionRequest` recebeu a solicitação de leitura com o ID do prompt. A aceitação leu o conteúdo do arquivo de teste e a recusa gerou erro sem devolver o conteúdo. O hook `PreToolUse` recebeu a pergunta estruturada com os IDs do prompt e da ferramenta. A resposta escolhida apareceu no resultado da ferramenta da mesma sessão. O protótipo respondeu diretamente aos hooks. Quando cada hook expirou com `onFailure: block`, o Claude retornou erro e bloqueou a chamada correspondente. [Hooks do Claude Code](https://code.claude.com/docs/en/hooks)
+
+O ledger mantém SI-010 e SI-026 em andamento. A integração dos hooks com o terminal gerenciado, a revisão de perfis com ferramentas ativas e a validação no navegador ainda estão pendentes. O marco dispensa migração. O rollback reverte o commit do Nexus e volta a usar seu pacote anterior. [Evidências e hashes](si026-claude-replacement-decisions.json)

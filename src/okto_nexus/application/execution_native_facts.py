@@ -209,7 +209,8 @@ def require_native_live_facts(*, scope, request, session, lease, authority, gran
         fail('The native request no longer has a live session lease.')
     if profile is not None and 'approvals' in profile['config'].get('disabled_capabilities', ()):
         fail('The session profile does not authorize native decisions.', ErrorCode.PERMISSION_DENIED)
-    if (source is None or source['action'] != 'turn.submit' or source['subject_agent_id'] != scope['agent_id']
+    if (source is None or source['action'] not in {'turn.submit', 'turn.steer'}
+            or source['subject_agent_id'] != scope['agent_id']
             or json.loads(source['expected_revisions_json']) != scope or source['admission_state'] == 'RESOLVED_TERMINAL'
             or receipt is not None and receipt['stage'] in {'SUCCEEDED', 'FAILED', 'CANCELLED', 'UNCERTAIN'}):
         fail('The native request turn is no longer active.')

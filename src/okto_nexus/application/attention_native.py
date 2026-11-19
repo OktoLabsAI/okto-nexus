@@ -201,7 +201,7 @@ def project(facts, now, policy):
         {'codex_approval_kind': request['approval_kind']})
     source = facts['source']
     recipient = recipient_from_facts(permission=permission,
-        source_exists=source is not None and source['action'] == 'turn.submit',
+        source_exists=source is not None,
         source_actor=source['actor_agent_id'] if source else None,
         domain_link_exists=facts['domain_link_exists'], domain_sender=facts['domain_sender'])
     archived_at = approval.get('archived_at') if approval else None
