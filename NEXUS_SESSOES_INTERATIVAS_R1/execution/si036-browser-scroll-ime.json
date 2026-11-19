@@ -1,0 +1,55 @@
+{
+  "tasks": ["SI-013", "SI-017", "SI-036"],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "f02fd8c28446b00d3b01ca9c99e09a8efd3290a5", "main": "8d77b50c00b417c86818d027aed7497fababac34", "ahead_of_main": 453},
+    "connector": {"branch": "feature/v0.0.15", "head": "e26f65a48e72907de212e917e5035a2f4623afb8", "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2", "ahead_of_main": 83},
+    "core": {"branch": "feature/v0.0.16", "head": "aaebb3a0a43ced4be3e830eb0b1cea762e519b6f", "main": "19c99f15b17ae994653ad9e190964229a0e296e8", "ahead_of_main": 62},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheels_sha256": {
+    "nexus": "b296305c5efd75eb19d55344fc13075a6c18a1de9de788f967861f4bd3567c96",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "7424e8d4424900b6b414de5d43778e9ba18c79d8f6579bee9a83ec1fcfeb093e"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "browser_driver": "Playwright CLI",
+    "dashboard_js_asset": "index-DPBNbalO.js",
+    "pi_version": "0.87.1",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "operator_authentication": "Disposable browser sign-in with X-Nexus-Operator-Session-Required",
+    "transport": "Real Nexus and Connector HTTP and control WebSocket on loopback",
+    "provider_transport": "Deterministic fixture provider in a real Pi process with outgoing network disabled",
+    "external_model_calls": 0
+  },
+  "scenarios": {
+    "SI-T-E11": "Partial pass for a retained Pi update. The exact scroll offset was 100 CSS pixels and first row geometry stayed at -87 relative to the scroll region. History grew from 864 to 936 pixels. The notice appeared once and keyboard activation restored end position and focus. Native text deltas remain to be tested through the live browser.",
+    "SI-T-E12": "PASS for the recorded Chromium keyboard and composition paths. A trusted composition start and trusted composing Enter were followed by composition end. Enter during composition and Enter on /status produced no runtime mutations. Shift+Enter inserted a line, then a single normal Enter submitted the final multiline draft. HTTP 202 and one exact native user delivery were observed."
+  },
+  "regressions_passed": {"frontend_components_and_contracts": 30, "conversation_stream_and_queue": 34, "browser_with_pi_owner": 1},
+  "final_state": {
+    "web_queue_entries": 1,
+    "native_user_messages": 2,
+    "native_results": 2,
+    "canonical_close": "SUCCEEDED"
+  },
+  "local_evidence_sha256": {
+    "test_browser_scroll_ime.py": "21436320536ffd101c65fcc57fa076bec2785004e6d9a87d6ecaeabe09604f4d",
+    "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "browser-scrolled.json": "48fbe33de276ae2f6589e2fb39c219db182437fe158a139db2bd95e467530872",
+    "browser-live.json": "12fc78ab69c1c9d7f2f7db37b313eba45103229da1911e195a6608f5534a3de6",
+    "browser-ime.json": "9288d1e8beb619019cefc6b33316c54c8a4eeb3844ba54d28b5e23006d0c5241",
+    "backend-proof.json": "0d08e5e6f3f0270bf1c104221132e8d567d99f0b306d5a4cd00fbd1db066c688",
+    "proof.xml": "422821e4cc0f4dbc6f206f5794a12cd305b1eab0d8daff26bcf992b836e43c41",
+    "frontend-contract-verified.txt": "adc2a4c7b857d88e06c86e6956e68fe17b1f002fffe9bbfd875013aaa383faf3",
+    "read-contract.xml": "5e7240dc9d430988fbe4d334c318c9acdcb50d26e1c5f4ece67e7ea485fb9875"
+  },
+  "limitations": [
+    "The automation used Chromium DevTools IME composition and a raw Enter key event. The OS IME candidate UI was outside the probe.",
+    "The live update was a committed Pi snapshot. Browser coverage for append deltas and accessibility through an actual screen reader remain open."
+  ],
+  "migration": "none"
+}
