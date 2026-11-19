@@ -1236,7 +1236,9 @@
         "execution/si025-pi-operator-ticket.md",
         "execution/si025-pi-operator-ticket.json",
         "execution/si025-pi-terminal-e2e.md",
-        "execution/si025-pi-terminal-e2e.json"
+        "execution/si025-pi-terminal-e2e.json",
+        "execution/si025-pi-queue.md",
+        "execution/si025-pi-queue.json"
       ]
     },
     {
@@ -2454,7 +2456,9 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si025-pi-queue.json"
+      ]
     },
     {
       "id": "SI-T-C01",
@@ -4038,7 +4042,8 @@
         "execution/si025-pi-core-owned-session.md",
         "execution/si025-pi-core-owned-session.json",
         "execution/si025-pi-owned-state.json",
-        "execution/si025-pi-private-renderer.json"
+        "execution/si025-pi-private-renderer.json",
+        "execution/si025-pi-queue.json"
       ]
     },
     {

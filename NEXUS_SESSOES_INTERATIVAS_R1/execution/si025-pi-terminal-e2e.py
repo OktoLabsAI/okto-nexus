@@ -29,6 +29,8 @@ from test_embedded_dispatch import admit
 
 PROMPT = 'Inspect the same Pi turn during viewer detach'
 RESULT = 'Pi result delivered to the reattached Nexus terminal'
+FOLLOW_UP = 'Submit the follow-up through the Nexus queue'
+FOLLOW_UP_RESULT = 'Pi result after the canonical queue released the follow-up'
 
 
 def wait_for(check, *, seconds=120):
@@ -40,8 +42,8 @@ def wait_for(check, *, seconds=120):
     raise AssertionError('The isolated Pi probe did not reach its expected state')
 
 
-def isolated_provider(root, release, workspace):
-    """Constrain native file access and install one in-process synthetic response."""
+def isolated_provider(root, release, workspace, responses):
+    """Constrain native file access and gate the in-process synthetic responses."""
     agent = root / 'profile' / '.pi' / 'agent'
     (agent / 'extensions').mkdir(parents=True)
     (workspace / '.pi').mkdir()
@@ -58,7 +60,11 @@ process.argv.push('--no-context-files', '--provider', 'nexus-fixture', '--model'
                   '--api-key', 'synthetic-fixture-token');
 ''', encoding='utf-8')
     peer = release / 'node_modules/@earendil-works/pi-ai/dist/providers/faux.js'
-    release_turn = root / 'release-turn'
+    signals = [root / f'release-turn-{index}' for index in range(len(responses))]
+    controlled_responses = [
+        f'() => respond({json.dumps(str(signal))}, {json.dumps(answer)})'
+        for signal, answer in zip(signals, responses, strict=True)
+    ]
     (agent / 'extensions' / 'synthetic-provider.js').write_text(f'''
 import {{ fauxProvider, fauxAssistantMessage }} from {json.dumps(peer.as_uri())};
 import {{ access }} from 'node:fs/promises';
@@ -66,14 +72,15 @@ import {{ setTimeout as delay }} from 'node:timers/promises';
 export default (pi) => {{
   const faux = fauxProvider({{ provider: 'nexus-fixture', api: 'nexus-fixture' }});
   pi.registerProvider(faux.provider);
-  faux.setResponses([async () => {{
+  async function respond(signal, answer) {{
     for (let count = 0; count < 1500; count++) {{
-      try {{ await access({json.dumps(str(release_turn))}); return fauxAssistantMessage({json.dumps(RESULT)}); }}
+      try {{ await access(signal); return fauxAssistantMessage(answer); }}
       catch (error) {{ if (error.code !== 'ENOENT') throw error; }}
       await delay(30);
     }}
     throw new Error('The controlled Pi turn was not released');
-  }}]);
+  }}
+  faux.setResponses([{', '.join(controlled_responses)}]);
 }};
 ''', encoding='utf-8')
     hosted = pi_hosted_rpc_path()
@@ -83,7 +90,7 @@ export default (pi) => {{
         f'--import={preload.as_uri()}',
     ))
     (root / 'scratch').mkdir()
-    return agent, release_turn, {
+    return agent, signals, {
         'HOME': str(root / 'profile'), 'USERPROFILE': str(root / 'profile'),
         'TEMP': str(root / 'scratch'), 'TMP': str(root / 'scratch'),
         'APPDATA': str(root / 'scratch'), 'LOCALAPPDATA': str(root / 'scratch'),
@@ -140,7 +147,40 @@ def admit_session(client, headers, workspace, app, provider_home):
     return binding
 
 
-def run(node, release, conpty_helpers):
+def enqueue_follow_up(client, data, generation, token):
+    client.cookies.set('nexus_operator_session', token)
+    path = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
+    query = {key: value for key, value in data.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    headers = {'X-Nexus-UI': '1'}
+
+    def capability():
+        view = client.get(path + '/interaction', params=query, headers=headers)
+        assert view.status_code == 200, view.text
+        return view.json()['next_turn']['capability_revision']
+
+    intent_id = 'isolated-pi-queued-follow-up'
+    body = {'scope': data, 'expected_session_generation': generation, 'client_intent_id': intent_id,
+            'capability_revision': wait_for(capability, seconds=10),
+            'content': [{'type': 'text', 'text': FOLLOW_UP}]}
+    response = client.post(path + '/inputs', json=body, headers=headers)
+    assert response.status_code == 202, response.text
+    queued = response.json()
+    assert queued['status'] == 'QUEUED' and queued['operation_id'] is None and not queued['possible_effect'], queued
+    replay = client.post(path + '/inputs', json=body, headers=headers)
+    assert replay.status_code == 202 and replay.json()['input_id'] == queued['input_id'], replay.text
+
+    def read():
+        response = client.get(path + '/inputs/receipt', params=query | {'client_intent_id': intent_id}, headers=headers)
+        assert response.status_code == 200, response.text
+        value = response.json()
+        assert value['scope'] == data and value['input_id'] == queued['input_id'], value
+        return value
+
+    return read
+
+
+def run(node, release, conpty_helpers, *, queue):
     sys.path.insert(0, str(conpty_helpers))
     from owned_engine_probe import environment
     from pty_probe import ProbeConsole
@@ -150,7 +190,8 @@ def run(node, release, conpty_helpers):
     print(f'Isolated Pi terminal proof directory {root}', flush=True)
     workspace = root / 'workspace'
     workspace.mkdir()
-    agent, release_turn, sandbox = isolated_provider(root, release, workspace)
+    results = [RESULT, FOLLOW_UP_RESULT] if queue else [RESULT]
+    agent, signals, sandbox = isolated_provider(root, release, workspace, results)
     native_environment = ApprovedLocalLaunch.environment
 
     async def isolated_environment(launch, prepared):
@@ -276,30 +317,66 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     sent = admit(setup, binding, 'isolated-pi-turn', 'turn.submit', session_id=data['session_id'], text=PROMPT)
                     await_text(first, PROMPT)
                     detach(first)
-                assert client.portal.call(owner.read_native_pi_presentation_state, scope)['is_streaming']
+                state = client.portal.call(owner.read_native_pi_presentation_state, scope)
+                assert state['is_streaming'] and state['pending_message_count'] == 0
                 assert client.portal.call(owner.prove_native_presentation_owner, scope) == before
+                follow_up = None
+                if queue:
+                    print('Enqueuing a follow-up while the Pi turn is streaming', flush=True)
+                    follow_up = enqueue_follow_up(client, data, scope.generation.value, token)
 
                 with viewer('second-viewer') as second:
                     second_attachment = wait_for(active_attachment, seconds=15)[0]
                     assert second_attachment != first_attachment
                     await_text(second, PROMPT)
-                    release_turn.touch()
+                    if follow_up:
+                        queued = follow_up()
+                        assert queued['status'] == 'QUEUED' and queued['operation_id'] is None, queued
+                        state = client.portal.call(owner.read_native_pi_presentation_state, scope)
+                        assert state['is_streaming'] and state['pending_message_count'] == 0
+                    signals[0].touch()
                     await_text(second, RESULT)
                     receipt(sent, 'SUCCEEDED')
+                    if follow_up:
+                        await_text(second, FOLLOW_UP)
+                        delivery = follow_up()
+                        assert delivery['status'] in ('DISPATCHING', 'ACCEPTED_NATIVE') and delivery['operation_id'], delivery
+                        signals[1].touch()
+                        await_text(second, FOLLOW_UP_RESULT)
+                        receipt(delivery, 'SUCCEEDED')
+                        delivered = follow_up()
+                        assert delivered['status'] == 'ACCEPTED_NATIVE' and delivered['operation_id'] == delivery['operation_id']
                     detach(second)
                 assert client.portal.call(owner.prove_native_presentation_owner, scope) == before
                 closed = admit(setup, binding, 'isolated-pi-close', 'runtime.close', session_id=data['session_id'])
                 receipt(closed, 'SUCCEEDED')
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * 2
-                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == len(results)
+                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue)
+                    if queue:
+                        native_turn_events = [tuple(row) for row in uow.connection.execute("""
+                            SELECT json_extract(payload_json,'$.native_type'),json_extract(payload_json,'$.operation_id')
+                            FROM execution_event_ingress
+                            WHERE session_id=? AND stream_epoch=?
+                            AND json_extract(payload_json,'$.native_type') IN ('agent_start','agent_settled')
+                            ORDER BY sequence
+                        """, (data['session_id'], before[0].stream_epoch))]
+                        assert native_turn_events == [
+                            ('agent_start', sent['operation_id']), ('agent_settled', sent['operation_id']),
+                            ('agent_start', delivery['operation_id']), ('agent_settled', delivery['operation_id']),
+                        ], native_turn_events
                 histories = list((agent / 'sessions').rglob('*.jsonl'))
                 assert len(histories) == 1
                 records = [json.loads(line) for line in histories[0].read_text(encoding='utf-8').splitlines()]
                 assert records[0]['id'] == before[0].native_session_id
-                assert [r['message']['role'] for r in records if r['type'] == 'message'] == ['system', 'user', 'assistant']
+                messages = [record['message'] for record in records if record['type'] == 'message']
+                assert [message['role'] for message in messages] == ['system'] + ['user', 'assistant'] * len(results)
+                expected = [PROMPT, RESULT, FOLLOW_UP, FOLLOW_UP_RESULT] if queue else [PROMPT, RESULT]
+                assert [message['content'][0]['text'] for message in messages[1:]] == expected
                 print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': 2,
-                                  'same_running_pi_process_after_detach': True, 'synthetic_turns': 1,
+                                  'same_running_pi_process_after_detach': True, 'synthetic_turns': len(results),
+                                  'follow_up_queued_until_settled': queue,
                                   'canonical_close': 'SUCCEEDED', 'console_modes_restored': True}), flush=True)
             finally:
                 server.should_exit = True
@@ -311,6 +388,8 @@ if __name__ == '__main__':
     parser.add_argument('--node', type=Path, required=True)
     parser.add_argument('--pi-release', type=Path, required=True)
     parser.add_argument('--conpty-helpers', type=Path, required=True)
+    parser.add_argument('--queue', action='store_true', help='Exercise the dashboard queue with a synthetic follow-up.')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
-    run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True), args.conpty_helpers.resolve(strict=True))
+    run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
+        args.conpty_helpers.resolve(strict=True), queue=args.queue)

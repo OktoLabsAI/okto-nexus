@@ -1,0 +1,54 @@
+{
+  "task": "SI-025",
+  "related_tests": ["SI-T-B22", "SI-T-G18"],
+  "status": "IN_PROGRESS",
+  "source_revisions": {
+    "nexus_probe_baseline": "37d99b96c08765e83f30594ebb1fd1f57e6531a5",
+    "nexus_installed": "86d9153debe3a9d265255c4893dd036e3550b597",
+    "core": "6a9a91a2e94c305adcafdb9e21ffc7e6139b1391",
+    "connector_pin": "15b192bd9495e1fd336532795c094501bfdcd9a6"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "583f6730605bc03a9a388c7c232d5eacb767e18796b32735e6a40c0f1a271ace",
+    "core_0.0.16_wheel_sha256": "9b8a0471a4ed352b4fd285f7c39f73026f0ec6ab854ee781e87b7b13531a19e0",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe_sha256": "3dbeefe9bff91166c7036d03b14352072cfee2e70bcc43e4e62195f7b9143e39"
+  },
+  "previous_pin_observation": {
+    "initial_receipt": "QUEUED",
+    "receipt_after_first_turn_settled_and_probe_deadline": "QUEUED",
+    "capacity_attempt": "PREPARED",
+    "second_native_turn_observed": false
+  },
+  "installed_windows_probe": {
+    "command_suffix": "si025-pi-terminal-e2e.py --node <node.exe> --pi-release <release> --conpty-helpers <helpers> --queue",
+    "real_pi": true,
+    "actual_windows_conpty": true,
+    "result": "PASS",
+    "input_receipt_replay_preserved_identity": true,
+    "native_queue_empty_while_follow_up_pending": true,
+    "settled_event_sequence": [2, 15, 16, 27],
+    "event_order": ["agent_start", "agent_settled", "agent_start", "agent_settled"],
+    "same_session_and_process": true,
+    "durable_input_count": 1,
+    "successful_synthetic_turns": 2,
+    "final_delivery_status": "ACCEPTED_NATIVE",
+    "canonical_close": "SUCCEEDED",
+    "provider_requests": 0
+  },
+  "regressions": {
+    "installed_core_passed": 31,
+    "installed_connector_passed": 61,
+    "installed_nexus_passed": 18,
+    "twine_strict_passed": true,
+    "offline_lock_check_passed": true,
+    "consumer_pins_match": true,
+    "ci_manifest_matches": true
+  },
+  "limitations": [
+    "The queue test drives the dashboard HTTP API as a human operator. It does not drive a browser or send input through the Pi viewer.",
+    "The controlled provider runs inside the real Pi process and uses no inference.",
+    "This is partial evidence for the two queue scenarios. It does not qualify steering, fault injection, approvals or a provider campaign."
+  ]
+}

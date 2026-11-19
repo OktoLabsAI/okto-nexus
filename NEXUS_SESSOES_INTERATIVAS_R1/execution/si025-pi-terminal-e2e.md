@@ -6,4 +6,4 @@ Dois clientes de terminal usaram o mesmo login de operador e tickets distintos d
 
 O ensaio passou com os wheels instalados. Também passaram os seis testes de regressão do transporte Pi. A reprodução usa `python execution/si025-pi-terminal-e2e.py --node <node.exe> --pi-release <raiz-do-release> --conpty-helpers <diretório-dos-helpers>` a partir do diretório do plano, com a raiz do checkout e `tests/execution_r4` no caminho de importação. Os helpers de ConPTY são os da campanha local anterior, identificados por hash na evidência.
 
-A etapa acrescenta evidência de leitura e detach à SI-025. A entrada pela fila canônica, as aprovações e a qualificação com inferência real seguem pendentes. A etapa dispensa migração e pode ser revertida com o commit de evidência.
+A versão original do script, identificada pelo hash do relatório, está no commit `37d99b96`. A etapa acrescenta evidência de leitura e detach à SI-025. O ensaio seguinte cobre o envio pela fila do painel. A etapa dispensa migração e pode ser revertida com o commit de evidência. [Prova da fila canônica](si025-pi-queue.md)
