@@ -455,6 +455,10 @@ def build_router():
     async def terminal_interrupt_receipt(session_id: str, request: Request):
         return await interrupt_receipt_for(session_id, request, 'nexus_cli')
 
+    @router.get('/presenter/interrupt/receipt')
+    async def presenter_interrupt_receipt(session_id: str, request: Request):
+        return await interrupt_receipt_for(session_id, request, 'native_terminal')
+
     return router
 
 

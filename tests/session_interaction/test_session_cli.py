@@ -224,9 +224,9 @@ def test_pi_console_decodes_split_paste_and_keeps_detach_local():
         ('insert', 'Revisão\nsegunda'), ('left', None), ('backspace', None), ('enter', None), ('detach', None),
     ]
     assert keys.feed('\x1b[13;28;13;1;16;1_\x1b[221;27;29;1;8;1_') == [('newline', None), ('detach', None)]
-    assert keys.feed('\x1b[200~review\x12\x19\x0e\x1b[201~') == [('insert', 'review')]
-    assert keys.feed('\x1b[82;19;18;1;8;1_\x1b[89;21;25;1;8;1_\x0e') == [
-        ('steer_review', None), ('steer_confirm', None), ('steer_cancel', None),
+    assert keys.feed('\x1b[200~review\x12\x18\x19\x0e\x1b[201~') == [('insert', 'review')]
+    assert keys.feed('\x1b[82;19;18;1;8;1_\x1b[88;45;24;1;8;1_\x1b[89;21;25;1;8;1_\x0e') == [
+        ('steer_review', None), ('interrupt_review', None), ('control_confirm', None), ('control_cancel', None),
     ]
 
 
@@ -261,6 +261,32 @@ def test_pi_receipt_recovers_the_original_presenter_intent(monkeypatch, capsys, 
     assert result['receipt']['input_id'] == 'input-original'
     if steer:
         assert result['command'] == 'steer' and result['message'] == 'Pi applied the reorientation.'
+
+
+def test_pi_interrupt_receipt_uses_the_native_presenter_scope(monkeypatch, capsys):
+    intent = 'pi_interrupt_' + 'a' * 32
+
+    class InterruptReceipt(Catalog):
+        token = 'synthetic-cookie'
+
+        def __call__(self, method, url, body=None):
+            if not urlsplit(url).path.endswith('/presenter/interrupt/receipt'):
+                return super().__call__(method, url, body)
+            assert method == 'GET' and body is None
+            query = parse_qs(urlsplit(url).query)
+            assert (query['client_intent_id'], query['expected_session_generation']) == ([intent], ['7'])
+            scope = {key: BINDING[key] for key in BINDING if key != 'endpoint_id'}
+            assert all(query[key] == [value] for key, value in scope.items())
+            return {'scope': scope | {'session_id': 'session-a', 'session_owner_generation': 7},
+                    'operation_id': 'original-interrupt', 'interrupt': {'target_status': 'interrupted', 'queue_paused': True}}
+
+    service = SimpleNamespace(operator_http=InterruptReceipt(), inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    assert main(['session', 'receipt', '--id', 'reviewer', '--session-id', 'session-a',
+                 '--owner-generation', '7', '--intent', intent, '--json']) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result['receipt']['operation_id'] == 'original-interrupt'
+    assert result['command'] == 'interrupt' and 'queue is paused' in result['message']
 
 
 def test_pi_terminal_keeps_split_utf8_and_recovers_style_after_ctrl_c(monkeypatch):

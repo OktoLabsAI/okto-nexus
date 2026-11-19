@@ -24,6 +24,7 @@ from okto_nexus.adapters.inbound.http.operator_auth import COOKIE, OperatorAuth
 from okto_nexus.adapters.inbound.http.session_interaction_contract import (
     InterruptTargetView,
     NativeTurnTarget,
+    ObservedRunTarget,
     SteerTargetView,
 )
 from okto_nexus.adapters.outbound.local_presenter_client import (
@@ -305,8 +306,8 @@ def _pi_prepare(transport, *, client_intent_id='pi-view', **options):
     return prepare(transport, client_intent_id, presentation='pi', capability_revision=review.json()['capability_revision'], **options)
 
 
-def _prove_pi_ticket(ws, scope, *, columns=100, rows=36):
-    ws.send_json({'kind': 'hello', 'version': 1, **document(scope), 'columns': columns, 'rows': rows})
+def _prove_pi_ticket(ws, scope, *, columns=100, rows=36, editor=False):
+    ws.send_json({'kind': 'hello', 'version': 1, **document(scope), 'columns': columns, 'rows': rows, 'editor': editor})
     challenge = ws.receive_json()
     assert challenge['kind'] == 'challenge'
     ws.send_json({'kind': 'prove', 'challenge': challenge['challenge']})
@@ -490,28 +491,97 @@ def test_pi_input_with_lost_reply_requires_recovery_of_the_same_intent(monkeypat
     assert [request['client_intent_id'] for request in calls] == ['original-intent']
 
 
-def test_pi_steer_separates_private_draft_review_and_uncertain_confirmation(monkeypatch):
+@pytest.mark.parametrize('action', ['steer', 'interrupt'])
+def test_pi_control_separates_review_and_uncertain_confirmation(monkeypatch, action):
     link = _LocalPresenter(None, None, 'viewer', live_updates=True, input_revision='revision')
     calls = []
-    intent = 'pi_steer_' + '1' * 32
+    intent = f'pi_{action}_' + '1' * 32
     review_id = 'r' * 32
 
     def exchange(frame, **_):
         calls.append(frame)
-        if frame['kind'] == 'steer_review':
-            return {'kind': 'steer_review', 'request_id': frame['request_id'],
-                    'steer_review': {'status': 'reviewed', 'review_id': review_id}}
+        if frame['kind'] == f'{action}_review':
+            return {'kind': f'{action}_review', 'request_id': frame['request_id'],
+                    f'{action}_review': {'status': 'reviewed', 'review_id': review_id}}
         raise OSError('Reply lost')
 
     monkeypatch.setattr(link, 'exchange', exchange)
-    assert link.review_pi_steer(intent=intent, output=lambda _: None) == review_id
+    assert link.review_pi_control(action=action, intent=intent, output=lambda _: None) == review_id
     with pytest.raises(ConnectionError) as lost:
-        link.decide_pi_steer(review_id=review_id, confirm=True, output=lambda _: None)
+        link.decide_pi_control(action=action, review_id=review_id, confirm=True, output=lambda _: None)
     assert lost.value.code == 'OUTCOME_UNKNOWN' and lost.value.possible_effect
     assert calls == [
-        {'kind': 'steer_review', 'request_id': 1, 'client_intent_id': intent, 'capability_revision': 'revision'},
-        {'kind': 'steer_confirm', 'request_id': 2, 'review_id': review_id},
+        {'kind': f'{action}_review', 'request_id': 1, 'client_intent_id': intent, 'capability_revision': 'revision'},
+        {'kind': f'{action}_confirm', 'request_id': 2, 'review_id': review_id},
     ]
+
+
+def test_pi_interrupt_review_cannot_change_action_or_survive_writer_replacement(transport, pi_presentation, monkeypatch):
+    services = pi_presentation.enable_input()
+
+    @asynccontextmanager
+    async def editor(scope, **_):
+        assert scope == transport.scope
+        first = True
+
+        async def output():
+            nonlocal first
+            if first:
+                first = False
+                return b'Pi transcript'
+            await anyio.sleep_forever()
+
+        async def edit(*_args, **_kwargs):
+            pytest.fail('An interrupt must leave the Pi draft alone')
+
+        yield edit, output
+
+    transport.app.state.local_pi_presentations = replace(services, open_editor=editor)
+    target = InterruptTargetView(target=ObservedRunTarget(kind='observed_run', run_ref='prun_' + '1' * 32),
+                                 capability_revision='exact-run', queue_revision=0)
+    monkeypatch.setattr(dashboard_session_presentations, 'review_exact_interrupt', lambda *_: target)
+    monkeypatch.setattr(dashboard_session_presentations, 'request_exact_human_interrupt',
+                        lambda **_: pytest.fail('An invalid review reached interrupt admission'))
+    monkeypatch.setattr(dashboard_session_presentations, 'steer_human_input',
+                        lambda **_: pytest.fail('An interrupt review became a steer intent'))
+
+    def offer(intent, *, takeover=False):
+        reply = _pi_review(transport, access='write').json()
+        result = prepare(transport, intent, presentation='pi', access='write',
+            expected_writer_epoch=reply['writer_epoch'], capability_revision=reply['capability_revision'],
+            takeover=takeover)
+        assert result.status_code == 201, result.text
+        return result.json()
+
+    def review(ws, request_id):
+        ws.send_json({'kind': 'interrupt_review', 'request_id': request_id,
+                      'capability_revision': pi_presentation.input_revision, 'client_intent_id': 'interrupt-intent'})
+        result = ws.receive_json()
+        assert result['interrupt_review']['status'] == 'reviewed'
+        return result['interrupt_review']['review_id']
+
+    first = offer('native-pi-first-writer')
+    with stream(transport, first, protocol=PI_PRESENTATION_SUBPROTOCOL) as old:
+        _prove_pi_ticket(old, transport.scope, editor=True)
+        assert old.receive_json()['access'] == 'write'
+        assert old.receive_bytes() == b'Pi transcript'
+        review_id = review(old, 1)
+        old.send_json({'kind': 'steer_confirm', 'request_id': 2, 'review_id': review_id})
+        assert old.receive_json()['steer_confirm'] == {'status': 'refused'}
+        old.send_json({'kind': 'interrupt_confirm', 'request_id': 3, 'review_id': review_id})
+        assert old.receive_json()['interrupt_confirm'] == {'status': 'refused'}
+        last_review = review(old, 4)
+        second = offer('native-pi-next-writer', takeover=True)
+        with stream(transport, second, protocol=PI_PRESENTATION_SUBPROTOCOL) as current:
+            _prove_pi_ticket(current, transport.scope, editor=True)
+            assert current.receive_json()['access'] == 'write'
+            assert current.receive_bytes() == b'Pi transcript'
+            old.send_json({'kind': 'interrupt_confirm', 'request_id': 5, 'review_id': last_review})
+            with pytest.raises(WebSocketDisconnect):
+                old.receive_json()
+            current.send_json({'kind': 'interrupt_confirm', 'request_id': 1, 'review_id': last_review})
+            assert current.receive_json()['interrupt_confirm'] == {'status': 'refused'}
+    assert attachment_state(transport, first)[0] == 'REPLACED'
 
 
 def test_writer_and_web_share_queue_with_exact_scope_and_idempotency(transport, monkeypatch):

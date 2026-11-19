@@ -4,6 +4,7 @@ import codecs
 import re
 import sys
 import time
+from dataclasses import dataclass
 from uuid import uuid4
 
 from ....application.terminal_connection import ConnectionError
@@ -17,8 +18,9 @@ _VT_KEYS = {
 }
 _WIN_KEYS = {35: 'end', 36: 'home', 37: 'left', 38: 'up', 39: 'right', 40: 'down', 46: 'delete'}
 _CONTROLS = {'\x03': 'detach', '\x1d': 'detach', '\r': 'enter', '\x08': 'backspace', '\x7f': 'backspace',
-             '\x12': 'steer_review', '\x19': 'steer_confirm', '\x0e': 'steer_cancel'}
-_STEER_KEYS = {'steer_review', 'steer_confirm', 'steer_cancel'}
+             '\x12': 'steer_review', '\x18': 'interrupt_review', '\x19': 'control_confirm', '\x0e': 'control_cancel'}
+_CONTROL_KEYS = {'steer_review', 'interrupt_review', 'control_confirm', 'control_cancel'}
+_CONTROL_NAMES = {'steer': 'Reorientation', 'interrupt': 'Interruption'}
 _STEER_STATUS = {
     'pending': 'Reorientation recorded. Waiting for delivery.',
     'submitted': 'Reorientation sent. Application is unconfirmed.',
@@ -59,8 +61,8 @@ def _key_from_csi(sequence):
         return 'newline', None
     if modifiers & 0x0c and not modifiers & 0x13 and key in (0x43, 0xdd):
         return 'detach', None
-    if modifiers & 0x0c and not modifiers & 0x13 and key in (0x52, 0x59, 0x4e):
-        return {0x52: 'steer_review', 0x59: 'steer_confirm', 0x4e: 'steer_cancel'}[key], None
+    if modifiers & 0x0c and not modifiers & 0x13 and key in (0x52, 0x58, 0x59, 0x4e):
+        return {0x52: 'steer_review', 0x58: 'interrupt_review', 0x59: 'control_confirm', 0x4e: 'control_cancel'}[key], None
     if 0 < code <= 0x10ffff and not 0xd800 <= code <= 0xdfff:
         return _bare_key(chr(code))
     return None, None
@@ -149,68 +151,117 @@ class _PiKeys:
         return actions
 
 
-class _PiSteer:
-    """Keep one review or recorded draft until the exact receipt settles."""
+def _interrupt_notice(result):
+    state = result['target_status']
+    if state == 'interrupted':
+        message = 'The selected Pi execution was interrupted.'
+    elif state == 'finished':
+        message = 'The selected Pi execution already ended.'
+    elif result['refused']:
+        message = 'Interruption was refused before it took effect.'
+    elif result['outcome_unknown']:
+        message = 'Interruption is unconfirmed.'
+    else:
+        message = 'Interruption recorded. Waiting for the selected Pi execution to stop.'
+    if result['queue_paused']:
+        message += ' The message queue is paused.'
+    return message
+
+
+@dataclass(frozen=True, slots=True)
+class _ControlReview:
+    action: str
+    intent: str
+    review_id: str
+
+
+@dataclass(slots=True)
+class _ControlReceipt:
+    intent: str
+    input_id: str | None
+    previous_message: str | None = None
+
+
+class _PiControls:
+    """Track an explicit review and the exact receipts of recorded controls."""
 
     def __init__(self, link, recover, render, status):
         self.link, self.recover, self.render, self.status = link, recover, render, status
-        self.review_id = self.intent = self.input_id = self.previous = None
+        self.review: _ControlReview | None = None
+        self.receipts: dict[str, _ControlReceipt] = {}
         self.next_poll = 0.0
 
     @property
     def holds_draft(self):
-        return self.review_id is not None or self.input_id is not None
+        return self.review is not None or 'steer' in self.receipts
 
-    def recover_notice(self):
-        receipt = self.recover(self.intent)
-        boundary = receipt.get('steer_boundary') if receipt else None
-        if boundary in ('applied', 'discarded'):
-            self.status(_STEER_STATUS[boundary])
+    def recover_notice(self, action, intent):
+        receipt = self.recover(intent)
+        if action == 'steer' and receipt and receipt.get('steer_boundary') in ('applied', 'discarded'):
+            self.status(_STEER_STATUS[receipt['steer_boundary']])
+        elif action == 'interrupt' and receipt and receipt['interrupt']['target_status'] in ('interrupted', 'finished'):
+            self.status(_interrupt_notice(receipt['interrupt'] | {'refused': False, 'outcome_unknown': False}))
         else:
-            self.status('Reorientation is unconfirmed. Use session receipt with intent ' + self.intent + '.')
+            self.status(f'{_CONTROL_NAMES[action]} is unconfirmed. Use session receipt with intent {intent}.')
 
     def key(self, key):
         """Return true when an uncertain productive response requires detaching."""
-        if self.input_id is not None:
+        if self.review is None:
+            if key in ('steer_review', 'interrupt_review'):
+                action = key.split('_')[0]
+                if action in self.receipts:
+                    return False
+                intent = f'pi_{action}_' + uuid4().hex
+                review_id = self.link.review_pi_control(action=action, intent=intent, output=self.render)
+                if review_id is None:
+                    self.status(f'{_CONTROL_NAMES[action]} is unavailable for the selected execution.')
+                else:
+                    self.review = _ControlReview(action, intent, review_id)
+                    question = ('Reorient this Pi run at its next available boundary?' if action == 'steer'
+                                else 'Interrupt this Pi execution and pause the message queue?')
+                    self.status(question + ' Ctrl+Y confirms. Ctrl+N cancels.')
             return False
-        if self.review_id is None:
-            if key == 'steer_review':
-                self.intent = 'pi_steer_' + uuid4().hex
-                self.review_id = self.link.review_pi_steer(intent=self.intent, output=self.render)
-                self.status('Reorient this Pi run at its next available boundary? Ctrl+Y confirms. Ctrl+N cancels.'
-                            if self.review_id else 'Reorientation is unavailable for this draft or execution.')
+        if key not in ('control_cancel', 'control_confirm'):
             return False
-        if key not in ('steer_cancel', 'steer_confirm'):
-            return False
-        confirm = key == 'steer_confirm'
+        review, self.review = self.review, None
+        confirm = key == 'control_confirm'
         try:
-            self.input_id = self.link.decide_pi_steer(review_id=self.review_id, confirm=confirm, output=self.render)
+            reply = self.link.decide_pi_control(action=review.action, review_id=review.review_id,
+                                                confirm=confirm, output=self.render)
         except ConnectionError as error:
             if not error.possible_effect:
                 raise
-            self.recover_notice()
+            self.recover_notice(review.action, review.intent)
             return True
-        self.review_id = None
-        if self.input_id:
-            self.previous = 'pending'
+        if reply:
+            self.receipts[review.action] = _ControlReceipt(review.intent, reply.get('input_id'))
             self.next_poll = time.monotonic()
-            self.status(_STEER_STATUS['pending'])
+            self.status(_STEER_STATUS['pending'] if review.action == 'steer'
+                        else 'Interruption recorded. Checking the selected execution and queue.')
         elif confirm:
-            self.status('The reorientation review changed. Your draft is available.')
+            self.status(f'The {_CONTROL_NAMES[review.action].lower()} review changed. Your draft is available.')
         else:
-            self.status('Reorientation cancelled. Your draft is available.')
+            self.status(f'{_CONTROL_NAMES[review.action]} cancelled. Your draft is available.')
         return False
 
     def poll(self):
-        if self.input_id is None or time.monotonic() < self.next_poll:
+        if not self.receipts or self.review is not None or time.monotonic() < self.next_poll:
             return
         self.next_poll = time.monotonic() + 1
-        state = self.link.pi_steer_status(input_id=self.input_id, output=self.render)
-        if state != self.previous:
-            self.previous = state
-            self.status(_STEER_STATUS[state])
-        if state in ('applied', 'discarded', 'refused'):
-            self.input_id = None
+        for action, receipt in tuple(self.receipts.items()):
+            if action == 'steer':
+                state = self.link.pi_steer_status(input_id=receipt.input_id, output=self.render)
+                message = _STEER_STATUS[state]
+                settled = state in ('applied', 'discarded', 'refused')
+            else:
+                result = self.link.pi_interrupt_status(intent=receipt.intent, output=self.render)
+                message = _interrupt_notice(result)
+                settled = result['target_status'] in ('interrupted', 'finished') or result['refused']
+            if message != receipt.previous_message:
+                receipt.previous_message = message
+                self.status(message)
+            if settled:
+                del self.receipts[action]
 
 
 def show_pi_editor(link, recover):
@@ -233,7 +284,7 @@ def show_pi_editor(link, recover):
         print('\r\n' + text, flush=True)
 
     keys = _PiKeys()
-    steer = _PiSteer(link, recover, render, status)
+    controls = _PiControls(link, recover, render, status)
     with ansi_viewer_output(sys.stdout), viewer_console_input(sys.stdin) as next_input:
         sys.stdout.write('\x1b[?2004h')
         sys.stdout.flush()
@@ -242,26 +293,27 @@ def show_pi_editor(link, recover):
                 try:
                     if output := link.poll_pi_output(.05):
                         render(output)
-                    steer.poll()
+                    controls.poll()
                 except ConnectionError:
-                    if steer.input_id is None:
+                    if not controls.receipts:
                         raise
-                    steer.recover_notice()
+                    for action, receipt in controls.receipts.items():
+                        controls.recover_notice(action, receipt.intent)
                     return
                 incoming = next_input()
                 if incoming is None:
                     return
                 for key, text in keys.feed(incoming):
                     if key == 'detach':
-                        if steer.input_id is not None:
-                            status('Reorientation receipt intent ' + steer.intent + '.')
+                        for action, receipt in controls.receipts.items():
+                            status(f'{_CONTROL_NAMES[action]} receipt intent {receipt.intent}.')
                         return
-                    if key in _STEER_KEYS:
-                        if steer.key(key):
+                    if key in _CONTROL_KEYS:
+                        if controls.key(key):
                             return
                         # Confirmation must arrive in a later terminal read.
                         break
-                    if steer.holds_draft:
+                    if controls.holds_draft:
                         continue
                     notice = ''
                     intent = 'pi_input_' + uuid4().hex

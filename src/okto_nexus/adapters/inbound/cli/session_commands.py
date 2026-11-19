@@ -17,6 +17,7 @@ COMMANDS = ('send', 'steer', 'interrupt')
 INTENT = re.compile(r'terminal_(send|steer|interrupt)_[0-9a-f]{32}')
 PI_INPUT_INTENT = re.compile(r'pi_input_[0-9a-f]{32}')
 PI_STEER_INTENT = re.compile(r'pi_steer_[0-9a-f]{32}')
+PI_INTERRUPT_INTENT = re.compile(r'pi_interrupt_[0-9a-f]{32}')
 PI_RUN_REF = re.compile(r'prun_[0-9a-f]{32}')
 _HANDLERS = {'send': 'enqueue', 'steer': 'review_steer', 'interrupt': 'review_interrupt'}
 _DELIVERY_MESSAGES = {
@@ -219,6 +220,8 @@ def recover_session_command(call, binding, session_id, generation, intent):
     url, scope, current = _session(call, binding, session_id)
     if generation > current:
         raise _unavailable()
+    if PI_INTERRUPT_INTENT.fullmatch(intent):
+        return recover_pi_interrupt(call, scope, generation, intent)
     if PI_INPUT_INTENT.fullmatch(intent) or PI_STEER_INTENT.fullmatch(intent):
         return recover_pi_input(call, scope, generation, intent)
     command = INTENT.fullmatch(intent)[1]
@@ -229,3 +232,9 @@ def recover_pi_input(call, scope, generation, intent):
     route = PREFIX + '/runtime/sessions/' + quote(scope['session_id'], safe='') + '/presenter/inputs/receipt?'
     receipt = call('GET', route + _query(scope, generation, client_intent_id=intent))
     return _result(receipt, scope, generation, 'steer' if PI_STEER_INTENT.fullmatch(intent) else 'send', intent)
+
+
+def recover_pi_interrupt(call, scope, generation, intent):
+    route = PREFIX + '/runtime/sessions/' + quote(scope['session_id'], safe='') + '/presenter/interrupt/receipt?'
+    receipt = call('GET', route + _query(scope, generation, client_intent_id=intent))
+    return _result(receipt, scope, generation, 'interrupt', intent)

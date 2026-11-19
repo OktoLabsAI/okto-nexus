@@ -190,10 +190,12 @@ class _LocalPresenter:
         except (ConnectionError, KeyError, ValueError):
             raise (_pi_input_unknown() if key == 'enter' else _unavailable()) from None
 
-    def review_pi_steer(self, *, intent, output):
+    def review_pi_control(self, *, action, intent, output):
+        if action not in ('steer', 'interrupt'):
+            raise ValueError('Unsupported Pi control')
         if self.input_revision is None:
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This Pi view is read-only.')
-        review = self._request('steer_review', pi_output=output, client_intent_id=intent,
+        review = self._request(f'{action}_review', pi_output=output, client_intent_id=intent,
                                capability_revision=self.input_revision)
         if review == {'status': 'unavailable'}:
             return None
@@ -203,20 +205,25 @@ class _LocalPresenter:
             raise _unavailable()
         return review_id
 
-    def decide_pi_steer(self, *, review_id, confirm, output):
-        kind = 'steer_confirm' if confirm else 'steer_cancel'
+    def decide_pi_control(self, *, action, review_id, confirm, output):
+        if action not in ('steer', 'interrupt'):
+            raise ValueError('Unsupported Pi control')
+        kind = f'{action}_confirm' if confirm else f'{action}_cancel'
         try:
             reply = self._request(kind, pi_output=output, review_id=review_id)
             if reply == {'status': 'refused'} or not confirm and reply == {'status': 'cancelled'}:
                 return None
+            if action == 'interrupt' and confirm and reply == {'status': 'recorded'}:
+                return reply
             input_id = reply.get('input_id')
-            if (not confirm or reply.keys() != {'status', 'input_id'} or reply['status'] != 'recorded'
+            if (action != 'steer' or not confirm or reply.keys() != {'status', 'input_id'} or reply['status'] != 'recorded'
                     or not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id)):
                 raise _unavailable()
-            return input_id
+            return reply
         except ConnectionError:
             if confirm:
-                raise _pi_input_unknown() from None
+                raise ConnectionError('OUTCOME_UNKNOWN', 'The Pi control receipt is unconfirmed. Recover the original intent.',
+                                      possible_effect=True) from None
             raise
 
     def pi_steer_status(self, *, input_id, output):
@@ -226,6 +233,14 @@ class _LocalPresenter:
                 'pending', 'submitted', 'awaiting_boundary', 'applied', 'discarded', 'refused', 'unconfirmed'):
             raise _unavailable()
         return status
+
+    def pi_interrupt_status(self, *, intent, output):
+        reply = self._request('interrupt_status', pi_output=output, client_intent_id=intent)
+        flags = {'queue_paused', 'refused', 'outcome_unknown'}
+        if (reply.keys() != flags | {'target_status'} or any(type(reply[key]) is not bool for key in flags)
+                or reply['target_status'] not in ('unconfirmed', 'running', 'interrupted', 'finished')):
+            raise _unavailable()
+        return reply
 
     def page(self, *, method, params):
         if method not in _HISTORY_METHODS:

@@ -1,0 +1,48 @@
+{
+  "task": "SI-025",
+  "task_status": "IN_PROGRESS",
+  "related_tests_added_evidence": ["SI-T-C12", "SI-T-C13", "SI-T-C14", "SI-T-C15"],
+  "source": {
+    "nexus_baseline": "f4168d3ffd9f9d926365f20a26e3f9eee315174c",
+    "core_pin": "1c3dba15d316e95afb8b071dff2a6b53b4dfd12a",
+    "connector_pin": "43697e03a59f0ff0ec890605c71084786cd50be0"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "ab50144d3ba169e8f59098085f80df88945a01801608614c7de2f1430eace278",
+    "core_0.0.16_wheel_sha256": "7bec3adecff37352e22d2c6e40e7f1f881058cdb31e87d09e61fc64e4d25a6fe",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe": "si025-pi-terminal-e2e.py",
+    "probe_sha256": "16fa660df3fdfeade303e1d3e1a5045187dc780d8e6c8088b8efd3960abffa75"
+  },
+  "installed_real_pi_windows_conpty": {
+    "external_provider_requests": 0,
+    "cancel_preserved_draft_and_running_execution": true,
+    "queue_revision_change_refused_confirmation": true,
+    "confirmed_interruption_preserved_visible_draft": true,
+    "canonical_interrupts": 1,
+    "operator_attachment_receipts": 3,
+    "native_terminal_receipt_after_detach": "interrupted",
+    "same_intent_hidden_from_web_and_cli_recovery_routes": true,
+    "paused_after_detach_with_continuation_queued": true,
+    "continuation_waited_for_explicit_resume": true,
+    "stale_run_refused_before_native_abort": true,
+    "same_running_pi_process_after_detach": true,
+    "canonical_close": "SUCCEEDED",
+    "console_modes_restored": true
+  },
+  "regressions": {
+    "installed_nexus": 80,
+    "real_pi_editor_steer": "PASS",
+    "wrong_control_and_writer_replacement": "PASS",
+    "lost_control_reply_keeps_original_intent": "PASS",
+    "core_pin_unchanged": true,
+    "nexus_strict_wheel_check": "PASS",
+    "nexus_offline_lock_check": "PASS",
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The Pi engine and Windows ConPTY editor are real. Model responses are synthetic.",
+    "Transport tests use a fixture editor to isolate writer replacement and cross-action refusal.",
+    "Approvals, browser qualification, remote operation and real-provider campaigns remain open."
+  ]
+}

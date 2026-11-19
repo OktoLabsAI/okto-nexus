@@ -38,9 +38,11 @@ from .session_commands import (
     COMMANDS,
     INTENT,
     PI_INPUT_INTENT,
+    PI_INTERRUPT_INTENT,
     PI_STEER_INTENT,
     execute_session_command,
     recover_pi_input,
+    recover_pi_interrupt,
     recover_session_command,
 )
 from .terminal_target import resolve_terminal_target, terminal_target_selection
@@ -191,12 +193,14 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         if writer:
             print('Enter records your message in the session queue.')
             print('Ctrl+R reviews reorientation at the next available boundary.')
+            print('Ctrl+X reviews interruption and pauses the queue after confirmation.')
             print(f'Receipt recovery uses session generation {generation}.')
         print('Ctrl+C detaches this viewer.', flush=True)
 
         def recover(intent):
             try:
-                return recover_pi_input(call, scope, generation, intent)['receipt']
+                read = recover_pi_interrupt if PI_INTERRUPT_INTENT.fullmatch(intent) else recover_pi_input
+                return read(call, scope, generation, intent)['receipt']
             except ConnectionError:
                 return None
 
@@ -338,7 +342,7 @@ def run_session(argv):
         parser.error('write actions require terminal confirmation')
     if args.action == 'receipt':
         if (args.intent is None or not (INTENT.fullmatch(args.intent) or PI_INPUT_INTENT.fullmatch(args.intent)
-                                       or PI_STEER_INTENT.fullmatch(args.intent))
+                                       or PI_STEER_INTENT.fullmatch(args.intent) or PI_INTERRUPT_INTENT.fullmatch(args.intent))
                 or not 0 < (args.owner_generation or 0) < 2**63):
             parser.error('receipt requires the terminal --intent and original --owner-generation')
     elif args.intent is not None or args.owner_generation is not None:
