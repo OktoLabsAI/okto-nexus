@@ -11,7 +11,7 @@ type Property = {
   minimum?: number; maximum?: number;
 };
 type NativeRequest = { method: string; params: {
-  tool_name?: string; questions?: Question[]; input?: { questions?: Question[] };
+  tool_name?: string; questions?: Question[]; input?: { questions?: Question[]; file_path?: string };
   message?: string; requestedSchema?: { properties: Record<string, Property>; required?: string[] };
   mode?: string; _meta?: {codex_approval_kind?: string};
   method?: string; title?: string; options?: string[]; placeholder?: string; prefill?: string;
@@ -29,13 +29,15 @@ export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermissi
   const [error, setError] = useState<string | null>(null);
   const request = detail.request_payload?.kwargs?.payload as NativeRequest | undefined;
   const params = request?.params;
+  const readTarget = request?.method === "control_request:can_use_tool" && params?.tool_name === "Read"
+    ? params.input?.file_path : undefined;
   const codex = !canonicalPermission && request?.method === "item/tool/requestUserInput";
   const claude = !canonicalPermission && request?.method === "control_request:can_use_tool" && params?.tool_name === "AskUserQuestion";
   const form = !canonicalPermission && request?.method === "mcpServer/elicitation/request";
   const pi = !canonicalPermission && request?.method === "extension_ui_request" &&
     ["select", "confirm", "input", "editor"].includes(params?.method ?? "");
   const permission = canonicalPermission || ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"].includes(request?.method ?? "") ||
-    (request?.method === "control_request:can_use_tool" && ["Write", "Edit", "Bash"].includes(params?.tool_name ?? ""));
+    (request?.method === "control_request:can_use_tool" && ["Read", "Write", "Edit", "Bash"].includes(params?.tool_name ?? ""));
   const questions = (claude ? params?.input?.questions : params?.questions) ?? [];
   const properties = params?.requestedSchema?.properties ?? {};
   const mcpPermission = form && params?.mode === "form" && params?._meta?.codex_approval_kind === "mcp_tool_call" &&
@@ -85,6 +87,7 @@ export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermissi
     <p>Runtime request: <b>{native?.state ?? "unavailable"}</b>{expired ? " · expired" : ""}.
       Your decision is recorded separately from delivery to the runtime.</p>
     {native?.reason && <p>Delivery detail: {native.reason}</p>}
+    {readTarget && <p className="break-all">Read <code>{readTarget}</code></p>}
     {native?.response != null && <pre className="whitespace-pre-wrap break-all max-h-40 overflow-auto">{JSON.stringify(native.response, null, 2)}</pre>}
     {!supported && <p>This request cannot be answered in this view. Its original details remain available below.</p>}
     {ready && supported && <form onSubmit={event => { event.preventDefault(); if (ready) submit(); }} className="space-y-3">

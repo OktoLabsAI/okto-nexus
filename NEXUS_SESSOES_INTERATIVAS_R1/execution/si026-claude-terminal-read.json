@@ -1,0 +1,89 @@
+{
+  "tasks": ["SI-021", "SI-026"],
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "7ee3dd2d", "main": "8d77b50c"},
+    "connector": {"branch": "feature/v0.0.15", "head": "425ea92", "main": "a3017d9"},
+    "core": {"branch": "feature/v0.0.16", "head": "781306a", "main": "19c99f1"},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "core_revision": "1dae685cc6c76ca81bdde1021be51ad0e2ef7145",
+  "connector_revision": "d38cedfd1b9a28c2bc64027ec49a77366ff0f5b3",
+  "artifacts_sha256": {
+    "core": "a87fd2a37e1090d753b21d10e375c387577795d2e90159892a79b6c3b3bc7471",
+    "connector": "0ff54533c52ed24968493f655655c1030ae298a7dd856301b1d5776b3e8cd7b8",
+    "nexus": "2ab314aeb24d84b9ab9a015f7ccec65c4df5ce0a34cafb91f32b87dee2c01a74"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "profile": {
+      "mode": "plan",
+      "allow": ["AskUserQuestion"],
+      "ask": ["Read"],
+      "deny": ["mcp__*"],
+      "blockReadsOutsideWorkingDirectories": true
+    },
+    "source_terminal_probe_sha256": "b130045af31df2e892a7a7e644e2739228713235074872173178743d0d284355",
+    "terminal_allow": {
+      "root": "D:/nexus-si026-read-1795101517414/approve",
+      "observations_sha256": "ec1b4208f2cf9a0d93311b946206f050dcf51dcd21fe15b099270d42c263071c",
+      "approved_content_observed": true
+    },
+    "terminal_deny": {
+      "root": "D:/nexus-si026-read-1795101517414/deny",
+      "observations_sha256": "1dfcf7cbf5ba5775b868ce07b8ca7645b533629503d16fa5918283664c08b9e3",
+      "native_denial_without_file_content": true
+    },
+    "installed_terminal_replaced_file": {
+      "root": "D:/nexus-si026-read-installed-1795101820252",
+      "probe_sha256": "86867c4d7ccf84645cf35987f3f3c0b838034e9ffa27b2a617fa1306700dbd55",
+      "observations_sha256": "9ad8e89bd87a4422b5415a87d38c40c9216fcbd25505247c8e49dc45e174f682",
+      "native_refusal_after_file_change": true,
+      "executor_receipt": {"stage": "FAILED", "code": "STALE_TURN", "possible_effect": false}
+    },
+    "installed_stream_origin": {
+      "root": "D:/nexus-si026-read-stream-1795101852070",
+      "probe_sha256": "3a2618861c8e77c655eaf7e382496878195da7c1f37e0a097ec1b827e50a61da",
+      "observations_sha256": "86fcd112574ff2368a535970d09673c50efe46afdae1f9336caf58c3ad3767c7",
+      "approved_content_observed": true
+    },
+    "terminal_evidence": {
+      "attention_action": "decide_native",
+      "display_contains_workspace_relative_file": true,
+      "wrong_actor_http_status": 403,
+      "stale_review_http_status": 409,
+      "replay_recovered_same_decision": true,
+      "same_owned_process_and_turn_completed": true,
+      "remaining_job_pids": []
+    }
+  },
+  "verification": {
+    "installed_core_tests": 121,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 13,
+    "installed_browser_tests": 14,
+    "frontend_node_tests": 417,
+    "frontend_build": "passed with bundle size warning",
+    "generated_contract_checks": "passed",
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed"
+  },
+  "browser_evidence": {
+    "browser": "Microsoft Edge via Playwright",
+    "assets": "installed Nexus wheel",
+    "requests": "synthetic native events through the product's decision API",
+    "entry_point": "global attention bell",
+    "exact_workspace_relative_path_visible": true,
+    "one_canonical_decision_for_each_approval_or_denial": true,
+    "fixture_uses_current_operator_session_and_navigation": true
+  },
+  "limitations": [
+    "Native evidence covers this local Windows executable and explicit plan profile.",
+    "The native product probe used the real Claude executable and a synthetic provider.",
+    "Other tools, profiles, environments and full interactive-session plan qualification remain open."
+  ],
+  "migration": "none"
+}

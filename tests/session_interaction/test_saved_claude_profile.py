@@ -64,6 +64,18 @@ def test_saved_question_profile_requires_the_reviewed_permissions_in_every_scope
     assert config.capture_claude_resume_profile(saved.prepared, saved.environment) is None
 
 
+def test_saved_read_profile_requires_native_working_directory_policy(saved):
+    permissions = {'allow': ['AskUserQuestion'], 'ask': ['Read'], 'deny': ['mcp__*']}
+    for value in (None, False, 1, True):
+        settings = permissions if value is None else permissions | {'blockReadsOutsideWorkingDirectories': value}
+        saved.settings.write_text(json.dumps({'permissions': settings}), encoding='utf-8')
+        reviewed = config.capture_claude_resume_profile(saved.prepared, saved.environment)
+        if value is True:
+            assert reviewed['read_approval'] is True and 'question_only' not in reviewed
+        else:
+            assert reviewed is None
+
+
 @pytest.mark.asyncio
 async def test_saved_grant_revalidates_exact_retired_history_and_current_profile(saved, monkeypatch):
     witness = {'history': asdict(saved.history), 'opening_profile': {

@@ -13,6 +13,7 @@ from test_runtime_selection_dashboard import assets
 
 pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
                                reason='Isolated browser campaign not enabled')
+_DECISION_ROUTE = '/api/v1/runtime-management/runtime/approval-decisions'
 
 
 def test_approval_status_tabs_filters_and_full_history(decision_state, native_browser):
@@ -51,21 +52,29 @@ def test_approval_status_tabs_filters_and_full_history(decision_state, native_br
     expect(page.get_by_test_id('recent-decisions')).to_have_count(0)
 
 
+def open_approvals(page):
+    page.get_by_role('button', name='Advanced', exact=True).click()
+    page.get_by_test_id('advanced-view').get_by_role('button', name=re.compile('^Approval history')).click()
+
+
 @pytest.fixture
-def native_browser(decision_state, assets):
+def native_browser(decision_state, assets, request):
     from playwright.sync_api import sync_playwright
     _, app, body = decision_state
-    client = TestClient(app)
+    origin = 'http://127.0.0.1'
+    client = TestClient(app, base_url=origin, client=('127.0.0.1', 50000))
+    auth = app.state.operator_auth
+    assert auth.configure('native-browser-fixture', 'fixture-operator-password', local=True)
+    client.cookies.set('nexus_operator_session', auth.login('native-browser-fixture', 'fixture-operator-password'))
     trace = {'requests': [], 'drop': False}
     with sync_playwright() as driver:
         browser = driver.chromium.launch(channel='msedge', headless=True)
         context = browser.new_context(viewport={'width': 1440, 'height': 1100})
-        context.add_init_script('sessionStorage.setItem("okto_nexus_operator_key", ' + json.dumps(app.state.test_agent_keys['operator']) + ');')
         context.add_init_script('localStorage.setItem("okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0", "fixture");')
         def route_request(route):
             request = route.request
             url = urlsplit(request.url)
-            if url.netloc != 'nexus.test':
+            if url.netloc != '127.0.0.1':
                 route.abort()
             elif url.path == '/api/v1/stream':
                 route.fulfill(status=200, body=': isolated native UI\n\n', content_type='text/event-stream')
@@ -73,8 +82,8 @@ def native_browser(decision_state, assets):
                 trace['requests'].append((request.method, url.path, request.post_data))
                 response = client.request(request.method, url.path + ('?' + url.query if url.query else ''),
                     headers={key: value for key, value in request.headers.items()
-                             if key.lower() in ('authorization', 'x-api-key', 'content-type')}, content=request.post_data)
-                if url.path == '/v1/runtime/approval-decisions' and request.method == 'POST' and trace['drop']:
+                             if key.lower() in ('origin', 'x-nexus-ui', 'content-type')}, content=request.post_data)
+                if url.path == _DECISION_ROUTE and request.method == 'POST' and trace['drop']:
                     assert response.status_code == 202, response.text
                     trace['drop'] = False
                     route.abort('failed')
@@ -91,10 +100,21 @@ def native_browser(decision_state, assets):
         page = context.new_page()
         page.set_default_timeout(10000)
         try:
-            page.goto('http://nexus.test/')
-            page.get_by_test_id('onboarding-close').click()
-            page.get_by_role('button', name=re.compile('^Approvals')).click()
-            page.get_by_test_id('approve-' + body['approval_key']['canonical_request_id']).click()
+            page.goto(origin + '/')
+            bell = page.get_by_test_id('global-attention-button')
+            bell.wait_for(state='visible')
+            onboarding = page.get_by_test_id('onboarding-close')
+            if onboarding.is_visible():
+                onboarding.click()
+            request_id = body['approval_key']['canonical_request_id']
+            case = getattr(request.node, 'callspec', None)
+            if case and case.params.get('decision_state') == 'claude_read':
+                bell.click()
+                card = page.get_by_role('article').filter(has=page.get_by_text(request_id, exact=True))
+                card.locator('[data-testid^="attention-open-"]').click()
+            else:
+                open_approvals(page)
+                page.get_by_test_id('approve-' + request_id).click()
             yield page, trace
         finally:
             context.close()
@@ -127,12 +147,12 @@ def test_native_ui_confirm_and_recover_without_persisting_answers(decision_state
     if lost_reply:
         expect(panel.get_by_role('alert')).to_be_visible()
         page.reload()
-        page.get_by_role('button', name=re.compile('^Approvals')).click()
+        open_approvals(page)
         page.get_by_test_id('detail-' + body['approval_key']['canonical_request_id']).click()
     expect(page.get_by_test_id('canonical-native-status')).to_contain_text('Decision: CONFIRMED')
     expect(page.get_by_test_id('canonical-native-status')).to_contain_text('Native delivery: DISPATCH_PENDING')
     posts = [json.loads(data) for method, path, data in trace['requests']
-             if method == 'POST' and path == '/v1/runtime/approval-decisions']
+             if method == 'POST' and path == _DECISION_ROUTE]
     assert len(posts) == 1
     assert posts[0]['approval_key'] == body['approval_key']
     assert posts[0]['request_hash'] == body['request_hash']
@@ -163,8 +183,27 @@ def test_native_ui_empty_mcp_permission_has_approve_button(decision_state, nativ
     button.click()
     expect(page.get_by_test_id('canonical-native-status')).to_contain_text('Decision: CONFIRMED')
     posts = [json.loads(data) for method, path, data in trace['requests']
-             if method == 'POST' and path == '/v1/runtime/approval-decisions']
+             if method == 'POST' and path == _DECISION_ROUTE]
     assert len(posts) == 1 and posts[0]['response'] == {'content': {}}
+
+
+@pytest.mark.parametrize('decision_state', ['claude_read'], indirect=True)
+@pytest.mark.parametrize(('button', 'decision', 'status'), [
+    ('Approve request', 'approve', 'CONFIRMED'),
+    ('Deny runtime request', 'deny', 'DENIED'),
+])
+def test_claude_read_ui_shows_exact_workspace_file(native_browser, request, button, decision, status):
+    from playwright.sync_api import expect
+    page, trace = native_browser
+    _, _, proposal = request.getfixturevalue('decision_state')
+    panel = page.get_by_role('region', name='Native runtime decision')
+    expect(panel.get_by_text('docs/reviewed.txt', exact=True)).to_be_visible()
+    panel.get_by_role('button', name=button, exact=True).click()
+    expect(page.get_by_test_id('canonical-native-status')).to_contain_text('Decision: ' + status)
+    posts = [json.loads(data) for method, path, data in trace['requests']
+             if method == 'POST' and path == _DECISION_ROUTE]
+    assert len(posts) == 1 and posts[0]['approval_key'] == proposal['approval_key']
+    assert posts[0]['decision'] == decision and 'response' not in posts[0]
 
 
 def test_native_ui_denial_is_canonical_and_cannot_use_legacy_decision(decision_state, native_browser):
@@ -173,9 +212,9 @@ def test_native_ui_denial_is_canonical_and_cannot_use_legacy_decision(decision_s
     page.get_by_role('button', name='Deny runtime request', exact=True).click()
     expect(page.get_by_test_id('canonical-native-status')).to_contain_text('Decision: DENIED')
     posts = [json.loads(data) for method, path, data in trace['requests']
-             if method == 'POST' and path == '/v1/runtime/approval-decisions']
+             if method == 'POST' and path == _DECISION_ROUTE]
     assert len(posts) == 1 and posts[0]['decision'] == 'deny' and 'response' not in posts[0]
-    assert not [path for method, path, _ in trace['requests'] if method == 'POST' and path.startswith('/api/')]
+    assert not [path for method, path, _ in trace['requests'] if method == 'POST' and path != _DECISION_ROUTE]
 
 
 def test_native_ui_expiry_disables_form_while_open(decision_state, native_browser):

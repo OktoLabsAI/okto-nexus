@@ -59,7 +59,8 @@ class SavedClaudeOpening:
             raise _refuse()
         return ClaudeTerminalResumeGrant(self.history, session_id, *(getattr(context, key) for key in fields),
             prepared.profile_fingerprint, prepared.root_fingerprint, partial(self._require_current, prepared),
-            question_only=self.profile.get('question_only') is True)
+            question_only=self.profile.get('question_only') is True,
+            read_approval=self.profile.get('read_approval') is True)
 
     async def environment(self, resolve, local_launch, prepared):
         value = await resolve(prepared)

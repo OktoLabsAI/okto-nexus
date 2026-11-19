@@ -46,6 +46,9 @@ def decision_state(opening, request):
     proposal = dict(schema_version=1, request_id=7, request_hash="a"*64,
         method="item/tool/requestUserInput" if is_input else "item/commandExecution/requestApproval",
         params={"turnId": "native-turn", "itemId": "item", "authorization": "Bearer private-marker"})
+    if native_case == 'claude_read':
+        proposal.update(request_id='fixture-read', method='control_request:can_use_tool', local_generation=1,
+                        params={'tool_name': 'Read', 'input': {'file_path': 'docs/reviewed.txt'}})
     if is_input:
         proposal['params']['isBlocking'] = native_case != 'nonblocking_input'
         proposal['params']['questions'] = [{'id': 'question', 'header': 'Choice', 'question': 'Choose the next step',

@@ -16,6 +16,7 @@ _SETTINGS_KEYS = frozenset({
     '$schema', 'permissions', 'env', 'hooks', 'model', 'effortLevel', 'useAutoModeDuringPlan',
 })
 _QUESTION_ONLY = {'allow': ['AskUserQuestion'], 'deny': ['mcp__*']}
+_READ_APPROVAL = {**_QUESTION_ONLY, 'ask': ['Read'], 'blockReadsOutsideWorkingDirectories': True}
 
 
 def capture_claude_resume_profile(prepared, environment):
@@ -76,14 +77,14 @@ def observe_claude_resume_profile(state_home, workspace):
             if rule is None:
                 return None
             rules.append(rule)
-        question_only = 'question_only' in rules
-        if (question_only and set(rules) - {'question_only', 'neutral'}
-                or not question_only and 'deny_all' not in rules):
+        tool_profile = next((rule for rule in rules if rule in {'question_only', 'read_approval'}), None)
+        if (tool_profile and set(rules) - {tool_profile, 'neutral'}
+                or not tool_profile and 'deny_all' not in rules):
             return None
         profile = {'state_home': str(home),
                    'settings_sha256': hashlib.sha256(canonical_json(fingerprints)).hexdigest()}
-        if question_only:
-            profile['question_only'] = True
+        if tool_profile:
+            profile[tool_profile] = True
         return profile
     except (OSError, ValueError, TypeError, RecursionError):
         return None
@@ -106,6 +107,8 @@ def _review_settings(data):
         return None
     if permissions == _QUESTION_ONLY:
         return 'question_only'
+    if permissions.get('blockReadsOutsideWorkingDirectories') is True and permissions == _READ_APPROVAL:
+        return 'read_approval'
     deny = permissions.get('deny', [])
     if set(permissions) - {'deny'} or type(deny) is not list or any(type(rule) is not str for rule in deny):
         return None
