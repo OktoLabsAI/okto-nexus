@@ -1,0 +1,56 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "core_revision": "692ef73cbc7b41cd9e61bfd085dc209f266e4088",
+  "connector_revision": "944cef3a2a448624b30894c7c0d4a8491845278c",
+  "artifacts_sha256": {
+    "core": "a5fe4570208013bbc73ab3d79cd88ff3adfebe5ceafd1498c406029600a454c0",
+    "connector": "f0b97c6f410b6bb206626a5c9ec275ee2673148765b4c0bbe178604d49068a91"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "tools_enabled": false,
+    "canonical_opening": {
+      "fixture": "D:/nexus-si026-canonical-opening-wheel-1795090339690",
+      "probe_sha256": "d70720b50157a8d5b759295a0dced346a3aafcc1ac900385b3ad75dd466c9aa2",
+      "observations_sha256": "a2b042f9b7e3b38d393a914acd969b2ae8aa7807f83ee61f0079368545723080",
+      "claimed_once_through_core": true,
+      "process_birth_recorded_in_exact_job": true,
+      "opening_receipt": "SUBMITTED",
+      "same_target_recovery_without_spawn": true,
+      "wrong_or_missing_target_refused_without_spawn": true,
+      "exact_saved_identity_observed": true,
+      "resumed_turn_model_calls": 1,
+      "resumed_turn_receipt": "SUCCEEDED",
+      "remaining_job_pids": []
+    },
+    "independent_stop_continuation": {
+      "fixture": "D:/nexus-si026-independent-stop-1795090452537",
+      "probe_sha256": "529845cf5f8ee623381fd24ac82639bf0659e7f76409e30ed05ffdc3808225bb",
+      "observations_sha256": "c29e38bf2d2d01e9ec00c7adcc13c715ce01f0f48df4af0ea40c29b3bb70e7af",
+      "receipt_while_continued_turn_busy": "SUCCEEDED",
+      "owned_terminal_idle_while_busy": false,
+      "stop_hook_active_sequence": [false, true],
+      "same_prompt_id": true,
+      "resumed_turn_model_calls": 2,
+      "remaining_job_pids": []
+    }
+  },
+  "regressions": {
+    "installed_core": 86,
+    "installed_core_skipped": 8,
+    "installed_nexus_saved_codex_and_claude_receipt": 4,
+    "installed_connector_units_and_process_lifecycle": 83,
+    "connector_process_test_environment": "The initial test used PYTHONPATH to provide the wheel. Child processes deliberately dropped PYTHONPATH and could not import the package. A fresh venv with both wheels physically installed passed all 83 tests.",
+    "generated_core_contracts": "PASS",
+    "strict_core_and_connector_metadata": "PASS",
+    "vendor_hashes_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "limitations": [
+    "The native run used the actual Core journal and launch controller with an isolated factory. Product successor admission is not enabled.",
+    "The completion gate cannot publish a terminal outcome for profiles with unqualified Stop continuations."
+  ]
+}

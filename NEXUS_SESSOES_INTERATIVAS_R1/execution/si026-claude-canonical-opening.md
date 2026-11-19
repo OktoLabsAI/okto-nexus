@@ -1,0 +1,9 @@
+# SI-026 — Recibo da abertura do contexto salvo Claude
+
+O Core vincula a abertura gerenciada ao UUID exato do Claude na semântica que o journal usa para deduplicar a operação. O UUID fica no host e a publicação R4 conserva somente o vínculo por hash. A repetição recupera o recibo. A remoção ou alteração do UUID produz conflito. Um factory que não declara suporte à abertura salva recebe uma recusa anterior ao efeito.
+
+No Windows, a prova com o Claude Code 2.1.328 e o wheel do Core instalados criou a sucessora pelo produtor durável do Core, em um Windows Job próprio. A prova de nascimento e o recibo de abertura corresponderam ao processo que retomou o UUID. O mesmo pedido recuperou o recibo, e as tentativas de alterar ou remover o destino não iniciaram outro processo. O ensaio usou um factory descartável, histórico produzido pelo CLI real e modelo em loopback. [Cenários e hashes](si026-claude-canonical-opening.json)
+
+Em outro projeto descartável, um segundo hook `Stop` prolongou o turno. O primeiro recibo chegou a `SUCCEEDED` enquanto a segunda resposta do modelo ainda estava retida pelo simulador e o processo permanecia ocupado. O segundo `Stop` trouxe o mesmo `prompt_id` com `stop_hook_active` verdadeiro. A documentação confirma que outro hook pode pedir continuação e que as regras de hooks podem vir de mais de uma fonte. A ativação precisa esperar uma confirmação de que o processo terminou aquele turno. [Hooks Stop](https://code.claude.com/docs/en/hooks#stop) · [Composição de políticas](https://code.claude.com/docs/en/managed-settings)
+
+SI-026 continua em andamento. O recibo protege a abertura no Core. A integração com a admissão de uma sucessora no Nexus, a proteção contra conclusão prematura, o attach e os controles de turno seguem pendentes. O marco dispensa migração. Para reverter, reverta os commits em conjunto e restaure os pins anteriores.
