@@ -1,0 +1,9 @@
+# Reorientação vinculada ao run do Pi
+
+O Core pode fixar uma reorientação à execução exata observada no Pi hospedado. Ele verifica esse vínculo antes de escrever no transporte. O Pi repete a verificação imediatamente antes de inserir a mensagem na fila nativa, inclusive após um manipulador assíncrono. O journal registra a entrada na fila e o consumo na fronteira, com o mesmo ID de operação e run. A associação usa o objeto nativo da mensagem, de modo que duas mensagens com texto igual mantêm identidades distintas.
+
+No ensaio com Pi 0.87.1 real e provedor sintético, o journal registrou a entrada na fila no evento 8 e o consumo no evento 18. A mensagem apareceu na sessão no evento 19, antes de a execução terminar no evento 28. Repetir o mesmo pedido devolveu o recibo existente. Trocar o run com o mesmo ID gerou conflito e um pedido novo para o run anterior foi recusado antes do envio. Uma solicitação que já estava no manipulador quando seu run terminou ficou com resultado incerto e sem mensagem pendente. [Dados do ensaio](si025-pi-steer-facts.json)
+
+Passaram 90 testes do Core, 61 do Connector e 15 do Nexus com os pacotes instalados. O ensaio do editor em Windows ConPTY enviou dois turnos sintéticos e confirmou que a continuação aguardou o término do turno ativo, que desanexar preservou o mesmo Pi e que o encerramento canônico restaurou o console. A prova do Core é reproduzível com `--hosted-core --hosted-turn --hosted-steer correlated`. [Parâmetros de execução](si025-pi-native-editor.md)
+
+O recibo do Core permanece `SUBMITTED` após o ACK. A SI-025 continua em andamento e o cenário completo SI-T-C04 segue pendente. Falta transportar a revisão do operador até o run exato e apresentar os fatos do journal no recibo do Nexus. Aprovações e qualificação com provedor real seguem pendentes. A etapa dispensa migração. Para reverter, restaure o pin anterior nos dois consumidores e reverta o commit correspondente do Core.

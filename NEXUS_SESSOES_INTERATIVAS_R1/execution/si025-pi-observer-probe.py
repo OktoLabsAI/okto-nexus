@@ -444,17 +444,24 @@ async def exercise_hosted_steer(runtime, journal, scope, target, channel, contex
         sent = await runtime.submit(operation, context)
         assert sent.stage == 'SUBMITTED'
         await wait_for_file(signal)
-        await wait_for_event(lambda event: event.native_type == 'agent_start' and event.operation_id == operation.operation_id)
+        return await wait_for_event(lambda event: event.native_type == 'agent_start' and event.operation_id == operation.operation_id)
 
-    async def control(operation_id, text):
-        return await runtime.control(ControlOperation(operation_id, turn.session_id, 'steer', text), context)
+    async def control(operation_id, text, run=None):
+        target = {'expected_pi_run_id': run} if run else {}
+        return await runtime.control(ControlOperation(operation_id, turn.session_id, 'steer', text, **target), context)
 
-    await opened_turn(turn, 'first-model-waiting')
-    acknowledged = await control('steer-boundary', STEER)
+    start = await opened_turn(turn, 'first-model-waiting')
+    first_run = start.payload['hosted_pi_run_id'] if expectation == 'correlated' else None
+    acknowledged = await control('steer-boundary', STEER, first_run)
     assert acknowledged.stage == 'SUBMITTED' and acknowledged.possible_effect
     queued = await wait_for_event(lambda e: e.native_type == 'queue_update' and e.payload.get('steering') == [STEER])
     assert not any(observed_user(e, STEER) for e in await snapshot())
     assert (await runtime.read_live_pi_session(scope, target, **channel))['pending_message_count'] == 1
+    if first_run:
+        accepted = await wait_for_event(lambda e: e.native_type == 'nexus_pi_steer' and e.operation_id == 'steer-boundary')
+        assert accepted.payload == {'run_id': first_run, 'stage': 'queued', 'turn_operation_id': turn.operation_id}
+        assert not any(e.native_type == 'nexus_pi_steer' and e.payload['stage'] == 'consumed' for e in await snapshot())
+        assert await control('steer-boundary', STEER, first_run) == acknowledged
     (checkpoints / 'release-hosted-turn').touch()
     consumed = await wait_for_event(lambda e: observed_user(e, STEER))
     await wait_for_turn(journal, operation_key(turn.operation_id))
@@ -464,8 +471,22 @@ async def exercise_hosted_steer(runtime, journal, scope, target, channel, contex
     assert still_submitted.stage == 'SUBMITTED'
 
     second = TurnOperation('pi-probe-last-turn', turn.session_id, LAST_PROMPT)
-    await opened_turn(second, 'last-model-waiting')
-    stale = asyncio.create_task(control('steer-after-settle', LATE_STEER))
+    second_start = await opened_turn(second, 'last-model-waiting')
+    second_run = second_start.payload['hosted_pi_run_id'] if first_run else None
+    if first_run:
+        assert first_run != second_run
+        try:
+            await control('steer-boundary', STEER, second_run)
+            raise AssertionError('A control ID accepted a different reviewed run')
+        except CoreError as error:
+            assert error.code == 'OPERATION_CONFLICT', error
+        try:
+            await control('steer-wrong-run', STEER, first_run)
+            raise AssertionError('A reviewed earlier run redirected its successor')
+        except CoreError as error:
+            assert error.code == 'STALE_TURN' and not error.possible_effect, error
+        assert not (await journal.get_receipt(operation_key('steer-wrong-run'))).possible_effect
+    stale = asyncio.create_task(control('steer-after-settle', LATE_STEER, second_run))
     try:
         await wait_for_file('steer-input-handler-waiting')
         (checkpoints / 'release-last-turn').touch()
@@ -484,10 +505,19 @@ async def exercise_hosted_steer(runtime, journal, scope, target, channel, contex
             assert observed_stage in ('FAILED', 'OUTCOME_UNKNOWN') and state['pending_message_count'] == 0
             assert not any(e.native_type == 'queue_update' and LATE_STEER in e.payload.get('steering', [])
                            for e in await snapshot())
+        facts = [e for e in await snapshot() if e.native_type == 'nexus_pi_steer'] if first_run else []
+        if first_run:
+            assert [(e.operation_id, e.payload) for e in facts] == [
+                ('steer-boundary', {'run_id': first_run, 'stage': stage, 'turn_operation_id': turn.operation_id})
+                for stage in ('queued', 'consumed')]
+            assert facts[0].sequence < facts[1].sequence <= consumed.sequence < settled.sequence
         return {'steer_rpc_ack': acknowledged.stage, 'steer_receipt_after_boundary': still_submitted.stage,
                 'queued_sequence': queued.sequence, 'boundary_message_sequence': consumed.sequence,
                 'settled_sequence': settled.sequence, 'late_steer_receipt': observed_stage,
-                'late_steer_pending_after_run_finished': state['pending_message_count']}
+                'late_steer_pending_after_run_finished': state['pending_message_count'],
+                **({'run_bound_facts': [e.payload['stage'] for e in facts],
+                    'fact_sequences': [e.sequence for e in facts],
+                    'receipt_identity_replay': True, 'stale_review_refused_before_wire': True} if first_run else {})}
     finally:
         (checkpoints / 'release-steer-input-handler').touch(exist_ok=True)
         await asyncio.gather(stale, return_exceptions=True)
@@ -688,7 +718,7 @@ if __name__ == '__main__':
     parser.add_argument('--hosted-core', action='store_true', help='Open the packaged owner via the real Core composition')
     parser.add_argument('--hosted-turn', action='store_true', help='Exercise the private renderer with one synthetic turn')
     parser.add_argument('--hosted-editor', action='store_true', help='Exercise the native editor during the synthetic turn')
-    parser.add_argument('--hosted-steer', choices=('baseline', 'fenced'),
+    parser.add_argument('--hosted-steer', choices=('baseline', 'fenced', 'correlated'),
                         help='Observe boundary steer receipt and a delayed input handler')
     args = parser.parse_args()
     if args.hosted_core and (args.core or args.cli_owner):

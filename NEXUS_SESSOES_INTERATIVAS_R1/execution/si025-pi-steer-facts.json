@@ -1,0 +1,61 @@
+{
+  "task": "SI-025",
+  "related_test": "SI-T-C04",
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "e3003c9d8dc5cb0619f138cd8b84371034edbf26",
+    "core_previous": "7615920c44794589fbeda018981180b81615a182",
+    "core_current": "3c9055da67e701e3bcff32f2c1a17789eb4f6331",
+    "connector_previous": "453f20f8d60dd1ad7b8a13436fed4265a54c8244",
+    "connector_current": "b4481301339664adc5cf6eb624f7d94fee6f500c"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "fcc4994c3c40faff8e20f32a5da2ddccbd0a4d78e5610e80d7cf681adac92ec5",
+    "core_previous_wheel_sha256": "4bfeec47e0bf2d6297fc76d0f8bc5a1c7e4417fc7ec835efbf0c38fcf0628b85",
+    "core_current_wheel_sha256": "31c1be3c3a0582201a907ac3aed85df8457b2e7c55b0b00dedd462d8feb1462b",
+    "connector_ci_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "hosted_rpc_sha256": "26b6547a459ec652f795a50b1f65b2cf05f33a3cb28637a06c5133e48e3d1704",
+    "probe_sha256": "8e1a3def8fbfa48e1a53017ccba7b32f54c72c8d75d71ed2f2716cfff4d735e0"
+  },
+  "synthetic_provider_real_pi": {
+    "steer_rpc_ack": "SUBMITTED",
+    "steer_receipt_after_boundary": "SUBMITTED",
+    "run_bound_facts": ["queued", "consumed"],
+    "fact_sequences": [8, 18],
+    "generic_queue_update_sequence": 9,
+    "boundary_message_sequence": 19,
+    "settled_sequence": 28,
+    "receipt_identity_replay": true,
+    "same_operation_with_different_reviewed_run": "OPERATION_CONFLICT",
+    "stale_review_refused_before_wire": true,
+    "late_steer_receipt": "OUTCOME_UNKNOWN",
+    "late_steer_pending_after_run_finished": 0,
+    "exact_persisted_history": true,
+    "turns_submitted": 2,
+    "core_close_stage": "SUCCEEDED",
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "installed_core_passed": 90,
+    "installed_connector_passed": 61,
+    "installed_nexus_passed": 15,
+    "strict_core_wheel_metadata_check_passed": true,
+    "modified_core_modules_matched_installed_artifact": 7,
+    "consumer_pins_identical": true,
+    "nexus_ci_manifest_verified": true,
+    "nexus_offline_lock_check_passed": true,
+    "nexus_installed_editor_windows_conpty": {
+      "same_running_pi_process_after_detach": true,
+      "synthetic_turns": 2,
+      "follow_up_queued_until_settled": true,
+      "canonical_close": "SUCCEEDED",
+      "console_modes_restored": true
+    }
+  },
+  "limitations": [
+    "Application review, host receipt binding and operator-facing status projection still require integration.",
+    "The complete SI-T-C04 scenario includes HTTP concurrency and operator-visible statuses.",
+    "Native approvals and real-provider qualification remain open."
+  ]
+}

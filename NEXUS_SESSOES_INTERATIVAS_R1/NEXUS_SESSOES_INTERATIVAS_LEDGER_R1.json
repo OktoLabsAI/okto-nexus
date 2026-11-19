@@ -1244,7 +1244,9 @@
         "execution/si025-pi-native-editor.md",
         "execution/si025-pi-native-editor.json",
         "execution/si025-pi-steer-boundary.md",
-        "execution/si025-pi-steer-boundary.json"
+        "execution/si025-pi-steer-boundary.json",
+        "execution/si025-pi-steer-facts.md",
+        "execution/si025-pi-steer-facts.json"
       ]
     },
     {
@@ -2549,7 +2551,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si025-pi-steer-boundary.json"
+        "execution/si025-pi-steer-boundary.json",
+        "execution/si025-pi-steer-facts.json"
       ]
     },
     {

@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `7615920c44794589fbeda018981180b81615a182`.
-The unpublished wheel SHA-256 is `4bfeec47e0bf2d6297fc76d0f8bc5a1c7e4417fc7ec835efbf0c38fcf0628b85`.
-The hosted Pi owner checks the active run again before admitting a delayed RPC steer to the native queue.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `3c9055da67e701e3bcff32f2c1a17789eb4f6331`.
+The unpublished wheel SHA-256 is `31c1be3c3a0582201a907ac3aed85df8457b2e7c55b0b00dedd462d8feb1462b`.
+Hosted Pi steering checks the selected run at enqueue and journals queue admission and consumption under the same operation ID.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency
