@@ -30,6 +30,7 @@ from ...outbound.service_manager.context import atomic_json
 from ...outbound.terminal_http import LocalOperatorHTTP
 from .codex_viewer_process import present_codex, select_viewer
 from .connect import project_profile
+from .connect_presentation import display_reattach_command
 from .native_input import display_text
 from .pi_viewer_terminal import show_pi_editor
 from .quick_connect_ids import binding_reference, public_ids
@@ -457,6 +458,8 @@ def run_session(argv):
                                       interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(), write=args.write)
             if args.attachment_receipt is not None:
                 atomic_json(args.attachment_receipt, attached or {'status': 'declined'})
+            display_reattach_command(attached, binding, service=service, operator_profile=args.operator_profile,
+                                     write=args.write, viewer_executable=args.viewer_executable)
             return 0
         if args.action == 'resume':
             if not args.json:

@@ -99,9 +99,10 @@ def test_list_fails_closed_on_later_scope_change(monkeypatch, capsys):
     ('server', 'executor', '3', 'CONNECTION_SELECTOR_CONFLICT'),
     ('server', 'executor', '4', None),
 ])
-def test_connector_handoff_verifies_scope_before_attachment(server, executor, revision, code, monkeypatch, tmp_path):
+def test_connector_handoff_verifies_scope_before_attachment(server, executor, revision, code, monkeypatch, tmp_path, capsys):
     catalog = Catalog(base='https://nexus.example')
-    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'},
+                              adapter=SimpleNamespace(home=tmp_path / 'Nexus client home'))
     tty = SimpleNamespace(isatty=lambda: True)
     monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
     monkeypatch.setattr(session, 'resolve_terminal_target', lambda service_args, profile, operator, local: service
@@ -123,10 +124,18 @@ def test_connector_handoff_verifies_scope_before_attachment(server, executor, re
     assert main(['session', 'attach', '--binding-id', 'binding', '--server-id', server, '--executor-id', executor,
                  '--workspace-id', 'workspace', '--binding-revision', revision, '--operator-profile', 'human',
                  '--attachment-receipt', str(file)]) == (0 if code is None else 3)
+    terminal = capsys.readouterr().out
     if code is None:
         assert json.loads(file.read_text()) == detached and not reported
+        assert terminal.startswith('Reattach to this session: ')
+        for option in ('--binding-id=binding', '--server-id=server', '--executor-id=executor',
+                       '--workspace-id=workspace', '--session-id=session-a', '--binding-revision=4',
+                       '--operator-profile=human', 'Nexus client home'):
+            assert option in terminal
+        assert '--attachment-receipt' not in terminal and detached['attachment_id'] not in terminal
     else:
         assert not file.exists() and reported[0]['code'] == code
+        assert not terminal
     assert catalog.routes == ([] if code == 'SERVER_ID_MISMATCH' else ['/connections/bindings/binding'])
 
 

@@ -509,7 +509,7 @@ def test_reconnect_reads_later_customization_without_reissuing_grants(terminal):
 
 
 def test_interactive_connect_preserves_configuration_on_viewer_failure(terminal, tmp_path, monkeypatch, capsys):
-    from okto_nexus.adapters.inbound.cli import session, work
+    from okto_nexus.adapters.inbound.cli import connect_presentation, session, work
     from okto_nexus.adapters.outbound.service_manager.context import read_json
 
     t = terminal
@@ -547,6 +547,21 @@ def test_interactive_connect_preserves_configuration_on_viewer_failure(terminal,
     assert interaction['attach_argv'][:3] == ['okto-nexus', 'session', 'attach']
     assert entered == ['subject'] and read_json(profile_path) == configured
     assert len(t.turns) == 1
+
+    def detach(call, binding, *, interactive):
+        assert interactive is True
+        scope = {field: binding[field] for field in ('binding_id', 'server_id', 'executor_id', 'workspace_id')}
+        return {'status': 'detached', 'scope': scope | {'session_id': 'exact-returned-session'}}
+
+    service.operator_profile = 'saved-human-login'
+    service.operator_http = t.call
+    monkeypatch.setattr(session, 'attach_session', detach)
+    connect_presentation.present_after_connect(service, profile='interactive', document=configured,
+                                               interaction={'status': 'requested'})
+    command = next(line for line in capsys.readouterr().out.splitlines() if line.startswith('Reattach to this session: '))
+    assert '--session-id=exact-returned-session' in command and '--operator-profile=saved-human-login' in command
+    assert '--binding-revision=' in command and '--profile' not in command
+    assert read_json(profile_path) == configured and len(t.turns) == 1
 
 
 def test_connect_interactive_rejects_redirected_output_before_resolving_service(monkeypatch, capsys):

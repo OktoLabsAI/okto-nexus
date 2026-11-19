@@ -1,9 +1,10 @@
 # Project work from the terminal
 
-After an interactive `okto-nexus connect`, the project prompt accepts your work
-request. Nothing productive is submitted until you enter a request. Reopen it
-with `okto-nexus work` from the same project, or select `--profile NAME`.
-`connect --no-chat` and `connect --json` finish at setup without entering the prompt.
+After setup in a terminal, `okto-nexus connect` asks whether to open the native
+viewer and defaults to No. Use `connect -i` to request it or `connect
+--no-interactive` to skip the offer. `connect --no-chat` or `connect --json`
+finishes at setup. Use `okto-nexus work` from the project or with `--profile
+NAME` to open the Nexus project prompt and submit an explicit work request.
 
 The prompt supports ordinary conversation and these explicit controls:
 
@@ -63,7 +64,8 @@ queue a message for the next turn while the harness is busy.
 
 Press Ctrl+] to detach. On Windows, closing the viewer's console also leaves
 the session, running turn and queue with the same executor while its authorization
-is valid. Run the same attach command to follow that session again. If a send
+is valid. When the viewer returns to the shell, use the **Reattach to this session**
+command to follow the same session again. If a send
 was in progress when the viewer closed, check the receipt reference printed in
 the terminal with the original operator login before sending again.
 

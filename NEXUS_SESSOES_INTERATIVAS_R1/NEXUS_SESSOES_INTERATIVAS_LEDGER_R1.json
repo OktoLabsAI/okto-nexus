@@ -1532,7 +1532,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
-        "execution/si028-connect-presentation.md"
+        "execution/si028-connect-presentation.md",
+        "execution/si032-exact-reattach-command.json"
       ]
     },
     {
@@ -1667,7 +1668,9 @@
         "execution/si022-pi-silent-presenter.md",
         "execution/si022-pi-silent-presenter.json",
         "execution/si022-r4-resume-lease.md",
-        "execution/si022-r4-resume-lease.json"
+        "execution/si022-r4-resume-lease.json",
+        "execution/si032-exact-reattach-command.md",
+        "execution/si032-exact-reattach-command.json"
       ]
     },
     {
@@ -1704,7 +1707,7 @@
         "SI-T-F17"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": ["execution/si032-exact-reattach-command.json"]
     },
     {
       "id": "SI-034",
@@ -1990,7 +1993,7 @@
         "SI-T-I09"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": ["execution/si032-exact-reattach-command.md", "execution/si032-exact-reattach-command.json"]
     },
     {
       "id": "SI-041",
@@ -3703,7 +3706,7 @@
         "SI-R19"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si032-exact-reattach-command.json"]
     },
     {
       "id": "SI-T-F10",
@@ -3793,7 +3796,7 @@
         "SI-R19"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si032-exact-reattach-command.json"]
     },
     {
       "id": "SI-T-F15",
@@ -3850,7 +3853,7 @@
         "SI-R19"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si032-exact-reattach-command.json"]
     },
     {
       "id": "SI-T-G01",
@@ -4526,7 +4529,8 @@
       "evidence": [
         "execution/si020-codex-keyboard-detach-windows.md",
         "execution/si020-codex-keyboard-detach-windows.json",
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si032-exact-reattach-command.json"
       ]
     },
     {
@@ -4789,7 +4793,7 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si032-exact-reattach-command.json"]
     },
     {
       "id": "SI-T-I05",

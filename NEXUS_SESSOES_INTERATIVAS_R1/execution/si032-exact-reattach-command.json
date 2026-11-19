@@ -1,0 +1,68 @@
+{
+  "tasks": ["SI-029", "SI-032", "SI-033", "SI-040"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-F09", "SI-T-F14", "SI-T-F17", "SI-T-H11", "SI-T-I04"],
+  "source": {
+    "nexus_baseline": "d710da699e4535c70f155ecb3c900043049cac49",
+    "connector_revision": "576e7045ae8104131c18235f3df707bda5d39b6c",
+    "core_revision": "6ec6ace51bcca05272e5bb63098d862e5641dc70"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "d474cf5a6c79c4ad00b242733b4c86e6cbb9aa4319eda359e53d8333744944c3",
+    "nexus_0.3.8_sdist_sha256": "3a3e640e5d74cc58ec07099b6dda0675b6b7817ad331d69d269567a946a62e52",
+    "previous_nexus_0.3.8_wheel_sha256": "389fdb1f28154dbe671612d03cf903e2e603da8dd0c7daf61a44599581e0362a",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "migration": null,
+    "strict_distribution_check": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "regressions": {
+    "previous_wheel_detach_omitted_command": true,
+    "previous_wheel_junit_sha256": "2ed5c9cd995b117cc387cd1e81de29bf8219a3f696d00f28305fcb2a8016da29",
+    "nexus_source": {"passed": 247, "junit_sha256": "fe74840e6a32d80094dfd0085c58e41f54a2ad3dbecc40d79927bc844403b0e7"},
+    "nexus_installed": {"passed": 247, "junit_sha256": "0e7ebb9dc9b9bbc3e772f4974df22704894dc334781bcf5c6d702e4450f2dc00"},
+    "installed_interactive_connect_selected_test": {"passed": 1, "junit_sha256": "ce498597364c139aec9fa9c4943962cce63410045d5a6661dd6dfa893fcade3e"},
+    "node_home_contracts": {"passed": 29, "junit_sha256": "344848dc119ef341086febfd1dc4ea802e6763084d7b1f5a38096f7e4d7fc52b"}
+  },
+  "native_windows_loopback": {
+    "platform": "Windows x64 with ConPTY",
+    "harness": "Pi 0.87.1",
+    "build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "powershell_banner_round_tripped_exact_argument_vector": true,
+    "same_native_session_and_process": true,
+    "new_turn_due_to_reattach": false,
+    "clean_detaches": 2,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_requests": 0,
+    "artifact_directory": "%TEMP%/si032-exact-reattach-1795110912086",
+    "probe_sha256": "86da820a6415cae81d14851a047329c6534fc3859c34b66d3e7601809e89acc2",
+    "remote_fixture_sha256": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "proof": "native/proof.json",
+    "proof_sha256": "222e904e7b0cfcecf9d68ba550ed70148189bc79b39f10fdcaa71f881b65371a",
+    "junit_sha256": "870d713d8d89349ce84bbb0fd7b0fc352fe27c39b38d43d909630f47b6bd4784"
+  },
+  "shell_rendering": {
+    "powershell_version": "7.6.10",
+    "literal_arguments_round_tripped": 10,
+    "command_target": "Local argument capture function",
+    "proof": "powershell-roundtrip.json",
+    "proof_sha256": "36ef1335c8bd60300f2570c7b6672b3c78786302cd610c2b16b1bf70965c7586"
+  },
+  "home_api_with_native_viewer": {
+    "presentation_version": 2,
+    "same_card_after_detach_while_turn_active": true,
+    "column": "active",
+    "connection": "connected",
+    "activity": "working",
+    "probe_sha256": "5df4c28f64bd76b63cfb76b78852b15bc8a84a4a275dcee61905a0f4cc150d0f",
+    "proof": "native-home-contract/proof.json",
+    "proof_sha256": "a074dda64b64698751171b3f8f339ca762964c74f63e9369116b5066479a78c0",
+    "junit_sha256": "a8ee3a82e0e169e55bec144344aa30c339b3859af65b8049b2041d08803fa322"
+  },
+  "limitations": [
+    "The native exercise decoded the generated PowerShell literals into argv and used the installed CLI entry point. The isolated vault and model responses were fixtures.",
+    "The Home tests are Node contract and component tests. Browser, human acceptance, cross-machine TLS and other platforms are tracked separately."
+  ]
+}
