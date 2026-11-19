@@ -79,7 +79,9 @@ _DETACH = '\x1d'
 _START_PASTE = '\x1b[200~'
 _END_PASTE = '\x1b[201~'
 # ConPTY can emit Win32 key records even when the outer console receives VT bytes.
-_WIN32_KEY_DOWN = re.compile(r'\x1b\[[0-9]{0,5};[0-9]{0,5};(?:29|93);1;([0-9]{1,5});[0-9]{0,5}_$')
+_WIN32_KEY_DOWN = re.compile(r'\x1b\[[0-9]{0,5};[0-9]{0,5};([0-9]{1,5});1;([0-9]{1,5});[0-9]{0,5}_$')
+_CONTROL_KEYS = {'\x1d', '\x19', '\x0e'}
+_KEY_CODES = {29: '\x1d', 93: '\x1d', 25: '\x19', 89: '\x19', 121: '\x19', 14: '\x0e', 78: '\x0e', 110: '\x0e'}
 
 
 @dataclass(frozen=True, slots=True)
@@ -150,17 +152,18 @@ def _write(function, handle, data, unit_size):
         data = data[count.value * unit_size:]
 
 
-class _DetachKey:
-    """Separate Ctrl+] from bracketed pastes, across input reads."""
+class _TerminalKeys:
+    """Recognize control gestures outside bracketed pastes, across input reads."""
 
     def __init__(self):
         self._suffix = ''
         self._in_paste = False
 
-    def pressed(self, text):
+    def read(self, text):
+        keys = set()
         for character in text:
-            if character == _DETACH and not self._in_paste:
-                return True
+            if character in _CONTROL_KEYS and not self._in_paste:
+                keys.add(character)
             self._suffix = (self._suffix + character)[-40:]
             if self._suffix.endswith(_START_PASTE):
                 self._in_paste = True
@@ -169,10 +172,11 @@ class _DetachKey:
             elif character == '_' and not self._in_paste:
                 record = _WIN32_KEY_DOWN.search(self._suffix)
                 if record is not None:
-                    modifiers = int(record[1])
-                    if modifiers & 0x0c and not modifiers & 0x13:  # Ctrl and no Alt or Shift.
-                        return True
-        return False
+                    key = _KEY_CODES.get(int(record[1]))
+                    modifiers = int(record[2])
+                    if key is not None and modifiers & 0x0c and not modifiers & 0x13:  # Ctrl and no Alt or Shift.
+                        keys.add(key)
+        return keys
 
 
 class _Pump:
@@ -214,7 +218,7 @@ class _Pump:
                 _close_handle(self.handle)
 
 
-def run_viewer_terminal(argv, *, cwd, env):
+def run_viewer_terminal(argv, *, cwd, env, confirmation=None):
     """Run only the viewer in a private ConPTY and return after keyboard detach."""
     stdin = msvcrt.get_osfhandle(sys.stdin.fileno())
     stdout_fd = sys.stdout.fileno()
@@ -228,15 +232,18 @@ def run_viewer_terminal(argv, *, cwd, env):
     def read_keyboard():
         buffer = ct.create_string_buffer(2048)
         decode = codecs.getincrementaldecoder('utf-16-le')(errors='replace').decode
-        key = _DetachKey()
+        controls = _TerminalKeys()
         while not stopping.is_set():
             raw = _read(_read_console, stdin, buffer, len(buffer) // 2, 2)
             if stopping.is_set():
                 return
             text = decode(raw)
-            if not raw or key.pressed(text):
+            keys = controls.read(text)
+            if not raw or _DETACH in keys:
                 detach.set()
                 return
+            if confirmation is not None and confirmation.consume_keys(keys):
+                continue
             try:
                 keyboard.put_nowait(text.encode('utf-8'))
             except Full:

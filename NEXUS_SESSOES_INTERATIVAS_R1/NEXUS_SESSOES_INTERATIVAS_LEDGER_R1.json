@@ -578,7 +578,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si010-exact-promotion.md",
-        "execution/si010-dashboard-steer-api.md"
+        "execution/si010-dashboard-steer-api.md",
+        "execution/si024-codex-native-steer-confirmation.md",
+        "execution/si024-codex-native-steer-confirmation.json"
       ]
     },
     {
@@ -1035,7 +1037,9 @@
         "execution/si024-codex-native-input-windows.md",
         "execution/si024-codex-native-input-windows.json",
         "execution/si030-terminal-session-controls.md",
-        "execution/si030-terminal-session-controls.json"
+        "execution/si030-terminal-session-controls.json",
+        "execution/si024-codex-native-steer-confirmation.md",
+        "execution/si024-codex-native-steer-confirmation.json"
       ]
     },
     {
@@ -1163,7 +1167,9 @@
         "execution/si024-codex-native-input-windows.md",
         "execution/si024-codex-native-input-windows.json",
         "execution/si020-codex-keyboard-detach-windows.md",
-        "execution/si020-codex-keyboard-detach-windows.json"
+        "execution/si020-codex-keyboard-detach-windows.json",
+        "execution/si024-codex-native-steer-confirmation.md",
+        "execution/si024-codex-native-steer-confirmation.json"
       ]
     },
     {
@@ -2451,7 +2457,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si024-codex-controlled-windows.json",
-        "execution/si024-codex-busy-presentation.md"
+        "execution/si024-codex-busy-presentation.md",
+        "execution/si024-codex-native-steer-confirmation.md",
+        "execution/si024-codex-native-steer-confirmation.json"
       ]
     },
     {
@@ -2474,7 +2482,9 @@
         "execution/si024-codex-controlled-windows.json",
         "execution/si024-codex-busy-presentation.md",
         "execution/si024-codex-interrupt-queue-windows.json",
-        "execution/si024-codex-interrupt-queue-windows.md"
+        "execution/si024-codex-interrupt-queue-windows.md",
+        "execution/si024-codex-native-steer-confirmation.md",
+        "execution/si024-codex-native-steer-confirmation.json"
       ]
     },
     {

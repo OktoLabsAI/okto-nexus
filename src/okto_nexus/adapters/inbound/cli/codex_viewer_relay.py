@@ -7,6 +7,8 @@ import threading
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from functools import partial
+from queue import Empty, Full, Queue
 
 from nexus_connector_core.protocol import canonical_json, strict_json
 from wsproto import ConnectionType, WSConnection
@@ -31,6 +33,7 @@ from ....domain.presentation_protocol import (
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
 )
+from .native_input import display_text
 
 _CONNECT_SECONDS = 30
 _FRAME_SECONDS = 5
@@ -44,6 +47,46 @@ class CodexRelayEndpoint:
     token: str = field(repr=False)
     thread_id: str
     connected: threading.Event = field(repr=False, compare=False)
+
+
+class ViewerSteerConfirmation:
+    """Collect one explicit key choice outside the native viewer's input stream."""
+
+    def __init__(self, report):
+        self._report = report
+        self._lock = threading.Lock()
+        self._answer = None
+
+    def ask(self, turn_id, text, stop):
+        answer = Queue(maxsize=1)
+        with self._lock:
+            self._report('Reorient turn ' + display_text(turn_id) + ' with this message?\n'
+                         + display_text(text[:240]) + (' …' if len(text) > 240 else '')
+                         + '\nCtrl+Y confirms. Ctrl+N cancels. Ctrl+] detaches.')
+            self._answer = answer
+        try:
+            deadline = time.monotonic() + 30
+            while not stop.is_set() and time.monotonic() < deadline:
+                try:
+                    decision = answer.get(timeout=.1)
+                except Empty:
+                    continue
+                return decision and not stop.is_set()
+            return False
+        finally:
+            with self._lock:
+                self._answer = None
+
+    def consume_keys(self, keys):
+        with self._lock:
+            if self._answer is None:
+                return False
+            if keys & {'\x19', '\x0e'}:
+                try:
+                    self._answer.put_nowait('\x0e' not in keys)
+                except Full:
+                    pass
+            return True
 
 
 def _receive_events(peer, wire, stop, deadline, idle=None):
@@ -107,16 +150,21 @@ def _viewer(peer, wire, protocol, stop, link, report_input_status):
             request_id, pending = protocol.pending_delivery
             if pending.input_id is not None:
                 try:
-                    turn = link.confirm_input_delivery(pending.input_id)
+                    if pending.steer_target is not None:
+                        result = ({'turnId': pending.steer_target} if link.confirm_steer_delivery(pending.input_id)
+                                  else None)
+                    else:
+                        turn = link.confirm_input_delivery(pending.input_id)
+                        result = {'turn': turn} if turn is not None else None
                 except CodexInputStatus as status:
                     if stop.is_set():
                         return
                     protocol.pending_delivery = (request_id, CodexPendingInput(None, str(status)))
                     report_input_status(str(status))
                 else:
-                    if turn is not None:
+                    if result is not None:
                         protocol.pending_delivery = None
-                        _reply(peer, wire, {'id': request_id, 'result': {'turn': turn}})
+                        _reply(peer, wire, {'id': request_id, 'result': result})
         for frame in link.updates(protocol.context.thread_id):
             if stop.is_set():
                 return
@@ -191,7 +239,7 @@ def _serve_once(listener, *, host, secret, protocol, stop, link, connected, repo
 
 
 @contextmanager
-def local_codex_relay(link, *, viewer_home, platform_os, report_input_status=lambda _: None):
+def local_codex_relay(link, *, viewer_home, platform_os, report_input_status=lambda _: None, confirmation=None):
     """Own one loopback socket and its Server link. The viewer gets its own secret."""
     context = link.viewer_context()
     with socket.create_server(('127.0.0.1', 0), backlog=2) as listener:
@@ -200,8 +248,11 @@ def local_codex_relay(link, *, viewer_home, platform_os, report_input_status=lam
         token = secrets.token_urlsafe(32)
         stop = threading.Event()
         connected = threading.Event()
+        writable = getattr(link, 'input_revision', None)
+        steer = (partial(link.steer, confirm=lambda turn, text: confirmation.ask(turn, text, stop))
+                 if writable and confirmation is not None else None)
         protocol = CodexViewerProtocol(context=context, read_page=link.page, viewer_home=viewer_home,
-            platform_os=platform_os, send_next_turn=link.send_next_turn if getattr(link, 'input_revision', None) else None)
+            platform_os=platform_os, send_next_turn=link.send_next_turn if writable else None, steer=steer)
 
         def serve():
             try:

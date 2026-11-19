@@ -14,7 +14,7 @@ from nexus_connector_core.discovery import candidate, discover_path
 
 from ....application.terminal_connection import ConnectionError
 from ....domain.presentation_protocol import CODEX_VIEWER_WINDOWS_SHA256
-from .codex_viewer_relay import local_codex_relay
+from .codex_viewer_relay import ViewerSteerConfirmation, local_codex_relay
 
 _AUTH_VARIABLE = 'NEXUS_CODEX_VIEWER_TOKEN'
 
@@ -78,8 +78,9 @@ def present_codex(link, executable):
             project = root / 'project'
             project.mkdir()
             environment = _environment(root / 'profile', f'http://127.0.0.1:{deny_proxy.getsockname()[1]}')
+            confirmation = ViewerSteerConfirmation(_report_input_status) if getattr(link, 'input_revision', None) else None
             with local_codex_relay(link, viewer_home=environment['CODEX_HOME'], platform_os='windows',
-                                   report_input_status=_report_input_status) as endpoint:
+                                   report_input_status=_report_input_status, confirmation=confirmation) as endpoint:
                 thread_id = str(UUID(endpoint.thread_id))
                 if thread_id != endpoint.thread_id:
                     raise ValueError('Invalid native session identity')
@@ -89,7 +90,7 @@ def present_codex(link, executable):
                     [str(executable), 'resume', thread_id, '--remote', endpoint.address,
                      '--remote-auth-token-env', _AUTH_VARIABLE, '--no-alt-screen',
                      '-c', 'check_for_update_on_startup=false', '-c', 'analytics.enabled=false'],
-                    cwd=project, env=environment,
+                    cwd=project, env=environment, confirmation=confirmation,
                 )
                 if not endpoint.connected.is_set() and not result.detached:
                     raise ConnectionError('VIEWER_NOT_ATTACHED', 'The Codex viewer did not connect to this presentation.')

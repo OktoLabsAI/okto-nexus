@@ -153,16 +153,16 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
 
 @pytest.mark.skipif(os.name != 'nt', reason='Windows console input')
 def test_detach_key_distinguishes_paste_and_other_win32_key_events():
-    from okto_nexus.adapters.inbound.cli.windows_viewer_terminal import _DetachKey
+    from okto_nexus.adapters.inbound.cli.windows_viewer_terminal import _TerminalKeys
 
-    key = _DetachKey()
-    assert not key.pressed('\x1b[20')
-    assert not key.pressed('0~paste\x1d\x1b[221;27;29;1;8;1_\x1b[201~')
-    assert not key.pressed('\x1b[221;27;29;0;8;1_\x1b[221;27;93;1;9;1_')
-    assert not key.pressed('\x1b[67;46;3;1;8;1_')
-    assert not key.pressed('\x1b[221;27;29;1;')
-    assert key.pressed('8;1_')
-    assert _DetachKey().pressed('\x1d')
+    key = _TerminalKeys()
+    assert not key.read('\x1b[20')
+    assert not key.read('0~paste\x1d\x1b[221;27;29;1;8;1_\x1b[201~')
+    assert not key.read('\x1b[221;27;29;0;8;1_\x1b[221;27;93;1;9;1_')
+    assert not key.read('\x1b[67;46;3;1;8;1_')
+    assert not key.read('\x1b[221;27;29;1;')
+    assert key.read('8;1_') == {'\x1d'}
+    assert _TerminalKeys().read('\x1d\x1b[89;21;25;1;8;1_\x0e') == {'\x1d', '\x19', '\x0e'}
 
 
 def test_terminal_steer_recovers_original_receipt_after_response_loss(monkeypatch, capsys):

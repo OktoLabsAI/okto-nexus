@@ -487,3 +487,32 @@ def test_native_next_turn_accepts_only_exact_plain_text_and_keeps_steer_separate
     following = request | {'id': 5, 'params': params | {'clientUserMessageId': '766bc061-86e2-4df3-a032-faafb16b3987'}}
     assert 'preceding message' in protocol.handle(following)['error']['message']
     assert protocol.pending_delivery[0] == 3 and len(recorded) == 1
+
+
+def test_native_steer_projects_only_the_exact_turn_and_text(tmp_path):
+    calls = []
+    target = 'cb17abba-cc2d-4d15-86fc-bc4d802f14ed'
+    message_id = '24447be9-beb8-47a4-ace2-a734561c7b88'
+
+    def steer(**kwargs):
+        calls.append(kwargs)
+        return CodexPendingInput('record', 'Reorientation recorded', steer_target=target)
+
+    protocol = CodexViewerProtocol(context=viewer_context(tmp_path), viewer_home=str(tmp_path), platform_os='windows',
+        read_page=lambda **_: {'data': [], 'nextCursor': None}, send_next_turn=lambda **_: pytest.fail('Unexpected send'),
+        steer=steer)
+    protocol.handle({'id': 1, 'method': 'initialize'})
+    protocol.handle({'id': 2, 'method': 'thread/read', 'params': {'threadId': THREAD, 'includeTurns': True}})
+    body = {'threadId': THREAD, 'expectedTurnId': target, 'clientUserMessageId': message_id,
+            'input': [{'type': 'text', 'text': 'Use the other file', 'text_elements': []}]}
+    request = {'id': 3, 'method': 'turn/steer', 'params': body}
+    for change in ({'threadId': target}, {'expectedTurnId': 'latest'}, {'additionalContext': []}, {'input': []}):
+        assert 'error' in protocol.handle(request | {'params': body | change})
+    assert not calls
+    assert protocol.handle(request) is None
+    assert calls == [{'thread_id': THREAD, 'turn_id': target, 'intent': 'codex_steer_' + message_id,
+                      'text': 'Use the other file'}]
+    assert protocol.pending_delivery[1].steer_target == target
+    protocol.pending_delivery = None
+    assert 'reviewed for reorientation' in protocol.handle({'id': 4, 'method': 'turn/start',
+        'params': {key: value for key, value in body.items() if key != 'expectedTurnId'}})['error']['message']

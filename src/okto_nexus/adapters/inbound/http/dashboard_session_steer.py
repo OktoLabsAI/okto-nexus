@@ -46,6 +46,23 @@ from .session_interaction_contract import (
 )
 
 
+def review_exact_steer(uow, scope, revision_for):
+    queue = uow.connection.execute("""
+        SELECT revision,paused_owner_generation FROM session_interaction_queues
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+    """, asdict(scope.session)).fetchone()
+    if (revision_for is None or (queue and queue['paused_owner_generation'] is not None)
+            or has_unresolved_interrupt(uow.connection, scope.session)):
+        return None
+    turn = active_native_turn(uow, scope, current_next_turn_revision=revision_for)
+    revisions = steer_effect_revisions(turn) if turn is not None else None
+    if turn is None or revisions is None:
+        return None
+    return SteerTargetView(target=NativeTurnTarget(kind='native_turn', turn_id=turn.native_id),
+        capability_revision=revisions[0], effect_revision=revisions[1], queue_revision=queue['revision'] if queue else 0,
+        effect='same_turn')
+
+
 async def steer_response(session_id, body, request, operation, arguments, *, surface='web'):
     if not getattr(request.state, 'operator_session', False):
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to reorient a turn.')
@@ -99,21 +116,7 @@ def build_router():
         def read():
             with factory.unit_of_work(write=False) as uow:
                 _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
-                control = None
-                queue = uow.connection.execute("""
-                    SELECT revision,paused_owner_generation FROM session_interaction_queues
-                    WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
-                """, asdict(scope.session)).fetchone()
-                if (options and (queue is None or queue['paused_owner_generation'] is None)
-                        and not has_unresolved_interrupt(uow.connection, scope.session)):
-                    turn = active_native_turn(uow, scope,
-                        current_next_turn_revision=options['session_input_capability_revision'])
-                    revisions = steer_effect_revisions(turn) if turn is not None else None
-                    if revisions and turn is not None:
-                        control = SteerTargetView(
-                            target=NativeTurnTarget(kind='native_turn', turn_id=turn.native_id),
-                            capability_revision=revisions[0], effect_revision=revisions[1],
-                            queue_revision=queue['revision'] if queue else 0, effect='same_turn')
+                control = review_exact_steer(uow, scope, options.get('session_input_capability_revision'))
                 queued_input = None
                 if control is not None and input_id is not None:
                     auth = state.operator_auth

@@ -150,7 +150,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     print(f'Opening {mode} for {display_text(scope["session_id"])} '
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
     if writer:
-        print('Enter sends plain text when idle. During a turn, use Nexus for durable queue input or explicit reorientation.')
+        print('Enter sends plain text when idle and opens a reorientation review during a turn.')
+        print('Use Nexus to put a message in the durable queue while the turn runs.')
         print('Tab retains text in this viewer until it can send.')
     print('Press Ctrl+] to detach from this session.', flush=True)
     with open_local_presentation(call, scope=scope, expected_session_generation=generation,

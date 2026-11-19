@@ -1,0 +1,43 @@
+{
+  "tasks": ["SI-010", "SI-021", "SI-024"],
+  "scope": "Local reviewed Codex frontend on Windows, using the exact running app-server in an isolated Nexus project",
+  "test_scope": {"SI-T-C02": "additional controlled evidence", "SI-T-C03": "additional race and no-fallback evidence"},
+  "artifacts": {
+    "directory": "%TEMP%/nexus-si-native-steer-build-5490413ffe9d4b6e907ac53605e499bb",
+    "nexus_wheel_sha256": "a44c69dfb158a0416f0939102e33a9b228fbc3251ae720362001b61548b3f7c0",
+    "nexus_sdist_sha256": "f99064ead6f61e00b89acc6ce2ab7eb1577ecae026d8738e75cb9a6b2692d2cc",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "strict_twine": "PASS",
+    "changed_application_modules_matched_to_wheel": 9
+  },
+  "supporting_regressions": {"source": 40, "installed": 40, "ruff": "PASS"},
+  "native_case": {
+    "fixture": "%TEMP%/nexus-si-native-steer-qualified-1b162c12bc574eee8044fd5f72b84dba/test_native_steer.py",
+    "fixture_sha256": "3d7185687153b6840b517a40570924b59083df3a9b0a6dd28cdab7f1c5b86874",
+    "installed_run": "%TEMP%/nexus-si-native-steer-installed-b59d55ee7c7d4933aa962191adfe0b35",
+    "frontend": "Codex 0.170.0",
+    "frontend_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "source_result": "PASS",
+    "installed_result": "PASS",
+    "observations_per_run": {
+      "cancel_no_effect": true,
+      "cancelled_input_did_not_run_after_turn_completion": true,
+      "stale_queue_review_refused_without_fallback": true,
+      "approved_text_observed_in_exact_turn_by_loopback_peer": true,
+      "native_turn_starts": 2,
+      "native_steers": 1,
+      "native_interrupts": 0,
+      "external_provider_calls": 0
+    },
+    "sqlite_after_installed_shutdown": {
+      "operations": {"runtime.close": 1, "runtime.open": 1, "turn.steer": 1, "turn.submit": 2},
+      "inputs": [{"surface": "web", "status": "QUEUED"}, {"surface": "native_terminal", "status": "DISPATCHING"}],
+      "control_surfaces": {"native_terminal": 1},
+      "closed_sessions": 1,
+      "detached_attachments": 3
+    }
+  },
+  "limitations": ["Durable native steer consumption was unconfirmed", "No remote presentation or provider campaign", "No human input or assistive technology test"]
+}

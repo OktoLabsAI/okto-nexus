@@ -37,12 +37,26 @@ def _plain_next_turn(params, context):
             or any(params.get(key) not in (None, value) for key, value in defaults.items())
             or not isinstance(inputs, list) or len(inputs) != 1):
         raise ValueError('The viewer changed the selected thread or launch options.')
-    item = inputs[0]
+    return 'codex_' + identity, _plain_text(inputs[0])
+
+
+def _plain_text(item):
     if (not isinstance(item, dict) or item.keys() - {'type', 'text', 'text_elements'}
             or item.get('type') != 'text' or type(item.get('text')) is not str
             or item.get('text_elements', []) != [] or item['text'].lstrip().startswith(('/', '!'))):
         raise ValueError('Send a plain-text message with no attachments or commands.')
-    return 'codex_' + identity, validate_input_text(item['text'])
+    return validate_input_text(item['text'])
+
+
+def _plain_steer(params, context):
+    metadata = {'responsesapiClientMetadata', 'responsesapiClientMetadataPatch', 'additionalContext'}
+    identity, target, content = (params.get(key) for key in ('clientUserMessageId', 'expectedTurnId', 'input'))
+    if (params.get('threadId') != context.thread_id or not _exact_uuid(identity, identity)
+            or not _exact_uuid(target, target) or any(params.get(key) is not None for key in metadata)
+            or params.keys() - metadata - {'threadId', 'expectedTurnId', 'clientUserMessageId', 'input'}
+            or not isinstance(content, list) or len(content) != 1):
+        raise ValueError('Reorientation requires the exact active turn and a plain-text message.')
+    return 'codex_steer_' + identity, target, _plain_text(content[0])
 
 
 class CodexInputStatus(Exception):
@@ -53,6 +67,7 @@ class CodexInputStatus(Exception):
 class CodexPendingInput:
     input_id: str | None
     message: str
+    steer_target: str | None = None
 
 
 def _printable(value: str) -> str:
@@ -116,16 +131,18 @@ class CodexViewerProtocol:
     """Terminate native RPC locally and project reviewed reads and input."""
 
     def __init__(self, *, context: CodexViewerContext, read_page, viewer_home: str, platform_os: str,
-                 send_next_turn=None):
+                 send_next_turn=None, steer=None):
         self.context = context
         self._read_page = read_page
         self._viewer_home = viewer_home
         self._platform_os = platform_os
         self._send_next_turn = send_next_turn
+        self._steer = steer
         self._initialized = False
         self.detached = False
         self.following = False
         self.pending_delivery = None
+        self._steer_message_ids = set()
 
     def handle(self, request):
         if (not isinstance(request, dict) or request.keys() - {'jsonrpc', 'id', 'method', 'params'}
@@ -172,9 +189,20 @@ class CodexViewerProtocol:
                     intent, text = _plain_next_turn(params, self.context)
                 except ValueError as error:
                     raise CodexInputStatus(str(error)) from None
+                if params['clientUserMessageId'] in self._steer_message_ids:
+                    raise CodexInputStatus('This message was reviewed for reorientation. Send a new message explicitly to queue it.')
                 return self._send_next_turn(thread_id=self.context.thread_id, intent=intent, text=text)
             if method == 'turn/steer':
-                raise CodexInputStatus('Review and confirm reorientation in Nexus for the selected turn.')
+                if not self.following or self._steer is None or self.pending_delivery is not None:
+                    raise CodexInputStatus('Review and confirm reorientation in Nexus for the selected turn.')
+                try:
+                    intent, turn_id, text = _plain_steer(params, self.context)
+                except ValueError as error:
+                    raise CodexInputStatus(str(error)) from None
+                if len(self._steer_message_ids) >= 4096:
+                    raise CodexInputStatus('Reopen this presentation to review another reorientation.')
+                self._steer_message_ids.add(params['clientUserMessageId'])
+                return self._steer(thread_id=self.context.thread_id, turn_id=turn_id, intent=intent, text=text)
         if method in THREAD_METHODS:
             request = codex_thread_presentation(method=method, params=params, native_thread_id=self.context.thread_id)
             thread = self.context.thread()

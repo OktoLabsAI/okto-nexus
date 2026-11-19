@@ -186,6 +186,44 @@ class _LocalPresenter:
             return turn
         return None
 
+    def steer(self, *, thread_id, turn_id, intent, text, confirm):
+        try:
+            review = self._request('steer_review', thread_id=thread_id, turn_id=turn_id,
+                                  client_intent_id=intent, content={'type': 'text', 'text': text})
+        except ConnectionError:
+            raise CodexInputStatus('The exact reorientation review is unavailable.') from None
+        review_id = review.get('review_id')
+        if (not isinstance(review_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]{32}', review_id)
+                or review.get('turn_id') != turn_id):
+            raise CodexInputStatus('The selected turn is unavailable for reorientation.')
+        if not confirm(turn_id, text):
+            raise CodexInputStatus('Reorientation cancelled.')
+        try:
+            result = self._request('steer_confirm', review_id=review_id)
+        except ConnectionError:
+            return CodexPendingInput(None, 'Reorientation is unconfirmed. Check the Nexus session before trying again.')
+        if result.get('status') == 'refused':
+            raise CodexInputStatus('The reorientation review is no longer valid. Your message was not sent.')
+        input_id = result.get('input_id')
+        if result.get('status') != 'recorded' or not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id):
+            return CodexPendingInput(None, 'Reorientation is unconfirmed. Check the Nexus session before trying again.')
+        return CodexPendingInput(input_id, 'Reorientation recorded for the selected turn. Native confirmation is pending.',
+                                 steer_target=turn_id)
+
+    def confirm_steer_delivery(self, input_id):
+        try:
+            result = self._request('input_delivery', input_id=input_id)
+            if result.get('input_id') != input_id:
+                raise _unavailable()
+            status = InputDeliveryState(result['status'])
+        except (ConnectionError, KeyError, ValueError):
+            raise CodexInputStatus('Reorientation recorded. Check the Nexus session for its delivery status.') from None
+        if status in (InputDeliveryState.QUEUED, InputDeliveryState.DISPATCHING):
+            return False
+        if status is InputDeliveryState.ACCEPTED_NATIVE:
+            return True
+        raise CodexInputStatus('Reorientation recorded. Check the Nexus session for its delivery status.')
+
     def _request(self, kind, *, flat=False, **payload):
         self._request_id += 1
         try:

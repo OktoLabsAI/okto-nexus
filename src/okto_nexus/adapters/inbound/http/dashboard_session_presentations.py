@@ -1,6 +1,7 @@
 """Local operator transport for a scoped Codex presenter."""
 
 import secrets
+import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from functools import partial
@@ -14,11 +15,13 @@ from nexus_connector_core import CoreError, NativeSessionOwnerProof
 from nexus_connector_core.protocol import canonical_json, strict_json
 from pydantic import Field, TypeAdapter
 
+from ....adapters.outbound.execution.core_inventory import protocol_info
 from ....application.codex_presenter_channel import CodexPresenterHistoryChannel
 from ....application.codex_viewer_protocol import CodexViewerContext
 from ....application.execution_native_session_mapping import ManagedNativeSession
 from ....application.session_attachment_broker import SessionAttachmentBroker
 from ....application.session_interaction_authority import enqueue_human_input
+from ....application.session_interaction_promotion import steer_human_input
 from ....domain.presentation_protocol import (
     LOCAL_CODEX_AUDIENCE,
     MAX_PRESENTATION_REQUEST_BYTES,
@@ -28,6 +31,7 @@ from ....domain.presentation_protocol import (
 from ....domain.session_interaction import InputAuthor, InputScope
 from ....errors import ErrorCode, OktoNexusError
 from .dashboard_session_input import _HEADERS, _error, _runtime_error
+from .dashboard_session_steer import review_exact_steer
 from .executor_link import _safe_transport
 from .operator_auth import COOKIE, same_origin_request
 from .session_interaction_contract import (
@@ -35,6 +39,7 @@ from .session_interaction_contract import (
     PrepareAttachment,
     Revision,
     ScopedSession,
+    SteerTargetView,
     TextInput,
     _Document,
 )
@@ -98,7 +103,31 @@ class _InputDeliveryRequest(_Document):
     input_id: Identifier
 
 
-_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest | _InputDeliveryRequest,
+class _SteerReviewRequest(_Document):
+    kind: Literal['steer_review']
+    request_id: Revision
+    thread_id: Identifier
+    turn_id: Identifier
+    client_intent_id: Identifier
+    content: TextInput
+
+
+class _SteerConfirmRequest(_Document):
+    kind: Literal['steer_confirm']
+    request_id: Revision
+    review_id: Identifier
+
+
+@dataclass(frozen=True, slots=True)
+class _ReviewedSteer:
+    id: str
+    expires: float
+    request: _SteerReviewRequest
+    target: SteerTargetView
+
+
+_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest
+                                 | _InputDeliveryRequest | _SteerReviewRequest | _SteerConfirmRequest,
                                  Field(discriminator='kind')])
 
 
@@ -169,6 +198,54 @@ def _services(state):
     return getattr(state, 'local_codex_presentations', None)
 
 
+def _verify_writer(state, services, active, uow, human):
+    if _services(state) is not services:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The presentation owner changed.', {})
+    services.broker.require_writer_effect(uow, human, **active)
+
+
+async def _review_steer(services, active, history, request):
+    if active['attachment'].access != 'write' or services.next_turn_revision is None:
+        return None
+    await history.verify_input_thread(request.thread_id)
+
+    def read():
+        with services.broker.factory.unit_of_work(write=False) as uow:
+            return review_exact_steer(uow, active['scope'], services.next_turn_revision)
+
+    target = await _worker(read)
+    if target is None or target.target.turn_id != request.turn_id:
+        return None
+    return _ReviewedSteer(secrets.token_urlsafe(24), time.monotonic() + 45, request, target)
+
+
+async def _confirm_steer(state, services, active, history, review, request):
+    revisions = getattr(state, 'session_input_dispatch_options', {}).get('session_steer_revisions')
+    if review is None or request.review_id != review.id or time.monotonic() >= review.expires or revisions is None:
+        return {'status': 'refused'}
+    await history.verify_input_thread(review.request.thread_id)
+
+    def cut(uow, human):
+        if time.monotonic() >= review.expires:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The reorientation review expired.', {})
+        _verify_writer(state, services, active, uow, human)
+
+    try:
+        receipt = await _worker(steer_human_input, factory=services.broker.factory,
+            access=services.execution_access, authority_fence=services.broker.authority_fence,
+            current_steer_revisions=revisions, scope=active['scope'], author=active['author'],
+            client_intent_id=review.request.client_intent_id, native_turn_id=review.request.turn_id,
+            capability_revision=review.target.capability_revision, confirmed_effect_revision=review.target.effect_revision,
+            expected_queue_revision=review.target.queue_revision, text=review.request.content.text,
+            fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
+            verify_presenter=cut)
+    except OktoNexusError as error:
+        if error.code in (ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED, ErrorCode.VALIDATION_ERROR, ErrorCode.NOT_FOUND):
+            return {'status': 'refused'}
+        raise
+    return {'status': 'recorded', 'input_id': receipt.input_id}
+
+
 async def _enqueue(state, services, active, history, request):
     broker = services.broker
     if active['attachment'].access != 'write' or services.next_turn_revision is None:
@@ -176,9 +253,7 @@ async def _enqueue(state, services, active, history, request):
     await history.verify_input_thread(request.thread_id)
 
     def verify_presenter(uow, human):
-        if _services(state) is not services:
-            raise OktoNexusError(ErrorCode.CONFLICT, 'The presentation owner changed.', {})
-        broker.require_writer_effect(uow, human, **active)
+        _verify_writer(state, services, active, uow, human)
 
     receipt = await _worker(enqueue_human_input, factory=broker.factory, access=services.execution_access,
         authority_fence=broker.authority_fence, current_capability_revision=services.next_turn_revision,
@@ -213,6 +288,7 @@ async def _present(ws, services, author, attachment_id, ticket):
         history = CodexPresenterHistoryChannel(broker=broker, prove_owner=services.prove_owner,
                                               access=services.execution_access, **active)
         next_renewal = anyio.current_time() + _RENEW_SECONDS
+        reviewed = None
         while _services(ws.app.state) is services:
             with anyio.move_on_after(max(0, next_renewal - anyio.current_time())) as deadline:
                 raw = await _receive(ws)
@@ -234,6 +310,14 @@ async def _present(ws, services, author, attachment_id, ticket):
                 reply = await _enqueue(ws.app.state, services, active, history, request)
             elif isinstance(request, _InputDeliveryRequest):
                 reply = {'kind': 'input_delivery', 'input_delivery': await history.input_delivery(request.input_id)}
+            elif isinstance(request, _SteerReviewRequest):
+                reviewed = await _review_steer(services, active, history, request)
+                control = {'review_id': reviewed.id, 'turn_id': request.turn_id} if reviewed else {}
+                reply = {'kind': 'steer_review', 'steer_review': control}
+            elif isinstance(request, _SteerConfirmRequest):
+                review, reviewed = reviewed, None
+                control = await _confirm_steer(ws.app.state, services, active, history, review, request)
+                reply = {'kind': 'steer_confirm', 'steer_confirm': control}
             else:
                 if not services.live_updates:
                     raise ValueError('Presentation updates are unavailable')
