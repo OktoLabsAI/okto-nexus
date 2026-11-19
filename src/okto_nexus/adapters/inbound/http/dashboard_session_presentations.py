@@ -102,7 +102,7 @@ class RemoteCodexPresentations:
     source: object
     execution_access: object
     live_updates: bool = True
-    next_turn_revision: None = None
+    next_turn_revision: Callable[[object, InputScope], str | None] | None = None
 
     async def prove_owner(self, scope, *, author):
         return await self.source.prove(scope, author=author)
@@ -346,7 +346,7 @@ def _matching_presenter(mapping, *, pi: bool) -> bool:
     return mapping.adapter_id == 'pi_rpc' if pi else mapping.codex_thread_id is not None
 
 
-def _verify_writer(state, services, active, uow, human, *, presentation='codex'):
+def _verify_writer(state, services, active, uow, human, *, presentation):
     if _services(state, presentation) is not services:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The presentation owner changed.', {})
     services.broker.require_writer_effect(uow, human, **active)
@@ -369,7 +369,7 @@ async def _review_turn(state, services, active, history, request):
     return _ReviewedTurn(secrets.token_urlsafe(24), time.monotonic() + 45, request, target)
 
 
-async def _confirm_turn(state, services, active, history, review, request):
+async def _confirm_turn(state, services, active, history, review, request, *, presentation):
     if (review is None or request.review_id != review.id or time.monotonic() >= review.expires
             or (request.kind == 'steer_confirm') != isinstance(review.request, _SteerReviewRequest)):
         return {'status': 'refused'}
@@ -378,7 +378,7 @@ async def _confirm_turn(state, services, active, history, review, request):
     def cut(uow, human):
         if time.monotonic() >= review.expires:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The turn review expired.', {})
-        _verify_writer(state, services, active, uow, human)
+        _verify_writer(state, services, active, uow, human, presentation=presentation)
 
     common = {'factory': services.broker.factory, 'access': services.execution_access,
         'authority_fence': services.broker.authority_fence, 'scope': active['scope'], 'author': active['author'],
@@ -405,11 +405,11 @@ async def _confirm_turn(state, services, active, history, review, request):
     return {'status': 'recorded', 'input_id': receipt.input_id}
 
 
-async def _enqueue(state, services, active, history, request):
+async def _enqueue(state, services, active, history, request, *, presentation):
     if active['attachment'].access != 'write' or services.next_turn_revision is None:
         raise ValueError('This presentation cannot enqueue input')
     await history.verify_input_thread(request.thread_id)
-    return await _record_presenter_input(state, services, active, request, presentation='codex')
+    return await _record_presenter_input(state, services, active, request, presentation=presentation)
 
 
 async def _record_presenter_input(state, services, active, request, *, presentation):
@@ -721,7 +721,8 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                 next_renewal = anyio.current_time() + _RENEW_SECONDS
                 continue
             request = _REQUEST.validate_python(raw)
-            if remote and not isinstance(request, (_ContextRequest, _HistoryRequest, _UpdatesRequest)):
+            if (remote and attachment.access == 'read'
+                    and not isinstance(request, (_ContextRequest, _HistoryRequest, _UpdatesRequest))):
                 raise ValueError('Remote Codex presentation is read-only')
             if isinstance(request, _ContextRequest):
                 if read_context is None:
@@ -733,7 +734,7 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                 page = await history.page(method=request.method, params=request.params)
                 reply = {'kind': 'page', 'page': page}
             elif isinstance(request, _EnqueueRequest):
-                reply = await _enqueue(ws.app.state, services, active, history, request)
+                reply = await _enqueue(ws.app.state, services, active, history, request, presentation=presentation)
             elif isinstance(request, _InputDeliveryRequest):
                 reply = {'kind': 'input_delivery', 'input_delivery': await history.input_delivery(request.input_id)}
             elif isinstance(request, _TurnReviewRequest):
@@ -742,7 +743,8 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                 reply = {'kind': request.kind, request.kind: control}
             elif isinstance(request, _TurnConfirmRequest):
                 review, reviewed = reviewed, None
-                control = await _confirm_turn(ws.app.state, services, active, history, review, request)
+                control = await _confirm_turn(ws.app.state, services, active, history, review, request,
+                                              presentation=presentation)
                 reply = {'kind': request.kind, request.kind: control}
             elif isinstance(request, _InterruptReceiptRequest):
                 receipt = await history.interrupt_receipt(thread_id=request.thread_id, intent=request.client_intent_id,
@@ -804,8 +806,8 @@ def build_router():
             if (reviewed != await _worker(review_capability, **authority)
                     or _services(state, body.presentation) is not services):
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
-            strategy = 'codex_remote_read' if body.presentation == 'codex_remote' else f'{body.presentation}_local_read'
-            details = {'attach_strategy': strategy, 'capability_revision': reviewed}
+            strategy = 'codex_remote' if body.presentation == 'codex_remote' else f'{body.presentation}_local'
+            details = {'attach_strategy': f'{strategy}_read', 'capability_revision': reviewed}
             if writing:
                 def input_revision():
                     with services.broker.factory.unit_of_work(write=False) as uow:
@@ -814,7 +816,7 @@ def build_router():
                 revision = await _worker(input_revision)
                 if revision is None or _services(state, body.presentation) is not services:
                     raise CoreError('SESSION_CONFLICT', 'native_presentation')
-                details = {'attach_strategy': f'{body.presentation}_local_write', 'capability_revision': reviewed.capability_revision,
+                details = {'attach_strategy': f'{strategy}_write', 'capability_revision': reviewed.capability_revision,
                     'writer_epoch': reviewed.epoch, 'writer_occupied': reviewed.occupied,
                     'input_capability_revision': revision}
         except OktoNexusError as error:

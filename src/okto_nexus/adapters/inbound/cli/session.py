@@ -36,14 +36,12 @@ from .quick_connect_project import local_executor, project_context
 from .service import resolve_local_service
 from .session_commands import (
     COMMANDS,
-    INTENT,
-    PI_INPUT_INTENT,
     PI_INTERRUPT_INTENT,
-    PI_STEER_INTENT,
     execute_session_command,
     recover_pi_input,
     recover_pi_interrupt,
     recover_session_command,
+    valid_receipt_intent,
 )
 from .terminal_target import resolve_terminal_target, terminal_target_selection
 from .work import open_work
@@ -177,9 +175,9 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
     remote = selected.get('executor_kind') == 'remote'
-    if remote and (write or binding.get('adapter_id') != 'codex_app_server'):
+    if remote and binding.get('adapter_id') != 'codex_app_server':
         raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE',
-                              'This Connector supports a read-only Codex viewer for the selected session.')
+                              'Remote terminal attachment is unavailable for this harness.')
     if binding.get('adapter_id') == 'pi_rpc':
         if viewer_executable is not None or write and sys.platform != 'win32':
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')
@@ -227,7 +225,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     revision = writer.capability_revision if writer else reviewed
     if not _approve_writer_transfer(writer):
         return None
-    mode = 'read-only remote Codex' if remote else ('Codex with session input' if writer else 'read-only Codex')
+    viewer = 'remote Codex' if remote else 'Codex'
+    mode = f'{viewer} with session input' if writer else f'read-only {viewer}'
     print(f'Opening {mode} for {display_text(scope["session_id"])} '
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
     if writer:
@@ -236,15 +235,28 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         print('Use Nexus to put a message in the durable queue while the turn runs.')
         print('Tab retains text in this viewer until it can send.')
     print('Press Ctrl+] to detach from this session.', flush=True)
-    with open_local_presentation(call, scope=scope, expected_session_generation=generation,
-                                 capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
-                                 **({'remote': True} if remote else {}),
-                                 **({'writer': writer} if writer else {})) as link:
-        print('Presentation ' + link.attachment_id, flush=True)
-        present_codex(link, executable)
+    last_intent = None
+
+    def show_receipt_reference(intent):
+        nonlocal last_intent
+        last_intent = intent
+        print(f'Receipt reference: --session-id {display_text(scope["session_id"])} '
+              f'--owner-generation {generation} --intent {display_text(intent)}', file=sys.stderr, flush=True)
+
+    try:
+        with open_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                     capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
+                                     **({'remote': True} if remote else {}),
+                                     **({'writer': writer} if writer else {}),
+                                     **({'on_intent': show_receipt_reference} if remote and writer else {})) as link:
+            print('Presentation ' + link.attachment_id, flush=True)
+            present_codex(link, executable)
+    finally:
+        if last_intent is not None:
+            show_receipt_reference(last_intent)
     _display({'state': 'detached'}, False)
     print('Session ' + display_text(scope['session_id']))
-    strategy = 'codex_remote_read' if remote else ('codex_local_write' if writer else 'codex_local_read')
+    strategy = f"codex_{'remote' if remote else 'local'}_{'write' if writer else 'read'}"
     return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
             'attach_strategy': strategy, 'capability_revision': revision}
 
@@ -328,7 +340,7 @@ def run_session(argv):
     parser.add_argument('--intent', help='terminal request identifier for receipt recovery')
     parser.add_argument('--owner-generation', type=int, help='original session owner generation for receipt recovery')
     parser.add_argument('--viewer-executable', type=Path, help='absolute path to the reviewed local viewer')
-    parser.add_argument('--write', action='store_true', help='enable plain-text input for a supported local viewer')
+    parser.add_argument('--write', action='store_true', help='enable plain-text input for a supported viewer')
     parser.add_argument('--json', action='store_true')
     args, service_args = parser.parse_known_args(argv)
     if args.workspace_id and not args.connect_id:
@@ -348,8 +360,7 @@ def run_session(argv):
     if args.action in COMMANDS and args.json:
         parser.error('write actions require terminal confirmation')
     if args.action == 'receipt':
-        if (args.intent is None or not (INTENT.fullmatch(args.intent) or PI_INPUT_INTENT.fullmatch(args.intent)
-                                       or PI_STEER_INTENT.fullmatch(args.intent) or PI_INTERRUPT_INTENT.fullmatch(args.intent))
+        if (not valid_receipt_intent(args.intent)
                 or not 0 < (args.owner_generation or 0) < 2**63):
             parser.error('receipt requires the terminal --intent and original --owner-generation')
     elif args.intent is not None or args.owner_generation is not None:

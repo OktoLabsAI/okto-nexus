@@ -75,16 +75,20 @@ class RemoteCodexPresentation:
             raise CoreError('CAPABILITY_UNSUPPORTED', 'remote_presentation')
         return mapping, lease_scope, link
 
-    def reader_revision(self, uow, scope, author, access, audience):
-        if author.surface != 'native_terminal' or access != 'read' or audience != REMOTE_CODEX_AUDIENCE:
+    def capability_revision(self, uow, scope, author, access, audience, *, next_turn_revision):
+        if author.surface != 'native_terminal' or access not in ('read', 'write') or audience != REMOTE_CODEX_AUDIENCE:
             return None
         try:
             mapping, lease_scope, link = self._select(uow, scope)
         except (CoreError, OktoNexusError):
             return None
-        return 'sha256:' + digest({'mapping': asdict(mapping), 'lease_scope': lease_scope,
-                                  'link': link.instance, 'viewer': CODEX_VIEWER_WINDOWS_SHA256,
-                                  'audience': audience})
+        context = {'mapping': asdict(mapping), 'lease_scope': lease_scope, 'link': link.instance,
+                   'viewer': CODEX_VIEWER_WINDOWS_SHA256, 'audience': audience}
+        if access == 'write':
+            if next_turn_revision is None or (revision := next_turn_revision(uow, scope)) is None:
+                return None
+            context.update(access=access, next_turn_revision=revision)
+        return 'sha256:' + digest(context)
 
     async def prove(self, scope, *, author):
         mapping, lease_scope, link = await asyncio.to_thread(self._authorize, scope, author)

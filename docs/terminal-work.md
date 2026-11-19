@@ -42,17 +42,31 @@ continue that session. Entering a new message is a separate action.
 ## Follow a Codex session hosted by Connector
 
 Use a saved human operator login for the Nexus server and select the exact
-workspace, Harness ID and session. The read-only viewer requires the reviewed
+workspace, Harness ID and session. The viewer requires the reviewed
 Codex 0.170.0 Windows x64 frontend and a compatible Connector-hosted app-server.
 
 ```sh
 okto-nexus session attach --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --write --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
+
+The default is read-only. `--write` also requires current Connector capacity
+and an execution grant for the selected session. Enter while idle records plain
+text in the Nexus queue. During a turn, Enter reviews reorientation and Esc
+reviews interruption. Confirming interruption pauses the queue. Nexus can also
+queue a message for the next turn while the harness is busy.
 
 Press Ctrl+] to detach. The session keeps its working directory, queue and
 running turn on the Connector host. After a lost connection, run the same
-command to follow the same session from its committed history. Use the
-operator's Nexus server address over HTTPS from another machine.
+command to follow the same session from its committed history. If the status of
+a request is unclear, use the receipt reference printed in the terminal and
+the original operator login before sending again.
+
+```sh
+okto-nexus session receipt --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
+```
+
+Use the operator's Nexus server address over HTTPS from another machine.
 
 ## Native Pi viewer on Windows
 

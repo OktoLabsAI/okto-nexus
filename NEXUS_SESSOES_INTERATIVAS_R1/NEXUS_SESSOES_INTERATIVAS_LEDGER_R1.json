@@ -1083,7 +1083,9 @@
         "execution/si022-remote-codex-context.md",
         "execution/si022-remote-codex-context.json",
         "execution/si022-codex-remote-attach.md",
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si022-codex-remote-writer.md",
+        "execution/si022-codex-remote-writer.json"
       ]
     },
     {
@@ -1502,7 +1504,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si022-codex-remote-attach.md",
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si022-codex-remote-writer.md",
+        "execution/si022-codex-remote-writer.json"
       ]
     },
     {
@@ -4399,7 +4403,8 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si022-remote-codex-context.json",
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si022-codex-remote-writer.json"
       ]
     },
     {

@@ -2,7 +2,7 @@
 
 import asyncio
 import time
-from dataclasses import asdict
+from dataclasses import asdict, replace
 
 import httpx
 import pytest
@@ -21,8 +21,11 @@ from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
 
 from okto_nexus.adapters.inbound.cli import session as session_cli
+from okto_nexus.adapters.inbound.cli.session_commands import recover_session_command
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE
 from okto_nexus.adapters.outbound.execution.presentation_link import PresentationLink
+from okto_nexus.adapters.outbound.local_presenter_client import _LocalPresenter
+from okto_nexus.application.codex_viewer_protocol import CodexInputStatus
 from okto_nexus.application.execution_leases import ExecutionChannel
 from okto_nexus.application.terminal_connection import PREFIX, ConnectionError
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
@@ -67,7 +70,7 @@ def test_link_rejects_misbound_reply_and_discards_late_reply_after_disconnect():
     asyncio.run(run())
 
 
-@pytest.mark.parametrize('mode', ['logout-inflight', 'terminal-reattach'])
+@pytest.mark.parametrize('mode', ['logout-inflight', 'terminal-reattach', 'writer'])
 def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, monkeypatch, request, mode):
     original_app = tcp.build_app
     reads = []
@@ -123,7 +126,12 @@ def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, mo
     with pytest.MonkeyPatch.context() as fixture_patch:
         fixture = tcp._runtime(tmp_path, request, fixture_patch)
         runtime = next(fixture)
-        project = RemoteProject(runtime, tmp_path, monkeypatch)
+        writing = mode == 'writer'
+        project = RemoteProject(runtime, tmp_path, monkeypatch, actions=8 if writing else 1)
+        if writing:
+            project.observed = replace(project.observed, architecture='x86_64')
+            for module in ('availability', 'executor_inventory'):
+                monkeypatch.setattr(f'nexus_connector_core.{module}.qualified_build', lambda *_args, **_kwargs: True)
 
         async def run():
             try:
@@ -143,8 +151,9 @@ def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, mo
                     'adapter_id': 'codex_app_server', 'source': 'thread/start/response', 'thread_id': _THREAD}))
                 await project.eventually(lambda: any('core/codex_thread_configuration' in row['payload_json']
                     for row in project.rows('execution_event_ingress')))
-                if mode == 'terminal-reattach':
-                    await _run_terminal_reattach(project, scope, child, native, epoch, cwd, monkeypatch)
+                if mode in ('terminal-reattach', 'writer'):
+                    attach = _run_remote_writer if writing else _run_terminal_reattach
+                    await attach(project, scope, child, native, epoch, cwd, monkeypatch)
                     assert connection.online and not native.stopped and len(project.native.opened) == 1
                     assert reads and all(target['opening_operation_id'] == opened['operation_id'] for _, target in reads)
                     return
@@ -266,9 +275,10 @@ async def _run_terminal_reattach(project, scope, operation_id, native, epoch, cw
 
     monkeypatch.setattr(session_cli, 'select_viewer', lambda _: 'fixture-reviewed-viewer')
     monkeypatch.setattr(session_cli, 'present_codex', viewer)
-    with pytest.raises(ConnectionError, match='read-only Codex'):
+    with pytest.raises(ConnectionError) as refusal:
         await asyncio.to_thread(session_cli.attach_session, api, binding, session_id=session_id,
                                 interactive=True, write=True)
+    assert refusal.value.http_status == 409
     first = await asyncio.to_thread(session_cli.attach_session, api, binding, session_id=session_id, interactive=True)
     assert first['attach_strategy'] == 'codex_remote_read'
     await project.eventually(lambda: [row['state'] for row in project.rows('session_attachments')] == ['DETACHED'])
@@ -291,3 +301,91 @@ async def _run_terminal_reattach(project, scope, operation_id, native, epoch, cw
                              ['DETACHED', 'DETACHED'])
     assert {row['operation_id'] for row in project.rows('execution_operations')} == before
     assert not native.stopped and native.sent == [('send_turn', operation_id)]
+
+
+async def _run_remote_writer(project, scope, operation_id, native, epoch, cwd, monkeypatch):
+    session = scope['session_id']
+    turn = {'threadId': _THREAD, 'thread_id': _THREAD, 'turnId': _TURN, 'turn_id': _TURN}
+    native.active_turn_id = _TURN
+    await native.queue.put(RuntimeEvent(scope['server_id'], scope['executor_id'], session, epoch, 0,
+        'turn_state', 'turn/started', turn | {'delivery_phase': 'started', 'turn': {'id': _TURN, 'status': 'inProgress'}},
+        operation_id=operation_id))
+    await project.eventually(lambda: any('turn/started' in row['payload_json']
+        for row in project.rows('execution_event_ingress')))
+    generation = scope['session_owner_generation']
+    binding = await asyncio.to_thread(project.work().binding)
+    intent = 'codex_b37538e5-0f91-49f3-8420-cf451ffe21e0'
+    exchange = _LocalPresenter.exchange
+
+    def lose_enqueue_reply(link, frame, **options):
+        result = exchange(link, frame, **options)
+        if frame['kind'] == 'enqueue':
+            assert result['status'] == 'QUEUED'
+            link.close()
+            raise ConnectionError('OUTCOME_UNKNOWN', 'Fixture lost the acknowledgement.', possible_effect=True)
+        return result
+
+    def viewer(link, executable):
+        assert link.input_revision and link.viewer_context().cwd == cwd
+        pending = link.send_next_turn(thread_id=_THREAD, intent=intent, text='One durable message')
+        assert pending.input_id is None and 'unconfirmed' in pending.message
+
+    monkeypatch.setattr(_LocalPresenter, 'exchange', lose_enqueue_reply)
+    monkeypatch.setattr(session_cli, 'select_viewer', lambda _: 'fixture-reviewed-viewer')
+    monkeypatch.setattr(session_cli, 'present_codex', viewer)
+    first = await asyncio.to_thread(session_cli.attach_session, project.http, binding, session_id=session,
+                                   interactive=True, write=True)
+    assert first['attach_strategy'] == 'codex_remote_write'
+    await project.eventually(lambda: [row['state'] for row in project.rows('session_attachments')] == ['DETACHED'])
+    receipt = await asyncio.to_thread(recover_session_command, project.http, binding, session, generation, intent)
+    assert receipt['receipt']['status'] == 'QUEUED'
+    assert len(project.rows('session_interaction_inputs')) == 1
+    assert native.sent == [('send_turn', operation_id)] and not native.stopped
+
+    cancelled = 'codex_interrupt_' + 'a' * 32
+    interrupted = 'codex_interrupt_' + 'b' * 32
+    steered = 'codex_steer_516a78af-4028-424e-91d3-2c9d42fd8d3d'
+    reorientations = []
+    controls = []
+    send = native.send
+
+    async def record_send(verb, payload, operation, *, expected_turn_id=None):
+        if verb == 'steer':
+            reorientations.append((expected_turn_id, payload['text']))
+        if verb == 'interrupt':
+            controls.append((expected_turn_id, project.rows('session_interaction_queues')[0]['paused_owner_generation']))
+        return await send(verb, payload, operation, expected_turn_id=expected_turn_id)
+
+    native.send = record_send
+
+    def steer(link, executable):
+        assert link.viewer_context().thread_id == _THREAD
+        pending = link.steer(thread_id=_THREAD, turn_id=_TURN, intent=steered, text='Refine the active turn',
+                             confirm=lambda target, text: (target, text) == (_TURN, 'Refine the active turn'))
+        assert pending.input_id and pending.steer_target == _TURN
+
+    monkeypatch.setattr(session_cli, 'present_codex', steer)
+    second = await asyncio.to_thread(session_cli.attach_session, project.http, binding, session_id=session,
+                                    interactive=True, write=True)
+    assert second['attachment_id'] != first['attachment_id']
+    await project.eventually(lambda: reorientations == [(_TURN, 'Refine the active turn')])
+    receipt = await asyncio.to_thread(recover_session_command, project.http, binding, session, generation, steered)
+    assert receipt['command'] == 'steer' and receipt['receipt']['reorientation'] is True
+
+    def interrupt(link, executable):
+        assert link.viewer_context().thread_id == _THREAD
+        with pytest.raises(CodexInputStatus, match='unavailable'):
+            link.interrupt(thread_id=_THREAD, turn_id=_THREAD, intent=cancelled, confirm=lambda _: pytest.fail('Wrong turn'))
+        with pytest.raises(CodexInputStatus, match='cancelled'):
+            link.interrupt(thread_id=_THREAD, turn_id=_TURN, intent=cancelled, confirm=lambda _: False)
+        link.interrupt(thread_id=_THREAD, turn_id=_TURN, intent=interrupted, confirm=lambda target: target == _TURN)
+
+    monkeypatch.setattr(session_cli, 'present_codex', interrupt)
+    third = await asyncio.to_thread(session_cli.attach_session, project.http, binding, session_id=session,
+                                    interactive=True, write=True)
+    assert len({first['attachment_id'], second['attachment_id'], third['attachment_id']}) == 3
+    await project.eventually(lambda: controls == [(_TURN, generation)])
+    receipt = await asyncio.to_thread(recover_session_command, project.http, binding, session, generation, interrupted)
+    assert receipt['receipt']['interrupt']['queue_paused'] is True
+    inputs = project.rows('session_interaction_inputs')
+    assert len(inputs) == 2 and any(row['status'] == 'QUEUED' for row in inputs) and not native.stopped

@@ -55,12 +55,13 @@ class LocalWriterReview:
 
 
 class _LocalPresenter:
-    def __init__(self, peer, wire, attachment_id, *, live_updates, input_revision=None):
+    def __init__(self, peer, wire, attachment_id, *, live_updates, input_revision=None, on_intent=None):
         self._peer = peer
         self._wire = wire
         self.attachment_id = attachment_id
         self.live_updates = live_updates
         self.input_revision = input_revision
+        self._on_intent = on_intent
         self._request_id = 0
         self._pi_binary = bytearray()
 
@@ -271,6 +272,7 @@ class _LocalPresenter:
 
     def send_next_turn(self, *, thread_id, intent, text):
         """Queue the source intent and keep the native response pending."""
+        self._report_intent(intent)
         try:
             queued = self._request('enqueue', flat=True, thread_id=thread_id, client_intent_id=intent,
                 capability_revision=self.input_revision, content={'type': 'text', 'text': text})
@@ -314,6 +316,7 @@ class _LocalPresenter:
                                       content={'type': 'text', 'text': text})
         if not confirm(turn_id, text):
             raise CodexInputStatus('Reorientation cancelled.')
+        self._report_intent(intent)
         try:
             result = self._request('steer_confirm', review_id=review_id)
         except ConnectionError:
@@ -344,6 +347,7 @@ class _LocalPresenter:
         review_id = self._review_turn('interrupt', thread_id=thread_id, turn_id=turn_id, intent=intent)
         if not confirm(turn_id):
             raise CodexInputStatus('Interruption cancelled.')
+        self._report_intent(intent)
         message = 'Interruption is unconfirmed. Check the Nexus session and its queue before trying again.'
         try:
             result = self._request('interrupt_confirm', review_id=review_id)
@@ -354,6 +358,10 @@ class _LocalPresenter:
         if result == {'status': 'recorded'}:
             message = 'Interruption recorded. The queue is paused while the selected turn is checked.'
         return CodexPendingInterrupt(intent, message)
+
+    def _report_intent(self, intent):
+        if self._on_intent is not None:
+            self._on_intent(intent)
 
     def confirm_interrupt(self, *, thread_id, intent):
         try:
@@ -438,8 +446,6 @@ def _revision(value):
 def review_local_presentation(api, *, scope, expected_session_generation, write=False, presentation='codex'):
     """Read an exact viewer capability without issuing an attachment ticket."""
     remote = presentation == 'codex_remote'
-    if remote and write:
-        raise _unavailable()
     _presentation_origin(api, scope, remote=remote)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     if presentation != 'codex':
@@ -455,7 +461,7 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
                 http_status=error.http_status) from None
         raise
     revision = response.get('capability_revision')
-    strategy = 'codex_remote_read' if remote else f"{presentation}_local_{'write' if write else 'read'}"
+    strategy = f"{presentation if remote else presentation + '_local'}_{'write' if write else 'read'}"
     if (type(response.get('version')) is not int or response['version'] != 1
             or response.get('attach_strategy') != strategy
             or response.get('scope') != scope or type(response.get('expected_session_generation')) is not int
@@ -474,11 +480,10 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
 
 @contextmanager
 def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id,
-                            writer=None, pi_viewport=None, pi_editor=False, remote=False):
+                            writer=None, pi_viewport=None, pi_editor=False, remote=False, on_intent=None):
     """Exchange the offer and challenge without passing the human session to the viewer."""
     origin = _presentation_origin(api, scope, remote=remote)
-    if (pi_editor and (pi_viewport is None or writer is None)
-            or remote and (writer is not None or pi_viewport is not None)):
+    if pi_editor and (pi_viewport is None or writer is None) or remote and pi_viewport is not None:
         raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
@@ -505,7 +510,8 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
             if origin.scheme == 'https':
                 peer = stack.enter_context(ssl.create_default_context().wrap_socket(peer, server_hostname=host))
             link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id,
-                                   live_updates=live_updates, input_revision=writer.input_revision if writer else None)
+                                   live_updates=live_updates, input_revision=writer.input_revision if writer else None,
+                                   on_intent=on_intent)
             protocol = REMOTE_CODEX_SUBPROTOCOL if remote else (
                 PI_PRESENTATION_SUBPROTOCOL if pi_viewport is not None else PRESENTATION_SUBPROTOCOL)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',

@@ -1,0 +1,60 @@
+{
+  "tasks": ["SI-022", "SI-031"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-H12"],
+  "source": {
+    "nexus_baseline": "e3f58f62092c3b1d8654ea84a1f6a90636b40e04",
+    "connector_revision": "173d55b7c2e9c09cf316794bea1ce86765cb4378",
+    "core_revision": "8877114d50f515a7aac06e874b7ddb756d2f876c"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "0b7fc10f44ec016327a406ca726188c65d54cd8f7c3028782a48769b5ca10b03",
+    "core_0.0.16_wheel_sha256": "42e965c44c993d80e182f7207bf101f6afe34e43ab28eb75fc81274d3992a9a8",
+    "connector_0.0.15_wheel_sha256": "9911c380c3fac1ac3332e422a69b244b55b5451ed23778b24ab0ea2aab01c641",
+    "database_migration": null
+  },
+  "regressions": {
+    "installed_remote_transport_broker_and_cli": 63,
+    "installed_reset_and_inventory": 11,
+    "strict_wheel_check": "PASS",
+    "changed_python_modules_verified_byte_for_byte": 7,
+    "offline_lock_check": "PASS",
+    "ruff_new_findings_relative_to_baseline": 0
+  },
+  "connector_fixture": {
+    "transport": "local loopback HTTP and WebSocket with Connector IPC and R4",
+    "native_process_and_qualification": "synthetic",
+    "queue_acknowledgement_discarded_after_commit": true,
+    "queued_write_recovered_by_original_intent": true,
+    "reattach_did_not_retry_queue_write": true,
+    "reorientation_bound_to_original_turn": true,
+    "wrong_turn_and_cancelled_interrupt_had_no_effect": true,
+    "interrupt_bound_to_original_turn_after_queue_pause": true,
+    "queued_input_retained": true
+  },
+  "native_windows_loopback": {
+    "test": "PASS",
+    "platform": "Windows x64 with ConPTY",
+    "viewer": "Codex 0.170.0",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "connector_app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "app_server_and_console": "real processes with isolated temporary profiles",
+    "model_response": "deterministic loopback Responses SSE",
+    "same_engine_pid_and_thread": true,
+    "viewer_sent_one_next_turn_after_the_first_completed": true,
+    "viewer_observed_second_result": true,
+    "keyboard_detach_restored_console": true,
+    "receipt_after_detach": "ACCEPTED_NATIVE",
+    "loopback_requests": 2,
+    "external_provider_requests": 0,
+    "fixture": "%TEMP%/nexus-si022-native-view-1795073414869/test_remote_native_writer.py",
+    "fixture_sha256": "eefa6539fb6e2d837d480a5dd87c4daabf979d0efeac0996c25f5c126e4505c6",
+    "terminal_capture_sha256": "8a1cf72455c5b5bbe78406873f76a61549fa9537330ec50e88729781e6085f6a",
+    "prior_observation": "One review immediately after completion was refused with HTTP 409. The passing run opened the writer during the first turn and sent the next message from the same viewer after completion. Fresh attach around that transition remains unqualified."
+  },
+  "limitations": [
+    "Loopback does not cover distinct hosts, TLS across hosts or loss of a physical network.",
+    "Remote Pi and Claude presentation and the Connector-side connect offer stay open."
+  ]
+}
