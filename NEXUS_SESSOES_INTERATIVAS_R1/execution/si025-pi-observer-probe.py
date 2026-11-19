@@ -18,6 +18,10 @@ from unittest.mock import patch
 
 PROMPT = 'Owner prompt held by a deterministic local provider'
 RESULT = 'Native Pi rendered the answer from the same session'
+STEER = 'Apply this message at the next available Pi boundary'
+LATE_STEER = 'This reviewed run must finish before the input handler releases'
+LAST_PROMPT = 'Observe the isolated run while its input handler is suspended'
+LAST_RESULT = 'The isolated run has settled'
 STAGES = ('first-view', 'between-views', 'second-view')
 
 
@@ -105,7 +109,7 @@ async def wait_for_turn(journal, operation_key):
 
 
 async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted_cli=None, hosted_turn=False,
-                        hosted_editor=False):
+                        hosted_editor=False, hosted_steer=None):
     from nexus_connector_core import (
         R4_PREVIEW_REVISION,
         CloseOperation,
@@ -190,7 +194,7 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
             'protocol_major': 1, 'contract_revision': R4_PREVIEW_REVISION, 'type': 'lease.granted',
             'request_id': request.request_id, 'lease_id': 'lease', 'lease_serial': request.expected_lease_serial + 1,
             'grant_id': request.grant_id, 'scope': dict(request.scope), 'valid_for_ms': 60000,
-            'allowed_actions': ['runtime.open', 'turn.submit', 'runtime.close'],
+            'allowed_actions': ['runtime.open', 'turn.submit', 'runtime.close'] + (['turn.steer'] if hosted_steer else []),
         })
         context = installed.context
         if hosted_cli:
@@ -209,9 +213,13 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
             }
             assert proof.process == await journal.get_process_birth(key)
             assert await journal.get_process_launch(key)
-            renderer_facts = await exercise_hosted_renderer(runtime, host, journal, scope, target, channel,
-                                                            context, turn, checkpoints, active_turn=hosted_turn,
-                                                            native_editor=hosted_editor)
+            if hosted_steer:
+                renderer_facts = await exercise_hosted_steer(runtime, journal, scope, target, channel, context,
+                                                             turn, checkpoints, hosted_steer)
+            else:
+                renderer_facts = await exercise_hosted_renderer(runtime, host, journal, scope, target, channel,
+                                                                context, turn, checkpoints, active_turn=hosted_turn,
+                                                                native_editor=hosted_editor)
             assert proof == await runtime.prove_live_native_session(scope, target, **channel)
             closed = await runtime.close(
                 CloseOperation('pi-probe-close', key.session_id, 'End isolated probe', ShutdownPolicy(1, 1)),
@@ -220,7 +228,7 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
             assert closed.stage == 'SUCCEEDED', closed
             return {'core': __version__, 'production_factory': True, 'hosted_rpc_readiness': True, **renderer_facts,
                     'r4_live_process_proof': True, 'core_close_stage': closed.stage,
-                    'turns_submitted': int(hosted_turn)}, opened.native_id
+                    'turns_submitted': 2 if hosted_steer else int(hosted_turn)}, opened.native_id
         prepared = await runtime.prepare(LaunchIntent('agent', 'workspace', 'pi_rpc'), context)
         with patch.object(runtime_bridge, 'load_adapter', fixture_adapter):
             opened = await runtime.open(OpenOperation('pi-probe-open', key.session_id, 'epoch', prepared), context)
@@ -402,6 +410,89 @@ async def exercise_native_editor(runtime, scope, target, channel):
         assert (await key('enter')).draft is None
 
 
+async def exercise_hosted_steer(runtime, journal, scope, target, channel, context, turn, checkpoints, expectation):
+    from nexus_connector_core import ControlOperation, CoreError, EventCursor, OperationKey, TurnOperation
+    from nexus_connector_core.native.adapter_types import NativeAdapterError
+
+    cursor = EventCursor(scope['server_id'], scope['executor_id'], scope['session_id'], target.stream_epoch)
+
+    def operation_key(operation):
+        return OperationKey(cursor.server_id, cursor.executor_id, operation)
+
+    async def snapshot():
+        return [event async for event in journal.events(cursor)]
+
+    def observed_user(event, value):
+        message = event.payload.get('message')
+        return (event.native_type == 'message_start' and isinstance(message, dict) and message.get('role') == 'user'
+                and any(part.get('text') == value for part in message.get('content', []) if isinstance(part, dict)))
+
+    async def wait_for_file(name):
+        async with asyncio.timeout(12):
+            while not (checkpoints / name).is_file():
+                await asyncio.sleep(.03)
+
+    async def wait_for_event(check):
+        async with asyncio.timeout(12):
+            while True:
+                for event in await snapshot():
+                    if check(event):
+                        return event
+                await asyncio.sleep(.03)
+
+    async def opened_turn(operation, signal):
+        sent = await runtime.submit(operation, context)
+        assert sent.stage == 'SUBMITTED'
+        await wait_for_file(signal)
+        await wait_for_event(lambda event: event.native_type == 'agent_start' and event.operation_id == operation.operation_id)
+
+    async def control(operation_id, text):
+        return await runtime.control(ControlOperation(operation_id, turn.session_id, 'steer', text), context)
+
+    await opened_turn(turn, 'first-model-waiting')
+    acknowledged = await control('steer-boundary', STEER)
+    assert acknowledged.stage == 'SUBMITTED' and acknowledged.possible_effect
+    queued = await wait_for_event(lambda e: e.native_type == 'queue_update' and e.payload.get('steering') == [STEER])
+    assert not any(observed_user(e, STEER) for e in await snapshot())
+    assert (await runtime.read_live_pi_session(scope, target, **channel))['pending_message_count'] == 1
+    (checkpoints / 'release-hosted-turn').touch()
+    consumed = await wait_for_event(lambda e: observed_user(e, STEER))
+    await wait_for_turn(journal, operation_key(turn.operation_id))
+    settled = await wait_for_event(lambda e: e.native_type == 'agent_settled' and e.operation_id == turn.operation_id)
+    assert queued.sequence < consumed.sequence < settled.sequence
+    still_submitted = await journal.get_receipt(operation_key('steer-boundary'))
+    assert still_submitted.stage == 'SUBMITTED'
+
+    second = TurnOperation('pi-probe-last-turn', turn.session_id, LAST_PROMPT)
+    await opened_turn(second, 'last-model-waiting')
+    stale = asyncio.create_task(control('steer-after-settle', LATE_STEER))
+    try:
+        await wait_for_file('steer-input-handler-waiting')
+        (checkpoints / 'release-last-turn').touch()
+        await wait_for_turn(journal, operation_key(second.operation_id))
+        (checkpoints / 'release-steer-input-handler').touch()
+        try:
+            result = await asyncio.wait_for(stale, timeout=8)
+            observed_stage = result.stage
+        except (CoreError, NativeAdapterError):
+            observed_stage = (await journal.get_receipt(operation_key('steer-after-settle'))).stage
+        state = await runtime.read_live_pi_session(scope, target, **channel)
+        assert not state['is_streaming']
+        if expectation == 'baseline':
+            assert observed_stage == 'SUBMITTED' and state['pending_message_count'] == 1
+        else:
+            assert observed_stage in ('FAILED', 'OUTCOME_UNKNOWN') and state['pending_message_count'] == 0
+            assert not any(e.native_type == 'queue_update' and LATE_STEER in e.payload.get('steering', [])
+                           for e in await snapshot())
+        return {'steer_rpc_ack': acknowledged.stage, 'steer_receipt_after_boundary': still_submitted.stage,
+                'queued_sequence': queued.sequence, 'boundary_message_sequence': consumed.sequence,
+                'settled_sequence': settled.sequence, 'late_steer_receipt': observed_stage,
+                'late_steer_pending_after_run_finished': state['pending_message_count']}
+    finally:
+        (checkpoints / 'release-steer-input-handler').touch(exist_ok=True)
+        await asyncio.gather(stale, return_exceptions=True)
+
+
 def fingerprints(node, release, script):
     namespace = release / 'node_modules' / '@earendil-works'
     installed = namespace / 'pi-coding-agent'
@@ -420,7 +511,40 @@ def fingerprints(node, release, script):
     return {name: hashlib.sha256(file.read_bytes()).hexdigest() for name, file in inputs.items()}
 
 
-def run(node, release, *, core, cli_owner, hosted_core, hosted_turn, hosted_editor):
+def steer_provider(provider, checkpoints):
+    return f'''
+import {{ fauxProvider, fauxAssistantMessage }} from {json.dumps(provider.as_uri())};
+import {{ access, writeFile }} from 'node:fs/promises';
+import {{ setTimeout as delay }} from 'node:timers/promises';
+import {{ join }} from 'node:path';
+const root = {json.dumps(str(checkpoints))};
+async function hold(started, release) {{
+  await writeFile(join(root, started), '');
+  for (let tick = 0; tick < 1000; tick++) {{
+    try {{ await access(join(root, release)); return; }}
+    catch (error) {{ if (error.code !== 'ENOENT') throw error; }}
+    await delay(30);
+  }}
+  throw new Error('No test-fixture release');
+}}
+export default (pi) => {{
+  const faux = fauxProvider({{ provider: 'nexus-fixture', api: 'nexus-fixture' }});
+  pi.registerProvider(faux.provider);
+  pi.on('input', async (event) => {{
+    if (event.text === {json.dumps(LATE_STEER)}) {{
+      await hold('steer-input-handler-waiting', 'release-steer-input-handler');
+    }}
+  }});
+  faux.setResponses([
+    async () => {{ await hold('first-model-waiting', 'release-hosted-turn'); return fauxAssistantMessage('First response'); }},
+    fauxAssistantMessage({json.dumps(RESULT)}),
+    async () => {{ await hold('last-model-waiting', 'release-last-turn'); return fauxAssistantMessage({json.dumps(LAST_RESULT)}); }},
+  ]);
+}};
+'''
+
+
+def run(node, release, *, core, cli_owner, hosted_core, hosted_turn, hosted_editor, hosted_steer):
     root = Path(tempfile.mkdtemp(prefix='nexus-si-pi-observer-')).resolve()
     script = root / 'probe.mjs'
     shutil.copyfile(Path(__file__).with_suffix('.mjs'), script)
@@ -486,7 +610,7 @@ def run(node, release, *, core, cli_owner, hosted_core, hosted_turn, hosted_edit
             extension = agent / 'extensions' / 'synthetic-provider.js'
             extension.parent.mkdir()
             provider = release / 'node_modules/@earendil-works/pi-ai/dist/providers/faux.js'
-            extension.write_text(
+            extension.write_text(steer_provider(provider, checkpoints) if hosted_steer else (
                 f'import {{ fauxProvider, fauxAssistantMessage }} from {json.dumps(provider.as_uri())};\n'
                 'import { access } from "node:fs/promises";\n'
                 'import { setTimeout as delay } from "node:timers/promises";\n'
@@ -502,7 +626,7 @@ def run(node, release, *, core, cli_owner, hosted_core, hosted_turn, hosted_edit
                 '    }\n'
                 '    throw new Error("Hosted renderer probe did not release the turn");\n'
                 '  }]);\n'
-                '};\n', encoding='utf-8',
+                '};\n'), encoding='utf-8',
             )
         else:
             env['OPENAI_API_KEY'] = 'synthetic-fixture-key'
@@ -512,9 +636,17 @@ def run(node, release, *, core, cli_owner, hosted_core, hosted_turn, hosted_edit
             f'--import={preload.as_uri()}',
         ))
         report, session_id = asyncio.run(exercise_core(argv, env, root, checkpoints, None, hosted_cli=cli,
-                                                       hosted_turn=hosted_turn, hosted_editor=hosted_editor))
+                                                       hosted_turn=hosted_turn, hosted_editor=hosted_editor,
+                                                       hosted_steer=hosted_steer))
         histories = list((agent / 'sessions').rglob('*.jsonl'))
-        if hosted_turn:
+        if hosted_steer:
+            assert len(histories) == 1
+            records = [json.loads(line) for line in histories[0].read_text(encoding='utf-8').splitlines()]
+            assert records[0]['id'] == session_id
+            user_messages = [entry['message']['content'][0]['text'] for entry in records
+                             if entry.get('type') == 'message' and entry['message']['role'] == 'user']
+            assert user_messages == [PROMPT, STEER, LAST_PROMPT]
+        elif hosted_turn:
             assert len(histories) == 1
             verify_history(agent / 'sessions', histories[0], session_id)
         else:
@@ -556,6 +688,8 @@ if __name__ == '__main__':
     parser.add_argument('--hosted-core', action='store_true', help='Open the packaged owner via the real Core composition')
     parser.add_argument('--hosted-turn', action='store_true', help='Exercise the private renderer with one synthetic turn')
     parser.add_argument('--hosted-editor', action='store_true', help='Exercise the native editor during the synthetic turn')
+    parser.add_argument('--hosted-steer', choices=('baseline', 'fenced'),
+                        help='Observe boundary steer receipt and a delayed input handler')
     args = parser.parse_args()
     if args.hosted_core and (args.core or args.cli_owner):
         parser.error('--hosted-core selects the real Core launch path')
@@ -563,6 +697,8 @@ if __name__ == '__main__':
         parser.error('--hosted-turn requires --hosted-core')
     if args.hosted_editor and not args.hosted_turn:
         parser.error('--hosted-editor requires --hosted-turn')
+    if args.hosted_steer and (not args.hosted_turn or args.hosted_editor):
+        parser.error('--hosted-steer requires --hosted-turn and a separate run from --hosted-editor')
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
         core=args.core, cli_owner=args.cli_owner, hosted_core=args.hosted_core, hosted_turn=args.hosted_turn,
-        hosted_editor=args.hosted_editor)
+        hosted_editor=args.hosted_editor, hosted_steer=args.hosted_steer)

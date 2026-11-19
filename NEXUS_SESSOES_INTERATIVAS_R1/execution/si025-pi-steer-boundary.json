@@ -1,0 +1,52 @@
+{
+  "task": "SI-025",
+  "related_test": "SI-T-C04",
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "ca79a90f2a6f44c3961c9952d86295beaa2ba4d5",
+    "core_previous": "a62aa2a4a4b9dca8d2ce13baa088f7a4d44d5b1f",
+    "core_current": "7615920c44794589fbeda018981180b81615a182",
+    "connector_pin": "453f20f8d60dd1ad7b8a13436fed4265a54c8244"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "fcc4994c3c40faff8e20f32a5da2ddccbd0a4d78e5610e80d7cf681adac92ec5",
+    "core_previous_wheel_sha256": "7945c77161d8527e0978f7e085a59cfb0c3c343127be39ff1009b6931a107760",
+    "core_current_wheel_sha256": "4bfeec47e0bf2d6297fc76d0f8bc5a1c7e4417fc7ec835efbf0c38fcf0628b85",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "agent_session_sha256": "5ebfae51db5a900596145159428e7cb57d195af9d54a28f41d4ac8ff1bfd5729",
+    "hosted_rpc_sha256": "6b1563279e04debc3b03d8cae88021690cca30bb06abd598862fa52ada633664",
+    "steer_guard_source_sha256": "c3c343cc5acb8b119f4bfbf62866b4aca6c00bdaa5a8f7dd75e9b52604ef43e3",
+    "probe_sha256": "64fdd140d15618850ffaaf07ee68d3c9d41f7f454bd45923f4692505c3a53baa"
+  },
+  "synthetic_provider_real_pi": {
+    "steer_rpc_ack": "SUBMITTED",
+    "steer_receipt_after_boundary": "SUBMITTED",
+    "queue_update_sequence": 8,
+    "boundary_message_start_sequence": 17,
+    "agent_settled_sequence": 26,
+    "baseline_late_steer_receipt": "SUBMITTED",
+    "baseline_late_steer_pending_messages": 1,
+    "current_late_steer_receipt": "OUTCOME_UNKNOWN",
+    "current_late_steer_pending_messages": 0,
+    "current_late_steer_emitted_no_native_queue_update": true,
+    "approved_turns_in_same_session": 2,
+    "native_history_contains_only_the_confirmed_steer": true,
+    "canonical_close": "SUCCEEDED",
+    "provider_requests": 0
+  },
+  "regressions": {
+    "installed_core_passed": 73,
+    "installed_connector_passed": 61,
+    "installed_core_private_native_editor_probe": "PASS",
+    "installed_nexus_native_editor_conpty": "PASS",
+    "fenced_probe_repeated_with_recorded_script": "PASS",
+    "strict_wheel_metadata_check_passed": true,
+    "offline_lock_check_passed": true
+  },
+  "limitations": [
+    "The real-engine case ends the selected run during the asynchronous extension handler. A successor during the delay is covered by a unit test.",
+    "The guard starts at the hosted Pi RPC entry. The original human review still needs an exact run binding to the native enqueue point.",
+    "The probe distinguishes boundary consumption using a known fixture string and committed journal events. The product still needs a durable operation-correlated consumption fact, approvals and real-provider qualification."
+  ]
+}

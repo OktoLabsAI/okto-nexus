@@ -1242,7 +1242,9 @@
         "execution/si025-pi-writer-transport.md",
         "execution/si025-pi-writer-transport.json",
         "execution/si025-pi-native-editor.md",
-        "execution/si025-pi-native-editor.json"
+        "execution/si025-pi-native-editor.json",
+        "execution/si025-pi-steer-boundary.md",
+        "execution/si025-pi-steer-boundary.json"
       ]
     },
     {
@@ -2546,7 +2548,9 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si025-pi-steer-boundary.json"
+      ]
     },
     {
       "id": "SI-T-C05",
