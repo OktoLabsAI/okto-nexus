@@ -62,7 +62,7 @@ def list_execution_sessions(factory, *, server_id, context, access, executor_id,
 
 
 def read_execution_session(factory, *, server_id, session_id, context, access,
-                           executor_id=None, _uow=None):
+                           executor_id=None, include_executor_kind=False, _uow=None):
     actor_agent_id = context.actor_agent_id
     for value in (session_id, actor_agent_id):
         if not isinstance(value, str) or not 1 <= len(value) <= 160:
@@ -74,7 +74,7 @@ def read_execution_session(factory, *, server_id, session_id, context, access,
         conn = uow.connection
         rows = conn.execute(
             "SELECT s.*,o.expected_revisions_json,o.created_at,o.subject_agent_id,"
-            "e.control_state,e.generation,e.revoked_at FROM execution_sessions s "
+            "e.control_state,e.generation,e.revoked_at,e.kind AS executor_kind FROM execution_sessions s "
             "JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
             "AND o.operation_id=s.open_operation_id AND o.session_id=s.session_id "
             "JOIN execution_executors e ON e.server_id=s.server_id AND e.executor_id=s.executor_id "
@@ -114,9 +114,12 @@ def read_execution_session(factory, *, server_id, session_id, context, access,
             and lease["connection_generation"] == row["generation"])
         # Process handles and proofs are executor-local. Lifecycle/lease facts do
         # not establish process exit (especially for attached runtimes).
-        return dict(scope=scope, connection_generation=row["generation"],
+        view = dict(scope=scope, connection_generation=row["generation"],
             lifecycle_state=row["lifecycle_state"], process_state="UNKNOWN", ownership="UNKNOWN",
             lease_state="EXPIRED" if expired and row["lease_state"] == "ACTIVE" else row["lease_state"],
             durable_release_pending=bool(closing and row["lifecycle_state"] != "CLOSED"),
             control_available=available, last_observed_at=observed,
             containment_reason=row["containment_reason"], contained_at=row["contained_at"])
+        if include_executor_kind:
+            view['executor_kind'] = row['executor_kind']
+        return view

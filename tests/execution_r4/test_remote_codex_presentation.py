@@ -1,6 +1,7 @@
 """Real HTTP/Connector WebSocket and canonical lease with a synthetic Codex read."""
 
 import asyncio
+import time
 from dataclasses import asdict
 
 import httpx
@@ -14,15 +15,22 @@ from nexus_connector_core.presentation_link import (
     decode_presentation_frame,
     presentation_result,
 )
+from nexus_connector_core.protocol import canonical_json
 from remote_renewal_helpers import RemoteProject
+from websockets.asyncio.client import connect
+from websockets.exceptions import ConnectionClosed
 
+from okto_nexus.adapters.inbound.cli import session as session_cli
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE
 from okto_nexus.adapters.outbound.execution.presentation_link import PresentationLink
 from okto_nexus.application.execution_leases import ExecutionChannel
+from okto_nexus.application.terminal_connection import PREFIX, ConnectionError
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
+from okto_nexus.domain.presentation_protocol import REMOTE_CODEX_SUBPROTOCOL
 from okto_nexus.domain.session_interaction import InputAuthor, InputScope
 
 _THREAD = 'bdfe5b81-54cf-43cf-8001-5de670d3dd69'
+_TURN = '3ef9bcae-c51a-4d6a-ae90-d7648356532e'
 _ROUTE = '/api/v1/__fixture_remote_presentation'
 
 
@@ -59,7 +67,8 @@ def test_link_rejects_misbound_reply_and_discards_late_reply_after_disconnect():
     asyncio.run(run())
 
 
-def test_human_reads_exact_remote_codex_context_and_logout_discards_inflight_result(tmp_path, monkeypatch, request):
+@pytest.mark.parametrize('mode', ['logout-inflight', 'terminal-reattach'])
+def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, monkeypatch, request, mode):
     original_app = tcp.build_app
     reads = []
     entered, release = asyncio.Event(), asyncio.Event()
@@ -101,7 +110,7 @@ def test_human_reads_exact_remote_codex_context_and_logout_discards_inflight_res
         native, epoch, cwd = project.native.opened[scope['session_id']]
         assert target.native_session_id == native.native_id and target.stream_epoch == epoch
         reads.append((scope, asdict(target)))
-        if len(reads) == 2:
+        if mode == 'logout-inflight' and len(reads) == 2:
             entered.set()
             await release.wait()
         return {'viewer_context': {'thread_id': thread_id, 'session_id': 'native-viewer-synthetic', 'cwd': cwd,
@@ -134,6 +143,11 @@ def test_human_reads_exact_remote_codex_context_and_logout_discards_inflight_res
                     'adapter_id': 'codex_app_server', 'source': 'thread/start/response', 'thread_id': _THREAD}))
                 await project.eventually(lambda: any('core/codex_thread_configuration' in row['payload_json']
                     for row in project.rows('execution_event_ingress')))
+                if mode == 'terminal-reattach':
+                    await _run_terminal_reattach(project, scope, child, native, epoch, cwd, monkeypatch)
+                    assert connection.online and not native.stopped and len(project.native.opened) == 1
+                    assert reads and all(target['opening_operation_id'] == opened['operation_id'] for _, target in reads)
+                    return
                 before = project.rows('execution_operations')
                 async with httpx.AsyncClient(base_url=project.origin, timeout=8) as client:
                     agent = {'Authorization': 'Bearer ' + project.key}
@@ -178,3 +192,102 @@ def test_human_reads_exact_remote_codex_context_and_logout_discards_inflight_res
             asyncio.run(run())
         finally:
             fixture.close()
+
+
+async def _run_terminal_reattach(project, scope, operation_id, native, epoch, cwd, monkeypatch):
+    session_id = scope['session_id']
+    server_id, executor_id = scope['server_id'], scope['executor_id']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                        'workspace_binding_id', 'agent_id', 'session_id')}
+    document = {'scope': exact, 'expected_session_generation': scope['session_owner_generation']}
+    turn_scope = {'threadId': _THREAD, 'thread_id': _THREAD, 'turnId': _TURN, 'turn_id': _TURN}
+
+    async def emit(category, method, payload):
+        await native.queue.put(RuntimeEvent(server_id, executor_id, session_id, epoch, 0, category, method,
+                                            turn_scope | payload, operation_id=operation_id))
+
+    await emit('turn_state', 'turn/started', {'delivery_phase': 'started', 'turn': {'id': _TURN, 'status': 'inProgress'}})
+    await project.eventually(lambda: any('turn/started' in row['payload_json']
+        for row in project.rows('execution_event_ingress')))
+    attach_path = PREFIX + f'/sessions/{session_id}/attachments:'
+    async with httpx.AsyncClient(base_url=project.origin) as wire:
+        headers = project.http.request_headers()
+        review = document | {'presentation': 'codex_remote'}
+        foreign = await wire.post(attach_path + 'review', json=review, headers=headers | {'Origin': 'https://other.invalid'})
+        assert foreign.status_code == 403
+        agent = await wire.post(attach_path + 'review', json=review, headers={
+            'Origin': project.origin, 'X-Nexus-UI': '1', 'X-Nexus-Operator-Session-Required': '1',
+            'Authorization': 'Bearer ' + project.key})
+        assert agent.status_code in (401, 403)
+        assert project.rows('session_attachments') == []
+
+    loop = asyncio.get_running_loop()
+    binding = await asyncio.to_thread(project.work().binding)
+    before = {row['operation_id'] for row in project.rows('execution_operations')}
+    offers, viewers = [], []
+
+    def api(method, path, body=None):
+        result = project.http(method, path, body)
+        if path == attach_path + 'prepare':
+            offers.append(result)
+        return result
+
+    for name in ('base', 'token', 'server_id', 'request_headers'):
+        setattr(api, name, getattr(project.http, name))
+
+    async def finish():
+        await emit('tool_activity', 'item/completed', {'item': {'type': 'agentMessage',
+            'id': 'remote-result', 'text': 'Finished on the Connector'}})
+        await emit('turn_state', 'turn/completed', {'delivery_phase': 'terminal', 'delivery_outcome': 'success',
+            'turn': {'id': _TURN, 'status': 'completed'}, 'output_text': 'Finished on the Connector'})
+
+    def viewer(link, executable):
+        assert executable == 'fixture-reviewed-viewer' and link.input_revision is None and link.live_updates
+        context = link.viewer_context()
+        assert context.thread_id == _THREAD and context.cwd == cwd == str(project.project)
+        page = link.page(method='thread/turns/list', params={'threadId': _THREAD})
+        assert page['data'][0]['id'] == _TURN and page['data'][0]['status'] == 'inProgress'
+        if not viewers:
+            viewers.append((link.attachment_id, page['backwardsCursor']))
+            link.close()
+            return
+        asyncio.run_coroutine_threadsafe(finish(), loop).result(timeout=5)
+        notices = []
+        deadline = time.monotonic() + 8
+        while not any(item['method'] == 'turn/completed' for item in notices):
+            assert time.monotonic() < deadline
+            notices.extend(link.updates(_THREAD))
+            time.sleep(.05)
+        assert any(item['params'].get('item', {}).get('text') == 'Finished on the Connector' for item in notices)
+        with pytest.raises(ConnectionError):
+            link.page(method='thread/turns/list', params={
+                'threadId': _THREAD, 'cursor': viewers[0][1], 'sortDirection': 'asc'})
+        viewers.append((link.attachment_id, page['backwardsCursor']))
+
+    monkeypatch.setattr(session_cli, 'select_viewer', lambda _: 'fixture-reviewed-viewer')
+    monkeypatch.setattr(session_cli, 'present_codex', viewer)
+    with pytest.raises(ConnectionError, match='read-only Codex'):
+        await asyncio.to_thread(session_cli.attach_session, api, binding, session_id=session_id,
+                                interactive=True, write=True)
+    first = await asyncio.to_thread(session_cli.attach_session, api, binding, session_id=session_id, interactive=True)
+    assert first['attach_strategy'] == 'codex_remote_read'
+    await project.eventually(lambda: [row['state'] for row in project.rows('session_attachments')] == ['DETACHED'])
+    assert not native.stopped and native.sent == [('send_turn', operation_id)]
+
+    offer, = offers
+    socket_path = PREFIX + f"/attachments/{offer['attachment_id']}/stream"
+    async with connect(project.origin.replace('http://', 'ws://', 1) + socket_path,
+            subprotocols=[REMOTE_CODEX_SUBPROTOCOL], origin=project.origin,
+            additional_headers={'Authorization': 'Bearer ' + offer['ticket'], 'Cookie': headers['Cookie']}) as socket:
+        await socket.send(canonical_json({'kind': 'hello', 'version': 1, **document}).decode())
+        with pytest.raises(ConnectionClosed):
+            await socket.recv()
+
+    second = await asyncio.to_thread(session_cli.attach_session, api, binding, session_id=session_id, interactive=True)
+    assert second['attachment_id'] != first['attachment_id'] and second['scope'] == first['scope'] == exact
+    assert len(viewers) == 2 and viewers[0][1] != viewers[1][1]
+    await project.operation(operation_id)
+    await project.eventually(lambda: sorted(row['state'] for row in project.rows('session_attachments')) ==
+                             ['DETACHED', 'DETACHED'])
+    assert {row['operation_id'] for row in project.rows('execution_operations')} == before
+    assert not native.stopped and native.sent == [('send_turn', operation_id)]

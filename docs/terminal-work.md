@@ -39,6 +39,21 @@ the exact `work chat` command. Run it from the project directory with the
 matching saved connection profile. Opening the prompt lets you inspect and
 continue that session. Entering a new message is a separate action.
 
+## Follow a Codex session hosted by Connector
+
+Use a saved human operator login for the Nexus server and select the exact
+workspace, Harness ID and session. The read-only viewer requires the reviewed
+Codex 0.170.0 Windows x64 frontend and a compatible Connector-hosted app-server.
+
+```sh
+okto-nexus session attach --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+```
+
+Press Ctrl+] to detach. The session keeps its working directory, queue and
+running turn on the Connector host. After a lost connection, run the same
+command to follow the same session from its committed history. Use the
+operator's Nexus server address over HTTPS from another machine.
+
 ## Native Pi viewer on Windows
 
 For a live hosted Pi session on the reviewed Windows build, open the transcript

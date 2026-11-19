@@ -1081,7 +1081,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si022-remote-codex-context.md",
-        "execution/si022-remote-codex-context.json"
+        "execution/si022-remote-codex-context.json",
+        "execution/si022-codex-remote-attach.md",
+        "execution/si022-codex-remote-attach.json"
       ]
     },
     {
@@ -1497,8 +1499,11 @@
         "SI-T-H12",
         "SI-T-I02"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si022-codex-remote-attach.md",
+        "execution/si022-codex-remote-attach.json"
+      ]
     },
     {
       "id": "SI-032",
@@ -4169,7 +4174,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si022-remote-codex-context.json"
+        "execution/si022-remote-codex-context.json",
+        "execution/si022-codex-remote-attach.json"
       ]
     },
     {
@@ -4190,7 +4196,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si022-remote-codex-context.json"
+        "execution/si022-remote-codex-context.json",
+        "execution/si022-codex-remote-attach.json"
       ]
     },
     {
@@ -4211,7 +4218,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si022-remote-codex-context.json"
+        "execution/si022-remote-codex-context.json",
+        "execution/si022-codex-remote-attach.json"
       ]
     },
     {
@@ -4231,7 +4239,9 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si022-codex-remote-attach.json"
+      ]
     },
     {
       "id": "SI-T-H05",
@@ -4366,7 +4376,8 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si020-codex-keyboard-detach-windows.md",
-        "execution/si020-codex-keyboard-detach-windows.json"
+        "execution/si020-codex-keyboard-detach-windows.json",
+        "execution/si022-codex-remote-attach.json"
       ]
     },
     {
@@ -4387,7 +4398,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si022-remote-codex-context.json"
+        "execution/si022-remote-codex-context.json",
+        "execution/si022-codex-remote-attach.json"
       ]
     },
     {

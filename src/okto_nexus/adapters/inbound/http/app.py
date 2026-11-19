@@ -875,6 +875,13 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     from ....application.remote_codex_presentation import RemoteCodexPresentation
     app.state.remote_codex_presentation = RemoteCodexPresentation(
         deps.connection_factory, authority_fence=app.state.operator_auth.authority_fence, clock=deps.clock)
+    from .dashboard_session_presentations import RemoteCodexPresentations
+    from ....application.session_attachment_broker import SessionAttachmentBroker
+    remote_codex = app.state.remote_codex_presentation
+    app.state.remote_codex_presentations = RemoteCodexPresentations(
+        SessionAttachmentBroker(deps.connection_factory, authority_fence=app.state.operator_auth.authority_fence,
+                                current_capability=remote_codex.reader_revision),
+        remote_codex, build_execution_access(deps))
     app.include_router(operator_auth_router())
     app.state.observability = observability
     app.state.search = search_service

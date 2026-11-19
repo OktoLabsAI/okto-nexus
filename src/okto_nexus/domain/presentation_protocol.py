@@ -1,8 +1,10 @@
 """Bounds and identity for the local Server-to-CLI presentation link."""
 
 PRESENTATION_SUBPROTOCOL = 'nexus.presenter.v1'
+REMOTE_CODEX_SUBPROTOCOL = 'nexus.presenter.codex-remote.v1'
 PI_PRESENTATION_SUBPROTOCOL = 'nexus.presenter.pi.v1'
 LOCAL_CODEX_AUDIENCE = 'nexus.local.codex.v1'
+REMOTE_CODEX_AUDIENCE = 'nexus.remote.codex.v1'
 LOCAL_PI_AUDIENCE = 'nexus.local.pi.v1'
 CODEX_VIEWER_WINDOWS_SHA256 = '8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce'
 MAX_PRESENTATION_REQUEST_BYTES = 64 * 1024

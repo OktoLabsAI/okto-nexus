@@ -16,6 +16,7 @@ from nexus_connector_core.presentation_link import (
 class PresentationLink:
     def __init__(self, channel, send, *, timeout=5):
         self.channel, self._send, self._timeout = channel, send, timeout
+        self.instance = secrets.token_hex(16)
         self._pending = {}
         self.closed = False
 

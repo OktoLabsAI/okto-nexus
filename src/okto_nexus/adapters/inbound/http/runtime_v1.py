@@ -238,7 +238,7 @@ def _path_free_trust_detail(reason: str) -> str:
             "see the server log for the resolved path")
 
 
-def build_router() -> APIRouter:
+def build_router(*, management=False) -> APIRouter:
     router = APIRouter()
 
     async def shutdown_authority(request, *, mutate):
@@ -808,7 +808,8 @@ def build_router() -> APIRouter:
             server_id = ensure_execution_installation(factory).server_id
             return read_execution_session(factory, server_id=server_id, session_id=session_id,
                 context=runtime_request_context(),
-                access=build_execution_access(request.app.state.deps), executor_id=query.get("executor_id"))
+                access=build_execution_access(request.app.state.deps), executor_id=query.get("executor_id"),
+                include_executor_kind=management)
         try:
             view = await anyio.to_thread.run_sync(read)
         except OktoNexusError as error:

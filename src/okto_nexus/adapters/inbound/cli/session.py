@@ -176,6 +176,10 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     scope = {name: source[name] for name in (
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
+    remote = selected.get('executor_kind') == 'remote'
+    if remote and (write or binding.get('adapter_id') != 'codex_app_server'):
+        raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE',
+                              'This Connector supports a read-only Codex viewer for the selected session.')
     if binding.get('adapter_id') == 'pi_rpc':
         if viewer_executable is not None or write and sys.platform != 'win32':
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')
@@ -216,13 +220,14 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
                 'attach_strategy': 'pi_local_write' if writer else 'pi_local_read', 'capability_revision': revision}
     reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                         **({'presentation': 'codex_remote'} if remote else {}),
                                          **({'write': True} if write else {}))
     executable = select_viewer(viewer_executable)
     writer = reviewed if write else None
     revision = writer.capability_revision if writer else reviewed
     if not _approve_writer_transfer(writer):
         return None
-    mode = 'Codex with session input' if writer else 'read-only Codex'
+    mode = 'read-only remote Codex' if remote else ('Codex with session input' if writer else 'read-only Codex')
     print(f'Opening {mode} for {display_text(scope["session_id"])} '
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
     if writer:
@@ -233,13 +238,15 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     print('Press Ctrl+] to detach from this session.', flush=True)
     with open_local_presentation(call, scope=scope, expected_session_generation=generation,
                                  capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
+                                 **({'remote': True} if remote else {}),
                                  **({'writer': writer} if writer else {})) as link:
         print('Presentation ' + link.attachment_id, flush=True)
         present_codex(link, executable)
     _display({'state': 'detached'}, False)
     print('Session ' + display_text(scope['session_id']))
+    strategy = 'codex_remote_read' if remote else ('codex_local_write' if writer else 'codex_local_read')
     return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
-            'attach_strategy': 'codex_local_write' if writer else 'codex_local_read', 'capability_revision': revision}
+            'attach_strategy': strategy, 'capability_revision': revision}
 
 
 def resume_saved_session(call, binding, session_id):

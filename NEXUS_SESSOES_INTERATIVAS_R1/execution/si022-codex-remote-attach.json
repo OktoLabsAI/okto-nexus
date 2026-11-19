@@ -1,0 +1,63 @@
+{
+  "tasks": ["SI-022", "SI-031"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-H01", "SI-T-H02", "SI-T-H03", "SI-T-H04", "SI-T-H11", "SI-T-H12"],
+  "source": {
+    "nexus_baseline": "3544d564b309145ddda242e51c726e631e6added",
+    "connector_revision": "173d55b7c2e9c09cf316794bea1ce86765cb4378",
+    "core_revision": "8877114d50f515a7aac06e874b7ddb756d2f876c"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "032271e54e80455ff3146906fd22c11a9a9aafe1adeb644efccba52d9354ef32",
+    "core_0.0.16_wheel_sha256": "42e965c44c993d80e182f7207bf101f6afe34e43ab28eb75fc81274d3992a9a8",
+    "connector_0.0.15_wheel_sha256": "9911c380c3fac1ac3332e422a69b244b55b5451ed23778b24ab0ea2aab01c641",
+    "database_migration": null
+  },
+  "installed_wheels": {
+    "tests": 31,
+    "transport": "HTTP and WebSocket loopback, Connector IPC and R4, synthetic native peer",
+    "foreign_origin_refused": true,
+    "agent_credential_refused": true,
+    "remote_write_request_refused": true,
+    "used_ticket_refused": true,
+    "previous_attachment_cursor_refused": true,
+    "reattach_observed_same_turn_and_final_result": true,
+    "detach_state_count": 2,
+    "engine_launches": 1,
+    "turn_submissions": 1,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "source_local_presenter_broker_and_cli": 59,
+    "strict_wheel_check": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "native_windows_loopback": {
+    "platform": "Windows x64 with ConPTY",
+    "viewer": "Codex 0.170.0",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "connector_app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "app_server_and_consoles": "real processes with temporary profiles",
+    "model_response": "deterministic loopback Responses SSE",
+    "same_engine_pid_and_thread": true,
+    "keyboard_detach_count": 2,
+    "restored_console_count": 2,
+    "second_viewer_rendered_turn_result": true,
+    "turn_submissions": 1,
+    "interruptions": 0,
+    "loopback_requests": 1,
+    "external_provider_requests": 0,
+    "fixture_directory": "%TEMP%/nexus-si022-native-view-1795073414869",
+    "fixture_hashes": {
+      "test_remote_native_engine.py": "0d80e69b7b67c05f9b04f135ac000ed6ba63d9e841c3ecd3661e7f601603f06e",
+      "test_remote_native_frontend.py": "6974c4e5f41ed21c6539c1cbe8bfbd1a55aa8a48af339c8200425933cd6d10ec",
+      "remote_native_project.py": "52c1ff8d2a09de6793110fd306e2443376090ef2deb227b7bfdd783397da2719"
+    },
+    "first_attempt": "The synthetic fixture's opening observation expired before the managed app-server's submission was recorded. The probe passed with the same code and a longer fixture deadline."
+  },
+  "limitations": [
+    "The CLI operator and the Connector were on the same Windows machine. TLS between separate machines and physical network loss are pending.",
+    "The implemented remote viewer capability is read-only Codex. Remote writing, remote Pi and Claude presenters, and the Connector-side connect offer remain open."
+  ]
+}

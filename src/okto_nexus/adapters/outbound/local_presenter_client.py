@@ -1,4 +1,4 @@
-"""Origin-bound local presenter client for the terminal relay."""
+"""Origin-bound presenter client for the terminal relay."""
 
 import re
 import socket
@@ -31,14 +31,16 @@ from ...application.codex_viewer_protocol import (
 )
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
-    MAX_PRESENTATION_NOTIFICATIONS,
     MAX_PI_PRESENTATION_BYTES,
+    MAX_PRESENTATION_NOTIFICATIONS,
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
-    PRESENTATION_SUBPROTOCOL,
     PI_PRESENTATION_SUBPROTOCOL,
+    PRESENTATION_SUBPROTOCOL,
+    REMOTE_CODEX_SUBPROTOCOL,
 )
 from ...domain.session_interaction import MAX_SQLITE_INTEGER, InputDeliveryState
+from .operator_client import server_origin
 
 _HISTORY_METHODS = ('thread/turns/list', 'thread/items/list')
 _TIMEOUT = 10
@@ -413,18 +415,18 @@ def _pi_input_unknown():
 
 
 def _unavailable():
-    return ConnectionError('PRESENTATION_UNAVAILABLE', 'The local presentation could not be confirmed. Review the exact session again.')
+    return ConnectionError('PRESENTATION_UNAVAILABLE', 'The presentation could not be confirmed. Review the exact session again.')
 
 
-def _local_origin(api, scope):
+def _presentation_origin(api, scope, *, remote):
     expected_keys = {'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id',
                      'agent_id', 'session_id'}
     if (scope.keys() != expected_keys or not getattr(api, 'server_id', None) or scope['server_id'] != api.server_id
             or not getattr(api, 'token', None) or not all(isinstance(value, str) and value for value in scope.values())):
         raise _unavailable()
-    origin = urlsplit(api.base)
+    origin = urlsplit(server_origin(api.base)) if remote else urlsplit(api.base)
     host = origin.hostname
-    if origin.scheme not in ('http', 'https') or host not in ('localhost', '127.0.0.1', '::1'):
+    if not remote and (origin.scheme not in ('http', 'https') or host not in ('localhost', '127.0.0.1', '::1')):
         raise ConnectionError('PRESENTATION_LOCAL_REQUIRED', 'This presentation requires the local Server address.')
     return origin
 
@@ -435,10 +437,13 @@ def _revision(value):
 
 def review_local_presentation(api, *, scope, expected_session_generation, write=False, presentation='codex'):
     """Read an exact viewer capability without issuing an attachment ticket."""
-    _local_origin(api, scope)
+    remote = presentation == 'codex_remote'
+    if remote and write:
+        raise _unavailable()
+    _presentation_origin(api, scope, remote=remote)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
-    if presentation == 'pi':
-        state['presentation'] = 'pi'
+    if presentation != 'codex':
+        state['presentation'] = presentation
     if write:
         state['access'] = 'write'
     try:
@@ -450,8 +455,9 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
                 http_status=error.http_status) from None
         raise
     revision = response.get('capability_revision')
+    strategy = 'codex_remote_read' if remote else f"{presentation}_local_{'write' if write else 'read'}"
     if (type(response.get('version')) is not int or response['version'] != 1
-            or response.get('attach_strategy') != f"{presentation}_local_{'write' if write else 'read'}"
+            or response.get('attach_strategy') != strategy
             or response.get('scope') != scope or type(response.get('expected_session_generation')) is not int
             or response['expected_session_generation'] != expected_session_generation
             or not _revision(revision)):
@@ -468,20 +474,22 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
 
 @contextmanager
 def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id,
-                            writer=None, pi_viewport=None, pi_editor=False):
+                            writer=None, pi_viewport=None, pi_editor=False, remote=False):
     """Exchange the offer and challenge without passing the human session to the viewer."""
-    origin = _local_origin(api, scope)
-    if pi_editor and (pi_viewport is None or writer is None):
+    origin = _presentation_origin(api, scope, remote=remote)
+    if (pi_editor and (pi_viewport is None or writer is None)
+            or remote and (writer is not None or pi_viewport is not None)):
         raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     access = 'write' if writer is not None else 'read'
     writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
-    pi_fields = {'presentation': 'pi'} if pi_viewport is not None else {}
+    presentation = {'presentation': 'codex_remote'} if remote else (
+        {'presentation': 'pi'} if pi_viewport is not None else {})
     offer = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:prepare',
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,
-                 'intent': 'attach_live', 'access': access} | writer_fields | pi_fields)
+                 'intent': 'attach_live', 'access': access} | writer_fields | presentation)
     attachment_id, ticket = offer.get('attachment_id'), offer.get('ticket')
     live_updates = offer.get('live_updates', False)
     if (type(offer.get('version')) is not int or offer['version'] != 1 or offer.get('state') != 'PREPARED'
@@ -492,15 +500,16 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     with ExitStack() as stack:
         try:
             peer = stack.enter_context(socket.create_connection((host, port), timeout=_TIMEOUT))
-            if not ip_address(peer.getpeername()[0]).is_loopback:
+            if (not remote or origin.scheme == 'http') and not ip_address(peer.getpeername()[0]).is_loopback:
                 raise ValueError('The presentation peer is not local')
             if origin.scheme == 'https':
                 peer = stack.enter_context(ssl.create_default_context().wrap_socket(peer, server_hostname=host))
             link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id,
                                    live_updates=live_updates, input_revision=writer.input_revision if writer else None)
+            protocol = REMOTE_CODEX_SUBPROTOCOL if remote else (
+                PI_PRESENTATION_SUBPROTOCOL if pi_viewport is not None else PRESENTATION_SUBPROTOCOL)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',
-                         headers=api.request_headers(), ticket=ticket,
-                         protocol=PI_PRESENTATION_SUBPROTOCOL if pi_viewport is not None else PRESENTATION_SUBPROTOCOL)
+                         headers=api.request_headers(), ticket=ticket, protocol=protocol)
             viewport = dict(zip(('columns', 'rows'), pi_viewport, strict=True)) if pi_viewport is not None else {}
             if pi_editor:
                 viewport['editor'] = True

@@ -30,7 +30,7 @@ def build_router():
         'accept_installation_succession', 'list_installation_successions',
     }
     router = APIRouter()
-    for source in (connections(), runtime()):
+    for source in (connections(), runtime(management=True)):
         router.routes.extend(route for route in source.routes if route.name in allowed)
     router.include_router(session_inputs())
     router.include_router(session_steer())
