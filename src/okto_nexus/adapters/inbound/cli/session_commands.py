@@ -63,7 +63,14 @@ def _unavailable():
 
 def _review(call, url, scope, generation, command):
     query = _query(scope, generation)
-    catalog = call('GET', url + '/commands?' + query)
+    try:
+        catalog = call('GET', url + '/commands?' + query)
+    except ConnectionError as error:
+        if error.http_status in (404, 405) and not error.possible_effect:
+            raise ConnectionError('SESSION_COMMAND_UNAVAILABLE',
+                'The selected Server does not offer session commands for this session.',
+                http_status=error.http_status) from None
+        raise
     revision = catalog.get('capability_revision')
     items = catalog.get('items')
     if (not _matches(catalog, scope, generation) or catalog.get('version') != 1 or not _identifier(revision)

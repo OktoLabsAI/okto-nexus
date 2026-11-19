@@ -10,6 +10,7 @@ import pytest
 
 from okto_nexus.adapters.inbound.cli import session
 from okto_nexus.adapters.inbound.cli.main import main
+from okto_nexus.application.terminal_connection import ConnectionError
 
 BINDING = {'server_id': 'server', 'executor_id': 'executor', 'binding_id': 'binding', 'agent_id': 'agent',
                'workspace_id': 'workspace', 'workspace_binding_id': 'realization', 'endpoint_id': 'endpoint'}
@@ -149,6 +150,33 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
     output = capsys.readouterr().out
     assert 'Press Ctrl+] to detach' in output and 'Session session-a' in output and 'Viewer detached' in output
     assert catalog.token not in output
+
+
+@pytest.mark.parametrize('http_status', [404, 405])
+def test_missing_server_features_refuse_before_viewer_selection_or_input(monkeypatch, http_status):
+    class OlderServer(Catalog):
+        token = 'fixture-cookie'
+        server_id = 'server'
+
+        def __call__(self, method, url, body=None):
+            path = urlsplit(url).path
+            if path.endswith(('/attachments:review', '/commands')):
+                raise ConnectionError('REQUEST_REFUSED', 'Unavailable route', http_status=http_status)
+            return super().__call__(method, url, body)
+
+    api = OlderServer()
+    monkeypatch.setattr(session, 'select_viewer', lambda *_: pytest.fail('Unexpected executable selection'))
+    with pytest.raises(ConnectionError, match='does not offer native presentation') as attach:
+        session.attach_session(api, BINDING, session_id='session-a', interactive=True, write=True)
+    assert attach.value.code == 'PRESENTATION_UNAVAILABLE' and not attach.value.possible_effect
+
+    def no_input(*_):
+        pytest.fail('Unexpected confirmation or input')
+
+    with pytest.raises(ConnectionError, match='does not offer session commands') as command:
+        session.execute_session_command(api, BINDING, 'session-a', 'send', interactive=True,
+                                        message_file=None, read=no_input, write=no_input)
+    assert command.value.code == 'SESSION_COMMAND_UNAVAILABLE' and not command.value.possible_effect
 
 
 @pytest.mark.skipif(os.name != 'nt', reason='Windows console input')

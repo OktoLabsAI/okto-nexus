@@ -67,7 +67,7 @@ class _LocalPresenter:
     def ensure_open(self):
         """Observe upstream close while the viewer is idle without another request."""
         if self._peer.fileno() < 0:
-            raise OSError('The presentation socket closed')
+            raise _unavailable()
         tls_pending = isinstance(self._peer, ssl.SSLSocket) and self._peer.pending()
         if not tls_pending and not select([self._peer], [], [], 0)[0]:
             return
@@ -77,11 +77,11 @@ class _LocalPresenter:
         except TimeoutError:
             return
         if not data:
-            raise OSError('The presentation socket closed')
+            raise _unavailable()
         self._wire.receive_data(data)
         for event in self._wire.events():
             if not isinstance(event, Ping):
-                raise OSError('The presentation sent an unsolicited event or closed')
+                raise _unavailable()
             self._peer.sendall(self._wire.send(event.response()))
 
     def _events(self, deadline):
@@ -301,7 +301,14 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     if write:
         state['access'] = 'write'
-    response = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:review', state)
+    try:
+        response = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:review', state)
+    except ConnectionError as error:
+        if error.http_status in (404, 405) and not error.possible_effect:
+            raise ConnectionError('PRESENTATION_UNAVAILABLE',
+                'The selected Server does not offer native presentation for this session.',
+                http_status=error.http_status) from None
+        raise
     revision = response.get('capability_revision')
     if (type(response.get('version')) is not int or response['version'] != 1
             or response.get('attach_strategy') != ('codex_local_write' if write else 'codex_local_read')

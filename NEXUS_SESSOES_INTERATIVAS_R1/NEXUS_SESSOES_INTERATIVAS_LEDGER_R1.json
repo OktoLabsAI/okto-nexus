@@ -1175,7 +1175,9 @@
         "execution/si024-codex-native-steer-confirmation.md",
         "execution/si024-codex-native-steer-confirmation.json",
         "execution/si024-codex-native-interrupt-confirmation.md",
-        "execution/si024-codex-native-interrupt-confirmation.json"
+        "execution/si024-codex-native-interrupt-confirmation.json",
+        "execution/si024-capability-downgrade.md",
+        "execution/si024-capability-downgrade.json"
       ]
     },
     {
@@ -1296,7 +1298,10 @@
         "SI-T-I09"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": [
+        "execution/si024-capability-downgrade.md",
+        "execution/si024-capability-downgrade.json"
+      ]
     },
     {
       "id": "SI-028",
@@ -1755,7 +1760,10 @@
         "SI-T-I06"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": [
+        "execution/si024-capability-downgrade.md",
+        "execution/si024-capability-downgrade.json"
+      ]
     },
     {
       "id": "SI-040",
@@ -4455,7 +4463,10 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si024-capability-downgrade.md",
+        "execution/si024-capability-downgrade.json"
+      ]
     },
     {
       "id": "SI-T-I03",

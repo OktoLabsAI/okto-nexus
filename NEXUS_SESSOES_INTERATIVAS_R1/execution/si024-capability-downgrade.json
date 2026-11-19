@@ -1,0 +1,76 @@
+{
+  "tasks": ["SI-024", "SI-027", "SI-039"],
+  "test_scope": {"SI-T-I02": "installed integration and package evidence; campaign pending"},
+  "current_artifacts": {
+    "directory": "%TEMP%/nexus-si-capability-build-e467968dc7454b7e8caa74482866d72b",
+    "nexus_version": "0.3.8",
+    "nexus_wheel_sha256": "32f11f91a35335952fd4a901f267a9235c6b39d04158df4e895c3c9d58fa6f3e",
+    "nexus_sdist_sha256": "b2923207d2f17915418940323449e9bfb946aaabd0b6b894dd8c735f2335befe",
+    "core_version": "0.0.16",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "strict_twine": "PASS",
+    "changed_modules_identical_to_wheel": 4,
+    "scoped_ruff": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "native_case": {
+    "fixture": "%TEMP%/nexus-si-downgrade-installed-e9226c150f444bf99abaa826235fe063/test_live_writer_downgrade.py",
+    "fixture_sha256": "7a213120c688854dbeecbea32b8363da4b9a0816308dd8949cdd781199bf6437",
+    "source_run": "%TEMP%/nexus-si-downgrade-source-09ec329209a54cdfb5edc4d9373ce6ad",
+    "source_fixture_sha256": "57cd847e8ad62b7403f15601a42f83a317e96faa47c6be553727c15f59446a36",
+    "source_result": "PASS",
+    "installed_result": "PASS",
+    "frontend": "Codex 0.170.0 in Windows ConPTY",
+    "frontend_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "cut": "Disable capacity availability in isolated Server during pending native interrupt review",
+    "observed": {
+      "next_turn_and_interrupt_unavailable": true,
+      "writer_disconnected_with_visible_status": true,
+      "pending_interrupt_reported_unconfirmed": true,
+      "read_only_reattached_during_downgrade_in_installed_run": true,
+      "same_process_and_thread_continued": true,
+      "queued_input_unchanged_at_cut_and_delivered_after_restore": true,
+      "native_interrupts": 0,
+      "native_steers": 0,
+      "native_turn_starts": 2,
+      "loopback_model_calls": 2,
+      "external_provider_calls": 0
+    },
+    "sqlite_after_installed_shutdown": {
+      "operations": {"runtime.close": 1, "runtime.open": 1, "turn.submit": 2},
+      "web_inputs_accepted_with_grant": 1,
+      "session_controls": 0,
+      "closed_sessions": 1,
+      "detached_readers": 1,
+      "detached_writers": 1
+    }
+  },
+  "previous_packages": {
+    "directory": "%TEMP%/nexus-si-previous-stack-98b39c0d920b4824b22ed589ca2a787c",
+    "nexus_0.3.7_commit": "2a0f30fb9da392fd80e1ddb1727950087ba8248b",
+    "nexus_0.3.7_wheel_sha256": "47aa65d32b1f72ec17a90e0bb0c7cdb1c86da119c27e09c4dc9fa0dd7194b4d5",
+    "core_0.0.14_wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "connector_0.0.13_wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+    "connector_0.0.14_wheel_sha256": "184c29b81274a1167ffa765b15433413f126a689c73c5f7a3077ddf0ef9860d2",
+    "core_0.0.15_wheel_sha256": "02c9454d10633ba760ac1c2d268e84704fbba607a2295ed3161a1df5e5f66657"
+  },
+  "compatibility_cases": {
+    "previous_stack_fixture": "test_previous_stack_diagnostics.py",
+    "previous_stack_fixture_sha256": "f98b61127e4e2c44f31e968314fa6a7666e122c8f20933530121718ad411c503",
+    "new_server_fixture": "test_older_connector_against_current.py",
+    "new_server_fixture_sha256": "73acfbb980104b522334d9cf413aa34662e28ee6d90a3ea0b321124f72c085ee",
+    "installed_client_against_previous_server": "PASS",
+    "older_connectors_against_current_server": "PASS",
+    "previous_server_matching_connector_registered": true,
+    "mismatched_connector_registration_attempts": 0,
+    "new_client_previous_server_session_listing": true,
+    "new_client_previous_server_attach": "PRESENTATION_UNAVAILABLE",
+    "new_client_previous_server_send": "SESSION_COMMAND_UNAVAILABLE",
+    "new_client_viewer_discovery_calls_on_previous_server": 0,
+    "previous_server_legacy_open_send_close": true
+  },
+  "supporting_regressions": {"source": 50, "installed": 50},
+  "limitations": ["Simulated loss of availability in a real Windows Codex presentation", "Synthetic adapter for the historical stack's execution", "No external provider campaign, two-host presentation, or human usability assessment"]
+}

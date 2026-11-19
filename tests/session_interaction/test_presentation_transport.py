@@ -394,6 +394,7 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
     if quit_mode == 'logout':
         monkeypatch.setattr(dashboard_session_presentations, '_RENEW_SECONDS', 1)
     positions = []
+    terminal_status = []
     notice = {'method': 'turn/started', 'params': {'threadId': THREAD, 'turn': {
         'id': 'turn', 'items': [], 'status': 'inProgress', 'itemsView': 'notLoaded', 'error': None}}}
     if quit_mode == 'follow':
@@ -434,7 +435,8 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
                     ).fetchone())
                 assert attachment_state(transport, offer)[0] == 'ACTIVE'
                 assert offer['attachment_id'] == peer.attachment_id
-                with local_codex_relay(peer, viewer_home=str(tmp_path), platform_os='windows') as endpoint:
+                with local_codex_relay(peer, viewer_home=str(tmp_path), platform_os='windows',
+                                       report_input_status=terminal_status.append) as endpoint:
                     port = urlsplit(endpoint.address).port
                     with socket.create_connection(('127.0.0.1', port), timeout=4) as foreign:
                         denied = open_viewer(endpoint, foreign, token=endpoint.token,
@@ -464,6 +466,9 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
                         if quit_mode == 'logout':
                             transport.auth.logout(transport.token)
                             assert viewer.recv(1024) == b''
+                            assert len(terminal_status) == 1 and 'lost its session presentation' in terminal_status[0]
+                        else:
+                            assert not terminal_status
                     deadline = time.monotonic() + 5
                     while attachment_state(transport, offer)[0] != 'DETACHED' and time.monotonic() < deadline:
                         time.sleep(.02)

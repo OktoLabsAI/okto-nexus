@@ -134,9 +134,9 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     scope = {name: source[name] for name in (
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
-    executable = select_viewer(viewer_executable)
     reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
                                          **({'write': True} if write else {}))
+    executable = select_viewer(viewer_executable)
     writer = reviewed if write else None
     revision = writer.capability_revision if writer else reviewed
     if writer and writer.occupied:

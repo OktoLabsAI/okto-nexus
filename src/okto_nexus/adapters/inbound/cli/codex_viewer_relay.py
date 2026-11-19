@@ -262,7 +262,11 @@ def _serve_once(listener, *, host, secret, protocol, stop, link, connected, repo
             listener.close()
             try:
                 _viewer(peer, wire, protocol, stop, link, report_input_status)
-            except (ConnectionError, OSError, ProtocolError, RecursionError, TypeError, ValueError):
+            except ConnectionError:
+                if not stop.is_set():
+                    report_input_status('This terminal lost its session presentation. Review the session in Nexus before sending again.')
+                return
+            except (OSError, ProtocolError, RecursionError, TypeError, ValueError):
                 return
             return
 
