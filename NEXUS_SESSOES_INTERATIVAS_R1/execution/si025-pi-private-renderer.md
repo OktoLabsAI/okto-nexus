@@ -13,3 +13,5 @@ Passaram 57 testes do Core, 103 do Connector e 23 do Nexus com os wheels instala
 Para reproduzir, execute `python NEXUS_SESSOES_INTERATIVAS_R1/execution/si025-pi-observer-probe.py --node <node.exe> --pi-release <raiz-do-release> --hosted-core --hosted-turn` com os wheels registrados na evidência disponíveis no interpretador. O preload do ensaio bloqueia conexões de saída do Pi e limita a leitura ao perfil descartável e aos arquivos necessários do release.
 
 A alteração dispensa migração. A reversão coordenada dos três commits restaura os pins anteriores. A SI-025 segue em andamento. A próxima etapa deve emitir tickets do operador para esse canal e validar o cliente de terminal e a entrada canônica com fila e aprovações.
+
+O script histórico é o de `990071b4588594fde4e3662a01b3c01e95c2a69b`. A versão atual usa a composição do host e a seleção de build adotadas pelo serviço. [Ticket e cliente Pi](si025-pi-operator-ticket.md)

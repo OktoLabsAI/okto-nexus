@@ -1,8 +1,11 @@
 """Find retained sessions in an exact project connection."""
 
 import argparse
+import codecs
 import json
+import shutil
 import sys
+from contextlib import nullcontext
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 from uuid import uuid4
@@ -118,6 +121,30 @@ def _select_session(call, binding, explicit, *, interactive):
     return read_binding_session(call, binding, candidates[int(choice) - 1])
 
 
+def _show_pi_transcript(link):
+    if sys.platform == 'win32':
+        from .windows_viewer_terminal import ansi_viewer_output
+        terminal = ansi_viewer_output(sys.stdout)
+    else:
+        terminal = nullcontext()
+    decoder = codecs.getincrementaldecoder('utf-8')()
+    try:
+        with terminal:
+            try:
+                while True:
+                    sys.stdout.write(decoder.decode(link.read_pi_output()))
+                    sys.stdout.flush()
+            finally:
+                sys.stdout.write('\x1b[0m\x1b[?25h\n')
+                sys.stdout.flush()
+    except KeyboardInterrupt:
+        return
+    except UnicodeError:
+        raise ConnectionError('PRESENTATION_UNAVAILABLE', 'The Pi transcript returned invalid terminal text.') from None
+    except OSError:
+        raise ConnectionError('PRESENTATION_TTY_REQUIRED', 'The terminal could not display the Pi transcript.') from None
+
+
 def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False):
     """Open a viewer for the exact existing session and return the detach receipt."""
     selected = _select_session(call, binding, session_id, interactive=interactive)
@@ -134,6 +161,23 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     scope = {name: source[name] for name in (
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
+    if binding.get('adapter_id') == 'pi_rpc':
+        if write or viewer_executable is not None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The local Pi transcript is read-only.')
+        revision = review_local_presentation(call, scope=scope, expected_session_generation=generation, presentation='pi')
+        size = shutil.get_terminal_size(fallback=(100, 36))
+        viewport = (max(24, min(300, size.columns)), max(8, min(120, size.lines)))
+        print(f'Opening read-only Pi for {display_text(scope["session_id"])} '
+              f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
+        print('Ctrl+C detaches this viewer.', flush=True)
+        with open_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                     capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
+                                     pi_viewport=viewport) as link:
+            _show_pi_transcript(link)
+        _display({'state': 'detached'}, False)
+        print('Session ' + display_text(scope['session_id']))
+        return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
+                'attach_strategy': 'pi_local_read', 'capability_revision': revision}
     reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
                                          **({'write': True} if write else {}))
     executable = select_viewer(viewer_executable)

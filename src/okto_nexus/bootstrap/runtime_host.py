@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import sys
 from dataclasses import replace
 from collections.abc import Awaitable, Callable, Mapping
 from contextlib import aclosing, asynccontextmanager
@@ -22,6 +23,8 @@ from nexus_connector_core import (
 from nexus_connector_core.journal import SQLiteJournal, open_journal
 from nexus_connector_core.models import PreparedLaunch, ProcessBirthRecord, SessionKey
 
+from ..application.execution_native_session_mapping import reviewed_pi_build
+
 
 class EmbeddedRuntimeHost:
     """Own one journal/runtime per session and one slot ledger per Server.
@@ -32,7 +35,8 @@ class EmbeddedRuntimeHost:
     silently reusing a runtime would execute against the old selection.
     """
 
-    def __init__(self, store_dir: Path, *, max_owned_slots: int = 64, capacity_enabled: bool = False):
+    def __init__(self, store_dir: Path, *, max_owned_slots: int = 64, capacity_enabled: bool = False,
+                 pi_presentation_enabled: bool = False):
         store_dir = Path(store_dir)
         if not store_dir.is_absolute():
             raise ValueError("The embedded Core store directory must be absolute.")
@@ -43,13 +47,16 @@ class EmbeddedRuntimeHost:
         if type(capacity_enabled) is not bool:
             raise ValueError('Capacity support must be a boolean.')
         self.capacity_enabled = capacity_enabled
+        if type(pi_presentation_enabled) is not bool:
+            raise ValueError('Pi presentation support must be a boolean.')
+        self.pi_presentation_enabled = pi_presentation_enabled
         self._capacity_services = {}
         self._capacity_gate = asyncio.Lock()
         self._lock = asyncio.Lock()
         self._ledger_task: asyncio.Task[SQLiteOwnedSlotLedger] | None = None
         self._runtime_tasks: dict[tuple[str, str], asyncio.Task[
             tuple[RuntimeCore, SQLiteJournal]]] = {}
-        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str, object]] = {}
+        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str, object, bool]] = {}
         self._closing = False
         self._draining = False
         self._history_closing = False
@@ -115,6 +122,15 @@ class EmbeddedRuntimeHost:
             connection_id: str, connection_generation: int) -> dict:
         return await self._read_r4_native_presentation(scope, target, "read_live_pi_session",
             connection_id=connection_id, connection_generation=connection_generation)
+
+    def has_hosted_pi_renderer(self, server_id: str, executor_id: str, session_id: str) -> bool:
+        """Check retained composition without opening a runtime or socket."""
+        scope = {'server_id': server_id, 'executor_id': executor_id, 'session_id': session_id}
+        try:
+            _, selection, task = self._existing_presentation_runtime(scope, 'pi_renderer')
+        except CoreError:
+            return False
+        return selection[6] and callable(getattr(task.result()[0], 'open_live_pi_renderer', None))
 
     @asynccontextmanager
     async def open_r4_pi_renderer(self, scope: Mapping, target: NativeSessionTarget, *,
@@ -384,8 +400,11 @@ class EmbeddedRuntimeHost:
         if codex_resume is not None and (not callable(codex_resume)
                 or set(candidates) != {"codex_app_server"} or native_factory is not None):
             raise CoreError("CAPABILITY_UNSUPPORTED", "saved_codex_resume", retry_safe=True)
+        pi = candidates.get('pi_rpc')
+        hosted_pi = (self.pi_presentation_enabled and native_factory is None and pi is not None
+                     and bool(pi.launch_script) and reviewed_pi_build(pi.version, sys.platform, pi.architecture, pi.build_identity))
         selection = (dict(candidates), dict(workspace_roots), native_action_factory,
-                     native_approvals_enabled, server_id, codex_resume)
+                     native_approvals_enabled, server_id, codex_resume, hosted_pi)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -426,6 +445,7 @@ class EmbeddedRuntimeHost:
                 pi_native_action=native_launch if selection[2] is not None else None,
                 native_approvals_enabled=selection[3],
                 codex_resume=selection[5],
+                **({'pi_hosted_rpc': True} if selection[6] else {}),
             )
             if selection[2] is not None:
                 from nexus_connector_core.native_action_socket import PiNativeActionOwner

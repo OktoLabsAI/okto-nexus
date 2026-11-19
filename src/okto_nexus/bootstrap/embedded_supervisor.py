@@ -47,6 +47,7 @@ class EmbeddedRuntimeSupervisor:
         from .runtime_host import EmbeddedRuntimeHost
         from .runtime_boot_owner import RuntimeBootOwner
         from .local_codex_presentations import publish_local_codex_presentations
+        from .local_pi_presentations import publish_local_pi_presentations
         from ..application.execution_local_launch import ApprovedLocalLaunch
         from ..adapters.inbound.mcp.tools.harness import run_runtime_boot
 
@@ -81,7 +82,8 @@ class EmbeddedRuntimeSupervisor:
             return
         host = EmbeddedRuntimeHost(old.host.store_dir,
                                    max_owned_slots=old.host.max_owned_slots,
-                                   capacity_enabled=old.host.capacity_enabled)
+                                   capacity_enabled=old.host.capacity_enabled,
+                                   pi_presentation_enabled=old.host.pi_presentation_enabled)
         host.local_launch_factory = lambda scope: ApprovedLocalLaunch(candidate, scope)
         dispatch = EmbeddedDispatchOwner(candidate, host,
                                          session_input_dispatch_options=old.session_input_dispatch_options)
@@ -94,6 +96,7 @@ class EmbeddedRuntimeSupervisor:
         state.embedded_dispatch_owner = coordinator.embedded = dispatch
         state.runtime_boot_owner = coordinator.runtime_boot = replacement_boot
         publish_local_codex_presentations(self.app, dispatch)
+        publish_local_pi_presentations(self.app, dispatch)
         self._candidate = None
         self._starting = dispatch
         await self._start_replacement()

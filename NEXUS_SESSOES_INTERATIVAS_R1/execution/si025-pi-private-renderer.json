@@ -1,6 +1,7 @@
 {
   "task": "SI-025",
   "status": "IN_PROGRESS",
+  "fixture_revision": "990071b4588594fde4e3662a01b3c01e95c2a69b",
   "scope": "Private Core-to-Pi loopback transport and trusted Nexus renderer reader on Windows x64, with Pi 0.87.1 and Node 24.15.0.",
   "baseline": {
     "nexus": "90b5ca931436a99b70c5ea21fcb78c336e63af1f",

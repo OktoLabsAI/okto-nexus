@@ -1,6 +1,7 @@
 """Exercise the local presentation protocol across HTTP and WebSocket."""
 
 import json
+from contextlib import asynccontextmanager
 import socket
 import threading
 import time
@@ -8,6 +9,7 @@ from dataclasses import asdict, replace
 from types import SimpleNamespace
 from urllib.parse import urlsplit
 
+import anyio
 import pytest
 import uvicorn
 from fastapi import FastAPI
@@ -42,6 +44,11 @@ from okto_nexus.application.codex_viewer_protocol import (
 )
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.application.terminal_connection import ConnectionError
+from okto_nexus.application.execution_native_session_mapping import (
+    _PI_PRESENTATION_BUILD, ManagedNativeSession, NativeLaunchBuild,
+)
+from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_presentations
+from okto_nexus.domain.presentation_protocol import PI_PRESENTATION_SUBPROTOCOL
 from okto_nexus.domain.session_interaction import InputAuthor
 from tests.session_interaction.test_queue_storage import database as queue_database
 
@@ -132,10 +139,10 @@ def prepare(transport, client_intent_id='exact-view', **extra):
         'client_intent_id': client_intent_id, 'intent': 'attach_live', 'access': 'read', **extra})
 
 
-def stream(transport, offer, *, path='', **headers):
+def stream(transport, offer, *, path='', protocol=SUBPROTOCOL, **headers):
     return transport.client.websocket_connect('ws://127.0.0.1' + PREFIX + '/attachments/'
         + offer['attachment_id'] + '/stream' + path,
-        headers={'Authorization': 'Bearer ' + offer['ticket'], **headers}, subprotocols=[SUBPROTOCOL])
+        headers={'Authorization': 'Bearer ' + offer['ticket'], **headers}, subprotocols=[protocol])
 
 
 def hello(ws, scope):
@@ -223,6 +230,149 @@ def test_disabled_and_unqualified_intents_are_refused(transport):
     assert prepare(transport, intent='resume_saved').status_code == 409
     transport.app.state.local_codex_presentations = None
     assert prepare(transport).status_code == 409
+
+
+@pytest.fixture
+def pi_presentation(transport):
+    version, platform, architecture, fingerprint = _PI_PRESENTATION_BUILD
+    build = NativeLaunchBuild(version, platform, architecture, 'sha256:' + 'a' * 64, fingerprint, 'qualified')
+    mapping = ManagedNativeSession(transport.scope, 'open-pi', 'pi_rpc', 'native-pi', 'epoch', 'candidate',
+                                   'inventory', 1, build, 'connection', 1, None, None)
+    views = []
+    state = SimpleNamespace(available=True, mapping=mapping, frames=views, refuse_open=False)
+
+    def available(server_id, executor_id, session_id):
+        return state.available and (server_id, executor_id, session_id) == tuple(asdict(transport.scope.session).values())
+
+    @asynccontextmanager
+    async def open_renderer(scope, *, columns, rows):
+        assert scope == transport.scope
+        if state.refuse_open:
+            from nexus_connector_core import CoreError
+            raise CoreError('NATIVE_UNAVAILABLE', 'pi_renderer')
+        views.append(('open', columns, rows))
+
+        async def frames():
+            yield b'\x1b[2JExact Pi renderer bytes\n'
+            await anyio.sleep_forever()
+
+        try:
+            yield frames()
+        finally:
+            views.append(('detach', columns, rows))
+
+    async def prove(scope):
+        assert scope == transport.scope
+        return state.mapping, 'retained-owner'
+
+    dispatch = SimpleNamespace(host=SimpleNamespace(pi_presentation_enabled=True, has_hosted_pi_renderer=available),
+        prove_native_presentation_owner=prove, read_native_presentation_mapping=lambda *_: state.mapping,
+        open_native_pi_renderer=open_renderer)
+    transport.app.state.deps.connection_factory = transport.factory
+    publish_local_pi_presentations(transport.app, dispatch)
+    return state
+
+
+def _pi_review(transport):
+    return transport.client.post(PREFIX + f'/sessions/{transport.scope.session.session_id}/attachments:review',
+        headers={'x-nexus-ui': '1'}, json={**document(transport.scope), 'presentation': 'pi'})
+
+
+def _pi_prepare(transport, *, client_intent_id='pi-view', **options):
+    review = _pi_review(transport)
+    assert review.status_code == 200 and review.json()['attach_strategy'] == 'pi_local_read'
+    return prepare(transport, client_intent_id, presentation='pi', capability_revision=review.json()['capability_revision'], **options)
+
+
+def _prove_pi_ticket(ws, scope, *, columns=100, rows=36):
+    ws.send_json({'kind': 'hello', 'version': 1, **document(scope), 'columns': columns, 'rows': rows})
+    challenge = ws.receive_json()
+    assert challenge['kind'] == 'challenge'
+    ws.send_json({'kind': 'prove', 'challenge': challenge['challenge']})
+    return challenge['channel_id']
+
+
+def test_pi_ticket_is_read_only_one_use_and_scoped_to_its_protocol(transport, pi_presentation):
+    offer = _pi_prepare(transport).json()
+    assert offer['live_updates'] is True
+    with stream(transport, offer) as ws, pytest.raises(WebSocketDisconnect):
+        hello(ws, transport.scope)
+        ws.receive_json()
+    assert attachment_state(transport, offer)[0] == 'PREPARED'
+    with stream(transport, offer, protocol=PI_PRESENTATION_SUBPROTOCOL) as ws:
+        _prove_pi_ticket(ws, transport.scope)
+        assert ws.receive_json() == {'kind': 'attached', 'attachment_id': offer['attachment_id'], 'access': 'read'}
+        assert ws.receive_bytes() == b'\x1b[2JExact Pi renderer bytes\n'
+        ws.send_bytes(b'never sent to Pi')
+        with pytest.raises(WebSocketDisconnect):
+            ws.receive_bytes()
+    assert attachment_state(transport, offer) == ('DETACHED', None, None)
+    assert pi_presentation.frames == [('open', 100, 36), ('detach', 100, 36)]
+    assert _pi_prepare(transport).json()['ticket'] is None
+    with stream(transport, offer, protocol=PI_PRESENTATION_SUBPROTOCOL) as ws, pytest.raises(WebSocketDisconnect):
+        _prove_pi_ticket(ws, transport.scope)
+
+
+@pytest.mark.parametrize('withdraw', ['logout', 'capability', 'attach_failure'])
+def test_pi_renderer_retires_on_authority_loss_and_attach_failure(transport, pi_presentation, withdraw):
+    offer = _pi_prepare(transport).json()
+    if withdraw == 'attach_failure':
+        pi_presentation.refuse_open = True
+    with stream(transport, offer, protocol=PI_PRESENTATION_SUBPROTOCOL) as ws:
+        _prove_pi_ticket(ws, transport.scope)
+        if withdraw != 'attach_failure':
+            assert ws.receive_json()['kind'] == 'attached'
+            assert ws.receive_bytes()
+            if withdraw == 'logout':
+                transport.auth.logout(transport.token)
+            else:
+                pi_presentation.available = False
+        with pytest.raises(WebSocketDisconnect):
+            ws.receive_json()
+    assert attachment_state(transport, offer) == ('DETACHED', None, None)
+    assert pi_presentation.frames == ([] if withdraw == 'attach_failure' else [('open', 100, 36), ('detach', 100, 36)])
+
+
+def test_pi_review_refuses_other_builds_writers_and_historical_runtime(transport, pi_presentation):
+    assert _pi_prepare(transport, access='write', expected_writer_epoch=0).status_code == 409
+    assert _pi_prepare(transport, intent='resume_saved').status_code == 409
+    original = pi_presentation.mapping
+    pi_presentation.mapping = replace(original, launch_build=replace(original.launch_build, build_identity='different'))
+    assert _pi_review(transport).status_code == 409
+    pi_presentation.mapping = original
+    pi_presentation.available = False
+    assert _pi_review(transport).status_code == 409
+
+
+def test_pi_client_reads_binary_frames_over_loopback_and_detaches(transport, pi_presentation):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
+        listener.bind(('127.0.0.1', 0))
+        listener.listen()
+        host, port = listener.getsockname()
+        server = uvicorn.Server(uvicorn.Config(transport.app, loop='asyncio', ws='wsproto',
+            lifespan='off', log_level='warning', access_log=False, proxy_headers=False))
+        thread = threading.Thread(target=lambda: server.run(sockets=[listener]), daemon=True)
+        thread.start()
+        try:
+            deadline = time.monotonic() + 5
+            while not server.started and thread.is_alive() and time.monotonic() < deadline:
+                time.sleep(.02)
+            assert server.started
+            api = RemoteOperatorHTTP(f'http://{host}:{port}', token=transport.token,
+                                     server_id=transport.scope.session.server_id)
+            scope = document(transport.scope)
+            revision = review_local_presentation(api, **scope, presentation='pi')
+            with open_local_presentation(api, **scope, capability_revision=revision,
+                                         client_intent_id='loopback-pi', pi_viewport=(80, 24)) as reader:
+                assert reader.read_pi_output() == b'\x1b[2JExact Pi renderer bytes\n'
+                offer = {'attachment_id': reader.attachment_id}
+                assert attachment_state(transport, offer)[0] == 'ACTIVE'
+        finally:
+            server.should_exit = True
+            thread.join(10)
+            assert not thread.is_alive()
+    assert attachment_state(transport, offer) == ('DETACHED', None, None)
+    assert pi_presentation.frames == [('open', 80, 24), ('detach', 80, 24)]
 
 
 def test_writer_and_web_share_queue_with_exact_scope_and_idempotency(transport, monkeypatch):

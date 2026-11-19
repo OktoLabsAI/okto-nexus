@@ -1,8 +1,10 @@
-"""Local operator transport for a scoped Codex presenter."""
+"""Local operator transport for scoped native presenters."""
 
+import asyncio
 import secrets
 import time
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable
+from contextlib import AbstractAsyncContextManager, AsyncExitStack
 from dataclasses import dataclass
 from functools import partial
 from ipaddress import ip_address
@@ -25,9 +27,12 @@ from ....application.session_interaction_controls import request_exact_human_int
 from ....application.session_interaction_promotion import steer_human_input
 from ....domain.presentation_protocol import (
     LOCAL_CODEX_AUDIENCE,
+    LOCAL_PI_AUDIENCE,
+    MAX_PI_PRESENTATION_BYTES,
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
+    PI_PRESENTATION_SUBPROTOCOL,
 )
 from ....domain.session_interaction import InputAuthor, InputScope
 from ....errors import ErrorCode, OktoNexusError
@@ -68,9 +73,21 @@ class LocalCodexPresentations:
     next_turn_revision: Callable[[object, InputScope], str | None] | None = None
 
 
+@dataclass(frozen=True, slots=True)
+class LocalPiPresentations:
+    broker: SessionAttachmentBroker
+    prove_owner: Callable[[InputScope], Awaitable[tuple[ManagedNativeSession, NativeSessionOwnerProof]]]
+    open_renderer: Callable[..., AbstractAsyncContextManager[AsyncIterator[bytes]]]
+
+
 class _Hello(ScopedSession):
     kind: Literal['hello']
     version: Literal[1]
+
+
+class _PiHello(_Hello):
+    columns: Annotated[int, Field(strict=True, ge=24, le=300)]
+    rows: Annotated[int, Field(strict=True, ge=8, le=120)]
 
 
 class _ChallengeReply(_Document):
@@ -156,10 +173,12 @@ _REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesReq
 
 class _Review(ScopedSession):
     access: Literal['read', 'write'] = 'read'
+    presentation: Literal['codex', 'pi'] = 'codex'
 
 
 class _Detach(ScopedSession):
     channel_id: Identifier
+    presentation: Literal['codex', 'pi'] = 'codex'
 
 
 def _local_transport(request) -> bool:
@@ -174,10 +193,10 @@ def _local_transport(request) -> bool:
         return False
 
 
-def _upgrade_allowed(ws: WebSocket) -> bool:
+def _upgrade_allowed(ws: WebSocket, protocol=PRESENTATION_SUBPROTOCOL) -> bool:
     if (not _local_transport(ws) or ws.query_params or ws.headers.get('sec-fetch-site') == 'cross-site'
             or len(ws.headers.getlist('origin')) > 1
-            or PRESENTATION_SUBPROTOCOL not in ws.scope.get('subprotocols', ())):
+            or protocol not in ws.scope.get('subprotocols', ())):
         return False
     try:
         return _safe_transport(ws)
@@ -217,8 +236,12 @@ async def _send(ws: WebSocket, frame):
         await ws.send_text(raw.decode())
 
 
-def _services(state):
-    return getattr(state, 'local_codex_presentations', None)
+def _services(state, presentation='codex'):
+    return getattr(state, 'local_pi_presentations' if presentation == 'pi' else 'local_codex_presentations', None)
+
+
+def _matching_presenter(mapping, *, pi: bool) -> bool:
+    return mapping.adapter_id == 'pi_rpc' if pi else mapping.codex_thread_id is not None
 
 
 def _verify_writer(state, services, active, uow, human):
@@ -297,28 +320,83 @@ async def _enqueue(state, services, active, history, request):
             'status': receipt.status, 'operation_id': receipt.operation_id, 'possible_effect': receipt.possible_effect}
 
 
-async def _present(ws, services, author, attachment_id, ticket):
+async def _present_pi(ws, services, active, hello):
+    async def verify(*, renew=False):
+        if _services(ws.app.state, 'pi') is not services:
+            raise ValueError('Presentation owner changed')
+        await _worker(services.broker.refresh if renew else services.broker.require_active, **active)
+        if _services(ws.app.state, 'pi') is not services:
+            raise ValueError('Presentation owner changed')
+
+    async with AsyncExitStack() as stack:
+        with anyio.fail_after(10):
+            frames = await stack.enter_async_context(services.open_renderer(
+                active['scope'], columns=hello.columns, rows=hello.rows))
+            await verify()
+            await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': 'read'})
+
+        inbound = asyncio.create_task(ws.receive())
+        output = asyncio.ensure_future(anext(frames, None))
+        renewal = anyio.current_time() + _RENEW_SECONDS
+        try:
+            while True:
+                done, _ = await asyncio.wait((inbound, output), timeout=1, return_when=asyncio.FIRST_COMPLETED)
+                if inbound in done:
+                    if inbound.result()['type'] != 'websocket.disconnect':
+                        raise ValueError('The Pi presentation only accepts output')
+                    return
+                renew = anyio.current_time() >= renewal
+                await verify(renew=renew)
+                if renew:
+                    renewal = anyio.current_time() + _RENEW_SECONDS
+                if output not in done:
+                    continue
+                data = output.result()
+                if data is None:
+                    break
+                if type(data) is not bytes or not 1 <= len(data) <= MAX_PI_PRESENTATION_BYTES:
+                    raise ValueError('Invalid renderer frame')
+                with anyio.fail_after(5):
+                    await ws.send_bytes(data)
+                output = asyncio.ensure_future(anext(frames, None))
+        finally:
+            inbound.cancel()
+            output.cancel()
+            with anyio.CancelScope(shield=True):
+                await asyncio.gather(inbound, output, return_exceptions=True)
+    await ws.close(code=4409)
+
+
+async def _present(ws, services, author, attachment_id, ticket, presentation):
     broker = services.broker
+    pi = presentation == 'pi'
+    audience = LOCAL_PI_AUDIENCE if pi else _AUDIENCE
     channel_id = 'viewer_' + secrets.token_hex(16)
     scope = None
-    await ws.accept(subprotocol=PRESENTATION_SUBPROTOCOL)
+    await ws.accept(subprotocol=PI_PRESENTATION_SUBPROTOCOL if pi else PRESENTATION_SUBPROTOCOL)
     try:
         with anyio.fail_after(10):
-            hello = _Hello.model_validate(await _receive(ws))
+            hello = (_PiHello if pi else _Hello).model_validate(await _receive(ws))
             scope = hello.input_scope()
-            if _services(ws.app.state) is not services:
+            if _services(ws.app.state, presentation) is not services:
                 raise ValueError('Presentation owner changed')
             credentials = {'scope': scope, 'author': author, 'attachment_id': attachment_id,
-                           'audience': _AUDIENCE, 'channel_id': channel_id, 'ticket': ticket}
+                           'audience': audience, 'channel_id': channel_id, 'ticket': ticket}
             nonce = await _worker(broker.challenge, **credentials)
             await _send(ws, {'kind': 'challenge', 'challenge': nonce, 'channel_id': channel_id})
             proof = _ChallengeReply.model_validate(await _receive(ws))
-            if _services(ws.app.state) is not services:
+            if _services(ws.app.state, presentation) is not services:
                 raise ValueError('Presentation owner changed')
             attachment = await _worker(broker.attach, **credentials, challenge=proof.challenge)
             active = {'scope': scope, 'author': author, 'attachment': attachment,
-                      'audience': _AUDIENCE, 'channel_id': channel_id}
-            await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
+                      'audience': audience, 'channel_id': channel_id}
+            if not pi:
+                await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
+        if pi:
+            if attachment.access != 'read':
+                raise ValueError('This renderer only supports reading')
+            await _present_pi(ws, services, active, hello)
+            return
         history = CodexPresenterHistoryChannel(broker=broker, prove_owner=services.prove_owner,
                                               access=services.execution_access, **active)
         next_renewal = anyio.current_time() + _RENEW_SECONDS
@@ -387,27 +465,32 @@ def build_router():
         token = request.cookies.get(COOKIE)
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to review this presentation.')
-        services = _services(state)
+        pi = body.presentation == 'pi'
+        services = _services(state, body.presentation)
         writing = body.access == 'write'
-        if services is None or services.read_context is None or writing and services.next_turn_revision is None:
+        if (services is None or pi and writing
+                or not pi and (services.read_context is None or writing and services.next_turn_revision is None)):
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         scope = body.input_scope()
         try:
             mapping, _ = await services.prove_owner(scope)
-            if mapping.codex_thread_id is None or _services(state) is not services:
+            if not _matching_presenter(mapping, pi=pi) or _services(state, body.presentation) is not services:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
             reference = await _worker(state.operator_auth.authority_reference, token=token)
             if reference is None:
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
-            authority = {'scope': scope, 'author': InputAuthor(reference, 'native_terminal'), 'audience': _AUDIENCE}
+            authority = {'scope': scope, 'author': InputAuthor(reference, 'native_terminal'),
+                         'audience': LOCAL_PI_AUDIENCE if pi else _AUDIENCE}
             review_capability = services.broker.review_writer if writing else services.broker.review_reader
             reviewed = await _worker(review_capability, **authority)
-            context = await services.read_context(scope)
-            if (context is None or context.thread_id != mapping.codex_thread_id
-                    or reviewed != await _worker(review_capability, **authority)
-                    or _services(state) is not services):
+            if not pi:
+                context = await services.read_context(scope)
+                if context is None or context.thread_id != mapping.codex_thread_id:
+                    raise CoreError('SESSION_CONFLICT', 'native_presentation')
+            if (reviewed != await _worker(review_capability, **authority)
+                    or _services(state, body.presentation) is not services):
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
-            details = {'attach_strategy': 'codex_local_read', 'capability_revision': reviewed}
+            details = {'attach_strategy': 'pi_local_read' if pi else 'codex_local_read', 'capability_revision': reviewed}
             if writing:
                 def input_revision():
                     with services.broker.factory.unit_of_work(write=False) as uow:
@@ -423,7 +506,7 @@ def build_router():
             return _runtime_error(error)
         except CoreError:
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
-        return JSONResponse({'version': 1, **details, **body.model_dump(exclude={'access'})}, headers=_HEADERS)
+        return JSONResponse({'version': 1, **details, **body.model_dump(exclude={'access', 'presentation'})}, headers=_HEADERS)
 
     @router.post('/sessions/{session_id}/attachments:prepare')
     async def prepare(session_id: str, body: PrepareAttachment, request: Request):
@@ -435,33 +518,42 @@ def build_router():
         token = request.cookies.get(COOKIE)
         if await _worker(state.operator_auth.resolve, token=token) is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to prepare this presentation.')
-        services = _services(state)
+        pi = body.presentation == 'pi'
+        services = _services(state, body.presentation)
         if (services is None or body.intent != 'attach_live'
-                or body.access == 'write' and services.next_turn_revision is None):
+                or body.access == 'write' and (pi or services.next_turn_revision is None)):
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         scope = body.input_scope()
         try:
             mapping, _ = await services.prove_owner(scope)
-            if mapping.codex_thread_id is None or _services(state) is not services:
+            if not _matching_presenter(mapping, pi=pi) or _services(state, body.presentation) is not services:
                 raise CoreError('SESSION_CONFLICT', 'native_presentation')
             reference = await _worker(state.operator_auth.authority_reference, token=token)
             if reference is None:
                 return _error(401, 'AUTH_FAILED', 'The operator login has expired.')
             offer = await _worker(services.broker.prepare, scope=scope, author=InputAuthor(reference, 'native_terminal'),
-                audience=_AUDIENCE, capability_revision=body.capability_revision, client_intent_id=body.client_intent_id,
+                audience=LOCAL_PI_AUDIENCE if pi else _AUDIENCE,
+                capability_revision=body.capability_revision, client_intent_id=body.client_intent_id,
                 access=body.access, expected_writer_epoch=body.expected_writer_epoch, takeover=body.takeover)
         except OktoNexusError as error:
             return _runtime_error(error)
         except CoreError:
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         return JSONResponse({'version': 1, 'attachment_id': offer.attachment_id, 'state': offer.state,
-                             'ticket': offer.ticket, 'live_updates': services.live_updates},
+                             'ticket': offer.ticket, 'live_updates': True if pi else services.live_updates},
                             status_code=201 if offer.ticket else 200, headers=_HEADERS)
 
     @router.websocket('/attachments/{attachment_id}/stream')
     async def stream(ws: WebSocket, attachment_id: str):
-        services, ticket = _services(ws.app.state), _ticket(ws)
-        if services is None or ticket is None or not _upgrade_allowed(ws):
+        offered = set(ws.scope.get('subprotocols', ()))
+        recognized = offered & {PI_PRESENTATION_SUBPROTOCOL, PRESENTATION_SUBPROTOCOL}
+        if len(recognized) != 1:
+            await ws.close(code=4403)
+            return
+        protocol = recognized.pop()
+        presentation = 'pi' if protocol == PI_PRESENTATION_SUBPROTOCOL else 'codex'
+        services, ticket = _services(ws.app.state, presentation), _ticket(ws)
+        if services is None or ticket is None or not _upgrade_allowed(ws, protocol):
             await ws.close(code=4403)
             return
         reference = await _worker(ws.app.state.operator_auth.authority_reference,
@@ -469,7 +561,7 @@ def build_router():
         if reference is None:
             await ws.close(code=4401)
             return
-        await _present(ws, services, InputAuthor(reference, 'native_terminal'), attachment_id, ticket)
+        await _present(ws, services, InputAuthor(reference, 'native_terminal'), attachment_id, ticket, presentation)
 
     @router.post('/attachments/{attachment_id}/detach')
     async def detach(attachment_id: str, body: _Detach, request: Request):
@@ -479,7 +571,7 @@ def build_router():
         reference = await _worker(state.operator_auth.authority_reference, token=request.cookies.get(COOKIE), create=False)
         if reference is None:
             return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to detach this presentation.')
-        services = _services(state)
+        services = _services(state, body.presentation)
         if services is None:
             return _error(409, 'CONFLICT', 'This local presentation is currently unavailable.')
         try:

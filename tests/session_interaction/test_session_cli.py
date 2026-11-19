@@ -3,6 +3,7 @@
 import json
 import os
 from contextlib import contextmanager
+from io import StringIO
 from types import SimpleNamespace
 from urllib.parse import parse_qs, urlsplit
 
@@ -150,6 +151,52 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
     output = capsys.readouterr().out
     assert 'Press Ctrl+] to detach' in output and 'Session session-a' in output and 'Viewer detached' in output
     assert catalog.token not in output
+
+
+def test_pi_attachment_selects_the_ticketed_transcript_and_detaches_locally(monkeypatch, capsys):
+    call = Catalog()
+    call.token = 'synthetic-cookie'
+    binding = BINDING | {'adapter_id': 'pi_rpc'}
+    reviewed = []
+
+    def review(api, **selection):
+        assert api is call and selection['expected_session_generation'] == 7
+        assert selection['presentation'] == 'pi' and selection['scope']['session_id'] == 'session-a'
+        return 'pi-revision'
+
+    @contextmanager
+    def attach(api, **selection):
+        assert api is call and selection['capability_revision'] == 'pi-revision'
+        assert selection['scope']['session_id'] == 'session-a' and 'pi_viewport' in selection
+        try:
+            yield SimpleNamespace(attachment_id='pi-attachment')
+        finally:
+            reviewed.append('socket closed')
+
+    monkeypatch.setattr(session, 'review_local_presentation', review)
+    monkeypatch.setattr(session, 'open_local_presentation', attach)
+    monkeypatch.setattr(session, '_show_pi_transcript', lambda link: reviewed.append(link.attachment_id))
+    result = session.attach_session(call, binding, session_id='session-a', interactive=True)
+    assert result['attach_strategy'] == 'pi_local_read' and result['status'] == 'detached'
+    assert reviewed == ['pi-attachment', 'socket closed']
+    assert 'Ctrl+C detaches' in capsys.readouterr().out
+    with pytest.raises(ConnectionError, match='read-only'):
+        session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
+
+
+def test_pi_terminal_keeps_split_utf8_and_recovers_style_after_ctrl_c(monkeypatch):
+    output = StringIO()
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(platform='linux', stdout=output))
+    pieces = iter([b'Pi \xe2', b'\x9c\x93'])
+
+    def next_frame():
+        value = next(pieces, None)
+        if value is None:
+            raise KeyboardInterrupt
+        return value
+
+    session._show_pi_transcript(SimpleNamespace(read_pi_output=next_frame))
+    assert output.getvalue() == 'Pi ✓\x1b[0m\x1b[?25h\n'
 
 
 @pytest.mark.parametrize('http_status', [404, 405])

@@ -14,6 +14,7 @@ from nexus_connector_core.protocol import canonical_json, strict_json
 from wsproto import ConnectionType, WSConnection
 from wsproto.events import (
     AcceptConnection,
+    BytesMessage,
     CloseConnection,
     Ping,
     RejectConnection,
@@ -31,9 +32,11 @@ from ...application.codex_viewer_protocol import (
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
     MAX_PRESENTATION_NOTIFICATIONS,
+    MAX_PI_PRESENTATION_BYTES,
     MAX_PRESENTATION_REQUEST_BYTES,
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
+    PI_PRESENTATION_SUBPROTOCOL,
 )
 from ...domain.session_interaction import MAX_SQLITE_INTEGER, InputDeliveryState
 
@@ -86,6 +89,13 @@ class _LocalPresenter:
 
     def _events(self, deadline):
         while True:
+            for event in self._wire.events():
+                if isinstance(event, (CloseConnection, RejectConnection)):
+                    raise OSError('Presentation socket refused or closed')
+                if isinstance(event, Ping):
+                    self._peer.sendall(self._wire.send(event.response()))
+                else:
+                    yield event
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise TimeoutError('Presentation response timed out')
@@ -94,23 +104,16 @@ class _LocalPresenter:
             if not data:
                 raise OSError('Presentation socket closed')
             self._wire.receive_data(data)
-            for event in self._wire.events():
-                if isinstance(event, (CloseConnection, RejectConnection)):
-                    raise OSError('Presentation socket refused or closed')
-                if isinstance(event, Ping):
-                    self._peer.sendall(self._wire.send(event.response()))
-                else:
-                    yield event
 
-    def upgrade(self, *, host, path, headers, ticket):
+    def upgrade(self, *, host, path, headers, ticket, protocol=PRESENTATION_SUBPROTOCOL):
         self._peer.sendall(self._wire.send(Request(host=host, target=path,
-            subprotocols=[PRESENTATION_SUBPROTOCOL], extra_headers=[
+            subprotocols=[protocol], extra_headers=[
                 (b'authorization', ('Bearer ' + ticket).encode()),
                 (b'cookie', headers['Cookie'].encode()),
                 (b'origin', headers['Origin'].encode()),
             ])))
         event = next(self._events(time.monotonic() + _TIMEOUT))
-        if not isinstance(event, AcceptConnection) or event.subprotocol != PRESENTATION_SUBPROTOCOL:
+        if not isinstance(event, AcceptConnection) or event.subprotocol != protocol:
             raise ValueError('Presentation subprotocol did not match')
 
     def exchange(self, frame):
@@ -133,6 +136,24 @@ class _LocalPresenter:
                     raise ValueError('Invalid presentation response')
                 return value
         raise OSError('The presentation response ended early')
+
+    def read_pi_output(self) -> bytes:
+        """Read a bounded binary frame with idle waits interruptible by the terminal."""
+        data = bytearray()
+        while True:
+            try:
+                for event in self._events(time.monotonic() + 1):
+                    if not isinstance(event, BytesMessage) or len(data) + len(event.data) > MAX_PI_PRESENTATION_BYTES:
+                        raise ValueError('Invalid Pi renderer frame')
+                    data.extend(event.data)
+                    if event.message_finished:
+                        if not data:
+                            raise ValueError('Empty Pi renderer frame')
+                        return bytes(data)
+            except TimeoutError:
+                continue
+            except (OSError, ValueError, ProtocolError):
+                raise _unavailable() from None
 
     def page(self, *, method, params):
         if method not in _HISTORY_METHODS:
@@ -295,10 +316,14 @@ def _revision(value):
     return isinstance(value, str) and 1 <= len(value) <= 160 and value.isprintable()
 
 
-def review_local_presentation(api, *, scope, expected_session_generation, write=False):
+def review_local_presentation(api, *, scope, expected_session_generation, write=False, presentation='codex'):
     """Read an exact viewer capability without issuing an attachment ticket."""
     _local_origin(api, scope)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
+    if presentation == 'pi':
+        if write:
+            raise _unavailable()
+        state['presentation'] = 'pi'
     if write:
         state['access'] = 'write'
     try:
@@ -311,7 +336,7 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
         raise
     revision = response.get('capability_revision')
     if (type(response.get('version')) is not int or response['version'] != 1
-            or response.get('attach_strategy') != ('codex_local_write' if write else 'codex_local_read')
+            or response.get('attach_strategy') != f"{presentation}_local_{'write' if write else 'read'}"
             or response.get('scope') != scope or type(response.get('expected_session_generation')) is not int
             or response['expected_session_generation'] != expected_session_generation
             or not _revision(revision)):
@@ -328,7 +353,7 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
 
 @contextmanager
 def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id,
-                            writer=None):
+                            writer=None, pi_viewport=None):
     """Exchange the offer and challenge without passing the human session to the viewer."""
     origin = _local_origin(api, scope)
     port = origin.port or (443 if origin.scheme == 'https' else 80)
@@ -336,9 +361,12 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     access = 'write' if writer is not None else 'read'
     writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
+    if pi_viewport is not None and writer is not None:
+        raise _unavailable()
+    pi_fields = {'presentation': 'pi'} if pi_viewport is not None else {}
     offer = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:prepare',
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,
-                 'intent': 'attach_live', 'access': access} | writer_fields)
+                 'intent': 'attach_live', 'access': access} | writer_fields | pi_fields)
     attachment_id, ticket = offer.get('attachment_id'), offer.get('ticket')
     live_updates = offer.get('live_updates', False)
     if (type(offer.get('version')) is not int or offer['version'] != 1 or offer.get('state') != 'PREPARED'
@@ -356,8 +384,10 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
             link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id,
                                    live_updates=live_updates, input_revision=writer.input_revision if writer else None)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',
-                         headers=api.request_headers(), ticket=ticket)
-            challenge = link.exchange({'kind': 'hello', 'version': 1, **state})
+                         headers=api.request_headers(), ticket=ticket,
+                         protocol=PI_PRESENTATION_SUBPROTOCOL if pi_viewport is not None else PRESENTATION_SUBPROTOCOL)
+            viewport = dict(zip(('columns', 'rows'), pi_viewport, strict=True)) if pi_viewport is not None else {}
+            challenge = link.exchange({'kind': 'hello', 'version': 1, **state, **viewport})
             nonce = challenge.get('challenge')
             if (challenge.get('kind') != 'challenge' or not isinstance(nonce, str)
                     or not re.fullmatch(r'[A-Za-z0-9_-]{43}', nonce)):

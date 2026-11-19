@@ -7,7 +7,7 @@ import os
 import re
 import subprocess
 import sys
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from ctypes import wintypes as wt
 from dataclasses import dataclass
 from queue import Empty, Full, Queue
@@ -99,6 +99,18 @@ def _mode(handle):
     value = wt.DWORD()
     _check(_get_mode(handle, ct.byref(value)))
     return value.value
+
+
+@contextmanager
+def ansi_viewer_output(stream):
+    """Enable and restore VT output without changing the terminal input mode."""
+    output = msvcrt.get_osfhandle(stream.fileno())
+    previous = _mode(output)
+    _check(_set_mode(output, previous | 0x0001 | 0x0004))
+    try:
+        yield
+    finally:
+        _check(_set_mode(output, previous))
 
 
 def _new_pipe(resources, peer_resources, *, input_pipe):

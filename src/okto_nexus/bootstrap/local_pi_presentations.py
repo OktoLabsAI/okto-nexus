@@ -1,0 +1,46 @@
+"""Publish the local operator reader for reviewed hosted Pi sessions."""
+
+from dataclasses import asdict
+
+from nexus_connector_core import CoreError
+
+from ..adapters.inbound.http.dashboard_session_presentations import LocalPiPresentations
+from ..application.execution_native_session_mapping import reviewed_pi_context
+from ..application.session_attachment_broker import SessionAttachmentBroker
+from ..domain.attention import digest
+from ..domain.presentation_protocol import LOCAL_PI_AUDIENCE
+from ..errors import OktoNexusError
+
+
+def publish_local_pi_presentations(app, dispatch):
+    state = app.state
+    if dispatch is None or not dispatch.host.pi_presentation_enabled:
+        state.local_pi_presentations = None
+        return
+
+    def available(mapping, scope):
+        session = scope.session
+        return reviewed_pi_context(mapping) and dispatch.host.has_hosted_pi_renderer(
+            session.server_id, session.executor_id, session.session_id)
+
+    def revision(uow, scope, author, access, audience):
+        if author.surface != 'native_terminal' or access != 'read' or audience != LOCAL_PI_AUDIENCE:
+            return None
+        try:
+            mapping = dispatch.read_native_presentation_mapping(uow, scope)
+        except (CoreError, OktoNexusError):
+            return None
+        if not available(mapping, scope):
+            return None
+        return 'sha256:' + digest({'mapping': asdict(mapping), 'audience': audience, 'access': access})
+
+    async def prove(scope):
+        mapping, proof = await dispatch.prove_native_presentation_owner(scope)
+        if not available(mapping, scope):
+            raise CoreError('CAPABILITY_UNSUPPORTED', 'pi_renderer')
+        return mapping, proof
+
+    state.local_pi_presentations = LocalPiPresentations(
+        SessionAttachmentBroker(state.deps.connection_factory, authority_fence=state.operator_auth.authority_fence,
+                                current_capability=revision),
+        prove, dispatch.open_native_pi_renderer)

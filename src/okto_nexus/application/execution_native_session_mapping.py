@@ -73,6 +73,24 @@ def reviewed_codex_context(mapping: ManagedNativeSession) -> bool:
             and (build.version, build.platform, build.architecture, build.content_fingerprint) == _CODEX_STATE_ENGINE)
 
 
+# Portable identity of the full Node and Pi dependency closure exercised by
+# the Windows hosted-renderer proof. The Core independently guards launch.
+_PI_PRESENTATION_BUILD = (
+    '0.87.1', 'win32', 'x86_64',
+    'sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b',
+)
+
+
+def reviewed_pi_build(version, platform, architecture, build_identity) -> bool:
+    return (version, platform, architecture, build_identity) == _PI_PRESENTATION_BUILD
+
+
+def reviewed_pi_context(mapping: ManagedNativeSession) -> bool:
+    build = mapping.launch_build
+    return (mapping.adapter_id == 'pi_rpc' and build is not None
+            and reviewed_pi_build(build.version, build.platform, build.architecture, build.build_identity))
+
+
 def _codex_opening_thread(conn, scope, stream_epoch):
     events = conn.execute("""
         SELECT e.sequence,e.event_hash,e.payload_json

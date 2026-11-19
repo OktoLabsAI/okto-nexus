@@ -120,7 +120,6 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
         ShutdownPolicy,
         TurnOperation,
         __version__,
-        create_runtime,
     )
     from nexus_connector_core.discovery import candidate_pi_node_cli, fingerprint
     from nexus_connector_core.journal import SQLiteJournal
@@ -147,19 +146,29 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
     async def environment(_prepared):
         return env
 
-    journal = SQLiteJournal(root / 'core-journal.db')
     node = Path(argv[0])
     candidate = (await asyncio.to_thread(candidate_pi_node_cli, node, hosted_cli, explicit=True) if hosted_cli else
                  InstallationCandidate('pi_rpc', str(node), fingerprint(node), 'explicit', 'selected',
                                        version='0.87.1', architecture='x86_64'))
     workspaces = {'workspace': str(root / 'project')}
+    key = SessionKey('server', 'executor', 'test-session')
+    host = EmbeddedRuntimeHost(root / 'embedded-core', pi_presentation_enabled=bool(hosted_cli))
+    host_key = (key.executor_id, key.session_id)
     if hosted_cli:
-        runtime = create_runtime(journal=journal, environment=environment, candidates={'pi_rpc': candidate},
-                                 workspace_roots=workspaces, pi_hosted_rpc=True)
+        runtime = await host.acquire(server_id=key.server_id, executor_id=key.executor_id, session_id=key.session_id,
+                                     candidates={'pi_rpc': candidate}, workspace_roots=workspaces, environment=environment)
+        journal = host._runtime_tasks[host_key].result()[1]
     else:
+        journal = SQLiteJournal(root / 'core-journal.db')
         factory = runtime_bridge.CopiedAdapterFactory(environment)
         runtime = LocalRuntimeCore(journal, factory, candidates={'pi_rpc': candidate}, workspace_roots=workspaces)
-    key = SessionKey('server', 'executor', 'test-session')
+
+        async def register_fixture_runtime():
+            return runtime, journal
+
+        host._selections[host_key] = ({'pi_rpc': candidate}, workspaces, None, False, key.server_id, None, False)
+        host._runtime_tasks[host_key] = asyncio.create_task(register_fixture_runtime())
+        await host._runtime_tasks[host_key]
     cursor = EventCursor(key.server_id, key.executor_id, key.session_id, 'epoch')
     turn = TurnOperation('pi-probe-turn', key.session_id, PROMPT)
     scope = {
@@ -169,17 +178,6 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
         'authorization_revision': 1, 'configuration_revision': 1, 'binding_revision': 1, 'credential_epoch': 1,
     }
     channel = {'connection_id': 'connection', 'connection_generation': 1}
-    host = EmbeddedRuntimeHost(root / 'embedded-core')
-    host_key = (key.executor_id, key.session_id)
-
-    async def register_fixture_runtime():
-        return runtime, journal
-
-    host._selections[host_key] = ({'pi_rpc': candidate}, {'workspace': str(root / 'project')},
-                                  None, False, key.server_id, None)
-    host._runtime_tasks[host_key] = asyncio.create_task(register_fixture_runtime())
-    await host._runtime_tasks[host_key]
-
     async def native_state():
         reply = await asyncio.to_thread(transport.request, 'get_state', {}, timeout_s=10)
         assert reply['success'] is True
@@ -195,6 +193,7 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
         })
         context = installed.context
         if hosted_cli:
+            assert host.has_hosted_pi_renderer(key.server_id, key.executor_id, key.session_id)
             provider, model = ('nexus-fixture', 'faux-1') if hosted_turn else ('openai', 'gpt-4.1-mini')
             intent = LaunchIntent('agent', 'workspace', 'pi_rpc', model=model,
                                   harness_settings=HarnessSettings(provider=provider))
@@ -288,8 +287,11 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
         })
         return report, Path(final['sessionFile'])
     finally:
-        await runtime.shutdown(ShutdownPolicy(1, 1))
-        journal.close()
+        if hosted_cli:
+            await host.shutdown(ShutdownPolicy(1, 1))
+        else:
+            await runtime.shutdown(ShutdownPolicy(1, 1))
+            journal.close()
 
 
 async def exercise_hosted_renderer(runtime, host, journal, scope, target, channel, context, turn, checkpoints,

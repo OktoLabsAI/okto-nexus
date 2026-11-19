@@ -8,6 +8,7 @@ async def start_runtime_services(app, *, native_factory=None):
     from .server_shutdown import ServerShutdownCoordinator
     from .runtime_boot_owner import RuntimeBootOwner
     from .local_codex_presentations import publish_local_codex_presentations
+    from .local_pi_presentations import publish_local_pi_presentations
     from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
     from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
     from ..application.connection_test import ConnectionTests
@@ -69,7 +70,8 @@ async def start_runtime_services(app, *, native_factory=None):
     with deps.connection_factory.unit_of_work(write=False) as uow:
         generation = uow.connection.execute('SELECT generation FROM runtime_reset_generation WHERE singleton=1').fetchone()[0]
     journal_dir = 'core-runtime' if generation == 0 else f'core-runtime-reset-{generation}'
-    host = EmbeddedRuntimeHost(deps.config.home_dir.resolve() / journal_dir, capacity_enabled=capacity_enabled)
+    host = EmbeddedRuntimeHost(deps.config.home_dir.resolve() / journal_dir, capacity_enabled=capacity_enabled,
+                               pi_presentation_enabled=input_enabled)
     inventory = dispatch = boot = None
     app.state.runtime_boot_owner = None
     app.state.embedded_core_host = host
@@ -92,6 +94,7 @@ async def start_runtime_services(app, *, native_factory=None):
         app.state.runtime_boot_owner = boot
         boot.start()
     publish_local_codex_presentations(app, dispatch)
+    publish_local_pi_presentations(app, dispatch)
     handoffs = None
     if scheduling or input_scheduling:
         scheduler = build_handoff_runtime_scheduler(deps, acquisition_enabled=acquisition_enabled) if scheduling else None

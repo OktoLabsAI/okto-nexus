@@ -1,0 +1,51 @@
+{
+  "task": "SI-025",
+  "status": "IN_PROGRESS",
+  "scope": "Local read-only Pi presentation through the Nexus operator broker and session attach CLI.",
+  "baseline": {
+    "nexus": "990071b4588594fde4e3662a01b3c01e95c2a69b",
+    "core": "1a66105428f983f2ed83fca408180e2c50ab926f",
+    "connector": "2b4b12031f003e2d63a843d6b26f797456e0db1d"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "583f6730605bc03a9a388c7c232d5eacb767e18796b32735e6a40c0f1a271ace",
+    "core_0.0.16_wheel_sha256": "b8fe2ca4ed01a18da22ec78861da2c2dd6f3f66b4423b17d08f896a261ffe813",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe_python_sha256": "69d0d092b8690933a66d792fb0ba6632c633cc9bc8ee4e86e17e620da272a7c7",
+    "conpty_probe_sha256": "cac41e10a353e2a0a888f2e0a087c4c4be25f247c0ffc0400c9b5a4a9ec2bd80"
+  },
+  "broker": {
+    "subprotocol": "nexus.presenter.pi.v1",
+    "access": "read",
+    "one_use_ticket_and_audience_fence": true,
+    "router_streams_binary_output_over_loopback": true,
+    "attached_confirmed_after_private_renderer_opens": true,
+    "active_attachment_closed_on_logout_or_capability_loss": true,
+    "inbound_renderer_bytes_rejected": true,
+    "launch_and_presentation_require_exact_reviewed_build": true
+  },
+  "controlled_proofs": {
+    "embedded_host_with_actual_pi_source": "PASS",
+    "embedded_host_with_actual_pi_wheel": "PASS",
+    "actual_windows_conpty_with_synthetic_renderer_source": "PASS",
+    "actual_windows_conpty_with_synthetic_renderer_wheel": "PASS",
+    "ctrl_c_detaches_local_viewer": true,
+    "console_modes_restored": true,
+    "renderer_fixture_test_admitted_no_runtime_operation": true,
+    "conpty_source_fixture": "%TEMP%/nexus-si025-pi-conpty-aeb1961991e84679b0a153d1ab01a787/probe.py",
+    "conpty_wheel_fixture": "%TEMP%/nexus-si025-pi-conpty-wheel-65663a61505a4ae2b6b2b02e13b95b7a/probe.py",
+    "conpty_helper_fixture": "%TEMP%/nexus-si-codex-frontend-6b647bac404f42a1b19afa9ae2a5e0a6/pty_probe.py"
+  },
+  "regressions": {
+    "nexus_installed_cli_broker_and_contract_passed": 64,
+    "nexus_installed_embedded_lifecycle_and_openapi_passed": 24,
+    "twine_strict_passed": true,
+    "nexus_lock_check_passed": true,
+    "published_wheel_modules_match_source": true
+  },
+  "limitations": [
+    "The real Pi proof uses the normal embedded Core composition and a disposable local synthetic provider. It exercises the private renderer, not the operator WebSocket.",
+    "The operator and ConPTY proofs use a synthetic renderer with the actual HTTP, SQLite ticket broker, WebSocket and CLI. The combined live-engine run, writer queue and approval actions remain pending."
+  ]
+}
