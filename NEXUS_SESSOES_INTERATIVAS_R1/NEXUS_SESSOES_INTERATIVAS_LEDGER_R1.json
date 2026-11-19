@@ -684,7 +684,9 @@
         "execution/si012-core-event-identities.md",
         "execution/si012-conversation-read-api.md",
         "execution/si036-pi-browser-queue-transcript.md",
-        "execution/si036-pi-browser-queue-transcript.json"
+        "execution/si036-pi-browser-queue-transcript.json",
+        "execution/si012-codex-live-conversation.md",
+        "execution/si012-codex-live-conversation.json"
       ]
     },
     {
@@ -894,7 +896,9 @@
         "execution/si017-exact-conversation-stream.md",
         "execution/si017-context-view-and-navigation.md",
         "execution/si036-browser-scroll-ime.md",
-        "execution/si036-browser-scroll-ime.json"
+        "execution/si036-browser-scroll-ime.json",
+        "execution/si012-codex-live-conversation.md",
+        "execution/si012-codex-live-conversation.json"
       ]
     },
     {
@@ -1853,7 +1857,9 @@
         "execution/si036-browser-session-isolation.json",
         "execution/si036-browser-session-isolation.md",
         "execution/si036-browser-scroll-ime.md",
-        "execution/si036-browser-scroll-ime.json"
+        "execution/si036-browser-scroll-ime.json",
+        "execution/si012-codex-live-conversation.md",
+        "execution/si012-codex-live-conversation.json"
       ]
     },
     {
@@ -3306,9 +3312,10 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si036-pi-browser-queue-transcript.json"
+        "execution/si036-pi-browser-queue-transcript.json",
+        "execution/si012-codex-live-conversation.json"
       ]
     },
     {
@@ -3482,9 +3489,10 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si036-browser-scroll-ime.json"
+        "execution/si036-browser-scroll-ime.json",
+        "execution/si012-codex-live-conversation.json"
       ]
     },
     {

@@ -8,6 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 from nexus_connector_core.native.adapter_types import HarnessEvent
+from nexus_connector_core.native.codex_chat_facts import CODEX_CHAT_DELTA
 from nexus_connector_core.native.event_ingest import translate_native_event
 from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT
 from nexus_connector_core.native.redaction import NativeSecretRedactor
@@ -165,6 +166,47 @@ def test_artifact_reference_advances_cursor_without_hydrating_body(stream, monke
     assert page["next_after_sequence"] == 2
     assert page["omitted_artifact_events"] == 1
     assert [update["text"] for update in page["updates"]] == ["Available inline text"]
+
+
+def test_owned_codex_fragment_uses_safe_item_identity_and_converges_with_completed_item(stream):
+    delta = "Safe assistant prefix before sample-"
+    full = delta + "secret and the end."
+    native = HarnessEvent("native-session", "codex", "output_delta", "item/agentMessage/delta",
+        "2026-11-19T00:00:00Z", {"threadId": "thread", "turnId": "turn", "itemId": "item", "delta": delta},
+        thread_id="thread", turn_id="turn", operation_id="operation")
+    redactor = NativeSecretRedactor(["sample-secret"])
+    for sequence, raw in enumerate((native, replace(native, payload={**native.payload, "delta": full[len(delta):]})), 1):
+        cooked = translate_native_event(redactor.scrub(raw), server_id="server", executor_id="executor",
+            session_id="session", stream_epoch="epoch", native_session_id="native-session")
+        stream.store(sequence, cooked.native_type, cooked.category, cooked.payload, operation_id=cooked.operation_id)
+    _completed(stream, 3, {"type": "agentMessage", "id": "item", "text": redactor.clean(full)})
+    stream.watermark(3)
+
+    page = stream.read(limit=2)
+    complete = stream.read(stream_epoch=page["stream_epoch"], after_sequence=page["next_after_sequence"])["updates"][0]
+    assert [part["change"] for part in page["updates"]] == ["append", "append"]
+    assert all(part["message_id"] == complete["message_id"] and part["operation_id"] == "operation"
+               for part in page["updates"])
+    prefix = "".join(part["text"] for part in page["updates"])
+    assert prefix.startswith("Safe assistant prefix") and "sample-" not in prefix
+    assert complete["change"] == "replace" and complete["text"] == "Safe assistant prefix before [REDACTED] and the end."
+    assert complete["text"].startswith(prefix)
+
+
+def test_invalid_codex_fragment_does_not_fall_back_to_raw_payload(stream):
+    valid = {"revision": 1, "thread_id": "thread", "item_id": "item", "text": "bounded", "truncated": False}
+    cases = [
+        ("item/agentMessage/delta", valid | {"thread_id": "another"}, "operation"),
+        ("item/agentMessage/delta", valid, None),
+        ("item/reasoning/textDelta", valid, "operation"),
+        ("item/agentMessage/delta", valid | {"truncated": 0}, "operation"),
+        ("item/agentMessage/delta", valid | {"item_id": "nxs_fake_secret"}, "operation"),
+    ]
+    for sequence, (kind, fact, operation) in enumerate(cases, 1):
+        stream.store(sequence, kind, "text_delta", {"thread_id": "thread", "threadId": "thread", "turn_id": "turn",
+            "itemId": "item", "delta": "untrusted", CODEX_CHAT_DELTA: fact}, operation_id=operation)
+    stream.watermark(len(cases))
+    assert stream.read()["updates"] == []
 
 
 def test_hosted_pi_transcript_requires_retained_ids_and_keeps_equal_messages_distinct(stream):

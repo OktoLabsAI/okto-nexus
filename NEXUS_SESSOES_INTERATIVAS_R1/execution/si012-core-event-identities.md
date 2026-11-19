@@ -20,3 +20,7 @@ and qualification for each installed harness remain pending.
 A subsequent [Windows Pi run](si036-pi-browser-queue-transcript.md)
 verified the additive identity event against the retained native journal.
 The earlier Pi event shape and the Claude evidence above still apply.
+
+The [Windows Codex run](si012-codex-live-conversation.md) verified the
+new bounded, sanitized fragment with the actual app-server and the same
+message identity as the completed item. The raw delta fields stay masked.

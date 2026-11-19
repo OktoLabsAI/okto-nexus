@@ -241,3 +241,12 @@ test('conversation position notifications cannot move another owner or accept an
   assert.throws(()=>assertConversationPosition({...position,stream_epoch:null},scope));
   assert.throws(()=>assertConversationPosition({...position,scope:{...scope,session_owner_generation:2}},scope));
 });
+
+test('a missing suffix does not splice in later fragments before the completed snapshot',()=>{
+  const delta={message_id:'message',update_id:'first',change:'append',role:'assistant',text:'prefix',text_truncated:true};
+  const omitted=applyConversationUpdates(new Map(),[delta,{...delta,update_id:'later',text:'later suffix',text_truncated:false}]);
+  assert.deepEqual(omitted.get('message'),{role:'assistant',text:'prefix',truncated:true});
+  const complete=applyConversationUpdates(omitted,[{...delta,update_id:'final',change:'replace',
+    text:'prefix restored interval and later suffix',text_truncated:false}]);
+  assert.deepEqual(complete.get('message'),{role:'assistant',text:'prefix restored interval and later suffix',truncated:false});
+});

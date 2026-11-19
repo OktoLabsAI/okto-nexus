@@ -1,0 +1,65 @@
+{
+  "tasks": ["SI-012", "SI-017", "SI-036"],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "29e449698da314e804a7897e1e0eb34acdc1caa2", "main": "8d77b50c00b417c86818d027aed7497fababac34", "ahead_of_main": 454},
+    "connector": {"branch": "feature/v0.0.15", "head": "e26f65a48e72907de212e917e5035a2f4623afb8", "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2", "ahead_of_main": 83},
+    "core": {"branch": "feature/v0.0.16", "head": "aaebb3a0a43ced4be3e830eb0b1cea762e519b6f", "main": "19c99f15b17ae994653ad9e190964229a0e296e8", "ahead_of_main": 62},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheels_sha256": {
+    "nexus": "45bd529510013ce73f9fe9e29425f1d266701722bd671c3effbd94aae3269803",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "d7031e57dde19967a4e96751a301468a9a483f150908f7dc7ffd6762156ce80c"
+  },
+  "sdists_sha256": {
+    "nexus": "69e6516e48fe2226888b297aa8be918db1bc7531e53c6d4c29a33ca4d1f08500",
+    "core": "869155b1cf2ee64031509cb5717d53e39435d6957b84583c00a867ce41a54b59"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "browser_driver": "Playwright CLI",
+    "dashboard_js_asset": "index-Dr38cQ0f.js",
+    "app_server_version": "0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "operator_authentication": "Disposable browser sign-in with X-Nexus-Operator-Session-Required",
+    "model_transport": "Native app-server with isolated profile and synthetic loopback SSE provider",
+    "external_model_calls": 0
+  },
+  "scenarios": {
+    "SI-T-E01": "PASS for the recorded Codex build and browser. Baseline: two native deltas, zero conversation appends and one completed message. Candidate: two separate live appends (95 then 170 visible characters) and an exact 178-character replacement on the same DOM row and scoped API message ID.",
+    "SI-T-E11": "PASS for the recorded native deltas, completed snapshot and browser. Offset remained at 100 CSS pixels. Relative top of the first row stayed at -87, and the conversation kept focus. One notice remained available until Enter followed the latest response and restored focus."
+  },
+  "observations": {
+    "raw_native_delta_and_item_fields_remain_masked": true,
+    "turn_completed_and_canonical_close_succeeded_in_both_runs": true,
+    "normalized_turn_result_identical_in_both_runs": true,
+    "sqlite_integrity": "ok",
+    "all_three_installed_packages_match_wheels": true,
+    "codex_defaults_to_full_snapshot_for_older_committed_masked_events": true
+  },
+  "regressions_passed": {"frontend_node": 418, "installed_core": 112, "installed_connector": 45, "installed_nexus": 44},
+  "build_checks": ["frontend build", "Core contract and R4 generator checks", "offline Nexus lock", "strict Twine checks for both wheels and sdists"],
+  "local_evidence_sha256": {
+    "test_browser_codex_stream.py": "a44d80e019667fe258125f097423bb7c54c73f867b2d8322684991e621568ffd",
+    "baseline.xml": "3720d3553eea2eb50105d3c87369d1b220689d9539767e4a93888259cf91faae",
+    "baseline-proof.json": "c02dec5754fe30a66b2375f64e00f06779a9e18dcccce2bcd96c2e7bc8eab917",
+    "reading.json": "8d9050eb298f8bc1a9fdb0071855fe4b04d714b4d1b7885ba0e932e89436ada7",
+    "fragment-one.json": "d460a8ade32f038db4b6f5f3e1aee4c33d9c47e214474b270a2a5a35d54703be",
+    "fragment-two.json": "acaf179572e5297780e2f6a0d347be32cec41fcf6571b2577a2dcbd6d03a8fcf",
+    "browser-final.json": "c2d0dd40690347c70dbde906beab145a43cdea5448368c049705121e07e1e28e",
+    "candidate.xml": "ad400765779792d343916ee42b894c3491a83e9ff0b86790855167458ab9edbe",
+    "candidate-proof.json": "36675835d3111a5085dda92473c43805fcf7b950cb1648b871ce920a93cf2502",
+    "durable-audit.json": "719ec427d1247f75fcfa54b030b9e768eee791a164e4d7b500eb44d11f1855bb",
+    "codexCoreInstalled.xml": "f99cfec42a298a8c40315f916018d886bec4629933a1ba7adce2550974fe043a",
+    "codexConnectorInstalled.xml": "e0c179787a602163245351355b76450b64d79e1961e8e03755f1e3cad2d2141a",
+    "codexNexusInstalled.xml": "666fa5c2e5c9e3d862c6472dc61e934199ff57a43503c604ac55099fabcc0dce"
+  },
+  "limitations": [
+    "The run covered exact native Codex deltas and snapshot, with synthetic model output. It did not qualify a real provider, another OS, zoom or an actual screen reader.",
+    "Older masked deltas remain unavailable to the transcript. Earlier completed messages remain readable."
+  ],
+  "migration": "none"
+}

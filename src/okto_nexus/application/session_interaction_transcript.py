@@ -4,6 +4,7 @@ import hashlib
 import re
 
 from nexus_connector_core.event_artifacts import REFERENCE_KEY
+from nexus_connector_core.native.codex_chat_facts import CODEX_CHAT_DELTA, is_codex_chat_id, valid_codex_chat_delta
 from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT, valid_pi_chat_fact
 from nexus_connector_core.protocol import canonical_json
 
@@ -87,6 +88,23 @@ def _updates(event: dict):
         }
         return
     thread = payload.get("thread_id")
+    if CODEX_CHAT_DELTA in payload:
+        fact = payload[CODEX_CHAT_DELTA]
+        operation = event.get("operation_id")
+        if (event.get("native_type") != "item/agentMessage/delta" or event.get("category") != "text_delta"
+                or not valid_codex_chat_delta(fact) or fact["thread_id"] != thread
+                or not all(_native_id(value) for value in (thread, fact["item_id"], operation))
+                or not is_codex_chat_id(payload.get("turn_id"))):
+            return
+        text, truncated = _bounded_body(fact["text"])
+        message_id = _identity(*stream, thread, fact["item_id"], "assistant", 0)
+        yield {
+            "event_id": event_id, "update_id": _identity(event_id, message_id), "message_id": message_id,
+            "sequence": sequence, "role": "assistant", "change": "append",
+            "origin": {"kind": "native_thread", "thread_id": thread}, "operation_id": operation,
+            "text": text, "text_truncated": truncated or fact["truncated"],
+        }
+        return
     if not _native_id(thread) or payload.get("threadId") != thread:
         return
     for role, change, item_id, index, body in _text_parts(event, payload):
@@ -119,8 +137,8 @@ def read_session_interaction_transcript(
     A page can have no chat updates and still advance. Replay cannot prove a
     complete native transcript, thread parentage, or an input-to-echo link.
     A truncated body can be a prefix or entirely absent (``text=None``).
-    Core 0.0.15 masks raw identity fields in output deltas and Claude snapshots.
-    Only reviewed hosted Pi snapshots carry a retained native entry identity.
+    Current Core emits scoped, scrubbed Codex fragments alongside masked raw
+    fields. Only reviewed hosted Pi snapshots carry a retained native entry ID.
     """
     if type(limit) is not int or not 1 <= limit <= MAX_SCAN_EVENTS:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid transcript scan limit.", {})

@@ -67,6 +67,9 @@ export function applyConversationUpdates(previous: ReadonlyMap<string, Conversat
     if (seen.has(update.update_id)) continue;
     seen.add(update.update_id);
     const prior = update.change === 'append' ? next.get(update.message_id) : undefined;
+    // After an omitted suffix, a later fragment would splice unrelated text
+    // into the visible prefix. A complete snapshot can restore the message.
+    if (prior?.truncated) continue;
     const text = (prior?.text ?? '') + (update.text ?? '');
     const limit = 16384;
     next.set(update.message_id, {role: update.role, text: text.slice(0, limit),
