@@ -328,6 +328,11 @@
           "artifact_path": "execution/si026-claude-remote-steer.json",
           "result": "Claude Code 2.1.328 listed the exact stream-json UUID and process, but its native attach rejected that UUID while the original owner stayed alive.",
           "limitations": "The isolated idle stream received only initialize. Background ownership, retained configuration, native detach and remote terminal presentation remain unverified."
+        },
+        {
+          "artifact_path": "execution/si026-claude-background-windows.json",
+          "result": "A native background worker preserved its exact session across terminal detach. A finished stream-json conversation also resumed in background under the same UUID, including without a new prompt.",
+          "limitations": "Single Windows machine and synthetic loopback model responses. HTTP prompt hooks admitted work after an HTTP 503. Product authorization, native tool approvals and Connector transport remain open."
         }
       ]
     },
@@ -1137,7 +1142,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
-        "execution/si023-codex-saved-resume.md"
+        "execution/si023-codex-saved-resume.md",
+        "execution/si026-claude-background-windows.json"
       ]
     },
     {
@@ -1330,7 +1336,9 @@
         "execution/si026-claude-operator-steer.md",
         "execution/si026-claude-operator-steer.json",
         "execution/si026-claude-remote-steer.md",
-        "execution/si026-claude-remote-steer.json"
+        "execution/si026-claude-remote-steer.json",
+        "execution/si026-claude-background-windows.md",
+        "execution/si026-claude-background-windows.json"
       ]
     },
     {

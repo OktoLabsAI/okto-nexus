@@ -1,0 +1,106 @@
+{
+  "tasks": ["SI-004", "SI-023", "SI-026"],
+  "status": "IN_PROGRESS",
+  "qualification_scope": "Native Windows prototype, isolated profiles and projects, fixed synthetic model responses via loopback",
+  "product_changes": false,
+  "source": {
+    "nexus_revision": "db5b695f",
+    "connector_revision": "c587205",
+    "core_revision": "665668b"
+  },
+  "installed_claude": {
+    "version": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "platform": "Windows x64 ConPTY",
+    "personal_account_used": false,
+    "workspace_trust_preseeded_in_fixture_only": true,
+    "native_process_tree": "isolated Windows Job, empty after the scoped stop and probe exit"
+  },
+  "scenarios": [
+    {
+      "name": "native_background_attach_detach_during_work",
+      "result": "PASS",
+      "facts": {
+        "actual_claude_worker": true,
+        "streaming_requests_to_loopback": 1,
+        "same_uuid_and_pid_after_detach": true,
+        "completed_without_attached_viewer": true,
+        "reattached_viewer_rendered_completion": true,
+        "viewer_exit_codes": [0, 0],
+        "exact_native_stop_exit": 0,
+        "remaining_fixture_processes": 0
+      },
+      "fixture": "%TEMP%/nexus-si026-claude-bg-bearer-1795082345667",
+      "probe_sha256": "a63bf09c25ab6793e91ac99a56dee853d6b351dbc4044e7244f3774027d2d91d",
+      "observations_sha256": "4ea08271b477148e885e890838742ffd6e7241060eed779ecf1c5cb63f6b4a72"
+    },
+    {
+      "name": "saved_stream_json_resume_with_explicit_continuation",
+      "result": "PASS",
+      "facts": {
+        "original_exit_code_before_background_start": 0,
+        "same_full_native_uuid": true,
+        "prior_result_in_resumed_model_request": true,
+        "reviewed_system_marker_explicit_at_both_launches": true,
+        "streaming_requests_to_loopback": 2,
+        "same_background_pid_across_detach": true,
+        "exact_native_stop_exit": 0,
+        "remaining_fixture_processes": 0
+      },
+      "fixture": "%TEMP%/nexus-si026-claude-bg-resume-1795082443067",
+      "probe_sha256": "515c76cbdcdbeb1d0537171dc7d775c605641bbd18144cff38691ca45b616472",
+      "observations_sha256": "84c5117bdca4f01eb587a458d34e719d0f8ee3e4e691074f569def07764b5a18"
+    },
+    {
+      "name": "saved_stream_json_resume_for_viewing_without_new_prompt",
+      "result": "PASS",
+      "facts": {
+        "original_exit_code_before_background_start": 0,
+        "same_full_native_uuid": true,
+        "prior_result_visible_in_native_terminal": true,
+        "model_requests_after_source_exit": 0,
+        "same_background_pid_after_detach": true,
+        "exact_native_stop_exit": 0,
+        "remaining_fixture_processes": 0
+      },
+      "fixture": "%TEMP%/nexus-si026-claude-bg-idle-1795082680110",
+      "probe_sha256": "bd83e1dd3af103a9b51ecdf9d2fdc7516f219f9380559afb23b57fea34fb5fcf",
+      "observations_sha256": "67bafd3b44f9d66fa76d654794b462ec1036e31c0dbc90f2068cf6b0918e4ec8"
+    },
+    {
+      "name": "http_prompt_hook_denies_before_model_request",
+      "result": "PASS",
+      "facts": {
+        "hook_event": "UserPromptSubmit",
+        "exact_uuid_and_directory": true,
+        "permission_mode": "plan",
+        "terminal_rendered_denial_reason": true,
+        "denied_prompt_model_requests": 0,
+        "remaining_fixture_processes": 0
+      },
+      "fixture": "%TEMP%/nexus-si026-claude-bg-http-deny-1795082871347",
+      "probe_sha256": "e277b8b9c6b0f241b818b7cd4c7bfdc40f5652ff9c321a0f34ab3033082c8896",
+      "observations_sha256": "66c5be0aaaa1a05eef5f3d492ff18432b09e844747742aedd2dfe9a644e7fb6d"
+    },
+    {
+      "name": "http_hook_failure_is_not_an_authority_barrier",
+      "result": "FAIL_OPEN_OBSERVED",
+      "facts": {
+        "hook_event": "UserPromptSubmit",
+        "exact_uuid_and_directory": true,
+        "hook_response": 503,
+        "prompt_reached_loopback_after_hook_failure": true,
+        "remaining_fixture_processes": 0
+      },
+      "fixture": "%TEMP%/nexus-si026-claude-bg-http-failure-1795082904502",
+      "probe_sha256": "4f2d0593e22712c8b1cbffd50de91dfab40c64facaa97a411573dab15cf54823",
+      "observations_sha256": "9c77bd240157f40f822890afbe5e84a7d66abe5a7fbb618cc422cc0ce9d420eb"
+    }
+  ],
+  "limitations": [
+    "The resume probe closed the stream-json source before starting the background session. It did not attach to or transfer a live stream-json process.",
+    "The fixture exposed no tools and exercised no productive permissions or accounts.",
+    "The initial trust, custom API key, and model simulator experiments used isolated state. Early command-hook attempts did not yield conclusive prompt-admission evidence.",
+    "A managed product resume still requires exact ownership checks, stale and fork refusal, durable authority and receipts, and remote qualification."
+  ]
+}
