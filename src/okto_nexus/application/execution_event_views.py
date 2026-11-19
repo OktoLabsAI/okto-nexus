@@ -12,7 +12,7 @@ PAGE_BYTES = 512 * 1024
 
 def read_execution_events(factory, *, server_id, session_id, context, access,
                           executor_id=None, stream_epoch=None, after_sequence=0, limit=200,
-                          hydrate_artifacts=True):
+                          hydrate_artifacts=True, report_missing_history=False):
     with factory.unit_of_work(write=False) as uow:
         view = read_execution_session(factory, server_id=server_id, session_id=session_id,
             context=context, access=access, executor_id=executor_id, _uow=uow)
@@ -36,9 +36,13 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
             'AND sequence>? AND sequence<=? ORDER BY sequence LIMIT ?',
             (*key, stream_epoch, after_sequence, committed, limit + 1)).fetchall()
         events, used = [], 0
-        if not rows and after_sequence < committed:
+        if not rows and after_sequence < committed and not report_missing_history:
             raise OktoNexusError(ErrorCode.DB_ERROR, 'Committed canonical events are missing.', {})
         for row in rows[:limit]:
+            if row['sequence'] != after_sequence + len(events) + 1:
+                if report_missing_history:
+                    break
+                raise OktoNexusError(ErrorCode.DB_ERROR, 'Stored canonical event integrity is invalid.', {})
             raw = row['payload_json'].encode('utf-8')
             try:
                 if len(raw) > 64 * 1024 or 'sha256:' + hashlib.sha256(raw).hexdigest() != row['event_hash']:
@@ -46,8 +50,6 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
                 event = json.loads(raw)
                 if tuple(event[k] for k in ('server_id', 'executor_id', 'session_id', 'stream_epoch', 'sequence')) != (*key, stream_epoch, row['sequence']):
                     raise ValueError('Invalid event scope')
-                if row['sequence'] != after_sequence + len(events) + 1:
-                    raise ValueError('Missing committed event')
             except (ValueError, TypeError, KeyError) as exc:
                 raise OktoNexusError(ErrorCode.DB_ERROR, 'Stored canonical event integrity is invalid.', {}) from exc
             if hydrate_artifacts:
@@ -67,7 +69,16 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
             event = {**event, 'payload': payload}
             events.append({**event, 'received_at': row['received_at']})
             used += presentation_bytes
-        return dict(scope=scope, stream_epoch=stream_epoch, events=events, count=len(events),
-            next_after_sequence=events[-1]['sequence'] if events else after_sequence,
+        next_after = after_sequence + len(events)
+        has_more = len(rows) > len(events)
+        result = dict(scope=scope, stream_epoch=stream_epoch, events=events, count=len(events),
+            next_after_sequence=next_after,
             committed_contiguous=committed, gap_pending=bool(watermark and watermark['gap_state'] != 'none'),
-            has_more=len(rows) > len(events))
+            has_more=has_more)
+        if report_missing_history:
+            # The lookahead distinguishes a page boundary from a missing
+            # committed event, without advancing over an unverifiable range.
+            missing = next_after < committed and (not has_more or rows[len(events)]['sequence'] != next_after + 1)
+            result['history_gap'] = next_after + 1 if missing else None
+            result['has_more'] = has_more and not missing
+        return result

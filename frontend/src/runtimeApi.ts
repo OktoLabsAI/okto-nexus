@@ -321,6 +321,7 @@ export interface SessionConversationPage {
   next_after_sequence: number;
   committed_contiguous: number;
   gap_pending: boolean;
+  history_gap?: number | null;
   has_more: boolean;
   omitted_artifact_events: number;
   history_complete: boolean;

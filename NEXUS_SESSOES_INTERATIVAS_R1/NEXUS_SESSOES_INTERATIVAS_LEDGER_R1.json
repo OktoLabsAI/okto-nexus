@@ -690,7 +690,9 @@
         "execution/si012-claude-retained-conversation.md",
         "execution/si012-claude-retained-conversation.json",
         "execution/si012-claude-stream-attribution.md",
-        "execution/si012-claude-stream-attribution.json"
+        "execution/si012-claude-stream-attribution.json",
+        "execution/si012-history-gap-and-paging.md",
+        "execution/si012-history-gap-and-paging.json"
       ]
     },
     {
@@ -1871,7 +1873,9 @@
         "execution/si012-claude-retained-conversation.md",
         "execution/si012-claude-retained-conversation.json",
         "execution/si012-claude-stream-attribution.md",
-        "execution/si012-claude-stream-attribution.json"
+        "execution/si012-claude-stream-attribution.json",
+        "execution/si012-history-gap-and-paging.md",
+        "execution/si012-history-gap-and-paging.json"
       ]
     },
     {
@@ -3382,8 +3386,11 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si012-history-gap-and-paging.md",
+        "execution/si012-history-gap-and-paging.json"
+      ]
     },
     {
       "id": "SI-T-E05",
@@ -3399,8 +3406,11 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si012-history-gap-and-paging.md",
+        "execution/si012-history-gap-and-paging.json"
+      ]
     },
     {
       "id": "SI-T-E06",

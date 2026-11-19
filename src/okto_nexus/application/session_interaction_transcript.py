@@ -153,8 +153,9 @@ def read_session_interaction_transcript(
 ) -> dict:
     """Return an ordered page of message updates on the canonical event cursor.
 
-    A page can have no chat updates and still advance. Replay cannot prove a
-    complete native transcript, thread parentage, or an input-to-echo link.
+    A page can have no chat updates and still advance. Missing committed
+    history stops replay at the last verified sequence. Replay cannot prove
+    a complete native transcript, thread parentage, or an input-to-echo link.
     A truncated body can be a prefix or entirely absent (``text=None``).
     Current Core emits scoped, scrubbed Codex fragments alongside masked raw
     fields. Pi and owned Claude terminals use retained native entries; Claude
@@ -169,7 +170,7 @@ def read_session_interaction_transcript(
         factory, server_id=scope.session.server_id, executor_id=scope.session.executor_id,
         session_id=scope.session.session_id, context=context, access=access,
         stream_epoch=stream_epoch, after_sequence=after_sequence, limit=limit,
-        hydrate_artifacts=False,
+        hydrate_artifacts=False, report_missing_history=True,
     )
     actual_scope = page["scope"]
     if (
@@ -188,6 +189,7 @@ def read_session_interaction_transcript(
         "next_after_sequence": page["next_after_sequence"],
         "committed_contiguous": page["committed_contiguous"],
         "gap_pending": page["gap_pending"],
+        "history_gap": page["history_gap"],
         "has_more": page["has_more"],
         "omitted_artifact_events": sum(REFERENCE_KEY in event["payload"] for event in page["events"]),
         "history_complete": False,

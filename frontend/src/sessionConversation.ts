@@ -32,10 +32,13 @@ export function assertInteractionScope(actual: InteractionScope, expected: Inter
 
 export function assertConversationPage(page: SessionConversationPage, scope: InteractionScope, after: number, epoch: string | null) {
   assertInteractionScope(page.scope, scope);
+  const gap = page.history_gap;
   if ((epoch !== null && page.stream_epoch !== epoch) ||
       !Number.isSafeInteger(page.next_after_sequence) || page.next_after_sequence < after ||
       !Number.isSafeInteger(page.committed_contiguous) || page.committed_contiguous < page.next_after_sequence ||
       (page.has_more && page.next_after_sequence === after) ||
+      (gap != null && (!Number.isSafeInteger(gap) || gap !== page.next_after_sequence + 1 ||
+        gap > page.committed_contiguous || page.has_more)) ||
       page.updates.length > 400 || page.updates.some(update => !Number.isSafeInteger(update.sequence) ||
         update.sequence <= after || update.sequence > page.next_after_sequence ||
         !['append', 'replace'].includes(update.change) || !['user', 'assistant'].includes(update.role) ||

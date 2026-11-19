@@ -41,11 +41,13 @@ interface History {
   ready: boolean;
   more: boolean;
   gap: boolean;
+  missingHistory: boolean;
   incomplete: boolean;
 }
 
 function emptyHistory(epoch: string | null = null): History {
-  return {messages: new Map(), epoch, after: 0, ready: false, more: false, gap: false, incomplete: false};
+  return {messages: new Map(), epoch, after: 0, ready: false, more: false, gap: false,
+    missingHistory: false, incomplete: false};
 }
 
 function errorStatus(error: unknown) {
@@ -181,14 +183,15 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
         lastInteraction.current = next;
         setInteraction(next);
         const current = view.current.epoch === next.stream_epoch ? view.current : emptyHistory(next.stream_epoch);
-        if (visible && (includeNext || !current.ready || (!current.more && (!position || positionAdvanced(current))))) {
+        if (visible && (includeNext || !current.ready ||
+            (!current.more && !current.missingHistory && (!position || positionAdvanced(current))))) {
           const page = await runtimeApi.sessionConversation(scope, current.after, current.epoch, signal);
           if (signal.aborted) return;
           assertConversationPage(page, scope, current.after, current.epoch);
           view.current = {messages: page.updates.length ? applyConversationUpdates(current.messages, page.updates) : current.messages,
             epoch: page.stream_epoch,
             after: page.next_after_sequence, ready: true, more: page.has_more, gap: page.gap_pending,
-            incomplete: !page.history_complete};
+            missingHistory: page.history_gap != null, incomplete: !page.history_complete};
           if (current.ready && !following.current && page.updates.length && !includeNext) setNewMessages(true);
           setHistory(view.current);
         }
@@ -382,10 +385,13 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
           {item.text && <p className="whitespace-pre-wrap break-words text-sm">{item.text}</p>}
           {item.truncated && <p className="text-xs text-surface-500">Part of this message is unavailable.</p>}
         </li>)}
-      </ol> : <p className="text-sm text-surface-500">{history.ready ? 'No conversation messages in this page.' : 'Loading conversation…'}</p>}
+      </ol> : !history.missingHistory &&
+        <p className="text-sm text-surface-500">{history.ready ? 'No conversation messages in this page.' : 'Loading conversation…'}</p>}
     </div>
-    {history.gap && <p className="text-xs" role="status">Some messages are still being recovered.</p>}
-    {history.incomplete && <p className="text-xs text-surface-500">Earlier native history may be unavailable.</p>}
+    {history.missingHistory ? <p className="text-xs" role="status">Part of this conversation history is unavailable.</p>
+      : history.gap && <p className="text-xs" role="status">Some messages are still being recovered.</p>}
+    {history.incomplete && !history.missingHistory &&
+      <p className="text-xs text-surface-500">Earlier native history may be unavailable.</p>}
     {history.more && <button className="btn btn-secondary" type="button" onClick={() => polling.current()}>Load more messages</button>}
     <p className="sr-only" role="status">{newMessages ? 'New messages available.' : ''}</p>
     {newMessages && <button className="btn btn-secondary" type="button" onClick={() => {

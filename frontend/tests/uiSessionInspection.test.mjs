@@ -220,6 +220,16 @@ test('conversation cursor pages cannot cross scope, owner generation or stream',
   assert.throws(()=>assertConversationPage(page,scope,0,'foreign-epoch'));
 });
 
+test('conversation cursor reports its next missing committed sequence without offering a later page',()=>{
+  const scope=session().scope;
+  const page={scope,stream_epoch:'epoch',next_after_sequence:7,committed_contiguous:20,
+    has_more:false,history_gap:8,updates:[]};
+  assert.doesNotThrow(()=>assertConversationPage(page,scope,7,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,history_gap:9},scope,7,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,committed_contiguous:7},scope,7,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,has_more:true},scope,6,'epoch'));
+});
+
 test('conversation reconciles deltas and snapshots by message identity with stable prior rows',()=>{
   const initial=new Map();
   const part={message_id:'message',update_id:'delta',change:'append',role:'assistant',text:'part',text_truncated:false};

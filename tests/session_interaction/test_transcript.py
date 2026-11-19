@@ -278,6 +278,7 @@ def test_omitted_events_advance_canonical_cursor_without_hiding_a_gap(stream):
     stream.watermark(1, "pending")
     page = stream.read()
     assert page["updates"] == [] and page["gap_pending"]
+    assert page["history_gap"] is None
     assert page["next_after_sequence"] == page["committed_contiguous"] == 1
     assert page["history_complete"] is False
 
@@ -292,6 +293,41 @@ def test_omitted_events_advance_canonical_cursor_without_hiding_a_gap(stream):
     page = stream.read(stream_epoch=page["stream_epoch"], after_sequence=page["next_after_sequence"])
     assert [item["text"] for item in page["updates"]] == ["hidden past the gap"]
     assert page["next_after_sequence"] == 4 and not page["gap_pending"]
+
+
+def test_missing_committed_history_stops_at_the_verified_prefix_even_at_the_page_boundary(stream):
+    _delta(stream, 1, "first", "before the gap")
+    _delta(stream, 3, "later", "beyond the gap")
+    stream.watermark(4)
+
+    for limit in (1, MAX_SCAN_EVENTS):
+        page = stream.read(limit=limit)
+        assert [item["text"] for item in page["updates"]] == ["before the gap"]
+        assert page["next_after_sequence"] == 1
+        assert page["committed_contiguous"] == 4 and page["history_gap"] == 2
+        assert not page["has_more"] and not page["gap_pending"]
+
+    for after in (1, 3):
+        page = stream.read(stream_epoch="epoch", after_sequence=after)
+        assert page["updates"] == [] and page["next_after_sequence"] == after
+        assert page["history_gap"] == after + 1 and not page["has_more"]
+
+
+def test_large_history_returns_a_bounded_repeatable_page(stream):
+    for sequence in range(1, 10_001):
+        _delta(stream, sequence, f"item-{sequence}", f"Message {sequence}")
+    stream.watermark(10_000)
+
+    first = stream.read()
+    cursor = {"stream_epoch": first["stream_epoch"], "after_sequence": first["next_after_sequence"]}
+    second = stream.read(**cursor)
+    assert second == stream.read(**cursor)
+    for page, start in ((first, 1), (second, MAX_SCAN_EVENTS + 1)):
+        stop = start + MAX_SCAN_EVENTS
+        assert page["has_more"] and page["history_gap"] is None
+        assert page["next_after_sequence"] == stop - 1 and page["committed_contiguous"] == 10_000
+        assert [item["sequence"] for item in page["updates"]] == list(range(start, stop))
+    assert len({item["message_id"] for item in first["updates"] + second["updates"]}) == 2 * MAX_SCAN_EVENTS
 
 
 def test_only_text_parts_are_projected_and_their_size_is_bounded(stream):

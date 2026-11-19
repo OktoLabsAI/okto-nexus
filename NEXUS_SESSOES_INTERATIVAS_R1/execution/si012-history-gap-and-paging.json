@@ -1,0 +1,112 @@
+{
+  "tasks": [
+    "SI-012",
+    "SI-036"
+  ],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "2a9a0d969088e35716ba52de880cc0f64d2c0c9d",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 457
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "working_trees": "clean",
+    "feature_upstream_drift": "0 ahead, 0 behind on all three"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Playwright CLI Chromium browser",
+    "packaged_dashboard": "index-C1_yS8HR.js",
+    "data": "Synthetic messages and missing range in a disposable SQLite copy; installed Nexus HTTP on loopback"
+  },
+  "scenarios": {
+    "SI-T-E04": "PASS for an unavailable committed range. The API reports sequence 3, leaves the cursor at 2 and publishes no later or invented text. The browser preserves two verified messages and presents a status instead of a continuation button.",
+    "SI-T-E05": "PASS for a 10,000-message SQLite fixture. Opening and requesting one page in a real browser fetched only sequences 1 through 100. Replaying the second cursor produced the same exact API body."
+  },
+  "proof": {
+    "dataset_messages": 10000,
+    "api": {
+      "first_page_bytes": 25195,
+      "second_page_bytes": 25216,
+      "events_per_page": 50,
+      "stable_epoch": true,
+      "stable_repeat": true,
+      "rejected_oversized_page": 422,
+      "missing_sequences": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gap_reported": 3,
+      "last_verified_sequence": 2,
+      "in_gap_chat_updates": 0,
+      "canonical_events_gap_status": 500
+    },
+    "browser_paging": {
+      "paging": true,
+      "messagesOnOpen": 50,
+      "messagesAfterPaging": 100,
+      "requests": [
+        0,
+        50
+      ]
+    },
+    "browser_gap": {
+      "gap": true,
+      "warning": true,
+      "messagesAfterGap": 2,
+      "requests": [
+        0
+      ]
+    },
+    "harnesses_started": 0,
+    "external_provider_calls": 0
+  },
+  "regressions_passed": {
+    "frontend_node": 420,
+    "python_source": 35,
+    "python_installed": 39
+  },
+  "build_checks": [
+    "frontend TypeScript and Vite",
+    "offline lock",
+    "strict Twine wheel and sdist",
+    "byte-for-byte installed source and dashboard comparison"
+  ],
+  "lint": "Scoped Ruff reproduced the same four diagnostics as the pre-change tree. No new diagnostics.",
+  "sha256": {
+    "nexus_wheel": "acc81c5de350eddc30155bb88e8d7e8fd68ca6f89a135fc85204b3c59d389d61",
+    "nexus_sdist": "dd0a3d1a7423a85fc24536a72766a0b73bc525b6b2bca28b4df16ad363e71477",
+    "core_pin": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "connector_pin": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "fixture": "56e7c717eedd9c5ccca08dd0bbc8275ca1d1c1d266542d72c651c0023d5109d7",
+    "paging_browser_driver": "480c8f27e5e8a340256fd3ae5e04c599aea4c79b0d897cc54160da8589d17411",
+    "gap_browser_driver": "13951ba32de64bc94a6f50a4cee1eff52fd1b4e74c5c5a5a27595fe0fa077106",
+    "fixture_result": "d6e79e62d810cc7cc1688e1e51c227c18ebc55685bca11ffa58fc88240068812",
+    "browser_paging_result": "969d04ec26c9a6930553eb542585684f09d96d09a710c1a622cccd187d2b85b6",
+    "browser_gap_result": "4313f03708f108b7aaca4d1d979c450b46875d4addc9e7bbf650ebda1c1139db",
+    "source_test_report": "7dfc3b2b13e600db08809b73c04da222b711d324621e14d9e1a3a5859194e2e2",
+    "installed_test_report": "e010256868fcb4969171cd9e31f04a5634c3bde245664072664bc01917ad20dd"
+  },
+  "limitations": [
+    "The absent committed range was simulated. This change does not introduce a pruning policy or infer why the range was lost.",
+    "Replay stops at the first unverifiable position instead of appending later fragments to an incomplete history.",
+    "This browser automation verifies accessible status markup. Screen reader and human acceptance are pending."
+  ],
+  "migration": "none"
+}
