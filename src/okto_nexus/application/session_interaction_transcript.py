@@ -4,6 +4,7 @@ import hashlib
 import re
 
 from nexus_connector_core.event_artifacts import REFERENCE_KEY
+from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT, valid_pi_chat_fact
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.harness.event_journal import redact
@@ -65,12 +66,29 @@ def _updates(event: dict):
     payload = event.get("payload")
     if not isinstance(payload, dict):
         return
-    thread = payload.get("thread_id")
-    if not _native_id(thread) or payload.get("threadId") != thread:
-        return
     stream = (event["server_id"], event["executor_id"], event["session_id"], event["stream_epoch"])
     sequence = event["sequence"]
     event_id = _identity(*stream, sequence)
+    if event.get("native_type") == PI_CHAT_EVENT:
+        if event.get("category") != "tool_activity" or not valid_pi_chat_fact(payload):
+            return
+        native = payload["native_session_id"]
+        operation = event.get("operation_id")
+        if not _native_id(native) or not _native_id(operation):
+            return
+        body = payload["text"]
+        text, truncated = (None, True) if body is None else _bounded_body(body)
+        message_id = _identity(*stream, "pi", native, payload["entry_id"], payload["role"])
+        yield {
+            "event_id": event_id, "update_id": _identity(event_id, message_id), "message_id": message_id,
+            "sequence": sequence, "role": payload["role"], "change": "replace",
+            "origin": {"kind": "native_session", "session_id": native}, "operation_id": operation,
+            "text": text, "text_truncated": truncated,
+        }
+        return
+    thread = payload.get("thread_id")
+    if not _native_id(thread) or payload.get("threadId") != thread:
+        return
     for role, change, item_id, index, body in _text_parts(event, payload):
         if not _native_id(item_id) or not isinstance(body, str):
             continue
@@ -102,7 +120,7 @@ def read_session_interaction_transcript(
     complete native transcript, thread parentage, or an input-to-echo link.
     A truncated body can be a prefix or entirely absent (``text=None``).
     Core 0.0.15 masks raw identity fields in output deltas and Claude snapshots.
-    Pi terminal message events retain text without a native message identifier.
+    Only reviewed hosted Pi snapshots carry a retained native entry identity.
     """
     if type(limit) is not int or not 1 <= limit <= MAX_SCAN_EVENTS:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid transcript scan limit.", {})

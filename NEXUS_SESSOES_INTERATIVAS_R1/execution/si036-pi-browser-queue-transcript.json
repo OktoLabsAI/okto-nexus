@@ -1,0 +1,61 @@
+{
+  "tasks": ["SI-012", "SI-025", "SI-036"],
+  "evidence_status": "PARTIAL",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "372547122ef1aac09fc2a81a9b2ff84b7afecd14", "main": "8d77b50c00b417c86818d027aed7497fababac34", "ahead_of_main": 451},
+    "connector": {"branch": "feature/v0.0.15", "head": "576e7045ae8104131c18235f3df707bda5d39b6c", "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2", "ahead_of_main": 82},
+    "core": {"branch": "feature/v0.0.16", "head": "6ec6ace51bcca05272e5bb63098d862e5641dc70", "main": "19c99f15b17ae994653ad9e190964229a0e296e8", "ahead_of_main": 61},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheels_sha256": {
+    "core": "7424e8d4424900b6b414de5d43778e9ba18c79d8f6579bee9a83ec1fcfeb093e",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "nexus": "b296305c5efd75eb19d55344fc13075a6c18a1de9de788f967861f4bd3567c96"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "browser_driver": "Playwright",
+    "dashboard_js_asset": "index-DPBNbalO.js",
+    "reviewed_pi": "0.87.1",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "operator_authentication": "Disposable browser sign-in",
+    "model_transport": "Deterministic fixture provider with external network disabled",
+    "external_model_calls": 0
+  },
+  "observations": {
+    "initial_browser_run": "Two successful canonical turns and two durable results. The conversation lacked the Pi responses because the prior native message event lacked retained entry identity.",
+    "browser_candidate": "Both enqueue requests returned 202. One reorientation was confirmed at 360 px using the keyboard. The UI reported pending at the next boundary and then applied. The second entry ran on its own turn. Both responses appeared once in the conversation while an unsent draft retained its value and focus.",
+    "native_candidate": "Exactly two successful canonical turn receipts. Six user and assistant ingress records match the exact Pi journal IDs and roles. SQLite integrity check and canonical close passed.",
+    "home_results": "Two response cards visible. The first result opened by keyboard. One pointer attempt at mobile width timed out."
+  },
+  "local_evidence_sha256": {
+    "test_browser_pi_with_chat.py": "27283ec50172b2ddb528b6c3a16d0bcdfa6eb22a9d5eca5e58f36ab9f5774e98",
+    "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "candidate/browser-promotion.json": "cb7a75bd31d89d37c6bc851d9455aea3e57c49eaefe28f873133be277ef0adab",
+    "candidate/browser-consumed.json": "e18f99e8aba8cf0a52538784cdb1469f23d9c8b0377971766364ad98efded9e4",
+    "candidate/browser-result.json": "67fc7dde9b12f0b364e613bcb03b63da37e67e2dc2a98e3563a7de336c80605d",
+    "candidate/browser-home-results.json": "1685254aba5db6cb3f80492d54f953f1aa69d32df7404d20aeee0f698f12684c",
+    "candidate/native-ids.json": "0096c978b333253117e954451ee7d4941da1d874fbf86a3d0235c8b889b20bd8",
+    "candidate/proof.xml": "d3984eec75ab6a434ac7ab5ab54b9c70dca8e62db1a895c6bf280824a728b193",
+    "core-installed.xml": "a4354c294f45750b962491a9918368173ec5b13995c4a10d3f12dc4069c6c46c",
+    "connector-installed.xml": "8e38ea8ad04b90c9de281f4a070142287f59ec892526c4faeda0f15c9b0822ac",
+    "nexus-installed.xml": "53ef6915d1ba7e2b3efb070667f977cedb88100db6360116bc7c9e25e921e120"
+  },
+  "installed_suite_passed": {"core": 70, "connector": 41, "nexus": 46},
+  "scopes": {
+    "SI-T-C04": "Supplemental browser evidence for the exact Pi reorientation boundary",
+    "SI-T-E01": "Final retained Pi entries and duplicate suppression. Delta and snapshot combinations were outside this run.",
+    "SI-T-E09": "Draft, focus and same target through Pi chat updates on Edge",
+    "SI-T-E13": "Mobile keyboard review at 360 px. Browser zoom and full pointer coverage remain open.",
+    "SI-T-I04": "Queue, reorientation and results. Separate detach evidence remains in SI-032."
+  },
+  "limitations": [
+    "This evidence is limited to the recorded Windows browser and Pi build.",
+    "Older Pi history without retained event identity remains outside the transcript projection.",
+    "Screen reader, 200 percent browser zoom, human acceptance and real model provider qualification remain open."
+  ],
+  "migration": "none"
+}

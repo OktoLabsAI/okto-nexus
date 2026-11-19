@@ -9,6 +9,7 @@ from types import SimpleNamespace
 import pytest
 from nexus_connector_core.native.adapter_types import HarnessEvent
 from nexus_connector_core.native.event_ingest import translate_native_event
+from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT
 from nexus_connector_core.native.redaction import NativeSecretRedactor
 from nexus_connector_core.protocol import canonical_json
 
@@ -73,11 +74,13 @@ def stream(monkeypatch):
         authority = (context, access)
         monkeypatch.setattr(execution_event_views, "read_execution_session", authorize)
 
-        def store(sequence, kind, category, payload, *, epoch="epoch"):
+        def store(sequence, kind, category, payload, *, epoch="epoch", operation_id=None):
             event = {**keys, "stream_epoch": epoch, "sequence": sequence,
                      "category": category, "payload": payload}
             if kind is not None:
                 event["native_type"] = kind
+            if operation_id is not None:
+                event["operation_id"] = operation_id
             raw = canonical_json(event)
             digest = "sha256:" + hashlib.sha256(raw).hexdigest()
             db.execute("INSERT INTO execution_event_ingress VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -162,6 +165,30 @@ def test_artifact_reference_advances_cursor_without_hydrating_body(stream, monke
     assert page["next_after_sequence"] == 2
     assert page["omitted_artifact_events"] == 1
     assert [update["text"] for update in page["updates"]] == ["Available inline text"]
+
+
+def test_hosted_pi_transcript_requires_retained_ids_and_keeps_equal_messages_distinct(stream):
+    fact = {"revision": 1, "native_session_id": "native-pi-session", "entry_id": "abcdef01",
+            "role": "assistant", "text": "same\x00 response"}
+    stream.store(1, "message_end", "tool_activity", {"message": fact})
+    stream.store(2, PI_CHAT_EVENT, "tool_activity", fact, operation_id="first-turn")
+    stream.store(3, PI_CHAT_EVENT, "tool_activity", fact | {"entry_id": "abcdef02"}, operation_id="second-turn")
+    stream.store(4, PI_CHAT_EVENT, "tool_activity", fact | {"entry_id": "abcdef03", "text": None},
+                 operation_id="second-turn")
+    stream.store(5, PI_CHAT_EVENT, "tool_activity", fact | {"role": "thinking"}, operation_id="second-turn")
+    stream.store(6, PI_CHAT_EVENT, "tool_activity", fact | {"entry_id": "abcdef04"})
+    stream.store(7, PI_CHAT_EVENT, "tool_activity", fact, operation_id="first-turn")
+    stream.watermark(7)
+
+    page = stream.read()
+    assert page["next_after_sequence"] == 7 and not page["history_complete"]
+    first, second, omitted, repeated = page["updates"]
+    assert first["message_id"] == repeated["message_id"] != second["message_id"]
+    assert first["update_id"] != repeated["update_id"]
+    assert first["text"] == second["text"] == "same response"
+    assert first["origin"] == {"kind": "native_session", "session_id": "native-pi-session"}
+    assert [item["operation_id"] for item in (first, second)] == ["first-turn", "second-turn"]
+    assert omitted["text"] is None and omitted["text_truncated"]
 
 
 def test_omitted_events_advance_canonical_cursor_without_hiding_a_gap(stream):

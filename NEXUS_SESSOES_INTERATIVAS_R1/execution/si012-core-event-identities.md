@@ -16,3 +16,7 @@ timestamps and content indexes alone provide insufficient correlation.
 
 This is pure Core conversion evidence with synthetic data. Native capture
 and qualification for each installed harness remain pending.
+
+A subsequent [Windows Pi run](si036-pi-browser-queue-transcript.md)
+verified the additive identity event against the retained native journal.
+The earlier Pi event shape and the Claude evidence above still apply.
