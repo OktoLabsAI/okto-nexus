@@ -5,15 +5,18 @@ import hashlib
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
 from dataclasses import asdict, replace
 from functools import partial
 from threading import Event
 
 import pytest
 import test_local_realization as local_realization
-from nexus_connector_core import RuntimeEvent
+from fastapi.testclient import TestClient
+from nexus_connector_core import CoreError, OperationKey, RuntimeEvent
 from test_agent_recovery_isolation import eventually
 from test_embedded_dispatch import admit, connect_local, wait_receipt
+from test_embedded_inventory import app_for as embedded_app
 
 from okto_nexus.application.execution_native_session_mapping import (
     read_managed_native_session,
@@ -40,8 +43,7 @@ def emit_codex_configuration(client, native, server, executor, session, epoch):
          'source': 'thread/start/response', 'fields': {}}))
 
 
-@pytest.fixture
-def interactive_runtime(monkeypatch, request):
+def _prepare_interactive_fixture(monkeypatch):
     from nexus_connector_core import availability
 
     app_for = local_realization.app_for
@@ -58,6 +60,11 @@ def interactive_runtime(monkeypatch, request):
     monkeypatch.setattr(local_realization, 'app_for', configure)
     monkeypatch.setattr(local_realization, 'InstallationCandidate', qualified_candidate)
     monkeypatch.setattr(availability, 'qualified_build', lambda *_args, **_kwargs: True)
+
+
+@pytest.fixture
+def interactive_runtime(monkeypatch, request):
+    _prepare_interactive_fixture(monkeypatch)
     return connect_local(request.getfixturevalue('local_setup'))
 
 
@@ -600,6 +607,181 @@ def test_server_dispatches_queue_after_busy_boundary_without_handoff_acquisition
     assert inputs()[-1] == {'input_id': pending.input_id, 'status': 'BLOCKED_AUTH',
                            'operation_id': None, 'capacity_state': None}
     assert len(native.native.sent) == 3
+
+
+@pytest.mark.parametrize('terminal_recorded', [False, True], ids=['unknown', 'completed'])
+def test_restart_reconciles_queued_input_receipts_without_resending(tmp_path, monkeypatch, terminal_recorded):
+    from okto_nexus.bootstrap import embedded_dispatch, server_runtime
+
+    def receipt(client, intent):
+        response = client.get(path + '/inputs/receipt', params=query | {'client_intent_id': intent})
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    with monkeypatch.context() as patch:
+        _prepare_interactive_fixture(patch)
+        with contextmanager(local_setup.__wrapped__)(tmp_path, patch, None) as setup:
+            setup, binding, native = connect_local(setup)
+            deps, app, client, headers, *_ = setup
+            owner = app.state.embedded_dispatch_owner
+            publish_shutdown = owner._publish_shutdown_history
+            crash_cut_reached = False
+            drop_receipts = True
+
+            async def exit_before_publication():
+                nonlocal drop_receipts
+                if not crash_cut_reached:
+                    # Release the injected fault on assertion failures so the
+                    # normal fixture teardown can still finish draining.
+                    drop_receipts = False
+                    await publish_shutdown()
+                    return
+                assert native.native.stopped
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT count(*) FROM execution_receipts WHERE operation_id=?',
+                                                  (operation,)).fetchone()[0] == 0
+
+            patch.setattr(owner, '_publish_shutdown_history', exit_before_publication)
+            first_generation = owner.channel.connection_generation
+            opened = admit(setup, binding, 'restart-input-open', 'runtime.start', new_session=True)
+            wait_receipt(setup, opened)
+            scope = opened['scope']
+            server, executor, session = (scope[key] for key in ('server_id', 'executor_id', 'session_id'))
+            exact = {key: scope[key] for key in ('server_id', 'executor_id', 'session_id', 'binding_id',
+                                                'workspace_id', 'workspace_binding_id', 'agent_id')}
+            generation = scope['session_owner_generation']
+            query = {key: value for key, value in exact.items() if key != 'session_id'}
+            query['expected_session_generation'] = generation
+            path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+            ui = {'x-nexus-ui': '1'}
+            auth = app.state.operator_auth
+            assert auth.configure('restart-human', 'synthetic-restart-password', local=True)
+            token = auth.login('restart-human', 'synthetic-restart-password')
+            assert token is not None
+            client.cookies.set('nexus_operator_session', token)
+
+            active = admit(setup, binding, 'restart-busy', 'turn.submit', session_id=session, text='Held original turn')
+            wait_receipt(setup, active)
+            original = active['operation_id']
+            send = native.native.send
+            written_operation = None
+            dropped_stages = []
+
+            async def write_with_lost_ack(verb, payload, operation_id, **kwargs):
+                nonlocal written_operation
+                await send(verb, payload, operation_id, **kwargs)
+                if verb == 'send_turn' and operation_id != original and written_operation is None:
+                    written_operation = operation_id
+                if not terminal_recorded and operation_id == written_operation:
+                    raise CoreError('OUTCOME_UNKNOWN', 'fixture_ack_lost_after_write', possible_effect=True)
+
+            append = embedded_dispatch.append_execution_receipt
+
+            def defer_receipt(*args, frame, **kwargs):
+                if drop_receipts and frame['operation_id'] == written_operation:
+                    dropped_stages.append(frame['stage'])
+                    raise OSError('Fixture receipt publication unavailable after the write')
+                return append(*args, frame=frame, **kwargs)
+
+            patch.setattr(native.native, 'send', write_with_lost_ack)
+            patch.setattr(embedded_dispatch, 'append_execution_receipt', defer_receipt)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                epoch, = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                                 (session,)).fetchone()
+
+            def settle(operation_id):
+                client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+                    'turn_state', 'fixture.interactive.complete',
+                    {'delivery_phase': 'terminal', 'delivery_outcome': 'success', 'output_text': 'Retained result'},
+                    operation_id=operation_id))
+
+            revision = client.get(path + '/interaction', params=query).json()['next_turn']['capability_revision']
+            base = {'scope': exact, 'expected_session_generation': generation, 'capability_revision': revision}
+            ids = {}
+            for intent, text in (('maybe-sent', 'One write may have reached the engine'),
+                                 ('retained-follower', 'Keep this queued input after restart')):
+                reply = client.post(path + '/inputs', headers=ui, json=base | {
+                    'client_intent_id': intent, 'content': [{'type': 'text', 'text': text}],
+                })
+                assert reply.status_code == 202, reply.text
+                row = reply.json()
+                assert row['status'] == 'QUEUED' and row['operation_id'] is None
+                ids[intent] = row['input_id']
+
+            settle(original)
+            eventually(lambda: len(native.native.sent) == 2, seconds=40)
+            observed = receipt(client, 'maybe-sent')
+            operation = observed['operation_id']
+            assert operation and operation == written_operation and observed['status'] in ('DISPATCHING', 'DELIVERY_UNKNOWN')
+            assert native.native.sent == [('send_turn', original), ('send_turn', operation)]
+            assert receipt(client, 'retained-follower')['status'] == 'QUEUED'
+            key = OperationKey(server, executor, operation)
+
+            async def history():
+                return await owner.host.historical_receipt(session_id=session, key=key)
+
+            def core_stage():
+                observed_core = client.portal.call(history)
+                return observed_core.stage if observed_core else None
+
+            if terminal_recorded:
+                eventually(lambda: core_stage() == 'SUBMITTED', seconds=25)
+                eventually(lambda: 'SUBMITTED' in dropped_stages, seconds=25)
+                settle(operation)
+            expected_stage = 'SUCCEEDED' if terminal_recorded else 'OUTCOME_UNKNOWN'
+            eventually(lambda: core_stage() == expected_stage, seconds=30)
+            if not terminal_recorded:
+                eventually(lambda: 'OUTCOME_UNKNOWN' in dropped_stages, seconds=30)
+            assert client.portal.call(history).possible_effect
+
+            # Preserve the Core journal and stop its own peer. Model the crash
+            # cut before Nexus can retry publication during graceful shutdown.
+            crash_cut_reached = True
+
+    assert native.native.stopped and native.opens == 1
+
+    successor = type(native)()
+    start_services = server_runtime.start_runtime_services
+
+    async def start(app, **kwargs):
+        return await start_services(app, **(kwargs | {'native_factory': successor}))
+
+    monkeypatch.setattr(server_runtime, 'start_runtime_services', start)
+    restarted_deps, restarted = embedded_app(tmp_path / 'home')
+    restarted_deps.config.runtime_session_interaction_enabled = True
+    with TestClient(restarted) as client:
+        restarted_owner = restarted.state.embedded_dispatch_owner
+        assert restarted_owner.channel.connection_generation > first_generation
+        client.cookies.set('nexus_operator_session', token)
+        expected_input = 'ACCEPTED_NATIVE' if terminal_recorded else 'DELIVERY_UNKNOWN'
+        eventually(lambda: receipt(client, 'maybe-sent')['status'] == expected_input, seconds=40)
+        recovered = receipt(client, 'maybe-sent')
+        assert recovered['input_id'] == ids['maybe-sent'] and recovered['operation_id'] == operation
+        assert recovered['possible_effect'] and recovered['scope'] == exact
+        view = client.get('/v1/runtime/operations/' + operation, headers=headers['subject'])
+        assert view.status_code == 200 and view.json()['executor_stage'] == expected_stage
+        assert view.json()['retry_safe'] is False
+        eventually(lambda: receipt(client, 'retained-follower')['status'] == 'BLOCKED_SESSION', seconds=35)
+        retained = receipt(client, 'retained-follower')
+        assert retained['input_id'] == ids['retained-follower'] and retained['operation_id'] is None
+        assert retained['scope'] == exact and not retained['possible_effect']
+
+        refused = client.post(path + '/inputs', headers=ui, json=base | {
+            'client_intent_id': 'new-after-restart', 'content': [{'type': 'text', 'text': 'No implicit reroute'}],
+        })
+        assert refused.status_code in (404, 409), refused.text
+        assert receipt(client, 'maybe-sent') == recovered
+        with restarted_deps.connection_factory.unit_of_work(write=False) as uow:
+            rows = uow.connection.execute('SELECT input_id,session_id,content FROM session_interaction_inputs '
+                                          'ORDER BY enqueue_sequence').fetchall()
+            assert [tuple(row) for row in rows] == [
+                (ids['maybe-sent'], session, 'One write may have reached the engine'),
+                (ids['retained-follower'], session, 'Keep this queued input after restart'),
+            ]
+            operations = uow.connection.execute("SELECT operation_id FROM execution_operations WHERE action='turn.submit'").fetchall()
+            assert {row[0] for row in operations} == {original, operation}
+        assert not restarted_owner.host._runtime_tasks
+    assert successor.opens == 0 and native.native.sent == [('send_turn', original), ('send_turn', operation)]
 
 
 def test_dashboard_admits_exact_input_once_under_the_original_human_login(interactive_runtime):

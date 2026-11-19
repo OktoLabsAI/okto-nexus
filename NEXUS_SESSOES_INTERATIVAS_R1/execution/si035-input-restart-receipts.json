@@ -1,0 +1,106 @@
+{
+  "tests": {
+    "SI-T-B13": "PASS",
+    "SI-T-B16": "PASS"
+  },
+  "related_tasks": [
+    "SI-008",
+    "SI-035"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "9fd4dc946f6dd9b8da498e1982a79ef84de8bf7c",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 466
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "worktrees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": "Windows, production ASGI routes and lifecycle of two Server instances, real SQLite files/Core journals and dispatcher, synthetic native Codex peer, same disposable home and operator login.",
+  "injection": "After the peer's tested write, an OSError prevents publication of the R4 receipt to Nexus while the original Core journal stays writable. Skip publication during old-owner shutdown at the proven cut.",
+  "observations": {
+    "unknown": {
+      "retained_core_stage": "OUTCOME_UNKNOWN",
+      "recovered_http_receipt": "DELIVERY_UNKNOWN",
+      "possible_effect": true,
+      "retry_safe": false
+    },
+    "completed": {
+      "retained_core_stage": "SUCCEEDED",
+      "recovered_http_receipt": "ACCEPTED_NATIVE",
+      "possible_effect": true,
+      "retry_safe": false
+    },
+    "writes_for_tested_input_before_restart": 1,
+    "additional_native_writes_after_restart": 0,
+    "native_processes_opened_after_restart": 0,
+    "identity_and_generation_scope_preserved": true,
+    "retained_follower": {
+      "before_restart": "QUEUED",
+      "after_confirmed_session_release": "BLOCKED_SESSION",
+      "same_id_scope_and_text": true,
+      "operation_linked": false
+    },
+    "fresh_input_into_retired_session_refused": true
+  },
+  "regressions": {
+    "two_fault_paths": {
+      "passed": 2,
+      "junit_sha256": "9b8faabaa385f39d58f743f18a2a2c9f594d8fa286f685697d6ffdc302dcfda3",
+      "cases": [
+        "test_restart_reconciles_queued_input_receipts_without_resending[unknown]",
+        "test_restart_reconciles_queued_input_receipts_without_resending[completed]"
+      ]
+    },
+    "recovery_receipt_and_capacity": {
+      "passed": 20,
+      "junit_sha256": "f661648036420252a7297e902cf6b7040d158ba571dc703d2cb50d5c1d783141",
+      "cases": [
+        "test_restart_recovers_historical_receipt_without_provider[False]",
+        "test_restart_recovers_historical_receipt_without_provider[True]",
+        "test_queue_dispatch_serializes_with_dashboard_controls[cancel]",
+        "test_queue_dispatch_serializes_with_dashboard_controls[dispatch]",
+        "test_reads_owned_receipt_in_exact_namespace_without_mutating_store",
+        "test_recovers_old_generation_and_current_status_without_replaying_input",
+        "test_mismatches_share_one_not_found_result",
+        "test_requires_current_session_visibility",
+        "test_prepared_request_survives_reopen_and_concurrent_input_has_no_early_operation",
+        "test_preparation_refuses_stale_session_and_connection_generations",
+        "test_staging_requires_prepared_request_and_preserves_proof_after_link",
+        "test_capacity_step_commits_request_before_host_and_uses_the_same_attempt[False]",
+        "test_capacity_step_commits_request_before_host_and_uses_the_same_attempt[True]",
+        "test_replacement_host_only_observes_the_original_attempt[False]",
+        "test_replacement_host_only_observes_the_original_attempt[True]",
+        "test_release_tombstone_recovers_abandoned_prepared_attempt[False]",
+        "test_release_tombstone_recovers_abandoned_prepared_attempt[True]",
+        "test_recovery_releases_consumed_slot_only_for_exact_unsent_refusal[False]",
+        "test_recovery_releases_consumed_slot_only_for_exact_unsent_refusal[True]",
+        "test_registry_fences_late_reservation_after_host_replacement"
+      ]
+    }
+  },
+  "test_location": "tests/execution_r4/test_session_input_runtime.py::test_restart_reconciles_queued_input_receipts_without_resending",
+  "limits": [
+    "This injects a publication cut around a real full ASGI lifespan restart. OS service crash and cross-host TLS remain separate.",
+    "Native writes are observed at a synthetic peer. The previous Windows Pi socket recovery ran a real harness."
+  ],
+  "migration": "none"
+}

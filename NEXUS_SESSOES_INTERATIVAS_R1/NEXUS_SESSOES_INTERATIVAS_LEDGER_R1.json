@@ -512,7 +512,9 @@
         "execution/si008-receipt-lookup.md",
         "execution/si013-dashboard-input-api.md",
         "execution/si023-retired-session-queue.md",
-        "execution/si023-retired-session-queue.json"
+        "execution/si023-retired-session-queue.json",
+        "execution/si035-input-restart-receipts.md",
+        "execution/si035-input-restart-receipts.json"
       ]
     },
     {
@@ -1840,7 +1842,9 @@
       "status": "TODO",
       "evidence": [
         "execution/si035-queue-dispatch-races.md",
-        "execution/si035-queue-dispatch-races.json"
+        "execution/si035-queue-dispatch-races.json",
+        "execution/si035-input-restart-receipts.md",
+        "execution/si035-input-restart-receipts.json"
       ]
     },
     {
@@ -2552,8 +2556,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si035-input-restart-receipts.md",
+        "execution/si035-input-restart-receipts.json"
+      ]
     },
     {
       "id": "SI-T-B14",
@@ -2603,8 +2610,12 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": ["execution/si023-retired-session-queue.json"]
+      "status": "PASS",
+      "evidence": [
+        "execution/si023-retired-session-queue.json",
+        "execution/si035-input-restart-receipts.md",
+        "execution/si035-input-restart-receipts.json"
+      ]
     },
     {
       "id": "SI-T-B17",
