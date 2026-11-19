@@ -1,0 +1,56 @@
+{
+  "task": "SI-031",
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "13c6dc9e969bce202348c035b4b91eb082fbfe3c",
+    "connector_baseline": "173d55b7c2e9c09cf316794bea1ce86765cb4378",
+    "connector_revision": "aca976c5ecd8f71dd9e296ca0699200a2a04f601",
+    "core_revision": "8877114d50f515a7aac06e874b7ddb756d2f876c"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "aad7817446627e6c551109d0d503188728e839cb004ce5ae665c6616d9f9d451",
+    "connector_0.0.15_wheel_sha256": "632cbb1b4331c2d92b1fec982c13c8099d390b5b20d66a0bf1b7abf68fe97f80",
+    "core_0.0.16_wheel_sha256": "42e965c44c993d80e182f7207bf101f6afe34e43ab28eb75fc81274d3992a9a8",
+    "database_migration": null
+  },
+  "regressions": {
+    "connector_installed_cli_setup_and_boundary_tests": 76,
+    "nexus_installed_session_and_remote_tests": 30,
+    "strict_wheel_metadata": "PASS",
+    "wheel_changed_modules_byte_for_byte": 4,
+    "nexus_offline_lock_check": "PASS",
+    "wrong_server_refused_before_binding_query": true,
+    "wrong_host_and_binding_revision_refused_before_attachment": true,
+    "non_tty_and_json_open_refused_before_setup": true,
+    "default_no_after_setup": true,
+    "incomplete_setup_skipped_offer": true,
+    "unavailable_or_misbound_attachment_preserved_connection": true,
+    "connector_credential_environment_excluded": true
+  },
+  "native_loopback": {
+    "test": "PASS",
+    "platform": "Windows x64 with ConPTY",
+    "operator_vault": "temporary synthetic login, fixture vault for an isolated Nexus process",
+    "connector_cli_and_nexus_cli": "separate installed executable processes",
+    "connector_setup_reused": true,
+    "no_interactive_skipped_offer_and_attachment": true,
+    "explicit_open_used_same_live_session": true,
+    "viewer": "Codex 0.170.0",
+    "connector_app_server": "Codex 0.157.0",
+    "same_engine_pid_and_thread": true,
+    "viewer_rendered_current_turn_result": true,
+    "detach_receipt_confirmed": true,
+    "new_operations_from_attachment": 0,
+    "loopback_model_requests": 1,
+    "external_provider_requests": 0,
+    "fixture": "%TEMP%/nexus-si022-native-view-1795073414869/test_si031_connector_cli.py",
+    "fixture_sha256": "c904589291eb44f3a240727d9b7c116afdeb994f60b29c86c27c5889314b3208",
+    "terminal_capture_sha256": "2ac2be4224c332f4cf5ee28c3171e83434f7e64c7fbc0e3dee219d0dd7c2e8e3",
+    "first_run": "The user interaction passed. The temporary server thread exceeded the original shutdown observation. The rerun added canonical session closure after the checks and a longer shutdown observation."
+  },
+  "limitations": [
+    "The host offer supports reviewed live Codex sessions. Remote Pi and Claude remain pending.",
+    "Distinct host TLS and native terminal qualification across hosts remain pending.",
+    "The mixed-version qualification campaign remains pending."
+  ]
+}

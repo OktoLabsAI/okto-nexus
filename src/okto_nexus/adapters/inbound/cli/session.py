@@ -26,6 +26,7 @@ from ...outbound.local_presenter_client import (
     open_local_presentation,
     review_local_presentation,
 )
+from ...outbound.service_manager.context import atomic_json
 from ...outbound.terminal_http import LocalOperatorHTTP
 from .codex_viewer_process import present_codex, select_viewer
 from .connect import project_profile
@@ -69,6 +70,17 @@ def _connection(call, *, project, workspace_id, connect_id):
     if any(current.get(key) != value for key, value in reference.items()):
         raise ConnectionError('CONNECTION_SELECTOR_CONFLICT', 'The canonical binding changed. Resolve this Harness ID again.')
     return current
+
+
+def _host_binding(service, status, args):
+    if status.get('server_id') != args.server_id:
+        raise ConnectionError('SERVER_ID_MISMATCH', 'This saved operator login belongs to another Nexus server.')
+    call = service.operator_http
+    current = call('GET', PREFIX + '/connections/bindings/' + quote(args.binding_id, safe=''))
+    reviewed = ('server_id', 'executor_id', 'workspace_id', 'binding_id', 'binding_revision')
+    if any(current.get(key) != getattr(args, key) for key in reviewed):
+        raise ConnectionError('CONNECTION_SELECTOR_CONFLICT', 'The confirmed binding changed. Review its current connection.')
+    return call, current
 
 
 def _view(call, binding):
@@ -332,6 +344,11 @@ def run_session(argv):
     connection = parser.add_mutually_exclusive_group()
     connection.add_argument('--id', dest='connect_id', help='public Harness ID in the selected workspace')
     connection.add_argument('--profile', help='existing project profile')
+    connection.add_argument('--binding-id', help='confirmed Connector binding, for an exact host handoff')
+    parser.add_argument('--server-id', help='Nexus server of the confirmed Connector binding')
+    parser.add_argument('--executor-id', help='host of the confirmed Connector binding')
+    parser.add_argument('--binding-revision', type=int, help='revision of the confirmed Connector binding')
+    parser.add_argument('--attachment-receipt', type=Path, help='write a non-secret host handoff result to this file')
     parser.add_argument('--project', type=Path, help='existing local project folder')
     parser.add_argument('--workspace-id', help='exact workspace for a public Harness ID')
     parser.add_argument('--operator-profile', help='saved human operator login')
@@ -343,8 +360,19 @@ def run_session(argv):
     parser.add_argument('--write', action='store_true', help='enable plain-text input for a supported viewer')
     parser.add_argument('--json', action='store_true')
     args, service_args = parser.parse_known_args(argv)
-    if args.workspace_id and not args.connect_id:
-        parser.error('--workspace-id requires --id')
+    if args.binding_id is not None:
+        ids = (args.binding_id, args.server_id, args.executor_id, args.workspace_id)
+        if (not args.operator_profile or not 0 < (args.binding_revision or 0) < 2**63
+                or any(not ident or len(ident) > 160 or not ident.isprintable() for ident in ids)
+                or args.project is not None or args.action not in ('list', 'attach')):
+            parser.error('--binding-id requires list or attach, --server-id, --executor-id, --workspace-id, '
+                         '--binding-revision and --operator-profile')
+    elif any(value is not None for value in (args.server_id, args.executor_id, args.binding_revision, args.attachment_receipt)):
+        parser.error('--server-id, --executor-id, --binding-revision and --attachment-receipt require --binding-id')
+    if args.attachment_receipt is not None and (args.action != 'attach' or args.json):
+        parser.error('--attachment-receipt requires interactive attach')
+    if args.workspace_id and not (args.connect_id or args.binding_id):
+        parser.error('--workspace-id requires --id or --binding-id')
     if args.workspace_id and args.project is not None:
         parser.error('choose --workspace-id or --project')
     if args.viewer_executable is not None and args.action != 'attach':
@@ -373,13 +401,18 @@ def run_session(argv):
         except ValueError:
             parser.error('invalid Harness ID')
     try:
-        project, profile = project_profile(args.project, args.profile)
-        service = _target(args, service_args, profile)
+        if args.binding_id is not None:
+            service = resolve_terminal_target(service_args, None, args.operator_profile, resolve_local_service)
+        else:
+            project, profile = project_profile(args.project, args.profile)
+            service = _target(args, service_args, profile)
         status = service.inspect()
         drain_read = args.action in ('list', 'receipt') and status['state'] == 'stopping' and status.get('ready_for_queries')
         if status['state'] != 'ready' and not drain_read:
             raise ConnectionError('SERVICE_NOT_READY', 'The selected Server is unavailable for session reads.')
-        if args.connect_id:
+        if args.binding_id is not None:
+            call, binding = _host_binding(service, status, args)
+        elif args.connect_id:
             call = service.operator_http if hasattr(service, 'operator_http') else LocalOperatorHTTP(
                 host=service.adapter.host, port=service.adapter.port)
             binding = _connection(call, project=project, workspace_id=args.workspace_id, connect_id=args.connect_id)
@@ -391,8 +424,10 @@ def run_session(argv):
         if status.get('server_id') not in (None, binding['server_id']):
             raise ConnectionError('SERVER_ID_MISMATCH', 'The session catalog belongs to another Server.')
         if args.action == 'attach':
-            attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
-                           interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(), write=args.write)
+            attached = attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
+                                      interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(), write=args.write)
+            if args.attachment_receipt is not None:
+                atomic_json(args.attachment_receipt, attached or {'status': 'declined'})
             return 0
         if args.action == 'resume':
             if not args.json:

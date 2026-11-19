@@ -47,7 +47,7 @@ class Catalog:
                         'items': [{'connect_id': 'reviewer', 'state': 'bound', 'workspace_id': 'workspace',
                                     'canonical_ref': BINDING}]}
         if path == '/connections/bindings/binding':
-            return BINDING
+            return BINDING | {'binding_revision': 4}
         if path == '/runtime/sessions':
             assert (query['executor_id'], query['binding_id'], query['agent_id']) == (
                 ['executor'], ['binding'], ['agent'])
@@ -91,6 +91,43 @@ def test_list_fails_closed_on_later_scope_change(monkeypatch, capsys):
     result = json.loads(capsys.readouterr().out)
     assert result['code'] == 'WORK_SCOPE_CHANGED'
     assert 'sessions' not in result
+
+
+@pytest.mark.parametrize(('server', 'executor', 'revision', 'code'), [
+    ('wrong', 'executor', '4', 'SERVER_ID_MISMATCH'),
+    ('server', 'wrong', '4', 'CONNECTION_SELECTOR_CONFLICT'),
+    ('server', 'executor', '3', 'CONNECTION_SELECTOR_CONFLICT'),
+    ('server', 'executor', '4', None),
+])
+def test_connector_handoff_verifies_scope_before_attachment(server, executor, revision, code, monkeypatch, tmp_path):
+    catalog = Catalog(base='https://nexus.example')
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda service_args, profile, operator, local: service
+                        if service_args == [] and profile is None and operator == 'human' else pytest.fail('Wrong topology'))
+    monkeypatch.setattr(session, 'project_profile', lambda *_: pytest.fail('Connector handoff must not use CWD'))
+    scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {'session_id': 'session-a'}
+    detached = {'status': 'detached', 'scope': scope, 'attachment_id': 'att_' + 'a' * 32,
+                'attach_strategy': 'codex_remote_read', 'capability_revision': 'sha256:' + 'a' * 64}
+
+    def attach(call, binding, **options):
+        assert code is None and call is catalog and binding == BINDING | {'binding_revision': 4}
+        assert options == {'session_id': None, 'viewer_executable': None, 'interactive': True, 'write': False}
+        return detached
+
+    monkeypatch.setattr(session, 'attach_session', attach)
+    reported = []
+    monkeypatch.setattr(session, '_display', lambda view, as_json: reported.append(view))
+    file = tmp_path / 'attachment.json'
+    assert main(['session', 'attach', '--binding-id', 'binding', '--server-id', server, '--executor-id', executor,
+                 '--workspace-id', 'workspace', '--binding-revision', revision, '--operator-profile', 'human',
+                 '--attachment-receipt', str(file)]) == (0 if code is None else 3)
+    if code is None:
+        assert json.loads(file.read_text()) == detached and not reported
+    else:
+        assert not file.exists() and reported[0]['code'] == code
+    assert catalog.routes == ([] if code == 'SERVER_ID_MISMATCH' else ['/connections/bindings/binding'])
 
 
 def test_json_attach_requires_choice_and_never_opens_terminal(monkeypatch, capsys):
