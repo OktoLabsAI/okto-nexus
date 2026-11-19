@@ -1,0 +1,43 @@
+{
+  "task": "SI-025",
+  "related_test": "SI-T-G04",
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": "86d9153debe3a9d265255c4893dd036e3550b597",
+    "core": "1a66105428f983f2ed83fca408180e2c50ab926f",
+    "connector": "2b4b12031f003e2d63a843d6b26f797456e0db1d"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "583f6730605bc03a9a388c7c232d5eacb767e18796b32735e6a40c0f1a271ace",
+    "core_0.0.16_wheel_sha256": "b8fe2ca4ed01a18da22ec78861da2c2dd6f3f66b4423b17d08f896a261ffe813",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe_sha256": "7185250a5d4baa1796c3c1d06de64f60d4cf5ef03913968fbecd886320bfc8c3",
+    "conpty_helper_directory": "%TEMP%/nexus-si-codex-frontend-6b647bac404f42a1b19afa9ae2a5e0a6",
+    "conpty_helper_sha256": {
+      "pty_probe.py": "c4e8a7e6de2ff6dae5d716767db26ed6a073bb0f92fee3d1e954ed13a12a1c78",
+      "owned_engine_probe.py": "40e46f40ec951ce0033b021a83c82b7f1ad558d74dea5351d9326ee0e9e58cbc",
+      "session_command_probe.py": "4241d729e1518f12a1d901c368db09294a4dbe62d213cf9233b0602383f0eb51"
+    }
+  },
+  "installed_windows_probe": {
+    "result": "PASS",
+    "real_pi": true,
+    "actual_windows_conpty": true,
+    "operator_tickets": 2,
+    "same_running_pi_process_after_detach": true,
+    "synthetic_turns": 1,
+    "canonical_close": "SUCCEEDED",
+    "console_modes_restored": true,
+    "provider_requests": 0
+  },
+  "regressions": {
+    "command": "python -m pytest -q tests/session_interaction/test_presentation_transport.py -k pi_",
+    "passed": 6
+  },
+  "limitations": [
+    "The provider and its release signal are controlled fixtures. The Pi process, renderer, Nexus Server, SQLite broker, CLI client and Windows ConPTY are real.",
+    "The probe uses a read-only viewer. Canonical input queue, steering and approvals require additional evidence.",
+    "The ConPTY helpers are retained local campaign artifacts outside the repository."
+  ]
+}

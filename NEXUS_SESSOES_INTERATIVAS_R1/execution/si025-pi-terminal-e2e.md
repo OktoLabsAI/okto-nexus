@@ -1,0 +1,9 @@
+# Pi hospedado com visualizador em Windows ConPTY
+
+O ensaio abriu o Pi 0.87.1 pela seleção local, binding, concessão e intenção R4 do Nexus instalado. Aguardou a publicação do inventário do Pi e a projeção da identidade exata da sessão no Server. O perfil e o projeto eram descartáveis. Um provedor sintético carregado pelo próprio Pi manteve o turno ativo até o teste liberar a resposta. O preload bloqueou o acesso à rede do processo Pi e o Node restringiu seu acesso ao sistema de arquivos.
+
+Dois clientes de terminal usaram o mesmo login de operador e tickets distintos do Nexus sobre HTTP e WebSocket em loopback. O primeiro mostrou a mensagem e saiu por Ctrl+C durante o turno. O Nexus confirmou o mesmo processo, a mesma sessão e o streaming ainda ativo antes da segunda abertura. O segundo cliente recebeu o contexto e mostrou o resultado do mesmo turno. Ambos restauraram os modos do console e deixaram registros de detach. A operação canônica encerrou o Pi após o segundo detach. O histórico salvo continha uma sessão com uma única mensagem do usuário e sua resposta. [Resultados e hashes](si025-pi-terminal-e2e.json)
+
+O ensaio passou com os wheels instalados. Também passaram os seis testes de regressão do transporte Pi. A reprodução usa `python execution/si025-pi-terminal-e2e.py --node <node.exe> --pi-release <raiz-do-release> --conpty-helpers <diretório-dos-helpers>` a partir do diretório do plano, com a raiz do checkout e `tests/execution_r4` no caminho de importação. Os helpers de ConPTY são os da campanha local anterior, identificados por hash na evidência.
+
+A etapa acrescenta evidência de leitura e detach à SI-025. A entrada pela fila canônica, as aprovações e a qualificação com inferência real seguem pendentes. A etapa dispensa migração e pode ser revertida com o commit de evidência.
