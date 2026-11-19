@@ -1,0 +1,198 @@
+{
+  "tasks": [
+    "SI-034",
+    "SI-036"
+  ],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "8c7cde57395dc4efa27a62624b125aa00149d526",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 460
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "upstream_drift": "0 ahead, 0 behind",
+    "worktrees": "clean"
+  },
+  "environment": {
+    "os": "Windows",
+    "browser": "Google Chrome via Playwright CLI",
+    "dashboard_js": "index-BgS4MkQ9.js",
+    "engine": "Real Pi 0.87.1 using a synthetic provider with outbound networking blocked"
+  },
+  "scenario": {
+    "SI-T-E13": "PASS for the observed queue and reorientation interactions. Chrome used an actual 360 CSS-pixel viewport at 100% and at native 200% page zoom. Component and installed API checks passed."
+  },
+  "mobile": {
+    "mobile_zoom": true,
+    "layout_width": 360,
+    "native_zoom_ratio": 1,
+    "visual_scale": 1,
+    "viewport_height": 800,
+    "document_width": 360,
+    "queue_changes": 2,
+    "input_posts": 1,
+    "keep_paused_focus": true,
+    "review_cancel_focus": true,
+    "no_review_dispatch": true,
+    "continued_from_open_review": true,
+    "queue_revision_after_pair": 3,
+    "geometry": [
+      {
+        "label": "Confirm reorientation",
+        "width": 162,
+        "height": 34
+      },
+      {
+        "label": "Cancel review",
+        "width": 113,
+        "height": 34
+      }
+    ]
+  },
+  "native_zoom_200_percent": {
+    "mobile_zoom": true,
+    "layout_width": 360,
+    "native_zoom_ratio": 2,
+    "visual_scale": 1,
+    "viewport_height": 502,
+    "document_width": 360,
+    "input_posts": 0,
+    "queue_changes": 2,
+    "keep_paused_focus": true,
+    "review_cancel_focus": true,
+    "no_review_dispatch": true,
+    "tab_count": 23,
+    "geometry": [
+      {
+        "label": "View message queue",
+        "width": 318,
+        "height": 20
+      },
+      {
+        "label": "Pause queue",
+        "width": 106,
+        "height": 34
+      },
+      {
+        "label": "Resume queue",
+        "width": 119,
+        "height": 34
+      },
+      {
+        "label": "Keep paused",
+        "width": 107,
+        "height": 34
+      },
+      {
+        "label": "Resume queue",
+        "width": 119,
+        "height": 34
+      },
+      {
+        "label": "Resume sending",
+        "width": 128,
+        "height": 34
+      },
+      {
+        "label": "Reorient current turn",
+        "width": 160,
+        "height": 34
+      },
+      {
+        "label": "Confirm reorientation",
+        "width": 162,
+        "height": 34
+      },
+      {
+        "label": "Cancel review",
+        "width": 113,
+        "height": 34
+      }
+    ]
+  },
+  "native_zoom_calibration": {
+    "combined_calibration": true,
+    "innerWidth": 360,
+    "dpr": 2,
+    "visualScale": 1,
+    "outerWidth": 736
+  },
+  "runtime": {
+    "queued_entries_before_release": 1,
+    "queued_operations_before_release": 0,
+    "pending_queue_reopened": true,
+    "native_turns": 2,
+    "canonical_results": 2,
+    "rewriting_operations": 0,
+    "canonical_close": "SUCCEEDED",
+    "process_exited": true,
+    "external_model_calls": 0,
+    "sqlite_integrity": "ok"
+  },
+  "test_suites_passed": {
+    "installed_control_api": 3,
+    "frontend_component": 19
+  },
+  "native_surface_screenshots": {
+    "mobile-resume.png": {
+      "width": 360,
+      "height": 800,
+      "context": "Queue resume review at standard zoom",
+      "sha256": "955bf0a6c5eb037e68769dbae69ee8bf460cbbfc2d4ce34c866424008dc32c52"
+    },
+    "mobile-review.png": {
+      "width": 360,
+      "height": 800,
+      "context": "Reorientation review at standard zoom",
+      "sha256": "861dd798828a071d0f90b6a9d684fd72222a56a3a8a450084b083a3656b51c2a"
+    },
+    "zoom-native-surface.png": {
+      "width": 720,
+      "height": 1005,
+      "context": "Full browser renderer at 200%, after native completion and HTTP shutdown",
+      "sha256": "7bc856f55fc08302d1e71091a37da1d294bcf9d3ff302935507005eb5888b4a3"
+    }
+  },
+  "sha256": {
+    "nexus_wheel": "f4f11eb18828c4fabd6740a004c3217d3753e8f62dc3e7f697fad3c42b2e500f",
+    "connector_pin": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_pin": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "native_fixture": "b7ab7641432afc1fba6365343b37a3d63b3df92f16ab93e5f80d52e5860dd037",
+    "mobile_driver": "ed204f55dded49d104e79f2dc331f8fac5541d0e1ea9104959d9a89fef3261ac",
+    "mobile_continuation": "d77ffd2e14fcef3bb8ace67ac85b3e46b6987cd6f109e5c01fe58e9033773fd5",
+    "zoom_driver": "05b5fe7abaa0a5b087465a55731876cdbed9a95da57812a7f5c70a7afccac383",
+    "zoom_calibration": "e0bd9ba58d00abffdff5b860fcb0af171dd5e5e8fb55d28b8ef914b8b97608e6",
+    "mobile_result": "3c19a27ef61a497324f43b2514f7417ac50f29e7bcc05a1221d26087ee9f14d3",
+    "zoom_result": "06352d04fab96016eb11405af5d4d3cfbb6abdfff33da153859c5cfe1490ce91",
+    "canonical_close_result": "8fac14729f4ffda4ce9e23ae60d8bdfe3cfbf21f10319a544267f5624b892d5a",
+    "control_api_junit": "088f470d51de4d09d497e851cc06991cd55e58f8fc481176359fd9155414f562",
+    "functional_run_with_teardown_timeout_junit": "dc111adf8bb1ea90e8e291131682473b95236bad4e061c5264a82e772889e3fd",
+    "repeat_before_browser_readiness_junit": "b2bf813a1c882b131305689854f74a97b9fb3464881ef6a3236714f0202d551d"
+  },
+  "migration": "none",
+  "fixture_limits": [
+    "The first mobile driver assumed an expanded desktop navigation. The follow-up used Expand navigation.",
+    "The mobile readiness check expected an explicit dialog role. The action resumed from the existing native dialog and SQLite verified the original queued entry and both queue revisions.",
+    "Default Playwright screenshots clipped the surface at 200%. Browser bounds and DOM geometry cover the actual action screens. The full native screenshot was captured after the fixture stopped and demonstrates complete physical capture at the same width.",
+    "The browser actions and Pi canonical close completed, but the pytest fixture timed out awaiting HTTP server teardown while browser pages were open. The pytest process then exited and the loopback port was confirmed closed.",
+    "A separate attempt to repeat the full run ended before publishing its browser URL. Its shutdown path timed out in the test Connector. That repeat contributes no acceptance evidence."
+  ],
+  "separate_acceptance": [
+    "Physical mobile hardware",
+    "Screen reader",
+    "Human usability"
+  ]
+}
