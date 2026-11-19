@@ -1,0 +1,111 @@
+{
+  "tests": {
+    "SI-T-D01": "Exact authenticated catalog returned revision, item states and effects, adapter and recorded launch version.",
+    "SI-T-D02": "One explicit typed status action returned HTTP 200 and was audited at the exact session route.",
+    "SI-T-D04": "The page identified /resume as terminal only and kept the draft. The typed API refused it without native effects.",
+    "SI-T-D05": "The unknown slash draft stayed in the editor, with an explicit warning and zero POSTs.",
+    "SI-T-D07": "The Codex adapter advertised no proven literal mechanism. The page explained the limit and offered no override.",
+    "SI-T-D08": "The absolute path /tmp/file stayed text in the draft without any prompt or command dispatch.",
+    "SI-T-D11": "The picker distinguished Nexus status from the native terminal command."
+  },
+  "tasks": [
+    "SI-015",
+    "SI-016",
+    "SI-036"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "38d7284a423498fa7f60695afd8f684835f08cf9",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 464
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "worktrees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "artifacts": {
+    "nexus_wheel_sha256": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "nexus_sdist_sha256": "9fa5e41aa49d6b8abe2ba157e0fe3c0d5ce7e573e4b928aaf5dc30a12b6bf867",
+    "connector_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "dashboard_asset": "index-CLF6k7YY.js",
+    "dashboard_asset_sha256": "f4af08b8c06573f94c7405839c83665095251aea0c3e2c0677854687e2041c3e"
+  },
+  "environment": "Windows, real Chromium via Playwright CLI, Codex app-server 0.157.0 with disposable profile and synthetic loopback response.",
+  "native_engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "browser": {
+    "browser": "Chromium",
+    "native_only_handler_absent": true,
+    "native_launch_version": "0.157.0",
+    "catalogue_schema": 1,
+    "negative_runtime_posts": 0,
+    "drafts_retained": [
+      "/resume",
+      "/comando_inexistente",
+      "/tmp/file"
+    ],
+    "literal_override": false,
+    "nexus_status_typed_posts": 1,
+    "nexus_status_http": 200,
+    "exact_scope": true
+  },
+  "server": {
+    "direct_typed_refusals": {
+      "resume": 422,
+      "comando_inexistente": 422,
+      "/tmp/file": 422
+    },
+    "anonymous_catalogue_status": 401,
+    "native_launch_version": "0.157.0",
+    "session_operations_before_and_after_negative_probes": 2,
+    "queue_entries": 0,
+    "audited_status_reads": 1,
+    "original_turn_completed": true,
+    "canonical_close": "SUCCEEDED",
+    "owner_process_exited": true,
+    "loopback_model_requests": 1,
+    "external_provider_calls": 0
+  },
+  "regressions": {
+    "node_passed": 421,
+    "source_catalogue": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "installed_api": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native_browser": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "vite_build": true,
+    "offline_lock": true,
+    "twine_strict": true,
+    "focused_ruff": true
+  },
+  "limitations": [
+    "No literal transport qualified by this probe.",
+    "No screen reader or human acceptance in this probe."
+  ],
+  "migration": "none"
+}

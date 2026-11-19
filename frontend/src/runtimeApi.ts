@@ -208,6 +208,7 @@ export interface SessionCommandCatalog {
   scope: RuntimeScope;
   session_owner_generation: number;
   capability_revision: string;
+  native_launch_version?: string | null;
   literal_text_supported: false;
   items: SessionCommandDescriptor[];
 }

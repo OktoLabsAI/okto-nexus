@@ -1443,7 +1443,7 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
         assert response.status_code == 200, response.text
         return response.json()['control']
 
-    def catalog():
+    def catalog(expected_version='0.159.0'):
         response = client.get(path + '/commands', params=query)
         assert response.status_code == 200, response.text
         assert response.headers['cache-control'] == 'no-store'
@@ -1451,10 +1451,20 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
         assert result['scope'] == exact and result['session_owner_generation'] == generation
         assert result['version'] == 1 and result['adapter_id'] == 'codex_app_server'
         assert result['literal_text_supported'] is False
+        assert result['native_launch_version'] == expected_version
         return result['capability_revision'], {item['command_id']: item for item in result['items']}
 
     assert preview() is None
     idle_revision, idle_commands = catalog()
+    assert catalog()[0] == idle_revision
+    with deps.connection_factory.unit_of_work() as uow:
+        launch_build, = uow.connection.execute(
+            'SELECT native_launch_build_json FROM execution_sessions WHERE session_id=?', (session,)).fetchone()
+        uow.connection.execute('UPDATE execution_sessions SET native_launch_build_json=NULL WHERE session_id=?', (session,))
+    legacy_revision, legacy_commands = catalog(expected_version=None)
+    assert legacy_revision != idle_revision and legacy_commands['resume'] == idle_commands['resume']
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE execution_sessions SET native_launch_build_json=? WHERE session_id=?', (launch_build, session))
     assert catalog()[0] == idle_revision
     assert idle_commands['help']['source'] == 'nexus' and idle_commands['status']['handler'] == 'session_status'
     assert idle_commands['send']['state'] == 'supported' and idle_commands['send']['arguments'] == ['message']

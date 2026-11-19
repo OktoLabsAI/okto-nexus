@@ -825,7 +825,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si015-session-command-catalog.md",
-        "execution/si016-home-session-commands.md"
+        "execution/si016-home-session-commands.md",
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
       ]
     },
     {
@@ -864,7 +866,9 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
-        "execution/si016-home-session-commands.md"
+        "execution/si016-home-session-commands.md",
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
       ]
     },
     {
@@ -1903,7 +1907,9 @@
         "execution/si036-browser-authorization-loss.md",
         "execution/si036-browser-authorization-loss.json",
         "execution/si036-visual-pause.md",
-        "execution/si036-visual-pause.json"
+        "execution/si036-visual-pause.json",
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
       ]
     },
     {
@@ -3123,8 +3129,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D02",
@@ -3141,8 +3150,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D03",
@@ -3177,8 +3189,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D05",
@@ -3195,8 +3210,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D06",
@@ -3231,8 +3249,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D08",
@@ -3249,8 +3270,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D09",
@@ -3303,8 +3327,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-browser-terminal-only.md",
+        "execution/si016-browser-terminal-only.json"
+      ]
     },
     {
       "id": "SI-T-D12",

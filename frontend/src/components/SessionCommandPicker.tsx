@@ -118,6 +118,8 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
     {catalog && selected && <div className="space-y-1 text-sm">
       <p className="font-medium">{selected.label} · {selected.source === 'nexus' ? 'Nexus' : 'Native terminal'}</p>
       <p>{selected.effect}</p>
+      {selected.state === 'native_only' && catalog.native_launch_version &&
+        <p>Harness version at session start: {catalog.native_launch_version}</p>}
       {selected.reason && <p role="status">{selected.reason}</p>}
       {selected.state === 'supported' && <>
         {invalidArgument && <p>{needsMessage ? 'Add a plain message after the command.' : 'This command takes no arguments.'}</p>}

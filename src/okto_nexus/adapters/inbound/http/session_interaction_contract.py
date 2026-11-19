@@ -274,6 +274,7 @@ class SessionCommandCatalog(_Document):
     session_owner_generation: Generation
     capability_revision: Identifier
     adapter_id: Identifier | None
+    native_launch_version: Annotated[str, Field(max_length=64)] | None = None
     literal_text_supported: Literal[False] = False
     items: Annotated[tuple[CommandDescriptor, ...], Field(max_length=100)]
 

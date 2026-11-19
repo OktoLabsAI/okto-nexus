@@ -1,6 +1,7 @@
 """Read the versioned, exact-session catalogue of dashboard commands."""
 
 from dataclasses import asdict
+from re import fullmatch
 
 import anyio
 from fastapi import APIRouter, Request
@@ -107,12 +108,17 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
     exact = _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
     conn = uow.connection
     endpoint = conn.execute("""
-        SELECT e.adapter_id FROM execution_sessions s
+        SELECT e.adapter_id, CASE WHEN json_valid(s.native_launch_build_json)
+            THEN json_extract(s.native_launch_build_json, '$.version') END AS native_launch_version
+        FROM execution_sessions s
         JOIN execution_bindings b USING(server_id, executor_id, binding_id)
         JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id
         WHERE s.server_id=:server_id AND s.executor_id=:executor_id AND s.session_id=:session_id
     """, asdict(scope.session)).fetchone()
     adapter = endpoint['adapter_id'] if endpoint else None
+    launch_version = endpoint['native_launch_version'] if endpoint else None
+    if not isinstance(launch_version, str) or not fullmatch(r'[0-9][0-9A-Za-z.+_-]{0,63}', launch_version):
+        launch_version = None
     revision_for = options.get('session_input_capability_revision')
     revision = revision_for(uow, scope) if revision_for else None
     state, reason, grant = _productive_availability(
@@ -164,16 +170,19 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
 
     resume = _unavailable('resume', 'Resume saved session', 'Open a saved conversation.',
                           'native_only' if adapter == 'codex_app_server' else 'unqualified',
-                          'Codex documents native resume. Check your terminal installation for availability.'
+                          'Use a compatible Codex terminal. Check whether your terminal supports resume.'
                           if adapter == 'codex_app_server' else 'Resuming saved sessions has no qualified dashboard handler.')
     items = (*_READ_ACTIONS, send, steer, interrupt, *_UNQUALIFIED, resume)
     _, agent_revisions, _ = current_agent_revisions(
         factory, agent_id=scope.agent_id, uow=uow, persist=False, require_active=False)
-    catalog_revision = 'sha256:' + digest({'version': 1, 'scope': exact, 'adapter': adapter, 'input': revision,
+    catalog_facts = {'version': 1, 'scope': exact, 'adapter': adapter, 'input': revision,
         'target': turn.revision if turn else None, 'steer': steer_revisions, 'grant': grant,
-        'agent_revisions': asdict(agent_revisions), 'items': [item.model_dump(mode='json') for item in items]})
+        'agent_revisions': asdict(agent_revisions), 'items': [item.model_dump(mode='json') for item in items]}
+    if launch_version is not None:
+        catalog_facts['native_launch_version'] = launch_version
+    catalog_revision = 'sha256:' + digest(catalog_facts)
     return SessionCommandCatalog(scope=document, session_owner_generation=scope.generation.value,
-        capability_revision=catalog_revision, adapter_id=adapter, items=items)
+        capability_revision=catalog_revision, adapter_id=adapter, native_launch_version=launch_version, items=items)
 
 
 def build_router():
