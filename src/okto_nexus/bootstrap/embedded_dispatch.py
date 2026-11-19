@@ -926,9 +926,12 @@ class EmbeddedDispatchOwner:
             return error.refusal
         except (CoreError, NativeAdapterError) as error:
             refused = isinstance(error, CoreError) and error.retry_safe and not error.possible_effect
-            uncertain = reviewed_claude and (
-                (isinstance(error, CoreError) and error.code == 'OUTCOME_UNKNOWN' and error.possible_effect)
-                or (isinstance(error, NativeAdapterError) and error.details.get('not_sent') is not True))
+            terminal_prompt = (frame['action'] == 'turn.submit' and isinstance(error, CoreError)
+                               and error.stage == 'claude_terminal_submission')
+            uncertain = ((isinstance(error, CoreError) and error.code == 'OUTCOME_UNKNOWN'
+                          and error.possible_effect and (reviewed_claude or terminal_prompt))
+                         or (reviewed_claude and isinstance(error, NativeAdapterError)
+                             and error.details.get('not_sent') is not True))
             if not (refused or uncertain):
                 raise
             receipt = await self.host.historical_receipt(session_id=frame['session_id'],
@@ -939,8 +942,8 @@ class EmbeddedDispatchOwner:
             if (refused and receipt.stage == 'FAILED' and not receipt.possible_effect
                     and receipt.retry_safe and receipt.error_code == error.code):
                 return receipt
-            # Retain the reader for the exact reviewed compound action. The
-            # journal withholds retries while this receipt has possible effect.
+            # Retain the exact receipt and reader when Claude may have seen the
+            # prompt or interruption. Uncertainty does not authorize another send.
             if (uncertain and receipt.possible_effect and not receipt.retry_safe
                     and receipt.stage in {'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED', 'CANCELLED'}):
                 return receipt

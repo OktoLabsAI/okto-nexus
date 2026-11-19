@@ -1,0 +1,55 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "d15b19458f883177fcd3d52600e5b87e8640b191",
+    "core": "da5ec18b83d425e088bb8d8120af0895ee99b51c",
+    "connector": "d19766ea66e564f520dc91b704f240ec0610b19f"
+  },
+  "artifacts_sha256": {
+    "nexus": "da66f629d23a24fd0a19eccc069f0ee2de19296bf7d9a80f81b2ad91b00872a1",
+    "core": "ee9201ae8bccb03ab2e7f55e3f2eb207f3aa9ba34ea4c6da13d06e916354770d",
+    "connector": "038d314a4369375c433b07ff2dc7ac456ee9bb36db959fb41bb962d7c2c66acd"
+  },
+  "regressions": {
+    "installed_core_terminal_submit_prompt_gate_and_native_fences": 73,
+    "installed_connector_boundaries_daemon_execution_control_and_lifecycle": 83,
+    "installed_nexus_session_input_saved_resume_and_remote_claude_controls": 25,
+    "source_embedded_r4_uncertain_terminal_receipt": "PASS",
+    "exact_terminal_event_resolves_uncertain_receipt_without_resend_with_synthetic_peer": true,
+    "generated_core_contracts": "PASS",
+    "strict_wheel_metadata_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "tools_enabled": false,
+    "success": {
+      "canonical_submit_and_replay_receipt": "SUBMITTED",
+      "authorized_core_operations": 1,
+      "loopback_requests_after_resume": 1,
+      "owned_pid_and_uuid_preserved_without_a_viewer": true,
+      "stop_prompt_id_matches_submit_hook": true,
+      "stop_final_response_matches": true,
+      "fixture": "D:/nexus-si026-canonical-terminal-wheel-1795088324472",
+      "probe_sha256": "b560614f864330d4ab6a40b0753b76548c305ee502c28728179ca3ec2a92326c",
+      "observations_sha256": "4825c7b2a6bc30c5641fbe2ddd0e1b59c719835e1ba64e5a60df9effbabc47aa"
+    },
+    "api_failure": {
+      "stop_failure_prompt_id_matches_submit_hook": true,
+      "reported_category": "unknown",
+      "authorized_core_operations": 1,
+      "loopback_requests_in_failed_turn": 4,
+      "fixture": "D:/nexus-si026-native-stop-error-observed-1795088478588",
+      "probe_sha256": "f9d4be83433d971081e7932b24614ec6819befde907a9a37f7c58bfc34bfa7ed",
+      "observations_sha256": "20995c832edb7934f53341f739f7059e44eee17b226b9f7b8a0753bf4fa1fa62"
+    }
+  },
+  "limitations": [
+    "A real owned Claude terminal exercised the installed Core journal. Its factory and authorization issuer were fixtures. The native hooks were observed without publishing them as canonical terminal outcomes.",
+    "The failure probe originally assumed one model request and a concrete invalid_request category. The observed build made four attempts within one admitted turn and reported unknown.",
+    "Canonical result ingestion, successor activation, native tool decisions, native interruption and product presentation remain pending."
+  ]
+}

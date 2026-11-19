@@ -58,6 +58,62 @@ def interactive_runtime(monkeypatch, request):
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
+def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt(
+        interactive_runtime, local_setup, monkeypatch):
+    from urllib.request import Request, urlopen
+    from uuid import uuid4
+
+    from nexus_connector_core.native.claude_terminal_prompt import ClaudeTerminalPromptGate
+    from nexus_connector_core.native.claude_terminal_submission import ClaudeTerminalSubmission
+
+    setup, binding, native = interactive_runtime
+    deps, app, client, headers, *_, workspace_root = setup
+    opened = admit(setup, binding, 'terminal-source', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    session = scope['session_id']
+    native_session = str(uuid4())
+    cwd = str(workspace_root.resolve())
+    replies = []
+
+    with ClaudeTerminalPromptGate(native_session, cwd, 'plan', lambda _operation: True) as gate:
+        settings, env = gate.launch_settings()
+        hook = settings['hooks']['UserPromptSubmit'][0]['hooks'][0]
+
+        class LostTerminalReply:
+            def write(self, data):
+                body = {'hook_event_name': 'UserPromptSubmit', 'session_id': native_session, 'cwd': cwd,
+                        'permission_mode': 'plan', 'prompt': data[6:-7].decode()}
+                request = Request(hook['url'], data=json.dumps(body).encode(), headers={
+                    'Content-Type': 'application/json', 'Authorization': 'Bearer ' + next(iter(env.values())),
+                })
+                with urlopen(request, timeout=4) as response:
+                    replies.append(json.load(response))
+                raise OSError('Synthetic loss after the native terminal received the hook reply.')
+
+        driver = ClaudeTerminalSubmission(LostTerminalReply(), gate)
+        monkeypatch.setattr(native.native, 'terminal_submission', driver, raising=False)
+        operation = admit(setup, binding, 'terminal-uncertain', 'turn.submit', session_id=session, text='Exact input.')
+        observed = wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',))
+        assert observed['operation_id'] == operation['operation_id']
+        assert replies == [{}] and driver.active_turn()
+        assert app.state.embedded_dispatch_owner.failure is None
+        request = {key: operation[key] for key in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')}
+        replayed = client.post('/v1/runtime/operations', headers=headers['subject'], json=request)
+        assert replayed.status_code == 200 and replayed.json()['operation_id'] == operation['operation_id']
+        assert wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',)) == observed
+
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                           (session,)).fetchone()[0]
+        client.portal.call(native.native.queue.put, RuntimeEvent(
+            scope['server_id'], scope['executor_id'], session, epoch, 0, 'turn_state', 'fixture-result',
+            {'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id=operation['operation_id']))
+        wait_receipt(setup, operation, stages=('SUCCEEDED',))
+        assert replies == [{}] and not driver.active_turn()
+
+
+@pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
 @pytest.mark.parametrize('condition', ['normal_close', 'replaced_history', 'changed_build', 'later_unverified_result'])
 def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_runtime, local_setup, condition, monkeypatch):
     import re
