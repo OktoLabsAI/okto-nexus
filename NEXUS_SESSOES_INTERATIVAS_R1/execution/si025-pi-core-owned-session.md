@@ -8,4 +8,4 @@ O ensaio injeta o host de teste no ponto de construção do adaptador. Usa o ren
 
 O ensaio passou com o código-fonte e com o wheel instalado do Core. Também passaram 35 regressões de inicialização, autorização R4 e transporte Pi.
 
-Para repetir com o Core 0.0.16 instalado, acrescente `--core` ao [comando do ensaio do renderer](si025-pi-shared-owner.md). A alteração amplia o ensaio e atualiza o ledger, sem migração. Reverter o commit restaura o ensaio anterior. O próximo passo é ligar o renderer a uma apresentação do Nexus vinculada à prova R4 do dono.
+O script em `579692681e7de650d17908ae595e5fa6a2834892` reproduz esta prova com o Core 0.0.16 original e `--core`. A versão atual do script também verifica a leitura interna do Nexus e exige o pin registrado na evidência seguinte. [Leitura da sessão pelo Nexus](si025-pi-owned-state.md)

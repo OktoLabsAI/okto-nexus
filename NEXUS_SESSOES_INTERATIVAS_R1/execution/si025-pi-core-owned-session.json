@@ -1,5 +1,6 @@
 {
   "task": "SI-025",
+  "fixture_revision": "579692681e7de650d17908ae595e5fa6a2834892",
   "scope": "Controlled Windows Pi SDK integration with the real Core R4 lease, runtime, journal and PiRpcConnector",
   "partial_scenarios": {
     "SI-T-B08": "Core persisted and correlated agent_settled for the submitted turn; compaction and retry races pending",

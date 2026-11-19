@@ -253,6 +253,17 @@ class EmbeddedDispatchOwner:
             return None
         return context if context.thread_id == metadata['thread_id'] else None
 
+    async def read_native_pi_presentation_state(self, scope: InputScope) -> dict:
+        """Observe Pi on the exact embedded owner retained at canonical open."""
+        async with self._native_presentation_context(scope) as (runtime_scope, mapping, target, channel):
+            if mapping.adapter_id != 'pi_rpc':
+                raise CoreError('CAPABILITY_UNSUPPORTED', 'native_presentation_read')
+            state = await self.host.read_r4_pi_session(runtime_scope, target,
+                connection_id=channel.connection_id, connection_generation=channel.connection_generation)
+            if not isinstance(state, dict) or state.get('native_session_id') != mapping.native_session_id:
+                raise CoreError('SESSION_CONFLICT', 'native_presentation_read')
+        return state
+
     def _presentation_session_live(self, key, session):
         return (session is not None and self.sessions.get(key) is session
                 and session['executor'] is not None and not session.get('recovering')

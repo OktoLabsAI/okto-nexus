@@ -106,9 +106,23 @@ class EmbeddedRuntimeHost:
             self, scope: Mapping, target: NativeSessionTarget, thread_id: str, *,
             connection_id: str, connection_generation: int) -> dict:
         """Observe metadata only through an already owned native runtime."""
+        return await self._read_r4_native_presentation(scope, target, "read_live_codex_thread", thread_id,
+            connection_id=connection_id, connection_generation=connection_generation)
+
+    async def read_r4_pi_session(
+            self, scope: Mapping, target: NativeSessionTarget, *,
+            connection_id: str, connection_generation: int) -> dict:
+        return await self._read_r4_native_presentation(scope, target, "read_live_pi_session",
+            connection_id=connection_id, connection_generation=connection_generation)
+
+    async def _read_r4_native_presentation(self, scope, target, reader_name, *args,
+                                           connection_id, connection_generation):
         stage = 'native_presentation_read'
         key, selection, task = self._existing_presentation_runtime(scope, stage)
-        result = await task.result()[0].read_live_codex_thread(scope, target, thread_id,
+        read = getattr(task.result()[0], reader_name, None)
+        if not callable(read):
+            raise CoreError('CAPABILITY_UNSUPPORTED', stage)
+        result = await read(scope, target, *args,
             connection_id=connection_id, connection_generation=connection_generation)
         if (self._draining or self._closing or self._runtime_tasks.get(key) is not task
                 or self._selections.get(key) is not selection):

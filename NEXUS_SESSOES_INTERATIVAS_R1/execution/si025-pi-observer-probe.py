@@ -124,6 +124,7 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
     from nexus_connector_core.native import runtime_bridge
     from nexus_connector_core.native.adapters.pi import PiRpcConnector
     from nexus_connector_core.runtime import LocalRuntimeCore
+    from okto_nexus.bootstrap.runtime_host import EmbeddedRuntimeHost
 
     assert __version__ == '0.0.16'
     created = []
@@ -160,6 +161,16 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         'authorization_revision': 1, 'configuration_revision': 1, 'binding_revision': 1, 'credential_epoch': 1,
     }
     channel = {'connection_id': 'connection', 'connection_generation': 1}
+    host = EmbeddedRuntimeHost(root / 'embedded-core')
+    host_key = (key.executor_id, key.session_id)
+
+    async def register_fixture_runtime():
+        return runtime, journal
+
+    host._selections[host_key] = ({'pi_rpc': candidate}, {'workspace': str(root / 'project')},
+                                  None, False, key.server_id, None)
+    host._runtime_tasks[host_key] = asyncio.create_task(register_fixture_runtime())
+    await host._runtime_tasks[host_key]
 
     async def native_state():
         reply = await asyncio.to_thread(transport.request, 'get_state', {}, timeout_s=10)
@@ -191,7 +202,7 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         proof = await runtime.prove_live_native_session(scope, target, **channel)
         assert proof.process == birth
         try:
-            await runtime.prove_live_native_session(scope, replace(target, native_session_id='sibling'), **channel)
+            await host.read_r4_pi_session(scope, replace(target, native_session_id='sibling'), **channel)
         except CoreError as error:
             assert error.code == 'SESSION_CONFLICT'
         else:
@@ -200,8 +211,10 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         assert submitted.stage == 'SUBMITTED'
         for stage in STAGES:
             assert await asyncio.to_thread(wait_checkpoint, owner, checkpoints / stage) == session
-            state = await native_state()
-            assert state['sessionId'] == session and state['isStreaming'] and state['pendingMessageCount'] == 0
+            assert await host.read_r4_pi_session(scope, target, **channel) == {
+                'native_session_id': session, 'is_streaming': True,
+                'is_compacting': False, 'pending_message_count': 0,
+            }
             assert await runtime.prove_live_native_session(scope, target, **channel) == proof
             if stage == 'between-views':
                 # Repeating the same canonical operation while detached must not prompt the native owner again.
@@ -213,6 +226,10 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         assert len(settled) == 1 and settled[0].operation_id == turn.operation_id
         final = await native_state()
         assert final['sessionId'] == session and not final['isStreaming']
+        assert await host.read_r4_pi_session(scope, target, **channel) == {
+            'native_session_id': session, 'is_streaming': False,
+            'is_compacting': False, 'pending_message_count': 0,
+        }
         result = await asyncio.to_thread(transport.request, 'get_last_assistant_text', {}, timeout_s=10)
         assert result['success'] and result['data']['text'] == RESULT
         closed = await runtime.close(
@@ -221,11 +238,19 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         )
         assert closed.stage == 'SUCCEEDED' and owner.poll() is not None
         assert (await journal.get_process_birth(key)) == birth
+        try:
+            await host.read_r4_pi_session(scope, target, **channel)
+        except CoreError as error:
+            assert error.code in ('SESSION_CONFLICT', 'SESSION_UNKNOWN', 'STALE_GENERATION'), error.code
+        else:
+            raise AssertionError('Pi state remained available after owner close')
         report.update({
             'core': __version__, 'same_birth_while_viewer_attached_and_detached': True,
             'native_session_matches_core_receipt': True, 'core_turn_replay_during_detach': True,
             'core_settled_events': len(settled), 'core_close_stage': closed.stage,
             'r4_owner_proof': True, 'foreign_native_session_refused': True,
+            'embedded_state_during_all_checkpoints': True, 'embedded_state_after_settled': True,
+            'embedded_state_refused_after_close': True,
         })
         return report, Path(final['sessionFile'])
     finally:

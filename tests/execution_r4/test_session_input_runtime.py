@@ -504,6 +504,8 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     assert live.target == target and live.key.session_id == session
     assert live.process.evidence == birth and live.boot_id == runtime.r4_boot_id
     assert client.portal.call(owner.prove_native_presentation_owner, scope) == (mapping, live)
+    with pytest.raises(CoreError, match='CAPABILITY_UNSUPPORTED'):
+        client.portal.call(owner.read_native_pi_presentation_state, scope)
 
     presentation = {'thread_id': thread, 'status': 'active'}
 

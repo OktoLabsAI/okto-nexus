@@ -1,0 +1,51 @@
+{
+  "task": "SI-025",
+  "status": "IN_PROGRESS",
+  "scope": "Trusted embedded read on the existing Windows Pi RPC owner. The fixture uses the real installed Pi SDK, an in-memory terminal and a synthetic provider.",
+  "baseline": {
+    "nexus": "579692681e7de650d17908ae595e5fa6a2834892",
+    "core": "cecd63f40b672e108caf4558f84bc47c1befbc2e",
+    "connector": "1bc8be5c341164e25768532d67ea16d5f7e0b6e2"
+  },
+  "artifacts": {
+    "pi": "0.87.1",
+    "node": "24.15.0",
+    "core_revision": "12f2cdbb831fc61c7e4c91dd9475b5cae8b12b6d",
+    "core_0.0.16_wheel_sha256": "02c45ac578d335609456fd48feac93d9c8094abe41cef890a15761b63059e909",
+    "connector_pin_revision": "ea9d578548687ad46404b74d5e483d8927cdfbe6",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "nexus_0.3.8_wheel_sha256": "d37d2cd9217226966bc226d922114bf3170a2e15f453efea906ae7632bf93cd0",
+    "probe_python_sha256": "991be4be83d35f87e034c0448a96672c9dda73991e4e39dd20ecc07fdebee840",
+    "probe_js_sha256": "f4ed4de052cd05149e44b7cc4402c014debbe2caf9d4569777074843a655c193",
+    "installed_pi_module_fingerprints": "si025-pi-shared-owner.json"
+  },
+  "observations": {
+    "source_and_installed_probe_passed": true,
+    "same_process_matches_r4_opening_receipt": true,
+    "renderer_attaches": 2,
+    "streaming_state_matches_exact_session_at_each_checkpoint": true,
+    "streaming_false_after_settled": true,
+    "foreign_native_session_refused": true,
+    "read_after_canonical_close_refused": true,
+    "core_close_stage": "SUCCEEDED",
+    "canonical_turn_replay_kept_one_prompt": true,
+    "correlated_agent_settled_events": 1,
+    "synthetic_pi_provider_calls": 1,
+    "network_attempts": 0
+  },
+  "regressions": {
+    "core_source_passed": 39,
+    "core_installed_passed": 39,
+    "connector_installed_passed": 103,
+    "nexus_source_passed": 34,
+    "nexus_installed_passed": 34,
+    "twine_strict_passed": ["Core wheel", "Core sdist", "Nexus wheel"],
+    "shared_core_pin_and_ci_manifest_verified": true,
+    "nexus_lock_check_passed": true,
+    "lint_baseline": "The modified Nexus modules retain the same 32 Ruff findings. The Core runtime retains two pre-existing F722 findings in the syntax-focused check."
+  },
+  "limitations": [
+    "The fixture inserts its owned runtime into the embedded host. Production Pi presentation availability, the authenticated viewer channel and real terminal input remain pending.",
+    "Renderer detach, exact replay and settled are partial observations for SI-T-G04, SI-T-G18 and SI-T-B08. The full scenarios remain NOT_RUN."
+  ]
+}

@@ -1,9 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `cecd63f40b672e108caf4558f84bc47c1befbc2e`.
-The unpublished wheel SHA-256 is `d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303`.
-The Codex adapter reports idle only for its exact live thread. The Core
-uses that observation when reserving capacity for the next queued turn.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `12f2cdbb831fc61c7e4c91dd9475b5cae8b12b6d`.
+The unpublished wheel SHA-256 is `02c45ac578d335609456fd48feac93d9c8094abe41cef890a15761b63059e909`.
+The Core reads a bounded projection of Pi 0.87.1 state from the exact live R4 owner.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency
