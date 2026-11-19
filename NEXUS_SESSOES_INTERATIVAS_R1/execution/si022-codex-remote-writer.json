@@ -51,7 +51,33 @@
     "fixture": "%TEMP%/nexus-si022-native-view-1795073414869/test_remote_native_writer.py",
     "fixture_sha256": "eefa6539fb6e2d837d480a5dd87c4daabf979d0efeac0996c25f5c126e4505c6",
     "terminal_capture_sha256": "8a1cf72455c5b5bbe78406873f76a61549fa9537330ec50e88729781e6085f6a",
-    "prior_observation": "One review immediately after completion was refused with HTTP 409. The passing run opened the writer during the first turn and sent the next message from the same viewer after completion. Fresh attach around that transition remains unqualified."
+    "prior_observation": "One review immediately after completion was refused with HTTP 409. The refusal did not recur on targeted retest and its cause remains undetermined.",
+    "idle_attachment_follow_up": {
+      "installed_nexus_revision": "0d8203fc6174614f1b83959278f847f3ae329972",
+      "native_writer_reopened_after_canonical_completion": true,
+      "next_turn_rendered_with_same_engine_and_thread": true,
+      "keyboard_detach_restored_console": true,
+      "receipt_after_detach": "ACCEPTED_NATIVE",
+      "engine_and_frontend_test": "PASS",
+      "loopback_requests": 2,
+      "external_provider_requests": 0,
+      "fixture": "%TEMP%/nexus-si022-native-view-1795073414869/test_remote_native_idle_writer.py",
+      "fixture_sha256": "c27885fedaeb28d2259c857992853092863e7032c45af86a014b7cd7ea09b89d",
+      "terminal_capture_sha256": "859aaf84e81908dabadceeafc03e1b94e91598965dd8456d0df9be15c3380b7f",
+      "installed_remote_regression_tests": 4,
+      "fixture_read_only_reopened_after_completion": true,
+      "fixture_read_only_open_added_no_operation": true,
+      "diagnostic_run": {
+        "fixture": "%TEMP%/nexus-si022-native-view-1795073414869/test_remote_native_transition.py",
+        "fixture_sha256": "9da1cb132a9c0d1dc01e8fc5145152d1c71403e78b0a29ffed66581006b3dff8",
+        "write_reviews_accepted_during_turn": 1,
+        "write_reviews_accepted_after_completion": 5,
+        "read_reviews_accepted_after_completion": 5,
+        "native_context_status_after_completion": "idle",
+        "attachments_prepared_by_review": 0,
+        "native_turn_starts_in_run": 1
+      }
+    }
   },
   "limitations": [
     "Loopback does not cover distinct hosts, TLS across hosts or loss of a physical network.",

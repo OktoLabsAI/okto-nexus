@@ -116,8 +116,9 @@ def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, mo
         if mode == 'logout-inflight' and len(reads) == 2:
             entered.set()
             await release.wait()
+        completed = any('turn/completed' in row['payload_json'] for row in project.rows('execution_event_ingress'))
         return {'viewer_context': {'thread_id': thread_id, 'session_id': 'native-viewer-synthetic', 'cwd': cwd,
-            'model': 'synthetic', 'model_provider': 'fixture', 'status': 'active', 'created_at': 1,
+            'model': 'synthetic', 'model_provider': 'fixture', 'status': 'idle' if completed else 'active', 'created_at': 1,
             'updated_at': 2, 'ephemeral': False, 'cli_version': '0.157.0', 'source': 'cli',
             'approval_policy': 'on-request', 'approvals_reviewer': 'user', 'sandbox': {'type': 'readOnly'},
             'reasoning_effort': 'medium'}}
@@ -299,6 +300,17 @@ async def _run_terminal_reattach(project, scope, operation_id, native, epoch, cw
     await project.operation(operation_id)
     await project.eventually(lambda: sorted(row['state'] for row in project.rows('session_attachments')) ==
                              ['DETACHED', 'DETACHED'])
+
+    def completed_viewer(link, executable):
+        context = link.viewer_context()
+        assert context.thread_id == _THREAD and context.status == 'idle' and context.cwd == cwd
+        page = link.page(method='thread/turns/list', params={'threadId': _THREAD})
+        assert page['data'][0]['id'] == _TURN and page['data'][0]['status'] == 'completed'
+
+    monkeypatch.setattr(session_cli, 'present_codex', completed_viewer)
+    third = await asyncio.to_thread(session_cli.attach_session, api, binding, session_id=session_id, interactive=True)
+    assert third['scope'] == exact and len({first['attachment_id'], second['attachment_id'], third['attachment_id']}) == 3
+    await project.eventually(lambda: [row['state'] for row in project.rows('session_attachments')] == ['DETACHED'] * 3)
     assert {row['operation_id'] for row in project.rows('execution_operations')} == before
     assert not native.stopped and native.sent == [('send_turn', operation_id)]
 
