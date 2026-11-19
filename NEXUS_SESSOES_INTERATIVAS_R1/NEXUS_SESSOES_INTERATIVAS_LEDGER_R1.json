@@ -914,7 +914,9 @@
         "execution/si017-grouped-turn-announcements.md",
         "execution/si017-grouped-turn-announcements.json",
         "execution/si036-browser-authorization-loss.md",
-        "execution/si036-browser-authorization-loss.json"
+        "execution/si036-browser-authorization-loss.json",
+        "execution/si036-visual-pause.md",
+        "execution/si036-visual-pause.json"
       ]
     },
     {
@@ -1899,7 +1901,9 @@
         "execution/si017-grouped-turn-announcements.md",
         "execution/si017-grouped-turn-announcements.json",
         "execution/si036-browser-authorization-loss.md",
-        "execution/si036-browser-authorization-loss.json"
+        "execution/si036-browser-authorization-loss.json",
+        "execution/si036-visual-pause.md",
+        "execution/si036-visual-pause.json"
       ]
     },
     {
@@ -3652,8 +3656,11 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si036-visual-pause.md",
+        "execution/si036-visual-pause.json"
+      ]
     },
     {
       "id": "SI-T-F01",

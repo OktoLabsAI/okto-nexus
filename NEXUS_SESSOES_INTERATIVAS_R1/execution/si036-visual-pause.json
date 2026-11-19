@@ -1,0 +1,83 @@
+{
+  "test": "SI-T-E16",
+  "related_tasks": [
+    "SI-017",
+    "SI-036"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "b1b1c5571018450f2e68174a4f229f9f736e7ef1",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 463
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "worktrees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "97cd09942827a21e5c4d291a23feee7428380c03015678f2ed21158c58de9f8d",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": "Windows, Chromium via Playwright CLI and native Pi 0.87.1 connected to a synthetic local provider. Browser and Connector used the installed Nexus over loopback.",
+  "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+  "browser": {
+    "browser": "Chromium",
+    "explicit_pause": true,
+    "board_frozen": true,
+    "applied_update": true,
+    "queue_http_status": 202,
+    "review_http_status": 200,
+    "stale_http_status": 409,
+    "stale_error": "CONFLICT",
+    "exact_scope": true,
+    "paused_browser_results": 0,
+    "resumed_browser_results": 2
+  },
+  "server": {
+    "real_native_engine": "Pi 0.87.1",
+    "external_provider_requests": 0,
+    "queue_rows": 1,
+    "queued_before_original_finished": true,
+    "queue_generation_pause": null,
+    "queue_dispatched_once_to_original_process": true,
+    "canonical_terminal_results": 2,
+    "real_native_chat_events": 4,
+    "stale_control_native_operations": 0,
+    "canonical_close": "SUCCEEDED",
+    "owner_exited": true
+  },
+  "regressions": {
+    "frontend_node_passed": 28,
+    "installed_api": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "installed_browser_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "fixture_driver_hashes": {
+    "visual-pause.js": "657106034d9317241c0a5a4b1030c3b477266d3cad4811ececa520644d0c4f18",
+    "test_visual_pause.py": "661fe70335debb1034775a09ac5f7d50231e09e985037d8cfd37e734926fc279",
+    "native-browser-r3.xml": "6fd9fbda91d97a11054e07c75049aa34bd7d24fdc3716fda5bd4ef55b3e301b8"
+  },
+  "migration": "none"
+}
