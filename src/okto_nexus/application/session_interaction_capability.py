@@ -34,6 +34,53 @@ def queue_pause_revision(uow, scope: InputScope, paused: bool, *, current_next_t
                               'scope': _scope_params(scope), 'next_turn': next_turn})
 
 
+def next_turn_state(uow, scope: InputScope, *, stream_epoch, connection_id, connection_generation) -> str:
+    """Describe timing for a qualified managed session, without reserving capacity."""
+    params = _scope_params(scope) | {'stream_epoch': stream_epoch, 'connection_id': connection_id,
+                                    'connection_generation': connection_generation}
+    stream = uow.connection.execute("""
+        SELECT 1 FROM execution_event_watermarks w
+        WHERE w.server_id=:server_id AND w.executor_id=:executor_id AND w.session_id=:session_id
+          AND w.stream_epoch=:stream_epoch AND w.committed_contiguous>0 AND w.gap_state='none'
+          AND NOT EXISTS (
+            SELECT 1 FROM execution_event_ingress e
+            WHERE e.server_id=w.server_id AND e.executor_id=w.executor_id AND e.session_id=w.session_id
+              AND e.stream_epoch=w.stream_epoch AND e.sequence<=w.committed_contiguous
+              AND e.event_type='error' AND CASE WHEN json_valid(e.payload_json)
+                  THEN json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' ELSE 1 END
+          )
+    """, params).fetchone()
+    if stream is None:
+        return 'unknown'
+
+    # A submitted turn from this owner occupies the next-turn lane. Uncertain
+    # admission or a pending control prevents a positive idle observation.
+    pending = uow.connection.execute("""
+        SELECT CASE WHEN o.action='turn.submit' AND o.admission_state='DISPATCHED'
+             AND o.binding_id=:binding_id AND o.workspace_id=:workspace_id
+             AND o.workspace_binding_id=:workspace_binding_id AND o.subject_agent_id=:agent_id
+             AND CASE WHEN json_valid(o.expected_revisions_json)
+                 THEN json_extract(o.expected_revisions_json,'$.session_owner_generation')=:owner_generation END
+             AND d.dispatch_state='DISPATCHED' AND r.stage IN ('SUBMITTED','ACCEPTED')
+             AND r.source_connection_id=:connection_id AND r.source_connection_generation=:connection_generation
+             AND result.terminal_sequence IS NULL
+           THEN 1 ELSE 0 END AS occupies_next_turn
+        FROM execution_operations o
+        LEFT JOIN execution_dispatch_outbox d USING(server_id, executor_id, operation_id)
+        LEFT JOIN execution_receipts r ON r.server_id=o.server_id AND r.executor_id=o.executor_id
+          AND r.operation_id=o.operation_id AND r.receipt_revision=d.last_receipt_revision
+        LEFT JOIN execution_results result ON result.server_id=o.server_id AND result.executor_id=o.executor_id
+          AND result.operation_id=o.operation_id
+        WHERE o.server_id=:server_id AND o.executor_id=:executor_id AND o.session_id=:session_id
+          AND o.action IN ('turn.submit','turn.steer','turn.interrupt','runtime.close')
+          AND o.admission_state NOT IN ('REJECTED','RESOLVED_TERMINAL')
+        ORDER BY occupies_next_turn DESC LIMIT 1
+    """, params).fetchone()
+    if pending is None:
+        return 'idle'
+    return 'busy' if pending['occupies_next_turn'] else 'unknown'
+
+
 def next_turn_revision(uow, scope: InputScope, *, availability, fresh_publications) -> str | None:
     """Return a technical revision only. Human and grant authority are separate."""
     session = asdict(scope.session)

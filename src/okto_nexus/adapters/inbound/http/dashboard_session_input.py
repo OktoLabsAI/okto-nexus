@@ -22,7 +22,7 @@ from ....application.session_interaction_authority import (
     change_human_queue_pause,
     enqueue_human_input,
 )
-from ....application.session_interaction_capability import queue_pause_revision
+from ....application.session_interaction_capability import next_turn_state, queue_pause_revision
 from ....application.session_interaction_controls import (
     read_human_interrupt_receipt,
     request_exact_human_interrupt,
@@ -251,12 +251,15 @@ def build_router():
                 claude_interrupt = (claude_steer and session['kind'] == 'embedded'
                     and isinstance(active_interrupt_target(uow, scope, current_next_turn_revision=revision_for),
                                    ExactClaudeOperation))
+                turn_state = (next_turn_state(uow, scope, stream_epoch=session['stream_epoch'],
+                    connection_id=session['owner_instance_id'], connection_generation=session['generation'])
+                    if signed_in and revision is not None else 'unknown')
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,
                         'interrupt_review_supported': exact_control or claude_interrupt,
                         'steer_review_supported': exact_control or claude_steer,
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
-                                      'human_login_required': not signed_in}}
+                                      'human_login_required': not signed_in, 'turn_state': turn_state}}
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)

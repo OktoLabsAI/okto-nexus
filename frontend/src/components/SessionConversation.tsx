@@ -287,6 +287,8 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
 
   const capability = interaction?.next_turn;
   const canSend = active && !!capability?.supported && !capability.human_login_required;
+  const sendLabel = capability?.turn_state === 'busy' ? 'Add to next turn'
+    : capability?.turn_state === 'idle' ? 'Send' : 'Send for next turn';
   const firstCharacter = draft.text.trimStart()[0];
   const command = firstCharacter === '/' || firstCharacter === '!';
   const slashCommand = firstCharacter === '/' && capability?.human_login_required === false;
@@ -428,7 +430,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       {tooLong && !slashCommand && <p role="status" className="text-xs">The message is longer than 64 KiB.</p>}
       <div className="flex flex-wrap gap-2">
         <button type="submit" className="btn btn-primary"
-          disabled={!canSend || busy || draftHeld || !!draft.uncertain || !draft.text.trim() || command || tooLong}>Send for next turn</button>
+          disabled={!canSend || busy || draftHeld || !!draft.uncertain || !draft.text.trim() || command || tooLong}>{sendLabel}</button>
         {steerAvailable && <button type="button" className="btn btn-secondary"
           disabled={!canReviewSteer || !draft.text.trim() || command || tooLong}
           onClick={event => reviewSteer({kind: 'draft', text: draft.text}, event.currentTarget)}>Reorient current turn</button>}

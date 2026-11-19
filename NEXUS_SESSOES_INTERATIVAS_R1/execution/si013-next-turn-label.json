@@ -1,0 +1,103 @@
+{
+  "tasks": [
+    "SI-013",
+    "SI-036"
+  ],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "7ea6293a5accc541596ec1e4089bce5785d3da1c",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 459
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "upstream_drift": "0 ahead, 0 behind",
+    "worktrees": "clean"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Chromium via Playwright CLI",
+    "dashboard_js": "index-BgS4MkQ9.js",
+    "native_process": "Pi 0.87.1 managed by Connector",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "transport": "Loopback R4, disposable operator login, deterministic local provider and blocked Pi egress"
+  },
+  "labels": {
+    "idle": "Send",
+    "busy": "Add to next turn",
+    "unknown": "Send for next turn"
+  },
+  "api": {
+    "initially_unconfirmed_then_idle": true,
+    "busy_accepts_idle_revision_into_queue": true,
+    "exact_scope_and_operator_login": true
+  },
+  "busy_browser": {
+    "enabled_busy_label": true,
+    "draft_focused": true,
+    "post_count": 0
+  },
+  "idle_browser": {
+    "label_idled": true,
+    "draft_preserved": true,
+    "focus_preserved": true,
+    "post_count": 1,
+    "enqueue_http_status": 202,
+    "server_receipt": "QUEUED"
+  },
+  "native": {
+    "session_count": 1,
+    "native_turns": 2,
+    "human_next_turn_inputs": 1,
+    "canonical_results": 2,
+    "canonical_close": "SUCCEEDED",
+    "process_exited": true,
+    "external_model_calls": 0,
+    "native_prompt_preserved": true,
+    "sqlite_integrity": "ok"
+  },
+  "regressions_passed": {
+    "api_source": 2,
+    "api_installed": 4,
+    "browser_pi": 1,
+    "frontend_node": 420
+  },
+  "build_checks": [
+    "TypeScript and Vite",
+    "offline lock",
+    "strict Twine",
+    "isolated installed file comparison"
+  ],
+  "lint": "Scoped Ruff reproduced three pre-existing import-order findings.",
+  "scope_limits": [
+    "Windows and the reviewed Pi build with a synthetic provider. The API race used a synthetic Core peer.",
+    "Other platforms, live providers, screen reader and human acceptance have separate gates."
+  ],
+  "sha256": {
+    "wheel": "f4f11eb18828c4fabd6740a004c3217d3753e8f62dc3e7f697fad3c42b2e500f",
+    "sdist": "3535425af11f184e678f7c21e50c74f36f4232d97a295f0a6f9fb4e5121087ad",
+    "core_pin": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "connector_pin": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "native_probe": "ff285ffc64d6a37e3e56d2dc96d129efa0857dc052761968bad2c7123cceef2e",
+    "busy_browser_script": "efa973a4542178cf7cd363ff8727994080bd941baa6f7c57b838b24289a340b6",
+    "idle_browser_script": "4cbf00ea8155ef18022529a169f788b2dbb40be9af8e69ad684294f965024166",
+    "native_browser_junit": "b619b9780123a76114e045fd312dea1d4e597e9d819cb5ca6d65f26c2a4c2d09",
+    "busy_browser_result": "0910b906dec75057e7dcf3db950f4b9ffef9a2732bc49e167cb7f8d2508ecbef",
+    "idle_browser_result": "e549123ba25c7223a6c61b54a4c3a06ca76592e28edd54973878970b6880cabb",
+    "server_result": "ac946e22f20fb1d805b3f2c75f6b2e8ff7ad1e153271d15cb611ac76ef78fe4e",
+    "api_installed_junit": "702d8149ce3a128cf70f03a11701dd0f94ea6a551f5bc038580828668d5c02b1"
+  },
+  "migration": "none"
+}

@@ -186,7 +186,8 @@ export interface SessionInteraction {
   interaction_enabled?: boolean;
   interrupt_review_supported?: boolean;
   steer_review_supported?: boolean;
-  next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean};
+  next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean;
+    turn_state?: 'idle' | 'busy' | 'unknown'};
 }
 
 export interface SessionCommandDescriptor {

@@ -524,9 +524,33 @@ def test_server_dispatches_queue_after_busy_boundary_without_handoff_acquisition
     assert auth.configure('queue-fixture', 'fixture-password-long', local=True)
     token = auth.login('queue-fixture', 'fixture-password-long')
     author = InputAuthor(auth.authority_reference(token), 'web')
+    client.cookies.set('nexus_operator_session', token)
+    path = f'/api/v1/runtime-management/runtime/sessions/{scope.session.session_id}'
+    query = {name: original[name] for name in (
+        'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id')}
+    query['expected_session_generation'] = scope.generation.value
+
+    def affordance():
+        response = client.get(path + '/interaction', params=query)
+        assert response.status_code == 200, response.text
+        assert response.headers['cache-control'] == 'no-store'
+        return response.json()['next_turn']
+
+    assert affordance()['turn_state'] == 'unknown'
+    with factory.unit_of_work(write=False) as uow:
+        epoch = uow.connection.execute(
+            'SELECT stream_epoch FROM execution_local_streams WHERE server_id=? AND executor_id=? AND session_id=?',
+            (scope.session.server_id, scope.session.executor_id, scope.session.session_id),
+        ).fetchone()['stream_epoch']
+    emit_codex_configuration(client, native, scope.session.server_id, scope.session.executor_id,
+                             scope.session.session_id, epoch)
+    eventually(lambda: affordance()['turn_state'] == 'idle')
+    assert affordance()['capability_revision'] == capability_revision
     ordinary = admit(setup, binding, 'busy-turn', 'turn.submit',
                      session_id=scope.session.session_id, text='Ordinary synthetic turn')
     wait_receipt(setup, ordinary)
+    eventually(lambda: affordance()['turn_state'] == 'busy')
+    assert affordance()['capability_revision'] == capability_revision
 
     def enqueue(text):
         return enqueue_human_input(factory=factory, access=build_execution_access(deps),
@@ -597,7 +621,7 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
 
     eventually(lambda: interaction()['supported'])
     capability = interaction()
-    assert capability['human_login_required']
+    assert capability['human_login_required'] and capability['turn_state'] == 'unknown'
     body = {'scope': {**exact, 'session_id': session}, 'expected_session_generation': generation,
             'capability_revision': capability['capability_revision'], 'client_intent_id': 'dashboard-input',
             'content': [{'type': 'text', 'text': 'Synthetic dashboard message'}]}
