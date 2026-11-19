@@ -1,6 +1,8 @@
 """Exercise the serve-owned queue against real R4/Core with a synthetic peer."""
 
+import hashlib
 import json
+import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, replace
 from functools import partial
@@ -72,6 +74,8 @@ def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt
     native_session = str(uuid4())
     cwd = str(workspace_root.resolve())
     replies = []
+    idle_since = None
+    finished_text_hash = hashlib.sha256(b'Result fixture-secret').hexdigest()
 
     with ClaudeTerminalPromptGate(native_session, cwd, 'plan', lambda _operation: True, observe_results=True) as gate:
         settings, env = gate.launch_settings()
@@ -105,7 +109,8 @@ def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt
         async def open_owned_terminal(_prepared, session_id, context, *, stream_epoch):
             native.native = ClaudeTerminalSession(
                 LostTerminalReply(), gate, native_id='fixture-owned-terminal', session_id=session_id,
-                stream_epoch=stream_epoch, context=context, redactor=NativeSecretRedactor(('fixture-secret',)))
+                stream_epoch=stream_epoch, context=context, redactor=NativeSecretRedactor(('fixture-secret',)),
+                observe_finished=lambda digest: idle_since if digest == finished_text_hash else None)
             return native.native
 
         monkeypatch.setattr(native, 'open', open_owned_terminal)
@@ -124,7 +129,13 @@ def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt
         assert wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',)) == observed
 
         send_hook(completion['url'], 'Stop', stop_hook_active=False, background_tasks=[], session_crons=[],
+                  last_assistant_message='Intermediate text')
+        assert wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',)) == observed
+        send_hook(completion['url'], 'Stop', stop_hook_active=True, background_tasks=[], session_crons=[],
                   last_assistant_message='Result fixture-secret')
+        assert wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',)) == observed
+        time.sleep(.01)
+        idle_since = time.time_ns() // 1_000_000
         wait_receipt(setup, operation, stages=('SUCCEEDED',))
         assert replies == [{}] and not driver.active_turn()
 

@@ -1,0 +1,55 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "core_revision": "f6b677c9f3d9673a2e789d537fd21ba843e1d885",
+  "connector_revision": "6d9c91846f8476de0fe8b863df3ffbdff475e8ad",
+  "artifacts_sha256": {
+    "core": "41cbc0b8f46769c970dc6cb58279604e5c8f21d49969963a139fd87694c9415e",
+    "connector": "82872601915b933a298e7d14e55ad55f33bb4d2a5ac3e90d17bcfdc167b27716"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "tools_enabled": false,
+    "success_after_continuation": {
+      "fixture": "D:/nexus-si026-finished-transcript-wheel-1795091310466",
+      "probe_sha256": "ad65575444e58f4c34232f3b24c0285644b3b3bfa9e2b096dc47dc4e01774ffc",
+      "observations_sha256": "8eeac2df48f4c91b1f7fa4f1d8f4785d350ea2dcf7f77ca6d8d24af9437bab0a",
+      "receipt_while_continuation_is_active": "SUBMITTED",
+      "native_states": ["idle", "busy", "busy", "idle"],
+      "stop_hook_active_sequence": [false, true],
+      "same_prompt_id": true,
+      "only_final_correlated_output_published": true,
+      "terminal_receipt": "SUCCEEDED",
+      "model_calls_in_resumed_turn": 2,
+      "remaining_job_pids": []
+    },
+    "provider_failure": {
+      "fixture": "D:/nexus-si026-finished-failure-wheel-1795091310466",
+      "probe_sha256": "b8458e4cda7c8c6c945da2b51a5c8c037d3641829ae376eb8c9f41871bb685e0",
+      "observations_sha256": "732c1040a1929eeabd3d5251715669614f25ffbf037998b9aa3469912dae0a",
+      "native_idle_before_stop_failure_diagnostic_sha256": "430313bc5dfcf4c1157dc9985869152029bcd41a5fdb9eb5e7d30ee8a98bf8bf",
+      "terminal_receipt": "FAILED",
+      "canonical_error_only": true,
+      "native_model_attempts_in_one_resumed_turn": 4,
+      "remaining_job_pids": []
+    }
+  },
+  "regressions": {
+    "installed_core": 83,
+    "installed_connector_units_and_process_lifecycle": 83,
+    "installed_nexus_uncertain_delivery_and_saved_codex": 4,
+    "native_fixture_clock_requires_new_idle_transition": true,
+    "old_success_cannot_settle_during_api_failure_idle_transition": true,
+    "stale_busy_and_mismatched_transcript_cannot_settle_success": true,
+    "generated_core_contracts_and_metadata": "PASS",
+    "vendor_hashes_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "limitations": [
+    "Native verification used an isolated launcher and the installed Core. The Nexus R4 test used synthetic hooks and native completion evidence.",
+    "The qualified native confirmation reads the reviewed transcript format and exact Windows owner registry. Unknown format, missing evidence, or ambiguous timestamps leave the operation unsettled.",
+    "Product successor admission, presentation transport, and terminal turn controls remain pending."
+  ]
+}
