@@ -1,0 +1,40 @@
+{
+  "tasks": ["SI-022", "SI-025"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "f30f1e154e09aed440e22aacc53d7541c6ec0674",
+    "core_revision": "74df0284468a8b91705930ec6ddf30ed25624091",
+    "connector_revision": "1eaf8c7c77eb443c7f807320fea34f46cb936059"
+  },
+  "artifacts": {
+    "core_0.0.16_wheel_sha256": "c2962da669ef948bda8b4acf593314cfdc6a4c56790c4809f7280d5eb6d46bf3",
+    "connector_0.0.15_wheel_sha256": "f77e98fbb6d6d74f7217eb518b73fad63401c061e9b39fc444fad0892b650938",
+    "nexus_0.3.8_regression_wheel_sha256": "aad7817446627e6c551109d0d503188728e839cb004ce5ae665c6616d9f9d451",
+    "database_migration": null
+  },
+  "verification": {
+    "installed_core_tests": 14,
+    "installed_connector_tests": 121,
+    "installed_nexus_codex_regression_tests": 4,
+    "strict_wheel_metadata": "PASS",
+    "generated_core_and_r4_contract_checks": "PASS",
+    "changed_modules_verified_byte_for_byte": 10,
+    "new_selective_ruff_diagnostics": 0
+  },
+  "fixture": {
+    "socket_and_renderer": "synthetic, with real Core frame codecs and Connector R4 reader",
+    "unnegotiated_extension_rejected": true,
+    "request_hash_and_active_scope_verified": true,
+    "same_scope_second_viewer_refused": true,
+    "read_only_edit_refused": true,
+    "repeated_or_cancelled_draft_edit_not_replayed": true,
+    "stale_lane_retires_viewer_without_closing_control_link": true,
+    "disconnect_retires_viewer_and_pending_output": true,
+    "external_provider_requests": 0
+  },
+  "limitations": [
+    "The Nexus public broker and CLI do not yet consume the Pi transport.",
+    "Remote Pi with a real installed renderer and Windows terminal has not been exercised in this increment.",
+    "Distinct-machine TLS, physical network loss and slow-viewer qualification remain open."
+  ]
+}
