@@ -6,6 +6,7 @@ from functools import partial
 import anyio
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
+from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC, PI_RUN_CONTROL_CODEC
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
 from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
@@ -34,6 +35,7 @@ from ....application.session_interaction_receipts import read_session_input_rece
 from ....application.session_interaction_targets import (
     ExactPiRun,
     active_interrupt_target,
+    negotiated_control_channel,
 )
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.attention import digest
@@ -216,7 +218,7 @@ def build_router():
             with factory.unit_of_work(write=False) as uow:
                 exact = _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
                 session = uow.connection.execute("""
-                    SELECT s.stream_epoch,e.adapter_id,x.kind FROM execution_sessions s
+                    SELECT s.stream_epoch,e.adapter_id,x.kind,x.owner_instance_id,x.generation FROM execution_sessions s
                     JOIN execution_executors x USING(server_id,executor_id)
                     LEFT JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id
                       AND b.binding_id=s.binding_id
@@ -226,13 +228,18 @@ def build_router():
                     (scope.session.server_id, scope.session.executor_id, session_id),
                 ).fetchone()
                 revision = revision_for(uow, scope) if revision_for is not None else None
-                pi = (revision is not None and session['adapter_id'] == 'pi_rpc'
-                      and session['kind'] == 'embedded')
+                adapter = session['adapter_id']
+                codec = {'pi_rpc': PI_RUN_CONTROL_CODEC, 'claude_stream': CLAUDE_OPERATION_STEER_CODEC}.get(adapter)
+                supported_owner = session['kind'] == 'embedded'
+                if revision is not None and codec is not None and session['kind'] == 'remote':
+                    channel = negotiated_control_channel(scope, state.deps.runtime_availability.current_host, codec.revision)
+                    supported_owner = channel is not None and (channel.connection_id, channel.connection_generation) == (
+                        session['owner_instance_id'], session['generation'])
+                pi = revision is not None and adapter == 'pi_rpc' and supported_owner
                 mapping = read_managed_native_session(uow, scope) if pi else None
-                exact_control = revision is not None and (session['adapter_id'] == 'codex_app_server'
+                exact_control = revision is not None and (adapter == 'codex_app_server'
                     or (mapping is not None and reviewed_pi_context(mapping)))
-                claude_steer = (revision is not None and session['adapter_id'] == 'claude_stream'
-                    and session['kind'] == 'embedded'
+                claude_steer = (revision is not None and adapter == 'claude_stream' and supported_owner
                     and read_managed_native_session(uow, scope) is not None)
                 return {'scope': exact, 'stream_epoch': session['stream_epoch'],
                         'interaction_enabled': revision_for is not None,

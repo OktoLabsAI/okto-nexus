@@ -106,11 +106,15 @@ def _review(call, url, scope, generation, command):
                    and _identifier(target['turn_id']))
     pi_run = (target.keys() == {'kind', 'run_ref'} and target['kind'] == 'observed_run'
               and isinstance(target['run_ref'], str) and PI_RUN_REF.fullmatch(target['run_ref']))
-    if not (native_turn or pi_run):
+    claude_turn = (command == 'steer' and target.keys() == {'kind', 'operation_id'}
+                   and target['kind'] == 'claude_operation' and _identifier(target['operation_id']))
+    if not (native_turn or pi_run or claude_turn):
         raise _unavailable()
     body |= {'capability_revision': revision, 'expected_queue_revision': queue, 'target': target}
     if command == 'steer':
-        if (control.get('effect') != ('next_boundary' if pi_run else 'same_turn')
+        expected_effect = {'observed_run': 'next_boundary', 'claude_operation': 'interrupt_then_send'}.get(
+            target['kind'], 'same_turn')
+        if (control.get('effect') != expected_effect
                 or not _identifier(control.get('effect_revision'))):
             raise _unavailable()
         body['confirmed_effect_revision'] = control['effect_revision']
@@ -163,7 +167,10 @@ def _result(receipt, scope, generation, command, intent):
             message = _DELIVERY_MESSAGES[state]
         if command == 'steer':
             boundary = receipt.get('steer_boundary')
-            if boundary in ('awaiting_boundary', 'applied', 'discarded'):
+            compound = receipt.get('steer_compound')
+            if compound is not None:
+                message = _claude_steer_message(receipt, compound, state)
+            elif boundary in ('awaiting_boundary', 'applied', 'discarded'):
                 if not _identifier(receipt.get('operation_id')) or receipt.get('possible_effect') is not True:
                     raise ConnectionError('SESSION_RECEIPT_UNCONFIRMED',
                         'The reorientation receipt has an unconfirmed boundary.', possible_effect=True)
@@ -174,6 +181,29 @@ def _result(receipt, scope, generation, command, intent):
                 message = 'Reorientation sent. Application is unconfirmed.'
     return {'state': 'recorded', 'message': message, 'command': command, 'client_intent_id': intent,
             'receipt': receipt}
+
+
+def _claude_steer_message(receipt, compound, state):
+    interruptions = {
+        'submitted': 'Claude interruption requested.',
+        'confirmed': 'Claude interruption confirmed.',
+        'write_unknown': 'Claude interruption outcome unconfirmed.',
+    }
+    replacements = {
+        'pending': ('Replacement message outcome is unconfirmed.' if state == InputDeliveryState.DELIVERY_UNKNOWN
+                    else 'Replacement message is pending.'),
+        'not_sent': 'Replacement message was not sent.',
+        'write_unknown': 'Replacement message delivery is unconfirmed.',
+        'submitted': ('Claude accepted the replacement message.' if state == InputDeliveryState.ACCEPTED_NATIVE
+                      else 'Replacement message was submitted to Claude.'),
+    }
+    if (type(compound) is not dict or compound.keys() != {'interruption', 'replacement'}
+            or any(type(value) is not str for value in compound.values())
+            or compound['interruption'] not in interruptions or compound['replacement'] not in replacements
+            or not _identifier(receipt.get('operation_id')) or receipt.get('possible_effect') is not True):
+        raise ConnectionError('SESSION_RECEIPT_UNCONFIRMED', 'The Claude reorientation result is unconfirmed.',
+                              possible_effect=True)
+    return interruptions[compound['interruption']] + ' ' + replacements[compound['replacement']]
 
 
 def execute_session_command(call, binding, session_id, command, *, interactive, message_file, read=input, write=print):
@@ -193,6 +223,8 @@ def execute_session_command(call, binding, session_id, command, *, interactive, 
         elif body['target']['kind'] == 'observed_run':
             prompt = ('Interrupt the selected Pi run and pause the queue? [y/N] ' if command == 'interrupt'
                       else 'Reorient the selected Pi run at its next available boundary? [y/N] ')
+        elif body['target']['kind'] == 'claude_operation':
+            prompt = 'Interrupt the current Claude turn and send this replacement message? [y/N] '
         else:
             write('Turn ' + display_text(body['target']['turn_id']))
             prompt = ('Reorient this exact turn now? [y/N] ' if command == 'steer'

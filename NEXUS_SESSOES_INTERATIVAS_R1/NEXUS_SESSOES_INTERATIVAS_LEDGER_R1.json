@@ -323,6 +323,11 @@
           "artifact_path": "execution/si004-codex-ephemeral-owner-windows.md",
           "result": "Authorized installed viewer used a scoped prototype bridge to one real ephemeral Codex thread. The original app-server process kept answering for the same idle thread after viewer exit.",
           "limitations": "Empty native thread, no Core-managed runtime or model. History paging replies were empty for this fixture. Active work, saved history, policy enforcement and remote ownership remain unqualified."
+        },
+        {
+          "artifact_path": "execution/si026-claude-remote-steer.json",
+          "result": "Claude Code 2.1.328 listed the exact stream-json UUID and process, but its native attach rejected that UUID while the original owner stayed alive.",
+          "limitations": "The isolated idle stream received only initialize. Background ownership, retained configuration, native detach and remote terminal presentation remain unverified."
         }
       ]
     },
@@ -1323,7 +1328,9 @@
         "execution/si026-claude-reviewed-target.md",
         "execution/si026-claude-reviewed-target.json",
         "execution/si026-claude-operator-steer.md",
-        "execution/si026-claude-operator-steer.json"
+        "execution/si026-claude-operator-steer.json",
+        "execution/si026-claude-remote-steer.md",
+        "execution/si026-claude-remote-steer.json"
       ]
     },
     {

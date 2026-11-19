@@ -1,0 +1,11 @@
+# SI-026 — Reorientação remota e prova de attach do Claude
+
+O operador pode revisar e confirmar pelo painel ou pelo comando `okto-nexus session steer` a interrupção do turno Claude ativo antes de enviar a substituição. O Nexus valida a sessão, o turno, a conexão e a revisão na transação de envio. A conexão negocia uma extensão que carrega a referência da operação original junto do frame R4. O Connector repassa essa referência ao Core, que a usa tanto no vínculo do recibo como na verificação imediatamente anterior à escrita. Um Connector sem a extensão deixa a revisão indisponível.
+
+O teste integrado usou HTTP, IPC, WSS, armazenamento e o runtime do produto com um peer Claude simulado. Antes da geração e sem a capacidade negociada, o comando foi recusado antes da confirmação. O teste perdeu a resposta HTTP depois de registrar a confirmação e recuperou o mesmo recibo. A interrupção foi confirmada e a escrita da substituição ficou incerta. Um resultado tardio resolveu a entrega desse mesmo ID. O teste confirmou uma única chamada de reorientação e observou que os eventos de cada estágio podem chegar depois do recibo de operação.
+
+Um ensaio separado usou o executável Claude Code 2.1.328 em um perfil vazio no Windows. O processo stream-json aceitou apenas `initialize` e ficou vivo. O catálogo reconheceu o UUID completo, o PID e o estado idle. O visualizador nativo em ConPTY recusou o UUID exato com código 1. Depois disso, o catálogo ainda listava o mesmo processo, que saiu normalmente quando o ensaio fechou seu stdin. O resultado confirma a incompatibilidade de attach para essa combinação específica. A documentação descreve attach para sessões em segundo plano. [Referência Claude Code](https://code.claude.com/docs/en/cli-reference)
+
+Passaram 55 testes do Nexus, 93 do Connector e 32 do Core a partir dos wheels instalados. Os dois ensaios de controle do Pi 0.87.1 em Windows ConPTY também passaram com os wheels. O ensaio nativo Claude usou apenas inicialização em um perfil vazio.
+
+SI-026 continua em andamento. Falta comprovar uma forma de conectar o terminal a um owner compatível mantendo identidade, ferramentas, permissões e autoridade do Nexus. O marco dispensa migração. O rollback reverte os commits e restaura os pins de dependência em conjunto. [Dados e revisões](si026-claude-remote-steer.json)

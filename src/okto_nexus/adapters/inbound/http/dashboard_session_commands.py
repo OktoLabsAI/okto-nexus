@@ -18,6 +18,7 @@ from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import require_session_input_grant
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_targets import (
+    active_claude_operation,
     active_interrupt_target,
     steer_effect_revisions,
 )
@@ -139,19 +140,25 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
     interrupt = _action('interrupt', 'Stop current turn', 'Interrupt the current turn and pause the message queue.',
                         'review_interrupt', interrupt_state, interrupt_reason)
 
-    steer_revisions = steer_effect_revisions(turn) if turn is not None else None
+    steer_target = turn
+    if adapter == 'claude_stream' and revision is not None:
+        steer_target = active_claude_operation(uow, scope, current_next_turn_revision=revision_for,
+                                               remote_control_host=remote_control_host)
+    steer_revisions = steer_effect_revisions(steer_target) if steer_target is not None else None
     steer_state, steer_reason = state, reason
     if state == 'supported':
-        if adapter not in ('codex_app_server', 'pi_rpc'):
+        if adapter not in ('codex_app_server', 'pi_rpc', 'claude_stream'):
             steer_state, steer_reason = 'unqualified', 'Reorientation is unavailable for this integration.'
-        elif has_unresolved_interrupt(conn, scope.session) or turn is None:
+        elif has_unresolved_interrupt(conn, scope.session) or steer_target is None:
             steer_state, steer_reason = 'disabled_for_state', 'There is no confirmed active run available for reorientation.'
         elif steer_revisions is None:
             steer_state, steer_reason = 'unqualified', 'There is no qualified reorientation effect for this turn.'
         elif is_input_queue_paused(conn, scope.session):
             steer_state, steer_reason = 'disabled_for_state', 'Resume the message queue first.'
-    description = ('Send a message at the next boundary of the confirmed Pi run.' if adapter == 'pi_rpc'
-                   else 'Send a message to the confirmed active turn.')
+    description = {
+        'pi_rpc': 'Send a message at the next boundary of the confirmed Pi run.',
+        'claude_stream': 'Interrupt the confirmed Claude turn, then send the replacement message.',
+    }.get(adapter, 'Send a message to the confirmed active turn.')
     steer = _action('steer', 'Reorient current turn', description,
                     'review_steer', steer_state, steer_reason)
 

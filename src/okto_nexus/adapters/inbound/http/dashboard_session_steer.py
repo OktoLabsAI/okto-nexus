@@ -61,7 +61,8 @@ def review_exact_steer(uow, scope, revision_for, *, remote_control_host=None):
     turn = active_native_turn(uow, scope, current_next_turn_revision=revision_for)
     run = (active_pi_run(uow, scope, current_next_turn_revision=revision_for, remote_control_host=remote_control_host)
            if turn is None else None)
-    claude = active_claude_operation(uow, scope, current_next_turn_revision=revision_for) if not (turn or run) else None
+    claude = (active_claude_operation(uow, scope, current_next_turn_revision=revision_for,
+                                    remote_control_host=remote_control_host) if not (turn or run) else None)
     proven = turn or run or claude
     revisions = steer_effect_revisions(proven) if proven is not None else None
     if revisions is None:

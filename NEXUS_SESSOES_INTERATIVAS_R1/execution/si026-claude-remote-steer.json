@@ -1,0 +1,60 @@
+{
+  "tasks": ["SI-004", "SI-026"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "f5e59555",
+    "connector_revision": "c5872055eebd1e951eb78c7e02585c52f9efe70d",
+    "core_revision": "665668bde9040a53bd0d7ce99b41bf4a389b734c"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "722274e2ce50e7b68560844b95e2e82bf241733ee0b4ab3ee4db05c7b3d49fe1",
+    "connector_0.0.15_wheel_sha256": "d51a7c2547490ed1dea8f184bc4a3627a9eee63670540ed456ed12384a49ddb4",
+    "core_0.0.16_wheel_sha256": "243cd48c2b73e55fca50d28f6d36ac231a0dce8661efb4967421d5eb37c8fa89",
+    "database_migration": null
+  },
+  "remote_compound_steer_fixture": {
+    "test": "tests/execution_r4/test_remote_claude_steer.py",
+    "transport": "Product HTTP, IPC, WSS, Core and journals with a synthetic Claude peer on loopback",
+    "requesting_and_missing_extension_refused": true,
+    "exact_operation_retained_on_connector": true,
+    "http_response_lost_and_same_receipt_recovered": true,
+    "interruption_confirmed_and_replacement_uncertain": true,
+    "same_replacement_resolved_by_late_event": true,
+    "native_steer_calls": 1,
+    "provider_requests": 0
+  },
+  "installed_claude_attach_probe": {
+    "version": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "platform": "Windows x64 ConPTY",
+    "engine_mode": "isolated print stream-json with closed credential sources and an explicit UUID",
+    "initialize": "success",
+    "user_messages": 0,
+    "catalog_before": "exact UUID, original PID, interactive, idle",
+    "viewer_exit": 1,
+    "viewer_result": "No session matching the full UUID",
+    "catalog_after": "same UUID, PID, kind and status",
+    "owner_exit_after_stdin_close": 0,
+    "fixture_root": "%TEMP%/nexus-si026-claude-exact-attach-1795081295112",
+    "fixture_sha256": "16f1c94de394177935e401970e106690067ab4b58617007e21d4941c7e20f373",
+    "observations_sha256": "41c8ac308aa6574107e019be689dd21b5d1fc8675aaf64a25d6822e10d3f84ae"
+  },
+  "regressions": {
+    "generated_core_contracts": "PASS",
+    "strict_wheel_check": "PASS",
+    "source_core_codec_receipt_and_claude_protocol": 32,
+    "source_connector_link_and_daemon": 79,
+    "source_nexus_local_claude_and_terminal_receipts": 9,
+    "source_nexus_remote_claude_and_pi_presentation": 2,
+    "installed_core_codec_receipt_and_claude_protocol": 32,
+    "installed_connector_link_daemon_and_connect_offer": 93,
+    "installed_nexus_interaction_and_dispatch": 55,
+    "installed_native_pi_loopback_control": 2,
+    "offline_lock_and_artifact_pins": "PASS"
+  },
+  "limitations": [
+    "The direct native attach probe tested an idle stream-json owner on one Windows host and was refused.",
+    "The tested Claude binary still requires qualification for product capabilities.",
+    "The isolated remote controls test used synthetic Claude behavior. Managed background continuity, native detach and operation across separate machines remain pending."
+  ]
+}

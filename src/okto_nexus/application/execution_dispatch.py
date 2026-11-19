@@ -11,7 +11,7 @@ import secrets
 from typing import Mapping
 
 from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
-from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION, encode_pi_run_control
+from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC, PI_RUN_CONTROL_CODEC
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
@@ -29,6 +29,7 @@ from .execution_semantics import (
 _CONTROL = frozenset({"turn.steer", "turn.interrupt", "runtime.close",
                       "approval.decide", "input.provide"})
 _REGULAR = frozenset({"runtime.open", "turn.submit"})
+_TARGETED_CONTROLS = {'claude_stream': CLAUDE_OPERATION_STEER_CODEC, 'pi_rpc': PI_RUN_CONTROL_CODEC}
 
 
 @dataclass(frozen=True, slots=True)
@@ -688,10 +689,10 @@ def begin_execution_send(
             if (binding['kind'] == 'remote' and linked_control is not None
                     and row['action'] in ('turn.steer', 'turn.interrupt')
                     and semantic['target']['kind'] == 'current_run'):
-                if (binding['adapter_id'] != 'pi_rpc' or channel is None
-                        or PI_RUN_CONTROL_REVISION not in channel.control_capabilities):
+                codec = _TARGETED_CONTROLS.get(binding['adapter_id'])
+                if codec is None or channel is None or codec.revision not in channel.control_capabilities:
                     raise OktoNexusError(ErrorCode.CONFLICT, 'The connected owner cannot target the reviewed run.', {})
-                wire_extension = encode_pi_run_control(frame, linked_control['target_ref'])
+                wire_extension = codec.encode(frame, linked_control['target_ref'])
         except CoreError as exc:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "The dispatch operation is incompatible with the Core contract.", {}) from exc

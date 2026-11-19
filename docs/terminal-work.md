@@ -104,6 +104,21 @@ reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
 
+## Reorient a managed Claude session
+
+From an interactive terminal, review a reorientation for the selected session.
+Claude needs a confirmed active turn. The command asks you to confirm interrupting
+that turn before it submits the replacement. The same flow works on a Connector
+that negotiated reviewed Claude controls.
+
+```sh
+okto-nexus session steer --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+```
+
+The receipt reports interruption and replacement separately. If delivery
+is unconfirmed, use `okto-nexus session receipt` with the session, owner generation
+and intent recorded by the first command.
+
 ## Request identity and authorization
 
 `--request-id` supplies a stable client intent ID for an explicit submission.
