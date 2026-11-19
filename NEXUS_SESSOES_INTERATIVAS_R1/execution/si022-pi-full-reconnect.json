@@ -1,0 +1,63 @@
+{
+  "tasks": ["SI-022", "SI-023"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-H12"],
+  "source": {
+    "nexus_revision": "541e5cc0e387560767c906d830fe5473caee0178",
+    "connector_revision": "576e7045ae8104131c18235f3df707bda5d39b6c",
+    "core_revision": "6ec6ace51bcca05272e5bb63098d862e5641dc70"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "c8bfe534e598fd9b9d904a7538646d70c42d60cd480f1c2a37876ef10ac001cd",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "database_schema": 187,
+    "artifact_directory": "%TEMP%/si022-pi-full-reconnect-1795109283858",
+    "fixture_hashes": {
+      "test_pi_full_reconnect.py": "191cdbf7c54d97f8557c623bc74721f940496d33c0726366c524f34ef141c7d8",
+      "test_pi_full_reconnect_new_work.py": "1a6219799e768ad324e0f48e151e7963710413ac7b41a5575a158ec50ccdcb48",
+      "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6"
+    }
+  },
+  "native_windows_loopback": {
+    "platform": "Windows x64 with ConPTY",
+    "harness": "Pi 0.87.1",
+    "pi_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "socket_attempts_blocked": 4,
+    "fast_resume_window_expired": true,
+    "control_generation_before": 3,
+    "control_generation_after": 4,
+    "http_receipts_available_during_socket_outage": true,
+    "original_turn_receipt_stage": "SUCCEEDED",
+    "old_process_exited_before_new_ready": true,
+    "editor_restored_console_modes": true,
+    "old_queue_status": "BLOCKED_SESSION",
+    "original_queue_intent_and_sequence_retained": true,
+    "original_turn_submissions": 1,
+    "queued_prompt_replayed": false,
+    "external_provider_requests": 0,
+    "proof": "initial/proof.json",
+    "proof_sha256": "20ffb5a8f2e43eeabbe419db81e85df363da4421fb8bb674211dd3283bccdff8",
+    "junit_sha256": "86535b53c01018200d1668683036f5f8e538e9826df3b6c1d852a1335c90b6ca"
+  },
+  "installed_regressions": {
+    "nexus": {"passed": 28, "junit_sha256": "2b5dd3cf77b8f2d5eb49961f96d3dcba0790443f3ca28bbbb13475b79f96c26e"},
+    "connector": {"passed": 41, "junit_sha256": "65d7ed1c5ab5ac67af82607c16d412353e744461e020f50eec97a103539bc1f7"}
+  },
+  "explicit_new_work_after_reconciliation": {
+    "admission": "Separate operator CLI request with new_session and a distinct client intent",
+    "new_session_and_native_process": true,
+    "original_input_remained_on_closed_session": true,
+    "one_turn_per_session": true,
+    "new_turn_and_explicit_close_receipts": "SUCCEEDED",
+    "external_provider_requests": 0,
+    "proof": "explicit-new-work-checked/proof.json",
+    "proof_sha256": "99078d124747cd615c28860889e5ad71d73b4092c96d3938083cd0bd425b1e3c",
+    "junit_sha256": "4478caa2aa89788a9681fe37c5b764840180c1a85ca890ff5883acacb74ff03e"
+  },
+  "limitations": [
+    "The R4 outage was injected only into the test-owned WebSocket on one Windows host. Cross-machine TLS, native Pi on other operating systems and provider campaigns are pending.",
+    "This run preserves a confirmed completed outcome. It does not qualify all possible-effect or transfer crash scenarios."
+  ]
+}

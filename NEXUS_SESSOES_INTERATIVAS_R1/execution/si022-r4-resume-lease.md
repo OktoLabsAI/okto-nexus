@@ -10,4 +10,4 @@ No wheel corrigido, o teste cortou o WebSocket R4 enquanto o Pi 0.87.1 executava
 
 Passaram 21 testes de continuidade, reinício e recuperação no wheel do Nexus e 12 testes de continuidade e reconexão no wheel do Connector. A cobertura do Nexus inclui geração divergente, ticket revogado, prova expirada e rejeição de recibo enquanto o canal está sem proprietário. [Regressão do canal](../../tests/execution_r4/test_connection_continuity.py)
 
-A qualificação fora da janela de retomada, a validação entre máquinas distintas e o estado visível da fila após o encerramento da sessão anterior continuam abertos.
+Um ensaio posterior cobriu a reconexão fora da janela de retomada e a recuperação da fila da sessão encerrada em loopback. A validação entre máquinas distintas continua aberta. [Reconexão completa com Pi](si022-pi-full-reconnect.md)

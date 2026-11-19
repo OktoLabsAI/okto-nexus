@@ -124,6 +124,10 @@ If the Connector briefly loses its control link, it can resume the same link
 with the existing execution lease. Wait until the link is ready, then attach
 to the original session. Use the original receipt for any pending input.
 
+If the outage outlasts that window, the Connector must reconcile the old
+execution before the new link becomes ready. Check the original session and
+its receipts before deciding what to send next.
+
 When Nexus closes the session, queued messages that never received an operation
 are marked as blocked and remain visible on their original receipts. Review any
 message whose delivery is uncertain using its original receipt. To send an unsent

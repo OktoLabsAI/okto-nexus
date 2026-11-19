@@ -8,4 +8,4 @@ A migração corrige filas antigas que já estavam vinculadas a sessões em esta
 
 Passaram 237 testes de interação, runtime e continuidade em código-fonte e 34 testes focalizados no wheel instalado em diretório temporário. A suíte do wheel cobre encerramento canônico, rollback da transação, consulta do recibo após encerramento e migração de schema 186 para 187 com reaplicação idempotente. [Artefatos e resultados](si023-retired-session-queue.json)
 
-Esta etapa exercitou o encerramento e a consulta SQLite, com publicação pelo fluxo de liberação coberta pelas regressões R4. O ensaio nativo da retomada rápida do Connector foi feito na etapa anterior. Ainda falta qualificar a reconexão completa com geração nova, em particular entre máquinas distintas. [Retomada rápida com Pi](si022-r4-resume-lease.md)
+Esta etapa exercitou o encerramento e a consulta SQLite, com publicação pelo fluxo de liberação coberta pelas regressões R4. Um ensaio posterior reproduziu `BLOCKED_SESSION` com Pi real após reconexão em nova geração, com Server e Connector na mesma máquina. [Reconexão completa com Pi](si022-pi-full-reconnect.md)
