@@ -1219,8 +1219,11 @@
         "SI-T-G18",
         "SI-T-H13"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si025-pi-shared-owner.md",
+        "execution/si025-pi-shared-owner.json"
+      ]
     },
     {
       "id": "SI-026",
@@ -3712,7 +3715,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si025-pi-shared-owner.md",
+        "execution/si025-pi-shared-owner.json"
+      ]
     },
     {
       "id": "SI-T-G05",
@@ -4002,7 +4008,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si025-pi-shared-owner.md",
+        "execution/si025-pi-shared-owner.json"
+      ]
     },
     {
       "id": "SI-T-G19",

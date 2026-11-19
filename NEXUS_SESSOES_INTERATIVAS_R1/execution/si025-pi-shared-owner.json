@@ -1,0 +1,50 @@
+{
+  "tasks": ["SI-025"],
+  "state": "controlled feasibility evidence",
+  "scope": "Installed Pi SDK and native RPC owner during one active turn with an in-process synthetic provider",
+  "partial_scenarios": {
+    "SI-T-G04": "renderer detaches from the owner while the turn is active; terminal capture only",
+    "SI-T-G18": "renderer and RPC use one AgentSession, with one prompt and one result; no two-surface queue exercise"
+  },
+  "baseline": {
+    "nexus": "409fd1f7234f5a52494efa92c0bc951782b85921",
+    "core": "cecd63f40b672e108caf4558f84bc47c1befbc2e",
+    "connector": "1bc8be5c341164e25768532d67ea16d5f7e0b6e2"
+  },
+  "platform": "Windows x64",
+  "pi": "0.87.1",
+  "node": "v24.15.0",
+  "sha256": {
+    "node_binary": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "pi_package": "627631b613ba4ca29eba8df793f5280fd20b19f01d73826e9ffda14c15def5dc",
+    "pi_sdk": "1e3601da1e18a7be4dfdcc625d7a7fb942cc095a5d737bb1b70211af33b61e05",
+    "native_renderer": "7dc366e8609d7d1e81fb85952e466aea9933b13e74842c2a9b9df678d267d12e",
+    "rpc_mode": "bdd94e753e6d19731d9fb9ea370462d095d64f1e78bddd7651320663fa57c4ff",
+    "faux_provider": "d8834e63c120a62d562c0740d989eb5fe0eca0fcf570a3543855c30840ab6b1c",
+    "probe_js": "65d51c6e1ae611176abef5a2fa116f90939244bfdfcf027d8f3448d1f655a4c5",
+    "probe_python": "86e238b57cbc4bdd3e7a6996ada9fa7d4c6eb6f1df8034cb32a103217f3647f8"
+  },
+  "runs": ["%TEMP%/nexus-si-pi-observer-hn7n32on", "%TEMP%/nexus-si-pi-observer-ysozi73x"],
+  "result_per_run": {
+    "result": "PASS",
+    "sessions_created": 1,
+    "renderer_attaches": 2,
+    "same_session_streaming_with_and_without_a_viewer": true,
+    "exact_persisted_history": true,
+    "owner_calls_before_rpc_eof": ["bind:rpc", "prompt"],
+    "disposals_before_rpc_eof": 0,
+    "disposals_after_rpc_eof": 1,
+    "native_rpc_owner_exit": 0,
+    "faux_model_calls": 1,
+    "network_attempts": 0,
+    "settled_events": 1
+  },
+  "static_checks": {"ruff": "PASS", "node_check": "PASS"},
+  "existing_core_pi_regressions": {"source": 30, "status": "PASS"},
+  "limitations": [
+    "The renderer captures bytes in memory and does not forward terminal input",
+    "The probe overrides Pi internal lifecycle, extension and settings hooks",
+    "The runtime is owned by native RPC directly, without the Core or Nexus presentation gateways",
+    "Real extensions, credentials, queue concurrency, operator terminals and external provider campaigns are pending"
+  ]
+}
