@@ -1,0 +1,77 @@
+{
+  "tasks": ["SI-026", "SI-036"],
+  "evidence_status": "PARTIAL",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "820b38de", "main": "8d77b50c", "ahead_of_main": 440},
+    "connector": {"branch": "feature/v0.0.15", "head": "d38cedf", "main": "a3017d9", "ahead_of_main": 81},
+    "core": {"branch": "feature/v0.0.16", "head": "1dae685", "main": "19c99f1", "ahead_of_main": 60},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_artifacts_sha256": {
+    "core": "a87fd2a37e1090d753b21d10e375c387577795d2e90159892a79b6c3b3bc7471",
+    "connector": "0ff54533c52ed24968493f655655c1030ae298a7dd856301b1d5776b3e8cd7b8",
+    "nexus": "2ab314aeb24d84b9ab9a015f7ccec65c4df5ce0a34cafb91f32b87dee2c01a74"
+  },
+  "environment": {
+    "claude_code": "2.1.328",
+    "claude_binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "platform": "Windows",
+    "reviewed_native_profile": {"mode": "plan", "tools": ["AskUserQuestion", "Read"]},
+    "browser": "Microsoft Edge",
+    "browser_driver": "Playwright",
+    "dashboard_js_asset": "index-DPBNbalO.js",
+    "operator_authentication": "Entered a disposable operator account through the UI with the session-required header.",
+    "application_transport": "Real Nexus ASGI server over loopback HTTP",
+    "model_transport": "Synthetic SSE fixture over loopback",
+    "external_model_calls": 0
+  },
+  "read_probe_sha256": "e7368583027c61ec6a4afe6a4c23ea9a439278ee341fcb1fc518c511edc4b9b8",
+  "cases": [
+    {
+      "case": "Read approved",
+      "root": "D:/nexus-si036-claude-http-1795102717451/approve",
+      "observations_sha256": "9d6c57f8cb3e002ebb7e68166359b1efc6217df7aa374f4f8db8735f020a0e16",
+      "canonical_decision": "CONFIRMED",
+      "native_received_exact_fixture_file_contents": true
+    },
+    {
+      "case": "Read denied",
+      "root": "D:/nexus-si036-claude-http-1795102717451/deny",
+      "observations_sha256": "9f1d3437fbd4a63a37e66099d1afc0dd6381fb2e0f036efefc749c6e9391f551",
+      "canonical_decision": "DENIED",
+      "native_received_denial_without_file_contents": true
+    },
+    {
+      "case": "Structured question answered via keyboard",
+      "root": "D:/nexus-si036-claude-question-keys-1795103137232",
+      "probe_sha256": "0605859eadc3b07366f3aa463808e5b870b805955a24a985c0f9b7283ecc9bd6",
+      "observations_sha256": "93ccf93b4fd8b1abd4f0aeeb8bc83630835834bd12840c7e884dbab45673c71b",
+      "canonical_decision": "CONFIRMED",
+      "keyboard_actions": ["Enter to open global Attention", "Enter to open the exact question", "ArrowDown to select Blue", "Enter to send answer"],
+      "native_received_exact_answer": true
+    }
+  ],
+  "observed_in_all_cases": {
+    "exact_native_request_reached_from_global_attention": true,
+    "one_canonical_browser_post": true,
+    "native_decision_receipt_read_with_same_browser_session": "SUBMITTED",
+    "original_turn_final_receipt": "SUCCEEDED",
+    "same_owned_process_and_saved_context": true,
+    "original_actor_without_operator_authority_http_status": 403,
+    "stale_review_http_status": 409,
+    "canonical_close": "SUCCEEDED",
+    "remaining_job_pids": []
+  },
+  "offline_nexus_lock_check": "passed",
+  "test_recovery": {
+    "initial_read_probe": "The fixture requested explicit operator sign-in instead of the legitimate loopback automatic access.",
+    "initial_question_probe": "Home followed by ArrowDown selected the second choice in the control. The harness test ended before a decision POST. ArrowDown from the unselected state selected the intended first choice."
+  },
+  "limitations": [
+    "Windows and the recorded local Claude executable with the reviewed plan profile.",
+    "Browser and native harness were real. The provider was a synthetic loopback fixture.",
+    "Full keyboard navigation, mobile and zoom, screen reader, and human acceptance remain open."
+  ],
+  "migration": "none"
+}
