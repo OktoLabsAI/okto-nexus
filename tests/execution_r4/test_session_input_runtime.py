@@ -1,11 +1,13 @@
 """Exercise the serve-owned queue against real R4/Core with a synthetic peer."""
 
+import asyncio
 import hashlib
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, replace
 from functools import partial
+from threading import Event
 
 import pytest
 import test_local_realization as local_realization
@@ -775,6 +777,156 @@ def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interac
     assert client.post(cancel_path, headers=ui, json=cancellation).status_code == 401
     assert client.get(path + '/inputs', params=query).status_code == 401
     client.cookies.clear()
+
+
+@pytest.mark.parametrize('winner', ['cancel', 'dispatch'])
+def test_queue_dispatch_serializes_with_dashboard_controls(interactive_runtime, monkeypatch, winner):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'race-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    generation = scope['session_owner_generation']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'session_id', 'binding_id',
+                                        'workspace_id', 'workspace_binding_id', 'agent_id')}
+    server, executor, session = (exact[key] for key in ('server_id', 'executor_id', 'session_id'))
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    base = {'scope': exact, 'expected_session_generation': generation}
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('queue-race', 'synthetic-race-password', local=True)
+    client.cookies.set('nexus_operator_session', auth.login('queue-race', 'synthetic-race-password'))
+
+    active = admit(setup, binding, 'race-busy', 'turn.submit', session_id=session, text='Original turn')
+    wait_receipt(setup, active)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        epoch, = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                        (session,)).fetchone()
+    turn_id = native.native.active_turn_id
+    emit_codex_configuration(client, native, server, executor, session, epoch)
+    client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+        'turn_state', 'turn/started', {'turn_id': turn_id, 'thread_id': CODEX_THREAD, 'threadId': CODEX_THREAD,
+            'turn': {'id': turn_id, 'status': 'inProgress'}, 'delivery_phase': 'started'},
+        operation_id=active['operation_id']))
+
+    def settle(operation_id):
+        client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+            'turn_state', 'turn/completed', {'turn_id': native.native.active_turn_id, 'thread_id': CODEX_THREAD,
+                'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id=operation_id))
+
+    revision = client.get(path + '/interaction', params=query).json()['next_turn']['capability_revision']
+    inputs = []
+    for intent in ('race-item', 'race-follower'):
+        response = client.post(path + '/inputs', headers=ui, json=base | {
+            'client_intent_id': intent, 'capability_revision': revision, 'content': [{'type': 'text', 'text': intent}],
+        })
+        assert response.status_code == 202, response.text
+        assert response.json()['status'] == 'QUEUED' and response.json()['operation_id'] is None
+        inputs.append(response.json()['input_id'])
+    first, follower = inputs
+
+    def queue():
+        page = client.get(path + '/inputs', params=query)
+        assert page.status_code == 200, page.text
+        return page.json()
+
+    def receipt(input_id):
+        response = client.get(path + '/inputs/receipt', params=query | {'input_id': input_id})
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    def control():
+        preview = client.get(path + '/steer', params=query | {'input_id': first})
+        assert preview.status_code == 200, preview.text
+        return preview.json()['control']
+
+    eventually(control, seconds=25)
+    reviewed = control()
+    before = queue()
+    head = before['items'][0]
+    assert head['input_id'] == first and head['can_cancel'] and head['can_promote']
+    versions = {'expected_queue_revision': before['queue_revision'], 'expected_input_revision': head['input_revision']}
+    cancel = base | versions | {'capability_revision': before['cancel_capability_revision']}
+    promote = base | versions | {'capability_revision': reviewed['capability_revision'],
+        'target': reviewed['target'], 'confirmed_effect_revision': reviewed['effect_revision']}
+    assert reviewed['queue_revision'] == before['queue_revision']
+
+    paused, release = Event(), Event()
+    availability = deps.runtime_availability
+    reserve = availability.try_reserve_capacity
+    consume = availability.consume_capacity
+
+    async def gate(request, result, state):
+        if request.attempt_id.startswith(first + ':') and getattr(result, 'state', None) == state:
+            paused.set()
+            assert await asyncio.to_thread(release.wait, 40), 'Test did not release the dispatcher'
+        return result
+
+    async def hold_reservation(request):
+        # Busy assessments are not reservations and do not cross the race cut.
+        return await gate(request, await reserve(request), 'HELD')
+
+    async def hold_consumption(request, reservation_id, operation):
+        result = await consume(request, reservation_id, operation)
+        return await gate(request, result, 'CONSUMED')
+
+    if winner == 'cancel':
+        monkeypatch.setattr(availability, 'try_reserve_capacity', hold_reservation)
+    else:
+        monkeypatch.setattr(availability, 'consume_capacity', hold_consumption)
+
+    expected = [('send_turn', active['operation_id'])]
+    cancel_path = f'{path}/inputs/{first}/cancel'
+    try:
+        settle(active['operation_id'])
+        assert paused.wait(40), 'Dispatcher did not reach the reserved test cut'
+        assert native.native.sent == expected and receipt(follower)['operation_id'] is None
+        observed = receipt(first)
+        if winner == 'cancel':
+            assert observed['status'] == 'QUEUED' and observed['operation_id'] is None
+            removed = client.post(cancel_path, headers=ui, json=cancel)
+            assert removed.status_code == 200, removed.text
+            assert removed.json()['status'] == 'CANCELLED' and removed.json()['operation_id'] is None
+        else:
+            assert observed['status'] == 'DISPATCHING' and observed['operation_id']
+            assert client.post(cancel_path, headers=ui, json=cancel).status_code == 409
+            promoted = client.post(f'{path}/inputs/{first}/promote', headers=ui, json=promote)
+            assert promoted.status_code == 409 and 'input or queue changed' in promoted.text.lower()
+            current = queue()
+            row = next(item for item in current['items'] if item['input_id'] == first)
+            assert not row['can_cancel'] and not row['can_promote']
+            fresh = {'expected_queue_revision': current['queue_revision'], 'expected_input_revision': row['input_revision']}
+            assert client.post(cancel_path, headers=ui, json=cancel | fresh).status_code == 409
+            blocked = client.post(f'{path}/inputs/{first}/promote', headers=ui, json=promote | fresh)
+            assert blocked.status_code == 409 and 'no longer available for reorientation' in blocked.text.lower()
+            expected.append(('send_turn', observed['operation_id']))
+    finally:
+        release.set()
+
+    if winner == 'dispatch':
+        eventually(lambda: len(native.native.sent) >= 2, seconds=30)
+        assert native.native.sent == expected
+        settle(observed['operation_id'])
+        eventually(lambda: receipt(first)['status'] == 'ACCEPTED_NATIVE', seconds=30)
+    eventually(lambda: bool(receipt(follower)['operation_id']) and len(native.native.sent) > len(expected), seconds=35)
+    following = receipt(follower)['operation_id']
+    assert native.native.sent == expected + [('send_turn', following)]
+    settle(following)
+    eventually(lambda: receipt(follower)['status'] == 'ACCEPTED_NATIVE', seconds=25)
+    assert native.native.sent == expected + [('send_turn', following)]
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        operations = uow.connection.execute('SELECT action,operation_id FROM execution_operations WHERE session_id=?',
+                                            (session,)).fetchall()
+        assert {(action, operation_id) for action, operation_id in operations if action != 'runtime.open'} == {
+            ('turn.submit', operation_id) for _, operation_id in [*expected, ('send_turn', following)]}
+        if winner == 'cancel':
+            resolved, = uow.connection.execute(
+                'SELECT resolved_at FROM session_interaction_capacity_attempts WHERE input_id=?', (first,)).fetchone()
+            assert resolved is not None
+    if winner == 'cancel':
+        assert receipt(first)['status'] == 'CANCELLED' and receipt(first)['operation_id'] is None
 
 
 def test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order(interactive_runtime):

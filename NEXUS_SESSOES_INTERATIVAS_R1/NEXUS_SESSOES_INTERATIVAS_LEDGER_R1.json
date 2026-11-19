@@ -546,7 +546,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si009-cancellation.md",
-        "execution/si009-queue-view.md"
+        "execution/si009-queue-view.md",
+        "execution/si035-queue-dispatch-races.md",
+        "execution/si035-queue-dispatch-races.json"
       ]
     },
     {
@@ -596,7 +598,9 @@
         "execution/si026-claude-terminal-steer.md",
         "execution/si026-claude-terminal-steer.json",
         "execution/si026-claude-replacement-decisions.md",
-        "execution/si026-claude-replacement-decisions.json"
+        "execution/si026-claude-replacement-decisions.json",
+        "execution/si035-queue-dispatch-races.md",
+        "execution/si035-queue-dispatch-races.json"
       ]
     },
     {
@@ -1834,7 +1838,10 @@
         "SI-T-H12"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": [
+        "execution/si035-queue-dispatch-races.md",
+        "execution/si035-queue-dispatch-races.json"
+      ]
     },
     {
       "id": "SI-036",
@@ -2647,8 +2654,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si035-queue-dispatch-races.md",
+        "execution/si035-queue-dispatch-races.json"
+      ]
     },
     {
       "id": "SI-T-B20",
@@ -2896,8 +2906,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si035-queue-dispatch-races.md",
+        "execution/si035-queue-dispatch-races.json"
+      ]
     },
     {
       "id": "SI-T-C10",

@@ -1,0 +1,76 @@
+{
+  "tests": {
+    "SI-T-B19": "PASS",
+    "SI-T-C09": "PASS"
+  },
+  "related_tasks": [
+    "SI-009",
+    "SI-010",
+    "SI-035"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "3a6e7584857e5590725e8ae0571ce83c811ea7eb",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 465
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "worktrees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": "Windows, installed R4 packages, real HTTP handlers, SQLite, automatic dispatcher and actual Core capacity protocol with synthetic Codex send peer.",
+  "cancel_precedes_dispatch": {
+    "paused_at": "Core reservation HELD, input has no linked operation",
+    "cancel_http_status": 200,
+    "receipt": "CANCELLED",
+    "linked_operation": false,
+    "outstanding_capacity_attempt": false,
+    "native_writes_for_input": 0,
+    "native_writes_for_follower": 1
+  },
+  "dispatch_precedes_controls": {
+    "paused_at": "Core consumption returned, R4 outbox still held",
+    "cancel_http_status": 409,
+    "promotion_http_status": 409,
+    "refused_with_updated_queue_revisions": true,
+    "receipt_before_send": "DISPATCHING",
+    "receipt_after_completed_turn": "ACCEPTED_NATIVE",
+    "native_writes_for_input": 1,
+    "native_writes_for_follower": 1,
+    "promoted_operations": 0
+  },
+  "regressions": {
+    "race_and_cancellation": {
+      "passed": 15,
+      "sha256": "e249e639742091550fc1a9c73b931665ce2be96706a2c7b9ebdfd734cb3e8039"
+    },
+    "capacity_and_controls": {
+      "passed": 14,
+      "sha256": "bbd1a7f720a8028ebb8f71a308f8addc580d4c757bc2bd3818c428e07312cfef"
+    }
+  },
+  "test_location": "tests/execution_r4/test_session_input_runtime.py::test_queue_dispatch_serializes_with_dashboard_controls",
+  "complementary_real_pi_evidence": "execution/si036-visual-pause.json",
+  "limits": [
+    "The synchronized races used a synthetic native peer.",
+    "Server restart with unresolved delivery is outside this evidence."
+  ],
+  "migration": "none"
+}
