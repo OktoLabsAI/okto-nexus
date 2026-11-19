@@ -1,0 +1,72 @@
+{
+  "tasks": ["SI-022", "SI-032"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-H12"],
+  "source": {
+    "nexus_baseline": "d84bcb4f401884026e5dfa771078e18cc0c701d5",
+    "connector_revision": "576e7045ae8104131c18235f3df707bda5d39b6c",
+    "core_revision": "6ec6ace51bcca05272e5bb63098d862e5641dc70"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "6fdc09da557c2eee312364d28fcd90a88bbcddea1966728798c219899d12d8bf",
+    "nexus_0.3.8_sdist_sha256": "49bbd62b8a2bae5ac8032830e6bcc7c7e9889db954d0651c6c2ce2f614f80f1e",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "previous_nexus_wheel_sha256": "47513410d60202bee7792a9b9bea687fe4e1acbe605a6d7384f1979747832921",
+    "database_migration": 186
+  },
+  "previous_wheel": {
+    "native_cut": "Socket replaced under the same identity and generation. The applied execution lease incorrectly became SUPERSEDED.",
+    "installed_regression": "Failed at the exact lease-row comparison after the socket cut."
+  },
+  "installed_regressions": {
+    "nexus_r4_continuity_restart_and_ns09": 21,
+    "connector_r4_continuity_and_reconnect_management": 12,
+    "strict_distribution_check": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "database_upgrade": {
+    "from_schema": 185,
+    "to_schema": 186,
+    "integrity": "ok",
+    "second_apply_migrations": [],
+    "rows_equal_after_upgrade": {
+      "execution_sessions": 1,
+      "execution_leases": 1,
+      "execution_operations": 2,
+      "execution_receipts": 2,
+      "session_interaction_inputs": 1
+    },
+    "proof": "upgraded-copy/proof.json",
+    "proof_sha256": "652569f35c45a9c677fabe24d361775481dd7d5b28d83bb6ea97aa8ce4488595"
+  },
+  "native_windows_loopback": {
+    "platform": "Windows x64 with ConPTY",
+    "harness": "Pi 0.87.1",
+    "pi_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "model_response": "Deterministic in-process Pi provider fixture",
+    "r4_socket_aborted_and_replaced": true,
+    "connector_identity_and_generation_retained": true,
+    "same_live_pi_process_and_session": true,
+    "working_turn_and_queue_persisted": true,
+    "first_editor_detached_on_cut": true,
+    "reattached_without_takeover": true,
+    "same_input_and_receipt_recovered": true,
+    "native_user_messages": 2,
+    "prompt_replayed": false,
+    "canonical_close": true,
+    "external_provider_requests": 0,
+    "artifact_directory": "%TEMP%/si022-pi-r4-reconnect-1795107409846",
+    "proof": "fixed-native/proof.json",
+    "proof_sha256": "91ebe7381fa39f2f9baf267a1d2d33ac5ff6f3bbf539701a15b7af24208f91dd",
+    "fixture_hashes": {
+      "test_pi_connector_reconnect.py": "68b6bfc04042db2b85daf6f3e819a719d334eff36d2e89279368d1c955f232d3",
+      "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6"
+    }
+  },
+  "limitations": [
+    "The native run exercised a same-host socket cut and authenticated same-generation resume. Cross-machine TLS and full reconnect after the fast-resume window remain open.",
+    "Queue status after retirement of the old session needs a separate test and fix. The observed queue and receipt belong to a session retained through the fast resume."
+  ]
+}

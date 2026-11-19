@@ -318,7 +318,7 @@ def build_router() -> APIRouter:
                 bootstrap_ticket_id = verified.ticket_id
                 with factory.unit_of_work() as uow:
                     row = uow.connection.execute(
-                        "SELECT generation,revoked_at,owner_instance_id "
+                        "SELECT generation,revoked_at,owner_instance_id,control_state "
                         "FROM execution_executors "
                         "WHERE server_id=? AND executor_id=? AND kind='remote'",
                         (server_id, executor_id),
@@ -326,13 +326,19 @@ def build_router() -> APIRouter:
                     if row is None or row["revoked_at"] is not None:
                         raise ValueError("executor unavailable")
                     if 'resume_connection_id' in hello:
-                        resume = uow.connection.execute('SELECT * FROM execution_connection_resumes WHERE server_id=? AND executor_id=?',
-                            (server_id, executor_id)).fetchone()
-                        if (not resume or row['owner_instance_id'] is not None
+                        resume = uow.connection.execute("""
+                            SELECT r.* FROM execution_connection_resumes r
+                            JOIN execution_link_tickets t ON t.ticket_id=r.ticket_id AND t.server_id=r.server_id
+                                AND t.executor_id=r.executor_id AND t.bound_connection_id=r.connection_id
+                            JOIN execution_agent_revisions a ON a.server_id=t.server_id AND a.agent_id=t.agent_id
+                            WHERE r.server_id=? AND r.executor_id=? AND r.ticket_id=? AND t.revoked_at IS NULL
+                              AND julianday(t.expires_at)>julianday('now') AND t.credential_epoch=a.credential_epoch
+                              AND t.authorization_revision=a.authorization_revision
+                            """, (server_id, executor_id, verified.ticket_id)).fetchone()
+                        if (not resume or row['owner_instance_id'] is not None or row['control_state'] != 'DISCONNECTED'
                                 or resume['connection_id'] != hello['resume_connection_id']
                                 or resume['connection_generation'] != hello.get('resume_connection_generation')
                                 or row['generation'] != resume['connection_generation']
-                                or resume['ticket_id'] != verified.ticket_id
                                 or datetime.fromisoformat(resume['expires_at']) <= datetime.now(timezone.utc)):
                             raise ValueError('connection resume unavailable')
                         uow.connection.execute("UPDATE execution_executors SET owner_instance_id=?,control_state='CONTROL_READY' "
@@ -844,26 +850,41 @@ def build_router() -> APIRouter:
             if connection_id is not None and generation is not None:
                 def _release():
                     with factory.unit_of_work() as uow:
-                        released = uow.connection.execute(
+                        conn = uow.connection
+                        retained = False
+                        if resumable_disconnect:
+                            # Record the exact resume proof before clearing the owner, in the same transaction.
+                            retained = conn.execute("""
+                                INSERT OR REPLACE INTO execution_connection_resumes(
+                                    server_id,executor_id,connection_id,connection_generation,ticket_id,expires_at)
+                                SELECT e.server_id,e.executor_id,e.owner_instance_id,e.generation,t.ticket_id,?
+                                FROM execution_executors e
+                                JOIN execution_link_tickets t ON t.server_id=e.server_id AND t.executor_id=e.executor_id
+                                    AND t.bound_connection_id=e.owner_instance_id AND t.ticket_id=?
+                                JOIN execution_agent_revisions a ON a.server_id=t.server_id AND a.agent_id=t.agent_id
+                                WHERE e.server_id=? AND e.executor_id=? AND e.owner_instance_id=? AND e.generation=?
+                                  AND e.control_state='CONTROL_READY' AND e.revoked_at IS NULL AND t.revoked_at IS NULL
+                                  AND julianday(t.expires_at)>julianday('now') AND t.credential_epoch=a.credential_epoch
+                                  AND t.authorization_revision=a.authorization_revision
+                                """, ((datetime.now(timezone.utc) + timedelta(seconds=30)).isoformat(), bootstrap_ticket_id,
+                                      server_id, executor_id, connection_id, generation)).rowcount == 1
+                        conn.execute(
                             "UPDATE execution_executors SET control_state='DISCONNECTED',"
                             "owner_instance_id=NULL WHERE server_id=? "
                             "AND executor_id=? AND owner_instance_id=? "
                             "AND generation=?",
                             (server_id, executor_id, connection_id,
                             generation),
-                        ).rowcount
-                        if resumable_disconnect and released == 1:
-                            uow.connection.execute('INSERT OR REPLACE INTO execution_connection_resumes VALUES (?,?,?,?,?,?)',
-                                (server_id, executor_id, connection_id, generation, bootstrap_ticket_id,
-                                 (datetime.now(timezone.utc) + timedelta(seconds=30)).isoformat()))
+                        )
+                        if retained:
                             return
-                        uow.connection.execute(
+                        conn.execute(
                             "UPDATE execution_control_lanes SET state='DISCONNECTED' "
                             "WHERE server_id=? AND executor_id=? AND "
                             "connection_id=? AND connection_generation=?",
                             (server_id, executor_id, connection_id, generation),
                         )
-                        uow.connection.execute(
+                        conn.execute(
                             "UPDATE execution_link_tickets SET "
                             "bound_connection_id=NULL WHERE server_id=? "
                             "AND executor_id=? AND bound_connection_id=?",

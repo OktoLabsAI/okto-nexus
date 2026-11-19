@@ -120,6 +120,10 @@ expires and the executor keeps the work and queue. Attach again to the same
 session to resume watching. Older readers that send no application messages
 expire after two minutes on a Server with this behavior.
 
+If the Connector briefly loses its control link, it can resume the same link
+with the existing execution lease. Wait until the link is ready, then attach
+to the original session. Use the original receipt for any pending input.
+
 ## Follow or reorient a managed Claude session
 
 On Windows, a local Claude session resumed into the Core-managed terminal

@@ -20,6 +20,10 @@ def fence_remote_connections_after_restart(factory) -> int:
         for row in rows:
             executor_id = row["executor_id"]
             conn.execute(
+                "DELETE FROM execution_connection_resumes WHERE server_id=? "
+                "AND executor_id=?", (server_id, executor_id),
+            )
+            conn.execute(
                 "UPDATE execution_executors SET owner_instance_id=NULL,"
                 "control_state='DISCONNECTED' WHERE server_id=? AND executor_id=?",
                 (server_id, executor_id),
@@ -33,9 +37,5 @@ def fence_remote_connections_after_restart(factory) -> int:
                 "UPDATE execution_link_tickets SET bound_connection_id=NULL "
                 "WHERE server_id=? AND executor_id=?",
                 (server_id, executor_id),
-            )
-            conn.execute(
-                "DELETE FROM execution_connection_resumes WHERE server_id=? "
-                "AND executor_id=?", (server_id, executor_id),
             )
     return len(rows)

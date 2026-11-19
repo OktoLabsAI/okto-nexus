@@ -7,7 +7,10 @@ from nexus_connector_core import R4_PREVIEW_REVISION, encode_r4_frame
 import pytest
 from starlette.websockets import WebSocketDisconnect
 
-from test_ns09 import setup_authority, negotiate
+from test_ns09 import admit, setup_authority, negotiate
+
+from okto_nexus.application.execution_leases import ExecutionLeaseService
+from okto_nexus.errors import OktoNexusError
 
 
 @pytest.mark.parametrize('invalid', [None, 'revoked', 'expired'])
@@ -44,9 +47,10 @@ def test_live_connection_renews_proofs_without_changing_owner(tmp_path, monkeypa
                 assert ws.receive_json() == dict(base, type='heartbeat')
 
 
-@pytest.mark.parametrize('stale', [False, True])
-def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch, stale):
-    deps, app, _, _, _, _, info, revisions, ticket, lane_ticket, server, executor = setup_authority(tmp_path, monkeypatch)
+@pytest.mark.parametrize('case', ['exact', 'stale-generation', 'expired-proof', 'revoked-grant'])
+def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch, case):
+    deps, app, access, operator, grant, _, info, revisions, ticket, lane_ticket, server, executor = setup_authority(
+        tmp_path, monkeypatch)
     from okto_nexus.adapters.inbound.http import executor_link
     scopes = []
     cancelled = []
@@ -70,6 +74,21 @@ def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch
     with TestClient(cancellable_app, base_url='https://127.0.0.1:8202') as client:
         with client.websocket_connect(url, headers=headers, subprotocols=['nxl.v1']) as ws:
             channel = negotiate(ws, info, revisions, lane_ticket, server, executor, control_capabilities=capabilities)
+            scope = admit(deps, app)['scope']
+            service = ExecutionLeaseService(factory=deps.connection_factory, access=access,
+                fresh_publications=app.state.inventory_fresh_publications)
+            request = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type='lease.renew',
+                request_id='fixture-lease', grant_id=grant['grant_id'], expected_lease_serial=0, scope=scope,
+                connection_id=channel.connection_id, connection_generation=channel.connection_generation, purpose='initial')
+            lease = service.issue(request, channel=channel)
+            applied = {key: lease[key] for key in ('protocol_major', 'contract_revision', 'request_id', 'lease_id',
+                                                  'lease_serial', 'grant_id', 'scope')}
+            applied.update(type='lease.applied', connection_id=channel.connection_id,
+                           connection_generation=channel.connection_generation, application_stage='INSTALLED')
+            service.applied(applied, channel=channel)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                original = dict(uow.connection.execute('SELECT * FROM execution_leases').fetchone())
+                assert original['status'] == 'ACTIVE'
             ws.close()
             # Keep the test transport alive until the server handles close;
             # cancellation is injected above at the actual cleanup boundary.
@@ -84,24 +103,47 @@ def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch
         with deps.connection_factory.unit_of_work(write=False) as uow:
             lane = dict(uow.connection.execute('SELECT * FROM execution_control_lanes').fetchone())
             assert uow.connection.execute('SELECT COUNT(*) FROM execution_connection_resumes').fetchone()[0] == 1
+            assert dict(uow.connection.execute('SELECT * FROM execution_leases').fetchone()) == original
+            owner = uow.connection.execute('SELECT owner_instance_id,control_state FROM execution_executors '
+                                           'WHERE executor_id=?', (executor,)).fetchone()
+            assert tuple(owner) == (None, 'DISCONNECTED')
+        with pytest.raises(OktoNexusError, match='superseded connection'):
+            service.applied(applied, channel=channel)
+        if case == 'expired-proof':
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE execution_connection_resumes SET expires_at='2001-01-01T00:00:00Z'")
+        if case == 'revoked-grant':
+            access.revoke(operator, grant_id=grant['grant_id'])
+        base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, server_id=server, executor_id=executor)
+        hello = dict(base, type='hello', link_attempt_id='resume',
+                     core_version=info['core_version'], management_revision=info['management_revision'],
+                     supported_nxl=[R4_PREVIEW_REVISION], snapshot_formats=[info['executor_snapshot_format']],
+                     control_capabilities=capabilities)
+        refused = case in ('stale-generation', 'expired-proof')
         with client.websocket_connect(url, headers=headers, subprotocols=['nxl.v1']) as ws:
-            base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, server_id=server, executor_id=executor)
-            ws.send_text(encode_r4_frame(dict(base, type='hello', link_attempt_id='resume',
-                core_version=info['core_version'], management_revision=info['management_revision'],
-                supported_nxl=[R4_PREVIEW_REVISION], snapshot_formats=[info['executor_snapshot_format']],
-                control_capabilities=capabilities, resume_connection_id=channel.connection_id,
-                resume_connection_generation=channel.connection_generation + int(stale))).decode())
-            if stale:
+            ws.send_text(encode_r4_frame(dict(hello, resume_connection_id=channel.connection_id,
+                resume_connection_generation=channel.connection_generation + int(case == 'stale-generation'))).decode())
+            if refused:
                 with pytest.raises(WebSocketDisconnect) as closed:
                     ws.receive_json()
                 assert closed.value.code == 4403
-                return
-            welcome = ws.receive_json()
-            assert welcome['resumed'] is True
-            assert welcome['connection_id'] == channel.connection_id
-            assert welcome['connection_generation'] == channel.connection_generation
-            with deps.connection_factory.unit_of_work(write=False) as uow:
-                assert dict(uow.connection.execute('SELECT * FROM execution_control_lanes').fetchone()) == lane
-            ws.send_text(encode_r4_frame(dict(base, type='heartbeat', connection_id=channel.connection_id,
-                connection_generation=channel.connection_generation)).decode())
-            assert ws.receive_json()['type'] == 'heartbeat'
+            else:
+                welcome = ws.receive_json()
+                assert welcome['resumed'] is True and welcome['connection_id'] == channel.connection_id
+                assert welcome['connection_generation'] == channel.connection_generation
+                state = 'REVOKED' if case == 'revoked-grant' else 'ACTIVE'
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert dict(uow.connection.execute('SELECT * FROM execution_control_lanes').fetchone()) == lane
+                    assert dict(uow.connection.execute('SELECT * FROM execution_leases').fetchone()) == original | {'status': state}
+                    assert uow.connection.execute('SELECT lease_state FROM execution_sessions').fetchone()[0] == state
+                ws.send_text(encode_r4_frame(dict(base, type='heartbeat', connection_id=channel.connection_id,
+                    connection_generation=channel.connection_generation)).decode())
+                assert ws.receive_json()['type'] == 'heartbeat'
+        if refused:
+            with client.websocket_connect(url, headers=headers, subprotocols=['nxl.v1']) as ws:
+                ws.send_text(encode_r4_frame(hello).decode())
+                welcome = ws.receive_json()
+                assert welcome['resumed'] is False and welcome['connection_generation'] == channel.connection_generation + 1
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT status FROM execution_leases').fetchone()[0] == 'SUPERSEDED'
+                    assert uow.connection.execute('SELECT lease_state FROM execution_sessions').fetchone()[0] == 'SUPERSEDED'
