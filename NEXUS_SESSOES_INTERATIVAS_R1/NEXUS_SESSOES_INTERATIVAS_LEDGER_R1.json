@@ -686,7 +686,9 @@
         "execution/si036-pi-browser-queue-transcript.md",
         "execution/si036-pi-browser-queue-transcript.json",
         "execution/si012-codex-live-conversation.md",
-        "execution/si012-codex-live-conversation.json"
+        "execution/si012-codex-live-conversation.json",
+        "execution/si012-claude-retained-conversation.md",
+        "execution/si012-claude-retained-conversation.json"
       ]
     },
     {
@@ -1427,7 +1429,9 @@
         "execution/si026-claude-terminal-read.md",
         "execution/si026-claude-terminal-read.json",
         "execution/si036-claude-browser-roundtrip.md",
-        "execution/si036-claude-browser-roundtrip.json"
+        "execution/si036-claude-browser-roundtrip.json",
+        "execution/si012-claude-retained-conversation.md",
+        "execution/si012-claude-retained-conversation.json"
       ]
     },
     {
@@ -1859,7 +1863,9 @@
         "execution/si036-browser-scroll-ime.md",
         "execution/si036-browser-scroll-ime.json",
         "execution/si012-codex-live-conversation.md",
-        "execution/si012-codex-live-conversation.json"
+        "execution/si012-codex-live-conversation.json",
+        "execution/si012-claude-retained-conversation.md",
+        "execution/si012-claude-retained-conversation.json"
       ]
     },
     {
@@ -3332,8 +3338,10 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si012-claude-retained-conversation.json"
+      ]
     },
     {
       "id": "SI-T-E03",
@@ -3349,8 +3357,10 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si012-claude-retained-conversation.json"
+      ]
     },
     {
       "id": "SI-T-E04",

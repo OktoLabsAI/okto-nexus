@@ -1,0 +1,60 @@
+{
+  "tasks": ["SI-012", "SI-026", "SI-036"],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "e8a0f5da5a9c2011fa7f8aab6d9273e2ef60c600", "main": "8d77b50c00b417c86818d027aed7497fababac34", "ahead_of_main": 455},
+    "connector": {"branch": "feature/v0.0.15", "head": "648348f707f31b9845e4d82f6e3304428fa9e217", "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2", "ahead_of_main": 84},
+    "core": {"branch": "feature/v0.0.16", "head": "9c25447bc4d2bb1c832fe8c402c8bf2c00c77edb", "main": "19c99f15b17ae994653ad9e190964229a0e296e8", "ahead_of_main": 63},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheels_sha256": {
+    "nexus": "6ed10b3be93161ed8ccac2b55fbe488bc0f4b39d1b27e82c90f27fe81f42fc57",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "99430b6a2ffe0901e55c20e00a8de5fcf679713c6a311475c0089db941c5307c"
+  },
+  "sdists_sha256": {
+    "nexus": "572228591f963371ca3b6d5bf11c82f542ca3fd6fe3d7ab3c4a55dc443ffaf0d",
+    "core": "32180ba112b6104d0cd21abeb5b2884287f2e3a4ebd9bcdebe17ea3392d7fc5e"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge 157.0.4341.60, Playwright CLI",
+    "dashboard_js_asset": "index-Dr38cQ0f.js",
+    "claude_version": "2.1.328",
+    "claude_binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "reviewed_native_path": "Resume a verified saved conversation in an owned Windows terminal, plan permission mode",
+    "operator_authentication": "Disposable browser sign-in with X-Nexus-Operator-Session-Required",
+    "model_transport": "Isolated profile and synthetic loopback SSE",
+    "external_model_calls": 0
+  },
+  "scenarios": {
+    "SI-T-E02": "PASS for the recorded Claude terminal and browser. Each Home Enter returned HTTP 202 and produced one native User row and one Assistant row after completion. The four retained entries matched the native UUIDs and the correct operation for each pair.",
+    "SI-T-E03": "PASS for two equal messages admitted separately in the same exact session. The browser showed both pairs while the API retained four distinct message identities and two operation IDs."
+  },
+  "observations": {
+    "baseline": "Successful canonical result and two retained native entries, with an empty conversation projection.",
+    "candidate": "Two successful native turns on the same owned PID, two terminal results, and four journal IDs equal to the native history IDs. Canonical close succeeded; no processes remained in the temporary job.",
+    "prompt_timing": "Both native prompt timestamps precede the authorization hook outcome. The exact prompt ID and digest match the single native prompt for each operation.",
+    "negative_component_scope": "Reject another prompt ID, duplicate native entry ID, a different output digest, and another turn boundary. Tool payload, hidden thinking and sidechain records stay outside main-thread chat."
+  },
+  "regressions_passed": {"installed_core": 61, "installed_connector": 45, "installed_nexus": 50},
+  "build_checks": ["Core and R4 contract generator", "offline Nexus lock", "strict Twine wheels and sdists", "installed packages match all three wheels"],
+  "local_evidence_sha256": {
+    "temp/probe.py": "dd78a105244ab7ccc8dcb41609bc81a36e88aea5e20ded3a007344871e10ee11",
+    "temp/claudeCoreFinal.xml": "ca1ca57a46ee54d40aa85ce25f60e9cdbb51388aa2e77ffa24a9e2eabd558cfd",
+    "temp/claudeConnectorFinal.xml": "47601c3fc43b3bb0618856a4efd2a8613f954006766962d30281ac851a8e64d1",
+    "temp/claudeNexusFinal.xml": "6decfba158b273e358a8b09e559c40e59d5014e9c373085e99cb5b09f4838672",
+    "baseline-confirmed/result.json": "fe8a934af2a65a046d3670629d0e5c3bf5dbd69d7a6db6d67ee3ab0b705df801",
+    "final/browser-turn-1.json": "64f97a4fbee95b9b00dae1059a1b662aa55f186fe42e7589f8b381c68dfddbb6",
+    "final/browser-turn-2.json": "af6e3787df8df866dbaa15a6e14382096601f88f6ad3f2e9b15d94162b831ca3",
+    "final/result.json": "dcb40a3f98c15a4bff2c87fdbdb9e961cb19f870645029e417cfd65dd2c8ff0a",
+    "final/durable-audit.json": "732e620b255fdd0f41d82f84a90f7f9b86e9a0324e4e99ffed666fb2c7027c74"
+  },
+  "limitations": [
+    "Applies to the reviewed terminal path and successfully completed turns. Initial stream-json sessions and their deltas still require a separately verified transcript source.",
+    "The sidechain fixture only establishes exclusion from main chat; explicit subagent attribution remains open.",
+    "Real provider, other platform and human acceptance qualification remain open."
+  ],
+  "migration": "none"
+}

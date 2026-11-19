@@ -8,6 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 from nexus_connector_core.native.adapter_types import HarnessEvent
+from nexus_connector_core.native.claude_chat_facts import CLAUDE_CHAT_EVENT
 from nexus_connector_core.native.codex_chat_facts import CODEX_CHAT_DELTA
 from nexus_connector_core.native.event_ingest import translate_native_event
 from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT
@@ -207,6 +208,24 @@ def test_invalid_codex_fragment_does_not_fall_back_to_raw_payload(stream):
             "itemId": "item", "delta": "untrusted", CODEX_CHAT_DELTA: fact}, operation_id=operation)
     stream.watermark(len(cases))
     assert stream.read()["updates"] == []
+
+
+def test_claude_retained_entries_keep_equal_messages_distinct_and_require_exact_operation(stream):
+    session_id = "f44b4089-a389-4a20-9874-e93dbd7bf23e"
+    first = "27014e6d-9872-49b4-9826-b6466ec0918a"
+    second = "1b47158b-f1b6-4594-938b-5782a2c98e14"
+    fact = {"revision": 1, "native_session_id": session_id, "entry_id": first, "role": "user", "text": "Same text"}
+    stream.store(1, CLAUDE_CHAT_EVENT, "tool_activity", fact, operation_id="one")
+    stream.store(2, CLAUDE_CHAT_EVENT, "tool_activity", fact | {"entry_id": second}, operation_id="two")
+    stream.store(3, CLAUDE_CHAT_EVENT, "tool_activity", fact | {"entry_id": "not-native"}, operation_id="three")
+    stream.store(4, CLAUDE_CHAT_EVENT, "tool_activity", fact | {"role": "tool_result"}, operation_id="four")
+    stream.store(5, CLAUDE_CHAT_EVENT, "tool_activity", fact)
+    stream.watermark(5)
+    updates = stream.read()["updates"]
+    assert [u["text"] for u in updates] == ["Same text", "Same text"]
+    assert [u["operation_id"] for u in updates] == ["one", "two"]
+    assert len({u["message_id"] for u in updates}) == 2
+    assert all(u["origin"] == {"kind": "native_session", "session_id": session_id} for u in updates)
 
 
 def test_hosted_pi_transcript_requires_retained_ids_and_keeps_equal_messages_distinct(stream):

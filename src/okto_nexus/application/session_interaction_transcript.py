@@ -4,6 +4,7 @@ import hashlib
 import re
 
 from nexus_connector_core.event_artifacts import REFERENCE_KEY
+from nexus_connector_core.native.claude_chat_facts import CLAUDE_CHAT_EVENT, valid_claude_chat_fact
 from nexus_connector_core.native.codex_chat_facts import CODEX_CHAT_DELTA, is_codex_chat_id, valid_codex_chat_delta
 from nexus_connector_core.native.pi_chat_facts import PI_CHAT_EVENT, valid_pi_chat_fact
 from nexus_connector_core.protocol import canonical_json
@@ -18,6 +19,8 @@ MAX_PART_BYTES = 4096
 MAX_ITEM_PARTS = 8
 _MAX_BODY_CHARS = 4 * MAX_PART_BYTES
 _TERMINAL_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+_NATIVE_CHAT = {PI_CHAT_EVENT: ("pi", valid_pi_chat_fact),
+                CLAUDE_CHAT_EVENT: ("claude_code", valid_claude_chat_fact)}
 
 
 def _native_id(value: object) -> bool:
@@ -70,8 +73,10 @@ def _updates(event: dict):
     stream = (event["server_id"], event["executor_id"], event["session_id"], event["stream_epoch"])
     sequence = event["sequence"]
     event_id = _identity(*stream, sequence)
-    if event.get("native_type") == PI_CHAT_EVENT:
-        if event.get("category") != "tool_activity" or not valid_pi_chat_fact(payload):
+    native_chat = _NATIVE_CHAT.get(event.get("native_type"))
+    if native_chat is not None:
+        harness, valid_fact = native_chat
+        if event.get("category") != "tool_activity" or not valid_fact(payload):
             return
         native = payload["native_session_id"]
         operation = event.get("operation_id")
@@ -79,7 +84,7 @@ def _updates(event: dict):
             return
         body = payload["text"]
         text, truncated = (None, True) if body is None else _bounded_body(body)
-        message_id = _identity(*stream, "pi", native, payload["entry_id"], payload["role"])
+        message_id = _identity(*stream, harness, native, payload["entry_id"], payload["role"])
         yield {
             "event_id": event_id, "update_id": _identity(event_id, message_id), "message_id": message_id,
             "sequence": sequence, "role": payload["role"], "change": "replace",
@@ -138,7 +143,7 @@ def read_session_interaction_transcript(
     complete native transcript, thread parentage, or an input-to-echo link.
     A truncated body can be a prefix or entirely absent (``text=None``).
     Current Core emits scoped, scrubbed Codex fragments alongside masked raw
-    fields. Only reviewed hosted Pi snapshots carry a retained native entry ID.
+    fields. Reviewed hosted Pi and owned Claude chat use retained native entries.
     """
     if type(limit) is not int or not 1 <= limit <= MAX_SCAN_EVENTS:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid transcript scan limit.", {})

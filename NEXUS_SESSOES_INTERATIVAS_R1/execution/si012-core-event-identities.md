@@ -24,3 +24,7 @@ The earlier Pi event shape and the Claude evidence above still apply.
 The [Windows Codex run](si012-codex-live-conversation.md) verified the
 new bounded, sanitized fragment with the actual app-server and the same
 message identity as the completed item. The raw delta fields stay masked.
+
+The [owned Claude terminal run](si012-claude-retained-conversation.md)
+verified retained user and assistant entry IDs against the native journal.
+The earlier stream-json fragment evidence still applies to that transport.
