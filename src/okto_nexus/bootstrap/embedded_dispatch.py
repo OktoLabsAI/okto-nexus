@@ -836,7 +836,8 @@ class EmbeddedDispatchOwner:
                     native_action_factory=tool_config["native_factory"] if tool_config else None,
                     saved_resume=saved_resume,
                     native_approvals_enabled=bool(self.deps.config.feature_hitl and
-                        getattr(saved_resume, 'callback_key', None) != 'claude_resume' and
+                        (getattr(saved_resume, 'callback_key', None) != 'claude_resume' or
+                         saved_resume.profile.get('question_only') is True) and
                         setup.candidate.adapter_id in {"codex_app_server", "claude_stream", "pi_rpc"}))
                 session["executor"] = executor
                 await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)

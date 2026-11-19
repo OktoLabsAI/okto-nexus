@@ -185,4 +185,13 @@ class ApprovedLocalLaunch:
         if prepared.intent.adapter_id == 'claude_stream' and self.owner.deps.config.runtime_session_interaction_enabled:
             from .execution_claude_resume_profile import capture_claude_resume_profile
             self.claude_resume_profile = await asyncio.to_thread(capture_claude_resume_profile, prepared, value)
+            if self.claude_resume_profile and self.claude_resume_profile.get('question_only'):
+                if not self.owner.deps.config.feature_hitl:
+                    raise CoreError('CAPABILITY_UNSUPPORTED', 'native_approval_launch', retry_safe=True)
+                from nexus_connector_core.environment import ProcessHTTPEnvironment
+                if isinstance(value, ProcessHTTPEnvironment):
+                    value = ProcessHTTPEnvironment(value, value.http_templates, value.disabled_mcp_names,
+                        value.preset_entries, value.preset_strict, claude_question_only=True)
+                else:
+                    value = ProcessHTTPEnvironment(value, (), claude_question_only=True)
         return value

@@ -1,0 +1,11 @@
+# SI-021 e SI-026 — Perguntas do Claude no terminal gerenciado
+
+O terminal Claude retomado entrega `AskUserQuestion` ao destinatário do turno pelo fluxo canônico de decisões do Nexus. O Core correlaciona a pergunta com a sessão, o workspace, o prompt e a ferramenta. A resposta é devolvida uma vez pelo próprio hook, com nova verificação da sessão e da autorização antes da escrita. A confirmação repetida recupera o recibo canônico. Recusa, expiração ou perda de autorização bloqueiam a resposta. Quando a escrita pode ter ocorrido e sua confirmação se perde, o Core registra resultado incerto.
+
+A primeira configuração ensaiada usava a regra `ask` e deixou uma confirmação adicional aberta no Claude após a resposta pelo Nexus. O perfil revisado usa modo `plan` e `permissions` com `allow: ["AskUserQuestion"]` e `deny: ["mcp__*"]`. Com a autorização para decisões ativas, o Nexus usa o mesmo conjunto de ferramentas na origem e na sessão retomada. O hook continua exigindo uma resposta explícita para a pergunta. A qualificação cobre o executável Claude Code 2.1.328 no Windows. [Hooks do Claude Code](https://code.claude.com/docs/en/hooks)
+
+O ensaio do executável real usou a API de operador do Nexus, projeto e perfil descartáveis e um provedor SSE simulado em loopback. A pergunta apareceu em Attention para o operador correto. Uma resposta com a chave errada recebeu erro de validação. A resposta válida voltou à ferramenta e o mesmo turno terminou no mesmo processo. Repetir a confirmação recuperou a mesma decisão. Com os pacotes instalados, escrever `sim` no chat criou uma entrada separada na fila e deixou a pergunta aberta. [Evidências e hashes](si026-claude-terminal-questions.json)
+
+Passaram 138 testes do Core, 83 do Connector e 12 do Nexus com os pacotes instalados. O ensaio de regressão com Claude real confirmou a reorientação no perfil anterior com ferramentas bloqueadas. Passaram também as checagens dos contratos gerados, do lock e dos três wheels.
+
+O marco dispensa migração. Para revertê-lo, reverta os commits em conjunto e restaure os pacotes anteriores. SI-021 e SI-026 seguem em andamento. A integração de permissões de ferramentas como `Read` e a validação da jornada no navegador continuam pendentes.

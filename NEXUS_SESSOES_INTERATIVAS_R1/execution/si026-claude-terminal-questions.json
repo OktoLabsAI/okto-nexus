@@ -1,0 +1,71 @@
+{
+  "tasks": ["SI-021", "SI-026"],
+  "scenarios": ["SI-T-C17"],
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "6a293613", "main": "8d77b50c"},
+    "connector": {"branch": "feature/v0.0.15", "head": "c5735dc", "main": "a3017d9"},
+    "core": {"branch": "feature/v0.0.16", "head": "ec8e6f7", "main": "19c99f1"},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "core_revision": "781306a136133fc9ca1570afff3f4533fdcbc7ae",
+  "connector_revision": "425ea92659cc7e8e05717d00887d12af0c7b4d27",
+  "artifacts_sha256": {
+    "core": "ae6f5a06a383aa2eb0f0c54ddb0791ffaea364c0da05a6db4dacc26523518c4f",
+    "connector": "290b8787395c07fe264c275a9aeee25db549c85a83ecdfa2cb61ab37610d32c5",
+    "nexus": "9dbba08d3bc1b1ceabba8dd4a1769b5ad24366efbf965f30f52bb6057f7a95fa"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "profile": {"mode": "plan", "allow": ["AskUserQuestion"], "deny": ["mcp__*"]},
+    "earlier_ask_rule": "The native hook call arrived, but the ask rule left a separate native confirmation pending.",
+    "source_fixture": {
+      "root": "D:/nexus-si026-question-allow-1795100652357",
+      "probe_sha256": "bfbff9a8f39e965c530d7a65176e783a111f604d701784001d54bf9c72d0537b",
+      "observations_sha256": "ca58fb8a6baf0b4d36b00b1e53f27b98c0f208525f91856606b6b1dc94098067"
+    },
+    "installed_fixture": {
+      "root": "D:/nexus-si026-question-installed-1795100806696",
+      "probe_sha256": "374cab2e60558cf76aa563d26b54bf97de6192eb7324a6fd50db110494114155",
+      "observations_sha256": "59bddc0cfcd6ec05f02e20d8f44dc9410820bfe197c9382ef2675d1b7317cdbc",
+      "plain_yes_remained_separate_queue_entry": true
+    },
+    "observed_in_both": {
+      "exact_question_recipient_and_turn": true,
+      "attention_action": "respond_native",
+      "mismatched_answer_http_status": 422,
+      "source_and_successor_offered_only_ask_user_question": true,
+      "replay_recovered_same_decision": true,
+      "native_tool_result_carried_exact_answer": true,
+      "original_turn_receipt": "SUCCEEDED",
+      "same_owned_process": true,
+      "provider_fixture_calls_for_turn_including_continuation": 2,
+      "remaining_job_pids": []
+    }
+  },
+  "installed_deny_all_profile_regression": {
+    "root": "D:/nexus-si026-question-legacy-1795100966870",
+    "probe_sha256": "8171cad5c3153a111b5140ac1474316f0a1e21d7677448b2a779e759600388ac",
+    "observations_sha256": "07216a98ffb3a1cdf34eab85c46867db8eaca569d865e9035151b9235f78c1b9",
+    "reviewed_steer_cancelled_and_replaced_once": true,
+    "remaining_job_pids": []
+  },
+  "verification": {
+    "installed_core_tests": 138,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 12,
+    "generated_contract_checks": "passed",
+    "ruff_changed_nexus_files": "34 existing findings, no new findings",
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed"
+  },
+  "limitations": [
+    "Native evidence covers the reviewed local Windows build and explicitly reviewed question-only profile.",
+    "The product API was exercised with the real Claude executable and a synthetic provider.",
+    "Native tool permissions, other tool-enabled profiles, and browser qualification remain pending."
+  ],
+  "migration": "none"
+}

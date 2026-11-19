@@ -50,6 +50,20 @@ def test_saved_profile_rejects_drift_and_unreviewed_sources(saved):
     assert config.capture_claude_resume_profile(saved.prepared, saved.environment) is None
 
 
+def test_saved_question_profile_requires_the_reviewed_permissions_in_every_scope(saved):
+    saved.settings.write_text('{"permissions":{"ask":["AskUserQuestion"],"deny":["mcp__*"]}}', encoding='utf-8')
+    assert config.capture_claude_resume_profile(saved.prepared, saved.environment) is None
+    saved.settings.write_text('{"permissions":{"allow":["AskUserQuestion"],"deny":["mcp__*"]}}', encoding='utf-8')
+    reviewed = config.capture_claude_resume_profile(saved.prepared, saved.environment)
+    assert reviewed['question_only'] is True and reviewed['settings_sha256'] != saved.profile['settings_sha256']
+    local = saved.settings.parent.parent / 'workspace' / '.claude' / 'settings.local.json'
+    local.parent.mkdir()
+    local.write_text('{"permissions":{"allow":["AskUserQuestion","Bash"]}}', encoding='utf-8')
+    assert config.capture_claude_resume_profile(saved.prepared, saved.environment) is None
+    local.write_text('{"permissions":{"deny":["*"]}}', encoding='utf-8')
+    assert config.capture_claude_resume_profile(saved.prepared, saved.environment) is None
+
+
 @pytest.mark.asyncio
 async def test_saved_grant_revalidates_exact_retired_history_and_current_profile(saved, monkeypatch):
     witness = {'history': asdict(saved.history), 'opening_profile': {

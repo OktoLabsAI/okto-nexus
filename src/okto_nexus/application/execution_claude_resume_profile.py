@@ -15,6 +15,7 @@ _WORKSPACE_FILES = ('settings.json', 'settings.local.json', 'CLAUDE.md', 'CLAUDE
 _SETTINGS_KEYS = frozenset({
     '$schema', 'permissions', 'env', 'hooks', 'model', 'effortLevel', 'useAutoModeDuringPlan',
 })
+_QUESTION_ONLY = {'allow': ['AskUserQuestion'], 'deny': ['mcp__*']}
 
 
 def capture_claude_resume_profile(prepared, environment):
@@ -75,10 +76,15 @@ def observe_claude_resume_profile(state_home, workspace):
             if rule is None:
                 return None
             rules.append(rule)
-        if not any(rules):
+        question_only = 'question_only' in rules
+        if (question_only and set(rules) - {'question_only', 'neutral'}
+                or not question_only and 'deny_all' not in rules):
             return None
-        return {'state_home': str(home),
-                'settings_sha256': hashlib.sha256(canonical_json(fingerprints)).hexdigest()}
+        profile = {'state_home': str(home),
+                   'settings_sha256': hashlib.sha256(canonical_json(fingerprints)).hexdigest()}
+        if question_only:
+            profile['question_only'] = True
+        return profile
     except (OSError, ValueError, TypeError, RecursionError):
         return None
 
@@ -90,9 +96,7 @@ def _review_settings(data):
     permissions = document.get('permissions', {})
     hooks = document.get('hooks', {})
     env = document.get('env', {})
-    if (type(permissions) is not dict or set(permissions) - {'deny'}
-            or type(permissions.get('deny', [])) is not list
-            or any(type(rule) is not str for rule in permissions.get('deny', []))
+    if (type(permissions) is not dict
             or document.get('useAutoModeDuringPlan', False) is not False
             or type(hooks) is not dict or set(hooks) - {'Stop', 'StopFailure'}
             or type(env) is not dict or any(name not in {
@@ -100,7 +104,12 @@ def _review_settings(data):
                 'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC',
             } for name in env)):
         return None
-    return '*' in permissions.get('deny', [])
+    if permissions == _QUESTION_ONLY:
+        return 'question_only'
+    deny = permissions.get('deny', [])
+    if set(permissions) - {'deny'} or type(deny) is not list or any(type(rule) is not str for rule in deny):
+        return None
+    return 'deny_all' if '*' in deny else 'deny_some' if deny else 'neutral'
 
 
 def _has_external_policy():
