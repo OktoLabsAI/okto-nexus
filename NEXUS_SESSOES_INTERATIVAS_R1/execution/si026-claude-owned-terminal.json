@@ -1,0 +1,48 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "5aa742488a4fc87bb2437d1d5537aa26055d8eb7",
+    "core": "dae75f9aef5bfd01832b220ed7cc6758e12f3327",
+    "connector": "478524b1d2a48f75630d05ca6262137638172fb3"
+  },
+  "artifacts_sha256": {
+    "nexus": "1b709acd32cd74a18e65d6037eb5d7718106d4f473f6ef16b6b8cf6f6de5a0bb",
+    "core": "b9c977b5f8f0054e9f8f17e16cd5706ce098822835292bfdd271e8b5d0f96e1f",
+    "connector": "8532cd306b5332aea501695de79ea8aa8a1ca88c291a428e8f6a53d5c9316ac7"
+  },
+  "regressions": {
+    "installed_core_process_ownership_native_protocols_and_prompt_gate": 33,
+    "cross_platform_cases_skipped_on_windows": 10,
+    "installed_connector_boundaries_daemon_execution_control_and_lifecycle": 83,
+    "installed_nexus_session_input_saved_resume_and_remote_claude_controls": 24,
+    "generated_core_contracts": "PASS",
+    "strict_wheel_metadata_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "catalog_matched_owned_birth_without_new_prompt": true,
+    "owned_conpty_uses_windows_job": true,
+    "native_blocked_before_model_on_host_failure": true,
+    "authorized_turn_completed_on_same_process_without_a_reader": true,
+    "reattached_cursor_rendered_result": true,
+    "duplicate_prompt_blocked_by_installed_gate": true,
+    "streaming_loopback_calls": 2,
+    "streaming_loopback_calls_after_resume": 1,
+    "external_model_calls": 0,
+    "tool_count": 0,
+    "direct_native_exit_code": 0,
+    "remaining_fixture_processes": 0,
+    "fixture": "D:/nexus-si026-core-wheel-1795087229321",
+    "probe_sha256": "7163dc902c7e3283c618a84df10d07d0b5d93d4d6a7a04ba0f6d47d7c24e4ca4",
+    "observations_sha256": "b781942b891797d875a351d5e02a3a87e666262d092c680bdb3d86d94e09e3ad"
+  },
+  "limitations": [
+    "Detaching the reader was exercised at the installed Core cursor boundary. The product attachment and its transport are not connected to this owner yet.",
+    "The real native terminal used a synthetic authorization callback. Production operation fencing and receipt recovery are pending.",
+    "The fixture observed an active native token indicator while a loopback response was held. An initial assertion expecting an incomplete answer to render during that hold failed and was narrowed to the actual observed behavior.",
+    "The scenario does not qualify tools, remote transport, productive permissions, native interruption, or a paid harness campaign."
+  ]
+}
