@@ -37,6 +37,7 @@ RESULT = 'Pi result delivered to the reattached Nexus terminal'
 FOLLOW_UP = 'Submit the follow-up through the Nexus queue'
 FOLLOW_UP_RESULT = 'Pi result after the canonical queue released the follow-up'
 EDITOR_FOLLOW_UP = 'Revisão do turno em andamento\nEnvie a resposta após a liberação'
+EDITOR_REORIENTATION = 'Reorient the exact execution from the native Pi draft'
 
 
 def wait_for(check, *, seconds=120):
@@ -206,8 +207,9 @@ def enqueue_follow_up(client, data, generation, token, *, presenter_address=None
     return read
 
 
-def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False):
+def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, steer_editor=False):
     sys.path.insert(0, str(conpty_helpers))
+    from okto_nexus.adapters.inbound.cli.session_commands import recover_pi_input
     from owned_engine_probe import environment
     from pty_probe import ProbeConsole
     from session_command_probe import write_input
@@ -216,8 +218,9 @@ def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False):
     print(f'Isolated Pi terminal proof directory {root}', flush=True)
     workspace = root / 'workspace'
     workspace.mkdir()
-    results = [RESULT, FOLLOW_UP_RESULT] if queue or steer else [RESULT]
-    follow_up_text = EDITOR_FOLLOW_UP if queue_surface == 'editor' else FOLLOW_UP
+    steering = steer or steer_editor
+    results = [RESULT, FOLLOW_UP_RESULT] if queue or steering else [RESULT]
+    follow_up_text = EDITOR_REORIENTATION if steer_editor else (EDITOR_FOLLOW_UP if queue_surface == 'editor' else FOLLOW_UP)
     agent, signals, sandbox = isolated_provider(root, release, workspace, results)
     native_environment = ApprovedLocalLaunch.environment
 
@@ -264,7 +267,7 @@ def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False):
             try:
                 wait_for(lambda: server.started, seconds=10)
                 binding = admit_session(client, headers, workspace, app, agent.parent.parent, expected_candidate,
-                                        steer=steer)
+                                        steer=steering)
                 setup = (deps, app, client, headers)
                 owner = app.state.embedded_dispatch_owner
                 print('Admitting the exact local Pi opening', flush=True)
@@ -334,10 +337,13 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     with deps.connection_factory.unit_of_work(write=False) as uow:
                         return uow.connection.execute("SELECT attachment_id FROM session_attachments WHERE state='ACTIVE'").fetchone()
 
-                def await_text(console, text):
+                def await_text(console, text, *, start=0):
+                    expected = text.encode()
+
                     def check():
-                        assert console.wait(0) is None or text.encode() in console.output, bytes(console.tail).decode('utf-8', 'replace')
-                        return text.encode() in console.output
+                        found = expected in console.output[start:]
+                        assert console.wait(0) is None or found, bytes(console.tail).decode('utf-8', 'replace')
+                        return found
                     wait_for(check, seconds=15)
 
                 def detach(console):
@@ -448,7 +454,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                             other_login=auth.login('operator', password) if presenter else None)
                     wait_for(lambda: not active_attachment(), seconds=8)
 
-                with viewer('second-viewer') as second:
+                with viewer('second-viewer', write=steer_editor) as second:
                     second_attachment = wait_for(active_attachment, seconds=15)[0]
                     assert second_attachment != first_attachment
                     await_text(second, PROMPT)
@@ -457,11 +463,74 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                         assert queued['status'] == 'QUEUED' and queued['operation_id'] is None, queued
                         state = client.portal.call(owner.read_native_pi_presentation_state, scope)
                         assert state['is_streaming'] and state['pending_message_count'] == 0
+                    if steer_editor:
+                        print('Reviewing the native Pi draft in Windows ConPTY', flush=True)
+                        client.cookies.set('nexus_operator_session', token)
+                        url = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
+                        generation = scope.generation.value
+                        query = {key: value for key, value in data.items() if key != 'session_id'}
+                        query['expected_session_generation'] = generation
+                        ui = {'X-Nexus-UI': '1'}
+
+                        def set_queue_paused(paused):
+                            response = client.get(url + '/inputs', params=query, headers=ui)
+                            assert response.status_code == 200, response.text
+                            view = response.json()
+                            changed = client.post(url + '/inputs/queue-state', headers=ui, json={
+                                'scope': data, 'expected_session_generation': generation, 'paused': paused,
+                                'capability_revision': view['pause_capability_revision'],
+                                'expected_queue_revision': view['queue_revision'],
+                            })
+                            assert changed.status_code == 200 and changed.json()['paused'] is paused, changed.text
+
+                        def review_draft():
+                            start = len(second.output)
+                            write_input(second.input, b'\x12')
+                            await_text(second, 'Ctrl+Y confirms. Ctrl+N cancels.', start=start)
+
+                        def retained():
+                            with deps.connection_factory.unit_of_work(write=False) as uow:
+                                return [dict(row) for row in uow.connection.execute("""
+                                    SELECT input_id,client_intent_id,content,operation_id FROM session_interaction_inputs
+                                    WHERE session_id=? AND surface='native_terminal'
+                                """, (data['session_id'],))]
+
+                        write_input(second.input, b'\x1b[200~' + follow_up_text.encode() + b'\x1b[201~')
+                        await_text(second, follow_up_text)
+                        review_draft()
+                        write_input(second.input, b'\r')
+                        write_input(second.input, b'\x0e')
+                        await_text(second, 'Reorientation cancelled. Your draft is available.')
+                        assert retained() == []
+                        review_draft()
+                        set_queue_paused(True)
+                        write_input(second.input, b'\x19')
+                        await_text(second, 'The reorientation review changed. Your draft is available.')
+                        assert retained() == []
+                        set_queue_paused(False)
+                        review_draft()
+                        assert retained() == []
+                        write_input(second.input, b'\x19')
+                        await_text(second, 'Pi queued the reorientation for the next boundary.')
+                        rows = retained()
+                        assert len(rows) == 1 and rows[0]['content'] == follow_up_text
+                        editor_receipt = rows[0]
+                        receipt(editor_receipt, 'SUBMITTED')
+                        terminal_api = RemoteOperatorHTTP(address, token=token, server_id=data['server_id'])
+                        assert recover_pi_input(terminal_api, data, generation,
+                            editor_receipt['client_intent_id'])['receipt']['steer_boundary'] == 'awaiting_boundary'
                     signals[0].touch()
                     await_text(second, RESULT)
                     if steer:
                         wait_for(lambda: steer_facts() == expected_fact, seconds=12)
                         assert follow_up()['steer_boundary'] == 'applied'
+                        signals[1].touch()
+                        await_text(second, FOLLOW_UP_RESULT)
+                    if steer_editor:
+                        await_text(second, 'Pi applied the reorientation.')
+                        assert recover_pi_input(terminal_api, data, generation,
+                            editor_receipt['client_intent_id'])['receipt']['steer_boundary'] == 'applied'
+                        write_input(second.input, b'\r')
                         signals[1].touch()
                         await_text(second, FOLLOW_UP_RESULT)
                     receipt(sent, 'SUCCEEDED')
@@ -481,9 +550,9 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     tickets = 3 if queue and queue_surface in ('presenter', 'editor') else 2
                     assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * tickets
-                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == (1 if steer else len(results))
-                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.steer'").fetchone()[0] == int(steer)
-                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue or steer)
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == (1 if steering else len(results))
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.steer'").fetchone()[0] == int(steering)
+                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue or steering)
                     if queue:
                         native_turn_events = [tuple(row) for row in uow.connection.execute("""
                             SELECT json_extract(payload_json,'$.native_type'),json_extract(payload_json,'$.operation_id')
@@ -502,11 +571,12 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert records[0]['id'] == before[0].native_session_id
                 messages = [record['message'] for record in records if record['type'] == 'message']
                 assert [message['role'] for message in messages] == ['system'] + ['user', 'assistant'] * len(results)
-                expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue or steer else [PROMPT, RESULT]
+                expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue or steering else [PROMPT, RESULT]
                 assert [message['content'][0]['text'] for message in messages[1:]] == expected
                 print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': tickets,
                                   'same_running_pi_process_after_detach': True, 'synthetic_responses': len(results),
-                                  'confirmed_operator_steer_in_same_run': steer,
+                                  'confirmed_operator_steer_in_same_run': steering,
+                                  'steer_surface': 'editor' if steer_editor else 'http' if steer else None,
                                   'follow_up_queued_until_settled': queue,
                                   'queue_surface': queue_surface if queue else None,
                                   'canonical_close': 'SUCCEEDED', 'console_modes_restored': True}), flush=True)
@@ -523,8 +593,10 @@ if __name__ == '__main__':
     scenario = parser.add_mutually_exclusive_group()
     scenario.add_argument('--queue', action='store_true', help='Exercise the canonical queue with a synthetic follow-up.')
     scenario.add_argument('--steer', action='store_true', help='Promote queued text into a reviewed Pi boundary steer.')
+    scenario.add_argument('--steer-editor', action='store_true', help='Review and confirm a native Pi draft.')
     parser.add_argument('--queue-surface', choices=('web', 'presenter', 'editor'), default='web')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
-        args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface, steer=args.steer)
+        args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface,
+        steer=args.steer, steer_editor=args.steer_editor)

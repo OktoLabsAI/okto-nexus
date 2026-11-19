@@ -1,0 +1,62 @@
+{
+  "task": "SI-025",
+  "task_status": "IN_PROGRESS",
+  "tests": {
+    "SI-T-C04": "PASS",
+    "SI-T-G18": "NOT_RUN"
+  },
+  "source": {
+    "nexus_baseline": "511e3816ea8c617b5b0201c48eb67360a2e99b77",
+    "core": "97502b5dbcea53bcbe184c67a8078ce334c2faf6",
+    "connector_pin": "8490a1a28c8335a2e0336edc585d931567df5cc8"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "3f810f36af188f381dea6a5b33a121e25884343188282ae8b240e639c3981ed1",
+    "core_0.0.16_wheel_sha256": "b77e50336aa2927c83b3efb11511113c256a8a26205f8c3c5d98008ed2d81ac6",
+    "connector_ci_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe": "si025-pi-terminal-e2e.py",
+    "probe_sha256": "b89b8a57b64aee18b6161864ac6f599838b4e8df0e824f387dc0404786769da5"
+  },
+  "installed_real_pi_windows_conpty": {
+    "native_editor_steer": {
+      "cancel_and_enter_in_review_recorded_no_input": true,
+      "queue_revision_change_refused_confirmation_without_input": true,
+      "unchanged_draft_was_confirmed": true,
+      "native_terminal_input_count": 1,
+      "canonical_turn_submissions": 1,
+      "canonical_steer_operations": 1,
+      "canonical_steer_ack": "SUBMITTED",
+      "terminal_receipt_before_consumption": "awaiting_boundary",
+      "terminal_receipt_after_consumption": "applied",
+      "steer_queued_sequence": 8,
+      "steer_consumed_sequence": 18,
+      "enter_after_applied_did_not_submit": true,
+      "same_running_pi_process_after_detach": true,
+      "canonical_close": "SUCCEEDED",
+      "console_modes_restored": true
+    },
+    "native_editor_enter": {
+      "one_follow_up_queued_until_settled": true,
+      "canonical_steer_operations": 0,
+      "same_running_pi_process_after_detach": true,
+      "canonical_close": "SUCCEEDED",
+      "console_modes_restored": true
+    },
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "installed_core": 79,
+    "installed_connector": 61,
+    "installed_nexus": 72,
+    "core_and_nexus_strict_wheel_checks": "PASS",
+    "ci_manifest_and_consumer_pins": "PASS",
+    "nexus_offline_lock_check": "PASS",
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The reviewed Pi and Windows renderer are real. Model responses are synthetic.",
+    "SI-T-G18 still requires campaign qualification.",
+    "Exact-run interruption, approvals, browser qualification and remote operation remain open."
+  ]
+}

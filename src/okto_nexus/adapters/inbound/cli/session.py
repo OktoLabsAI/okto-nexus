@@ -38,6 +38,7 @@ from .session_commands import (
     COMMANDS,
     INTENT,
     PI_INPUT_INTENT,
+    PI_STEER_INTENT,
     execute_session_command,
     recover_pi_input,
     recover_session_command,
@@ -189,6 +190,7 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
               f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
         if writer:
             print('Enter records your message in the session queue.')
+            print('Ctrl+R reviews reorientation at the next available boundary.')
             print(f'Receipt recovery uses session generation {generation}.')
         print('Ctrl+C detaches this viewer.', flush=True)
 
@@ -335,7 +337,8 @@ def run_session(argv):
     if args.action in COMMANDS and args.json:
         parser.error('write actions require terminal confirmation')
     if args.action == 'receipt':
-        if (args.intent is None or not (INTENT.fullmatch(args.intent) or PI_INPUT_INTENT.fullmatch(args.intent))
+        if (args.intent is None or not (INTENT.fullmatch(args.intent) or PI_INPUT_INTENT.fullmatch(args.intent)
+                                       or PI_STEER_INTENT.fullmatch(args.intent))
                 or not 0 < (args.owner_generation or 0) < 2**63):
             parser.error('receipt requires the terminal --intent and original --owner-generation')
     elif args.intent is not None or args.owner_generation is not None:

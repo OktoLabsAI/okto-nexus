@@ -1248,7 +1248,9 @@
         "execution/si025-pi-steer-facts.md",
         "execution/si025-pi-steer-facts.json",
         "execution/si025-pi-operator-steer.md",
-        "execution/si025-pi-operator-steer.json"
+        "execution/si025-pi-operator-steer.json",
+        "execution/si025-pi-native-steer.md",
+        "execution/si025-pi-native-steer.json"
       ]
     },
     {
@@ -2555,7 +2557,8 @@
       "evidence": [
         "execution/si025-pi-steer-boundary.json",
         "execution/si025-pi-steer-facts.json",
-        "execution/si025-pi-operator-steer.json"
+        "execution/si025-pi-operator-steer.json",
+        "execution/si025-pi-native-steer.json"
       ]
     },
     {
@@ -4059,7 +4062,8 @@
         "execution/si025-pi-private-renderer.json",
         "execution/si025-pi-queue.json",
         "execution/si025-pi-writer-transport.json",
-        "execution/si025-pi-native-editor.json"
+        "execution/si025-pi-native-editor.json",
+        "execution/si025-pi-native-steer.json"
       ]
     },
     {

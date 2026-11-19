@@ -224,10 +224,15 @@ def test_pi_console_decodes_split_paste_and_keeps_detach_local():
         ('insert', 'Revisão\nsegunda'), ('left', None), ('backspace', None), ('enter', None), ('detach', None),
     ]
     assert keys.feed('\x1b[13;28;13;1;16;1_\x1b[221;27;29;1;8;1_') == [('newline', None), ('detach', None)]
+    assert keys.feed('\x1b[200~review\x12\x19\x0e\x1b[201~') == [('insert', 'review')]
+    assert keys.feed('\x1b[82;19;18;1;8;1_\x1b[89;21;25;1;8;1_\x0e') == [
+        ('steer_review', None), ('steer_confirm', None), ('steer_cancel', None),
+    ]
 
 
-def test_pi_receipt_recovers_the_original_presenter_intent(monkeypatch, capsys):
-    intent = 'pi_input_' + 'a' * 32
+@pytest.mark.parametrize('steer', [False, True])
+def test_pi_receipt_recovers_the_original_presenter_intent(monkeypatch, capsys, steer):
+    intent = ('pi_steer_' if steer else 'pi_input_') + 'a' * 32
 
     class PiReceipts(Catalog):
         token = 'synthetic-cookie'
@@ -242,14 +247,20 @@ def test_pi_receipt_recovers_the_original_presenter_intent(monkeypatch, capsys):
             assert query['expected_session_generation'] == ['7']
             scope = {key: BINDING[key] for key in BINDING if key != 'endpoint_id'} | {'session_id': 'session-a'}
             assert all(query[key] == [value] for key, value in scope.items() if key != 'session_id')
-            return {'scope': scope, 'session_owner_generation': 7, 'reorientation': False,
-                    'input_id': 'input-original', 'status': 'QUEUED'}
+            receipt = {'scope': scope, 'session_owner_generation': 7, 'reorientation': steer,
+                       'input_id': 'input-original', 'status': 'DISPATCHING' if steer else 'QUEUED'}
+            if steer:
+                receipt.update(operation_id='operation-original', possible_effect=True, steer_boundary='applied')
+            return receipt
 
     service = SimpleNamespace(operator_http=PiReceipts(), inspect=lambda: {'state': 'ready', 'server_id': 'server'})
     monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
     assert main(['session', 'receipt', '--id', 'reviewer', '--session-id', 'session-a',
                  '--owner-generation', '7', '--intent', intent, '--json']) == 0
-    assert json.loads(capsys.readouterr().out)['receipt']['input_id'] == 'input-original'
+    result = json.loads(capsys.readouterr().out)
+    assert result['receipt']['input_id'] == 'input-original'
+    if steer:
+        assert result['command'] == 'steer' and result['message'] == 'Pi applied the reorientation.'
 
 
 def test_pi_terminal_keeps_split_utf8_and_recovers_style_after_ctrl_c(monkeypatch):

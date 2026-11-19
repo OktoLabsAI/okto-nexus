@@ -190,6 +190,43 @@ class _LocalPresenter:
         except (ConnectionError, KeyError, ValueError):
             raise (_pi_input_unknown() if key == 'enter' else _unavailable()) from None
 
+    def review_pi_steer(self, *, intent, output):
+        if self.input_revision is None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This Pi view is read-only.')
+        review = self._request('steer_review', pi_output=output, client_intent_id=intent,
+                               capability_revision=self.input_revision)
+        if review == {'status': 'unavailable'}:
+            return None
+        review_id = review.get('review_id')
+        if (review.keys() != {'status', 'review_id'} or review['status'] != 'reviewed'
+                or not isinstance(review_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]{32}', review_id)):
+            raise _unavailable()
+        return review_id
+
+    def decide_pi_steer(self, *, review_id, confirm, output):
+        kind = 'steer_confirm' if confirm else 'steer_cancel'
+        try:
+            reply = self._request(kind, pi_output=output, review_id=review_id)
+            if reply == {'status': 'refused'} or not confirm and reply == {'status': 'cancelled'}:
+                return None
+            input_id = reply.get('input_id')
+            if (not confirm or reply.keys() != {'status', 'input_id'} or reply['status'] != 'recorded'
+                    or not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id)):
+                raise _unavailable()
+            return input_id
+        except ConnectionError:
+            if confirm:
+                raise _pi_input_unknown() from None
+            raise
+
+    def pi_steer_status(self, *, input_id, output):
+        reply = self._request('steer_status', pi_output=output, input_id=input_id)
+        status = reply.get('status')
+        if reply.keys() != {'status'} or status not in (
+                'pending', 'submitted', 'awaiting_boundary', 'applied', 'discarded', 'refused', 'unconfirmed'):
+            raise _unavailable()
+        return status
+
     def page(self, *, method, params):
         if method not in _HISTORY_METHODS:
             raise ConnectionError('PRESENTATION_METHOD_UNAVAILABLE', 'Only scoped history can be read on this link.')

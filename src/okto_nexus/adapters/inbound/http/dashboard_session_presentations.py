@@ -27,6 +27,7 @@ from ....application.session_attachment_broker import SessionAttachmentBroker
 from ....application.session_interaction_authority import enqueue_human_input
 from ....application.session_interaction_controls import request_exact_human_interrupt
 from ....application.session_interaction_promotion import steer_human_input
+from ....application.session_interaction_receipts import read_session_input_receipt
 from ....domain.presentation_protocol import (
     LOCAL_CODEX_AUDIENCE,
     LOCAL_PI_AUDIENCE,
@@ -36,7 +37,7 @@ from ....domain.presentation_protocol import (
     PRESENTATION_SUBPROTOCOL,
     PI_PRESENTATION_SUBPROTOCOL,
 )
-from ....domain.session_interaction import InputAuthor, InputScope
+from ....domain.session_interaction import InputAuthor, InputDeliveryState, InputScope
 from ....errors import ErrorCode, OktoNexusError
 from .dashboard_session_input import (
     _HEADERS,
@@ -51,6 +52,7 @@ from .operator_auth import COOKIE, same_origin_request
 from .session_interaction_contract import (
     Identifier,
     InterruptTargetView,
+    ObservedRunTarget,
     PrepareAttachment,
     Revision,
     ScopedSession,
@@ -138,6 +140,25 @@ class _PiKeyRequest(_Document):
     text: Annotated[str, Field(max_length=4096)] | None = None
 
 
+class _PiSteerReviewRequest(_Document):
+    kind: Literal['steer_review']
+    request_id: Revision
+    client_intent_id: Identifier
+    capability_revision: Identifier
+
+
+class _PiSteerDecisionRequest(_Document):
+    kind: Literal['steer_confirm', 'steer_cancel']
+    request_id: Revision
+    review_id: Identifier
+
+
+class _PiSteerStatusRequest(_Document):
+    kind: Literal['steer_status']
+    request_id: Revision
+    input_id: Identifier
+
+
 class _EnqueueRequest(_PiEnqueueRequest):
     thread_id: Identifier
 
@@ -183,6 +204,15 @@ class _ReviewedTurn:
     expires: float
     request: _SteerReviewRequest | _InterruptReviewRequest
     target: SteerTargetView | InterruptTargetView
+
+
+@dataclass(frozen=True, slots=True)
+class _ReviewedPiDraft:
+    id: str
+    expires: float
+    client_intent_id: str
+    target: SteerTargetView
+    text: str = field(repr=False)
 
 
 _REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest
@@ -347,6 +377,68 @@ async def _record_presenter_input(state, services, active, request, *, presentat
             'status': receipt.status, 'operation_id': receipt.operation_id, 'possible_effect': receipt.possible_effect}
 
 
+def _review_pi_draft(services, active, request, text):
+    if not text or not text.strip() or text.lstrip().startswith(('/', '!')):
+        return None
+    with services.broker.factory.unit_of_work(write=False) as uow:
+        if services.next_turn_revision(uow, active['scope']) != request.capability_revision:
+            return None
+        target = review_exact_steer(uow, active['scope'], services.next_turn_revision)
+        if target is None or target.effect != 'next_boundary' or not isinstance(target.target, ObservedRunTarget):
+            return None
+        return _ReviewedPiDraft(secrets.token_urlsafe(24), time.monotonic() + 45,
+                               request.client_intent_id, target, text)
+
+
+async def _decide_pi_draft(state, services, active, request, review):
+    if review is None or request.review_id != review.id:
+        return {'status': 'refused'}
+    if request.kind == 'steer_cancel':
+        return {'status': 'cancelled'}
+    revisions = getattr(state, 'session_input_dispatch_options', {}).get('session_steer_revisions')
+    if revisions is None:
+        return {'status': 'refused'}
+
+    def cut(uow, human):
+        if time.monotonic() >= review.expires:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The reorientation review expired.', {})
+        _verify_writer(state, services, active, uow, human, presentation='pi')
+
+    try:
+        receipt = await _worker(steer_human_input, factory=services.broker.factory, access=services.execution_access,
+            authority_fence=services.broker.authority_fence, current_steer_revisions=revisions,
+            scope=active['scope'], author=active['author'], client_intent_id=review.client_intent_id,
+            text=review.text, native_turn_id=review.target.target.run_ref, observed_run=True,
+            capability_revision=review.target.capability_revision, confirmed_effect_revision=review.target.effect_revision,
+            expected_queue_revision=review.target.queue_revision, fresh_publications=state.inventory_fresh_publications,
+            remote_ready=protocol_info()['remote_execution_ready'], verify_presenter=cut)
+    except OktoNexusError as error:
+        if error.code in (ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED, ErrorCode.VALIDATION_ERROR, ErrorCode.NOT_FOUND):
+            return {'status': 'refused'}
+        raise
+    return {'status': 'recorded', 'input_id': receipt.input_id}
+
+
+def _read_pi_draft_status(services, active, input_id):
+    broker = services.broker
+    with broker.authority_fence() as human:
+        receipt = read_session_input_receipt(broker.factory, access=services.execution_access, resolve_human=human,
+            scope=active['scope'], author=active['author'], input_id=input_id)
+    if not receipt.reorientation or receipt.operation_id is None:
+        raise ValueError('The receipt is not a recorded reorientation')
+    if receipt.steer_boundary is not None:
+        return receipt.steer_boundary
+    if receipt.status == InputDeliveryState.REFUSED_BEFORE_SEND and not receipt.possible_effect:
+        return 'refused'
+    if receipt.status == InputDeliveryState.DELIVERY_UNKNOWN:
+        return 'unconfirmed'
+    return 'submitted' if receipt.steer_submitted else 'pending'
+
+
+async def _reply_pi(ws, request, value):
+    await _send(ws, {'kind': request.kind, 'request_id': request.request_id, request.kind: value})
+
+
 async def _present_pi(ws, services, active, hello):
     access = active['attachment'].access
     state = ws.app.state
@@ -381,7 +473,7 @@ async def _present_pi(ws, services, active, hello):
 
         inbound = asyncio.create_task(ws.receive())
         output = asyncio.create_task(read_output())
-        pending = None
+        pending = review = admitted = None
         renewal = anyio.current_time() + _RENEW_SECONDS
         try:
             while True:
@@ -401,10 +493,37 @@ async def _present_pi(ws, services, active, hello):
                     raw = _decode(message)
                     if pending is not None:
                         raise ValueError('The draft editor already has a pending request')
-                    if hello.editor and isinstance(raw, dict) and raw.get('kind') == 'key':
+                    kind = raw.get('kind') if isinstance(raw, dict) else None
+                    if hello.editor and kind == 'steer_status':
+                        request = _PiSteerStatusRequest.model_validate(raw)
+                        if request.input_id != admitted:
+                            raise ValueError('The draft has no matching reorientation')
+                        status = await _worker(_read_pi_draft_status, services=services, active=active, input_id=admitted)
+                        if status == 'applied':
+                            pending = request
+                            await edit('clear', text=None)
+                        else:
+                            if status in ('discarded', 'refused'):
+                                admitted = None
+                            await _reply_pi(ws, request, {'status': status})
+                    elif hello.editor and admitted is not None:
+                        raise ValueError('A reorientation holds the draft until its receipt is known')
+                    elif hello.editor and kind == 'steer_review':
+                        review = None
+                        pending = _PiSteerReviewRequest.model_validate(raw)
+                        await edit('snapshot', text=None)
+                    elif hello.editor and kind in ('steer_confirm', 'steer_cancel'):
+                        request = _PiSteerDecisionRequest.model_validate(raw)
+                        selected, review = review, None
+                        reply = await _decide_pi_draft(state, services, active, request, selected)
+                        admitted = reply.get('input_id')
+                        await _reply_pi(ws, request, reply)
+                    elif hello.editor and kind == 'key':
+                        review = None
                         pending = _PiKeyRequest.model_validate(raw)
                         await edit(pending.key, text=pending.text)
                     else:
+                        review = None
                         request = _PiEnqueueRequest.model_validate(raw)
                         reply = await _record_presenter_input(state, services, active, request, presentation='pi')
                         if _services(state, 'pi') is not services:
@@ -419,18 +538,29 @@ async def _present_pi(ws, services, active, hello):
                 if hello.editor and isinstance(data, PiEditorUpdate):
                     if pending is None:
                         raise ValueError('The draft editor response is unsolicited')
-                    queued = None
-                    if data.draft is not None:
-                        if pending.key != 'enter' or data.limit_reached:
-                            raise ValueError('The draft editor response does not match the key')
-                        request = _PiEnqueueRequest(kind='enqueue', request_id=pending.request_id,
-                            client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
-                            content=TextInput(type='text', text=data.draft))
-                        queued = await _record_presenter_input(state, services, active, request, presentation='pi')
+                    if isinstance(pending, _PiSteerReviewRequest):
+                        review = await _worker(_review_pi_draft, services=services, active=active, request=pending,
+                                               text=data.draft)
+                        reply = ({'status': 'reviewed', 'review_id': review.id} if review is not None
+                                 else {'status': 'unavailable'})
+                    elif isinstance(pending, _PiSteerStatusRequest):
+                        if data.draft is not None or data.limit_reached:
+                            raise ValueError('The renderer did not clear the applied draft')
+                        admitted = None
+                        reply = {'status': 'applied'}
+                    else:
+                        queued = None
+                        if data.draft is not None:
+                            if pending.key != 'enter' or data.limit_reached:
+                                raise ValueError('The draft editor response does not match the key')
+                            request = _PiEnqueueRequest(kind='enqueue', request_id=pending.request_id,
+                                client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
+                                content=TextInput(type='text', text=data.draft))
+                            queued = await _record_presenter_input(state, services, active, request, presentation='pi')
+                        reply = {'limit_reached': data.limit_reached, 'queued': queued}
                     if _services(state, 'pi') is not services:
                         break
-                    await _send(ws, {'kind': 'key', 'request_id': pending.request_id,
-                                     'key': {'limit_reached': data.limit_reached, 'queued': queued}})
+                    await _reply_pi(ws, pending, reply)
                     pending = None
                 elif type(data) is not bytes or not 1 <= len(data) <= MAX_PI_PRESENTATION_BYTES:
                     raise ValueError('Invalid renderer frame')

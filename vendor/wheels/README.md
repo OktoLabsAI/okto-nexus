@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `0c8aae277fe58f281b55cedf80bd774f0dc2e975`.
-The unpublished wheel SHA-256 is `2515b37f1cad2a19ad08871d41c609d8b372a622821db243890d1b3b72c089bb`.
-The local receipt binding now covers the exact hosted Pi run and recovers under the existing R4 wire format.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `97502b5dbcea53bcbe184c67a8078ce334c2faf6`.
+The unpublished wheel SHA-256 is `b77e50336aa2927c83b3efb11511113c256a8a26205f8c3c5d98008ed2d81ac6`.
+The private Pi editor can snapshot a draft for review and clear it after verified consumption at a boundary.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency

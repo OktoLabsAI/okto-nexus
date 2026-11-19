@@ -490,6 +490,30 @@ def test_pi_input_with_lost_reply_requires_recovery_of_the_same_intent(monkeypat
     assert [request['client_intent_id'] for request in calls] == ['original-intent']
 
 
+def test_pi_steer_separates_private_draft_review_and_uncertain_confirmation(monkeypatch):
+    link = _LocalPresenter(None, None, 'viewer', live_updates=True, input_revision='revision')
+    calls = []
+    intent = 'pi_steer_' + '1' * 32
+    review_id = 'r' * 32
+
+    def exchange(frame, **_):
+        calls.append(frame)
+        if frame['kind'] == 'steer_review':
+            return {'kind': 'steer_review', 'request_id': frame['request_id'],
+                    'steer_review': {'status': 'reviewed', 'review_id': review_id}}
+        raise OSError('Reply lost')
+
+    monkeypatch.setattr(link, 'exchange', exchange)
+    assert link.review_pi_steer(intent=intent, output=lambda _: None) == review_id
+    with pytest.raises(ConnectionError) as lost:
+        link.decide_pi_steer(review_id=review_id, confirm=True, output=lambda _: None)
+    assert lost.value.code == 'OUTCOME_UNKNOWN' and lost.value.possible_effect
+    assert calls == [
+        {'kind': 'steer_review', 'request_id': 1, 'client_intent_id': intent, 'capability_revision': 'revision'},
+        {'kind': 'steer_confirm', 'request_id': 2, 'review_id': review_id},
+    ]
+
+
 def test_writer_and_web_share_queue_with_exact_scope_and_idempotency(transport, monkeypatch):
     app, factory, scope = transport.app, transport.factory, transport.scope
     service = app.state.local_codex_presentations
