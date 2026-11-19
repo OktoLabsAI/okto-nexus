@@ -1,0 +1,39 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "core_revision": "379b411a741189cbf555c9439bf213a3dc478073",
+  "connector_revision": "fcfcddcdbfa77f25385ba69b95253a79d9d79b55",
+  "artifacts_sha256": {
+    "core": "da185d8705ae45f444f863fa5c4cd9fc78d23808e8bd2ba73db51a69c0ca7301",
+    "connector": "247687fdf175011088df9564de520b96f3089d662482a4cb401b7edc23b55f47"
+  },
+  "native_windows_loopback": {
+    "fixture": "D:/nexus-si026-owner-wheel-1795089820440",
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "probe_sha256": "d0489e38b64805068318c174d85aa8dc7565a6e25bd4cb40a336ece71e4df202",
+    "observations_sha256": "eb7dae65c2771c2d54d62440d365c1732341cf34edee075bba2f474a82ac4b4c",
+    "exact_saved_uuid_confirmed_before_new_input": true,
+    "native_registry_filetime_matches_owned_handle": true,
+    "wrong_uuid_and_birth_time_refused": true,
+    "resumed_turn_model_calls": 1,
+    "external_model_calls": 0,
+    "tools_enabled": false,
+    "receipt": "SUCCEEDED",
+    "remaining_job_pids": []
+  },
+  "regressions": {
+    "installed_core": 62,
+    "installed_nexus_codex_saved_rollout_with_updated_core": 3,
+    "installed_connector_passed": 122,
+    "installed_connector_failed": 1,
+    "prior_packaged_pair_reproduced_connector_failure": "test_failed_preownership_supervised_attempt_is_actionable_without_relaunch: shutdown_outcome unconfirmed instead of drained",
+    "strict_core_and_connector_metadata": "PASS",
+    "vendor_hashes_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "limitations": [
+    "The isolated launch fixture supplied the retired source and the prepared Claude settings. The product does not call the verifier yet.",
+    "The registry corroborates a process already owned by Core. It cannot grant launch, lease, tool, or presenter authority."
+  ]
+}
