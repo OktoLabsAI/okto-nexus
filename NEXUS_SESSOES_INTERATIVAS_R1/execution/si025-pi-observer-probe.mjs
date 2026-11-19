@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { syncBuiltinESMExports } from "node:module";
+import { registerHooks, syncBuiltinESMExports } from "node:module";
 import { access, readFile, rename, writeFile } from "node:fs/promises";
 import net from "node:net";
 import path from "node:path";
@@ -15,7 +15,9 @@ net.Socket.prototype.connect = denyNetwork;
 globalThis.fetch = denyNetwork;
 syncBuiltinESMExports();
 
-const [release, cwd, agentDir, controlDir, sessionFlag, selectedSession] = process.argv.slice(2);
+const [release, cwd, agentDir, controlDir, ...options] = process.argv.slice(2);
+const cliOwner = options[0] === "--cli-owner";
+const [sessionFlag, selectedSession] = options.slice(Number(cliOwner));
 assert.ok(
   (sessionFlag === undefined && selectedSession === undefined) ||
   (sessionFlag === "--session-id" && /^hsess_[0-9a-f]{32}$/.test(selectedSession)),
@@ -25,11 +27,8 @@ const installed = path.join(namespace, "pi-coding-agent");
 const pkg = JSON.parse(await readFile(path.join(installed, "package.json"), "utf8"));
 assert.equal(pkg.version, "0.87.1");
 assert.equal(process.version, "v24.15.0");
-console.error("importing sdk");
-const sdk = await import(pathToFileURL(path.join(installed, pkg.exports["."].import)).href);
-console.error("importing provider");
+const sdkUrl = pathToFileURL(path.join(installed, pkg.exports["."].import)).href;
 const ai = await import(pathToFileURL(path.join(namespace, "pi-ai", "dist", "providers", "faux.js")).href);
-const { InteractiveMode, ModelRuntime, SessionManager, SettingsManager } = sdk;
 
 class CaptureTerminal {
   columns = 116;
@@ -55,139 +54,218 @@ class CaptureTerminal {
   setProgress() {}
 }
 
-// Restrict process-wide lifecycle, extension binding and network setup to the
-// RPC owner. These override points are internal to the examined Pi build.
-class ObservingPi extends InteractiveMode {
-  registerSignalHandlers() {}
-  applyRuntimeSettings() {}
-  async bindCurrentSessionExtensions() {}
-}
 const faux = ai.fauxProvider({ provider: "nexus-fixture", api: "nexus-fixture" });
-console.error("loading model runtime");
-const modelRuntime = await ModelRuntime.create({
-  authPath: path.join(agentDir, "auth.json"), modelsPath: null,
-  allowModelNetwork: false, refreshOnCreate: false,
-});
-console.error("registering provider");
-modelRuntime.registerNativeProvider(faux.provider);
-console.error("setting runtime fixture token");
-await modelRuntime.setRuntimeApiKey(faux.provider.id, "synthetic-fixture-token");
-let sessionCreations = 0;
-console.error("creating agent session");
-const owner = await sdk.createAgentSessionRuntime(async ({ cwd, agentDir, sessionManager }) => {
-  sessionCreations += 1;
-  const services = await sdk.createAgentSessionServices({
-    cwd, agentDir, modelRuntime,
-    settingsManager: SettingsManager.inMemory({ showTerminalProgress: false }),
-    resourceLoaderOptions: {
-      noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true, noContextFiles: true,
+
+async function openSdkOwner() {
+  const sdk = await import(sdkUrl);
+  const { ModelRuntime, SessionManager, SettingsManager } = sdk;
+  const modelRuntime = await ModelRuntime.create({
+    authPath: path.join(agentDir, "auth.json"), modelsPath: null,
+    allowModelNetwork: false, refreshOnCreate: false,
+  });
+  modelRuntime.registerNativeProvider(faux.provider);
+  await modelRuntime.setRuntimeApiKey(faux.provider.id, "synthetic-fixture-token");
+  let creations = 0;
+  const owner = await sdk.createAgentSessionRuntime(async ({ cwd, agentDir, sessionManager }) => {
+    creations += 1;
+    const services = await sdk.createAgentSessionServices({
+      cwd, agentDir, modelRuntime,
+      settingsManager: SettingsManager.inMemory({ showTerminalProgress: false }),
+      resourceLoaderOptions: {
+        noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true, noContextFiles: true,
+      },
+    });
+    const result = await sdk.createAgentSessionFromServices({
+      services, sessionManager, model: faux.getModel(), noTools: "all",
+    });
+    return { ...result, services, diagnostics: services.diagnostics };
+  }, {
+    cwd,
+    agentDir,
+    sessionManager: SessionManager.create(cwd, path.join(agentDir, "sessions"),
+      selectedSession ? { id: selectedSession } : undefined),
+  });
+  await exercise(owner, () => creations);
+}
+
+async function openCliOwner() {
+  const dist = path.join(installed, "dist");
+  const mainUrl = pathToFileURL(path.join(dist, "main.js")).href;
+  const modesUrl = pathToFileURL(path.join(dist, "modes/index.js")).href;
+  const handoffUrl = pathToFileURL(path.join(controlDir, "cli-rpc-handoff.mjs")).href;
+  // Change one import in the unbundled CLI path, leaving setup, parsing and
+  // session creation to Pi. The substitute delegates all three mode exports.
+  await writeFile(new URL(handoffUrl), `export { InteractiveMode, runPrintMode } from ${JSON.stringify(modesUrl)};\n`
+    + `export { observeCliRpc as runRpcMode } from ${JSON.stringify(import.meta.url)};\n`, "utf8");
+  let intercepted = 0;
+  const hook = registerHooks({
+    resolve(specifier, context, nextResolve) {
+      if (context.parentURL === mainUrl && specifier === "./modes/index.js") {
+        intercepted += 1;
+        return { url: handoffUrl, shortCircuit: true };
+      }
+      return nextResolve(specifier, context);
     },
   });
-  const result = await sdk.createAgentSessionFromServices({
-    services, sessionManager, model: faux.getModel(), noTools: "all",
-  });
-  return { ...result, services, diagnostics: services.diagnostics };
-}, {
-  cwd,
-  agentDir,
-  sessionManager: SessionManager.create(cwd, path.join(agentDir, "sessions"),
-    selectedSession ? { id: selectedSession } : undefined),
-});
-
-const session = owner.session;
-const sessionId = session.sessionId;
-const presenterHost = {
-  get session() { return owner.session; },
-  setBeforeSessionInvalidate() {},
-  setRebindSession() {},
-};
-const effects = [];
-for (const method of ["prompt", "abort", "steer", "followUp", "bindExtensions"]) {
-  const original = session[method].bind(session);
-  session[method] = (...args) => {
-    effects.push(method === "bindExtensions" ? `bind:${args[0].mode}` : method);
-    return original(...args);
-  };
-}
-let disposals = 0;
-const dispose = owner.dispose.bind(owner);
-owner.dispose = async () => {
-  disposals += 1;
-  await dispose();
-  await record("owner-disposed", String(disposals));
-};
-let viewerAttaches = 0;
-const probeText = "Owner prompt held by a deterministic local provider";
-const resultText = "Native Pi rendered the answer from the same session";
-const events = [];
-async function attach() {
-  const terminal = new CaptureTerminal();
-  const viewer = new ObservingPi(presenterHost, { terminal, tuiMode: "transcript" });
-  await viewer.init();
-  assert.ok(terminal.started);
-  assert.equal(owner.session, session);
-  viewerAttaches += 1;
-  return { viewer, terminal };
-}
-async function expectOutput(terminal, text) {
-  for (let count = 0; count < 80 && !terminal.output.includes(text); count += 1) await delay(30);
-  assert.ok(terminal.output.includes(text), text);
-}
-async function record(name, value) {
-  const destination = path.join(controlDir, name);
-  await writeFile(destination + ".tmp", value, "utf8");
-  await rename(destination + ".tmp", destination);
-}
-async function checkpoint(name) {
-  await record(name, sessionId);
-  for (let count = 0; count < 500; count += 1) {
-    try {
-      await access(path.join(controlDir, `release-${name}`));
-      return;
-    } catch (error) {
-      if (error.code !== "ENOENT") throw error;
-    }
-    await delay(30);
+  const { setupCli } = await import(pathToFileURL(path.join(dist, "cli/setup.js")).href);
+  let main;
+  try {
+    ({ main } = await import(mainUrl));
+  } finally {
+    hook.deregister();
   }
-  throw new Error(`The runner did not release ${name}`);
+  assert.equal(intercepted, 1, "The installed CLI must import the reviewed RPC handoff");
+  setupCli();
+  await main([
+    "--mode", "rpc", "--offline", "--no-approve", "--no-context-files", "--tools", "read",
+    "--provider", faux.provider.id, "--model", faux.getModel().id, "--api-key", "synthetic-fixture-token",
+    ...(selectedSession ? ["--session-id", selectedSession] : []),
+  ], {
+    extensionFactories: [{ name: "nexus-provider-fixture", factory: (pi) => {
+      pi.registerProvider(faux.provider);
+      pi.registerCommand("nexus-owner-proof", { description: "Fixture extension command", handler() {} });
+    } }],
+  });
+  throw new Error("Pi CLI did not enter its RPC owner");
 }
-let second;
-faux.setResponses([async () => {
-  assert.ok(session.isStreaming);
-  const first = await attach();
-  await expectOutput(first.terminal, probeText);
-  await checkpoint("first-view");
-  first.viewer.stop();
-  assert.ok(first.terminal.stopped && session.isStreaming);
-  await checkpoint("between-views");
-  second = await attach();
-  await expectOutput(second.terminal, probeText);
-  await checkpoint("second-view");
-  return ai.fauxAssistantMessage(resultText);
-}]);
-session.subscribe((event) => {
-  events.push(event.type);
-  if (event.type !== "agent_settled") return;
-  void (async () => {
-    await expectOutput(second.terminal, resultText);
-    second.viewer.stop();
-    assert.ok(second.terminal.stopped);
+
+let cliHandoffs = 0;
+export async function observeCliRpc(owner) {
+  cliHandoffs += 1;
+  assert.equal(cliHandoffs, 1);
+  assertCliSettings(owner.session);
+  await exercise(owner, () => cliHandoffs);
+}
+
+function assertCliSettings(session) {
+  assert.equal(session.model.provider, faux.provider.id);
+  assert.equal(session.model.id, faux.getModel().id);
+  assert.ok(session.modelRuntime.hasConfiguredAuth(faux.provider.id));
+  assert.deepEqual(session.getActiveToolNames(), ["read"]);
+  assert.equal(session.settingsManager.getDefaultThinkingLevel(), "low");
+  assert.ok(session.resourceLoader.getSkills().skills.some(({ name }) => name === "nexus-owner-skill"));
+  const commands = session.extensionRunner.getRegisteredCommands().map(({ invocationName }) => invocationName);
+  assert.ok(commands.includes("nexus-owner-proof") && commands.includes("nexus-profile-command"));
+  assert.ok(!commands.includes("nexus-unapproved-command"));
+}
+
+async function exercise(owner, sessionCount) {
+  const sdk = await import(sdkUrl);
+  // Restrict process-wide lifecycle and extension binding to the RPC owner.
+  // These override points are internal to the examined Pi build.
+  class ObservingPi extends sdk.InteractiveMode {
+    registerSignalHandlers() {}
+    applyRuntimeSettings() {}
+    async bindCurrentSessionExtensions() {}
+  }
+
+
+  const session = owner.session;
+  const sessionId = session.sessionId;
+  const presenterHost = {
+    get session() { return owner.session; },
+    setBeforeSessionInvalidate() {},
+    setRebindSession() {},
+  };
+  const effects = [];
+  for (const method of ["prompt", "abort", "steer", "followUp", "bindExtensions"]) {
+    const original = session[method].bind(session);
+    session[method] = (...args) => {
+      effects.push(method === "bindExtensions" ? `bind:${args[0].mode}` : method);
+      return original(...args);
+    };
+  }
+  let disposals = 0;
+  const dispose = owner.dispose.bind(owner);
+  owner.dispose = async () => {
+    disposals += 1;
+    await dispose();
+    await record("owner-disposed", String(disposals));
+  };
+  let viewerAttaches = 0;
+  const probeText = "Owner prompt held by a deterministic local provider";
+  const resultText = "Native Pi rendered the answer from the same session";
+  const events = [];
+  async function attach() {
+    const terminal = new CaptureTerminal();
+    const viewer = new ObservingPi(presenterHost, { terminal, tuiMode: "transcript" });
+    await viewer.init();
+    assert.ok(terminal.started);
     assert.equal(owner.session, session);
-    assert.equal(session.sessionId, sessionId);
-    assert.equal(sessionCreations, 1);
-    assert.equal(disposals, 0);
-    assert.equal(networkAttempts, 0);
-    assert.equal(faux.state.callCount, 1);
-    assert.equal(viewerAttaches, 2);
-    assert.deepEqual(effects, ["bind:rpc", "prompt"]);
-    assert.equal(events.filter((type) => type === "agent_settled").length, 1);
-    await record("summary.json", JSON.stringify({
-      pi: pkg.version, node: process.version, sessionId,
-      sessions_created: sessionCreations, renderer_attaches: viewerAttaches,
-      owner_calls_before_rpc_eof: effects, disposals_before_rpc_eof: disposals,
-      faux_model_calls: faux.state.callCount, network_attempts: networkAttempts, settled: 1,
-    }));
-  })().catch((error) => { console.error(error); process.exit(1); });
+    viewerAttaches += 1;
+    return { viewer, terminal };
+  }
+  async function expectOutput(terminal, text) {
+    for (let count = 0; count < 80 && !terminal.output.includes(text); count += 1) await delay(30);
+    assert.ok(terminal.output.includes(text), text);
+  }
+  async function record(name, value) {
+    const destination = path.join(controlDir, name);
+    await writeFile(destination + ".tmp", value, "utf8");
+    await rename(destination + ".tmp", destination);
+  }
+  async function checkpoint(name) {
+    await record(name, sessionId);
+    for (let count = 0; count < 500; count += 1) {
+      try {
+        await access(path.join(controlDir, `release-${name}`));
+        return;
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
+      await delay(30);
+    }
+    throw new Error(`The runner did not release ${name}`);
+  }
+  let second;
+  faux.setResponses([async () => {
+    assert.ok(session.isStreaming);
+    const first = await attach();
+    await expectOutput(first.terminal, probeText);
+    await checkpoint("first-view");
+    first.viewer.stop();
+    assert.ok(first.terminal.stopped && session.isStreaming);
+    await checkpoint("between-views");
+    second = await attach();
+    await expectOutput(second.terminal, probeText);
+    await checkpoint("second-view");
+    return ai.fauxAssistantMessage(resultText);
+  }]);
+  session.subscribe((event) => {
+    events.push(event.type);
+    if (event.type !== "agent_settled") return;
+    void (async () => {
+      await expectOutput(second.terminal, resultText);
+      second.viewer.stop();
+      assert.ok(second.terminal.stopped);
+      assert.equal(owner.session, session);
+      assert.equal(session.sessionId, sessionId);
+      if (cliOwner) assertCliSettings(session);
+      assert.equal(sessionCount(), 1);
+      assert.equal(disposals, 0);
+      assert.equal(networkAttempts, 0);
+      assert.equal(faux.state.callCount, 1);
+      assert.equal(viewerAttaches, 2);
+      assert.deepEqual(effects, ["bind:rpc", "prompt"]);
+      assert.equal(events.filter((type) => type === "agent_settled").length, 1);
+      await record("summary.json", JSON.stringify({
+        pi: pkg.version, node: process.version, sessionId,
+        ...(cliOwner ? {
+          cli_rpc_handoffs: cliHandoffs,
+          cli_model_auth_tools_settings_skill_extension_verified: true,
+        } : { sessions_created: sessionCount() }),
+        renderer_attaches: viewerAttaches,
+        owner_calls_before_rpc_eof: effects, disposals_before_rpc_eof: disposals,
+        faux_model_calls: faux.state.callCount, network_attempts: networkAttempts, settled: 1,
+      }));
+    })().catch((error) => { console.error(error); process.exit(1); });
+  });
+  console.error("starting rpc");
+  await sdk.runRpcMode(owner);
+}
+
+// Avoid a top-level await cycle while the CLI handoff imports this module.
+void (cliOwner ? openCliOwner() : openSdkOwner()).catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
 });
-console.error("starting rpc");
-await sdk.runRpcMode(owner);

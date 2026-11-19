@@ -84,7 +84,7 @@ def exercise_owner(owner, trace_path, checkpoints):
 
 
 def verify_history(directory, session_file, session_id):
-    assert list(directory.glob('*.jsonl')) == [session_file]
+    assert list(directory.rglob('*.jsonl')) == [session_file]
     history = [json.loads(line) for line in session_file.read_text(encoding='utf-8').splitlines()]
     assert history[0]['id'] == session_id
     messages = [entry['message'] for entry in history if entry.get('type') == 'message']
@@ -265,6 +265,9 @@ def fingerprints(node, release, script):
     inputs = {
         'node': node,
         'probe': script,
+        'cli_main': installed / 'dist/main.js',
+        'cli_setup': installed / 'dist/cli/setup.js',
+        'cli_modes': installed / 'dist/modes/index.js',
         'pi_package': installed / 'package.json',
         'pi_sdk': installed / 'dist/index.js',
         'interactive_mode': installed / 'dist/modes/interactive/interactive-mode.js',
@@ -274,7 +277,7 @@ def fingerprints(node, release, script):
     return {name: hashlib.sha256(file.read_bytes()).hexdigest() for name, file in inputs.items()}
 
 
-def run(node, release, *, core):
+def run(node, release, *, core, cli_owner):
     root = Path(tempfile.mkdtemp(prefix='nexus-si-pi-observer-')).resolve()
     script = root / 'probe.mjs'
     shutil.copyfile(Path(__file__).with_suffix('.mjs'), script)
@@ -284,6 +287,24 @@ def run(node, release, *, core):
     # Pi's discovery walks ancestors looking for this boundary.
     (project / '.git').mkdir()
     (project / '.git/HEAD').write_text('ref: refs/heads/fixture\n', encoding='ascii')
+    if cli_owner:
+        (agent / 'settings.json').write_text(json.dumps({'defaultThinkingLevel': 'low'}), encoding='utf-8')
+        project_config = project / '.pi'
+        project_config.mkdir()
+        (project_config / 'settings.json').write_text(json.dumps({'defaultThinkingLevel': 'high'}), encoding='utf-8')
+        for config, command in ((agent, 'nexus-profile-command'), (project_config, 'nexus-unapproved-command')):
+            extensions = config / 'extensions'
+            extensions.mkdir()
+            (extensions / 'probe.js').write_text(
+                f'export default (pi) => pi.registerCommand({json.dumps(command)}, {{handler() {{}}}});\n',
+                encoding='utf-8',
+            )
+        skill = agent / 'skills' / 'nexus-owner-skill'
+        skill.mkdir(parents=True)
+        (skill / 'SKILL.md').write_text(
+            '---\nname: nexus-owner-skill\ndescription: Disposable owner proof\n---\n# Fixture skill\n',
+            encoding='utf-8',
+        )
     env = {key: os.environ[key] for key in ('SystemRoot', 'WINDIR', 'COMSPEC') if key in os.environ}
     env.update({
         'PATH': str(root / 'bin'), 'PATHEXT': '.COM;.EXE', 'HOME': str(root), 'USERPROFILE': str(root),
@@ -295,6 +316,8 @@ def run(node, release, *, core):
         str(node), '--permission', f'--allow-fs-read={release}', f'--allow-fs-read={root}',
         f'--allow-fs-write={root}', str(script), str(release), str(project), str(agent), str(checkpoints),
     ]
+    if cli_owner:
+        argv.append('--cli-owner')
     print(f'Isolated probe directory {root}', flush=True)
     if core:
         cli = release / 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js'
@@ -326,5 +349,6 @@ if __name__ == '__main__':
     parser.add_argument('--node', type=Path, required=True)
     parser.add_argument('--pi-release', type=Path, required=True, help='Pi release root containing node_modules')
     parser.add_argument('--core', action='store_true', help='Drive the Pi process through the installed Core 0.0.16')
+    parser.add_argument('--cli-owner', action='store_true', help='Use the official unbundled Pi CLI to open the owner')
     args = parser.parse_args()
-    run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True), core=args.core)
+    run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True), core=args.core, cli_owner=args.cli_owner)

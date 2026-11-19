@@ -1,0 +1,43 @@
+{
+  "task": "SI-025",
+  "status": "IN_PROGRESS",
+  "scope": "Windows x64, Node 24.15.0 and the unbundled CLI distributed with Pi 0.87.1. The installed renderer uses an in-memory terminal and a synthetic provider.",
+  "baseline": {
+    "nexus": "a6cbbfd93c836f80ecbeebe854b378fe79bf54b6",
+    "core": "12f2cdbb831fc61c7e4c91dd9475b5cae8b12b6d",
+    "connector": "ea9d578548687ad46404b74d5e483d8927cdfbe6"
+  },
+  "artifact_pins": "si025-pi-owned-state.json",
+  "sha256": {
+    "pi_cli_main": "5a9473442cd761b21d07c374bb137967dd11474f5a7754d1c32f585e7b1a1f49",
+    "pi_cli_modes": "42bd65ff8aee4f60dfcfcfb9db66772219281585cdbef845df747c8846618a87",
+    "pi_cli_setup": "4a2a7a0dbf82e2e5d18cec90896b36cbedce78b3d09e78d4040ac94fa3fbeba8",
+    "probe_python": "442db5b36d0f343a459f6a0baec831343d18e23fc3e74a7cf1c276e8d94b41a1",
+    "probe_js": "b2b3b47cc3f8ac8dabec0f5d299d334890f66ff99184a420d2f7a861e3388bf3"
+  },
+  "observations": {
+    "pi_cli_rpc_handoffs_per_run": 1,
+    "renderer_attaches_per_run": 2,
+    "profile_model_auth_tool_settings_skill_extension_retained": true,
+    "unapproved_project_setting_and_extension_excluded": true,
+    "one_rpc_extension_binding_through_detach": true,
+    "synthetic_provider_calls_per_run": 1,
+    "network_attempts": 0,
+    "same_persisted_session_history": true,
+    "core_process_and_opening_receipt_retained": true,
+    "core_turn_replay_kept_one_prompt": true,
+    "core_correlated_agent_settled_events": 1,
+    "core_close_stage": "SUCCEEDED"
+  },
+  "runs": {
+    "cli_owner_direct": "PASS",
+    "cli_owner_core_source": "PASS",
+    "cli_owner_core_and_nexus_wheels": "PASS",
+    "sdk_owner_direct_regression": "PASS",
+    "sdk_owner_core_and_nexus_wheels_regression": "PASS"
+  },
+  "limitations": [
+    "Identity and configuration were tested through Pi's modular CLI startup with a fixture hook. The production Connector's bundled CLI path was not changed.",
+    "The fixture does not qualify the authenticated Nexus viewer, actual terminal input, production credentials, native permission responses or the multi-surface queue. No ledger status was promoted."
+  ]
+}

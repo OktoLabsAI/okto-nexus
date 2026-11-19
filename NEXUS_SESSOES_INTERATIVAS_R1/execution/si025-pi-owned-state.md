@@ -11,3 +11,5 @@ Passaram 39 testes do Core, 103 do Connector e 34 do Nexus com os wheels instala
 Para reproduzir, use o comando do ensaio Pi com `--core` e disponibilize Nexus 0.3.8 e o pin Core 0.0.16 desta etapa no interpretador. O roteiro injeta a composição embutida de teste e registra uma concessão temporária. [Comando base](si025-pi-shared-owner.md)
 
 A alteração é interna e não precisa de migração. A reversão coordenada dos três commits restaura os pins anteriores. A SI-025 continua em andamento. O próximo passo é vincular o renderer ao canal autenticado do operador, mantendo o dono único e qualificando entrada, fila, extensões e detach no terminal real.
+
+O ensaio seguinte verificou a abertura pela CLI oficial com configuração e extensão temporárias. [Prova da abertura pela CLI](si025-pi-cli-owner.md)

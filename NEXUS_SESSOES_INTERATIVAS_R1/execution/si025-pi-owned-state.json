@@ -1,6 +1,7 @@
 {
   "task": "SI-025",
   "status": "IN_PROGRESS",
+  "fixture_revision": "a6cbbfd93c836f80ecbeebe854b378fe79bf54b6",
   "scope": "Trusted embedded read on the existing Windows Pi RPC owner. The fixture uses the real installed Pi SDK, an in-memory terminal and a synthetic provider.",
   "baseline": {
     "nexus": "579692681e7de650d17908ae595e5fa6a2834892",
