@@ -785,14 +785,16 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
         read_context = _author_callback(services.read_context, author, presentation)
         history = CodexPresenterHistoryChannel(broker=broker, prove_owner=prove_owner,
                                               access=services.execution_access, **active)
-        next_renewal = anyio.current_time() + _RENEW_SECONDS
+        next_check = next_renewal = anyio.current_time() + _RENEW_SECONDS
         reviewed = None
         while _services(ws.app.state, presentation) is services:
-            with anyio.move_on_after(max(0, next_renewal - anyio.current_time())) as deadline:
+            with anyio.move_on_after(max(0, next_check - anyio.current_time())) as deadline:
                 raw = await _receive(ws)
             if deadline.cancel_called:
-                await _worker(broker.refresh, **active)
-                next_renewal = anyio.current_time() + _RENEW_SECONDS
+                # A live transport alone doesn't prove that the remote terminal
+                # is still receiving and processing the application stream.
+                await _worker(broker.require_active if remote else broker.refresh, **active)
+                next_check = anyio.current_time() + _RENEW_SECONDS
                 continue
             request = _REQUEST.validate_python(raw)
             if (remote and attachment.access == 'read'
@@ -830,6 +832,9 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                 reply = {'kind': 'updates', 'updates': await history.updates()}
             if _services(ws.app.state, presentation) is not services:
                 break
+            if remote and anyio.current_time() >= next_renewal:
+                await _worker(broker.refresh, **active)
+                next_renewal = anyio.current_time() + _RENEW_SECONDS
             await _send(ws, {'request_id': request.request_id, **reply})
         await ws.close(code=4409)
     except WebSocketDisconnect:

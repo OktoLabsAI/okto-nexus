@@ -1,6 +1,7 @@
 """Real HTTP/Connector WebSocket and canonical lease with a synthetic Codex read."""
 
 import asyncio
+import json
 import time
 from dataclasses import asdict, replace
 
@@ -22,9 +23,13 @@ from websockets.exceptions import ConnectionClosed
 
 from okto_nexus.adapters.inbound.cli import session as session_cli
 from okto_nexus.adapters.inbound.cli.session_commands import recover_session_command
+from okto_nexus.adapters.inbound.http import dashboard_session_presentations
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE
 from okto_nexus.adapters.outbound.execution.presentation_link import PresentationLink
-from okto_nexus.adapters.outbound.local_presenter_client import _LocalPresenter
+from okto_nexus.adapters.outbound.local_presenter_client import (
+    _LocalPresenter,
+    review_local_presentation,
+)
 from okto_nexus.application.codex_viewer_protocol import CodexInputStatus
 from okto_nexus.application.execution_leases import ExecutionChannel
 from okto_nexus.application.terminal_connection import PREFIX, ConnectionError
@@ -70,15 +75,16 @@ def test_link_rejects_misbound_reply_and_discards_late_reply_after_disconnect():
     asyncio.run(run())
 
 
-@pytest.mark.parametrize('mode', ['logout-inflight', 'terminal-reattach', 'writer'])
+@pytest.mark.parametrize('mode', ['logout-inflight', 'terminal-reattach', 'writer', 'silent-writer'])
 def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, monkeypatch, request, mode):
     original_app = tcp.build_app
-    reads = []
+    reads, apps = [], []
     entered, release = asyncio.Event(), asyncio.Event()
 
     def build_app(deps, **kwargs):
         deps.config.runtime_session_interaction_enabled = True
         app = original_app(deps, **kwargs)
+        apps.append(app)
 
         @app.post(_ROUTE)
         async def read_context(request: Request):
@@ -127,7 +133,7 @@ def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, mo
     with pytest.MonkeyPatch.context() as fixture_patch:
         fixture = tcp._runtime(tmp_path, request, fixture_patch)
         runtime = next(fixture)
-        writing = mode == 'writer'
+        writing = mode in ('writer', 'silent-writer')
         project = RemoteProject(runtime, tmp_path, monkeypatch, actions=8 if writing else 1)
         if writing:
             project.observed = replace(project.observed, architecture='x86_64')
@@ -152,6 +158,18 @@ def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, mo
                     'adapter_id': 'codex_app_server', 'source': 'thread/start/response', 'thread_id': _THREAD}))
                 await project.eventually(lambda: any('core/codex_thread_configuration' in row['payload_json']
                     for row in project.rows('execution_event_ingress')))
+                if writing:
+                    native.active_turn_id = _TURN
+                    await native.queue.put(RuntimeEvent(project.server_id, scope['executor_id'], session, epoch, 0,
+                        'turn_state', 'turn/started', {'threadId': _THREAD, 'thread_id': _THREAD,
+                            'turnId': _TURN, 'turn_id': _TURN, 'delivery_phase': 'started',
+                            'turn': {'id': _TURN, 'status': 'inProgress'}}, operation_id=child))
+                    await project.eventually(lambda: any('turn/started' in row['payload_json']
+                        for row in project.rows('execution_event_ingress')))
+                if mode == 'silent-writer':
+                    await _run_silent_remote_writer(project, scope, apps[0], monkeypatch)
+                    assert connection.online and not native.stopped and native.sent == [('send_turn', child)]
+                    return
                 if mode in ('terminal-reattach', 'writer'):
                     attach = _run_remote_writer if writing else _run_terminal_reattach
                     await attach(project, scope, child, native, epoch, cwd, monkeypatch)
@@ -202,6 +220,77 @@ def test_exact_remote_codex_context_authority_and_terminal_reattach(tmp_path, mo
             asyncio.run(run())
         finally:
             fixture.close()
+
+
+async def _run_silent_remote_writer(project, scope, app, monkeypatch):
+    broker = app.state.remote_codex_presentations.broker
+    clock = [time.monotonic()]
+    monkeypatch.setattr(broker, 'clock', lambda: clock[0])
+    monkeypatch.setattr(dashboard_session_presentations, '_RENEW_SECONDS', .1)
+    checks = []
+
+    def observe(check):
+        def run(**active):
+            observed_at = clock[0]
+            result = check(**active)
+            checks.append(observed_at)
+            return result
+        return run
+
+    for method in ('refresh', 'require_active'):
+        monkeypatch.setattr(broker, method, observe(getattr(broker, method)))
+
+    session = scope['session_id']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                        'workspace_binding_id', 'agent_id', 'session_id')}
+    generation = scope['session_owner_generation']
+    document = {'scope': exact, 'expected_session_generation': generation}
+
+    async def review():
+        return await asyncio.to_thread(review_local_presentation, project.http, scope=exact,
+                                       expected_session_generation=generation, write=True, presentation='codex_remote')
+
+    writer = await review()
+    offer = await asyncio.to_thread(project.http, 'POST', PREFIX + f'/sessions/{session}/attachments:prepare',
+        document | {'presentation': 'codex_remote', 'intent': 'attach_live', 'access': 'write',
+                    'capability_revision': writer.capability_revision, 'client_intent_id': 'silent-writer',
+                    'expected_writer_epoch': writer.epoch, 'takeover': False})
+    path = PREFIX + f"/attachments/{offer['attachment_id']}/stream"
+    headers = {'Authorization': 'Bearer ' + offer['ticket'], 'Cookie': project.http.request_headers()['Cookie']}
+    before = project.rows('execution_operations')
+
+    def expiry():
+        return project.rows('session_attachments')[0]['expires_monotonic']
+
+    async with connect(project.origin.replace('http://', 'ws://', 1) + path,
+            subprotocols=[REMOTE_CODEX_SUBPROTOCOL], origin=project.origin, additional_headers=headers) as socket:
+        async def exchange(frame):
+            await socket.send(canonical_json(frame).decode())
+            return json.loads(await asyncio.wait_for(socket.recv(), 8))
+
+        challenge = await exchange({'kind': 'hello', 'version': 1, **document})
+        assert (await exchange({'kind': 'prove', 'challenge': challenge['challenge']}))['access'] == 'write'
+        first_expiry = expiry()
+        clock[0] += 10
+        await project.eventually(lambda: clock[0] in checks)
+        context = await exchange({'kind': 'context', 'request_id': 1, 'follow': True})
+        assert context['context']['thread_id'] == _THREAD
+        renewed_expiry = expiry()
+        assert renewed_expiry > first_expiry
+
+        clock[0] += 10
+        await asyncio.wait_for(await socket.ping(), 5)
+        await project.eventually(lambda: clock[0] in checks)
+        assert expiry() == renewed_expiry
+        assert (await review()).occupied
+        clock[0] = renewed_expiry + 1
+        with pytest.raises(ConnectionClosed):
+            await asyncio.wait_for(socket.recv(), 5)
+
+    await project.eventually(lambda: [r['state'] for r in project.rows('session_attachments')] == ['DETACHED'])
+    assert not (await review()).occupied
+    assert project.rows('execution_operations') == before
+    assert project.rows('session_interaction_inputs') == []
 
 
 async def _run_terminal_reattach(project, scope, operation_id, native, epoch, cwd, monkeypatch):
@@ -317,13 +406,6 @@ async def _run_terminal_reattach(project, scope, operation_id, native, epoch, cw
 
 async def _run_remote_writer(project, scope, operation_id, native, epoch, cwd, monkeypatch):
     session = scope['session_id']
-    turn = {'threadId': _THREAD, 'thread_id': _THREAD, 'turnId': _TURN, 'turn_id': _TURN}
-    native.active_turn_id = _TURN
-    await native.queue.put(RuntimeEvent(scope['server_id'], scope['executor_id'], session, epoch, 0,
-        'turn_state', 'turn/started', turn | {'delivery_phase': 'started', 'turn': {'id': _TURN, 'status': 'inProgress'}},
-        operation_id=operation_id))
-    await project.eventually(lambda: any('turn/started' in row['payload_json']
-        for row in project.rows('execution_event_ingress')))
     generation = scope['session_owner_generation']
     binding = await asyncio.to_thread(project.work().binding)
     intent = 'codex_b37538e5-0f91-49f3-8420-cf451ffe21e0'

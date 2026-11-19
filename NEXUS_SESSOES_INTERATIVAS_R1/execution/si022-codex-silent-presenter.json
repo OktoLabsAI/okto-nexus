@@ -1,0 +1,56 @@
+{
+  "tasks": ["SI-022", "SI-032"],
+  "scenario_evidence_partial": ["SI-T-G08", "SI-T-H09", "SI-T-H12"],
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "c1bc96dac9b76a383ad435ebd71c37851ea02e23", "main": "8d77b50c", "behind_main": 0, "ahead_of_main": 444},
+    "connector": {"branch": "feature/v0.0.15", "head": "576e7045ae8104131c18235f3df707bda5d39b6c", "main": "a3017d9", "behind_main": 0, "ahead_of_main": 82},
+    "core": {"branch": "feature/v0.0.16", "head": "6ec6ace51bcca05272e5bb63098d862e5641dc70", "main": "19c99f1", "behind_main": 0, "ahead_of_main": 61},
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "artifacts": {
+    "prior_nexus_0.3.8_wheel_sha256": "c8dd51e124176c9d3326cf61cf6540f313cf3c8cda585432248df183ea664437",
+    "nexus_0.3.8_wheel_sha256": "4473a7ed7574752e1269ff33eda7fe614cdf4eab8b9f997019b7b38d763f2e63",
+    "nexus_0.3.8_sdist_sha256": "6bf5c23efe0d3743dce5d558ce0cd2be6281aa8c122ee37a2a7512fb6127ba36",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "changed_module_matches_installed_wheel": true,
+    "strict_twine": "PASS",
+    "offline_nexus_lock": "PASS"
+  },
+  "regression": {
+    "test": "tests/execution_r4/test_remote_codex_presentation.py::test_exact_remote_codex_context_authority_and_terminal_reattach[silent-writer]",
+    "prior_wheel": "Expected failure: presentation expiry advanced during the application-silent interval.",
+    "fixed_behavior": "An authenticated request renews the presentation. A successful protocol ping alone leaves its expiry unchanged. After expiry the writer is released, with the same Connector and operation.",
+    "fixed_wheel_remote_and_local_regressions_passed": 73,
+    "prior_wheel_cli_and_broker_recheck_passed": 38,
+    "ruff_new_findings_relative_to_baseline": 0
+  },
+  "native_probe": {
+    "status": "PASS",
+    "scope": "Installed Nexus, Connector and Core on Windows x64, remote presentation over loopback, app-server and frontend real, model fixture over loopback SSE",
+    "engine": {"version": "0.157.0", "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"},
+    "reattached_viewer": {"version": "0.170.0", "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"},
+    "directory": "%TEMP%/si022-silent-remote-1795105640848",
+    "probe_file": "test_silent_remote_codex.py",
+    "probe_sha256": "52d4ae0abaf528ea4ee6a88c21f8fac925d32231f59058ef4113dfe8489a8b79",
+    "connector_fixture_sha256": "52c1ff8d2a09de6793110fd306e2443376090ef2deb227b7bfdd783397da2719",
+    "observation_file": "native-run/test_connector_preserves_codex0/presenters/proof.json",
+    "observation_sha256": "e7c50011899bd3a3aae8ccb7e31c538e2936c133575682134f3501488227dd3a",
+    "writer_released_with_transport_alive_before_expiry": true,
+    "same_connector_process_thread_and_productive_grant": true,
+    "same_native_turns_and_no_interrupt_or_steer": true,
+    "queued_input_delivered_once_and_original_receipt_recovered": true,
+    "native_turn_starts": 2,
+    "loopback_model_requests": 2,
+    "external_provider_calls": 0,
+    "remaining_native_test_workers_observed": 0
+  },
+  "limitations": [
+    "Fixture clock advances presentation time and compresses the checking interval. It leaves the productive grant clock and model transport independent.",
+    "The first client is a protocol peer that stops application frames. The replacement is the reviewed real frontend. Connector and Nexus run on the same Windows machine.",
+    "The initial fixture omitted the started-turn event and follow flag. The final baseline and package checks use the exact recorded turn and explicitly disable pytest's source pythonpath injection.",
+    "The remaining cross-harness and physical two-host qualification is outside this evidence."
+  ],
+  "migration": "none"
+}

@@ -67,6 +67,10 @@ is valid. Run the same attach command to follow that session again. If a send
 was in progress when the viewer closed, check the receipt reference printed in
 the terminal with the original operator login before sending again.
 
+If a Connector-hosted Codex viewer stops exchanging messages with Nexus, its
+presentation expires and frees the terminal writer slot. Any request already
+recorded in the queue remains with the session.
+
 ```sh
 okto-nexus session receipt --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
 ```

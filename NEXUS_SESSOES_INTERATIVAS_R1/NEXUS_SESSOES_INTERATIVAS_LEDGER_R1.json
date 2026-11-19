@@ -1113,7 +1113,9 @@
         "execution/si022-pi-remote-terminal.md",
         "execution/si022-pi-remote-terminal.json",
         "execution/si022-si025-pi-remote-controls.md",
-        "execution/si022-si025-pi-remote-controls.json"
+        "execution/si022-si025-pi-remote-controls.json",
+        "execution/si022-codex-silent-presenter.md",
+        "execution/si022-codex-silent-presenter.json"
       ]
     },
     {
@@ -1643,7 +1645,9 @@
       "status": "TODO",
       "evidence": [
         "execution/si032-codex-abrupt-viewer-exit.md",
-        "execution/si032-codex-abrupt-viewer-exit.json"
+        "execution/si032-codex-abrupt-viewer-exit.json",
+        "execution/si022-codex-silent-presenter.md",
+        "execution/si022-codex-silent-presenter.json"
       ]
     },
     {
@@ -4002,7 +4006,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si022-codex-silent-presenter.md",
+        "execution/si022-codex-silent-presenter.json"
+      ]
     },
     {
       "id": "SI-T-G09",
@@ -4451,7 +4458,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si032-codex-abrupt-viewer-exit.md",
-        "execution/si032-codex-abrupt-viewer-exit.json"
+        "execution/si032-codex-abrupt-viewer-exit.json",
+        "execution/si022-codex-silent-presenter.md",
+        "execution/si022-codex-silent-presenter.json"
       ]
     },
     {
@@ -4516,7 +4525,9 @@
       "evidence": [
         "execution/si022-remote-codex-context.json",
         "execution/si022-codex-remote-attach.json",
-        "execution/si022-codex-remote-writer.json"
+        "execution/si022-codex-remote-writer.json",
+        "execution/si022-codex-silent-presenter.md",
+        "execution/si022-codex-silent-presenter.json"
       ]
     },
     {
