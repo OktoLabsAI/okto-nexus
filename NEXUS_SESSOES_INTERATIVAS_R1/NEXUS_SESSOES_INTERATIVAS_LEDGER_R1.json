@@ -736,7 +736,9 @@
         "execution/si013-dashboard-input-api.md",
         "execution/si013-home-conversation.md",
         "execution/si036-browser-scroll-ime.md",
-        "execution/si036-browser-scroll-ime.json"
+        "execution/si036-browser-scroll-ime.json",
+        "execution/si013-browser-queue-recovery.md",
+        "execution/si013-browser-queue-recovery.json"
       ]
     },
     {
@@ -780,7 +782,9 @@
         "execution/si014-queue-pause-and-resume.md",
         "execution/si014-home-exact-interrupt.md",
         "execution/si010-dashboard-steer-api.md",
-        "execution/si014-home-reorientation.md"
+        "execution/si014-home-reorientation.md",
+        "execution/si013-browser-queue-recovery.md",
+        "execution/si013-browser-queue-recovery.json"
       ]
     },
     {
@@ -1875,7 +1879,9 @@
         "execution/si012-claude-stream-attribution.md",
         "execution/si012-claude-stream-attribution.json",
         "execution/si012-history-gap-and-paging.md",
-        "execution/si012-history-gap-and-paging.json"
+        "execution/si012-history-gap-and-paging.json",
+        "execution/si013-browser-queue-recovery.md",
+        "execution/si013-browser-queue-recovery.json"
       ]
     },
     {
@@ -3446,8 +3452,11 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si013-browser-queue-recovery.md",
+        "execution/si013-browser-queue-recovery.json"
+      ]
     },
     {
       "id": "SI-T-E08",
@@ -3463,8 +3472,11 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si013-browser-queue-recovery.md",
+        "execution/si013-browser-queue-recovery.json"
+      ]
     },
     {
       "id": "SI-T-E09",

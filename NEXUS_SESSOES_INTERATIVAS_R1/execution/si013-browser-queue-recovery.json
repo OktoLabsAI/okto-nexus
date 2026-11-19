@@ -1,0 +1,105 @@
+{
+  "tasks": [
+    "SI-013",
+    "SI-014",
+    "SI-036"
+  ],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "485df7b5555ef4cddc5418dc9449f6f7110fa8a2",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 458
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "working_trees": "clean",
+    "feature_upstream_drift": "0 ahead, 0 behind on all three"
+  },
+  "environment": {
+    "os": "Windows",
+    "browser": "Chromium driven through Playwright CLI",
+    "dashboard_js": "index-C1_yS8HR.js",
+    "native_process": "Pi 0.87.1",
+    "native_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "transport": "Installed Nexus and Connector communicating over loopback, with a deterministic faux provider and outgoing Pi network blocked"
+  },
+  "scenarios": {
+    "SI-T-E07": "PASS. The browser showed both pending entries as queued. The API and SQLite showed null operation IDs while the first native turn remained active.",
+    "SI-T-E08": "PASS. The management endpoint returned HTTP 202 before the browser response was dropped. An actual reload requested the original intent and restored the queued receipt. A separately held GET for that exact receipt proved that the composer stayed disabled until the result. The recovered input produced exactly one native submission."
+  },
+  "browser": {
+    "queue_recovery": true,
+    "post_count": 2,
+    "ordinary_status": 202,
+    "ordinary_queue_http_status": 200,
+    "lost_server_status": 202,
+    "receipt_gets": 1,
+    "exact_recovered_intent": true,
+    "send_guard_until_receipt": true,
+    "exact_input_queued_after_recovery": true,
+    "queued_absent_from_chat": true,
+    "browser_storage_reference_cleared": true,
+    "original_reload_matching_request": true,
+    "original_reload_request_http_status": 200,
+    "fixture_stored_reference_replayed_in_new_tab": true,
+    "posts_during_guard_probe": 0,
+    "reloaded": true
+  },
+  "backend": {
+    "scope_count": 1,
+    "queued_before_release": 2,
+    "queued_operations_before_release": 0,
+    "recovered_same_durable_input": true,
+    "original_turns_before_release": 1,
+    "queued_inputs_dispatched_once": 2,
+    "total_turns": 3,
+    "native_user_entries": 3,
+    "canonical_results": 3,
+    "canonical_close": "SUCCEEDED",
+    "pi_process_exited": true,
+    "external_model_calls": 0,
+    "sqlite_integrity": "ok"
+  },
+  "regressions_passed": {
+    "installed_queue_api": 44,
+    "browser_with_real_pi": 1,
+    "frontend_component": 19
+  },
+  "fixture_notes": [
+    "The first browser capture expected the agent API path. The repeated fixture followed the actual runtime management path.",
+    "The first receipt in the final fixture remained queued while the browser test resumed. Receipt identity was tied to the request selector and SQLite because the response omits the client intent ID.",
+    "Playwright reported the real beforeunload dialog before returning the scripted result. The browser then completed the reload. A subsequent check observed its request for the original intent. The delayed-GET probe opened a fresh tab initialized with the same stored reference."
+  ],
+  "limits": [
+    "Injected loss of a response after durable admission on one OS and one Pi build with a synthetic provider.",
+    "Pending: other browser failure modes, screen-reader and human acceptance."
+  ],
+  "sha256": {
+    "nexus_wheel": "acc81c5de350eddc30155bb88e8d7e8fd68ca6f89a135fc85204b3c59d389d61",
+    "connector_pin": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_pin": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "browser_driver_initial": "c73c0b6c42a0afff320b9ba88465e01d2ccfeb5fee81b218872d8ffa463962bb",
+    "browser_driver_continuation": "dff6ced4af3a6e03e0cce383544daf82a28cb89c7bf2238106159abb748f6915",
+    "browser_driver_post_reload": "9b14c6d4b2a9e8de92f5bfc7a6edc35ed8dd932cc1450bf4481ab8deffc5f1b5",
+    "native_probe": "221925f83285a2faf22cb3875392d251a2d79e13957bf8ab6ce33357e133f4d6",
+    "remote_project_fixture": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "browser_result": "61117164db0dea6142334a872948d8a5a39e598bf84835343711ac07eb474d9e",
+    "native_result": "c4bf41bdc33bc20000e0254f38e46d68eb7b5ee5a4b95ee1670d3bdb43803d51",
+    "native_junit": "ad64cf2927cc81637e48c75289928a6d59065be5ffa3e04830d3a7346bebd5e9",
+    "regressions_junit": "6589618c881dcb5efb91b176a85ba8873b77e7795faed7300ef425ac78766d43"
+  },
+  "migration": "none"
+}
