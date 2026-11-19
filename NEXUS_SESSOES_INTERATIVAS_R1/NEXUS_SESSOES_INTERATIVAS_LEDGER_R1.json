@@ -1162,7 +1162,9 @@
         "execution/si022-r4-resume-lease.md",
         "execution/si022-r4-resume-lease.json",
         "execution/si022-pi-full-reconnect.md",
-        "execution/si022-pi-full-reconnect.json"
+        "execution/si022-pi-full-reconnect.json",
+        "execution/si035-pi-reconnect-candidate.md",
+        "execution/si035-pi-reconnect-candidate.json"
       ]
     },
     {
@@ -1714,7 +1716,9 @@
         "execution/si022-r4-resume-lease.md",
         "execution/si022-r4-resume-lease.json",
         "execution/si032-exact-reattach-command.md",
-        "execution/si032-exact-reattach-command.json"
+        "execution/si032-exact-reattach-command.json",
+        "execution/si035-pi-reconnect-candidate.md",
+        "execution/si035-pi-reconnect-candidate.json"
       ]
     },
     {
@@ -1844,7 +1848,9 @@
         "execution/si035-queue-dispatch-races.md",
         "execution/si035-queue-dispatch-races.json",
         "execution/si035-input-restart-receipts.md",
-        "execution/si035-input-restart-receipts.json"
+        "execution/si035-input-restart-receipts.json",
+        "execution/si035-pi-reconnect-candidate.md",
+        "execution/si035-pi-reconnect-candidate.json"
       ]
     },
     {
@@ -4716,7 +4722,7 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si022-remote-codex-context.json",
         "execution/si022-codex-remote-attach.json",
@@ -4728,7 +4734,9 @@
         "execution/si022-r4-resume-lease.md",
         "execution/si022-r4-resume-lease.json",
         "execution/si022-pi-full-reconnect.md",
-        "execution/si022-pi-full-reconnect.json"
+        "execution/si022-pi-full-reconnect.json",
+        "execution/si035-pi-reconnect-candidate.md",
+        "execution/si035-pi-reconnect-candidate.json"
       ]
     },
     {

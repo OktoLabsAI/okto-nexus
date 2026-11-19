@@ -1,0 +1,79 @@
+{
+  "test": {
+    "id": "SI-T-H12",
+    "status": "PASS",
+    "scope": "Windows loopback, authenticated R4 same-generation resume"
+  },
+  "related_tasks": [
+    "SI-022",
+    "SI-032",
+    "SI-035"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "9b9068e31d15b2397e66831639fb99ece3fe5746",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 467
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "worktrees": "clean",
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "native": {
+    "harness": "Pi 0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "frontend": "Windows ConPTY",
+    "native_user_messages": 2,
+    "canonical_close_succeeded": true
+  },
+  "observations": {
+    "r4_socket_aborted_and_replaced": true,
+    "connection_generation_retained": true,
+    "same_live_pi_process": true,
+    "working_turn_and_queue_persisted": true,
+    "first_editor_detached_on_cut": true,
+    "reattached_without_takeover": true,
+    "same_input_and_receipt_recovered": true,
+    "no_prompt_replay": true,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "native": {
+      "passed": 1,
+      "junit_sha256": "5ae695d39c20cd7c5c1b39248a5851eb931002954aea314529111b24398fe8a5"
+    },
+    "nexus_api_continuity_and_restart": {
+      "passed": 8,
+      "junit_sha256": "f0d2d729c4abdeaaacdcb520a6b12d309402b4a41248c2029bace65b7bb9ca79"
+    }
+  },
+  "previous_full_reconnect_after_expiry": "execution/si022-pi-full-reconnect.json",
+  "fixture_driver_sha256": {
+    "test_pi_connector_reconnect.py": "68b6bfc04042db2b85daf6f3e819a719d334eff36d2e89279368d1c955f232d3",
+    "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6"
+  },
+  "limits": [
+    "Only the disposable Connector's exact WebSocket was aborted.",
+    "Pi used synthetic responses on Windows.",
+    "Cross-machine TLS and platform-wide qualification remain separate."
+  ],
+  "migration": "none"
+}
