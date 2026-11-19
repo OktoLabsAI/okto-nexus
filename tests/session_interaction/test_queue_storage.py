@@ -16,6 +16,8 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.protocol import canonical_json
 
+from okto_nexus.adapters.outbound.sqlite.execution_session_release import SqliteSessionReleaseRepository
+from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
 from okto_nexus.adapters.outbound.sqlite.session_interaction import (
     accept_input,
     prepare_dispatch_head,
@@ -206,6 +208,77 @@ def test_preparation_keeps_blocked_head_ahead_of_later_input(database):
         uow.connection.execute("UPDATE execution_sessions SET owner_generation=2")
         assert prepare_dispatch_head(uow, scope=scope, now=NOW) is None
         assert prepare_dispatch_head(uow, scope=replace(scope, generation=SessionOwnerGeneration(2)), now=NOW) is None
+
+
+def test_canonical_release_blocks_only_unsent_inputs_in_the_closed_session(database):
+    factory, (scope, sibling) = database
+    key = (scope.session.server_id, scope.session.executor_id, scope.session.session_id)
+    release = {
+        "scope": {"server_id": key[0], "executor_id": key[1], "session_id": key[2],
+                  "session_owner_generation": scope.generation.value},
+        "opening_operation_id": "open-r4-id",
+    }
+    repo = SqliteSessionReleaseRepository()
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        enqueue(uow, scope)
+        enqueue(uow, scope, intent="another-unsent")
+        linked = enqueue(uow, scope, intent="uncertain")
+        other = enqueue(uow, sibling)
+        conn.execute("""
+            INSERT INTO execution_operations(server_id,executor_id,session_id,operation_id,subject_agent_id,actor_agent_id,
+                binding_id,workspace_id,workspace_binding_id,action,intent_hash,semantic_payload,expected_revisions_json,
+                admission_state,created_at)
+            VALUES(?,?,?,'uncertain-operation','recipient','recipient',?,?,?,'turn.submit','test','{}','{}','ACCEPTED','t')
+        """, (*key, scope.binding_id, scope.workspace_id, scope.workspace_binding_id))
+        conn.execute("UPDATE session_interaction_inputs SET status='DELIVERY_UNKNOWN',possible_effect=1,"
+                     "operation_id='uncertain-operation' WHERE input_id=?", (linked.input_id,))
+        queued = enqueue(uow, scope)
+        second = enqueue(uow, scope, intent="another-unsent")
+        uncertain = enqueue(uow, scope, intent="uncertain")
+        conn.execute("UPDATE execution_sessions SET lease_state='SUPERSEDED' "
+                     "WHERE server_id=? AND executor_id=? AND session_id=?", key)
+        assert enqueue(uow, scope) == queued
+
+    with pytest.raises(RuntimeError), factory.unit_of_work() as uow:
+        repo.close(uow, release)
+        raise RuntimeError("abort the closure transaction")
+
+    with factory.unit_of_work() as uow:
+        assert enqueue(uow, scope) == queued
+        repo.close(uow, release)
+        for intent, original in (("request", queued), ("another-unsent", second)):
+            assert enqueue(uow, scope, intent=intent) == replace(
+                original, status=InputDeliveryState.BLOCKED_SESSION, input_revision=original.input_revision + 1,
+                queue_revision=queued.queue_revision + 1,
+            )
+        assert enqueue(uow, scope, intent="uncertain") == replace(uncertain, queue_revision=queued.queue_revision + 1)
+        assert enqueue(uow, sibling) == other
+        repo.close(uow, release)
+        assert enqueue(uow, scope).queue_revision == queued.queue_revision + 1
+        assert prepare_dispatch_head(uow, scope=scope, now=NOW) is None
+        assert uow.connection.execute("SELECT count(*) FROM execution_operations").fetchone()[0] == 1
+
+
+def test_retired_queue_backfill_preserves_receipts_and_is_idempotent(database):
+    factory, (scope, sibling) = database
+    with factory.unit_of_work() as uow:
+        retired = enqueue(uow, scope)
+        live = enqueue(uow, sibling)
+        uow.connection.execute("DROP TRIGGER session_interaction_block_retired_inputs")
+        uow.connection.execute("DELETE FROM schema_migrations WHERE version=187")
+        uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='FAILED' WHERE executor_id=?",
+                               (scope.session.executor_id,))
+        assert enqueue(uow, scope) == retired
+
+    assert MigrationRunner(factory).apply() == [187]
+    assert MigrationRunner(factory).apply() == []
+    with factory.unit_of_work() as uow:
+        assert enqueue(uow, scope) == replace(retired, status=InputDeliveryState.BLOCKED_SESSION,
+                                              input_revision=retired.input_revision + 1,
+                                              queue_revision=retired.queue_revision + 1)
+        assert enqueue(uow, sibling) == live
+        assert uow.connection.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
 
 
 def test_receipt_projection_keeps_native_acceptance_and_exact_executor(database):

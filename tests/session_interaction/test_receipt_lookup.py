@@ -103,6 +103,13 @@ def test_reads_owned_receipt_in_exact_namespace_without_mutating_store(receipt_l
     with fixture.factory.unit_of_work(write=False) as uow:
         for table in ("runtime_execution_grants", "runtime_access_audit", "execution_dispatch_outbox", "execution_leases"):
             assert uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0] == 0
+    with fixture.factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED' WHERE executor_id=?",
+                               (fixture.scope.session.executor_id,))
+    assert fixture.read() == replace(fixture.original, status=InputDeliveryState.BLOCKED_SESSION,
+                                     input_revision=fixture.original.input_revision + 1,
+                                     queue_revision=fixture.original.queue_revision + 1)
+    assert fixture.read(scope=fixture.sibling) == fixture.other
 
 
 def test_recovers_old_generation_and_current_status_without_replaying_input(receipt_lookup):

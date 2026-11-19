@@ -1,0 +1,11 @@
+# SI-008 e SI-023 — Recibo de fila após encerramento da sessão
+
+A rotina de encerramento já excluía a sessão do agendamento, mas o recibo de uma entrada ainda enfileirada continuava exibindo `QUEUED`. A migração 187 marca como `BLOCKED_SESSION` somente entradas em `QUEUED`, sem operação vinculada e sem possível efeito, quando a sessão muda para `CLOSED` ou `FAILED`. A atualização e o encerramento compartilham a mesma transação. A revisão de cada entrada afetada avança uma vez, e a revisão da fila avança uma vez por transição com entradas afetadas. O identificador, a sequência, o conteúdo e o vínculo com a sessão de origem continuam no registro original.
+
+Um envio cujo efeito é incerto continua em `DELIVERY_UNKNOWN` com a operação original. O agendador mantém a via de reconciliação existente para tentativas de capacidade. Uma perda breve do canal ou a substituição da concessão produtiva, sem encerramento confirmado da sessão, deixa a entrada disponível para o processo de recuperação. [Regressões do encerramento e migração](../../tests/session_interaction/test_queue_storage.py) · [Recuperação pelo recibo](../../tests/session_interaction/test_receipt_lookup.py)
+
+A migração corrige filas antigas que já estavam vinculadas a sessões em estado terminal. Para rollback mantendo os dados atuais, aplique uma migração posterior que desative o gatilho e preserve os recibos já atualizados. Para restaurar um wheel anterior, restaure também um backup de schema compatível.
+
+Passaram 237 testes de interação, runtime e continuidade em código-fonte e 34 testes focalizados no wheel instalado em diretório temporário. A suíte do wheel cobre encerramento canônico, rollback da transação, consulta do recibo após encerramento e migração de schema 186 para 187 com reaplicação idempotente. [Artefatos e resultados](si023-retired-session-queue.json)
+
+Esta etapa exercitou o encerramento e a consulta SQLite, com publicação pelo fluxo de liberação coberta pelas regressões R4. O ensaio nativo da retomada rápida do Connector foi feito na etapa anterior. Ainda falta qualificar a reconexão completa com geração nova, em particular entre máquinas distintas. [Retomada rápida com Pi](si022-r4-resume-lease.md)

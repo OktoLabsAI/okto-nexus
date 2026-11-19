@@ -124,6 +124,11 @@ If the Connector briefly loses its control link, it can resume the same link
 with the existing execution lease. Wait until the link is ready, then attach
 to the original session. Use the original receipt for any pending input.
 
+When Nexus closes the session, queued messages that never received an operation
+are marked as blocked and remain visible on their original receipts. Review any
+message whose delivery is uncertain using its original receipt. To send an unsent
+message to a different session, select that session and submit it explicitly.
+
 ## Follow or reorient a managed Claude session
 
 On Windows, a local Claude session resumed into the Core-managed terminal

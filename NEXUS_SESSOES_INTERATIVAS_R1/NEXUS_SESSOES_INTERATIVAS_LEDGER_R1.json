@@ -510,7 +510,9 @@
       "evidence": [
         "execution/si008-capacity-recovery.md",
         "execution/si008-receipt-lookup.md",
-        "execution/si013-dashboard-input-api.md"
+        "execution/si013-dashboard-input-api.md",
+        "execution/si023-retired-session-queue.md",
+        "execution/si023-retired-session-queue.json"
       ]
     },
     {
@@ -1165,7 +1167,9 @@
         "execution/si026-claude-retained-identity.json",
         "execution/si026-claude-source-retirement.json",
         "execution/si026-claude-owned-successor.json",
-        "execution/si026-claude-nexus-resume.json"
+        "execution/si026-claude-nexus-resume.json",
+        "execution/si023-retired-session-queue.md",
+        "execution/si023-retired-session-queue.json"
       ]
     },
     {
@@ -2477,7 +2481,7 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si023-retired-session-queue.json"]
     },
     {
       "id": "SI-T-B15",
@@ -2511,7 +2515,7 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si023-retired-session-queue.json"]
     },
     {
       "id": "SI-T-B17",

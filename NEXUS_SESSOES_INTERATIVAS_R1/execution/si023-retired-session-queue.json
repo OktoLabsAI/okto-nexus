@@ -1,0 +1,39 @@
+{
+  "tasks": ["SI-008", "SI-023"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-B14", "SI-T-B16"],
+  "source": {
+    "nexus_baseline": "a9b6db75c3f009d593839025cf014c809044efb9",
+    "connector_revision": "576e7045ae8104131c18235f3df707bda5d39b6c",
+    "core_revision": "6ec6ace51bcca05272e5bb63098d862e5641dc70"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "c8bfe534e598fd9b9d904a7538646d70c42d60cd480f1c2a37876ef10ac001cd",
+    "nexus_0.3.8_sdist_sha256": "0ad17af40fae433080292d049d691a8e7f8920278b94999393965f01df47fe98",
+    "database_migration": 187,
+    "migration_sha256": "044a9b76dcd55b8538395ed03b1513fe6945820cd0211a9ce1380a02978631dc",
+    "strict_distribution_check": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "observations": {
+    "previous_behavior_reproduced": "The canonical release left both unsent inputs QUEUED at their old revisions.",
+    "same_receipt_on_closed_session": true,
+    "one_queue_revision_increment_per_affected_transition": true,
+    "original_uncertain_operation_retained": true,
+    "sibling_executor_unchanged": true,
+    "closure_transaction_rollback_preserves_queue": true,
+    "closure_and_upgrade_are_idempotent": true,
+    "migration_preserves_integrity": true,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "interaction_runtime_and_continuity_source": {"passed": 237, "junit_sha256": "34cddbf6c0aafa3f898fba7bdcae4b05760176ab4fbc7de7eaf1e286bf229152"},
+    "focused_source": {"passed": 33, "junit_sha256": "b00ecc1c891c9ec4b321e7df09486913e53ce06c27ceb7c59f9d1e669bfc0727"},
+    "focused_installed": {"passed": 34, "junit_sha256": "4dfc7db697cf784485330b0f8771859a0b625203a3bc705a91c2b0dd7e7d1a6a"},
+    "artifact_directory": "%TEMP%/si023-session-closed-19c933aa87e144a6af48f10d17e610c5"
+  },
+  "limitations": [
+    "The receipt and upgrade checks used temporary SQLite data and the real receipt reader. They did not include a model or native harness run.",
+    "The full reconnect after fast-resume expiry and cross-machine TLS remain open."
+  ]
+}
