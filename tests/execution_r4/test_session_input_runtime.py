@@ -58,6 +58,72 @@ def interactive_runtime(monkeypatch, request):
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
+@pytest.mark.parametrize('later_unverified_result', [False, True])
+def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_runtime, local_setup, later_unverified_result):
+    setup, binding, native = interactive_runtime
+    deps, _, client, *_ = setup
+    opened = admit(setup, binding, 'claude-history-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    selected = opened['scope']
+    scope = InputScope(SessionKey(selected['server_id'], selected['executor_id'], selected['session_id']),
+        SessionOwnerGeneration(selected['session_owner_generation']), selected['binding_id'],
+        selected['workspace_id'], selected['workspace_binding_id'], selected['agent_id'])
+    session = scope.session.session_id
+    factory = deps.connection_factory
+    history_uuid = 'cb41c871-35f9-480f-90c2-f2aa920caf65'
+
+    def mapping():
+        with factory.unit_of_work(write=False) as uow:
+            return read_managed_native_session(uow, scope)
+
+    eventually(mapping)
+    observed = mapping()
+    assert observed.claude_history is None
+    with factory.unit_of_work(write=False) as uow:
+        stream = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                       (session,)).fetchone()[0]
+
+    def turn(label, identity):
+        work = admit(setup, binding, 'claude-history-' + label, 'turn.submit', session_id=session, text=label)
+        wait_receipt(setup, work)
+        payload = {'delivery_phase': 'terminal', 'delivery_outcome': 'success', 'session_id': history_uuid}
+        if identity:
+            payload['claude_history_identity'] = {'schema_version': 1, 'session_id': history_uuid}
+        client.portal.call(native.native.queue.put, RuntimeEvent(
+            scope.session.server_id, scope.session.executor_id, session, stream, 0, 'turn_state',
+            'result:success', payload, operation_id=work['operation_id']))
+        wait_receipt(setup, work, stages=('SUCCEEDED',))
+
+        def committed_result():
+            with factory.unit_of_work(write=False) as uow:
+                return uow.connection.execute("""
+                    SELECT 1 FROM execution_results r
+                    JOIN execution_event_watermarks w USING(server_id,executor_id,session_id,stream_epoch)
+                    WHERE r.server_id=? AND r.executor_id=? AND r.operation_id=?
+                      AND w.gap_state='none' AND r.terminal_sequence<=w.committed_contiguous
+                """, (scope.session.server_id, scope.session.executor_id, work['operation_id'])).fetchone()
+
+        eventually(committed_result)
+        return work['operation_id']
+
+    operation = turn('confirmed', True)
+    eventually(lambda: mapping().claude_history)
+    proof = mapping().claude_history
+    assert proof.session_uuid == history_uuid and proof.operation_id == operation
+    assert proof.event_hash.startswith('sha256:') and mapping().native_session_id != history_uuid
+    with factory.unit_of_work(write=False) as uow:
+        assert read_managed_native_session(uow, replace(scope, generation=SessionOwnerGeneration(
+            scope.generation.value + 1))) is None
+    if later_unverified_result:
+        turn('legacy-without-proof', False)
+        assert mapping().claude_history is None
+    else:
+        close = admit(setup, binding, 'claude-history-close', 'runtime.close', session_id=session)
+        wait_receipt(setup, close, stages=('SUCCEEDED',))
+        assert mapping().claude_history == proof
+
+
+@pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
 @pytest.mark.parametrize('replacement', ['submitted', 'not_sent', 'write_unknown'])
 def test_dashboard_reviews_and_recovers_exact_claude_reorientation(interactive_runtime, local_setup, replacement):
     from nexus_connector_core.native.adapter_types import (

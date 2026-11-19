@@ -1,0 +1,9 @@
+# SI-023 e SI-026 — Identidade da conversa Claude
+
+O Core observa o UUID informado pelo Claude na inicialização do turno e no resultado final. Registra a associação quando ambos pertencem ao mesmo turno, concordam entre si e o turno termina com sucesso. Uma divergência torna a identidade imprópria para retomada durante toda a vida daquele processo. Um campo fornecido diretamente pelo executável em um único frame não constitui evidência. Se a associação exceder o tamanho disponível no evento, o Core entrega o resultado e omite o metadado.
+
+O Nexus consulta o resultado terminal mais recente no stream da sessão e verifica a operação canônica, a geração, o escopo, a sequência confirmada e o hash do evento. A associação permanece consultável depois do fechamento canônico. Se um resultado mais recente não traz confirmação, o leitor fica sem candidato e preserva o histórico existente.
+
+Em um ensaio no Windows, o adaptador do Core instalado iniciou o Claude Code 2.1.328 e emitiu o evento terminal com o UUID gerado pelo próprio executável. O ensaio encerrou o processo de origem, usou esse UUID para abrir o histórico em segundo plano sem prompt e confirmou o mesmo UUID no catálogo e o mesmo PID após sair do terminal. O simulador recebeu apenas o turno que criou o histórico. A inicialização usou um perfil descartável e um endpoint local com resposta sintética. Passaram 33 testes do Core, 75 do Connector e 18 do Nexus, todos a partir dos wheels. [Resultados e hashes](si026-claude-retained-identity.json)
+
+A mudança dispensa migração. O rollback reverte os commits correspondentes e restaura os pins anteriores. A abertura em segundo plano ainda precisa ser ligada à autorização do Nexus e à prova de liberação do processo de origem. A associação de identidade registrada neste marco é uma das provas exigidas nessa transição.

@@ -5,6 +5,11 @@ from dataclasses import asdict, dataclass
 from hashlib import sha256
 from uuid import UUID
 
+from nexus_connector_core.native.claude_history_identity import (
+    CLAUDE_HISTORY_IDENTITY,
+    confirmed_claude_history,
+)
+
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.session_interaction import InputScope
 from .execution_inventory_revalidation import selection
@@ -43,6 +48,13 @@ def _launch_build(evidence: dict) -> NativeLaunchBuild | None:
 
 
 @dataclass(frozen=True, slots=True)
+class ClaudeHistoryIdentity:
+    session_uuid: str
+    operation_id: str
+    event_hash: str
+
+
+@dataclass(frozen=True, slots=True)
 class ManagedNativeSession:
     scope: InputScope
     opening_operation_id: str
@@ -57,6 +69,7 @@ class ManagedNativeSession:
     receipt_connection_generation: int | None
     codex_thread_id: str | None
     codex_configuration_hash: str | None
+    claude_history: ClaudeHistoryIdentity | None = None
 
 
 # Windows x64 app-server used in the local viewer and saved-history probes.
@@ -129,6 +142,47 @@ def _codex_opening_thread(conn, scope, stream_epoch):
     return thread_id, event['event_hash']
 
 
+def _claude_history(conn, scope, stream_epoch):
+    # The newest terminal result owns the evidence. Searching back for a
+    # convenient UUID after a later unverified result can revive a stale owner.
+    event = conn.execute("""
+        SELECT e.sequence,e.event_hash,e.payload_json,r.operation_id,r.delivery_outcome
+        FROM execution_event_ingress e
+        JOIN execution_event_watermarks w USING(server_id,executor_id,session_id,stream_epoch)
+        JOIN execution_results r ON r.server_id=e.server_id AND r.executor_id=e.executor_id
+          AND r.session_id=e.session_id AND r.stream_epoch=e.stream_epoch AND r.terminal_sequence=e.sequence
+          AND r.operation_id=json_extract(e.payload_json,'$.operation_id')
+        JOIN execution_operations o ON o.server_id=r.server_id AND o.executor_id=r.executor_id
+          AND o.operation_id=r.operation_id AND o.session_id=r.session_id
+        WHERE e.server_id=:server_id AND e.executor_id=:executor_id AND e.session_id=:session_id
+          AND e.stream_epoch=:stream_epoch AND e.sequence<=w.committed_contiguous
+          AND e.event_type='turn_state' AND w.gap_state='none'
+          AND o.subject_agent_id=:agent_id AND o.binding_id=:binding_id AND o.workspace_id=:workspace_id
+          AND o.workspace_binding_id=:workspace_binding_id AND o.action IN ('turn.submit','turn.steer')
+          AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=:owner_generation
+        ORDER BY e.sequence DESC LIMIT 1
+    """, _scope_params(scope) | {'stream_epoch': stream_epoch}).fetchone()
+    if event is None or event['delivery_outcome'] != 'success':
+        return None
+    raw = event['payload_json']
+    if 'sha256:' + sha256(raw.encode()).hexdigest() != event['event_hash']:
+        return None
+    document = json.loads(raw)
+    if (tuple(document.get(key) for key in ('server_id', 'executor_id', 'session_id', 'stream_epoch', 'sequence'))
+            != (scope.session.server_id, scope.session.executor_id, scope.session.session_id, stream_epoch, event['sequence'])
+            or document.get('category') != 'turn_state' or document.get('operation_id') != event['operation_id']
+            or document.get('native_type') != 'result:success'):
+        return None
+    payload = document.get('payload')
+    if (type(payload) is not dict or payload.get('delivery_phase') != 'terminal'
+            or payload.get('delivery_outcome') != 'success'):
+        return None
+    session_uuid = confirmed_claude_history(payload.get(CLAUDE_HISTORY_IDENTITY))
+    if session_uuid is None or session_uuid != payload.get('session_id'):
+        return None
+    return ClaudeHistoryIdentity(session_uuid, event['operation_id'], event['event_hash'])
+
+
 def read_managed_native_session(uow, scope: InputScope) -> ManagedNativeSession | None:
     """Resolve retained identity only. Process ownership and access need separate proof."""
     row = uow.connection.execute("""
@@ -169,6 +223,8 @@ def read_managed_native_session(uow, scope: InputScope) -> ManagedNativeSession 
     thread, configuration_hash = (None, None)
     if adapter == 'codex_app_server' and row['stream_epoch'] is not None:
         thread, configuration_hash = _codex_opening_thread(uow.connection, scope, row['stream_epoch'])
+    claude_history = (_claude_history(uow.connection, scope, row['stream_epoch'])
+                      if adapter == 'claude_stream' and row['stream_epoch'] is not None else None)
     return ManagedNativeSession(scope, row['operation_id'], adapter, native_id, row['stream_epoch'],
         candidate, inventory, revision, build, row['source_connection_id'], row['source_connection_generation'],
-        thread, configuration_hash)
+        thread, configuration_hash, claude_history)

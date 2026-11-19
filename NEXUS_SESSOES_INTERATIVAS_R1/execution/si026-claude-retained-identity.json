@@ -1,0 +1,44 @@
+{
+  "tasks": ["SI-023", "SI-026"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "317e1e0d",
+    "connector_revision": "ab92c4f15897ff8b5c566646211fffd4bf12dce0",
+    "core_revision": "54fa620514bfe585871de45766a1d5d54205667b"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "6bbaac09c7814fed365aa90af143ac2645ebe42fed535b81f3142deabce24f98",
+    "connector_0.0.15_wheel_sha256": "76e9887fe7a208f253e67f7c7cea7da007b8f609a9c2991b95e74f03b7e6ec94",
+    "core_0.0.16_wheel_sha256": "b21500a52e25d6ad86e8ecae23ff799521bbe291f0809e126666fedd6d6e72eb",
+    "database_migration": null
+  },
+  "regressions": {
+    "installed_core_claude_identity_protocol_and_control": 33,
+    "installed_connector_boundaries_link_and_daemon": 75,
+    "installed_nexus_session_input_runtime_and_remote_claude_steer": 18,
+    "generated_contract_checks": "PASS",
+    "strict_wheel_metadata": "PASS",
+    "offline_uv_lock_check": "PASS"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "installed_core_owned_real_cli_and_corroborated_terminal_event": true,
+    "uuid_assigned_by_claude": true,
+    "original_stream_process_closed_successfully_first": true,
+    "saved_background_owner_reported_identical_uuid": true,
+    "history_rendered_in_native_terminal": true,
+    "background_pid_preserved_on_detach": true,
+    "new_prompt_or_model_request_on_resume": false,
+    "loopback_model_request_count": 1,
+    "canonical_exact_stop_exit": 0,
+    "fixture": "%TEMP%/nexus-si026-claude-owned-history-1795084167788",
+    "fixture_sha256": "4d0b650d3b4e215d7d17c574669277af3f74cc8707dd58c642ff4131590fc654",
+    "observations_sha256": "9fd0b744b86ca1178b4b8a525137c3dbdb46d849cd689df3dc305b5477bd85a0"
+  },
+  "limitations": [
+    "The native probe used a real Claude CLI owned by the installed Core adapter. The Nexus persistence tests used synthetic events through the managed runtime.",
+    "An observed UUID binds the retained conversation identity. A product transfer still needs close and release proof, scoped launch configuration, exclusive successor admission and fail-closed authorization.",
+    "Native Claude presentation is still pending in the product."
+  ]
+}
