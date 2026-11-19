@@ -40,9 +40,23 @@
     "installed_core_pi_native_inputs": 14,
     "database_migration_required": false
   },
+  "installed_edge_browser": {
+    "version": "157.0.4341.60",
+    "driver": "Playwright CLI on Windows",
+    "surface_paths": ["Home > Needs you > Respond", "Needs attention > Open question"],
+    "native_answers_from_browser": 3,
+    "all_three_native_receipts": "SUBMITTED",
+    "pi_extension_observed_exact_answers": true,
+    "attention_count_returned_to_zero": true,
+    "queue_released_after_agent_settled": true,
+    "viewer_attachments_detached": 2,
+    "canonical_close": "SUCCEEDED",
+    "operator_sign_in_lost_question_selection": true,
+    "reopened_same_question_from_home": true
+  },
   "limitations": [
     "The Pi process and Windows native terminal are real. A temporary extension generates the dialogs and the provider response is deterministic in-process synthetic data.",
-    "Home and Attention are verified through their backend HTTP endpoints. Browser interaction and assistive technology were outside this proof.",
+    "The Edge probe covers choosing, denying and answering through the product UI. It leaves other browsers, assistive technology, continuity across sign-in and human acceptance open.",
     "This proof covers Pi extension dialog responses for a local owner. Remote Connector validation, live providers and the remaining scenario levels are open."
   ]
 }
