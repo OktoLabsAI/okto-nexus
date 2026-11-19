@@ -1,0 +1,42 @@
+{
+  "task": "SI-026",
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-C03", "SI-T-C05", "SI-T-C06", "SI-T-C07"],
+  "source": {
+    "nexus_baseline": "a451afd68e2991d0380294de4bdc0ebc5b5d45d9",
+    "connector_baseline": "a0ef60a5e7726666ad67b8f22d4d04df4b9097c2",
+    "connector_pin_revision": "87d69ab051b4519477bd18c419b3fb73f52dd3c4",
+    "core_baseline": "f592099f53380d7fa85329cdff85aa91bfff9f8d",
+    "core_revision": "43a663efad7e0c4ca91970dc9b6a6e1432df88ae"
+  },
+  "artifacts": {
+    "core_0.0.16_wheel_sha256": "8468cd7c1778ce34d6b42841d5ec054dbe110ca0aba63bf16d382a59cd72c0ad",
+    "core_0.0.16_sdist_sha256": "dc0729ca6e79c706627ef23177640b9fd7fd51bc76f27700ccc80846368a9643",
+    "previous_core_0.0.16_wheel_sha256": "23ce1bed9403715c4e8597d14b6b7b850806669b3c7bb8ee34babc40f0e8cdfc",
+    "changed_core_package_members": 5,
+    "unchanged_core_package_members": 170
+  },
+  "observed": {
+    "generating_fact_owned_by_exact_original_operation": true,
+    "reviewed_target_refused_if_head_changed_at_writer": true,
+    "wire_frames_written_for_stale_review": 0,
+    "original_success_preserved_on_natural_finish_during_interrupt": true,
+    "replacement_withheld_on_natural_finish_during_interrupt": true,
+    "replacement_waited_for_matching_interrupt_reply_and_original_interrupted_result": true,
+    "reviewed_target_bound_to_recovery_hash": true,
+    "external_provider_requests": 0
+  },
+  "regressions": {
+    "installed_core": 112,
+    "installed_connector": 8,
+    "installed_nexus": 3,
+    "strict_wheel_and_sdist_check": "PASS",
+    "both_generated_contracts": "PASS",
+    "offline_nexus_lock_check": "PASS",
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The stream-json peer is a synthetic subprocess. The native Claude terminal, external provider and remote Connector path were outside the probe.",
+    "This evidence covers Core and R4 receipt association. The Nexus operator review and admission for Claude remain pending."
+  ]
+}

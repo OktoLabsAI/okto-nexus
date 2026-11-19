@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `f592099f53380d7fa85329cdff85aa91bfff9f8d`.
-The unpublished wheel SHA-256 is `23ce1bed9403715c4e8597d14b6b7b850806669b3c7bb8ee34babc40f0e8cdfc`.
-Claude stream steering retains separate evidence for interruption and replacement writes, including partial outcomes.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `43a663efad7e0c4ca91970dc9b6a6e1432df88ae`.
+The unpublished wheel SHA-256 is `8468cd7c1778ce34d6b42841d5ec054dbe110ca0aba63bf16d382a59cd72c0ad`.
+Reviewed Claude reorientation checks the original operation before writing and waits for its confirmed interruption before sending the replacement.
 The reviewed hosted Pi RPC owner checks the approved run immediately before abort. Its terminal event retains the exact run.
 The Nexus CI manifest also identifies the matching Connector wheel.
 

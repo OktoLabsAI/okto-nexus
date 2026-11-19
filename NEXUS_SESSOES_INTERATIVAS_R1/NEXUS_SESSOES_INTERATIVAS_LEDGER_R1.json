@@ -1300,7 +1300,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si026-claude-compound-steer.md",
-        "execution/si026-claude-compound-steer.json"
+        "execution/si026-claude-compound-steer.json",
+        "execution/si026-claude-reviewed-target.md",
+        "execution/si026-claude-reviewed-target.json"
       ]
     },
     {
@@ -2551,7 +2553,8 @@
         "execution/si024-codex-interrupt-queue-windows.json",
         "execution/si024-codex-interrupt-queue-windows.md",
         "execution/si024-codex-native-steer-confirmation.md",
-        "execution/si024-codex-native-steer-confirmation.json"
+        "execution/si024-codex-native-steer-confirmation.json",
+        "execution/si026-claude-reviewed-target.json"
       ]
     },
     {
@@ -2594,7 +2597,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si026-claude-compound-steer.json"
+        "execution/si026-claude-compound-steer.json",
+        "execution/si026-claude-reviewed-target.json"
       ]
     },
     {
@@ -2614,7 +2618,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si026-claude-compound-steer.json"
+        "execution/si026-claude-compound-steer.json",
+        "execution/si026-claude-reviewed-target.json"
       ]
     },
     {
@@ -2634,7 +2639,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si026-claude-compound-steer.json"
+        "execution/si026-claude-compound-steer.json",
+        "execution/si026-claude-reviewed-target.json"
       ]
     },
     {
