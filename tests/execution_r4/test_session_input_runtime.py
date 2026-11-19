@@ -64,35 +64,55 @@ def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt
     from uuid import uuid4
 
     from nexus_connector_core.native.claude_terminal_prompt import ClaudeTerminalPromptGate
-    from nexus_connector_core.native.claude_terminal_submission import ClaudeTerminalSubmission
+    from nexus_connector_core.native.claude_terminal_submission import ClaudeTerminalSession
+    from nexus_connector_core.native.redaction import NativeSecretRedactor
 
     setup, binding, native = interactive_runtime
     deps, app, client, headers, *_, workspace_root = setup
-    opened = admit(setup, binding, 'terminal-source', 'runtime.start', new_session=True)
-    wait_receipt(setup, opened)
-    scope = opened['scope']
-    session = scope['session_id']
     native_session = str(uuid4())
     cwd = str(workspace_root.resolve())
     replies = []
 
-    with ClaudeTerminalPromptGate(native_session, cwd, 'plan', lambda _operation: True) as gate:
+    with ClaudeTerminalPromptGate(native_session, cwd, 'plan', lambda _operation: True, observe_results=True) as gate:
         settings, env = gate.launch_settings()
         hook = settings['hooks']['UserPromptSubmit'][0]['hooks'][0]
+        completion = settings['hooks']['Stop'][0]['hooks'][0]
+        token = next(iter(env.values()))
+
+        def send_hook(url, kind, **fields):
+            body = {'hook_event_name': kind, 'session_id': native_session, 'cwd': cwd,
+                    'permission_mode': 'plan', 'prompt_id': 'fixture-prompt', **fields}
+            request = Request(url, data=json.dumps(body).encode(), headers={
+                'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token,
+            })
+            with urlopen(request, timeout=4) as response:
+                return json.load(response)
 
         class LostTerminalReply:
+            birth = None
+            stopped = False
+
             def write(self, data):
-                body = {'hook_event_name': 'UserPromptSubmit', 'session_id': native_session, 'cwd': cwd,
-                        'permission_mode': 'plan', 'prompt': data[6:-7].decode()}
-                request = Request(hook['url'], data=json.dumps(body).encode(), headers={
-                    'Content-Type': 'application/json', 'Authorization': 'Bearer ' + next(iter(env.values())),
-                })
-                with urlopen(request, timeout=4) as response:
-                    replies.append(json.load(response))
+                replies.append(send_hook(hook['url'], 'UserPromptSubmit', prompt=data[6:-7].decode()))
                 raise OSError('Synthetic loss after the native terminal received the hook reply.')
 
-        driver = ClaudeTerminalSubmission(LostTerminalReply(), gate)
-        monkeypatch.setattr(native.native, 'terminal_submission', driver, raising=False)
+            def poll(self):
+                return 0 if self.stopped else None
+
+            def close(self):
+                self.stopped = True
+
+        async def open_owned_terminal(_prepared, session_id, context, *, stream_epoch):
+            native.native = ClaudeTerminalSession(
+                LostTerminalReply(), gate, native_id='fixture-owned-terminal', session_id=session_id,
+                stream_epoch=stream_epoch, context=context, redactor=NativeSecretRedactor(('fixture-secret',)))
+            return native.native
+
+        monkeypatch.setattr(native, 'open', open_owned_terminal)
+        opened = admit(setup, binding, 'terminal-source', 'runtime.start', new_session=True)
+        wait_receipt(setup, opened)
+        session = opened['scope']['session_id']
+        driver = native.native.terminal_submission
         operation = admit(setup, binding, 'terminal-uncertain', 'turn.submit', session_id=session, text='Exact input.')
         observed = wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',))
         assert observed['operation_id'] == operation['operation_id']
@@ -103,14 +123,19 @@ def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt
         assert replayed.status_code == 200 and replayed.json()['operation_id'] == operation['operation_id']
         assert wait_receipt(setup, operation, stages=('OUTCOME_UNKNOWN',)) == observed
 
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
-                                           (session,)).fetchone()[0]
-        client.portal.call(native.native.queue.put, RuntimeEvent(
-            scope['server_id'], scope['executor_id'], session, epoch, 0, 'turn_state', 'fixture-result',
-            {'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id=operation['operation_id']))
+        send_hook(completion['url'], 'Stop', stop_hook_active=False, background_tasks=[], session_crons=[],
+                  last_assistant_message='Result fixture-secret')
         wait_receipt(setup, operation, stages=('SUCCEEDED',))
         assert replies == [{}] and not driver.active_turn()
+
+        def result():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                return uow.connection.execute(
+                    'SELECT output_text FROM execution_results WHERE operation_id=? AND terminal_sequence IS NOT NULL',
+                    (operation['operation_id'],)).fetchone()
+
+        eventually(result)
+        assert result()['output_text'] == 'Result [REDACTED]'
 
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)

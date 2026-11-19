@@ -1,0 +1,56 @@
+{
+  "tasks": ["SI-026"],
+  "status": "IN_PROGRESS",
+  "source": {
+    "nexus_baseline": "5258ca93e110c4654e4f904dbb3538ea4bb2e6f3",
+    "core": "a1966a73cb2ba06f549167266b220d3bab5846d6",
+    "connector": "e91c83b9413ba330d1ac68a906713f57f0db66e6"
+  },
+  "artifacts_sha256": {
+    "nexus": "a0726d27c1bf7ad434bd777aaf4cd7c5e9b2121f3f14714028fa8d68fda9b24a",
+    "core": "22d12e6cc313776b698d69b7a2d7d66c4d039f7e0e9fe876fd58e0025bd7e651",
+    "connector": "de6cc0b489cba65e0e0033e93b772d3602937c028c6633a68de73ae97c0831cc"
+  },
+  "regressions": {
+    "installed_core_terminal_hooks_native_ownership_and_fences": 75,
+    "installed_connector_boundaries_daemon_execution_control_and_lifecycle": 83,
+    "installed_nexus_session_inputs_saved_resume_and_remote_claude_controls": 25,
+    "source_embedded_r4_completion_settles_uncertain_receipt_and_redacts_output": "PASS",
+    "same_prompt_same_session_replay_is_ignored": true,
+    "wrong_scope_wrong_prompt_and_pending_background_work_leave_turn_unsettled": true,
+    "completion_preserves_a_result_above_the_prompt_body_limit": true,
+    "generated_core_contracts": "PASS",
+    "strict_wheel_metadata_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "tools_enabled": false,
+    "success": {
+      "canonical_receipt_after_stop": "SUCCEEDED",
+      "original_receipt_recovered_without_resubmission": true,
+      "exact_output_persisted_by_core": true,
+      "same_owner_completed_without_reader": true,
+      "loopback_model_calls_during_turn": 1,
+      "fixture": "D:/nexus-si026-result-wheel-0-1795089201851",
+      "probe_sha256": "dd3f42895217a108c205750a4e6ff5baab3755795411079f22a2ebaa108c4bde",
+      "observations_sha256": "547ac48afa0751d34fd53543ff28ecc8dd64b1db9b99fe1c16061ef81a2dad7c"
+    },
+    "api_failure": {
+      "canonical_receipt_after_stop_failure": "FAILED",
+      "original_receipt_recovered_without_resubmission": true,
+      "only_canonical_error_code_published": true,
+      "loopback_model_calls_during_turn": 4,
+      "fixture": "D:/nexus-si026-result-wheel-1-1795089201851",
+      "probe_sha256": "ee7cffe48c043846961d32c6ddff5a79c92453e2b2f4cd39939492a3d227b316",
+      "observations_sha256": "20e7bf75156623d643b24cdbc7e2c275a0d69a74457df56067c196d5706220d5"
+    }
+  },
+  "limitations": [
+    "The installed Core was exercised with real Claude and an isolated launch factory. The Nexus R4 scenario used synthetic hook requests against the real gate, reducers and journal.",
+    "Success observation must be enabled only for a reviewed effective configuration with no other Stop decision that can prolong work.",
+    "Product successor admission, presentation transport, native interruption and tool decisions remain pending."
+  ]
+}
