@@ -1,0 +1,54 @@
+{
+  "task": "SI-026",
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "b4e41592", "main": "8d77b50c"},
+    "connector": {"branch": "feature/v0.0.15", "head": "6e7fa28", "main": "a3017d9"},
+    "core": {"branch": "feature/v0.0.16", "head": "39e449a", "main": "19c99f1"}
+  },
+  "core_revision": "64023909e96b8b042442e7065cc79668b7029ff8",
+  "connector_revision": "6fe4d5d44dcec50561e84d8fd88e2352ffcecd03",
+  "artifacts_sha256": {
+    "core": "d705fc53671aa0ae5d64362b2e9b3e350291470907b3f45b47fcee0fbe12c039",
+    "connector": "1d9b009cd6117aac753d1301d709282c779df32c6cc36f2b501f845ce4024ae6",
+    "nexus": "99bf28279116270e22dd275989c855af7af2a0529c8298ef003a2f855b0ad05e"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "source_fixture": "D:/nexus-si026-gen-src-final-1795096597475",
+    "installed_fixture": "D:/nexus-si026-gen-installed-final-1795096687135",
+    "probe_sha256": "7df082ddd71ca883bbf81641fed3b1f5c3ddfae24cd2bfae697e964fc9ca5dec",
+    "observations_sha256": "b1d47022f6c8f8ec40e28c53cb1be373e5649398c5ad50797a8fbe77671ffdcf",
+    "generation_while_prompt_hook_held": false,
+    "generation_before_provider_response": false,
+    "generation_after_first_response": {"event_count": 1, "exact_operation": true, "private_fields_omitted": true},
+    "generation_after_confirmed_cancellation": false,
+    "next_explicit_turn_same_process": "SUCCEEDED",
+    "trace_deleted_after_canonical_close": true,
+    "remaining_job_pids": []
+  },
+  "diagnostic_probe": {
+    "fixture": "D:/nexus-si026-gen-volatile-1795096233065",
+    "probe_sha256": "d000225b5495a78b4e249fe56f1d9b9395c81aec2beccd0ad4587a767b71f024",
+    "observations_sha256": "4aaad555ce54a1a5d230ad40e067bc09e3da5bdd839626f55215f26d5c10dd4d",
+    "named_pipe_writer_delivered_bytes": false,
+    "generic_api_filter_included_first_byte": false,
+    "reviewed_filtered_file_and_delete_on_close": true
+  },
+  "verification": {
+    "installed_core_tests": 44,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 4,
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed",
+    "focused_core_lint": "passed"
+  },
+  "limitations": [
+    "Only the pinned Windows executable and reviewed plan profile with tools denied were qualified.",
+    "Missing, ambiguous or detached provider request evidence leaves the observation unavailable.",
+    "The runtime records generation evidence. Operator controls and approval integration are still pending on this terminal route."
+  ],
+  "migration": "none"
+}
