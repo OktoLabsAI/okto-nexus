@@ -1,0 +1,71 @@
+{
+  "tasks": ["SI-034", "SI-036"],
+  "evidence_status": "PARTIAL_TASK_COVERAGE",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "4f19c37ece994680255eb034e8af230a78a98cbd", "main": "8d77b50c00b417c86818d027aed7497fababac34", "ahead_of_main": 452},
+    "connector": {"branch": "feature/v0.0.15", "head": "e26f65a48e72907de212e917e5035a2f4623afb8", "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2", "ahead_of_main": 83},
+    "core": {"branch": "feature/v0.0.16", "head": "aaebb3a0a43ced4be3e830eb0b1cea762e519b6f", "main": "19c99f15b17ae994653ad9e190964229a0e296e8", "ahead_of_main": 62},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "installed_wheels_sha256": {
+    "nexus": "b296305c5efd75eb19d55344fc13075a6c18a1de9de788f967861f4bd3567c96",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "7424e8d4424900b6b414de5d43778e9ba18c79d8f6579bee9a83ec1fcfeb093e"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "browser_driver": "Playwright CLI",
+    "dashboard_js_asset": "index-DPBNbalO.js",
+    "pi_version": "0.87.1",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "same_agent_and_project": true,
+    "independent_pi_processes": 2,
+    "operator_authentication": "Disposable signed-in browser with X-Nexus-Operator-Session-Required. A separate signed-in terminal fixture controlled canonical cleanup.",
+    "transport": "Real Nexus and Connector HTTP and control WebSocket over loopback",
+    "provider_transport": "Deterministic fixture loaded in each real Pi process with outgoing network disabled",
+    "external_model_calls": 0
+  },
+  "scenarios": {
+    "SI-T-E10": "PASS on the recorded browser. The exact picker did not preselect a session. Switching A to B to A and back preserved the two distinct drafts and their own transcripts. No runtime POST occurred.",
+    "SI-T-E15": "PASS for the live server-side logout path. Returned 200 for logout, removed protected UI and mutation controls before reauthentication, then reopened the exact retained transcripts with empty composers.",
+    "SI-T-H16": "PASS for a real Pi run and the recorded browser-author revocation. The exact queued input stayed durable as BLOCKED_AUTH, with no operation after reauthentication. The two existing turns and only those turns succeeded.",
+    "SI-T-E13": "Supplemental pass for pointer activation of the first of two Results cards at 360 CSS pixels in Edge. Browser zoom and broader control coverage stay open."
+  },
+  "regressions_passed": {
+    "frontend_node": 417,
+    "installed_api_authority_conversation_queue": 57,
+    "browser_with_two_native_owners": 1
+  },
+  "final_durable_state": {
+    "sqlite_integrity": "ok",
+    "retained_results": 2,
+    "distinct_session_turn_operations": 2,
+    "closure_receipts_succeeded": 2,
+    "revoked_queue_status_after_relogin": "BLOCKED_AUTH",
+    "revoked_queue_received_operation": false
+  },
+  "probe_recovery": [
+    "The first collection failed because the isolated dependency target lacked websockets. Installed the cached dependency in that target.",
+    "The first native attempt reached both sessions. The observer assumed a single Core runtime; the final probe enumerates both runtimes and checks that the two sessions have distinct live PIDs.",
+    "Dismissed the metrics settings overlay and awaited the existing dialog's hidden state before the mobile pointer activation."
+  ],
+  "local_evidence_sha256": {
+    "test_browser_session_isolation.py": "465b3427330936a423ce6e4960d11f2ecfc404d55914d849d4e94c3f189d1387",
+    "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "browser-switch.json": "ca3711aafbd993d6067adbcf9062c31641d52028adde4c738ef27cb3d69f3094",
+    "browser-queue.json": "e7d4d069036e8256f3761c99f2f2ea09ab744423af02a1c1dc0146bed9c60965",
+    "browser-revoke.json": "10d409dbaaf8922585f112133ceb7b6388b254fda65cdaaf1c968f75b9bc501a",
+    "backend-proof.json": "71ce6125cf86ccbb4508ee869a0aeafcb9eaafe7b1dcf9b594fedecc8c4b7e17",
+    "browser-signback.json": "c6eff559de456914db3fa1d37b750410f6edbfcc2a25c99cfb8ab9dc2f48d3fe",
+    "browser-mobile-result.json": "5ec8627708874c0a8ab01907f855eead0bc10a8c8866316e352df2b7fc9631f2",
+    "candidate.xml": "2602ade707a948358bf82813c1dd9443518b7572039646211d30b34bda60b4ba",
+    "durable-audit.json": "f33d8b5b6ec3b896d2fa1d892289323f9bfd92f9703a2b9f8d0bf1ba72028a32"
+  },
+  "limitations": [
+    "The live browser path used revocation of a signed-in session through actual logout. Distinct causes of 401/403 and other browser authentication modes remain outside this probe.",
+    "This stage did not exercise a viewer in a terminal, a real provider, a second OS, screen reader, zoom at 200 percent or human acceptance."
+  ],
+  "migration": "none"
+}

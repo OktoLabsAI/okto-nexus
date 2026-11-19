@@ -1752,7 +1752,10 @@
         "SI-T-H20"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": [
+        "execution/si036-browser-session-isolation.json",
+        "execution/si036-browser-session-isolation.md"
+      ]
     },
     {
       "id": "SI-035",
@@ -1842,7 +1845,9 @@
         "execution/si036-claude-browser-roundtrip.md",
         "execution/si036-claude-browser-roundtrip.json",
         "execution/si036-pi-browser-queue-transcript.md",
-        "execution/si036-pi-browser-queue-transcript.json"
+        "execution/si036-pi-browser-queue-transcript.json",
+        "execution/si036-browser-session-isolation.json",
+        "execution/si036-browser-session-isolation.md"
       ]
     },
     {
@@ -3452,8 +3457,10 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si036-browser-session-isolation.json"
+      ]
     },
     {
       "id": "SI-T-E11",
@@ -3505,7 +3512,8 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si036-pi-browser-queue-transcript.json"
+        "execution/si036-pi-browser-queue-transcript.json",
+        "execution/si036-browser-session-isolation.json"
       ]
     },
     {
@@ -3540,7 +3548,9 @@
         "SI-R21"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si036-browser-session-isolation.json"
+      ]
     },
     {
       "id": "SI-T-E16",
@@ -4650,8 +4660,10 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si036-browser-session-isolation.json"
+      ]
     },
     {
       "id": "SI-T-H17",
