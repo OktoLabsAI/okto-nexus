@@ -6,6 +6,7 @@ import json
 import logging
 import os
 from pathlib import Path
+import re
 import socket
 import sys
 import tempfile
@@ -34,6 +35,7 @@ PROMPT = 'Inspect the same Pi turn during viewer detach'
 RESULT = 'Pi result delivered to the reattached Nexus terminal'
 FOLLOW_UP = 'Submit the follow-up through the Nexus queue'
 FOLLOW_UP_RESULT = 'Pi result after the canonical queue released the follow-up'
+EDITOR_FOLLOW_UP = 'Revisão do turno em andamento\nEnvie a resposta após a liberação'
 
 
 def wait_for(check, *, seconds=120):
@@ -214,6 +216,7 @@ def run(node, release, conpty_helpers, *, queue, queue_surface):
     workspace = root / 'workspace'
     workspace.mkdir()
     results = [RESULT, FOLLOW_UP_RESULT] if queue else [RESULT]
+    follow_up_text = EDITOR_FOLLOW_UP if queue_surface == 'editor' else FOLLOW_UP
     agent, signals, sandbox = isolated_provider(root, release, workspace, results)
     native_environment = ApprovedLocalLaunch.environment
 
@@ -304,18 +307,20 @@ call = RemoteOperatorHTTP(os.environ['NEXUS_PROBE_ADDRESS'], token=os.environ['N
 handles = [msvcrt.get_osfhandle(f.fileno()) for f in (sys.stdin, sys.stdout)]
 saved = [_mode(handle) for handle in handles]
 assert sys.stdin.isatty() and sys.stdout.isatty()
-result = attach_session(call, binding, session_id=session, interactive=True)
-assert result['scope']['session_id'] == session and result['attach_strategy'] == 'pi_local_read'
+write = os.environ['NEXUS_PROBE_PI_WRITE'] == 'yes'
+result = attach_session(call, binding, session_id=session, interactive=True, write=write)
+assert result['scope']['session_id'] == session
+assert result['attach_strategy'] == ('pi_local_write' if write else 'pi_local_read')
 assert [_mode(handle) for handle in handles] == saved
 print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
 ''', encoding='utf-8')
 
                 @contextmanager
-                def viewer(name):
+                def viewer(name, *, write=False):
                     env, cwd = environment(root / name, 'http://127.0.0.1:1')
                     env.update(PYTHONPATH=os.environ['PYTHONPATH'], NEXUS_PROBE_BINDING=json.dumps(binding),
                                NEXUS_PROBE_SESSION=data['session_id'], NEXUS_PROBE_ADDRESS=address,
-                               NEXUS_PROBE_OPERATOR=token)
+                               NEXUS_PROBE_OPERATOR=token, NEXUS_PROBE_PI_WRITE='yes' if write else 'no')
                     console = ProbeConsole([sys.executable, '-B', str(child)], env, cwd)
                     try:
                         yield console
@@ -351,10 +356,35 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 follow_up = None
                 if queue:
                     print('Enqueuing a follow-up while the Pi turn is streaming', flush=True)
-                    presenter = queue_surface == 'presenter'
-                    follow_up = enqueue_follow_up(client, data, scope.generation.value, token,
-                        presenter_address=address if presenter else None,
-                        other_login=auth.login('operator', password) if presenter else None)
+                    if queue_surface == 'editor':
+                        with viewer('native-editor', write=True) as writer:
+                            wait_for(active_attachment, seconds=15)
+                            await_text(writer, PROMPT)
+                            pasted = (follow_up_text.replace('\n', '\r\n') + 'X').encode('utf-8')
+                            write_input(writer.input, b'\x1b[200~' + pasted + b'\x1b[201~')
+                            await_text(writer, follow_up_text.splitlines()[-1] + 'X')
+                            with deps.connection_factory.unit_of_work(write=False) as uow:
+                                assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == 0
+                            write_input(writer.input, b'\x7f\r')
+                            await_text(writer, 'Message recorded as sin_')
+                            input_id = re.search(rb'Message recorded as (sin_[0-9a-f]{32})', bytes(writer.output))[1].decode()
+                            detach(writer)
+                        client.cookies.set('nexus_operator_session', token)
+                        query = {key: value for key, value in data.items() if key != 'session_id'}
+                        query |= {'input_id': input_id, 'expected_session_generation': scope.generation.value}
+                        url = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}/presenter/inputs/receipt"
+
+                        def follow_up():
+                            response = client.get(url, params=query, headers={'X-Nexus-UI': '1'})
+                            assert response.status_code == 200, response.text
+                            value = response.json()
+                            assert value['scope'] == data and value['input_id'] == input_id, value
+                            return value
+                    else:
+                        presenter = queue_surface == 'presenter'
+                        follow_up = enqueue_follow_up(client, data, scope.generation.value, token,
+                            presenter_address=address if presenter else None,
+                            other_login=auth.login('operator', password) if presenter else None)
                     wait_for(lambda: not active_attachment(), seconds=8)
 
                 with viewer('second-viewer') as second:
@@ -370,7 +400,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     await_text(second, RESULT)
                     receipt(sent, 'SUCCEEDED')
                     if follow_up:
-                        await_text(second, FOLLOW_UP)
+                        await_text(second, follow_up_text.splitlines()[0])
                         delivery = follow_up()
                         assert delivery['status'] in ('DISPATCHING', 'ACCEPTED_NATIVE') and delivery['operation_id'], delivery
                         signals[1].touch()
@@ -383,7 +413,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 closed = admit(setup, binding, 'isolated-pi-close', 'runtime.close', session_id=data['session_id'])
                 receipt(closed, 'SUCCEEDED')
                 with deps.connection_factory.unit_of_work(write=False) as uow:
-                    tickets = 3 if queue and queue_surface == 'presenter' else 2
+                    tickets = 3 if queue and queue_surface in ('presenter', 'editor') else 2
                     assert [row[0] for row in uow.connection.execute('SELECT state FROM session_attachments')] == ['DETACHED'] * tickets
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == len(results)
                     assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue)
@@ -405,7 +435,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 assert records[0]['id'] == before[0].native_session_id
                 messages = [record['message'] for record in records if record['type'] == 'message']
                 assert [message['role'] for message in messages] == ['system'] + ['user', 'assistant'] * len(results)
-                expected = [PROMPT, RESULT, FOLLOW_UP, FOLLOW_UP_RESULT] if queue else [PROMPT, RESULT]
+                expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue else [PROMPT, RESULT]
                 assert [message['content'][0]['text'] for message in messages[1:]] == expected
                 print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': tickets,
                                   'same_running_pi_process_after_detach': True, 'synthetic_turns': len(results),
@@ -423,7 +453,7 @@ if __name__ == '__main__':
     parser.add_argument('--pi-release', type=Path, required=True)
     parser.add_argument('--conpty-helpers', type=Path, required=True)
     parser.add_argument('--queue', action='store_true', help='Exercise the canonical queue with a synthetic follow-up.')
-    parser.add_argument('--queue-surface', choices=('web', 'presenter'), default='web')
+    parser.add_argument('--queue-surface', choices=('web', 'presenter', 'editor'), default='web')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),

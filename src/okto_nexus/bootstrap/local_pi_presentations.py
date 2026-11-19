@@ -51,4 +51,5 @@ def publish_local_pi_presentations(app, dispatch):
         SessionAttachmentBroker(state.deps.connection_factory, authority_fence=state.operator_auth.authority_fence,
                                 current_capability=revision),
         prove, dispatch.open_native_pi_renderer,
-        build_execution_access(state.deps) if next_turn_revision is not None else None, next_turn_revision)
+        build_execution_access(state.deps) if next_turn_revision is not None else None, next_turn_revision,
+        open_editor=getattr(dispatch, 'open_native_pi_editor', None))

@@ -30,13 +30,16 @@ from ...outbound.terminal_http import LocalOperatorHTTP
 from .codex_viewer_process import present_codex, select_viewer
 from .connect import project_profile
 from .native_input import display_text
+from .pi_viewer_terminal import show_pi_editor
 from .quick_connect_ids import binding_reference, public_ids
 from .quick_connect_project import local_executor, project_context
 from .service import resolve_local_service
 from .session_commands import (
     COMMANDS,
     INTENT,
+    PI_INPUT_INTENT,
     execute_session_command,
+    recover_pi_input,
     recover_session_command,
 )
 from .terminal_target import resolve_terminal_target, terminal_target_selection
@@ -145,6 +148,15 @@ def _show_pi_transcript(link):
         raise ConnectionError('PRESENTATION_TTY_REQUIRED', 'The terminal could not display the Pi transcript.') from None
 
 
+def _approve_writer_transfer(writer):
+    if writer is None or not writer.occupied:
+        return True
+    try:
+        return input('Transfer terminal input from the current writer? [y/N] ').strip().lower() in ('y', 'yes')
+    except EOFError:
+        return False
+
+
 def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False):
     """Open a viewer for the exact existing session and return the detach receipt."""
     selected = _select_session(call, binding, session_id, interactive=interactive)
@@ -162,34 +174,48 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
     if binding.get('adapter_id') == 'pi_rpc':
-        if write or viewer_executable is not None:
-            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The local Pi transcript is read-only.')
-        revision = review_local_presentation(call, scope=scope, expected_session_generation=generation, presentation='pi')
+        if viewer_executable is not None or write and sys.platform != 'win32':
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')
+        reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
+                                             presentation='pi', **({'write': True} if write else {}))
+        writer = reviewed if write else None
+        revision = writer.capability_revision if writer else reviewed
+        if not _approve_writer_transfer(writer):
+            return None
         size = shutil.get_terminal_size(fallback=(100, 36))
         viewport = (max(24, min(300, size.columns)), max(8, min(120, size.lines)))
-        print(f'Opening read-only Pi for {display_text(scope["session_id"])} '
+        mode = 'Pi with session input' if writer else 'read-only Pi'
+        print(f'Opening {mode} for {display_text(scope["session_id"])} '
               f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
+        if writer:
+            print('Enter records your message in the session queue.')
+            print(f'Receipt recovery uses session generation {generation}.')
         print('Ctrl+C detaches this viewer.', flush=True)
+
+        def recover(intent):
+            try:
+                return recover_pi_input(call, scope, generation, intent)['receipt']
+            except ConnectionError:
+                return None
+
         with open_local_presentation(call, scope=scope, expected_session_generation=generation,
                                      capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
-                                     pi_viewport=viewport) as link:
-            _show_pi_transcript(link)
+                                     pi_viewport=viewport, **({'writer': writer, 'pi_editor': True} if writer else {})) as link:
+            if writer:
+                show_pi_editor(link, recover)
+            else:
+                _show_pi_transcript(link)
         _display({'state': 'detached'}, False)
         print('Session ' + display_text(scope['session_id']))
         return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
-                'attach_strategy': 'pi_local_read', 'capability_revision': revision}
+                'attach_strategy': 'pi_local_write' if writer else 'pi_local_read', 'capability_revision': revision}
     reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
                                          **({'write': True} if write else {}))
     executable = select_viewer(viewer_executable)
     writer = reviewed if write else None
     revision = writer.capability_revision if writer else reviewed
-    if writer and writer.occupied:
-        try:
-            confirmation = input('Transfer terminal input from the current writer? [y/N] ')
-        except EOFError:
-            return None
-        if confirmation.strip().lower() not in ('y', 'yes'):
-            return None
+    if not _approve_writer_transfer(writer):
+        return None
     mode = 'Codex with session input' if writer else 'read-only Codex'
     print(f'Opening {mode} for {display_text(scope["session_id"])} '
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
@@ -309,7 +335,8 @@ def run_session(argv):
     if args.action in COMMANDS and args.json:
         parser.error('write actions require terminal confirmation')
     if args.action == 'receipt':
-        if args.intent is None or INTENT.fullmatch(args.intent) is None or not 0 < (args.owner_generation or 0) < 2**63:
+        if (args.intent is None or not (INTENT.fullmatch(args.intent) or PI_INPUT_INTENT.fullmatch(args.intent))
+                or not 0 < (args.owner_generation or 0) < 2**63):
             parser.error('receipt requires the terminal --intent and original --owner-generation')
     elif args.intent is not None or args.owner_generation is not None:
         parser.error('--intent and --owner-generation require receipt')

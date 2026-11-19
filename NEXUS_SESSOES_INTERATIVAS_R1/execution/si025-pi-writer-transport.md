@@ -9,3 +9,5 @@ O ensaio `--queue --queue-surface presenter` passou com o Nexus e o Pi instalado
 Em um ensaio isolado, o editor nativo do Pi 0.87.1 mostrou texto em português colado em duas linhas e emitiu um único envio com Enter. Esse ensaio usou um terminal simulado e exercitou a captura de texto do editor.
 
 A etapa dispensa migração. A reversão é o commit deste marco no Nexus. A SI-025 continua em andamento. O editor nativo ainda precisa enviar as mensagens pelo transporte. Aprovações, reorientação e inferência real também seguem pendentes.
+
+O hash do ensaio corresponde ao script do commit `7723281c`. A etapa seguinte valida o envio pelo editor nativo em ConPTY. [Editor nativo](si025-pi-native-editor.md)

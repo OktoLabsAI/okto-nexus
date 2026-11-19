@@ -10,7 +10,7 @@ import subprocess
 import tempfile
 import threading
 import time
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack, asynccontextmanager
 from dataclasses import replace
 from pathlib import Path
 from queue import Empty, Queue
@@ -104,7 +104,8 @@ async def wait_for_turn(journal, operation_key):
             await asyncio.sleep(.03)
 
 
-async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted_cli=None, hosted_turn=False):
+async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted_cli=None, hosted_turn=False,
+                        hosted_editor=False):
     from nexus_connector_core import (
         R4_PREVIEW_REVISION,
         CloseOperation,
@@ -209,7 +210,8 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
             assert proof.process == await journal.get_process_birth(key)
             assert await journal.get_process_launch(key)
             renderer_facts = await exercise_hosted_renderer(runtime, host, journal, scope, target, channel,
-                                                            context, turn, checkpoints, active_turn=hosted_turn)
+                                                            context, turn, checkpoints, active_turn=hosted_turn,
+                                                            native_editor=hosted_editor)
             assert proof == await runtime.prove_live_native_session(scope, target, **channel)
             closed = await runtime.close(
                 CloseOperation('pi-probe-close', key.session_id, 'End isolated probe', ShutdownPolicy(1, 1)),
@@ -295,7 +297,7 @@ async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted
 
 
 async def exercise_hosted_renderer(runtime, host, journal, scope, target, channel, context, turn, checkpoints,
-                                   *, active_turn):
+                                   *, active_turn, native_editor):
     from nexus_connector_core import CoreError, OperationKey
 
     @asynccontextmanager
@@ -337,6 +339,10 @@ async def exercise_hosted_renderer(runtime, host, journal, scope, target, channe
     if active_turn:
         detached = await runtime.read_live_pi_session(scope, target, **channel)
         assert detached['native_session_id'] == target.native_session_id and detached['is_streaming']
+    if native_editor:
+        await exercise_native_editor(runtime, scope, target, channel)
+        state = await runtime.read_live_pi_session(scope, target, **channel)
+        assert state['is_streaming'] and state['pending_message_count'] == 0
     deadline = time.monotonic() + 5
     while True:
         try:
@@ -354,7 +360,46 @@ async def exercise_hosted_renderer(runtime, host, journal, scope, target, channe
     if active_turn:
         await wait_for_turn(journal, OperationKey(scope['server_id'], scope['executor_id'], turn.operation_id))
     return {'renderer_reattached': True, 'foreign_and_second_viewer_refused': True,
-            'renderer_saw_turn_across_detach': active_turn}
+            'renderer_saw_turn_across_detach': active_turn, 'native_editor_returned_exact_draft': native_editor}
+
+
+async def exercise_native_editor(runtime, scope, target, channel):
+    from nexus_connector_core import CoreError
+    from nexus_connector_core.native.pi_renderer import PiEditorUpdate
+
+    expected = 'Revisão em português\noutra linha'
+    deadline = time.monotonic() + 5
+    while True:
+        stack = AsyncExitStack()
+        try:
+            editor = await stack.enter_async_context(runtime.open_live_pi_editor(
+                scope, target, **channel, columns=100, rows=36))
+            break
+        except CoreError as error:
+            await stack.aclose()
+            if error.code != 'NATIVE_UNAVAILABLE' or time.monotonic() >= deadline:
+                raise
+            await asyncio.sleep(.03)
+
+    async with stack, asyncio.timeout(10):
+        async def key(action, text=None):
+            await editor.edit(action, text=text)
+            while True:
+                event = await editor.read_event()
+                assert event is not None
+                if isinstance(event, PiEditorUpdate):
+                    return event
+
+        assert (await key('insert', expected + 'X')).draft is None
+        assert (await key('backspace')).draft is None
+        output = bytearray()
+        while expected.splitlines()[0].encode() not in output:
+            data = await editor.read_event()
+            assert type(data) is bytes
+            output.extend(data)
+            assert len(output) <= 256 * 1024
+        assert (await key('enter')).draft == expected
+        assert (await key('enter')).draft is None
 
 
 def fingerprints(node, release, script):
@@ -375,7 +420,7 @@ def fingerprints(node, release, script):
     return {name: hashlib.sha256(file.read_bytes()).hexdigest() for name, file in inputs.items()}
 
 
-def run(node, release, *, core, cli_owner, hosted_core, hosted_turn):
+def run(node, release, *, core, cli_owner, hosted_core, hosted_turn, hosted_editor):
     root = Path(tempfile.mkdtemp(prefix='nexus-si-pi-observer-')).resolve()
     script = root / 'probe.mjs'
     shutil.copyfile(Path(__file__).with_suffix('.mjs'), script)
@@ -467,7 +512,7 @@ def run(node, release, *, core, cli_owner, hosted_core, hosted_turn):
             f'--import={preload.as_uri()}',
         ))
         report, session_id = asyncio.run(exercise_core(argv, env, root, checkpoints, None, hosted_cli=cli,
-                                                       hosted_turn=hosted_turn))
+                                                       hosted_turn=hosted_turn, hosted_editor=hosted_editor))
         histories = list((agent / 'sessions').rglob('*.jsonl'))
         if hosted_turn:
             assert len(histories) == 1
@@ -510,10 +555,14 @@ if __name__ == '__main__':
     parser.add_argument('--cli-owner', action='store_true', help='Use the official unbundled Pi CLI to open the owner')
     parser.add_argument('--hosted-core', action='store_true', help='Open the packaged owner via the real Core composition')
     parser.add_argument('--hosted-turn', action='store_true', help='Exercise the private renderer with one synthetic turn')
+    parser.add_argument('--hosted-editor', action='store_true', help='Exercise the native editor during the synthetic turn')
     args = parser.parse_args()
     if args.hosted_core and (args.core or args.cli_owner):
         parser.error('--hosted-core selects the real Core launch path')
     if args.hosted_turn and not args.hosted_core:
         parser.error('--hosted-turn requires --hosted-core')
+    if args.hosted_editor and not args.hosted_turn:
+        parser.error('--hosted-editor requires --hosted-turn')
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
-        core=args.core, cli_owner=args.cli_owner, hosted_core=args.hosted_core, hosted_turn=args.hosted_turn)
+        core=args.core, cli_owner=args.cli_owner, hosted_core=args.hosted_core, hosted_turn=args.hosted_turn,
+        hosted_editor=args.hosted_editor)

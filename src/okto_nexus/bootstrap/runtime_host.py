@@ -132,19 +132,24 @@ class EmbeddedRuntimeHost:
             return False
         return selection[6] and callable(getattr(task.result()[0], 'open_live_pi_renderer', None))
 
-    @asynccontextmanager
-    async def open_r4_pi_renderer(self, scope: Mapping, target: NativeSessionTarget, *,
-                                  connection_id: str, connection_generation: int, columns: int, rows: int):
+    def _pi_renderer_owner(self, scope):
         stage = 'pi_renderer'
         key, selection, task = self._existing_presentation_runtime(scope, stage)
-        attach = getattr(task.result()[0], 'open_live_pi_renderer', None)
-        if not callable(attach):
-            raise CoreError('CAPABILITY_UNSUPPORTED', stage)
 
         def verify():
             if (self._draining or self._closing or self._runtime_tasks.get(key) is not task
                     or self._selections.get(key) is not selection):
                 raise CoreError('STALE_GENERATION', stage)
+
+        return task.result()[0], verify
+
+    @asynccontextmanager
+    async def open_r4_pi_renderer(self, scope: Mapping, target: NativeSessionTarget, *,
+                                  connection_id: str, connection_generation: int, columns: int, rows: int):
+        runtime, verify = self._pi_renderer_owner(scope)
+        attach = getattr(runtime, 'open_live_pi_renderer', None)
+        if not callable(attach):
+            raise CoreError('CAPABILITY_UNSUPPORTED', 'pi_renderer')
 
         async with attach(scope, target, connection_id=connection_id, connection_generation=connection_generation,
                           columns=columns, rows=rows) as frames:
@@ -157,6 +162,18 @@ class EmbeddedRuntimeHost:
 
             async with aclosing(output()) as guarded:
                 yield guarded
+
+    @asynccontextmanager
+    async def open_r4_pi_editor(self, scope: Mapping, target: NativeSessionTarget, *,
+                                connection_id: str, connection_generation: int, columns: int, rows: int):
+        runtime, verify = self._pi_renderer_owner(scope)
+        attach = getattr(runtime, 'open_live_pi_editor', None)
+        if not callable(attach):
+            raise CoreError('CAPABILITY_UNSUPPORTED', 'pi_renderer')
+        async with attach(scope, target, connection_id=connection_id, connection_generation=connection_generation,
+                          columns=columns, rows=rows) as editor:
+            verify()
+            yield editor, verify
 
     async def _read_r4_native_presentation(self, scope, target, reader_name, *args,
                                            connection_id, connection_generation):

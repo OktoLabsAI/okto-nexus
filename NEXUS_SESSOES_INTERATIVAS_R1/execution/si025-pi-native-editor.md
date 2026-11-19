@@ -1,0 +1,9 @@
+# Editor nativo do Pi na fila canônica
+
+`session attach --write` monta o editor nativo do Pi 0.87.1 no processo já hospedado pelo Core. O Core mantém a conversa em andamento e entrega ao Nexus apenas o rascunho produzido pelo editor ao pressionar Enter. O Nexus vincula a entrega à sessão e à geração do escritor, revalida o login e registra a mensagem na fila existente. O terminal mostra o recibo da fila. Quando a resposta de Enter fica incerta, o operador pode consultar a mesma intenção com `session receipt`. [Comandos](../../docs/terminal-work.md#native-pi-viewer-on-windows)
+
+No ensaio com os pacotes instalados, o terminal Windows colou duas linhas em português e corrigiu um caractere no editor. Antes de Enter, a fila estava vazia. Depois de Enter, havia uma única entrada. Ctrl+C devolveu o console com seus modos originais. O mesmo Pi terminou o primeiro turno e só então recebeu a mensagem corrigida. O observador reaberto mostrou as duas respostas. O histórico reteve o texto corrigido com a quebra de linha. O projeto temporário usou um provedor sintético. [Resultados e hashes](si025-pi-native-editor.json)
+
+Passaram 187 testes de regressão com os pacotes instalados. O ensaio usa `si025-pi-terminal-e2e.py --queue --queue-surface editor` com os parâmetros de instalação e ConPTY da prova anterior. O ensaio complementar `si025-pi-observer-probe.py --hosted-core --hosted-turn --hosted-editor` inspeciona o editor privado pela API do Core durante um turno sintético. [Parâmetros do ensaio Windows](si025-pi-terminal-e2e.md)
+
+A etapa dispensa migração. Para reverter, reverta a implementação no Nexus junto com os pins nos dois consumidores e restaure o Core anterior. A SI-025 continua em andamento. A próxima etapa cobre reorientação na fronteira do Pi e decisões de aprovação no contexto da mesma sessão.

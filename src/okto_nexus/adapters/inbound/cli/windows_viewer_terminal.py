@@ -230,6 +230,50 @@ class _Pump:
                 _close_handle(self.handle)
 
 
+@contextmanager
+def viewer_console_input(stream):
+    """Read the viewer's VT input without blocking the presentation socket."""
+    stdin = msvcrt.get_osfhandle(stream.fileno())
+    previous = _mode(stdin)
+    stopping = Event()
+    failures = []
+    keyboard = Queue(maxsize=16)
+
+    def read_keyboard():
+        buffer = ct.create_string_buffer(2048)
+        decode = codecs.getincrementaldecoder('utf-16-le')(errors='replace').decode
+        while not stopping.is_set():
+            raw = _read(_read_console, stdin, buffer, len(buffer) // 2, 2)
+            if stopping.is_set():
+                return
+            text = decode(raw) if raw else None
+            try:
+                keyboard.put_nowait(text)
+            except Full:
+                raise OSError('The viewer terminal input buffer is full.') from None
+            if not raw:
+                return
+
+    def take():
+        if failures:
+            raise failures[0]
+        try:
+            return keyboard.get_nowait()
+        except Empty:
+            return ''
+
+    _check(_set_mode(stdin, (previous & ~0x47) | 0x0280))
+    try:
+        pump = _Pump(read_keyboard, failures, stopping)
+        try:
+            yield take
+        finally:
+            stopping.set()
+            pump.join()
+    finally:
+        _check(_set_mode(stdin, previous))
+
+
 def run_viewer_terminal(argv, *, cwd, env, confirmation=None):
     """Run only the viewer in a private ConPTY and return after keyboard detach."""
     stdin = msvcrt.get_osfhandle(sys.stdin.fileno())

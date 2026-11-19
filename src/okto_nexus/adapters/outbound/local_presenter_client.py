@@ -60,6 +60,7 @@ class _LocalPresenter:
         self.live_updates = live_updates
         self.input_revision = input_revision
         self._request_id = 0
+        self._pi_binary = bytearray()
 
     def close(self):
         """Stop this presentation socket, including an in-flight read."""
@@ -123,7 +124,7 @@ class _LocalPresenter:
         self._peer.settimeout(_TIMEOUT)
         self._peer.sendall(self._wire.send(TextMessage(data=raw.decode())))
         parts, received = [], 0
-        binary = bytearray()
+        binary = self._pi_binary
         for event in self._events(time.monotonic() + _TIMEOUT):
             if pi_output is not None and isinstance(event, BytesMessage) and not parts:
                 if output := _pi_fragment(binary, event):
@@ -145,16 +146,20 @@ class _LocalPresenter:
 
     def read_pi_output(self) -> bytes:
         """Read a bounded binary frame with idle waits interruptible by the terminal."""
-        data = bytearray()
         while True:
-            try:
-                for event in self._events(time.monotonic() + 1):
-                    if output := _pi_fragment(data, event):
-                        return output
-            except TimeoutError:
-                continue
-            except (OSError, ValueError, ProtocolError):
-                raise _unavailable() from None
+            if output := self.poll_pi_output(1):
+                return output
+
+    def poll_pi_output(self, timeout: float) -> bytes | None:
+        try:
+            for event in self._events(time.monotonic() + timeout):
+                if output := _pi_fragment(self._pi_binary, event):
+                    self._pi_binary.clear()
+                    return output
+        except TimeoutError:
+            return None
+        except (OSError, ValueError, ProtocolError):
+            raise _unavailable() from None
 
     def send_pi_input(self, *, intent, text, output):
         """Record plain text on the canonical queue while rendering concurrent output."""
@@ -163,20 +168,27 @@ class _LocalPresenter:
         try:
             receipt = self._request('enqueue', flat=True, pi_output=output, client_intent_id=intent,
                                     capability_revision=self.input_revision, content={'type': 'text', 'text': text})
-            input_id = receipt['input_id']
-            status = InputDeliveryState(receipt['status'])
-            sequence = receipt['enqueue_sequence']
-            operation_id = receipt['operation_id']
-            if (not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id)
-                    or type(sequence) is not int or sequence < 1 or type(receipt['possible_effect']) is not bool
-                    or operation_id is not None and (not isinstance(operation_id, str) or not operation_id)):
-                raise ValueError
+            return _pi_queue_receipt(receipt)
         except (ConnectionError, KeyError, ValueError):
-            raise ConnectionError('OUTCOME_UNKNOWN',
-                'The queue receipt is unconfirmed. Recover the same message intent before sending again.',
-                possible_effect=True) from None
-        return {'input_id': input_id, 'status': status, 'enqueue_sequence': sequence,
-                'operation_id': operation_id, 'possible_effect': receipt['possible_effect']}
+            raise _pi_input_unknown() from None
+
+    def edit_pi_input(self, *, intent, key, text, output):
+        """Send editor gestures. Enter may record one draft in the Nexus queue."""
+        if self.input_revision is None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This Pi view is read-only.')
+        try:
+            reply = self._request('key', pi_output=output, client_intent_id=intent,
+                                  capability_revision=self.input_revision, key=key, text=text)
+            if reply.keys() != {'limit_reached', 'queued'} or type(reply['limit_reached']) is not bool:
+                raise ValueError
+            queued = reply['queued']
+            if queued is not None:
+                if key != 'enter' or reply['limit_reached'] or not isinstance(queued, dict):
+                    raise ValueError
+                queued = _pi_queue_receipt(queued)
+            return reply['limit_reached'], queued
+        except (ConnectionError, KeyError, ValueError):
+            raise (_pi_input_unknown() if key == 'enter' else _unavailable()) from None
 
     def page(self, *, method, params):
         if method not in _HISTORY_METHODS:
@@ -330,6 +342,24 @@ def _pi_fragment(data, event):
     return None
 
 
+def _pi_queue_receipt(receipt):
+    input_id = receipt['input_id']
+    status = InputDeliveryState(receipt['status'])
+    sequence, operation_id = receipt['enqueue_sequence'], receipt['operation_id']
+    if (not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id)
+            or type(sequence) is not int or sequence < 1 or type(receipt['possible_effect']) is not bool
+            or operation_id is not None and (not isinstance(operation_id, str) or not operation_id)):
+        raise ValueError('Invalid queue receipt')
+    return {'input_id': input_id, 'status': status, 'enqueue_sequence': sequence,
+            'operation_id': operation_id, 'possible_effect': receipt['possible_effect']}
+
+
+def _pi_input_unknown():
+    return ConnectionError('OUTCOME_UNKNOWN',
+        'The queue receipt is unconfirmed. Recover the same message intent before sending again.',
+        possible_effect=True)
+
+
 def _unavailable():
     return ConnectionError('PRESENTATION_UNAVAILABLE', 'The local presentation could not be confirmed. Review the exact session again.')
 
@@ -386,9 +416,11 @@ def review_local_presentation(api, *, scope, expected_session_generation, write=
 
 @contextmanager
 def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id,
-                            writer=None, pi_viewport=None):
+                            writer=None, pi_viewport=None, pi_editor=False):
     """Exchange the offer and challenge without passing the human session to the viewer."""
     origin = _local_origin(api, scope)
+    if pi_editor and (pi_viewport is None or writer is None):
+        raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
@@ -418,6 +450,8 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
                          headers=api.request_headers(), ticket=ticket,
                          protocol=PI_PRESENTATION_SUBPROTOCOL if pi_viewport is not None else PRESENTATION_SUBPROTOCOL)
             viewport = dict(zip(('columns', 'rows'), pi_viewport, strict=True)) if pi_viewport is not None else {}
+            if pi_editor:
+                viewport['editor'] = True
             challenge = link.exchange({'kind': 'hello', 'version': 1, **state, **viewport})
             nonce = challenge.get('challenge')
             if (challenge.get('kind') != 'challenge' or not isinstance(nonce, str)

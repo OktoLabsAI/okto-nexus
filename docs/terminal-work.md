@@ -39,6 +39,30 @@ the exact `work chat` command. Run it from the project directory with the
 matching saved connection profile. Opening the prompt lets you inspect and
 continue that session. Entering a new message is a separate action.
 
+## Native Pi viewer on Windows
+
+For a live hosted Pi session on the reviewed Windows build, open the transcript
+or open the native editor with the same operator login.
+
+```sh
+okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --write --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
+```
+
+Enter records the text in the Nexus session queue and shows its receipt. If Pi
+is working, the message waits for the next turn. Ctrl+C closes the viewer and
+leaves the admitted work running. Taking over from another terminal writer
+requires explicit confirmation.
+
+If an Enter request has an unconfirmed receipt, use the original intent and
+session generation printed by the viewer.
+
+```sh
+okto-nexus session receipt --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
+```
+
+## Request identity and authorization
+
 `--request-id` supplies a stable client intent ID for an explicit submission.
 Reusing the retained ID with changed text or selection is refused. Submission
 records its ID before HTTP, resolves through the existing intent API and admits

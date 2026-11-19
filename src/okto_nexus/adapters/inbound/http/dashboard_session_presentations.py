@@ -15,6 +15,7 @@ import anyio
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from nexus_connector_core import CoreError, NativeSessionOwnerProof
+from nexus_connector_core.native.pi_renderer import PiEditorUpdate
 from nexus_connector_core.protocol import canonical_json, strict_json
 from pydantic import Field, TypeAdapter
 
@@ -81,6 +82,7 @@ class LocalPiPresentations:
     open_renderer: Callable[..., AbstractAsyncContextManager[AsyncIterator[bytes]]]
     execution_access: object | None = None
     next_turn_revision: Callable[[object, InputScope], str | None] | None = None
+    open_editor: Callable[..., AbstractAsyncContextManager] | None = None
     renderer_locks: WeakValueDictionary[InputScope, asyncio.Lock] = field(default_factory=WeakValueDictionary,
                                                                           repr=False, compare=False)
 
@@ -93,6 +95,7 @@ class _Hello(ScopedSession):
 class _PiHello(_Hello):
     columns: Annotated[int, Field(strict=True, ge=24, le=300)]
     rows: Annotated[int, Field(strict=True, ge=8, le=120)]
+    editor: bool = False
 
 
 class _ChallengeReply(_Document):
@@ -124,6 +127,15 @@ class _PiEnqueueRequest(_Document):
     client_intent_id: Identifier
     capability_revision: Identifier
     content: TextInput
+
+
+class _PiKeyRequest(_Document):
+    kind: Literal['key']
+    request_id: Revision
+    client_intent_id: Identifier
+    capability_revision: Identifier
+    key: Literal['insert', 'enter', 'newline', 'backspace', 'delete', 'left', 'right', 'up', 'down', 'home', 'end']
+    text: Annotated[str, Field(max_length=4096)] | None = None
 
 
 class _EnqueueRequest(_PiEnqueueRequest):
@@ -353,13 +365,23 @@ async def _present_pi(ws, services, active, hello):
             lock = services.renderer_locks.setdefault(active['scope'], asyncio.Lock())
             await stack.enter_async_context(lock)
             await verify()
-            frames = await stack.enter_async_context(services.open_renderer(
-                active['scope'], columns=hello.columns, rows=hello.rows))
+            viewport = {'columns': hello.columns, 'rows': hello.rows}
+            if hello.editor:
+                if access != 'write' or services.open_editor is None or services.next_turn_revision is None:
+                    raise ValueError('This presentation cannot open a draft editor')
+                edit, read_output = await stack.enter_async_context(services.open_editor(active['scope'], **viewport))
+            else:
+                frames = await stack.enter_async_context(services.open_renderer(active['scope'], **viewport))
+
+                async def read_output():
+                    return await anext(frames, None)
+
             await verify()
             await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': access})
 
         inbound = asyncio.create_task(ws.receive())
-        output = asyncio.ensure_future(anext(frames, None))
+        output = asyncio.create_task(read_output())
+        pending = None
         renewal = anyio.current_time() + _RENEW_SECONDS
         try:
             while True:
@@ -376,22 +398,46 @@ async def _present_pi(ws, services, active, hello):
                 if message is not None:
                     if access != 'write' or services.next_turn_revision is None:
                         raise ValueError('This presentation cannot enqueue input')
-                    request = _PiEnqueueRequest.model_validate(_decode(message))
-                    reply = await _record_presenter_input(state, services, active, request, presentation='pi')
-                    if _services(state, 'pi') is not services:
-                        break
-                    await _send(ws, {'request_id': request.request_id, **reply})
+                    raw = _decode(message)
+                    if pending is not None:
+                        raise ValueError('The draft editor already has a pending request')
+                    if hello.editor and isinstance(raw, dict) and raw.get('kind') == 'key':
+                        pending = _PiKeyRequest.model_validate(raw)
+                        await edit(pending.key, text=pending.text)
+                    else:
+                        request = _PiEnqueueRequest.model_validate(raw)
+                        reply = await _record_presenter_input(state, services, active, request, presentation='pi')
+                        if _services(state, 'pi') is not services:
+                            break
+                        await _send(ws, {'request_id': request.request_id, **reply})
                     inbound = asyncio.create_task(ws.receive())
                 if output not in done:
                     continue
                 data = output.result()
                 if data is None:
                     break
-                if type(data) is not bytes or not 1 <= len(data) <= MAX_PI_PRESENTATION_BYTES:
+                if hello.editor and isinstance(data, PiEditorUpdate):
+                    if pending is None:
+                        raise ValueError('The draft editor response is unsolicited')
+                    queued = None
+                    if data.draft is not None:
+                        if pending.key != 'enter' or data.limit_reached:
+                            raise ValueError('The draft editor response does not match the key')
+                        request = _PiEnqueueRequest(kind='enqueue', request_id=pending.request_id,
+                            client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
+                            content=TextInput(type='text', text=data.draft))
+                        queued = await _record_presenter_input(state, services, active, request, presentation='pi')
+                    if _services(state, 'pi') is not services:
+                        break
+                    await _send(ws, {'kind': 'key', 'request_id': pending.request_id,
+                                     'key': {'limit_reached': data.limit_reached, 'queued': queued}})
+                    pending = None
+                elif type(data) is not bytes or not 1 <= len(data) <= MAX_PI_PRESENTATION_BYTES:
                     raise ValueError('Invalid renderer frame')
-                with anyio.fail_after(5):
-                    await ws.send_bytes(data)
-                output = asyncio.ensure_future(anext(frames, None))
+                else:
+                    with anyio.fail_after(5):
+                        await ws.send_bytes(data)
+                output = asyncio.create_task(read_output())
         finally:
             inbound.cancel()
             output.cancel()

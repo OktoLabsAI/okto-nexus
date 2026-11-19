@@ -180,8 +180,76 @@ def test_pi_attachment_selects_the_ticketed_transcript_and_detaches_locally(monk
     assert result['attach_strategy'] == 'pi_local_read' and result['status'] == 'detached'
     assert reviewed == ['pi-attachment', 'socket closed']
     assert 'Ctrl+C detaches' in capsys.readouterr().out
-    with pytest.raises(ConnectionError, match='read-only'):
-        session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
+    with pytest.raises(ConnectionError, match='reviewed Windows terminal'):
+        session.attach_session(call, binding, session_id='session-a', interactive=True, viewer_executable='another-viewer')
+
+
+def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch):
+    call = Catalog()
+    call.token = 'synthetic-cookie'
+    binding = BINDING | {'adapter_id': 'pi_rpc'}
+    writer = SimpleNamespace(capability_revision='pi-writer', occupied=True)
+    calls = []
+
+    def review(api, **selection):
+        assert api is call and selection['presentation'] == 'pi' and selection['write'] is True
+        return writer
+
+    @contextmanager
+    def attach(api, **selection):
+        assert api is call and selection['capability_revision'] == 'pi-writer'
+        assert selection['writer'] is writer and selection['pi_editor'] is True
+        yield SimpleNamespace(attachment_id='writer')
+
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(platform='win32'))
+    monkeypatch.setattr(session, 'review_local_presentation', review)
+    monkeypatch.setattr(session, 'open_local_presentation', attach)
+    monkeypatch.setattr(session, 'show_pi_editor', lambda link, recover: calls.append(link.attachment_id))
+    monkeypatch.setattr('builtins.input', lambda _: 'n')
+    assert session.attach_session(call, binding, session_id='session-a', interactive=True, write=True) is None
+    assert calls == []
+    monkeypatch.setattr('builtins.input', lambda _: 'y')
+    result = session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
+    assert result['attach_strategy'] == 'pi_local_write'
+    assert calls == ['writer']
+
+
+def test_pi_console_decodes_split_paste_and_keeps_detach_local():
+    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import _PiKeys
+
+    keys = _PiKeys()
+    assert keys.feed('\x1b[20') == []
+    assert keys.feed('0~Revisão\r\nsegunda\x03\x1b[20') == []
+    assert keys.feed('1~\x1b[D\x7f\r\x03') == [
+        ('insert', 'Revisão\nsegunda'), ('left', None), ('backspace', None), ('enter', None), ('detach', None),
+    ]
+    assert keys.feed('\x1b[13;28;13;1;16;1_\x1b[221;27;29;1;8;1_') == [('newline', None), ('detach', None)]
+
+
+def test_pi_receipt_recovers_the_original_presenter_intent(monkeypatch, capsys):
+    intent = 'pi_input_' + 'a' * 32
+
+    class PiReceipts(Catalog):
+        token = 'synthetic-cookie'
+
+        def __call__(self, method, url, body=None):
+            expected = '/api/v1/runtime-management/runtime/sessions/session-a/presenter/inputs/receipt'
+            if urlsplit(url).path != expected:
+                return super().__call__(method, url, body)
+            assert method == 'GET' and body is None
+            query = parse_qs(urlsplit(url).query)
+            assert query['client_intent_id'] == [intent]
+            assert query['expected_session_generation'] == ['7']
+            scope = {key: BINDING[key] for key in BINDING if key != 'endpoint_id'} | {'session_id': 'session-a'}
+            assert all(query[key] == [value] for key, value in scope.items() if key != 'session_id')
+            return {'scope': scope, 'session_owner_generation': 7, 'reorientation': False,
+                    'input_id': 'input-original', 'status': 'QUEUED'}
+
+    service = SimpleNamespace(operator_http=PiReceipts(), inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    assert main(['session', 'receipt', '--id', 'reviewer', '--session-id', 'session-a',
+                 '--owner-generation', '7', '--intent', intent, '--json']) == 0
+    assert json.loads(capsys.readouterr().out)['receipt']['input_id'] == 'input-original'
 
 
 def test_pi_terminal_keeps_split_utf8_and_recovers_style_after_ctrl_c(monkeypatch):

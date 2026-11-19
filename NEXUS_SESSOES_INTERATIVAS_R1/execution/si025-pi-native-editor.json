@@ -1,0 +1,51 @@
+{
+  "task": "SI-025",
+  "status": "IN_PROGRESS",
+  "related_tests": ["SI-T-B08", "SI-T-B22", "SI-T-G04", "SI-T-G18"],
+  "source": {
+    "nexus_baseline": "7723281c698971bdd5b7c375080a9cf71ebb4dec",
+    "core": "a62aa2a4a4b9dca8d2ce13baa088f7a4d44d5b1f",
+    "connector_pin": "7a173c5960ef0d7841bc5896d594f3bcf1ea19e1"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "fcc4994c3c40faff8e20f32a5da2ddccbd0a4d78e5610e80d7cf681adac92ec5",
+    "core_0.0.16_wheel_sha256": "7945c77161d8527e0978f7e085a59cfb0c3c343127be39ff1009b6931a107760",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "hosted_renderer_source_sha256": "ac34a448d77448880f08158db8dbd712af3b77ae95be39292a6bc25be2a7786a",
+    "observer_probe_sha256": "a83712d8a0f8b1fa01f190aa272b6df7f87b005bbf78a9a9958de4f43c793685",
+    "terminal_probe_sha256": "425a0ec8b6ee2ca434b44e50d09aad0829ca4b7ce7f8da98f65914bf5250cea7"
+  },
+  "native_windows_probe": {
+    "source_result": "PASS",
+    "installed_result": "PASS",
+    "source_console_entry": "ASCII text and Backspace",
+    "installed_console_entry": "Portuguese bracketed paste with CRLF and Backspace",
+    "actual_cli_attach_write": true,
+    "queue_empty_after_edit_before_enter": true,
+    "queue_rows_after_enter": 1,
+    "receipt_recovered_after_detach": true,
+    "final_queue_status": "ACCEPTED_NATIVE",
+    "exact_multiline_text_in_native_history": true,
+    "same_owner": true,
+    "event_order": ["agent_start", "agent_settled", "agent_start", "agent_settled"],
+    "event_sequences": [2, 15, 16, 27],
+    "console_modes_restored": true,
+    "canonical_close": "SUCCEEDED",
+    "synthetic_turns": 2,
+    "provider_requests": 0
+  },
+  "regressions": {
+    "installed_nexus_passed": 60,
+    "installed_core_passed": 66,
+    "installed_connector_passed": 61,
+    "strict_wheel_metadata_check_passed": true,
+    "offline_lock_check_passed": true,
+    "ci_manifest_matches_pins": true
+  },
+  "limitations": [
+    "The isolated Windows campaign uses the reviewed Pi and Node builds and a synthetic provider.",
+    "The native editor was exercised through sequential attachments. Writer takeover was covered through the broker and transport tests with synthetic rendering.",
+    "Native approval decisions, boundary steering and real-provider qualification remain pending."
+  ]
+}

@@ -15,6 +15,7 @@ from .native_input import display_text
 
 COMMANDS = ('send', 'steer', 'interrupt')
 INTENT = re.compile(r'terminal_(send|steer|interrupt)_[0-9a-f]{32}')
+PI_INPUT_INTENT = re.compile(r'pi_input_[0-9a-f]{32}')
 _HANDLERS = {'send': 'enqueue', 'steer': 'review_steer', 'interrupt': 'review_interrupt'}
 _DELIVERY_MESSAGES = {
     InputDeliveryState.DISPATCHING: 'The message is being delivered.',
@@ -193,8 +194,16 @@ def execute_session_command(call, binding, session_id, command, *, interactive, 
 
 
 def recover_session_command(call, binding, session_id, generation, intent):
-    command = INTENT.fullmatch(intent)[1]
     url, scope, current = _session(call, binding, session_id)
     if generation > current:
         raise _unavailable()
+    if PI_INPUT_INTENT.fullmatch(intent):
+        return recover_pi_input(call, scope, generation, intent)
+    command = INTENT.fullmatch(intent)[1]
     return _result(_receipt(call, url, scope, generation, command, intent), scope, generation, command, intent)
+
+
+def recover_pi_input(call, scope, generation, intent):
+    route = PREFIX + '/runtime/sessions/' + quote(scope['session_id'], safe='') + '/presenter/inputs/receipt?'
+    receipt = call('GET', route + _query(scope, generation, client_intent_id=intent))
+    return _result(receipt, scope, generation, 'send', intent)

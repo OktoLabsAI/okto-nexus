@@ -286,6 +286,38 @@ class EmbeddedDispatchOwner:
             async with aclosing(output()) as guarded:
                 yield guarded
 
+    @asynccontextmanager
+    async def open_native_pi_editor(self, scope: InputScope, *, columns: int, rows: int):
+        """A draft editor bound to the reviewed mapping and host generation."""
+        async with AsyncExitStack() as stack:
+            async with self._native_presentation_context(scope) as selected:
+                runtime_scope, mapping, target, channel = selected
+                if mapping.adapter_id != 'pi_rpc':
+                    raise CoreError('CAPABILITY_UNSUPPORTED', 'pi_renderer')
+                editor, verify_host = await stack.enter_async_context(self.host.open_r4_pi_editor(runtime_scope, target,
+                    connection_id=channel.connection_id, connection_generation=channel.connection_generation,
+                    columns=columns, rows=rows))
+
+            @asynccontextmanager
+            async def current_editor():
+                verify_host()
+                async with self._native_presentation_context(scope) as current:
+                    if current != selected:
+                        raise CoreError('STALE_GENERATION', 'pi_renderer')
+                    yield
+                verify_host()
+
+            async def edit(key, *, text):
+                async with current_editor():
+                    await editor.edit(key, text=text)
+
+            async def read():
+                event = await editor.read_event()
+                async with current_editor():
+                    return event
+
+            yield edit, read
+
     def _presentation_session_live(self, key, session):
         return (session is not None and self.sessions.get(key) is session
                 and session['executor'] is not None and not session.get('recovering')

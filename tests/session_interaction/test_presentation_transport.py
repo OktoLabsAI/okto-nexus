@@ -471,7 +471,8 @@ def test_pi_client_reads_binary_frames_over_loopback_and_detaches(transport, pi_
     assert pi_presentation.frames == [('open', 80, 24), ('detach', 80, 24)]
 
 
-def test_pi_input_with_lost_reply_requires_recovery_of_the_same_intent(monkeypatch):
+@pytest.mark.parametrize('editor', [False, True])
+def test_pi_input_with_lost_reply_requires_recovery_of_the_same_intent(monkeypatch, editor):
     link = _LocalPresenter(None, None, 'viewer', live_updates=True, input_revision='revision')
     calls = []
 
@@ -481,7 +482,10 @@ def test_pi_input_with_lost_reply_requires_recovery_of_the_same_intent(monkeypat
 
     monkeypatch.setattr(link, 'exchange', lost_reply)
     with pytest.raises(ConnectionError) as raised:
-        link.send_pi_input(intent='original-intent', text='Queued once', output=lambda _: None)
+        if editor:
+            link.edit_pi_input(intent='original-intent', key='enter', text=None, output=lambda _: None)
+        else:
+            link.send_pi_input(intent='original-intent', text='Queued once', output=lambda _: None)
     assert raised.value.code == 'OUTCOME_UNKNOWN' and raised.value.possible_effect
     assert [request['client_intent_id'] for request in calls] == ['original-intent']
 
