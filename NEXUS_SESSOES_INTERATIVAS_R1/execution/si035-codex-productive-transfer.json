@@ -1,0 +1,83 @@
+{
+  "scenarios": [
+    "SI-023",
+    "SI-035",
+    "SI-T-G15"
+  ],
+  "platform": "Windows x64",
+  "nexus_candidate_head": "6806580630cdfa5b4879f4d5bcbf589dbbbe556f",
+  "nexus_wheel_sha256": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+  "connector_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+  "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+  "codex_app_server": {
+    "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "version": "0.157.0"
+  },
+  "runner": {
+    "phase_exit_codes": {
+      "source": 0,
+      "pre-send-cut": 86,
+      "recovered": 0
+    },
+    "loopback_model_requests": [
+      {
+        "stage": "source",
+        "expected_prompt": true,
+        "saved_history_seen": false
+      },
+      {
+        "stage": "successor",
+        "expected_prompt": true,
+        "saved_history_seen": true
+      }
+    ],
+    "external_provider_calls": 0,
+    "source_and_successor_completed": true,
+    "cut_between_reserve_and_send": true,
+    "no_model_request_during_cut": true
+  },
+  "origin": {
+    "first_nexus_exiting_normally": true,
+    "first_native_stopped": true,
+    "first_calls": [
+      "initialize",
+      "account/read",
+      "thread/start",
+      "turn/start",
+      "thread/read",
+      "thread/read"
+    ]
+  },
+  "reserved_before_native_send": {
+    "admission_durable": true,
+    "attempt_reserved": true,
+    "native_calls": 0
+  },
+  "recovery": {
+    "canonical_close": true,
+    "durable_history": true,
+    "human_consent": true,
+    "distinct_nexus_process": true,
+    "new_owner_generation": true,
+    "recovered_pre_send_reservation": true,
+    "same_persisted_close_proof": true,
+    "exact_native_resume": true,
+    "original_owner_stopped_before_resume": true,
+    "successor_canonically_closed": true,
+    "calls": [
+      "initialize",
+      "account/read",
+      "thread/resume",
+      "turn/start",
+      "thread/read"
+    ],
+    "fixture_provider_calls": 1,
+    "successor_turn_accepted": true,
+    "original_context_fenced": true
+  },
+  "regressions": {
+    "junit_sha256": "eec0fc43e96367333a1c4fb0461c22600267ab02c469640db023923a1c4ac253",
+    "passed": 48
+  },
+  "external_provider_campaign": "not_run"
+}
