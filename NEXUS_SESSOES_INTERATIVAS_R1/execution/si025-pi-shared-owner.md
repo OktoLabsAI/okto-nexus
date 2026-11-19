@@ -10,4 +10,4 @@ O ensaio foi repetido em duas execuções isoladas. Passaram também 30 regress�
 
 Para repetir, execute `python NEXUS_SESSOES_INTERATIVAS_R1/execution/si025-pi-observer-probe.py --node <node.exe> --pi-release <raiz-do-release>`. Use a raiz do release 0.87.1 que contém `node_modules`. O comando salva os dados em um diretório temporário e retorna o resumo e os hashes dos módulos examinados.
 
-A etapa adiciona ensaio e evidências ao ledger. A reversão retira esses arquivos e referências, sem migração. O próximo passo é testar o mesmo processo do Pi sob a propriedade do `PiRpcConnector` e ligar a apresentação ao escopo autenticado do Nexus.
+A etapa adiciona ensaio e evidências ao ledger. A reversão retira esses arquivos e referências, sem migração. A etapa seguinte verificou o mesmo processo sob a propriedade do `PiRpcConnector`. [Ensaio com o Core](si025-pi-core-owned-session.md)

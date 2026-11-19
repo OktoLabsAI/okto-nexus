@@ -15,7 +15,11 @@ net.Socket.prototype.connect = denyNetwork;
 globalThis.fetch = denyNetwork;
 syncBuiltinESMExports();
 
-const [release, cwd, agentDir, controlDir] = process.argv.slice(2);
+const [release, cwd, agentDir, controlDir, sessionFlag, selectedSession] = process.argv.slice(2);
+assert.ok(
+  (sessionFlag === undefined && selectedSession === undefined) ||
+  (sessionFlag === "--session-id" && /^hsess_[0-9a-f]{32}$/.test(selectedSession)),
+);
 const namespace = path.join(release, "node_modules", "@earendil-works");
 const installed = path.join(namespace, "pi-coding-agent");
 const pkg = JSON.parse(await readFile(path.join(installed, "package.json"), "utf8"));
@@ -83,7 +87,12 @@ const owner = await sdk.createAgentSessionRuntime(async ({ cwd, agentDir, sessio
     services, sessionManager, model: faux.getModel(), noTools: "all",
   });
   return { ...result, services, diagnostics: services.diagnostics };
-}, { cwd, agentDir, sessionManager: SessionManager.create(cwd, path.join(agentDir, "sessions")) });
+}, {
+  cwd,
+  agentDir,
+  sessionManager: SessionManager.create(cwd, path.join(agentDir, "sessions"),
+    selectedSession ? { id: selectedSession } : undefined),
+});
 
 const session = owner.session;
 const sessionId = session.sessionId;

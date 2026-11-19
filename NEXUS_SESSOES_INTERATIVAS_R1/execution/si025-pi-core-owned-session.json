@@ -1,0 +1,54 @@
+{
+  "task": "SI-025",
+  "scope": "Controlled Windows Pi SDK integration with the real Core R4 lease, runtime, journal and PiRpcConnector",
+  "partial_scenarios": {
+    "SI-T-B08": "Core persisted and correlated agent_settled for the submitted turn; compaction and retry races pending",
+    "SI-T-G04": "Core retained the same owned process through two in-memory renderer openings",
+    "SI-T-G18": "Same-operation replay while detached resulted in one native prompt; two-surface queue pending"
+  },
+  "baseline": {
+    "nexus": "60cf99d3161d54d1943c36adf05ea0bbf9e963c6",
+    "core": "cecd63f40b672e108caf4558f84bc47c1befbc2e",
+    "connector": "1bc8be5c341164e25768532d67ea16d5f7e0b6e2"
+  },
+  "artifacts": {
+    "pi": "0.87.1",
+    "node": "v24.15.0",
+    "core": "0.0.16",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "core_install": "%TEMP%/nexus-si-pi-core-artifact-6e5def12b40d421083c883884bc78e43/site",
+    "probe_python_sha256": "3153a0206e46a847d75293b5b007d34a057c8560cb434e096aeac97817364b34",
+    "probe_js_sha256": "f4ed4de052cd05149e44b7cc4402c014debbe2caf9d4569777074843a655c193",
+    "pi_module_fingerprints": "si025-pi-shared-owner.json"
+  },
+  "runs": {
+    "installed": "%TEMP%/nexus-si-pi-observer-n9kuy708",
+    "source": "%TEMP%/nexus-si-pi-observer-7bwkzh2q",
+    "direct_rpc_regression": "%TEMP%/nexus-si-pi-observer-tr0qchbr"
+  },
+  "core_result_per_run": {
+    "result": "PASS",
+    "r4_owner_proof": true,
+    "foreign_native_session_refused": true,
+    "same_native_session_and_process_birth_through_detach": true,
+    "canonical_turn_replayed_while_detached": true,
+    "owner_calls_before_closing": ["bind:rpc", "prompt"],
+    "native_prompt_count": 1,
+    "synthetic_model_calls": 1,
+    "network_attempts": 0,
+    "renderer_attaches": 2,
+    "core_settled_events": 1,
+    "journal_process_births": 1,
+    "journal_released_owned_slots": 1,
+    "retained_operation_stages": {"runtime.open": "SUBMITTED", "turn.submit": "SUCCEEDED", "runtime.close": "SUCCEEDED"},
+    "native_history_messages": ["system", "user", "assistant"]
+  },
+  "static_checks": {"ruff": "PASS", "node_check": "PASS"},
+  "existing_core_regressions": {"source": 35, "status": "PASS"},
+  "limitations": [
+    "The probe injects the controlled Node program at the adapter-construction point",
+    "Native state is compared through the internal Pi RPC transport",
+    "The renderer captures bytes in memory and accepts no terminal input",
+    "Nexus attachment transport, real extensions and credentials, multi-surface delivery, and external campaigns are pending"
+  ]
+}

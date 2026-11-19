@@ -1222,7 +1222,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si025-pi-shared-owner.md",
-        "execution/si025-pi-shared-owner.json"
+        "execution/si025-pi-shared-owner.json",
+        "execution/si025-pi-core-owned-session.md",
+        "execution/si025-pi-core-owned-session.json"
       ]
     },
     {
@@ -2198,7 +2200,10 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si025-pi-core-owned-session.md",
+        "execution/si025-pi-core-owned-session.json"
+      ]
     },
     {
       "id": "SI-T-B09",
@@ -3717,7 +3722,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si025-pi-shared-owner.md",
-        "execution/si025-pi-shared-owner.json"
+        "execution/si025-pi-shared-owner.json",
+        "execution/si025-pi-core-owned-session.md",
+        "execution/si025-pi-core-owned-session.json"
       ]
     },
     {
@@ -4010,7 +4017,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si025-pi-shared-owner.md",
-        "execution/si025-pi-shared-owner.json"
+        "execution/si025-pi-shared-owner.json",
+        "execution/si025-pi-core-owned-session.md",
+        "execution/si025-pi-core-owned-session.json"
       ]
     },
     {

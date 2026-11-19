@@ -2,6 +2,7 @@
   "tasks": ["SI-025"],
   "state": "controlled feasibility evidence",
   "scope": "Installed Pi SDK and native RPC owner during one active turn with an in-process synthetic provider",
+  "fixture_revision": "60cf99d3161d54d1943c36adf05ea0bbf9e963c6",
   "partial_scenarios": {
     "SI-T-G04": "renderer detaches from the owner while the turn is active; terminal capture only",
     "SI-T-G18": "renderer and RPC use one AgentSession, with one prompt and one result; no two-surface queue exercise"
