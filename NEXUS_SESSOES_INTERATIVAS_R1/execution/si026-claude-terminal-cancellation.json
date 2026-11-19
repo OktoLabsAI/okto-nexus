@@ -1,0 +1,58 @@
+{
+  "task": "SI-026",
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "c866ec72", "main": "8d77b50c"},
+    "connector": {"branch": "feature/v0.0.15", "head": "8ee88ce", "main": "a3017d9"},
+    "core": {"branch": "feature/v0.0.16", "head": "854b91d", "main": "19c99f1"}
+  },
+  "core_revision": "39e449ac541f5c14a62ba05598ae061615aad53e",
+  "connector_revision": "6e7fa28523c75273d5d71809994b5d26514a1771",
+  "artifacts_sha256": {
+    "core": "56ed9f0bee3b0632d9ca8e88a6e4d64486afa852b6cd3dd80cb204fa975fe738",
+    "connector": "91af0610e8b7c6e0f8a8fded287bd7a480dd64f9730ea8f1e3a1099b87c117ce",
+    "nexus": "112422c2b48282b5ea7bb85dfef81281ccc8250043ba20deafd3b88148e038d3"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "profile": "explicit plan and locally approved fixture provider reference, tools denied",
+    "source_fixture": "D:/nexus-si026-cancel-verify-source-1795095745446",
+    "installed_fixture": "D:/nexus-si026-cancel-verify-wheel-1795095745446",
+    "probe_sha256": "07252b8e5b532c7045deb99153273d3070f5c9226d7f181a7c7247ca05876fdf",
+    "observations_sha256": "37348c70962318fae0322e9441256ff7cc9d8b84cbcf95526fcfe842bfecaefd",
+    "registry_status_before_provider_request": "busy",
+    "api_request_in_transcript_before_escape": false,
+    "escape_origin": "temporary fixture writing directly to its owned pseudoconsole",
+    "native_interruption_correlated_to_prompt": true,
+    "canonical_original_receipt": "CANCELLED",
+    "repeat_recovers_original_receipt": true,
+    "explicit_next_turn_same_process": "SUCCEEDED",
+    "canonical_close": "SUCCEEDED",
+    "remaining_job_pids": []
+  },
+  "generation_diagnostic": {
+    "fixture": "D:/nexus-si026-generation-observe-1795095842608",
+    "probe_sha256": "8aef9d99894994cc01629c6fc510e0736496125da423c9927165a3e4887dde0a",
+    "observations_sha256": "3bf198cd5ff39b489452bd3fb5f1d61693e3583529543dbe041ca00bda5e16b6",
+    "first_chunk_marker_while_prompt_hook_held": 0,
+    "first_chunk_marker_while_request_awaited_response": 0,
+    "first_chunk_marker_after_delta": 1,
+    "prompt_id_in_marker": false,
+    "remaining_job_pids": []
+  },
+  "verification": {
+    "installed_core_tests": 41,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 4,
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed",
+    "focused_core_lint": "passed"
+  },
+  "limitations": [
+    "Only the reviewed Windows build and the observed mid-stream abort with a linked partial response were verified.",
+    "Control delivery from the product, compound steer, queue barrier, approvals and other configurations remain unqualified for this terminal route."
+  ],
+  "migration": "none"
+}
