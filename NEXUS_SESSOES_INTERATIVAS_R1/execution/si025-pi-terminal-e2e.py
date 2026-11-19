@@ -41,6 +41,11 @@ FOLLOW_UP_RESULT = 'Pi result after the canonical queue released the follow-up'
 EDITOR_FOLLOW_UP = 'Revisão do turno em andamento\nEnvie a resposta após a liberação'
 EDITOR_REORIENTATION = 'Reorient the exact execution from the native Pi draft'
 INTERRUPT_DRAFT = 'This unsent draft survives the interruption'
+QUESTION_CHOICE = 'Choose the next step'
+QUESTION_CONFIRM = 'Confirm a second step'
+QUESTION_TEXT = 'Enter a note for the test'
+QUESTION_ANSWER = 'isolated-text-answer-73ee5576'
+QUESTION_FOLLOW_UP = 'Sim'
 
 
 def wait_for(check, *, seconds=120):
@@ -109,6 +114,29 @@ export default (pi) => {{
     }
 
 
+def install_pi_questions(agent, root):
+    result = root / 'question-results.json'
+    extension = agent / 'extensions' / 'operator-questions.js'
+    extension.write_text(f'''
+import {{ rename, writeFile }} from 'node:fs/promises';
+export default (pi) => {{
+  let asked = false;
+  pi.on('turn_start', async (_event, ctx) => {{
+    if (asked) return;
+    asked = true;
+    const timeout = {{ timeout: 120000 }};
+    const choice = await ctx.ui.select({json.dumps(QUESTION_CHOICE)}, ['Proceed', 'Hold'], timeout);
+    const confirmation = await ctx.ui.confirm({json.dumps(QUESTION_CONFIRM)}, 'Continue with the isolated second step?', timeout);
+    const text = await ctx.ui.input({json.dumps(QUESTION_TEXT)}, 'Type a synthetic note', timeout);
+    const destination = {json.dumps(str(result))};
+    await writeFile(destination + '.tmp', JSON.stringify({{choice, confirmation, text}}));
+    await rename(destination + '.tmp', destination);
+  }});
+}};
+''', encoding='utf-8')
+    return result
+
+
 def admit_session(client, headers, workspace, app, provider_home, expected_candidate, *, steer, interrupt):
     inventory_owner = app.state.embedded_inventory_owner
     executor = '/v1/runtime/executors/' + inventory_owner.key.executor_id
@@ -159,7 +187,7 @@ def admit_session(client, headers, workspace, app, provider_home, expected_candi
     return binding
 
 
-def enqueue_follow_up(client, data, generation, token, *, presenter_address=None, other_login=None):
+def enqueue_follow_up(client, data, generation, token, *, presenter_address=None, other_login=None, text=FOLLOW_UP):
     client.cookies.set('nexus_operator_session', token)
     path = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
     query = {key: value for key, value in data.items() if key != 'session_id'}
@@ -180,8 +208,8 @@ def enqueue_follow_up(client, data, generation, token, *, presenter_address=None
         with open_local_presentation(api, **scope, capability_revision=writer.capability_revision,
                                      client_intent_id='isolated-pi-writer', writer=writer, pi_viewport=(80, 24)) as link:
             output.append(link.read_pi_output())
-            queued = link.send_pi_input(intent=intent_id, text=FOLLOW_UP, output=output.append)
-            replay = link.send_pi_input(intent=intent_id, text=FOLLOW_UP, output=output.append)
+            queued = link.send_pi_input(intent=intent_id, text=text, output=output.append)
+            replay = link.send_pi_input(intent=intent_id, text=text, output=output.append)
             assert replay == queued and PROMPT.encode() in b''.join(output)
         receipt_path = '/presenter/inputs/receipt'
         selector = query | {'client_intent_id': intent_id}
@@ -193,7 +221,7 @@ def enqueue_follow_up(client, data, generation, token, *, presenter_address=None
     else:
         body = {'scope': data, 'expected_session_generation': generation, 'client_intent_id': intent_id,
                 'capability_revision': wait_for(capability, seconds=10),
-                'content': [{'type': 'text', 'text': FOLLOW_UP}]}
+                'content': [{'type': 'text', 'text': text}]}
         response = client.post(path + '/inputs', json=body, headers=headers)
         assert response.status_code == 202, response.text
         queued = response.json()
@@ -212,8 +240,130 @@ def enqueue_follow_up(client, data, generation, token, *, presenter_address=None
     return read
 
 
+def enqueue_question_work(client, scope, generation, token):
+    client.cookies.set('nexus_operator_session', token)
+    url = f"/api/v1/runtime-management/runtime/sessions/{scope['session_id']}"
+    query = {key: value for key, value in scope.items() if key != 'session_id'} | {
+        'expected_session_generation': generation}
+    ui = {'X-Nexus-UI': '1'}
+    intent = 'isolated-pi-human-question-turn'
+
+    def revision():
+        response = client.get(url + '/interaction', headers=ui, params=query)
+        assert response.status_code == 200, response.text
+        return response.json()['next_turn']['capability_revision']
+
+    response = client.post(url + '/inputs', headers=ui, json={
+        'scope': scope, 'expected_session_generation': generation, 'client_intent_id': intent,
+        'capability_revision': wait_for(revision, seconds=12),
+        'content': [{'type': 'text', 'text': PROMPT}],
+    })
+    assert response.status_code == 202, response.text
+
+    def delivered():
+        response = client.get(url + '/inputs/receipt', headers=ui, params=query | {'client_intent_id': intent})
+        assert response.status_code == 200, response.text
+        value = response.json()
+        return value if value['operation_id'] else None
+
+    return wait_for(delivered, seconds=15)
+
+
+def pending_pi_question(client, workspace_id, title):
+    def read():
+        result = client.get('/api/v1/runtime-management/runtime/input-requests',
+                            headers={'X-Nexus-UI': '1'}, params={'workspace_id': workspace_id})
+        assert result.status_code == 200, result.text
+        return next((item for item in result.json()['items']
+                     if item['request_payload']['kwargs']['display']['params'].get('title') == title), None)
+
+    return wait_for(read, seconds=15)
+
+
+def answer_pi_questions(client, headers, data, generation, result_file, follow_up):
+    url = '/api/v1/runtime-management/runtime'
+    ui = {'X-Nexus-UI': '1'}
+    decisions = []
+    for title, method, decision, answer in (
+        (QUESTION_CHOICE, 'select', 'approve', {'value': 'Proceed'}),
+        (QUESTION_CONFIRM, 'confirm', 'deny', None),
+        (QUESTION_TEXT, 'input', 'approve', {'value': QUESTION_ANSWER}),
+    ):
+        detail = pending_pi_question(client, data['workspace_id'], title)
+        queued = follow_up()
+        assert queued['status'] == 'QUEUED' and queued['operation_id'] is None, queued
+        kwargs = detail['request_payload']['kwargs']
+        key = kwargs['approval_key']
+        assert all(key[name] == data[name] for name in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                                       'agent_id', 'session_id')), key
+        assert key['session_owner_generation'] == generation and key['kind'] == 'native_input'
+        assert kwargs['recipient_agent_id'] == 'operator'
+        assert kwargs['display']['params']['method'] == method
+        assert not result_file.exists()
+        attention = client.get('/api/v1/attention', headers=ui, params={
+            'workspace_id': data['workspace_id'], 'kind': 'native_question_pending'})
+        assert attention.status_code == 200, attention.text
+        alert, = attention.json()['data']['items']
+        assert alert['session_id'] == data['session_id'] and alert['category'] == 'action_required'
+        assert alert['source_id'] == key['canonical_request_id']
+        assert alert['allowed_actions'] == ['inspect_approval', 'respond_native']
+        board = client.get('/api/v1/home/harness-board', headers=ui, params={
+            'workspace_id': data['workspace_id'], 'presentation_version': 2})
+        assert board.status_code == 200, board.text
+        items = board.json()['data']['columns']['needs_you']['items']
+        requests = [item['request'] for item in items if item['kind'] == 'request']
+        requests.extend(entry['request'] for item in items if item['kind'] == 'harness'
+                        for entry in item['requests_preview'])
+        assert any(request['attention_id'] == alert['attention_id'] for request in requests), items
+        body = {name: kwargs[name] for name in ('approval_key', 'expected_revision', 'request_hash', 'cas_token')}
+        body |= {'client_intent_id': 'isolated-pi-native-' + method, 'decision': decision}
+        if answer is not None:
+            body['response'] = answer
+
+        with client_cookie_removed(client, 'nexus_operator_session'):
+            sibling = client.get('/v1/runtime/input-requests', headers=headers['subject'])
+            assert sibling.status_code == 200 and sibling.json()['items'] == [], sibling.text
+            assert client.post('/v1/runtime/approval-decisions', headers=headers['subject'], json=body).status_code == 403
+        stale = body | {'expected_revision': body['expected_revision'] + 1}
+        assert client.post(url + '/approval-decisions', headers=ui, json=stale).status_code == 409
+        if method == 'select':
+            invalid = body | {'response': {'value': 'Unavailable option'}}
+            assert client.post(url + '/approval-decisions', headers=ui, json=invalid).status_code == 422
+        accepted = client.post(url + '/approval-decisions', headers=ui, json=body)
+        assert accepted.status_code == 202, accepted.text
+        record = accepted.json()
+        replay = client.post(url + '/approval-decisions', headers=ui, json=body)
+        assert replay.status_code == 200 and replay.json()['decision_id'] == record['decision_id'], replay.text
+        assert replay.json()['native_operation_id'] == record['native_operation_id']
+
+        def receipt():
+            view = client.get(url + '/approval-decisions/' + record['decision_id'], headers=ui)
+            assert view.status_code == 200, view.text
+            value = view.json()
+            assert value['native_stage'] not in ('REFUSED_BEFORE_EFFECT', 'OUTCOME_UNKNOWN'), value
+            return value if value['native_stage'] == 'SUBMITTED' else None
+
+        decisions.append(wait_for(receipt, seconds=12))
+
+    wait_for(result_file.is_file, seconds=12)
+    assert json.loads(result_file.read_text(encoding='utf-8')) == {
+        'choice': 'Proceed', 'confirmation': False, 'text': QUESTION_ANSWER}
+    assert len({item['native_operation_id'] for item in decisions}) == len(decisions)
+    return decisions
+
+
+@contextmanager
+def client_cookie_removed(client, key):
+    value = client.cookies.get(key)
+    client.cookies.delete(key)
+    try:
+        yield
+    finally:
+        client.cookies.set(key, value)
+
+
 def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, steer_editor=False, interrupt=False,
-        interrupt_surface='web'):
+        interrupt_surface='web', questions=False):
     sys.path.insert(0, str(conpty_helpers))
     from okto_nexus.adapters.inbound.cli.session_commands import execute_session_command, recover_pi_input, recover_pi_interrupt
     from owned_engine_probe import environment
@@ -226,9 +376,13 @@ def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, ste
     workspace.mkdir()
     steering = steer or steer_editor
     interrupt_editor = interrupt and interrupt_surface == 'editor'
-    results = [RESULT, FOLLOW_UP_RESULT] if queue or steering or interrupt else [RESULT]
+    has_follow_up = queue or questions
+    results = [RESULT, FOLLOW_UP_RESULT] if has_follow_up or steering or interrupt else [RESULT]
     follow_up_text = EDITOR_REORIENTATION if steer_editor else (EDITOR_FOLLOW_UP if queue_surface == 'editor' else FOLLOW_UP)
+    if questions:
+        follow_up_text = QUESTION_FOLLOW_UP
     agent, signals, sandbox = isolated_provider(root, release, workspace, results)
+    question_results = install_pi_questions(agent, root) if questions else None
     native_environment = ApprovedLocalLaunch.environment
 
     async def isolated_environment(launch, prepared):
@@ -253,7 +407,8 @@ def run(node, release, conpty_helpers, *, queue, queue_surface, steer=False, ste
     ])
     assert not rest
     deps = bootstrap({}, ['--home', str(root / 'nexus'), '--feature-harness-integrations', 'true',
-                          '--runtime-session-interaction-enabled', 'true'])
+                          '--runtime-session-interaction-enabled', 'true']
+                     + (['--feature-hitl', 'true'] if questions else []))
     deps.local_discovery = discovery
     with pytest.MonkeyPatch.context() as patch, socket.socket() as listener:
         patch.setattr(ApprovedLocalLaunch, 'environment', isolated_environment)
@@ -374,13 +529,23 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                 print('Opening the operator viewer in Windows ConPTY', flush=True)
                 with viewer('first-viewer') as first:
                     first_attachment = wait_for(active_attachment, seconds=15)[0]
-                    sent = admit(setup, binding, 'isolated-pi-turn', 'turn.submit', session_id=data['session_id'], text=PROMPT)
-                    await_text(first, PROMPT)
+                    sent = (enqueue_question_work(client, data, scope.generation.value, token) if questions
+                            else admit(setup, binding, 'isolated-pi-turn', 'turn.submit', session_id=data['session_id'], text=PROMPT))
+                    if questions:
+                        pending_pi_question(client, data['workspace_id'], QUESTION_CHOICE)
+                    else:
+                        await_text(first, PROMPT)
                     detach(first)
                 state = client.portal.call(owner.read_native_pi_presentation_state, scope)
                 assert state['is_streaming'] and state['pending_message_count'] == 0
                 assert client.portal.call(owner.prove_native_presentation_owner, scope) == before
                 follow_up = None
+                if questions:
+                    print('Answering the Pi dialogs as the originating operator', flush=True)
+                    follow_up = enqueue_follow_up(client, data, scope.generation.value, token, text=follow_up_text)
+                    native_decisions = answer_pi_questions(
+                        client, headers, data, scope.generation.value, question_results, follow_up)
+                    assert follow_up()['status'] == 'QUEUED'
                 if interrupt:
                     print('Interrupting the reviewed Pi run with a continuation in the queue', flush=True)
                     url = f"/api/v1/runtime-management/runtime/sessions/{data['session_id']}"
@@ -594,7 +759,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     second_attachment = wait_for(active_attachment, seconds=15)[0]
                     assert second_attachment != first_attachment
                     await_text(second, PROMPT)
-                    if queue and follow_up:
+                    if has_follow_up and follow_up:
                         queued = follow_up()
                         assert queued['status'] == 'QUEUED' and queued['operation_id'] is None, queued
                         state = client.portal.call(owner.read_native_pi_presentation_state, scope)
@@ -694,7 +859,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                         receipt(follow_up(), 'SUCCEEDED')
                     else:
                         receipt(sent, 'SUCCEEDED')
-                    if queue and follow_up:
+                    if has_follow_up and follow_up:
                         await_text(second, follow_up_text.splitlines()[0])
                         delivery = follow_up()
                         assert delivery['status'] in ('DISPATCHING', 'ACCEPTED_NATIVE') and delivery['operation_id'], delivery
@@ -713,8 +878,13 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == (1 if steering else len(results))
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.steer'").fetchone()[0] == int(steering)
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.interrupt'").fetchone()[0] == int(interrupt)
-                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == int(queue or steering or interrupt)
-                    if queue:
+                    input_count = 2 if questions else int(queue or steering or interrupt)
+                    assert uow.connection.execute('SELECT COUNT(*) FROM session_interaction_inputs').fetchone()[0] == input_count
+                    if questions:
+                        rows = uow.connection.execute("""SELECT semantic_payload FROM execution_operations
+                            WHERE action='input.provide'""").fetchall()
+                        assert len(rows) == len(native_decisions) and all(QUESTION_ANSWER not in row[0] for row in rows)
+                    if has_follow_up:
                         native_turn_events = [tuple(row) for row in uow.connection.execute("""
                             SELECT json_extract(payload_json,'$.native_type'),json_extract(payload_json,'$.operation_id')
                             FROM execution_event_ingress
@@ -737,7 +907,7 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                     kept = [messages[index]['content'][0]['text'] for index in (1, 3, 4)]
                     assert kept == [PROMPT, FOLLOW_UP, FOLLOW_UP_RESULT]
                 else:
-                    expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if queue or steering else [PROMPT, RESULT]
+                    expected = [PROMPT, RESULT, follow_up_text, FOLLOW_UP_RESULT] if has_follow_up or steering else [PROMPT, RESULT]
                     assert [message['content'][0]['text'] for message in messages[1:]] == expected
                 print(json.dumps({'real_pi': True, 'actual_windows_conpty': True, 'operator_tickets': tickets,
                                   'same_running_pi_process_after_detach': True, 'synthetic_responses': len(results),
@@ -745,8 +915,9 @@ print('PI_DETACHED_AND_CONSOLE_RESTORED', flush=True)
                                   'steer_surface': 'editor' if steer_editor else 'http' if steer else None,
                                   'interrupt_paused_queue_and_refused_stale_run': interrupt,
                                   'interrupt_surface': interrupt_surface if interrupt else None,
-                                  'follow_up_queued_until_settled': queue,
-                                  'queue_surface': queue_surface if queue else None,
+                                  'operator_native_decisions': len(native_decisions) if questions else 0,
+                                  'follow_up_queued_until_settled': has_follow_up,
+                                  'queue_surface': 'web' if questions else queue_surface if queue else None,
                                   'canonical_close': 'SUCCEEDED', 'console_modes_restored': True}), flush=True)
             finally:
                 server.should_exit = True
@@ -763,10 +934,12 @@ if __name__ == '__main__':
     scenario.add_argument('--steer', action='store_true', help='Promote queued text into a reviewed Pi boundary steer.')
     scenario.add_argument('--steer-editor', action='store_true', help='Review and confirm a native Pi draft.')
     scenario.add_argument('--interrupt', action='store_true', help='Interrupt the exact Pi run with a durable queue barrier.')
+    scenario.add_argument('--questions', action='store_true', help='Answer the owned Pi dialogs through canonical decisions.')
     parser.add_argument('--queue-surface', choices=('web', 'presenter', 'editor'), default='web')
     parser.add_argument('--interrupt-surface', choices=('web', 'cli', 'editor'), default='web')
     args = parser.parse_args()
     logging.getLogger('httpx').setLevel(logging.WARNING)
     run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
         args.conpty_helpers.resolve(strict=True), queue=args.queue, queue_surface=args.queue_surface,
-        steer=args.steer, steer_editor=args.steer_editor, interrupt=args.interrupt, interrupt_surface=args.interrupt_surface)
+        steer=args.steer, steer_editor=args.steer_editor, interrupt=args.interrupt, interrupt_surface=args.interrupt_surface,
+        questions=args.questions)

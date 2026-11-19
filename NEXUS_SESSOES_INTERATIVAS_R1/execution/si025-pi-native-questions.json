@@ -1,0 +1,48 @@
+{
+  "task": "SI-025",
+  "task_status": "IN_PROGRESS",
+  "related_tests_added_evidence": ["SI-T-B07", "SI-T-C17", "SI-T-G01"],
+  "source": {
+    "nexus_baseline": "50955226865757e086f8df655bf783d53c3b366f",
+    "core_pin": "1c3dba15d316e95afb8b071dff2a6b53b4dfd12a",
+    "connector_pin": "43697e03a59f0ff0ec890605c71084786cd50be0"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "ab50144d3ba169e8f59098085f80df88945a01801608614c7de2f1430eace278",
+    "core_0.0.16_wheel_sha256": "7bec3adecff37352e22d2c6e40e7f1f881058cdb31e87d09e61fc64e4d25a6fe",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "probe": "si025-pi-terminal-e2e.py",
+    "probe_sha256": "50d57dab0717a55c298e6dfd10ed878c203e07460650d1103e4024b92e3311fa",
+    "probe_mode": "--questions"
+  },
+  "installed_real_pi_windows_conpty": {
+    "external_provider_requests": 0,
+    "synthetic_responses": 2,
+    "operator_attachment_receipts": 2,
+    "native_dialog_method": ["select", "confirm", "input"],
+    "observed_application_in_pi": ["selected option", "confirmation denied", "text received"],
+    "native_decision_operations": 3,
+    "same_receipts_and_operations_on_replay": true,
+    "wrong_actor_wrong_revision_and_invalid_option_refused": true,
+    "needs_you_and_attention_shared_exact_occurrence": true,
+    "plain_text_queued_while_question_pending": true,
+    "follow_up_dispatched_only_after_first_agent_settled": true,
+    "same_running_pi_process_after_detach": true,
+    "canonical_close": "SUCCEEDED",
+    "console_modes_restored": true,
+    "durable_tables_inspected_for_absence_of_text_answer": [
+      "execution_decisions", "execution_operations", "execution_event_ingress",
+      "session_interaction_inputs", "execution_dispatch_outbox"
+    ]
+  },
+  "regressions": {
+    "installed_nexus_native_ingress_and_decisions": 59,
+    "installed_core_pi_native_inputs": 14,
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The Pi process and Windows native terminal are real. A temporary extension generates the dialogs and the provider response is deterministic in-process synthetic data.",
+    "Home and Attention are verified through their backend HTTP endpoints. Browser interaction and assistive technology were outside this proof.",
+    "This proof covers Pi extension dialog responses for a local owner. Remote Connector validation, live providers and the remaining scenario levels are open."
+  ]
+}
