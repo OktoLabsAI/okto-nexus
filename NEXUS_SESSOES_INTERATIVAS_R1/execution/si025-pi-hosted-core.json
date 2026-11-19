@@ -1,0 +1,54 @@
+{
+  "task": "SI-025",
+  "status": "IN_PROGRESS",
+  "scope": "Trusted Core composition on Windows x64 with Pi 0.87.1 and the reviewed Node 24.15.0. Hosted startup and renderer observations use disposable profiles.",
+  "baseline": {
+    "nexus": "f1003fc9e844d31858c4d1b90159b5e60f2700e1",
+    "core": "12f2cdbb831fc61c7e4c91dd9475b5cae8b12b6d",
+    "connector": "ea9d578548687ad46404b74d5e483d8927cdfbe6"
+  },
+  "artifacts": {
+    "core_revision": "59a472aaa9d5a83f28be11841c65b48d1b0218df",
+    "connector_pin_revision": "cbd83e4641dc5f2b44947c7fb5e76552fba6d785",
+    "core_0.0.16_wheel_sha256": "8e0ca64839a6ba53ae9f0623c4174365f4d317b77ae16b81217aa5477d7a7320",
+    "nexus_0.3.8_wheel_sha256": "d37d2cd9217226966bc226d922114bf3170a2e15f453efea906ae7632bf93cd0",
+    "connector_0.0.15_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "hosted_rpc_js_sha256": "35fc45f856b1278652bdf56351772a2a514d956725eb5814db7cae66e4944e58",
+    "probe_python_sha256": "be7147bc9bf75c52a1d4aecbd7287aeb2f2c69173d1e99576a3c82846123195a",
+    "probe_js_sha256": "ea3746a16c952c2a45f021b02a0a07c1bb5552a0e7449b0cd8dd23eb881b8be6"
+  },
+  "hosted_launch": {
+    "source_probe": "PASS",
+    "installed_probe": "PASS",
+    "core_owned_factory": true,
+    "session_confirmed_by_hosted_ready_notice_and_correlated_get_state": true,
+    "r4_process_birth_matches_open_receipt": true,
+    "core_close_stage": "SUCCEEDED",
+    "turns_submitted": 0,
+    "no_persisted_turn": true
+  },
+  "renderer_probe": {
+    "source_probe": "PASS",
+    "installed_probe": "PASS",
+    "imports_packaged_hosted_rpc": true,
+    "preserves_fixture_model_auth_tool_skill_extension": true,
+    "same_session_renderer_attaches": 2,
+    "correlated_core_settled_events": 1,
+    "synthetic_provider_calls_per_run": 1,
+    "network_attempts": 0
+  },
+  "regressions": {
+    "core_source_passed": 41,
+    "core_installed_passed": 41,
+    "connector_installed_passed": 103,
+    "nexus_installed_passed": 22,
+    "shared_core_wheel_and_ci_manifest_verified": true,
+    "twine_strict_passed": ["Core wheel", "Core sdist"],
+    "nexus_lock_check_passed": true
+  },
+  "limitations": [
+    "The hosted launch is explicit and trusted, with no operator-facing presentation availability yet.",
+    "The standard production factory probe opens an idle session with a dummy credential and network blocked. Its preload only isolates the test.",
+    "The normal hosted launch and the renderer exercise are separate observations. The renderer probe uses a fixture factory, a synthetic provider and an in-memory terminal."
+  ]
+}

@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `12f2cdbb831fc61c7e4c91dd9475b5cae8b12b6d`.
-The unpublished wheel SHA-256 is `02c45ac578d335609456fd48feac93d9c8094abe41cef890a15761b63059e909`.
-The Core reads a bounded projection of Pi 0.87.1 state from the exact live R4 owner.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `59a472aaa9d5a83f28be11841c65b48d1b0218df`.
+The unpublished wheel SHA-256 is `8e0ca64839a6ba53ae9f0623c4174365f4d317b77ae16b81217aa5477d7a7320`.
+The Core wheel includes the opt-in, version-pinned startup for the same Pi CLI and RPC owner.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency

@@ -1,6 +1,7 @@
 {
   "task": "SI-025",
   "status": "IN_PROGRESS",
+  "fixture_revision": "f1003fc9e844d31858c4d1b90159b5e60f2700e1",
   "scope": "Windows x64, Node 24.15.0 and the unbundled CLI distributed with Pi 0.87.1. The installed renderer uses an in-memory terminal and a synthetic provider.",
   "baseline": {
     "nexus": "a6cbbfd93c836f80ecbeebe854b378fe79bf54b6",

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { registerHooks, syncBuiltinESMExports } from "node:module";
+import { syncBuiltinESMExports } from "node:module";
 import { access, readFile, rename, writeFile } from "node:fs/promises";
 import net from "node:net";
 import path from "node:path";
@@ -17,7 +17,8 @@ syncBuiltinESMExports();
 
 const [release, cwd, agentDir, controlDir, ...options] = process.argv.slice(2);
 const cliOwner = options[0] === "--cli-owner";
-const [sessionFlag, selectedSession] = options.slice(Number(cliOwner));
+const hostedModule = cliOwner ? options[1] : undefined;
+const [sessionFlag, selectedSession] = options.slice(cliOwner ? 2 : 0);
 assert.ok(
   (sessionFlag === undefined && selectedSession === undefined) ||
   (sessionFlag === "--session-id" && /^hsess_[0-9a-f]{32}$/.test(selectedSession)),
@@ -85,56 +86,30 @@ async function openSdkOwner() {
     sessionManager: SessionManager.create(cwd, path.join(agentDir, "sessions"),
       selectedSession ? { id: selectedSession } : undefined),
   });
-  await exercise(owner, () => creations);
+  await observe(owner, () => creations);
+  await sdk.runRpcMode(owner);
 }
 
 async function openCliOwner() {
-  const dist = path.join(installed, "dist");
-  const mainUrl = pathToFileURL(path.join(dist, "main.js")).href;
-  const modesUrl = pathToFileURL(path.join(dist, "modes/index.js")).href;
-  const handoffUrl = pathToFileURL(path.join(controlDir, "cli-rpc-handoff.mjs")).href;
-  // Change one import in the unbundled CLI path, leaving setup, parsing and
-  // session creation to Pi. The substitute delegates all three mode exports.
-  await writeFile(new URL(handoffUrl), `export { InteractiveMode, runPrintMode } from ${JSON.stringify(modesUrl)};\n`
-    + `export { observeCliRpc as runRpcMode } from ${JSON.stringify(import.meta.url)};\n`, "utf8");
-  let intercepted = 0;
-  const hook = registerHooks({
-    resolve(specifier, context, nextResolve) {
-      if (context.parentURL === mainUrl && specifier === "./modes/index.js") {
-        intercepted += 1;
-        return { url: handoffUrl, shortCircuit: true };
-      }
-      return nextResolve(specifier, context);
-    },
-  });
-  const { setupCli } = await import(pathToFileURL(path.join(dist, "cli/setup.js")).href);
-  let main;
-  try {
-    ({ main } = await import(mainUrl));
-  } finally {
-    hook.deregister();
-  }
-  assert.equal(intercepted, 1, "The installed CLI must import the reviewed RPC handoff");
-  setupCli();
-  await main([
+  const { runHostedPiRpc } = await import(pathToFileURL(hostedModule).href);
+  await runHostedPiRpc(path.join(installed, "dist/bundle/cli.js"), [
     "--mode", "rpc", "--offline", "--no-approve", "--no-context-files", "--tools", "read",
     "--provider", faux.provider.id, "--model", faux.getModel().id, "--api-key", "synthetic-fixture-token",
     ...(selectedSession ? ["--session-id", selectedSession] : []),
-  ], {
+  ], observeCliRpc, {
     extensionFactories: [{ name: "nexus-provider-fixture", factory: (pi) => {
       pi.registerProvider(faux.provider);
       pi.registerCommand("nexus-owner-proof", { description: "Fixture extension command", handler() {} });
     } }],
   });
-  throw new Error("Pi CLI did not enter its RPC owner");
 }
 
 let cliHandoffs = 0;
-export async function observeCliRpc(owner) {
+async function observeCliRpc(owner) {
   cliHandoffs += 1;
   assert.equal(cliHandoffs, 1);
   assertCliSettings(owner.session);
-  await exercise(owner, () => cliHandoffs);
+  await observe(owner, () => cliHandoffs);
 }
 
 function assertCliSettings(session) {
@@ -149,7 +124,7 @@ function assertCliSettings(session) {
   assert.ok(!commands.includes("nexus-unapproved-command"));
 }
 
-async function exercise(owner, sessionCount) {
+async function observe(owner, sessionCount) {
   const sdk = await import(sdkUrl);
   // Restrict process-wide lifecycle and extension binding to the RPC owner.
   // These override points are internal to the examined Pi build.
@@ -261,10 +236,9 @@ async function exercise(owner, sessionCount) {
     })().catch((error) => { console.error(error); process.exit(1); });
   });
   console.error("starting rpc");
-  await sdk.runRpcMode(owner);
 }
 
-// Avoid a top-level await cycle while the CLI handoff imports this module.
+// The hosted module's handoff owns the RPC lifetime.
 void (cliOwner ? openCliOwner() : openSdkOwner()).catch((error) => {
   console.error(error);
   process.exitCode = 1;

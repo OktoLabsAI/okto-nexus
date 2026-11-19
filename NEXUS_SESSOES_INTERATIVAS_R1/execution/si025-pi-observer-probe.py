@@ -103,12 +103,13 @@ async def wait_for_turn(journal, operation_key):
             await asyncio.sleep(.03)
 
 
-async def exercise_core(argv, env, root, checkpoints, version_command):
+async def exercise_core(argv, env, root, checkpoints, version_command, *, hosted_cli=None):
     from nexus_connector_core import (
         R4_PREVIEW_REVISION,
         CloseOperation,
         CoreError,
         EventCursor,
+        HarnessSettings,
         InstallationCandidate,
         LaunchIntent,
         NativeSessionTarget,
@@ -118,8 +119,9 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         ShutdownPolicy,
         TurnOperation,
         __version__,
+        create_runtime,
     )
-    from nexus_connector_core.discovery import fingerprint
+    from nexus_connector_core.discovery import candidate_pi_node_cli, fingerprint
     from nexus_connector_core.journal import SQLiteJournal
     from nexus_connector_core.native import runtime_bridge
     from nexus_connector_core.native.adapters.pi import PiRpcConnector
@@ -144,13 +146,18 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
     async def environment(_prepared):
         return env
 
-    factory = runtime_bridge.CopiedAdapterFactory(environment)
     journal = SQLiteJournal(root / 'core-journal.db')
     node = Path(argv[0])
-    candidate = InstallationCandidate('pi_rpc', str(node), fingerprint(node), 'explicit', 'selected',
-                                      version='0.87.1', architecture='x86_64')
-    runtime = LocalRuntimeCore(journal, factory, candidates={'pi_rpc': candidate},
-                               workspace_roots={'workspace': str(root / 'project')})
+    candidate = (await asyncio.to_thread(candidate_pi_node_cli, node, hosted_cli, explicit=True) if hosted_cli else
+                 InstallationCandidate('pi_rpc', str(node), fingerprint(node), 'explicit', 'selected',
+                                       version='0.87.1', architecture='x86_64'))
+    workspaces = {'workspace': str(root / 'project')}
+    if hosted_cli:
+        runtime = create_runtime(journal=journal, environment=environment, candidates={'pi_rpc': candidate},
+                                 workspace_roots=workspaces, pi_hosted_rpc=True)
+    else:
+        factory = runtime_bridge.CopiedAdapterFactory(environment)
+        runtime = LocalRuntimeCore(journal, factory, candidates={'pi_rpc': candidate}, workspace_roots=workspaces)
     key = SessionKey('server', 'executor', 'test-session')
     cursor = EventCursor(key.server_id, key.executor_id, key.session_id, 'epoch')
     turn = TurnOperation('pi-probe-turn', key.session_id, PROMPT)
@@ -186,6 +193,28 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
             'allowed_actions': ['runtime.open', 'turn.submit', 'runtime.close'],
         })
         context = installed.context
+        if hosted_cli:
+            intent = LaunchIntent('agent', 'workspace', 'pi_rpc', model='gpt-4.1-mini',
+                                  harness_settings=HarnessSettings(provider='openai'))
+            prepared = await runtime.prepare(intent, context)
+            opened = await runtime.open(OpenOperation('pi-probe-open', key.session_id, 'epoch', prepared), context)
+            assert opened.stage == 'SUBMITTED', opened
+            target = NativeSessionTarget(opened.operation_id, 'pi_rpc', opened.native_id, cursor.stream_epoch)
+            proof = await runtime.prove_live_native_session(scope, target, **channel)
+            assert await host.read_r4_pi_session(scope, target, **channel) == {
+                'native_session_id': opened.native_id, 'is_streaming': False,
+                'is_compacting': False, 'pending_message_count': 0,
+            }
+            assert proof.process == await journal.get_process_birth(key)
+            assert await journal.get_process_launch(key)
+            closed = await runtime.close(
+                CloseOperation('pi-probe-close', key.session_id, 'End isolated probe', ShutdownPolicy(1, 1)),
+                context, wait_for_completion=True,
+            )
+            assert closed.stage == 'SUCCEEDED', closed
+            return {'core': __version__, 'production_factory': True, 'hosted_rpc_readiness': True,
+                    'r4_live_process_proof': True, 'core_close_stage': closed.stage,
+                    'turns_submitted': 0}, None
         prepared = await runtime.prepare(LaunchIntent('agent', 'workspace', 'pi_rpc'), context)
         with patch.object(runtime_bridge, 'load_adapter', fixture_adapter):
             opened = await runtime.open(OpenOperation('pi-probe-open', key.session_id, 'epoch', prepared), context)
@@ -255,7 +284,6 @@ async def exercise_core(argv, env, root, checkpoints, version_command):
         return report, Path(final['sessionFile'])
     finally:
         await runtime.shutdown(ShutdownPolicy(1, 1))
-        factory.close()
         journal.close()
 
 
@@ -277,7 +305,7 @@ def fingerprints(node, release, script):
     return {name: hashlib.sha256(file.read_bytes()).hexdigest() for name, file in inputs.items()}
 
 
-def run(node, release, *, core, cli_owner):
+def run(node, release, *, core, cli_owner, hosted_core):
     root = Path(tempfile.mkdtemp(prefix='nexus-si-pi-observer-')).resolve()
     script = root / 'probe.mjs'
     shutil.copyfile(Path(__file__).with_suffix('.mjs'), script)
@@ -312,16 +340,45 @@ def run(node, release, *, core, cli_owner):
         'TMP': str(root / 'tmp'), 'TEMP': str(root / 'tmp'), 'PI_CODING_AGENT_DIR': str(agent),
         'PI_OFFLINE': '1', 'TERM': 'xterm-256color',
     })
+    hosted = None
+    if cli_owner or hosted_core:
+        from nexus_connector_core.pi_extension_resource import pi_hosted_rpc_path
+
+        hosted = pi_hosted_rpc_path()
+    cli = release / 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js'
     argv = [
         str(node), '--permission', f'--allow-fs-read={release}', f'--allow-fs-read={root}',
         f'--allow-fs-write={root}', str(script), str(release), str(project), str(agent), str(checkpoints),
     ]
     if cli_owner:
-        argv.append('--cli-owner')
+        argv.insert(4, f'--allow-fs-read={hosted.parent}')
+        argv.extend(('--cli-owner', str(hosted)))
     print(f'Isolated probe directory {root}', flush=True)
+    if hosted_core:
+        (project / '.pi').mkdir()
+        (project / '.pi/settings.json').write_text('{}', encoding='utf-8')
+        preload = root / 'isolated-cli.mjs'
+        preload.write_text(
+            'import net from "node:net";\n'
+            'const denyNetwork = () => { throw new Error("Network forbidden in the hosted Pi probe"); };\n'
+            'net.Socket.prototype.connect = denyNetwork;\n'
+            'globalThis.fetch = denyNetwork;\n'
+            'process.argv.push("--no-context-files");\n', encoding='utf-8',
+        )
+        env['OPENAI_API_KEY'] = 'synthetic-fixture-key'
+        env['NODE_OPTIONS'] = ' '.join((
+            '--permission', f'--allow-fs-read="{release.as_posix()}"', f'--allow-fs-read="{root.as_posix()}"',
+            f'--allow-fs-read="{hosted.parent.as_posix()}"', f'--allow-fs-write="{root.as_posix()}"',
+            f'--import={preload.as_uri()}',
+        ))
+        report, _ = asyncio.run(exercise_core(argv, env, root, checkpoints, None, hosted_cli=cli))
+        assert not list((agent / 'sessions').rglob('*.jsonl'))
+        report['no_persisted_turn'] = True
+        report['hosted_rpc_sha256'] = hashlib.sha256(hosted.read_bytes()).hexdigest()
+        print(json.dumps(report, sort_keys=True))
+        return
     if core:
-        cli = release / 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js'
-        version_command = [*argv[:5], str(cli), '--version']
+        version_command = [*argv[:argv.index(str(script))], str(cli), '--version']
         report, session_file = asyncio.run(exercise_core(argv, env, root, checkpoints, version_command))
     else:
         with (root / 'stderr.txt').open('w', encoding='utf-8') as stderr, subprocess.Popen(
@@ -350,5 +407,9 @@ if __name__ == '__main__':
     parser.add_argument('--pi-release', type=Path, required=True, help='Pi release root containing node_modules')
     parser.add_argument('--core', action='store_true', help='Drive the Pi process through the installed Core 0.0.16')
     parser.add_argument('--cli-owner', action='store_true', help='Use the official unbundled Pi CLI to open the owner')
+    parser.add_argument('--hosted-core', action='store_true', help='Open the packaged owner via the real Core composition')
     args = parser.parse_args()
-    run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True), core=args.core, cli_owner=args.cli_owner)
+    if args.hosted_core and (args.core or args.cli_owner):
+        parser.error('--hosted-core is a standalone no-prompt probe')
+    run(args.node.resolve(strict=True), args.pi_release.resolve(strict=True),
+        core=args.core, cli_owner=args.cli_owner, hosted_core=args.hosted_core)
