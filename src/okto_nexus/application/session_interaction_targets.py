@@ -125,6 +125,8 @@ def active_claude_operation(uow, scope: InputScope, *, current_next_turn_revisio
     evidence = _active_start(uow, scope, 'claude_stream', 'nexus_claude_generating',
                              'tool_activity', phase=None, remote_channel=channel)
     if evidence is None:
+        evidence = _active_claude_terminal_start(uow, scope)
+    if evidence is None:
         return None
     selected, start, payload = evidence
     if type(payload.get('schema_version')) is not int or payload['schema_version'] != 1:
@@ -133,6 +135,14 @@ def active_claude_operation(uow, scope: InputScope, *, current_next_turn_revisio
         'opening': mapping.opening_operation_id, 'operation_id': selected['operation_id'],
         'epoch': selected['stream_epoch'], 'generating': start['event_hash']})
     return ExactClaudeOperation(selected['operation_id'], revision, selected['stream_epoch'])
+
+
+def _active_claude_terminal_start(uow, scope):
+    evidence = _active_start(uow, scope, 'claude_stream', 'core.claude_terminal_generating',
+                             'tool_activity', phase=None)
+    if evidence is not None and evidence[2].get('interruptible') is True:
+        return evidence
+    return None
 
 
 def _active_start(uow, scope, adapter_id, native_start, event_type, *, phase='started', remote_channel=None):
@@ -221,11 +231,11 @@ def active_interrupt_target(uow, scope: InputScope, *, current_next_turn_revisio
         contract = get_control_targeting('pi_rpc', 'turn.interrupt')
         if contract.supported and contract.native_turn_id == 'forbidden' and contract.requires_active_run:
             return run
-    evidence = _active_start(uow, scope, 'claude_stream', 'core.claude_terminal_generating', 'tool_activity', phase=None)
+    evidence = _active_claude_terminal_start(uow, scope)
     if evidence is None:
         return None
     selected, start, payload = evidence
-    if type(payload.get('schema_version')) is not int or payload['schema_version'] != 1 or payload.get('interruptible') is not True:
+    if type(payload.get('schema_version')) is not int or payload['schema_version'] != 1:
         return None
     capability = current_next_turn_revision(uow, scope)
     if capability is None:

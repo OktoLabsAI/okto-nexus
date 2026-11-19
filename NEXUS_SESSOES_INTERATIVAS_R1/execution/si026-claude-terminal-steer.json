@@ -1,0 +1,70 @@
+{
+  "tasks": ["SI-010", "SI-026"],
+  "scenarios": ["SI-T-C05", "SI-T-C06", "SI-T-C07"],
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "nexus": {"branch": "feature/v0.3.8", "head": "37c99aef", "main": "8d77b50c"},
+    "connector": {"branch": "feature/v0.0.15", "head": "0a2bab5", "main": "a3017d9"},
+    "core": {"branch": "feature/v0.0.16", "head": "f09baad", "main": "19c99f1"},
+    "working_trees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "core_revision": "ec8e6f73b43f41f28f03a33108f6a1ae1f66b724",
+  "connector_revision": "c5735dce7d188e4b05a79720225e6c8cc358f10b",
+  "artifacts_sha256": {
+    "core": "c76c9544bace90f74f09df86acd8eb1627a0ee8c251dc773aff50db64514034b",
+    "connector": "92ea029351cb4146e21c74a04241f3bf7740cc146b756edd0fd5552e0be3a4be",
+    "nexus": "e6a9a7e5984aabe8f1fcbf92fe9ae31fae2bc3de6c8e1e588d92f4b5641827e9"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "probe_sha256": "8171cad5c3153a111b5140ac1474316f0a1e21d7677448b2a779e759600388ac",
+    "source_fixture": {
+      "root": "D:/nexus-si026-steer-1795098318230",
+      "observations_sha256": "07216a98ffb3a1cdf34eab85c46867db8eaca569d865e9035151b9235f78c1b9",
+      "receipt_before_result": {
+        "status": "DISPATCHING",
+        "interruption": "confirmed",
+        "replacement": "submitted"
+      }
+    },
+    "installed_fixture_with_lost_write_confirmation": {
+      "root": "D:/nexus-si026-steer-unknown-1795098523112",
+      "observations_sha256": "2bef0bae3bd1b156addbfb7fa2b46c9535f983fbb17bf3c1947bd25e7ca99bd9",
+      "receipt_before_result": {
+        "status": "DELIVERY_UNKNOWN",
+        "interruption": "confirmed",
+        "replacement": "write_unknown"
+      }
+    },
+    "observed_in_both": {
+      "review_while_prompt_hook_held": false,
+      "review_before_provider_response": false,
+      "divergent_queue_revision_http_status": 409,
+      "terminal_writes": ["escape", "replacement"],
+      "durable_cancel_precedes_replacement": true,
+      "original_turn_receipt": "CANCELLED",
+      "replacement_final_input_status": "ACCEPTED_NATIVE",
+      "same_process_and_exact_scope": true,
+      "replay_recovered_receipt_without_retry": true,
+      "remaining_job_pids": []
+    }
+  },
+  "verification": {
+    "installed_core_tests": 151,
+    "installed_connector_tests": 83,
+    "installed_nexus_tests": 10,
+    "frontend_node_tests": 417,
+    "frontend_build": "passed with bundle size warning",
+    "wheel_metadata_strict": "passed",
+    "nexus_lock_check": "passed"
+  },
+  "limitations": [
+    "Native evidence covers the recorded Windows executable, the reviewed plan profile with tools denied, and standard keys.",
+    "The loopback provider and the loss of write acknowledgement are simulated.",
+    "Browser review, terminal-native approvals and other build or profile qualifications remain pending."
+  ],
+  "migration": "none"
+}
