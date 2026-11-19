@@ -113,6 +113,11 @@ reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
 
+If a slow terminal can no longer receive updates, Nexus releases its
+presentation while the session keeps running. Reattach to the same session
+for a fresh viewport. Check the conversation for output you missed and the
+original receipt for any unconfirmed input.
+
 For a remote Pi session, use a Nexus CLI build that supports idle presentation
 renewal. The reader and editor renew their presentation while waiting for output
 or input. When the client stops exchanging messages with Nexus, its presentation

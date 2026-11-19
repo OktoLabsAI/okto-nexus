@@ -385,6 +385,47 @@ def test_pi_ticket_is_read_only_one_use_and_scoped_to_its_protocol(transport, pi
         _prove_pi_ticket(ws, transport.scope)
 
 
+def test_pi_backpressure_releases_attachment_before_bounded_close(transport, pi_presentation, monkeypatch):
+    offer = _pi_prepare(transport, client_intent_id='slow-pi-view').json()
+    close_started, close_finished = threading.Event(), threading.Event()
+    websocket = dashboard_session_presentations.WebSocket
+    send_bytes, close = websocket.send_bytes, websocket.close
+
+    def is_slow(ws):
+        return ws.path_params.get('attachment_id') == offer['attachment_id']
+
+    async def stalled_send(ws, payload):
+        if is_slow(ws):
+            await anyio.sleep_forever()
+        await send_bytes(ws, payload)
+
+    async def stalled_close(ws, code=1000, reason=None):
+        if is_slow(ws):
+            close_started.set()
+            try:
+                await anyio.sleep_forever()
+            finally:
+                close_finished.set()
+        await close(ws, code=code, reason=reason)
+
+    monkeypatch.setattr(websocket, 'send_bytes', stalled_send)
+    monkeypatch.setattr(websocket, 'close', stalled_close)
+    monkeypatch.setattr(dashboard_session_presentations, '_SEND_SECONDS', .2, raising=False)
+    monkeypatch.setattr(dashboard_session_presentations, '_CLOSE_SECONDS', .8, raising=False)
+    with stream(transport, offer, protocol=PI_PRESENTATION_SUBPROTOCOL) as slow:
+        _prove_pi_ticket(slow, transport.scope)
+        assert slow.receive_json()['kind'] == 'attached'
+        assert close_started.wait(8)
+        assert attachment_state(transport, offer) == ('DETACHED', None, None)
+        assert pi_presentation.frames == [('open', 100, 36), ('detach', 100, 36)]
+        fresh = _pi_prepare(transport, client_intent_id='reattach-pi-view').json()
+        with stream(transport, fresh, protocol=PI_PRESENTATION_SUBPROTOCOL) as reader:
+            _prove_pi_ticket(reader, transport.scope)
+            assert reader.receive_json()['kind'] == 'attached'
+            assert reader.receive_bytes() == b'\x1b[2JExact Pi renderer bytes\n'
+            assert close_finished.wait(3)
+
+
 @pytest.mark.parametrize('withdraw', ['logout', 'capability', 'attach_failure'])
 def test_pi_renderer_retires_on_authority_loss_and_attach_failure(transport, pi_presentation, withdraw):
     offer = _pi_prepare(transport).json()

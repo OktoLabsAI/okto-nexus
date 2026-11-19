@@ -1013,7 +1013,8 @@
         "execution/si020-codex-keyboard-detach-windows.md",
         "execution/si020-codex-keyboard-detach-windows.json",
         "execution/si032-codex-abrupt-viewer-exit.md",
-        "execution/si032-codex-abrupt-viewer-exit.json"
+        "execution/si032-codex-abrupt-viewer-exit.json",
+        "execution/si037-pi-viewer-backpressure.json"
       ]
     },
     {
@@ -1321,7 +1322,8 @@
         "execution/si022-si025-pi-remote-controls.json",
         "execution/si027-pi-installation-gate.json",
         "execution/si022-pi-silent-presenter.md",
-        "execution/si022-pi-silent-presenter.json"
+        "execution/si022-pi-silent-presenter.json",
+        "execution/si037-pi-viewer-backpressure.json"
       ]
     },
     {
@@ -1870,7 +1872,7 @@
         "SI-T-H18"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": ["execution/si037-pi-viewer-backpressure.md", "execution/si037-pi-viewer-backpressure.json"]
     },
     {
       "id": "SI-038",
@@ -4575,7 +4577,7 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si037-pi-viewer-backpressure.json"]
     },
     {
       "id": "SI-T-H14",
@@ -4594,7 +4596,7 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["execution/si037-pi-viewer-backpressure.json"]
     },
     {
       "id": "SI-T-H15",

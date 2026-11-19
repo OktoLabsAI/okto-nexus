@@ -1,0 +1,56 @@
+{
+  "tasks": ["SI-020", "SI-025", "SI-037"],
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-H13", "SI-T-H14"],
+  "source": {
+    "nexus_baseline": "fcda5a6ef1fca4d1f45c4cd7556e011ed41a7614",
+    "connector_revision": "576e7045ae8104131c18235f3df707bda5d39b6c",
+    "core_revision": "6ec6ace51bcca05272e5bb63098d862e5641dc70"
+  },
+  "artifacts": {
+    "nexus_0.3.8_wheel_sha256": "389fdb1f28154dbe671612d03cf903e2e603da8dd0c7daf61a44599581e0362a",
+    "nexus_0.3.8_sdist_sha256": "e0aa44d93cbcbeeb5ba67a5fe729dc9dbfe06d4c74984e70170254155f9f7e9c",
+    "prior_nexus_0.3.8_wheel_sha256": "c8bfe534e598fd9b9d904a7538646d70c42d60cd480f1c2a37876ef10ac001cd",
+    "connector_0.0.15_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_0.0.16_wheel_sha256": "b1673ab60639dcbbaa1925927a381b10e0393f4cab8f6f5db44fe9e3dcf54884",
+    "new_database_migration": null,
+    "strict_distribution_check": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "regressions": {
+    "previous_wheel_failed_with_active_attachment_after_output_timed_out": true,
+    "previous_wheel_junit_sha256": "acfe36fddbbc226368aac7fec802848f4d1af75dc1cd46dee88d133ebc81b65a",
+    "nexus_source": {"passed": 47, "junit_sha256": "0dc8df89d6906a522db83158eb51293a00533da4610e74b0e01c6775c72f0e71"},
+    "nexus_installed": {"passed": 47, "junit_sha256": "9ed394dfc498d648b08c067014bacc85f0f2ae36efbd61ea1d7f89b721333b38"},
+    "core_installed_renderer": {"passed": 2, "junit_sha256": "ebd9d7bade7d9648a4d80ac4156f757813a20f8284a474bd73d9369952b3d55f"}
+  },
+  "native_windows_loopback": {
+    "platform": "Windows x64 with ConPTY",
+    "harness": "Pi 0.87.1",
+    "build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "fault": "Operator stopped reading. WebSocket send and close waits were injected at the ASGI boundary on that exact socket.",
+    "editor_detached_before_blocked_close": true,
+    "blocked_close_bounded": true,
+    "same_native_pid_and_r4_socket": true,
+    "same_productive_grant": true,
+    "reattachment_rendered_active_session": true,
+    "same_input_receipt_recovered": true,
+    "response_bytes_without_viewers": 50425,
+    "reattachment_rendered_result_tail": true,
+    "native_user_messages": 2,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_requests": 0,
+    "artifact_directory": "%TEMP%/si035-pi-slow-terminal-1795110000732",
+    "test_probe_sha256": "b5b3b419dd61dacc19deb86336ae002ce65fa558ce360e074f11c9bf6b1d240f",
+    "remote_project_fixture_sha256": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "proof": "native-final/proof.json",
+    "proof_sha256": "ecaa172ca217ec6e21bf68aef14ceb0c28e30b2fa97fc9c3ffa89f06c4692fea",
+    "junit_sha256": "518c81852b9edae9eb9565e9007cbaf652a79527c80e08a98d9b388f43e7dedf",
+    "fixture_correction": "The initial run checked the accepted state before the native terminal receipt. The corrected run verified the same operation and recovered it again after completion."
+  },
+  "limitations": [
+    "Backpressure was injected against one operator WebSocket on a single host, without physically saturating a network.",
+    "The output run exercised a finite 50,425-byte result. Continuous higher-volume stress, cross-machine TLS and other operating systems remain pending."
+  ]
+}

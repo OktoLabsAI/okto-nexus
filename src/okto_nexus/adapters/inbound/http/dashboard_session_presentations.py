@@ -79,6 +79,8 @@ _REMOTE = frozenset({'codex_remote', 'pi_remote'})
 _PI = frozenset({'pi', 'pi_remote'})
 _TERMINAL = _PI | {'claude'}
 _RENEW_SECONDS = 15
+_SEND_SECONDS = 5
+_CLOSE_SECONDS = 2
 
 
 @dataclass(frozen=True, slots=True)
@@ -344,7 +346,7 @@ async def _send(ws: WebSocket, frame):
     raw = canonical_json(frame)
     if len(raw) > MAX_PRESENTATION_RESPONSE_BYTES:
         raise ValueError('Presentation frame too large')
-    with anyio.fail_after(5):
+    with anyio.fail_after(_SEND_SECONDS):
         await ws.send_text(raw.decode())
 
 
@@ -691,7 +693,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                 elif type(data) is not bytes or not 1 <= len(data) <= MAX_PI_PRESENTATION_BYTES:
                     raise ValueError('Invalid renderer frame')
                 else:
-                    with anyio.fail_after(5):
+                    with anyio.fail_after(_SEND_SECONDS):
                         await ws.send_bytes(data)
                 output = asyncio.create_task(read_output())
         finally:
@@ -699,7 +701,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
             output.cancel()
             with anyio.CancelScope(shield=True):
                 await asyncio.gather(inbound, output, return_exceptions=True)
-    await ws.close(code=4409)
+    return 4409
 
 
 async def _present_claude(ws, services, active):
@@ -740,7 +742,7 @@ async def _present_claude(ws, services, active):
                     if type(frame) is not bytes or not 1 <= len(frame) <= MAX_PI_PRESENTATION_BYTES:
                         raise ValueError('Invalid terminal frame')
                     await verify()
-                    with anyio.fail_after(5):
+                    with anyio.fail_after(_SEND_SECONDS):
                         await ws.send_bytes(frame)
                     output = asyncio.create_task(anext(frames, None))
         finally:
@@ -748,7 +750,7 @@ async def _present_claude(ws, services, active):
             output.cancel()
             with anyio.CancelScope(shield=True):
                 await asyncio.gather(inbound, output, return_exceptions=True)
-    await ws.close(code=1000)
+    return 1000
 
 
 async def _present(ws, services, author, attachment_id, ticket, presentation):
@@ -758,6 +760,7 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
     _, audience, protocol = _PRESENTERS[presentation]
     channel_id = 'viewer_' + secrets.token_hex(16)
     scope = None
+    close_code = None
     await ws.accept(subprotocol=protocol)
     try:
         with anyio.fail_after(10):
@@ -783,10 +786,10 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
             if presentation not in _TERMINAL:
                 await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
         if presentation == 'claude':
-            await _present_claude(ws, services, active)
+            close_code = await _present_claude(ws, services, active)
             return
         if pi:
-            await _present_pi(ws, services, active, hello, presentation=presentation)
+            close_code = await _present_pi(ws, services, active, hello, presentation=presentation)
             return
         prove_owner = _author_callback(services.prove_owner, author, presentation)
         read_context = _author_callback(services.read_context, author, presentation)
@@ -843,15 +846,22 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                 await _worker(broker.refresh, **active)
                 next_renewal = anyio.current_time() + _RENEW_SECONDS
             await _send(ws, {'request_id': request.request_id, **reply})
-        await ws.close(code=4409)
+        close_code = 4409
     except WebSocketDisconnect:
         return
     except (CoreError, OktoNexusError, ValueError, RecursionError, TimeoutError):
-        await ws.close(code=4409)
+        close_code = 4409
     finally:
         if scope is not None:
             with anyio.CancelScope(shield=True):
                 await _worker(broker.disconnect, scope=scope, attachment_id=attachment_id, channel_id=channel_id)
+        # The same backpressure that blocked output can also block the close frame.
+        if close_code is not None:
+            try:
+                with anyio.move_on_after(_CLOSE_SECONDS):
+                    await ws.close(code=close_code)
+            except WebSocketDisconnect:
+                pass
 
 
 def build_router():
