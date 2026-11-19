@@ -56,7 +56,7 @@ class EmbeddedRuntimeHost:
         self._ledger_task: asyncio.Task[SQLiteOwnedSlotLedger] | None = None
         self._runtime_tasks: dict[tuple[str, str], asyncio.Task[
             tuple[RuntimeCore, SQLiteJournal]]] = {}
-        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str, object, bool]] = {}
+        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str, object, bool, object]] = {}
         self._closing = False
         self._draining = False
         self._history_closing = False
@@ -398,7 +398,7 @@ class EmbeddedRuntimeHost:
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
-        codex_resume=None,
+        codex_resume=None, claude_resume=None,
     ) -> RuntimeCore:
         for value, label in ((server_id, "server"), (executor_id, "executor"), (session_id, "session")):
             if (not isinstance(value, str) or not value or len(value) > 160 or
@@ -417,11 +417,14 @@ class EmbeddedRuntimeHost:
         if codex_resume is not None and (not callable(codex_resume)
                 or set(candidates) != {"codex_app_server"} or native_factory is not None):
             raise CoreError("CAPABILITY_UNSUPPORTED", "saved_codex_resume", retry_safe=True)
+        if claude_resume is not None and (not callable(claude_resume)
+                or set(candidates) != {"claude_stream"} or native_factory is not None):
+            raise CoreError("CAPABILITY_UNSUPPORTED", "saved_claude_resume", retry_safe=True)
         pi = candidates.get('pi_rpc')
         hosted_pi = (self.pi_presentation_enabled and native_factory is None and pi is not None
                      and bool(pi.launch_script) and reviewed_pi_build(pi.version, sys.platform, pi.architecture, pi.build_identity))
         selection = (dict(candidates), dict(workspace_roots), native_action_factory,
-                     native_approvals_enabled, server_id, codex_resume, hosted_pi)
+                     native_approvals_enabled, server_id, codex_resume, hosted_pi, claude_resume)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -462,6 +465,7 @@ class EmbeddedRuntimeHost:
                 pi_native_action=native_launch if selection[2] is not None else None,
                 native_approvals_enabled=selection[3],
                 codex_resume=selection[5],
+                **({'claude_resume': selection[7]} if selection[7] is not None else {}),
                 **({'pi_hosted_rpc': True} if selection[6] else {}),
             )
             if selection[2] is not None:

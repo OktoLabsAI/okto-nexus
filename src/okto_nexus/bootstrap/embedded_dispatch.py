@@ -812,6 +812,7 @@ class EmbeddedDispatchOwner:
                     native_action_factory=tool_config["native_factory"] if tool_config else None,
                     saved_resume=saved_resume,
                     native_approvals_enabled=bool(self.deps.config.feature_hitl and
+                        getattr(saved_resume, 'callback_key', None) != 'claude_resume' and
                         setup.candidate.adapter_id in {"codex_app_server", "claude_stream", "pi_rpc"}))
                 session["executor"] = executor
                 await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
@@ -835,7 +836,7 @@ class EmbeddedDispatchOwner:
                     from ..application.execution_saved_resume import saved_opening_profile
                     session['opening_profile'] = saved_opening_profile(prepared)
                 if executor.saved_resume is not None:
-                    options['resume_thread_id'] = executor.saved_resume.thread_id
+                    options[executor.saved_resume.target_key] = executor.saved_resume.target
                 continuation['options'] = options
             elif action in ("approval.decide", "input.provide"):
                 native_operation = r4_native_decision_operation(frame)
@@ -864,7 +865,8 @@ class EmbeddedDispatchOwner:
                     context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
                         connection_generation=self.channel.connection_generation)
                     receipt = await runtime.open(OpenOperation(frame["operation_id"], key, epoch, prepared,
-                        resume_thread_id=options.get('resume_thread_id')), context)
+                        resume_thread_id=options.get('resume_thread_id'),
+                        resume_claude_session_id=options.get('resume_claude_session_id')), context)
                 except OperationCapacityDeferred:
                     raise
                 except CoreError as error:
@@ -893,6 +895,9 @@ class EmbeddedDispatchOwner:
             else:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
             if action == 'runtime.open' and receipt.stage == 'SUBMITTED':
+                profile = executor.local_launch.claude_resume_profile
+                if profile is not None:
+                    session['opening_profile']['claude_resume_profile'] = profile
                 await self.context_observer.publish_support(runtime, key)
             await self._publish(binding, receipt)
             if action == 'runtime.open' and receipt.stage == 'FAILED':

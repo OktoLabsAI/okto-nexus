@@ -48,22 +48,24 @@ def require_saved_resume_operator(*, actor, context, enabled):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Sign in as a human operator to resume a saved session.', {})
 
 
-def saved_source(conn, scope, source_session_id, source_generation):
+def saved_source(conn, scope, source_session_id, source_generation, *, adapter_id='codex_app_server'):
     row = conn.execute("""
         SELECT c.witness_json, c.close_operation_id, c.release_digest
         FROM embedded_saved_contexts c
         JOIN execution_sessions s USING (server_id, executor_id, session_id)
         JOIN execution_executors e USING (server_id, executor_id)
         WHERE c.server_id=? AND c.executor_id=? AND c.session_id=? AND c.owner_generation=?
-          AND c.status='VERIFIED' AND c.adapter_id='codex_app_server' AND e.kind='embedded' AND s.binding_id=?
+          AND c.status='VERIFIED' AND c.adapter_id=? AND e.kind='embedded' AND s.binding_id=?
           AND s.workspace_id=? AND s.workspace_binding_id=? AND s.owner_generation=c.owner_generation
           AND s.open_operation_id=c.opening_operation_id AND s.stream_epoch=c.stream_epoch
           AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED'
-    """, (scope['server_id'], scope['executor_id'], source_session_id, source_generation, scope['binding_id'],
+    """, (scope['server_id'], scope['executor_id'], source_session_id, source_generation, adapter_id, scope['binding_id'],
           scope['workspace_id'], scope['workspace_binding_id'])).fetchone()
     if row is None:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact session has no verified saved context on this host.', {})
     witness = json.loads(row['witness_json'])
+    if adapter_id == 'claude_stream' and not witness.get('opening_profile', {}).get('claude_resume_profile'):
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The saved Claude profile has no reviewed launch evidence.', {})
     if any(witness['scope'].get(key) != scope[key] for key in _SAME_SCOPE):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The authority or configuration of the saved session changed.', {})
     lineage = {'source_session_id': source_session_id, 'source_session_generation': source_generation,

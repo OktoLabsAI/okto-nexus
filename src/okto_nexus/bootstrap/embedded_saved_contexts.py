@@ -116,7 +116,14 @@ class EmbeddedSavedContexts:
                         return
                     provider = {'configuration_hash': mapping.codex_configuration_hash, 'rollout': asdict(saved)}
                 if opening_profile is not None:
-                    provider['opening_profile'] = dict(opening_profile)
+                    profile = dict(opening_profile)
+                    claude_profile = profile.get('claude_resume_profile')
+                    if claude_profile is not None:
+                        from ..application.execution_claude_resume_profile import observe_claude_resume_profile
+                        current = await asyncio.to_thread(observe_claude_resume_profile, saved.state_home, root)
+                        if current != claude_profile:
+                            profile.pop('claude_resume_profile')
+                    provider['opening_profile'] = profile
                 await asyncio.to_thread(self._record, scope, runtime_scope, mapping, frame['operation_id'],
                                         proof, provider, root)
         except (CoreError, TimeoutError, ValueError, OSError, sqlite3.Error):

@@ -1,0 +1,64 @@
+{
+  "tasks": ["SI-023", "SI-026"],
+  "status": "IN_PROGRESS",
+  "core_revision": "11c2a25c95189c094684ba640dab96f351a99502",
+  "connector_revision": "b9d285a084905fd30677fdffddb154605fab8abc",
+  "artifacts_sha256": {
+    "core": "24c5a5f60df402c800750f11e8866ae8245b392c7bd3f476d48d3d55552c3a86",
+    "connector": "cf9edf268262acf965e5f80141023bb8fa598c54fa3de583a90973c4ebeda7bf",
+    "nexus": "c29ff95426a6539c75817f8d86f07ac187c8fcbbb8ba774ce5298458115d2a20"
+  },
+  "native_windows_loopback": {
+    "claude_code": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "external_model_calls": 0,
+    "source_runtime": "claude_stream",
+    "profile": "explicit plan and locally approved provider reference, tools denied",
+    "source_execution": {
+      "fixture": "D:/nexus-si026-product-resume-timed-1795093108953",
+      "probe_sha256": "337bdbf971b146ef48a3ab0294703ad60b734217476140d105336ca276724469",
+      "observations_sha256": "5c07ada5ac230584eb848667a2da34bc94e8e3628cd88b31749b636cb1abd02e",
+      "retired_source_verified": true,
+      "human_operator_and_exclusive_successor": true,
+      "opening_recovered_without_second_spawn": true,
+      "exact_saved_uuid": true,
+      "same_context_and_tool_set_observed": true,
+      "successor_submit_and_canonical_close": "SUCCEEDED",
+      "remaining_job_pids": []
+    },
+    "installed_execution": {
+      "fixture": "D:/nexus-si026-product-resume-wheel-observer-1795093323391",
+      "probe_sha256": "9ea5b2b45715238d102e696d1c926a5dca725072ec30a61b2bb9117d4e30d7a2",
+      "observations_sha256": "5c07ada5ac230584eb848667a2da34bc94e8e3628cd88b31749b636cb1abd02e",
+      "source_and_successor_turns_and_close_terminal": true,
+      "source_and_successor_closed": true,
+      "separate_successor_refused": true,
+      "remaining_job_pids": []
+    },
+    "earlier_observations": [
+      {
+        "observations_sha256": "c93c9018cda8834586f089830fed95ae0cdab38ece995c9afca551153c7005c0",
+        "prompt_hook": 503,
+        "receipt": "OUTCOME_UNKNOWN",
+        "model_calls_after_source": 0,
+        "resolution": "The host was still verifying the guarded profile after the initial deadline. Keep the verifier inside the native hook window, preserving the no-replay disposition."
+      },
+      {
+        "observations_sha256": "6d0ca39bd3282ebab9ca1c491ef1bf3b84a609bf0dcf84550f12183a0b80c63a",
+        "resolution": "The first installed probe ended during an opening that was still live. The observation deadline was increased in the fixture without changing product timeouts."
+      }
+    ]
+  },
+  "regressions": {
+    "installed_core": 93,
+    "installed_connector_units_and_process_lifecycle": 83,
+    "installed_nexus_saved_context_and_receipts": 16,
+    "strict_wheel_metadata": "PASS",
+    "vendor_hashes_and_offline_lock": "PASS",
+    "database_migration": null
+  },
+  "limitations": [
+    "HTTP operator routes were exercised by TestClient. No browser, native attach or remote Connector resume was qualified.",
+    "The policy guard refuses configurations beyond the reviewed local file sources and tool-deny profile."
+  ]
+}

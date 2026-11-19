@@ -257,7 +257,8 @@ def submit_execution_operation(
                     from .execution_saved_resume import (
                         require_saved_source_exclusive, require_saved_source_settled, saved_source)
                     current, _ = saved_source(conn, scope, saved_resume['source_session_id'],
-                                              saved_resume['source_session_generation'])
+                                              saved_resume['source_session_generation'],
+                                              adapter_id=resolved['semantic_intent']['payload']['adapter_id'])
                     if current != saved_resume:
                         raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed.', {})
                     require_saved_source_exclusive(conn, scope, saved_resume)

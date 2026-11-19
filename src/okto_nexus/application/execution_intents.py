@@ -256,7 +256,8 @@ def resolve_execution_intent(
         lineage = None
         if saved_resume:
             from .execution_saved_resume import require_saved_source_exclusive, require_saved_source_settled, saved_source
-            lineage, _ = saved_source(conn, scope, request['session_id'], request['source_session_generation'])
+            lineage, _ = saved_source(conn, scope, request['session_id'], request['source_session_generation'],
+                                     adapter_id=binding['adapter_id'])
             require_saved_source_exclusive(conn, scope, lineage)
             require_saved_source_settled(conn, scope, lineage['source_session_id'])
         if containment and actor_agent_id != subject_agent_id:

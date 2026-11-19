@@ -52,10 +52,41 @@ def resume_for_open(owner, frame):
             return None
         if not owner.deps.config.runtime_session_interaction_enabled:
             raise _refuse('CAPABILITY_UNSUPPORTED')
+        if frame['payload']['adapter_id'] == 'claude_stream':
+            from .embedded_claude_resume import SavedClaudeOpening
+            return SavedClaudeOpening(owner, frame, lineage)
         return SavedCodexOpening(owner, frame, lineage)
 
 
+def read_retired_source(owner, frame, lineage, *, ready=False):
+    with owner.factory.unit_of_work(write=False) as uow:
+        owner.verify(uow=uow)
+        row = uow.connection.execute("""
+            SELECT saved_resume_json, native_launch_build_json, owner_generation, lifecycle_state
+            FROM execution_sessions
+            WHERE server_id=? AND executor_id=? AND session_id=? AND open_operation_id=?
+        """, tuple(frame[k] for k in ('server_id', 'executor_id', 'session_id', 'operation_id'))).fetchone()
+        states = ('OPEN_PENDING', 'READY') if ready else ('OPEN_PENDING',)
+        if (row is None or row['owner_generation'] != frame['session_owner_generation']
+                or row['lifecycle_state'] not in states
+                or json.loads(row['saved_resume_json'] or 'null') != lineage):
+            raise _refuse('STALE_GENERATION')
+        try:
+            current, witness = saved_source(uow.connection, frame, lineage['source_session_id'],
+                lineage['source_session_generation'], adapter_id=frame['payload']['adapter_id'])
+            require_saved_source_exclusive(uow.connection, frame, lineage, successor=frame['session_id'])
+            require_saved_source_settled(uow.connection, frame, lineage['source_session_id'])
+        except OktoNexusError as error:
+            raise _refuse('RECONCILIATION_REQUIRED') from error
+        if current != lineage or json.loads(row['native_launch_build_json'] or 'null') != witness['launch_build']:
+            raise _refuse()
+        return witness
+
+
 class SavedCodexOpening:
+    callback_key = 'codex_resume'
+    target_key = 'resume_thread_id'
+
     def __init__(self, owner, frame, lineage):
         self.owner = owner
         self.frame = dict(frame)
@@ -63,30 +94,10 @@ class SavedCodexOpening:
         self.witness = self._read_source()
         self.rollout = rollout_evidence(self.witness['rollout'])
         self.thread_id = self.rollout.thread_id
+        self.target = self.thread_id
 
     def _read_source(self):
-        with self.owner.factory.unit_of_work(write=False) as uow:
-            self.owner.verify(uow=uow)
-            scope, lineage = self.frame, self.lineage
-            row = uow.connection.execute("""
-                SELECT saved_resume_json, native_launch_build_json, owner_generation
-                FROM execution_sessions
-                WHERE server_id=? AND executor_id=? AND session_id=? AND open_operation_id=?
-                  AND lifecycle_state='OPEN_PENDING'
-            """, tuple(scope[k] for k in ('server_id', 'executor_id', 'session_id', 'operation_id'))).fetchone()
-            if (row is None or row['owner_generation'] != scope['session_owner_generation']
-                    or json.loads(row['saved_resume_json'] or 'null') != lineage):
-                raise _refuse('STALE_GENERATION')
-            try:
-                current, witness = saved_source(uow.connection, scope, lineage['source_session_id'],
-                                                lineage['source_session_generation'])
-                require_saved_source_exclusive(uow.connection, scope, lineage, successor=scope['session_id'])
-                require_saved_source_settled(uow.connection, scope, lineage['source_session_id'])
-            except OktoNexusError as error:
-                raise _refuse('RECONCILIATION_REQUIRED') from error
-            if current != lineage or json.loads(row['native_launch_build_json'] or 'null') != witness['launch_build']:
-                raise _refuse()
-            return witness
+        return read_retired_source(self.owner, self.frame, self.lineage)
 
     def _check_file(self, prepared):
         if self._read_source() != self.witness or Path(prepared.cwd) != Path(self.witness['workspace_root']):

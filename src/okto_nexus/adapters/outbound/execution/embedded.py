@@ -59,7 +59,9 @@ class EmbeddedExecutor:
         resume_grant = {}
         if saved_resume is not None:
             environment = partial(saved_resume.environment, environment, local_launch)
-            resume_grant['codex_resume'] = saved_resume.grant
+            resume_grant[saved_resume.callback_key] = saved_resume.grant
+            if saved_resume.callback_key == 'claude_resume':
+                saved_resume.local_launch = local_launch
         runtime = await host.acquire(
             server_id=scope["server_id"], executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
@@ -146,7 +148,7 @@ class EmbeddedExecutor:
             environment=self.environment, native_factory=self.native_factory,
             native_action_factory=self.native_action_factory,
             native_approvals_enabled=self.native_approvals_enabled,
-            **({'codex_resume': self.saved_resume.grant} if self.saved_resume is not None else {}),
+            **({self.saved_resume.callback_key: self.saved_resume.grant} if self.saved_resume is not None else {}),
         )
 
     async def open(self, *, operation_id: str, stream_epoch: str,

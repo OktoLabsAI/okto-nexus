@@ -6,6 +6,7 @@ import os
 import secrets
 import time
 from urllib.parse import urlsplit
+from pathlib import Path
 
 from nexus_connector_core import CoreError
 from nexus_connector_core.harness_config import harness_http_template
@@ -114,6 +115,18 @@ class EmbeddedToolsOwner:
             raise CoreError('WORKSPACE_UNAVAILABLE', 'mcp_client_configuration',
                             message='Configure the harness directory to include its global MCPs.')
         provider_home_http=not native and launch.record["provider_home"] is not None and (not launch.auth_refs or inherit_mcps)
+        if (adapter == 'claude_stream' and self.owner.deps.config.runtime_session_interaction_enabled
+                and launch.record['provider_home'] and not always_allow and not inherit_mcps
+                and not frame['payload'].get('mcp_preset')
+                and frame['payload'].get('harness_settings', {}).get('permission_mode') == 'plan'):
+            from ..application.execution_claude_resume_profile import observe_claude_resume_profile
+            home_path = Path(launch.record['provider_home']['path'])
+            if (home_path / '.claude').is_dir():
+                home_path = home_path / '.claude'
+            if await asyncio.to_thread(observe_claude_resume_profile, str(home_path), launch.workspace_root):
+                # A new scoped HTTP credential does not require copying the
+                # Claude state directory. The reviewed profile denies tools.
+                provider_home_http = True
         process_http=not native and (provider_home_http or always_allow)
         audience="nexus-native-session" if native else "nexus-mcp-session"
         from ..application.execution_tools import NATIVE_ACTIONS

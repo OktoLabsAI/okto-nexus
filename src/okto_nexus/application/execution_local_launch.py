@@ -52,6 +52,7 @@ class ApprovedLocalLaunch:
         self.workspace_root = self.record["root"]["path"]
         self.auth_refs = tuple(sorted(set(self.record["configuration"]["secret_bindings"].values())))
         self.tools = None
+        self.claude_resume_profile = None
 
     def _database(self):
         owner, scope = self.owner, self.scope
@@ -181,4 +182,7 @@ class ApprovedLocalLaunch:
             process_http=bool(self.tools and self.tools.get("process_http")))
         await asyncio.to_thread(self.check)
         await asyncio.to_thread(tools_current)
+        if prepared.intent.adapter_id == 'claude_stream' and self.owner.deps.config.runtime_session_interaction_enabled:
+            from .execution_claude_resume_profile import capture_claude_resume_profile
+            self.claude_resume_profile = await asyncio.to_thread(capture_claude_resume_profile, prepared, value)
         return value
