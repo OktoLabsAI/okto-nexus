@@ -1297,8 +1297,11 @@
         "SI-T-G17",
         "SI-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si026-claude-compound-steer.md",
+        "execution/si026-claude-compound-steer.json"
+      ]
     },
     {
       "id": "SI-027",
@@ -2590,7 +2593,9 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si026-claude-compound-steer.json"
+      ]
     },
     {
       "id": "SI-T-C06",
@@ -2608,7 +2613,9 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si026-claude-compound-steer.json"
+      ]
     },
     {
       "id": "SI-T-C07",
@@ -2626,7 +2633,9 @@
         "SI-R22"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si026-claude-compound-steer.json"
+      ]
     },
     {
       "id": "SI-T-C08",

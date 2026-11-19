@@ -1,0 +1,43 @@
+{
+  "task": "SI-026",
+  "status": "IN_PROGRESS",
+  "scenario_evidence_partial": ["SI-T-C05", "SI-T-C06", "SI-T-C07"],
+  "source": {
+    "nexus_baseline": "90785ecfc63e0cc57d1b178e7d80385933d095b3",
+    "connector_baseline": "43697e03a59f0ff0ec890605c71084786cd50be0",
+    "connector_pin_revision": "a0ef60a5e7726666ad67b8f22d4d04df4b9097c2",
+    "core_baseline": "1c3dba15d316e95afb8b071dff2a6b53b4dfd12a",
+    "core_revision": "f592099f53380d7fa85329cdff85aa91bfff9f8d"
+  },
+  "artifacts": {
+    "core_0.0.16_wheel_sha256": "23ce1bed9403715c4e8597d14b6b7b850806669b3c7bb8ee34babc40f0e8cdfc",
+    "core_0.0.16_sdist_sha256": "ff4a8f8f55d1c4cc2d2f43772f5320aca3943d620e2ff0e07c93082b0ca675a9",
+    "previous_core_0.0.16_wheel_sha256": "7bec3adecff37352e22d2c6e40e7f1f881058cdb31e87d09e61fc64e4d25a6fe",
+    "connector_0.0.15_ci_wheel_sha256": "0f07be2d8de02cb2f434489a263599e9e1824794bfaa6821f9a3d95b2a391c69",
+    "unchanged_core_package_members": 172,
+    "changed_core_package_members": 3
+  },
+  "observed_cases": {
+    "before_interrupt_refusal": {"receipt": "FAILED", "possible_effect": false, "retry_safe": true, "original": "SUCCEEDED"},
+    "interrupt_write_uncertain": {"receipt": "OUTCOME_UNKNOWN", "possible_effect": true, "retry_safe": false, "original": "CANCELLED", "replacement_written": false},
+    "before_replacement_refusal": {"receipt": "OUTCOME_UNKNOWN", "possible_effect": true, "retry_safe": false, "original": "CANCELLED", "replacement_written": false},
+    "replacement_write_uncertain": {"initial_receipt": "OUTCOME_UNKNOWN", "retry_safe": false, "original": "CANCELLED", "replacement_after_native_result": "SUCCEEDED"},
+    "normal": {"initial_receipt": "SUBMITTED", "original": "CANCELLED", "replacement_after_native_result": "SUCCEEDED"}
+  },
+  "verification": {
+    "installed_core_tests": 49,
+    "installed_connector_tests": 8,
+    "installed_nexus_tests": 4,
+    "both_generated_contracts": "PASS",
+    "strict_wheel_and_sdist_check": "PASS",
+    "correlated_original_control_and_replacement_facts": true,
+    "recovery_and_same_intent_replay_sent_no_extra_frames": true,
+    "external_provider_requests": 0,
+    "database_migration_required": false
+  },
+  "limitations": [
+    "The child process is real and speaks a synthetic stream-json protocol. The Claude executable and live provider were outside the run.",
+    "The compound failure is tested through Core admission, transport, events, and reconciliation. Connector and Nexus coverage is regression coverage.",
+    "Explicit operator confirmation, HTTP concurrency, native attach and the remote path remain open."
+  ]
+}
