@@ -912,7 +912,9 @@
         "execution/si012-codex-live-conversation.md",
         "execution/si012-codex-live-conversation.json",
         "execution/si017-grouped-turn-announcements.md",
-        "execution/si017-grouped-turn-announcements.json"
+        "execution/si017-grouped-turn-announcements.json",
+        "execution/si036-browser-authorization-loss.md",
+        "execution/si036-browser-authorization-loss.json"
       ]
     },
     {
@@ -1782,7 +1784,9 @@
         "execution/si036-browser-session-isolation.json",
         "execution/si036-browser-session-isolation.md",
         "execution/si036-mobile-native-zoom.md",
-        "execution/si036-mobile-native-zoom.json"
+        "execution/si036-mobile-native-zoom.json",
+        "execution/si036-browser-authorization-loss.md",
+        "execution/si036-browser-authorization-loss.json"
       ]
     },
     {
@@ -1893,7 +1897,9 @@
         "execution/si036-mobile-native-zoom.md",
         "execution/si036-mobile-native-zoom.json",
         "execution/si017-grouped-turn-announcements.md",
-        "execution/si017-grouped-turn-announcements.json"
+        "execution/si017-grouped-turn-announcements.json",
+        "execution/si036-browser-authorization-loss.md",
+        "execution/si036-browser-authorization-loss.json"
       ]
     },
     {
@@ -3625,9 +3631,11 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si036-browser-session-isolation.json"
+        "execution/si036-browser-session-isolation.json",
+        "execution/si036-browser-authorization-loss.md",
+        "execution/si036-browser-authorization-loss.json"
       ]
     },
     {

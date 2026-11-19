@@ -1,0 +1,83 @@
+{
+  "test": "SI-T-E15",
+  "related_tasks": [
+    "SI-017",
+    "SI-034",
+    "SI-036"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "1abbfed3ab50f68d4940a1284b94fa18178fb0a0",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 462
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "pins_and_hashes": "execution/si017-grouped-turn-announcements.json",
+    "worktrees": "clean",
+    "feature_branch_upstream_drift": "0 ahead, 0 behind"
+  },
+  "environment": "Windows, real Chromium via Playwright CLI, Nexus 0.3.8 wheel from the session announcements milestone, loopback",
+  "candidate_wheel_sha256": "97cd09942827a21e5c4d291a23feee7428380c03015678f2ed21158c58de9f8d",
+  "scenario": {
+    "expired_cookie": "Expire the two sessions in the disposable operator database, with no browser logout call.",
+    "denied_actor": "Disable the operator identity in the copied database while its web login stays valid.",
+    "prior_end_to_end_logout_with_mutations_enabled": "execution/si036-browser-session-isolation.json",
+    "additional_probe": {
+      "cases": {
+        "401": {
+          "http_status": 401,
+          "error_code": "AUTH_FAILED",
+          "browser": {
+            "httpStatus": 401,
+            "protectedTranscriptCleared": true,
+            "activeSessionPanelCleared": true,
+            "authExpiredEvents": 1
+          }
+        },
+        "403": {
+          "http_status": 403,
+          "error_code": "PERMISSION_DENIED",
+          "browser": {
+            "httpStatus": 403,
+            "protectedTranscriptCleared": true,
+            "activeSessionPanelCleared": true,
+            "authExpiredEvents": 0
+          }
+        }
+      },
+      "restored": {
+        "originalSessionHistoryRestored": true
+      },
+      "durable_row_counts": {
+        "execution_event_ingress": 69,
+        "execution_results": 3,
+        "execution_operations": 4,
+        "session_interaction_inputs": 0
+      },
+      "durable_row_hashes_preserved": true,
+      "provider_calls": 0,
+      "native_harnesses_started": 0
+    }
+  },
+  "regressions_passed": {
+    "installed_python_authority_stream_and_queue_storage": 20
+  },
+  "scope": {
+    "code_changes": false,
+    "schema_changes": false,
+    "manual_acceptance": false,
+    "fixture_native_harnesses": 0
+  }
+}
