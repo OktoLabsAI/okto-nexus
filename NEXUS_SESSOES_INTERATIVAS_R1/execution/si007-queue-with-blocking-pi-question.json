@@ -1,0 +1,56 @@
+{
+  "scenario": "SI-T-B07",
+  "status": "PASS",
+  "scope": "SQLite, authenticated HTTP, installed dispatcher, and a controlled blocking question from real Pi 0.87.1 on Windows",
+  "baseline": {
+    "nexus": "1bb082dbfdd7e53c8e46df47cc0554cec8eb6450",
+    "connector": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+    "core": "a10e4d665f00d8a8c97f0d386b30f964c97602ff"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "runtime": {
+    "fixture_question_blocked": true,
+    "ordinary_message_remained_queued": true,
+    "dispatcher_attempts_with_question_pending": 3,
+    "input_provide_from_ordinary_message": 0,
+    "correlated_native_decisions": 3,
+    "turn_after_settlement_succeeded": true,
+    "same_exact_session": true,
+    "total_native_prompts": 2,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "durable_audit": {
+    "operations": {
+      "input.provide": 3,
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "exact_closed_session": true,
+    "distinct_accepted_inputs": 2,
+    "ordinary_message_verbatim": true,
+    "results_same_session": 2,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "event_sequences": {
+      "first_agent_start": 2,
+      "first_agent_settled": 20,
+      "second_agent_start": 21,
+      "second_agent_settled": 49
+    }
+  },
+  "artifact_sha256": {
+    "proof.json": "72449199b63180fc2cae61bdef65f420f4441e2921c610a7317e776b22f1ffc4",
+    "focus.xml": "608f0dc072112d9887d5f9b4844e31eabafbf67ad7fd3693b768009b8ee6ed72",
+    "local_author_probe.py": "5984bdea8b5c23676c91d74823bf5f11d1a8c1c893286bc179b47ef6d5ba88eb"
+  },
+  "previous_browser_evidence": "si025-pi-native-questions.json",
+  "limitations": [
+    "No live model or provider credentials. The question originated in a disposable Pi extension. The ordinary input used authenticated TestClient HTTP, not a browser run on this candidate."
+  ]
+}

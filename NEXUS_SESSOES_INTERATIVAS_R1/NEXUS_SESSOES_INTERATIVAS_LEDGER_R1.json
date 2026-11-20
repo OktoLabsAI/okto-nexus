@@ -507,7 +507,9 @@
         "execution/si032-queue-without-terminal.md",
         "execution/si032-queue-without-terminal.json",
         "execution/si007-shared-turn-arbitration.md",
-        "execution/si007-shared-turn-arbitration.json"
+        "execution/si007-shared-turn-arbitration.json",
+        "execution/si007-queue-with-blocking-pi-question.md",
+        "execution/si007-queue-with-blocking-pi-question.json"
       ]
     },
     {
@@ -2686,9 +2688,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si025-pi-native-questions.json"
+        "execution/si025-pi-native-questions.json",
+        "execution/si007-queue-with-blocking-pi-question.md",
+        "execution/si007-queue-with-blocking-pi-question.json"
       ]
     },
     {
