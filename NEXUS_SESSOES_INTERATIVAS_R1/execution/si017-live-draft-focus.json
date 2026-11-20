@@ -1,0 +1,128 @@
+{
+  "scenario": "SI-T-E09",
+  "status": "PASS",
+  "scope": "Component checks, exact HTTP and SSE, and real Edge browser on Windows",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "d61299445ff397dcff86aa0feb8a70a5907724eb",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_main": 0,
+      "ahead_of_main": 480
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_main": 0,
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_main": 0,
+      "ahead_of_main": 65
+    },
+    "working_trees": "clean"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "browser": "Microsoft Edge with Playwright CLI",
+    "engine": "Codex app-server 0.157.0",
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "transport": "Connector-owned R4 HTTP and WebSocket over loopback",
+    "auth": "Disposable operator login and isolated temporary provider profile",
+    "provider": "Deterministic Responses SSE, zero external model calls"
+  },
+  "browser": {
+    "prepare": {
+      "result": {
+        "checkpoint": "EXACT_STREAM_DRAFT_FOCUSED",
+        "scope": true,
+        "characters": 32,
+        "selection": 3
+      },
+      "log_sha256": "c3fe399cf4399d8e4ffc9040e6c0502515e38051775380049650b604ac78c63d"
+    },
+    "first": {
+      "result": {
+        "checkpoint": "FOCUS_DRAFT_AND_SELECTION_PRESERVED",
+        "phase": "first",
+        "characters": 32,
+        "selection": 3
+      },
+      "log_sha256": "1ac6cce80d18b3229f8f495b567017480633428236635ac72cb7435c284f5638"
+    },
+    "second": {
+      "result": {
+        "checkpoint": "FOCUS_DRAFT_AND_SELECTION_PRESERVED",
+        "phase": "second",
+        "characters": 51,
+        "selection": 2
+      },
+      "log_sha256": "9d4c685858f95206c35357142565b4e79a9b127031c8bf5991f3c03a41149854"
+    },
+    "complete": {
+      "result": {
+        "checkpoint": "FOCUS_DRAFT_AND_SELECTION_PRESERVED",
+        "phase": "complete",
+        "characters": 69,
+        "selection": 2
+      },
+      "log_sha256": "091892013d7ddd2d7529673156c9d7c66e14d463b84ef8d3a044493e518ad0a3"
+    }
+  },
+  "service": {
+    "installed_assets_and_packages_verified": true,
+    "single_native_app_server": true,
+    "conversation_appends": 2,
+    "complete_snapshots": 1,
+    "stable_message_identity": true,
+    "exact_session_scope": true,
+    "one_native_turn": true,
+    "queued_inputs": 0,
+    "unsubmitted_draft_stayed_in_browser": true,
+    "canonical_close": "SUCCEEDED",
+    "loopback_model_requests": 1,
+    "external_provider_calls": 0
+  },
+  "persistence": {
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "sessions_closed": 1,
+    "native_launches": 1,
+    "canonical_results": 1,
+    "queued_draft_inputs": 0
+  },
+  "verification": {
+    "component_cases": 20,
+    "api_and_transcript_cases": 28,
+    "installed_browser_cases": 1,
+    "component_tap_sha256": "65962de1e924b09938073c576e049f166c8de005d7afc732ad30cfb667e4e633",
+    "api_junit_sha256": "8593b6068a1ad2f3edcd1e2f3ac6f02046f6b712ab70c0ef081d26cdfc0b5d0d",
+    "browser_junit_sha256": "9dd387bf35450d0d35f226789c4feb411dcafacba095c4dfc4d8eec3e4221295",
+    "commands": [
+      "rtk proxy node --test tests/uiSessionInspection.test.mjs",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports tests/session_interaction/test_conversation_stream.py tests/session_interaction/test_transcript.py",
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "pwsh -NoProfile -File drive.ps1 -Root <isolated-root>"
+    ],
+    "fixture_directory": "D:/nxs-draft-39944496/r4",
+    "fixtures_sha256": {
+      "test_live_draft.py": "32008ca64495fc630b4e241ae4ee238b87f01530a6f221e72c336c2e050e7abb",
+      "prepare.js": "01f3d2bc2845c07a22d9cb5837d3c08d808e7db25672f33c4f07f3b69f91139d",
+      "check.js": "0fa6e22beb087abb6f193bd93cc9d07620178025c714674bfcad7001ddd4a5ad",
+      "run.ps1": "5497416b681c13db98b78af0459a70af6552ab3aa4c2eb80b772210cf4b8aecb",
+      "drive.ps1": "07f32f6d36f717a52569407f81ee99b271cc64e4971db54c6ea22c5c7dddff64"
+    }
+  },
+  "limitations": [
+    "The earlier embedded fixture received PROFILE_DRIFT before native launch. The completed run used the approved remote Connector path on the same host.",
+    "Separate gates cover screen-reader output, manual acceptance, and a real provider."
+  ]
+}

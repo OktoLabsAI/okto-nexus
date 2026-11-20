@@ -746,7 +746,9 @@
         "execution/si013-browser-queue-recovery.md",
         "execution/si013-browser-queue-recovery.json",
         "execution/si013-next-turn-label.md",
-        "execution/si013-next-turn-label.json"
+        "execution/si013-next-turn-label.json",
+        "execution/si017-live-draft-focus.md",
+        "execution/si017-live-draft-focus.json"
       ]
     },
     {
@@ -926,7 +928,9 @@
         "execution/si036-browser-authorization-loss.md",
         "execution/si036-browser-authorization-loss.json",
         "execution/si036-visual-pause.md",
-        "execution/si036-visual-pause.json"
+        "execution/si036-visual-pause.json",
+        "execution/si017-live-draft-focus.md",
+        "execution/si017-live-draft-focus.json"
       ]
     },
     {
@@ -1938,7 +1942,9 @@
         "execution/si016-browser-terminal-only.md",
         "execution/si016-browser-terminal-only.json",
         "execution/si036-home-states-native-detach.md",
-        "execution/si036-home-states-native-detach.json"
+        "execution/si036-home-states-native-detach.json",
+        "execution/si017-live-draft-focus.md",
+        "execution/si017-live-draft-focus.json"
       ]
     },
     {
@@ -3614,11 +3620,13 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si036-pi-browser-queue-transcript.json",
         "execution/si013-next-turn-label.md",
-        "execution/si013-next-turn-label.json"
+        "execution/si013-next-turn-label.json",
+        "execution/si017-live-draft-focus.md",
+        "execution/si017-live-draft-focus.json"
       ]
     },
     {
