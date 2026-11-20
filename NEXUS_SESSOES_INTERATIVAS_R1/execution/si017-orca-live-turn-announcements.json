@@ -1,0 +1,195 @@
+{
+  "tasks": [
+    "SI-017",
+    "SI-036"
+  ],
+  "test": "SI-T-E14",
+  "result": "PASS",
+  "baseline": {
+    "nexus": {
+      "path": "okto_labs_okto_nexus",
+      "branch": "feature/v0.3.8",
+      "head": "0bd4dbe9042f4f8c1a19589957a00e359b1eafb5",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 538,
+      "behind_main": 0
+    },
+    "connector": {
+      "path": "okto-nexus-connector",
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 88,
+      "behind_main": 0
+    },
+    "core": {
+      "path": "okto-nexus-connector-core",
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 67,
+      "behind_main": 0
+    },
+    "clean_at_intake_and_upstream_counts_zero": true
+  },
+  "environment": {
+    "os": "Debian 13 under WSL2, Windows host, disposable Xvfb session, Docker network none",
+    "image_id": "sha256:caffb0e35d27120746352b9632a72bdbd638ca1f6defdcff85298fb6267eb710",
+    "versions": {
+      "at-spi2-core": "2.56.2-1+deb13u2",
+      "chromium": "156.0.8078.79-1~deb13u1",
+      "espeak-ng": "1.52.0+dfsg-5",
+      "orca": "48.1-1+deb13u2",
+      "pulseaudio": "17.0+dfsg1-2+b1",
+      "speech-dispatcher": "0.12.0-5",
+      "playwright_cli": "0.1.25"
+    },
+    "screen_reader_output": "AT-SPI through Orca to Speech Dispatcher, eSpeak NG and PulseAudio null sink",
+    "capture": "Speech Dispatcher input and waveform from virtual sink, segmented after setup speech was stopped",
+    "runtime_processes_removed": true
+  },
+  "artifacts_sha256": {
+    "previous_nexus_wheel": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "nexus_wheel": "528459e8d7854e54147bf26d6ea1535aedaaadf7d380e8666380fc3526e5802a",
+    "nexus_sdist": "f2f905c456b89dba39a9c4fc23a196c66b207e910101af9bfa5dee1785a1acf6",
+    "connector_wheel": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core_wheel": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "candidate_served_asset": {
+    "served_asset": "/assets/index-BPl1v2m4.js",
+    "sha256": "a2dc72d517f142e5b23ee1b36169ed9755097c833b749198dcf10dfc0cc9a27b"
+  },
+  "checks": {
+    "frontend_passed": 422,
+    "frontend_build": true,
+    "uv_lock_check": true,
+    "twine_check_strict": true,
+    "source_transcript_passed": 24,
+    "installed_transcript_passed": 24
+  },
+  "previous_build_reproduced": {
+    "first_finishing_turn_spoken": [
+      "Turn finished."
+    ],
+    "second_distinct_finishing_turn_in_dom": [
+      "Turn finished.",
+      "Turn finished."
+    ],
+    "second_distinct_finishing_turn_spoken": [],
+    "scope": "Same screen reader and installed package path with previous wheel, independent canonical terminal events"
+  },
+  "candidate": {
+    "fixture_only": true,
+    "provider_calls": 0,
+    "native_harnesses_started": 0,
+    "api": {
+      "historic_terminal_count": 1,
+      "fragments": 24,
+      "canonical_new_terminal_count": 6,
+      "duplicate_terminal_projected": false
+    },
+    "browser": {
+      "open": {
+        "historicNotices": 0,
+        "focusedRegion": "Conversation messages",
+        "accessibilityRole": "status",
+        "live": "polite",
+        "atomic": true
+      },
+      "fragments": {
+        "visibleFragments": 24,
+        "terminalNotices": 0,
+        "newMessageNotices": 0,
+        "focusPreserved": true
+      },
+      "first": {
+        "turnNotices": [
+          "Turn finished."
+        ],
+        "focusPreserved": true
+      },
+      "duplicate": {
+        "duplicateAnnouncements": 0,
+        "focusPreserved": true
+      },
+      "second": {
+        "turnNotices": [
+          "Turn finished.",
+          "Another turn finished."
+        ],
+        "newMessageNotices": 0,
+        "focusPreserved": true
+      },
+      "grouped": {
+        "turnNotices": [
+          "Turn finished.",
+          "Another turn finished.",
+          "2 turns ended."
+        ],
+        "focusPreserved": true
+      },
+      "grouped_repeat": {
+        "turnNotices": [
+          "Turn finished.",
+          "Another turn finished.",
+          "2 turns ended.",
+          "2 more turns ended."
+        ],
+        "focusPreserved": true
+      }
+    },
+    "screen_reader": {
+      "opened_region_spoken": true,
+      "phases": {
+        "fragments": {
+          "spoken": [],
+          "non_silent_samples": 0
+        },
+        "first": {
+          "spoken": [
+            "Turn finished."
+          ],
+          "non_silent_samples": 10169
+        },
+        "duplicate": {
+          "spoken": [],
+          "non_silent_samples": 0
+        },
+        "second": {
+          "spoken": [
+            "Another turn finished."
+          ],
+          "non_silent_samples": 15134
+        },
+        "grouped": {
+          "spoken": [
+            "2 turns ended."
+          ],
+          "non_silent_samples": 13796
+        },
+        "grouped-repeat": {
+          "spoken": [
+            "2 more turns ended."
+          ],
+          "non_silent_samples": 16913
+        }
+      },
+      "wave_format": {
+        "channels": 1,
+        "bits": 16,
+        "hz": 16000
+      },
+      "sha256": {
+        "ssip": "e78ecfa48ace649314e25f8c3e23a2db17af609d489a360eac907ddff5d2e9eb",
+        "orca": "1352c2ba9858954d6d1fc98ed084fa45ecb405af7a27d58a3169e7642c491836",
+        "wave": "68ebcc14f30f701fdfed1703b5328f13498fd9e02aa745e71743a02f8848c1ba"
+      }
+    }
+  },
+  "qualification": {
+    "covers": "SI-T-E14 component, installed API and real Chromium with Orca. Verified exactly configured browser and reader versions.",
+    "not_exercised": "Manual acceptance, Windows screen readers, other reader/browser combinations and priced provider campaigns.",
+    "data": "Closed-mutation read fixture and synthetic events in disposable copy of the database. No provider calls."
+  },
+  "rollback": "Revert this Nexus commit to restore the previous dashboard. No database migration or connector/core release."
+}

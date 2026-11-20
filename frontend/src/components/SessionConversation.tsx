@@ -192,8 +192,9 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
           const page = await runtimeApi.sessionConversation(scope, current.after, current.epoch, signal);
           if (signal.aborted) return;
           assertConversationPage(page, scope, current.after, current.epoch);
-          const announcement = current.ready ? liveTurnAnnouncement(page, current.announceAfter) : null;
-          if (announcement || !current.ready) setTurnAnnouncement(announcement);
+          setTurnAnnouncement(previous => current.ready
+            ? liveTurnAnnouncement(page, current.announceAfter, previous?.text) ?? previous
+            : null);
           view.current = {messages: page.updates.length ? applyConversationUpdates(current.messages, page.updates) : current.messages,
             epoch: page.stream_epoch,
             after: page.next_after_sequence, ready: true, more: page.has_more, gap: page.gap_pending,

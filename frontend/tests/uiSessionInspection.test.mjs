@@ -243,6 +243,17 @@ test('conversation announces new verified turn outcomes as one message per page'
   assert.equal(liveTurnAnnouncement({...page,turn_outcomes:undefined},7),null);
 });
 
+test('consecutive live notices remain distinguishable to assistive technology',()=>{
+  const page={turn_outcomes:[{sequence:8,outcome:'success'},{sequence:11,outcome:'success'}]};
+  const first=liveTurnAnnouncement(page,0);
+  assert.deepEqual(first,{sequence:11,text:'2 turns ended.'});
+  const later={turn_outcomes:[{sequence:12,outcome:'success'},{sequence:15,outcome:'success'}]};
+  assert.deepEqual(liveTurnAnnouncement(later,11,first.text),{sequence:15,text:'2 more turns ended.'});
+  assert.deepEqual(liveTurnAnnouncement(later,12,'Turn finished.'),{sequence:15,text:'Another turn finished.'});
+  assert.deepEqual(liveTurnAnnouncement(later,12,'Another turn finished.'),{sequence:15,text:'Turn finished.'});
+  assert.equal(liveTurnAnnouncement(later,15,'Turn finished.'),null);
+});
+
 test('conversation reconciles deltas and snapshots by message identity with stable prior rows',()=>{
   const initial=new Map();
   const part={message_id:'message',update_id:'delta',change:'append',role:'assistant',text:'part',text_truncated:false};

@@ -55,12 +55,17 @@ export function assertConversationPage(page: SessionConversationPage, scope: Int
   }
 }
 
-export function liveTurnAnnouncement(page: SessionConversationPage, after: number) {
+export function liveTurnAnnouncement(page: SessionConversationPage, after: number, previousText?: string) {
   const outcomes = page.turn_outcomes?.filter(result => result.sequence > after) ?? [];
   if (!outcomes.length) return null;
   const last = outcomes[outcomes.length - 1];
-  const labels = {success: 'Turn finished.', failed: 'Turn failed.', interrupted: 'Turn interrupted.'};
-  return {sequence: last.sequence, text: outcomes.length === 1 ? labels[last.outcome] : `${outcomes.length} turns ended.`};
+  const descriptions = {success: 'finished', failed: 'failed', interrupted: 'interrupted'};
+  const description = descriptions[last.outcome];
+  const single = outcomes.length === 1;
+  const text = single ? `Turn ${description}.` : `${outcomes.length} turns ended.`;
+  // Replacing a DOM node with identical text can go unannounced even for a different turn.
+  const repeated = single ? `Another turn ${description}.` : `${outcomes.length} more turns ended.`;
+  return {sequence: last.sequence, text: text === previousText ? repeated : text};
 }
 
 export function assertConversationPosition(position: SessionConversationPosition, scope: InteractionScope) {

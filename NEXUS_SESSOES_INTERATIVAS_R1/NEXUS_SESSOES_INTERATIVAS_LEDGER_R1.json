@@ -1016,7 +1016,9 @@
         "execution/si036-visual-pause.md",
         "execution/si036-visual-pause.json",
         "execution/si017-live-draft-focus.md",
-        "execution/si017-live-draft-focus.json"
+        "execution/si017-live-draft-focus.json",
+        "execution/si017-orca-live-turn-announcements.md",
+        "execution/si017-orca-live-turn-announcements.json"
       ]
     },
     {
@@ -2164,7 +2166,9 @@
         "execution/si015-native-extension-catalog.md",
         "execution/si015-native-extension-catalog.json",
         "execution/si016-browser-shell-boundary.md",
-        "execution/si016-browser-shell-boundary.json"
+        "execution/si016-browser-shell-boundary.json",
+        "execution/si017-orca-live-turn-announcements.md",
+        "execution/si017-orca-live-turn-announcements.json"
       ]
     },
     {
@@ -2957,7 +2961,8 @@
         "SI-R22"
       ],
       "status": "PASS",
-      "evidence": ["execution/si023-retired-session-queue.json",
+      "evidence": [
+        "execution/si023-retired-session-queue.json",
         "execution/si008-lost-enqueue-response.md",
         "execution/si008-lost-enqueue-response.json"
       ]
@@ -4104,10 +4109,12 @@
         "SI-R18",
         "SI-R21"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si017-grouped-turn-announcements.md",
-        "execution/si017-grouped-turn-announcements.json"
+        "execution/si017-grouped-turn-announcements.json",
+        "execution/si017-orca-live-turn-announcements.md",
+        "execution/si017-orca-live-turn-announcements.json"
       ]
     },
     {
