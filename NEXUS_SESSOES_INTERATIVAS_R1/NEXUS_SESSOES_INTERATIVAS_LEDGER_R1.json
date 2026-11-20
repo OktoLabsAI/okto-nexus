@@ -1166,7 +1166,9 @@
         "execution/si037-pi-headless-output.md",
         "execution/si037-pi-headless-output.json",
         "execution/si037-codex-viewer-process-expiry.md",
-        "execution/si037-codex-viewer-process-expiry.json"
+        "execution/si037-codex-viewer-process-expiry.json",
+        "execution/si037-posix-pty-hangup.md",
+        "execution/si037-posix-pty-hangup.json"
       ]
     },
     {
@@ -1896,7 +1898,9 @@
         "execution/si032-queue-without-terminal.md",
         "execution/si032-queue-without-terminal.json",
         "execution/si037-codex-viewer-process-expiry.md",
-        "execution/si037-codex-viewer-process-expiry.json"
+        "execution/si037-codex-viewer-process-expiry.json",
+        "execution/si037-posix-pty-hangup.md",
+        "execution/si037-posix-pty-hangup.json"
       ]
     },
     {
@@ -2201,7 +2205,9 @@
         "execution/si037-pi-headless-output.md",
         "execution/si037-pi-headless-output.json",
         "execution/si037-codex-viewer-process-expiry.md",
-        "execution/si037-codex-viewer-process-expiry.json"
+        "execution/si037-codex-viewer-process-expiry.json",
+        "execution/si037-posix-pty-hangup.md",
+        "execution/si037-posix-pty-hangup.json"
       ]
     },
     {
@@ -5088,8 +5094,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si037-posix-pty-hangup.md",
+        "execution/si037-posix-pty-hangup.json"
+      ]
     },
     {
       "id": "SI-T-H08",

@@ -1,0 +1,102 @@
+{
+  "scenario": "SI-T-H07",
+  "qualification_scope": "Real Linux controlling PTY in a disposable Docker container, installed Pi read-only presentation, Windows-hosted native Pi 0.87.1, authenticated WSS loopback route across the kernels",
+  "repositories_before_change": {
+    "Nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "2ed1c169f501abcbc067838046718d42c028f306",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead": [
+        0,
+        535
+      ]
+    },
+    "Connector": {
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead": [
+        0,
+        88
+      ]
+    },
+    "Core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead": [
+        0,
+        67
+      ]
+    }
+  },
+  "working_trees_clean": true,
+  "wheel_sha256": {
+    "nexus": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "fixture": "D:\\nxs-posix-reader-87a29ce7-final",
+  "linux_image_sha256": "896edfbcbf0c29ad15681617a8886cb9871b7f24c5fde4606114c8ee6bfe4c70",
+  "linux_install": "Same three wheels installed into a disposable target, dependency check and imports passed.",
+  "proof": {
+    "engine_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "linux_controlling_terminal": {
+      "kernel": "5.15.146.1-microsoft-standard-WSL2",
+      "machine": "x86_64",
+      "python": "3.11.18",
+      "marker_rendered_on_controlling_pty": true,
+      "master_fd_closed": true,
+      "process_exit_signal": 1
+    },
+    "tls_cross_kernel": true,
+    "native_launches": 1,
+    "original_turn_kept_during_terminal_close": true,
+    "same_productive_grant": true,
+    "same_queued_input_delivered_once": true,
+    "successful_results_without_viewers": 2,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "sqlite": {
+    "detached_readers": 1,
+    "canonical_operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "new_session_inputs": 1,
+    "new_session_controls": 0,
+    "successful_results": 2,
+    "foreign_key_violations": 0,
+    "integrity": "ok"
+  },
+  "cleanup": {
+    "listener_closed": true,
+    "tls_private_key_removed": true,
+    "engine_process_gone_after_canonical_close": true
+  },
+  "tests": {
+    "installed_native_integration": {
+      "passed": 1,
+      "sha256": "31190354c9d6c9ec6cfcdfb54909ab8db2fa08aa4f5d265fd91a3d306468e2b5"
+    },
+    "installed_broker_and_queue_regressions": {
+      "passed": 19,
+      "sha256": "30307df5d6491b76cbc7f84f5217309c2c987d110943906cafeff23a399fee3a"
+    }
+  },
+  "fixture_revision": {
+    "issue": "The first Linux probe showed real SIGHUP. The Windows fixture required SUBMITTED even though the provider was running and the public receipt still reported ACCEPTED.",
+    "junit_sha256": "734316d516e15fe8e046b2e6c6321bfeb3f07760de5304225c23ba1d75b3742d"
+  },
+  "artifacts_sha256": {
+    "test_posix_loss.py": "780909f55189cc7144ccd0e89ec1818249a1ecbf2d09eebe16b4b44f1127528f",
+    "linux_pty_client.py": "0c81b7b3973de6a731073f0512d7e61214713decf56b414f90ae4d0293c6ddac",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "test_headless_setup.py": "3fc482d92893f88d1c64e58d3be5257832910eda66fbcf8d9d3924b4cc2765cc",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "run.ps1": "d06aea83240b80fd7b887b3f051e744ab1a35694ee1db4c75473c889e6033ed2",
+    "proof.json": "5c80019a173cd4c98aa24b5f61523c4e7bbd38e3653551b02a191acd133ad9c4"
+  }
+}
