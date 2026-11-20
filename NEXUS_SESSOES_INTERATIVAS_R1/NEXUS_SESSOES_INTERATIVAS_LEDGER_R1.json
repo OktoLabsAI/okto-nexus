@@ -694,7 +694,9 @@
         "execution/si024-codex-native-interrupt-confirmation.md",
         "execution/si024-codex-native-interrupt-confirmation.json",
         "execution/si026-claude-terminal-interrupt.md",
-        "execution/si026-claude-terminal-interrupt.json"
+        "execution/si026-claude-terminal-interrupt.json",
+        "execution/si011-interrupt-refusal-keeps-turn.md",
+        "execution/si011-interrupt-refusal-keeps-turn.json"
       ]
     },
     {
@@ -3340,8 +3342,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si011-interrupt-refusal-keeps-turn.md",
+        "execution/si011-interrupt-refusal-keeps-turn.json"
+      ]
     },
     {
       "id": "SI-T-C17",

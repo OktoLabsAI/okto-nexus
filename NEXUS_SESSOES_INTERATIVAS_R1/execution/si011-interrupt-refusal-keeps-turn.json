@@ -1,0 +1,69 @@
+{
+  "scenario": "SI-T-C16",
+  "status": "PASS",
+  "wheel_source_revision": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "checked_branch_head": "03ad1fd1e5a4c198aa78c2a59e11dec5a048fc47",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "platform": "Windows x64 and Edge",
+  "browser": {
+    "checkpoint": "DECLINED_INTERRUPT_WITH_TURN_RUNNING",
+    "same_selected_session": true,
+    "confirmed_requests": 1,
+    "visible_running_refusal": true,
+    "visible_paused_queue": true
+  },
+  "runtime": {
+    "native_proven_no_write": true,
+    "native_control_attempts": 1,
+    "same_running_target": true,
+    "queue_paused_with_one_retained_input": true,
+    "target_later_completed_naturally": true,
+    "new_turn_sends": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "frontend_unit_tests": 1,
+  "fixture_path": "D:/nxs-browser-interrupt-22585345",
+  "hashes": [
+    {
+      "file": "focus.xml",
+      "sha256": "83335399fa477143aa3d6f13096018f54d4e6ff011b2e1f10698b5ce0e07a388"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "f44cad8e70282f9a349e262cc65b0df8cadc41a7ef6e5a1049aaaeae879f6194"
+    },
+    {
+      "file": "browser-verified.json",
+      "sha256": "b59625ed1b38013a91ee497ee6e1cde78a870d177ae6373bcd767d21be46e08d"
+    },
+    {
+      "file": "frontend-unit.tap",
+      "sha256": "f666227489af626a4110b48acc962daa7810112f698b9cd9981fb52019235255"
+    },
+    {
+      "file": "test_interrupt_refusal.py",
+      "sha256": "f77965e75d141e5246aff16e3de64824b65a9ebc6791f282389a71bbb0b05658"
+    },
+    {
+      "file": "open.js",
+      "sha256": "eac0aed9be086ce5aa6a2602d9c39ef3743f7b69dc068b41ea91ba8f7be41be4"
+    },
+    {
+      "file": "run.ps1",
+      "sha256": "502d6a5ff755308766dde4d274f9bba444576e9f6e4584583744abc09a20da63"
+    },
+    {
+      "file": "drive.ps1",
+      "sha256": "4b9aad77192d05f10fc8881e519cafa5bbb98f0d737a917a281e1e54648387b7"
+    }
+  ],
+  "limits": [
+    "Synthetic Codex peer and proven pre-write refusal",
+    "No unconfirmed or post-write rejection",
+    "No screen reader"
+  ]
+}
