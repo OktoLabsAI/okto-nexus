@@ -178,6 +178,62 @@ def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
     assert history.status_code==200 and history.json()["executor_stage"]=="SUCCEEDED"
 
 
+@pytest.mark.parametrize('has_open_grant', [False, True])
+def test_human_empty_open_requires_current_grant_and_never_sends(connected_local, has_open_grant):
+    from okto_nexus.application.terminal_work import PREFIX, SUBMISSION
+
+    setup, binding, native = connected_local
+    deps, app, client, *_ = setup
+    if not has_open_grant:
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute(
+                "UPDATE runtime_execution_grants SET expires_at=? WHERE endpoint_id=?",
+                (iso_plus(deps.clock.now_iso(), -60), binding['endpoint_id']),
+            )
+
+    auth = app.state.operator_auth
+    password = 'isolated-fixture-operator'
+    assert auth.configure('human', password, local=True)
+    token = auth.login('human', password)
+    headers = {'X-Nexus-UI': '1', 'Origin': str(client.base_url).rstrip('/'),
+               'X-Nexus-Operator-Session-Required': '1', 'Cookie': 'nexus_operator_session=' + token}
+
+    def snapshot():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return [tuple(row) for row in uow.connection.execute(
+                'SELECT * FROM runtime_execution_grants ORDER BY grant_id')]
+
+    before = snapshot()
+    response = client.post(PREFIX + '/runtime/intents:resolve', headers=headers, json=dict(
+        client_intent_id='terminal-empty-opening', intent='runtime.start', agent_id=binding['agent_id'],
+        binding_id=binding['binding_id'], workspace_binding_id=binding['workspace_binding_id']))
+    assert response.status_code == 200, response.text
+    resolved = response.json()
+    submission = {key: resolved[key] for key in SUBMISSION}
+    response = client.post(PREFIX + '/runtime/operations', headers=headers, json=submission)
+    if has_open_grant:
+        assert response.status_code == 202, response.text
+        wait_receipt(setup, resolved)
+        replay = client.post(PREFIX + '/runtime/operations', headers=headers, json=submission)
+        assert replay.status_code == 200 and replay.json()['operation_id'] == resolved['operation_id']
+        assert native.opens == 1 and not native.native.sent
+    else:
+        assert response.status_code == 403, response.text
+        assert 'Review the project execution authorization' in response.json()['error']['message']
+        assert native.opens == 0
+
+    before_cleanup = snapshot()
+    assert before_cleanup == before
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert [row[0] for row in uow.connection.execute('SELECT action FROM execution_operations')] == (
+            ['runtime.open'] if has_open_grant else [])
+        assert uow.connection.execute('SELECT count(*) FROM execution_sessions').fetchone()[0] == int(has_open_grant)
+    if has_open_grant:
+        closed = admit(setup, binding, 'close-terminal-empty-opening', 'runtime.close',
+                       session_id=resolved['scope']['session_id'])
+        wait_receipt(setup, closed, stages=('SUCCEEDED',))
+
+
 def test_open_idle_session_backs_off_to_the_idle_interval(connected_local):
     """An open session keeps a non-terminal receipt. It must not keep the host on its short tick."""
     setup,binding,native=connected_local

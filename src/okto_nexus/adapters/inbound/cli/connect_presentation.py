@@ -144,13 +144,24 @@ def present_after_connect(service, *, profile, document, interaction):
             if input(f'Open {harness} in this terminal? [y/N] ').strip().lower() != 'y':
                 return
         from .session import attach_session
+        from .session_open import empty_session
         from .work import open_work
         flow = open_work(service, profile, connection=document)
         binding = flow.binding()
         call, login = flow.call, None
         if not hasattr(service, 'operator_profile') and getattr(call, 'base', None):
             call, login = _local_viewer_login(service, call, binding['server_id'])
-        attached = attach_session(call, binding, interactive=True)
+        recovered = empty_session(service, call, binding)
+        try:
+            attached = attach_session(call, binding, interactive=True, session_id=recovered) if recovered else attach_session(
+                call, binding, interactive=True)
+        except ConnectionError as error:
+            if error.code != 'NO_LIVE_SESSION' or recovered or not getattr(call, 'token', None):
+                raise
+            opened = empty_session(service, call, binding, allow_new=True)
+            if opened is None:
+                return
+            attached = attach_session(call, binding, interactive=True, session_id=opened)
         display_reattach_command(attached, binding, service=service, operator_profile=login)
     except EOFError:
         return

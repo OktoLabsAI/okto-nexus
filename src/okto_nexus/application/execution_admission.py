@@ -49,7 +49,8 @@ def submit_execution_operation(
     with factory.unit_of_work() as uow:
         conn = uow.connection
         intent = conn.execute(
-            "SELECT resolved_json,operation_id,source_guard_digest,actor_guard_digest,session_selection,reuse_admitted_at FROM "
+            "SELECT resolved_json,operation_id,source_guard_digest,actor_guard_digest,session_selection,reuse_admitted_at,"
+            "initial_turn_json FROM "
             "execution_client_intents WHERE server_id=? AND actor_agent_id=? "
             "AND client_intent_id=? AND intent_id GLOB 'r4intent_*'",
             (server_id, actor_agent_id, request["client_intent_id"]),
@@ -237,6 +238,23 @@ def submit_execution_operation(
                 from .execution_identity_owner import require_identity_host
                 require_identity_host(conn, server_id=server_id,
                                       agent_id=subject_agent_id, executor_id=executor_id)
+                if (context is not None and context.authentication_source == 'operator_session'
+                        and actor_agent_id != subject_agent_id and saved_resume is None
+                        and intent['initial_turn_json'] is None):
+                    # An empty opening requested by the human terminal must
+                    # have a current grant before a session claim is written.
+                    # Dispatch checks the same authority again before launch.
+                    from .execution_operator_authority import require_subject_dispatch_grant
+                    try:
+                        require_subject_dispatch_grant(uow, access=access,
+                            subject=access.agents.get(uow, subject_agent_id), grant_id=None,
+                            action='open', endpoint_id=binding['endpoint_id'], workspace_id=scope['workspace_id'],
+                            mode='managed', consume=False, audit=False)
+                    except OktoNexusError as error:
+                        if error.code != ErrorCode.PERMISSION_DENIED:
+                            raise
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                            'Review the project execution authorization before opening an empty session.', {}) from error
                 profile = conn.execute(
                     "SELECT enabled,revision,launch_revision FROM runtime_profiles "
                     "WHERE profile_id=?", (binding["profile_id"],),

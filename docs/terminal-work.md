@@ -12,6 +12,13 @@ for that origin and Server. If you have several matching logins, choose one
 explicitly with `session attach --operator-profile OPERATOR` and the connection
 and session selectors below.
 
+If the connection has no live session, Connect asks separately before opening
+an empty session. Enter declines. An approved opening uses the current grant
+and runtime policy, then displays the exact session once it is ready. Review
+missing or expired authority through `work authorize`. If an opening receipt
+is uncertain, requesting the viewer again checks that same receipt. No project
+message is submitted by this flow.
+
 The prompt supports ordinary conversation and these explicit controls:
 
 - `/status`, `/watch`: inspect or follow the current request.

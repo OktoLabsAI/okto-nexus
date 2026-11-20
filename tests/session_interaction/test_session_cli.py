@@ -17,6 +17,74 @@ BINDING = {'server_id': 'server', 'executor_id': 'executor', 'binding_id': 'bind
                'workspace_id': 'workspace', 'workspace_binding_id': 'realization', 'endpoint_id': 'endpoint'}
 
 
+@pytest.mark.parametrize('answer', ['no', 'yes', 'lost-receipt', 'no-grant'])
+def test_empty_open_requires_confirmation_and_recovers_the_same_receipt(tmp_path, monkeypatch, answer):
+    from okto_nexus.adapters.inbound.cli.session_open import empty_session
+
+    binding = BINDING | {'binding_revision': 1}
+    scope = binding | {'session_id': 'exact-session', 'session_owner_generation': 1}
+    scope.pop('endpoint_id')
+    home = tmp_path / 'nexus'
+    work = home / 'terminal/work'
+    work.mkdir(parents=True)
+    retained_work = work / 'profile.json'
+    retained_work.write_bytes(b'{ "work": "retained" }')
+    service = SimpleNamespace(adapter=SimpleNamespace(home=home))
+    resolution = {'operation_id': 'exact-opening', 'intent_hash': 'exact-hash', 'resolution_revision': 1,
+                  'reuse': False, 'can_submit': True, 'session_id': 'exact-session',
+                  'scope': scope, 'semantic_intent': {'action': 'runtime.open'}}
+    operation = {'operation_id': 'exact-opening', 'intent_hash': 'exact-hash', 'action': 'runtime.open',
+                 'scope': scope, 'executor_stage': 'SUBMITTED'}
+    writes = []
+
+    class Human:
+        base, username, token = 'http://127.0.0.1:8202', 'operator', 'fixture'
+
+        def __call__(self, method, path, body=None):
+            if path.endswith('/runtime-policy'):
+                return {'data': {'effective': {'session_policy': 'per_sender'}}}
+            if method == 'POST':
+                writes.append(body)
+                if path.endswith('intents:resolve'):
+                    resolution['client_intent_id'] = body['client_intent_id']
+                    return resolution
+                assert path.endswith('/runtime/operations')
+                if answer == 'no-grant':
+                    raise ConnectionError('PERMISSION_DENIED', 'Current grant required')
+                if answer == 'lost-receipt':
+                    raise ConnectionError('OUTCOME_UNKNOWN', 'Injected lost response', possible_effect=True)
+                return operation
+            if path.endswith('/runtime/sessions/exact-session?executor_id=executor'):
+                return {'scope': scope, 'control_available': True}
+            assert path.endswith('/runtime/intents/' + resolution['client_intent_id'])
+            return {'resolution': resolution, 'operation': operation, 'initial_turn_operation_id': None}
+
+    call = Human()
+    assert empty_session(service, call, binding) is None
+    monkeypatch.setattr('builtins.input', lambda _: '' if answer == 'no' else 'y')
+    if answer == 'no':
+        assert empty_session(service, call, binding, allow_new=True) is None
+        assert writes == [] and not list((home / 'terminal/session-openings').glob('*.json'))
+    elif answer == 'yes':
+        assert empty_session(service, call, binding, allow_new=True) == 'exact-session'
+    else:
+        expected = 'OUTCOME_UNKNOWN' if answer == 'lost-receipt' else 'PERMISSION_DENIED'
+        with pytest.raises(ConnectionError) as rejected:
+            empty_session(service, call, binding, allow_new=True)
+        assert rejected.value.code == expected
+        if answer == 'lost-receipt':
+            monkeypatch.setattr('builtins.input', lambda _: pytest.fail('Recovery already has an admission'))
+            assert empty_session(service, call, binding) == 'exact-session'
+        else:
+            assert 'work authorize' in rejected.value.message
+            assert empty_session(service, call, binding) is None
+    if answer != 'no':
+        assert len(writes) == 2
+        assert writes[0]['intent'] == 'runtime.start' and 'text' not in writes[0]
+        assert writes[1]['client_intent_id'] == writes[0]['client_intent_id']
+    assert retained_work.read_bytes() == b'{ "work": "retained" }'
+
+
 class Catalog:
     def __init__(self, *, base='http://127.0.0.1:4000', drift=False, two_live=False):
         self.base = base

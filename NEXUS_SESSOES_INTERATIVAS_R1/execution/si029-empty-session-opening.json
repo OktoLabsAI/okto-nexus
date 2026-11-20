@@ -1,0 +1,111 @@
+{
+  "tasks": [
+    "SI-029",
+    "SI-030"
+  ],
+  "passed_scenarios": [
+    "SI-T-F16"
+  ],
+  "status": "INSTALLED_EMPTY_SESSION_OPENING_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "feature/v0.3.8...origin/feature/v0.3.8",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 520
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "baseline_wheel_sha256": "c5cd9e1656fe3244b9a5b6891843f8ef0218d864a11e4c4ea1d8bd50ac217861",
+  "candidate_wheel_sha256": {
+    "nexus": "6899291fe034b25833429f3cf0a7a0a30154dc6ae4267f77acbd40b7257034cc",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "wheel_audit": {
+    "wheel_sha256": "6899291fe034b25833429f3cf0a7a0a30154dc6ae4267f77acbd40b7257034cc",
+    "product_files": 810,
+    "checkout_match": true,
+    "product_changes": [
+      "okto_nexus/adapters/inbound/cli/connect_presentation.py",
+      "okto_nexus/adapters/inbound/cli/session_open.py",
+      "okto_nexus/application/execution_admission.py"
+    ]
+  },
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "terminal": "Windows ConPTY with installed okto-nexus.exe",
+    "harness": "Real Pi 0.87.1 with no external networking or provider calls",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "authorization": "Real temporary human Nexus login, isolated vault fixture and canonical subject grant",
+    "terminal_observation": "Fixture marker after the ANSI viewer context was entered before Ctrl+C"
+  },
+  "native_integration": {
+    "default_no_effect": true,
+    "expired_grant_refused_before_admission": true,
+    "exact_first_session_attached": true,
+    "setup_or_grant_replay": false,
+    "empty_open_operations": 1,
+    "turn_operations": 0,
+    "external_provider_calls": 0,
+    "canonical_closes": 1
+  },
+  "independent_read_only_audit": {
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "operation_counts": {
+      "runtime.open": 1,
+      "runtime.close": 1
+    },
+    "turns_and_results": 0,
+    "detached_exact_session": true,
+    "closed_exact_session": true,
+    "bindings": 1,
+    "setup_commits": 0,
+    "grants_from_fixture": 2,
+    "work_checkpoints_written": 0,
+    "exact_opening_checkpoint_settled": true
+  },
+  "cleanup": {
+    "listener_count": 0,
+    "fixture_process_count": 0
+  },
+  "tests": {
+    "source_focused": 7,
+    "installed_regressions": 40,
+    "installed_native_integration": 1,
+    "installed_imports_verified": true,
+    "twine_strict": "PASS",
+    "recovery": "Injected lost admission response; exact lookup returned the same admission without another POST"
+  },
+  "fixture_directory": "D:/nxs-pi-empty-opening-live-3903d98b",
+  "artifact_sha256": {
+    "test_connect_pi.py": "44bcd7caddc1d4ecc9914d6affc931a9769829a7e1334ab8861cae0468aed738",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "focus.xml": "fa749e141b8843906e93a6d042a0e08444b2c32d48a4fed3cca6fd7b12a66dfe",
+    "declined-empty.txt": "7f9209a1d2101ac41a385d8d71de5a384ffe7d3a8d73f8ad52e10d42b18c9bae",
+    "expired-empty.txt": "4f70897aa58f8a42e19c60c7414de57a59c4cd858c2916150a1552a300e0c33d",
+    "accepted-empty.txt": "462764e7fc7dec45dfd0c9bb6155a21ebddef8f24be0d17a75ea8d96872ba292",
+    "proof.json": "9ac3956e464f7f96397086c7709248392e9bd1b39151d7ebde7fe67848d64853",
+    "audit.json": "823350c1b2b590fc18f50754209ee9f17b969fac1fd3e0f208f512411e8c74bf",
+    "installed-regressions.xml": "58418b487ff9bef35ee16147fcb55178f86334699756c2c88b69abb36719ae77",
+    "source-regressions.xml": "212ae064a0fbe693523057cfdab6c99df40d320b3b64a33cafaea3a98fb5837e"
+  },
+  "limits": [
+    "Installed qualification covers embedded Pi on Windows. Distinct-host and external provider gates remain pending."
+  ],
+  "migration": "none"
+}
