@@ -481,7 +481,9 @@
         "execution/si007-capacity-step.md",
         "execution/si007-build-and-migration.md",
         "execution/si007-registered-capacity.md",
-        "execution/si007-serve-capacity.md"
+        "execution/si007-serve-capacity.md",
+        "execution/si009-queue-limit-and-expiration.md",
+        "execution/si009-queue-limit-and-expiration.json"
       ]
     },
     {
@@ -558,7 +560,9 @@
         "execution/si009-cancellation.md",
         "execution/si009-queue-view.md",
         "execution/si035-queue-dispatch-races.md",
-        "execution/si035-queue-dispatch-races.json"
+        "execution/si035-queue-dispatch-races.json",
+        "execution/si009-queue-limit-and-expiration.md",
+        "execution/si009-queue-limit-and-expiration.json"
       ]
     },
     {
@@ -2769,8 +2773,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si009-queue-limit-and-expiration.md",
+        "execution/si009-queue-limit-and-expiration.json"
+      ]
     },
     {
       "id": "SI-T-B18",
@@ -2786,8 +2793,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si009-queue-limit-and-expiration.md",
+        "execution/si009-queue-limit-and-expiration.json"
+      ]
     },
     {
       "id": "SI-T-B19",

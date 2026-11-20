@@ -1,0 +1,41 @@
+{
+  "scenarios": [
+    "SI-T-B17",
+    "SI-T-B18"
+  ],
+  "status": "PASS",
+  "nexus_before_evidence": "7d8e45f343667a4211be9b821fe70c63f02b83b8",
+  "installed_wheels": {
+    "nexus": "489dfb0ee4c718026f0f0d1e2fa185eb5f406698652592e6c21a80146fd01031",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "result": {
+    "accepted_at_default_capacity": 50,
+    "extra_input_http": 409,
+    "original_receipts_and_order_preserved": true,
+    "replay_same_receipt": true,
+    "expired_receipt_visible": true,
+    "fixture_expired_only_first_entry": true,
+    "retained_unexpired_items": 49,
+    "recovered_capacity_new_sequence": 51,
+    "first_sequence_dispatched_after_resume": 2,
+    "expired_entry_operation": null
+  },
+  "verification": {
+    "installed_regressions": 3,
+    "cases": [
+      "test_queue_limit_preserves_accepted_inputs_and_expiration_frees_capacity",
+      "test_pending_limit_rejects_new_intents_and_preserves_existing_receipts",
+      "test_preparation_expires_only_unsent_inputs_in_the_exact_session"
+    ],
+    "fixture_directory": "D:/nxs-queue-limits-27006376",
+    "passing_junit_sha256": "0d53a33035c8d528105225ab9cae6e10028b5890ac31fbff5c029deef8ec2277",
+    "earlier_assertion_failure_junit_sha256": "d3fbe56a05ae6677c41ab023f395b8e3f189cc2af11602011a03182c6e4856f8",
+    "ruff": "PASS"
+  },
+  "limits": [
+    "The test uses actual HTTP handlers, SQLite and the installed dispatcher with a synthetic R4 peer.",
+    "The fixture backdated one expiry timestamp instead of waiting for the real queue TTL."
+  ]
+}

@@ -947,6 +947,100 @@ def test_queue_commit_failure_returns_no_receipt_or_native_send(interactive_runt
     client.cookies.clear()
 
 
+def test_queue_limit_preserves_accepted_inputs_and_expiration_frees_capacity(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'queue-limit-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    original = opened['scope']
+    generation = original['session_owner_generation']
+    exact = {key: original[key] for key in ('server_id', 'executor_id', 'session_id', 'binding_id',
+                                            'workspace_id', 'workspace_binding_id', 'agent_id')}
+    session = exact['session_id']
+    scope = InputScope(SessionKey(exact['server_id'], exact['executor_id'], session),
+        SessionOwnerGeneration(generation), exact['binding_id'], exact['workspace_id'],
+        exact['workspace_binding_id'], exact['agent_id'])
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    base = {'scope': exact, 'expected_session_generation': generation}
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('queue-limit', 'synthetic-queue-limit-password', local=True)
+    client.cookies.set('nexus_operator_session', auth.login('queue-limit', 'synthetic-queue-limit-password'))
+
+    def queue():
+        reply = client.get(path + '/inputs', params=query | {'limit': 50})
+        assert reply.status_code == 200, reply.text
+        return reply.json()
+
+    def pause(page, paused):
+        reply = client.post(path + '/inputs/queue-state', headers=ui, json=base | {
+            'capability_revision': page['pause_capability_revision'], 'expected_queue_revision': page['queue_revision'],
+            'paused': paused,
+        })
+        assert reply.status_code == 200, reply.text
+
+    pause(queue(), True)
+    revision = client.get(path + '/interaction', params=query).json()['next_turn']['capability_revision']
+    assert revision
+
+    def send(index):
+        intent = f'queue-limit-{index}'
+        return client.post(path + '/inputs', headers=ui, json=base | {
+            'capability_revision': revision, 'client_intent_id': intent, 'content': [{'type': 'text', 'text': intent}],
+        })
+
+    accepted = []
+    for index in range(50):
+        reply = send(index)
+        assert reply.status_code == 202, reply.text
+        receipt = reply.json()
+        assert (receipt['status'], receipt['enqueue_sequence'], receipt['operation_id']) == ('QUEUED', index + 1, None)
+        accepted.append(receipt['input_id'])
+
+    full = queue()
+    assert [row['input_id'] for row in full['items']] == accepted
+    assert full['next_cursor'] is None and full['paused']
+    denied = send(50)
+    assert denied.status_code == 409
+    assert denied.json()['error']['message'] == 'This session has reached its pending input limit.'
+    replay = send(0)
+    assert replay.status_code == 202 and replay.json()['input_id'] == accepted[0]
+    assert queue() == full and not native.native.sent
+
+    factory = deps.connection_factory
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE session_interaction_inputs SET expires_at=? WHERE input_id=?",
+                               ('2000-01-01T00:00:00+00:00', accepted[0]))
+    scheduler, = app.state.handoff_runtime_service._schedulers
+    client.portal.call(partial(advance_input_capacity, scope=scope, remote_ready=scheduler.execution_ready,
+                               **scheduler.options))
+    retained = queue()
+    expired, *waiting = retained['items']
+    assert expired['input_id'] == accepted[0] and expired['status'] == 'EXPIRED'
+    assert expired['input_revision'] == 1 and expired['operation_id'] is None and not expired['can_cancel']
+    assert retained['queue_revision'] == full['queue_revision'] + 1
+    assert waiting == [row | {'queue_revision': retained['queue_revision']} for row in full['items'][1:]]
+    assert not native.native.sent
+    receipt_path = path + '/inputs/receipt'
+    receipt_query = query | {'client_intent_id': 'queue-limit-0'}
+    receipt = client.get(receipt_path, params=receipt_query).json()
+    assert receipt['input_id'] == accepted[0] and receipt['status'] == 'EXPIRED'
+
+    released_slot = send(50)
+    assert released_slot.status_code == 202 and released_slot.json()['enqueue_sequence'] == 51
+    pause(queue(), False)
+    eventually(lambda: len(native.native.sent) == 1)
+    with factory.unit_of_work(write=False) as uow:
+        linked = uow.connection.execute(
+            'SELECT input_id, operation_id FROM session_interaction_inputs WHERE operation_id IS NOT NULL'
+        ).fetchall()
+    assert [tuple(row) for row in linked] == [(accepted[1], native.native.sent[0][1])]
+    assert client.get(receipt_path, params=receipt_query).json()['status'] == 'EXPIRED'
+    client.cookies.clear()
+
+
 def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interactive_runtime):
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup
