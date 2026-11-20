@@ -1,5 +1,11 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `26a157abcc4d8fc79ac92cfb6a456747f19f36d1`.
+The unpublished wheel SHA-256 is `f88f0e24036df292164e8b9168e2097b0e47ec575611b476e1fbb6a080353441`.
+Codex launches with a project MCP preset honor the global MCP inheritance setting even when no Nexus tools are injected.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `2c034665508a9bca61d2b59b74964cef862fcf60`.
 The unpublished wheel SHA-256 is `04bfa3bbef7ff3c9083453c37b1a3837ff5d3460714c59c4318b9474e29b1d97`.
 For the qualified Codex 0.157.0 build, the Core records acceptance when the native acknowledgement names the reviewed turn.

@@ -1,6 +1,6 @@
 # SI-038 · Primeira campanha com Codex no Windows
 
-O candidato é o Nexus `f44cebec`, com os wheels fixados do Connector 0.0.15 e do Core 0.0.16. O app-server 0.157.0 é o executor qualificado para conversa e reorientação neste build. O Codex 0.170.0 é o visualizador revisado. A campanha mais antiga do plano Nexus UI recebeu `modelNotFound` para `gpt-5.3-codex` durante o teste de conexão. O mesmo nome está ausente do catálogo que o app-server 0.157.0 reportou no ensaio com perfil vazio e proxy de descarte. A observação com perfil vazio pode usar catálogo local. [Falha anterior](../../NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-terminal-ro.json) [Matriz dos builds](si039-codex-build-capabilities.md)
+O candidato parte do Nexus `fc7724e2`, com o Connector 0.0.15 e o Core 0.0.16 de `26a157ab`. O app-server 0.157.0 é o executor qualificado para conversa e reorientação neste build. O Codex 0.170.0 é o visualizador revisado. A campanha mais antiga do plano Nexus UI recebeu `modelNotFound` para `gpt-5.3-codex` durante o teste de conexão. O mesmo nome está ausente do catálogo que o app-server 0.157.0 reportou no ensaio com perfil vazio e proxy de descarte. A observação com perfil vazio pode usar catálogo local. [Falha anterior](../../NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-terminal-ro.json) [Matriz dos builds](si039-codex-build-capabilities.md)
 
 ## Ensaio de contabilização
 
@@ -21,7 +21,7 @@ Após consentimento para a consulta, inicializar um único app-server do build f
 
 O projeto descartável pode manter o turno ativo com a ferramenta local `wait_for_marker`. O ensaio usou um servidor MCP com uma única ferramenta de leitura. A janela começa quando o app-server anuncia a chamada em andamento para a thread e o turno revisados. A automação só grava o marcador depois de confirmar a fila, a reorientação e a desanexação. O prazo da ferramenta limita a espera a 180 segundos.
 
-Para a campanha, o preset revisado precisa anunciar a ferramenta na sessão esperada antes do trabalho observado. Se o provedor concluir o turno antes da janela de observação, registrar o cenário como inconclusivo e parar. Os prompts e a revisão usam só dados sintéticos, com automações externas e MCPs globais desabilitados. [Ensaio da espera controlada](si038-codex-tool-gate.md)
+Para a campanha, o preset revisado precisa anunciar a ferramenta na sessão esperada antes do trabalho observado. A revisão é gravada pela API de operador, e o Core aplica a opção de herança desabilitada mesmo quando o preset é a única fonte de ferramentas. Se o provedor concluir o turno antes da janela de observação, registrar o cenário como inconclusivo e parar. Os prompts e a revisão usam só dados sintéticos, com automações externas e MCPs globais desabilitados. [Ensaio da espera controlada](si038-codex-tool-gate.md) [Evidência do preset e isolamento](si038-codex-effective-preset.md)
 
 ## Limites propostos
 

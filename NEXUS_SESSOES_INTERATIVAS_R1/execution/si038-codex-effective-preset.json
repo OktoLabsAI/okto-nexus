@@ -1,0 +1,281 @@
+{
+  "task": "SI-038",
+  "plan_status": "IN_PROGRESS",
+  "platform": "Windows x64",
+  "provider_campaign": "NOT_RUN",
+  "intake": {
+    "nexus_head": "fc7724e2ecab9f6e81977f2cd06d152a60a2ff1f",
+    "nexus_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "connector_head": "3a0f46a89ce808fc152d43b05014a7e0d1f7c743",
+    "connector_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+    "core_head": "2c034665508a9bca61d2b59b74964cef862fcf60",
+    "core_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+    "working_trees_clean": true
+  },
+  "candidate": {
+    "connector_pin_commit": "186a3dae4818edf1330395959d2efda6de885b36",
+    "core_source_commit": "26a157abcc4d8fc79ac92cfb6a456747f19f36d1",
+    "core_previous_wheel_sha256": "04bfa3bbef7ff3c9083453c37b1a3837ff5d3460714c59c4318b9474e29b1d97",
+    "core_wheel_sha256": "f88f0e24036df292164e8b9168e2097b0e47ec575611b476e1fbb6a080353441",
+    "nexus_installed_wheel_sha256": "528459e8d7854e54147bf26d6ea1535aedaaadf7d380e8666380fc3526e5802a",
+    "connector_installed_wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "codex_engine_version": "0.157.0",
+    "codex_viewer_version": "0.170.0",
+    "codex_viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "regressions": {
+    "previous_core_wheel_expected_inheritance_failure": {
+      "tests": 2,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "31e22a5ca9691223a9377778b02d834562ddc5dbc77ae08a0259b605dbf1e58e"
+    },
+    "core_source": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2,
+      "sha256": "e1942d9716ec5c7d7b201197ca7bd396f1bc34868217001674f0c5023e7599ee"
+    },
+    "core_installed": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2,
+      "sha256": "1444fc733515d764ea3d7e85af87074973a5873dff40d5de1b8ac17532ad4672"
+    },
+    "nexus_installed": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "498193f292012b3ec3d8ac099e7b506de63951fe12d12a2e827b09fbf0a2e029"
+    },
+    "connector_installed": {
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "109dbf501f49f107d3ab8fbe302f00c6c9696527fd86fd3ae578e30efb554477"
+    }
+  },
+  "native_thread_without_prompt": {
+    "control": {
+      "direct_profile_started_sentinel": true,
+      "process_exit": 0,
+      "inference": false,
+      "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+    },
+    "preset_no_nexus_templates": {
+      "reviewed_preset_started": true,
+      "unrelated_global_not_started": true,
+      "config_unchanged": true,
+      "process_exit": 0,
+      "inference": false,
+      "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+    }
+  },
+  "integrated_rehearsal": {
+    "scope": "Installed Windows Nexus and Connector, pinned native Codex, loopback inference emulator and Edge automation",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "14662e90db9b27c53674c365d91ddb8f4186cc4f60c9dd3b645d7879f0953849"
+    },
+    "passed": true,
+    "preset_api": {
+      "before": 0,
+      "after": 1,
+      "configuration_digest": "sha256:18b3bc7df7c29d9c01a92794a12db186281768b80d2e1206269b4c41d3ed2647",
+      "agent_write_status": 403,
+      "stale_write_status": 409
+    },
+    "opening_received": {
+      "signed_opening_has_only_reviewed_preset": true
+    },
+    "opening_approved": {
+      "approved_host_environment": true
+    },
+    "rendered_facts": {
+      "template_count": 1,
+      "global_mcp_suppressed": true,
+      "reviewed_preset_present": true
+    },
+    "effective_launch": {
+      "signed_opening_has_only_reviewed_preset": true,
+      "global_mcp_suppressed": true,
+      "only_canonical_nexus_http_template": true,
+      "isolated_profile": true
+    },
+    "global_isolation": {
+      "unrelated_mcp_not_launched": true,
+      "profile_config_unchanged": true
+    },
+    "native_steer_ack": {
+      "exact_turn": true,
+      "same_app_server": true
+    },
+    "marker_released": {
+      "released_after_both_detaches": true,
+      "canonical_steer_accepted_before_release": true
+    },
+    "proof": {
+      "connect_i_restored_read_only_view": true,
+      "explicit_writer_started_native_turn": true,
+      "browser_default_queue_receipt": true,
+      "one_reviewed_native_steer": true,
+      "browser_queue_started_separate_turn": true,
+      "native_thread_count": 1,
+      "native_turn_starts": 3,
+      "native_steers": 1,
+      "native_pid_preserved": true,
+      "loopback_response_requests": 5,
+      "external_provider_requests": 0,
+      "both_viewers_detached": true,
+      "canonical_close": true
+    },
+    "durability": {
+      "operations": {
+        "runtime.open": 1,
+        "turn.submit": 3,
+        "turn.steer": 1,
+        "runtime.close": 1
+      },
+      "one_closed_session": true,
+      "attachments": {
+        "read": "DETACHED",
+        "write": "DETACHED"
+      },
+      "canonical_inputs": [
+        {
+          "surface": "native_terminal",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.submit"
+        },
+        {
+          "surface": "web",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.submit"
+        },
+        {
+          "surface": "nexus_cli",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.steer"
+        }
+      ],
+      "result_rows": 3,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "connector_native_launches": 1
+    },
+    "usage_audit": {
+      "total": 1575,
+      "usage_seen": true,
+      "native_identities": 1,
+      "started_operations": 3,
+      "terminal_operations": 3,
+      "covered_started_operations": 3,
+      "usage_events": [
+        {
+          "journal_sequence": 15,
+          "cumulative_total": 105
+        },
+        {
+          "journal_sequence": 23,
+          "cumulative_total": 315
+        },
+        {
+          "journal_sequence": 27,
+          "cumulative_total": 630
+        },
+        {
+          "journal_sequence": 34,
+          "cumulative_total": 1050
+        },
+        {
+          "journal_sequence": 45,
+          "cumulative_total": 1575
+        }
+      ],
+      "reported_accounting_final": false,
+      "one_launch_and_journal_checks_passed": true,
+      "usage_observer_source_sha256": "6f238ede81e7ad6421b33be66e251e58419cec814a6a11125d67022fb812d2b2"
+    },
+    "cleanup": {
+      "fixture_injection_remaining": false,
+      "disposable_listener_count": 0,
+      "disposable_process_count": 0
+    }
+  },
+  "retained_fixture_attempts": [
+    {
+      "phase": "preset write",
+      "observation": "Fixture passed the CLI token to an operator cookie route, which returned 401.",
+      "junit": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2714c081d80e6dc2b13513657027f3731304ad81842ca6a8d09d129526ae7700"
+      }
+    },
+    {
+      "phase": "open",
+      "observation": "Control dispatch closed with PERMISSION_DENIED and the opening launch was fenced.",
+      "junit": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "a54aee5c03b8498adb8c772a164ffabea043acd7adf1fed055b94e1ea132e0dc"
+      }
+    },
+    {
+      "phase": "open",
+      "observation": "Omitting the early operator logout left the opening failure reproducible.",
+      "junit": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3aa37d6e98e070eee0344d4cdd8e6c77b71bfe7985172887a0d7667a9bf19bb6"
+      }
+    },
+    {
+      "phase": "open",
+      "observation": "SQLite writer admission timed out and the control link closed.",
+      "junit": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d0cc5c53edbd37bfc73b3d96b0fce70cf37bbff14ef04825e3c33df78ab2f6a1"
+      }
+    },
+    {
+      "phase": "environment",
+      "observation": "Paced fixture reached rendering. The check expecting zero HTTP templates was invalid for remote execution.",
+      "rendered_facts": {
+        "template_count": 1,
+        "global_mcp_suppressed": true,
+        "reviewed_preset_present": true
+      },
+      "junit": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "bf3e894a4c0723ed932d042df47b7889bc93c3dc8e5b8ab95da4d2add10fa5f4"
+      }
+    }
+  ],
+  "local_evidence_directory": "D:\\nxs-si038-effective-preset-fc7724e2",
+  "fixture_sha256": "4385eb7f2e268ea87050f7ae71b03b7347d8c4aff1b943ca364c12c22c913f04",
+  "external_provider_requests": 0,
+  "paid_tokens": 0,
+  "personal_installation_changed": false,
+  "migration_needed": false
+}
