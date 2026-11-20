@@ -439,7 +439,9 @@
         "execution/si008-lost-enqueue-response.md",
         "execution/si008-lost-enqueue-response.json",
         "execution/si006-stale-session-generation.md",
-        "execution/si006-stale-session-generation.json"
+        "execution/si006-stale-session-generation.json",
+        "execution/si006-homonymous-workspace-scope.md",
+        "execution/si006-homonymous-workspace-scope.json"
       ]
     },
     {
@@ -2404,8 +2406,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-homonymous-workspace-scope.md",
+        "execution/si006-homonymous-workspace-scope.json"
+      ]
     },
     {
       "id": "SI-T-A07",

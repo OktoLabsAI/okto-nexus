@@ -1,0 +1,58 @@
+{
+  "scenario": "SI-T-A06",
+  "status": "PASS",
+  "wheel_source_revision": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "checked_branch_start": "bb5fbeac657a617f5cc1c5e073ba923ed828dac1",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "fixture": "Installed Nexus HTTP, public finish, SQLite, scheduler, distinct synthetic Codex peers",
+  "observations": {
+    "same_harness_id_and_project_label": true,
+    "separate_workspaces": 2,
+    "exact_directory_resolution": true,
+    "cross_workspace_exact_scope_conflict": 409,
+    "selected_native_turns": 1,
+    "sibling_native_turns": 0,
+    "canonical_closes": 2
+  },
+  "audit": {
+    "physical_integrity": "ok",
+    "same_public_id_under_distinct_bound_workspaces": true,
+    "one_result_for_the_chosen_workspace": true,
+    "operations": {
+      "runtime.close": 2,
+      "runtime.open": 2,
+      "turn.submit": 1
+    }
+  },
+  "fixture_path": "D:/nxs-homonym-43291357",
+  "hashes": [
+    {
+      "file": "test_homonymous_workspace.py",
+      "sha256": "5bc78865fba97d76a91b7f6333000e47cf3397f78ba0ee57622d5d650a57d98a"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "06cfd3631a0687f6a2a491a9c5ea07a8f8722ffe91ca9341c5e50dddc7840834"
+    },
+    {
+      "file": "audit.py",
+      "sha256": "c86c1c0de1565fdbfba9f0159be4e2823edce047242dbb724035744c90b38ae5"
+    },
+    {
+      "file": "audit.json",
+      "sha256": "71863c756a68c5a14e420da8fe918c893b582af6379f1bef8aa6078aa5ff73b6"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "21ec00674e9686f8bce34ef0c7629a2473dc8b284bbfb995d08ae0e1f3da0a2c"
+    }
+  ],
+  "limits": [
+    "Synthetic peers and workspaces",
+    "No browser or model request"
+  ]
+}
