@@ -724,8 +724,9 @@ def test_claude_interrupt_cli_confirms_the_operation_and_recovers_the_only_recei
     ('SUBMISSION_STARTED', 'CLOSED', 1),
     ('OUTCOME_UNKNOWN', None, 1),
 ])
+@pytest.mark.parametrize('existing_review', [False, True])
 def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
-        monkeypatch, capsys, stage, successor_state, exit_code):
+        monkeypatch, capsys, stage, successor_state, exit_code, existing_review):
     class SavedCatalog(Catalog):
         token = 'synthetic-cookie'
         resolution = None
@@ -745,6 +746,8 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
                 assert body['source_session_generation'] == 7 and 'text' not in body and 'new_session' not in body
                 self.resolution = {'client_intent_id': body['client_intent_id'], 'operation_id': 'saved-open',
                     'resolution_revision': 1, 'intent_hash': 'sha256:' + 'a' * 64,
+                    'session_id': 'successor', 'can_submit': True, 'reuse': False,
+                    'semantic_intent': {'action': 'runtime.open'},
                     'saved_resume': {'source_session_id': 'session-b', 'source_session_generation': 7},
                     'scope': {key: value for key, value in BINDING.items() if key != 'endpoint_id'} |
                              {'session_id': 'successor', 'session_owner_generation': 1}}
@@ -753,6 +756,7 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
                 assert method == 'POST' and body['operation_id'] == 'saved-open'
                 self.submissions += 1
                 self.operation = {'operation_id': 'saved-open', 'scope': self.resolution['scope'], 'action': 'runtime.open',
+                                  'intent_hash': self.resolution['intent_hash'],
                                   'executor_stage': stage}
                 raise session.ConnectionError('OUTCOME_UNKNOWN', 'Simulated lost response.', possible_effect=True)
             if path == session.PREFIX + '/runtime/sessions/successor':
@@ -763,11 +767,41 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
             return super().__call__(method, url, body)
 
     catalog = SavedCatalog()
+    source = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {
+        'session_id': 'session-b', 'session_owner_generation': 7}
+    if existing_review:
+        catalog('POST', session.PREFIX + '/runtime/intents:resolve', {
+            'client_intent_id': 'saved_resume_' + document_revision(source), 'intent': 'runtime.resume_saved',
+            'session_id': 'session-b', 'source_session_generation': 7})
+    reviewed = catalog.resolution
     service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
     monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
     args = ['session', 'resume', '--id', 'reviewer', '--session-id', 'session-b', '--json']
-    assert main(args) != 0
-    assert json.loads(capsys.readouterr().out)['code'] == 'OUTCOME_UNKNOWN'
+    assert main(args) == 3
+    assert json.loads(capsys.readouterr().out)['code'] == 'SAVED_RESUME_CONFIRMATION_REQUIRED'
+    assert catalog.resolution is reviewed and catalog.submissions == 0
+
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    prompts = []
+    answers = iter(('', 'yes'))
+
+    def confirm(prompt):
+        assert catalog.resolution is reviewed and catalog.submissions == 0
+        prompts.append(prompt)
+        return next(answers)
+
+    monkeypatch.setattr('builtins.input', confirm)
+    assert main(args[:-1]) == 0
+    assert 'Saved resume cancelled.' in capsys.readouterr().out
+    assert catalog.resolution is reviewed and catalog.submissions == 0
+    assert main(args[:-1]) == 1
+    output = capsys.readouterr().out
+    assert 'session-b in workspace workspace on host executor' in output
+    assert 'Saved resume outcome is unconfirmed' in output and 'Receipt saved-open.' in output
+    assert prompts == ['Open a successor for this saved session? [y/N] '] * 2
+    if existing_review:
+        assert catalog.resolution is reviewed
     assert main(args) == exit_code
     result = json.loads(capsys.readouterr().out)
     assert result['session_id'] == 'successor' and result['source_session_id'] == 'session-b'
@@ -777,3 +811,26 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
     else:
         assert result['state'] == 'resume_requested'
     assert catalog.submissions == 1 and '/runtime/sessions' not in catalog.routes
+
+
+def test_saved_resume_reports_a_live_source_without_prompting_or_resolving(monkeypatch, capsys):
+    class LiveCatalog(Catalog):
+        token = 'synthetic-cookie'
+
+        def __call__(self, method, url, body=None):
+            path = urlsplit(url).path
+            if path.startswith(session.PREFIX + '/runtime/intents/'):
+                assert method == 'GET'
+                raise session.ConnectionError('NOT_FOUND', 'Missing intent.', http_status=404)
+            reply = super().__call__(method, url, body)
+            if path.endswith('/runtime/sessions/session-a'):
+                return reply | {'lifecycle_state': 'READY', 'lease_state': 'ACTIVE'}
+            return reply
+
+    service = SimpleNamespace(operator_http=LiveCatalog(), inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    monkeypatch.setattr('builtins.input', lambda _: pytest.fail('A live source cannot open a saved successor'))
+    assert main(['session', 'resume', '--id', 'reviewer', '--session-id', 'session-a']) == 3
+    assert 'The source session is still active.' in capsys.readouterr().out

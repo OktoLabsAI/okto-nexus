@@ -1,0 +1,68 @@
+{
+  "tasks": ["SI-023", "SI-030"],
+  "scenario_regression": ["SI-T-F15"],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "2ecedd8c262fd7760f89ff9f4c4fc7cc22bf4331",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 555,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "44938d4a86a9385ba47c59b2d8f81c7c34502d2d",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 94,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "ea339aee529feddde5e46f6857164dfefc557065",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 76,
+      "behind_main": 0
+    },
+    "worktrees_clean": true,
+    "upstream_drift": [0, 0]
+  },
+  "artifacts": {
+    "nexus_build_tree": "9c59e642802e3a3d7edf0237344e1630e10ef6d9",
+    "prior_nexus_wheel_sha256": "bd5a39fd831e188f155b62c5c2f468895bc12129f947e38c6d4978178be208de",
+    "nexus_wheel_sha256": "5030f187ea317c410f6a3bc0d26afe7baf5c6736efc26e0abdc405c50d42e814",
+    "connector_wheel_sha256": "1c9c072ca30756b140cd17ef6cae006997e4db34e766b625b8195075d7e2595e",
+    "core_wheel_sha256": "1f4587c47247c90668203fa88e8de257cf945d69008dec9bb0159512e43b5812"
+  },
+  "verification": {
+    "source_tests_passed": 53,
+    "installed_wheel_tests_passed": 59,
+    "installed_import_paths_verified": true,
+    "offline_lock_check": "PASS",
+    "strict_wheel_validation": "PASS",
+    "installed_dependencies_check": "PASS"
+  },
+  "native_probe": {
+    "platform": "Windows ConPTY",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "model_endpoint": "isolated loopback fixture",
+    "external_model_requests": 0,
+    "personal_login_used": false,
+    "scoped_operator_profile": "isolated test fixture",
+    "source_history_and_retirement_verified": true,
+    "json_and_pipe_refusal_left_no_intent_or_successor": true,
+    "default_decline_left_no_intent_or_successor": true,
+    "confirmed_admissions": 1,
+    "lost_response_reported_as_unconfirmed": true,
+    "same_receipt_recovered_in_json_without_new_effect": true,
+    "native_uuid_retained": true,
+    "model_requests_on_resume": 0,
+    "later_explicit_turn_reused_retained_context": true,
+    "sqlite_integrity": "ok",
+    "remaining_test_processes": 0
+  },
+  "limits": [
+    "Local Claude retained resume using the installed Nexus wheel and a simulated model endpoint",
+    "No remote, multi-host or production provider qualification"
+  ]
+}

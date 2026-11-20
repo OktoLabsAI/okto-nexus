@@ -1384,6 +1384,8 @@
         "execution/si035-codex-productive-transfer.json",
         "execution/si023-si024-codex-fork-refusal.md",
         "execution/si023-si024-codex-fork-refusal.json",
+        "execution/si023-si030-saved-resume-confirmation.md",
+        "execution/si023-si030-saved-resume-confirmation.json",
         "execution/si030-cli-empty-new-context.md",
         "execution/si030-cli-empty-new-context.json",
         "execution/si030-remote-closed-opening-recovery.md",
@@ -1841,6 +1843,8 @@
         "execution/si030-installed-pi-session-selection.json",
         "execution/si030-terminal-session-selection.md",
         "execution/si023-codex-saved-resume.md",
+        "execution/si023-si030-saved-resume-confirmation.md",
+        "execution/si023-si030-saved-resume-confirmation.json",
         "execution/si030-terminal-session-controls.md",
         "execution/si030-terminal-session-controls.json",
         "execution/si030-cli-empty-new-context.md",
@@ -4544,7 +4548,8 @@
       "status": "PASS",
       "evidence": [
         "execution/si030-terminal-session-selection.md",
-        "execution/si023-si030-codex-resume-windows.json"
+        "execution/si023-si030-codex-resume-windows.json",
+        "execution/si023-si030-saved-resume-confirmation.json"
       ]
     },
     {

@@ -304,10 +304,28 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
             'attach_strategy': strategy, 'capability_revision': revision}
 
 
-def resume_saved_session(call, binding, session_id):
+def _confirm_saved_resume(source_view, *, interactive):
+    if source_view.get('lifecycle_state') == 'READY' and source_view.get('lease_state') == 'ACTIVE':
+        raise ConnectionError('CONFLICT', 'The source session is still active. Saved resume requires a verified '
+                              'close. Use live attachment when available.', http_status=409)
+    if not interactive:
+        raise ConnectionError('SAVED_RESUME_CONFIRMATION_REQUIRED',
+                              'Use an interactive terminal to confirm opening a successor from this saved session.')
+    source = source_view['scope']
+    print(f'Resume saved history from session {display_text(source["session_id"])} '
+          f'in workspace {display_text(source["workspace_id"])} on host {display_text(source["executor_id"])}. '
+          'The queue stays with the source session. No prompt will be sent.')
+    try:
+        return input('Open a successor for this saved session? [y/N] ').strip().lower() in ('y', 'yes')
+    except EOFError:
+        return False
+
+
+def resume_saved_session(call, binding, session_id, *, interactive=False):
     if not getattr(call, 'token', None):
         raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'Sign in with operator login and pass --operator-profile.')
-    source = read_binding_session(call, binding, session_id)['scope']
+    source_view = read_binding_session(call, binding, session_id)
+    source = source_view['scope']
     generation = source.get('session_owner_generation')
     if type(generation) is not int or generation < 1:
         raise ConnectionError('SESSION_UNAVAILABLE', 'The exact source generation is unavailable.')
@@ -319,6 +337,11 @@ def resume_saved_session(call, binding, session_id):
     except ConnectionError as error:
         if error.http_status != 404:
             raise
+        durable = None
+    first_review = durable is None
+    if first_review:
+        if not _confirm_saved_resume(source_view, interactive=interactive):
+            return None
         body = {key: binding[key] for key in ('agent_id', 'binding_id', 'workspace_binding_id')}
         resolution = call('POST', PREFIX + '/runtime/intents:resolve', body | {
             'client_intent_id': intent_id, 'intent': 'runtime.resume_saved',
@@ -332,17 +355,29 @@ def resume_saved_session(call, binding, session_id):
     if (resolution.get('client_intent_id') != intent_id
             or lineage.get('source_session_id') != session_id or lineage.get('source_session_generation') != generation
             or any(scope.get(field) != binding[field] for field in scope_fields)
-            or not isinstance(successor, str) or successor == session_id
+            or not isinstance(successor, str) or not 1 <= len(successor) <= 160 or not successor.isprintable()
+            or successor == session_id or resolution.get('session_id') != successor
+            or resolution.get('reuse') is not False or durable.get('initial_turn_operation_id') is not None
+            or (resolution.get('semantic_intent') or {}).get('action') != 'runtime.open'
             or not all(field in resolution for field in SUBMISSION)):
         raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The resume receipt does not match the selected source.')
     operation = durable.get('operation')
     if operation is None:
-        operation = call('POST', PREFIX + '/runtime/operations', {field: resolution[field] for field in SUBMISSION})
-    if (operation.get('operation_id') != resolution['operation_id'] or operation.get('scope') != scope
-            or operation.get('action') != 'runtime.open'):
-        raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The operation receipt does not match the selected successor.')
-    stage = operation.get('executor_stage')
-    unconfirmed = stage == 'OUTCOME_UNKNOWN'
+        if resolution.get('can_submit') is not True:
+            raise ConnectionError('CONFLICT', 'The connection is not ready for saved session resume.')
+        if not first_review and not _confirm_saved_resume(source_view, interactive=interactive):
+            return None
+        try:
+            operation = call('POST', PREFIX + '/runtime/operations', {field: resolution[field] for field in SUBMISSION})
+        except ConnectionError as error:
+            if not error.possible_effect:
+                raise
+    if operation is not None:
+        if (operation.get('operation_id') != resolution['operation_id'] or operation.get('scope') != scope
+                or operation.get('action') != 'runtime.open' or operation.get('intent_hash') != resolution['intent_hash']):
+            raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The operation receipt does not match the selected successor.')
+    stage = operation.get('executor_stage') if operation is not None else None
+    unconfirmed = operation is None or stage == 'OUTCOME_UNKNOWN'
     if stage == 'SUBMISSION_STARTED':
         # Recovery can retain only the opening fence after proving that the
         # successor process exited. The receipt still describes a possible effect.
@@ -352,11 +387,13 @@ def resume_saved_session(call, binding, session_id):
         unconfirmed = (successor_view.get('lifecycle_state') in ('CLOSED', 'FAILED')
                        and successor_view.get('lease_state') == 'CLOSED')
     status = 'outcome is unconfirmed' if unconfirmed else display_text(stage or 'pending')
+    recovery = ' Run the same command to recover this receipt.' if unconfirmed else ''
     return {'state': 'resume_unconfirmed' if unconfirmed else 'resume_requested',
             'source_session_id': session_id, 'session_id': successor,
             'operation_id': resolution['operation_id'], 'executor_stage': stage,
             'message': f'Saved resume {status} for {display_text(session_id)}. '
-                       f'Successor session {display_text(successor)}. Receipt {display_text(resolution["operation_id"])}.'}
+                       f'Successor session {display_text(successor)}. Receipt {display_text(resolution["operation_id"])}.'
+                       + recovery}
 
 
 def _target(args, service_args, profile):
@@ -474,9 +511,11 @@ def run_session(argv):
                                      write=args.write, viewer_executable=args.viewer_executable)
             return 0
         if args.action == 'resume':
-            if not args.json:
-                print('Resume the saved conversation in a successor session. The source queue stays with the original session.')
-            result = resume_saved_session(call, binding, args.session_id)
+            result = resume_saved_session(call, binding, args.session_id,
+                                          interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty())
+            if result is None:
+                print('Saved resume cancelled.')
+                return 0
             _display(result, args.json)
             return int(result['state'] == 'resume_unconfirmed' or result['executor_stage'] in ('FAILED', 'CANCELLED'))
         if args.action in COMMANDS:
