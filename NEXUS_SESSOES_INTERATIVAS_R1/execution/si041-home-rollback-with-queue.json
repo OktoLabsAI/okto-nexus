@@ -1,0 +1,66 @@
+{
+  "scenario": "SI-T-I03",
+  "scope": "Operational Home to Classic Home and back via the real Settings controls",
+  "verification": {
+    "installed_integration": "PASS",
+    "external_provider_campaign": "not_run"
+  },
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "f7eae3941809a1f2609f8fdc776a4a19b871e30e",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 473
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "behind_main": 0,
+    "status": "three clean worktrees and zero upstream drift"
+  },
+  "wheels": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "browser": "Edge 157.0.4341.60 on Windows x64",
+    "core": "0.0.16",
+    "pi": "0.87.1",
+    "connector_r4": "real WebSocket on loopback",
+    "provider": "deterministic fixture with external networking disabled"
+  },
+  "observations": {
+    "browser_received_202": true,
+    "queue_at_switch": "QUEUED",
+    "queue_after_dispatch": "ACCEPTED_NATIVE",
+    "same_persisted_input_and_sequence": true,
+    "same_connector_generation": true,
+    "same_native_process": true,
+    "session_count": 1,
+    "turns": 2,
+    "native_user_messages": 2,
+    "canonical_results": 2,
+    "input_post_count": 1,
+    "results_returned_after_reenabling_operational_home": true,
+    "canonical_close": true,
+    "external_provider_requests": 0
+  },
+  "classic_observed_during_dispatch": true,
+  "native_junit_sha256": "a894eb6b69699e94741bb2ab59a59e5f6b09c5fac72aa195613e41cf1dba1ec7",
+  "browser_checkpoints": {
+    "enqueue_log_sha256": "2da6bbadb5906693b69c21885da029ed9bbfcd4daa1e5b72978fe71674490ce5",
+    "mode_switch_log_sha256": "772a433d99806398dbb7df14be89b9e4a05ede38ab2c29bca8250a707294f01c",
+    "during_dispatch_log_sha256": "ca61db4c2e33f492c6215136924829f0cc826e039f814b351bb1e731864dae32",
+    "reenable_log_sha256": "158519df1e4b3cd30697e740b8f21aa0a1a0dd895701f5e2ba9c6203aba06df7"
+  }
+}
