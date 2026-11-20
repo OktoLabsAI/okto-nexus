@@ -1,5 +1,12 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `ea339aee529feddde5e46f6857164dfefc557065`.
+The unpublished wheel SHA-256 is `1f4587c47247c90668203fa88e8de257cf945d69008dec9bb0159512e43b5812`.
+The managed Claude terminal retains filtered text and can open a new reader after output eviction.
+The Nexus CI manifest identifies the matching Connector wheel.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `226db2c143f92c6c6da2484e7974fd3c4f28887a`.
 The unpublished wheel SHA-256 is `e378513e9b720372bdaec9e03f24d2da1844d931057afbe36f0ae4c19b97824b`.
 The Pi renderer admits two independent readers alongside its single editor.

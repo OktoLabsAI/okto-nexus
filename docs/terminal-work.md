@@ -230,7 +230,8 @@ message to a different session, select that session and submit it explicitly.
 On Windows, a local Claude session resumed into the Core-managed terminal
 can be followed in a read-only viewer. Press Ctrl+C to leave the viewer while
 the managed terminal and its work continue. Use Home or the explicit session
-commands to control work.
+commands to control work. If older terminal output has rolled out of the
+buffer, a new viewer shows a notice and displays the retained output.
 
 ```sh
 okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
