@@ -1,0 +1,117 @@
+{
+  "scenarios": [
+    "SI-T-B12",
+    "SI-T-H08"
+  ],
+  "status": "PASS",
+  "wheel_source_revision": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "checked_branch_head": "bb5fbeac657a617f5cc1c5e073ba923ed828dac1",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "platform": "Windows x64 ConPTY and actual loopback HTTP/WebSocket",
+  "harness": {
+    "engine": "Codex app-server 0.157.0",
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer": "Codex 0.170.0",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "cases": [
+    {
+      "cut": "console-close",
+      "presenter_exit_code": 3221225786,
+      "native_frontend_observed_to_exit": true,
+      "writer_lease_detached": true,
+      "new_writer_without_takeover": true,
+      "retained_queue_and_grant_at_cut": true,
+      "queue_completed_without_any_presenter": true,
+      "reattached_after_both_results": true,
+      "queued_message_delivered_once": true,
+      "same_engine_thread_and_turn_after_cut": true,
+      "native_turn_starts": 2,
+      "native_steers": 0,
+      "native_interrupts": 0,
+      "loopback_model_requests": 2,
+      "external_provider_calls": 0,
+      "turn_result": "SUCCEEDED",
+      "queued_turn_result": "SUCCEEDED",
+      "canonical_close": "SUCCEEDED"
+    },
+    {
+      "cut": "presenter-kill",
+      "presenter_exit_code": 222,
+      "native_frontend_observed_to_exit": true,
+      "writer_lease_detached": true,
+      "new_writer_without_takeover": true,
+      "retained_queue_and_grant_at_cut": true,
+      "queue_completed_without_any_presenter": true,
+      "reattached_after_both_results": true,
+      "queued_message_delivered_once": true,
+      "same_engine_thread_and_turn_after_cut": true,
+      "native_turn_starts": 2,
+      "native_steers": 0,
+      "native_interrupts": 0,
+      "loopback_model_requests": 2,
+      "external_provider_calls": 0,
+      "turn_result": "SUCCEEDED",
+      "queued_turn_result": "SUCCEEDED",
+      "canonical_close": "SUCCEEDED"
+    }
+  ],
+  "audit": {
+    "console-close": {
+      "operations": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 2
+      },
+      "both_results_in_same_session": true,
+      "detached_presenters": 2,
+      "database_integrity": "ok"
+    },
+    "presenter-kill": {
+      "operations": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 2
+      },
+      "both_results_in_same_session": true,
+      "detached_presenters": 2,
+      "database_integrity": "ok"
+    }
+  },
+  "fixture_path": "D:/nxs-codex-detach-queue-52144128",
+  "hashes": [
+    {
+      "file": "D:/nxs-codex-detach-queue-52144128/test_detached_queue.py",
+      "sha256": "f5f6e7cd09bc21d1e37e0f0efe9c1874410c26ccacb31bfc84fe65bcf9b722b5"
+    },
+    {
+      "file": "D:/nxs-codex-detach-queue-52144128/audit.json",
+      "sha256": "30e1d896f0e81a72db64d50b0f0e5535f6e0dbef839e8938c0326adbf984d7b0"
+    },
+    {
+      "file": "D:/nxs-codex-detach-queue-52144128/focus.xml",
+      "sha256": "2e32aa571100d7b00cfb1f8a5e9fb3da517b61d287563fcaab53a7b6c34d50e4"
+    },
+    {
+      "file": "D:/nxs-two-session-26279447/audit_exact.py",
+      "sha256": "098571998505c70b8d2d24f2f0544d41dcb8b4e849653502039b92a509b7da9f"
+    },
+    {
+      "file": "D:/nxs-codex-detach-queue-52144128/pytest/test_abrupt_viewer_exit_preser0/result.json",
+      "sha256": "d894a69b6e51fb15ef61d27ba25ec9a42d29de861c11baa55108c740bc7a03fb"
+    },
+    {
+      "file": "D:/nxs-codex-detach-queue-52144128/pytest/test_abrupt_viewer_exit_preser1/result.json",
+      "sha256": "8421d027dcff7433a9a0958d77a3930e1bebd47ebd782afcffb5d30ebf3820e7"
+    }
+  ],
+  "limits": [
+    "Disposable local target and deterministic response peer",
+    "Direct disconnect, not lease expiry under partition",
+    "No cross-host qualification"
+  ]
+}

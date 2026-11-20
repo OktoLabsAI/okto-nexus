@@ -497,7 +497,9 @@
         "execution/si007-pi-tool-boundary.md",
         "execution/si007-pi-tool-boundary.json",
         "execution/si025-pi-delayed-settlement.md",
-        "execution/si025-pi-delayed-settlement.json"
+        "execution/si025-pi-delayed-settlement.json",
+        "execution/si032-queue-without-terminal.md",
+        "execution/si032-queue-without-terminal.json"
       ]
     },
     {
@@ -1116,7 +1118,9 @@
         "execution/si020-browser-exit-preserves-work.md",
         "execution/si020-browser-exit-preserves-work.json",
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si032-queue-without-terminal.md",
+        "execution/si032-queue-without-terminal.json"
       ]
     },
     {
@@ -1802,7 +1806,9 @@
         "execution/si037-controlled-connector-stop.md",
         "execution/si037-controlled-connector-stop.json",
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si032-queue-without-terminal.md",
+        "execution/si032-queue-without-terminal.json"
       ]
     },
     {
@@ -2079,7 +2085,9 @@
         "execution/si037-controlled-connector-stop.md",
         "execution/si037-controlled-connector-stop.json",
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si032-queue-without-terminal.md",
+        "execution/si032-queue-without-terminal.json"
       ]
     },
     {
@@ -2746,8 +2754,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si032-queue-without-terminal.md",
+        "execution/si032-queue-without-terminal.json"
+      ]
     },
     {
       "id": "SI-T-B13",
@@ -4887,10 +4898,12 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si032-codex-abrupt-viewer-exit.md",
-        "execution/si032-codex-abrupt-viewer-exit.json"
+        "execution/si032-codex-abrupt-viewer-exit.json",
+        "execution/si032-queue-without-terminal.md",
+        "execution/si032-queue-without-terminal.json"
       ]
     },
     {
