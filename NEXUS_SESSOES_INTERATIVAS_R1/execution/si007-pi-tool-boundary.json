@@ -1,0 +1,127 @@
+{
+  "scenarios": [
+    "SI-T-B01",
+    "SI-T-B06",
+    "SI-T-B09",
+    "SI-T-B22",
+    "SI-T-C01"
+  ],
+  "status": "PASS",
+  "source_baseline": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "platform": "Windows x64; real Edge and Pi; simulated model and tool in disposable environment",
+  "pi": {
+    "version": "0.87.1",
+    "installation_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b"
+  },
+  "runtime": {
+    "confirmed_idle_before_send": true,
+    "idle_http_receipt": 202,
+    "idle_canonical_turns": 1,
+    "partial_completion_while_tool_active": true,
+    "steer_available_with_busy_enter": true,
+    "normal_enter_queued": true,
+    "quiet_dispatch_scans": 3,
+    "quiet_profile": "at least three seconds without target events",
+    "operations_before_confirmed_turn_completion": 0,
+    "started_after_agent_settled": 1,
+    "native_queue_writes": [
+      "prompt",
+      "prompt",
+      "prompt"
+    ],
+    "verbatim_separate_native_users": 3,
+    "same_exact_session": true,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "browser": {
+    "checkpoint": "BUSY_ENTER_QUEUED_AFTER_PARTIAL_TEXT",
+    "queue_status": "QUEUED",
+    "http_status": 202,
+    "network_posts": 1,
+    "partial_text_visible": true,
+    "confirmation_visible": true
+  },
+  "durable_audit": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 3
+    },
+    "verified_receipts": 2,
+    "original_content_matches_native_operations": true,
+    "results_for_the_same_session": 3,
+    "session_closed": true,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "session_event_sequences": {
+    "partial_assistant_message_end": 31,
+    "tool_execution_start": 32,
+    "tool_execution_end": 33,
+    "agent_end": 45,
+    "agent_settled": 46,
+    "next_agent_start": 47
+  },
+  "api_regressions_passed": 3,
+  "fixture_paths": {
+    "final_run": "D:/nxs-tool-boundary-14293452",
+    "api_junit": "D:/nxs-tool-boundary-56961183/api-regression.xml"
+  },
+  "hashes": [
+    {
+      "file": "local_author_probe.py",
+      "sha256": "a250b8f7e50e932512978e4e64466d39cbcae554c6afbfc18d2ea058cae59142"
+    },
+    {
+      "file": "test_author.py",
+      "sha256": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc"
+    },
+    {
+      "file": "run.ps1",
+      "sha256": "f2d0a0909c2cec4cf72e903e692f62fced2898fb94470b25d052e7d851da688f"
+    },
+    {
+      "file": "open.js",
+      "sha256": "9b33e8f9a453d87748e26b6835e451052854f433b584d07845bc7a0962b96acd"
+    },
+    {
+      "file": "drive.ps1",
+      "sha256": "1e0e839c4112d30d3091e9414e5e8720fcd98fe37d718a09ad7e115c1db10f47"
+    },
+    {
+      "file": "audit_durable.py",
+      "sha256": "1c484ce51e821e9db02b1444cc9a3a0e73bca0f33c9a1bcb4336a19d24f64c8c"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "a59c7f0d802a682b0385bf8775f1e022b89e46019e7d74e6eb65403e730f15d4"
+    },
+    {
+      "file": "browser-verified.json",
+      "sha256": "e7003f5401e120eca6942691ba38a61617f22b52ccd7897ee20a8031df177d7f"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "bd43252bc684d3d10573a0b54aad88810162c27346e612a4a7c424fa98fe9d38"
+    },
+    {
+      "file": "audit.json",
+      "sha256": "09b07d25229d89f676b724bf2649741970f4d6026eb8f7f7555a5662953c7d89"
+    },
+    {
+      "file": "api-regression.xml",
+      "sha256": "0ab54de9e0c5faeead6408d2812ccf39e5406dc27718f7360d15a2c1de5f89ae"
+    }
+  ],
+  "limits": [
+    "The model and tool are fixtures",
+    "No deliberate retry or compaction delay between agent_end and agent_settled",
+    "No separate physical host or screen reader"
+  ]
+}

@@ -491,7 +491,9 @@
         "execution/si009-queue-limit-and-expiration.md",
         "execution/si009-queue-limit-and-expiration.json",
         "execution/si007-concurrent-browser-fifo.md",
-        "execution/si007-concurrent-browser-fifo.json"
+        "execution/si007-concurrent-browser-fifo.json",
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
       ]
     },
     {
@@ -626,7 +628,9 @@
         "execution/si026-claude-replacement-decisions.md",
         "execution/si026-claude-replacement-decisions.json",
         "execution/si035-queue-dispatch-races.md",
-        "execution/si035-queue-dispatch-races.json"
+        "execution/si035-queue-dispatch-races.json",
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
       ]
     },
     {
@@ -820,7 +824,9 @@
         "execution/si010-dashboard-steer-api.md",
         "execution/si014-home-reorientation.md",
         "execution/si013-browser-queue-recovery.md",
-        "execution/si013-browser-queue-recovery.json"
+        "execution/si013-browser-queue-recovery.json",
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
       ]
     },
     {
@@ -1421,7 +1427,9 @@
         "execution/si022-pi-silent-presenter.json",
         "execution/si037-pi-viewer-backpressure.json",
         "execution/si036-pi-browser-queue-transcript.md",
-        "execution/si036-pi-browser-queue-transcript.json"
+        "execution/si036-pi-browser-queue-transcript.json",
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
       ]
     },
     {
@@ -2504,8 +2512,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
+      ]
     },
     {
       "id": "SI-T-B02",
@@ -2601,8 +2612,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
+      ]
     },
     {
       "id": "SI-T-B07",
@@ -2658,8 +2672,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
+      ]
     },
     {
       "id": "SI-T-B10",
@@ -2907,9 +2924,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si025-pi-queue.json"
+        "execution/si025-pi-queue.json",
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
       ]
     },
     {
@@ -2927,8 +2946,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-pi-tool-boundary.md",
+        "execution/si007-pi-tool-boundary.json"
+      ]
     },
     {
       "id": "SI-T-C02",
