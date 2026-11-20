@@ -2047,7 +2047,9 @@
         "execution/si039-installed-migration.md",
         "execution/si039-installed-migration.json",
         "execution/si039-codex-build-capabilities.md",
-        "execution/si039-codex-build-capabilities.json"
+        "execution/si039-codex-build-capabilities.json",
+        "execution/si039-installed-journey.md",
+        "execution/si039-installed-journey.json"
       ]
     },
     {
@@ -5010,7 +5012,10 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si039-installed-journey.md",
+        "execution/si039-installed-journey.json"
+      ]
     },
     {
       "id": "SI-T-I06",

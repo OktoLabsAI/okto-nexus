@@ -1,0 +1,108 @@
+{
+  "scenario": "SI-T-I05",
+  "layers": {
+    "integration": "PASS",
+    "installed_package": "PASS",
+    "external_provider_campaign": "not_run"
+  },
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "inspected_head": "7cd84770f3bdb444fcf4ae494360b7e368806f05",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 471
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "inspected_head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "inspected_head": "454c9700e0def181c81fe633857a25b48e125512",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "working_trees": "clean",
+    "behind_main": 0,
+    "upstream_drift": "0 ahead, 0 behind"
+  },
+  "environment": {
+    "windows_build": "26300",
+    "python": "3.13.1",
+    "browser": "Edge 157.0.4341.60",
+    "serve": "wheel assets via production HTTP app on loopback",
+    "terminal": "Windows ConPTY with test-only operator vault",
+    "connector": "installed Connector daemon and real R4 WebSocket, same Windows host",
+    "pi_provider": "deterministic local fixture with native process network blocked"
+  },
+  "packages": {
+    "nexus_wheel_sha256": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "core_pin_in_both_consumers": "0.0.16",
+    "offline_install": "PASS",
+    "pip_check": "PASS",
+    "offline_lock_check": "PASS",
+    "wheel_record_verified": {
+      "okto_nexus": {
+        "record_files_matching": 814,
+        "version": "0.3.8"
+      },
+      "okto_nexus_connector": {
+        "record_files_matching": 134,
+        "version": "0.0.15"
+      },
+      "okto_nexus_connector_core": {
+        "record_files_matching": 197,
+        "version": "0.0.16"
+      }
+    },
+    "core_r4_contract_manifest": "PASS"
+  },
+  "journey": {
+    "browser_assets_equal_installed_wheel": [
+      {
+        "name": "index-CLF6k7YY.js",
+        "sha256": "f4af08b8c06573f94c7405839c83665095251aea0c3e2c0677854687e2041c3e"
+      },
+      {
+        "name": "index-DWAYZd2O.css",
+        "sha256": "4b5c52c3efaeaa246f6f7f30ecf1d928505dce63b0e8111520b867047f022b31"
+      }
+    ],
+    "cli_detached_same_session_and_restored_console": true,
+    "pi": "0.87.1",
+    "external_provider_requests": 0,
+    "cli_exact_session_listed_before_and_after": true,
+    "native_turn_operations": 1,
+    "results": 1,
+    "browser_active_and_result_observed": true,
+    "canonical_close": true,
+    "remote_connector_over_real_r4_websocket": true
+  },
+  "durable": {
+    "same_scope_closed": true,
+    "durable_read_only_detach": true,
+    "native_user_messages": 1,
+    "runtime_open_operations": 1,
+    "runtime_close_operations": 1,
+    "turn_operations": 1,
+    "results": 1
+  },
+  "validation": {
+    "installed_browser_cli_journey": 1,
+    "package_regressions": 61,
+    "native_junit_sha256": "c100b7f5e6ffc7f9f987d249592ee3b39f501069050a0971c10a5a6df8b5e89b",
+    "regressions_junit_sha256": "2dbf20d3342411e0c4e463dc43630c5a2579c5f568268fa8c24936fc17097b72",
+    "browser_active_log_sha256": "2b2adf493be51ee6d976803c9ef0d43f316a6dca101750c5d64cd46291201d70",
+    "browser_result_log_sha256": "baf98610b21d763bf821e95c170fd40db83452f4e1bf9fee60de911ba7bf45ed",
+    "live_mcp": {
+      "status": "PASS",
+      "authenticated_agents": 2,
+      "tools": 54,
+      "canonical_process_exit": true
+    }
+  }
+}
