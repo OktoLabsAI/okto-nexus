@@ -1,0 +1,160 @@
+{
+  "scenario": "SI-T-I01",
+  "scope": "Windows integration and installed packages with a synthetic pre-plan database",
+  "before": {
+    "nexus": {
+      "head": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+      "version": "0.3.7",
+      "wheel_sha256": "d2f030c1527a2e02a16bb1fd768eeac122dee79b2483c7882ed9a240d019ca33"
+    },
+    "connector": {
+      "head": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "version": "0.0.13",
+      "wheel_sha256": "a23f6f991c3537e981ebadbd8f4651cd8adf48a486a41181ebd17832206f54c2"
+    },
+    "core": {
+      "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "version": "0.0.14",
+      "wheel_sha256": "50e443c213a68587d172ebab4d0f00256edea36728ec1d074a4737d4fbcd4804"
+    }
+  },
+  "after": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "ba6a8d4602e68ee439067b1c8123bc33a74f5491",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead_main": [
+        0,
+        524
+      ],
+      "working_tree_clean": true,
+      "version": "0.3.8",
+      "wheel_sha256": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead_main": [
+        0,
+        87
+      ],
+      "working_tree_clean": true,
+      "version": "0.0.15",
+      "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead_main": [
+        0,
+        66
+      ],
+      "working_tree_clean": true,
+      "version": "0.0.16",
+      "wheel_sha256": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+    }
+  },
+  "test_runs": {
+    "historical_package_seed": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "4d9dc8eda2d6d691a175c2f482095dcad67d9fe33264d5afb2610b3de202a82d"
+    },
+    "current_package_regressions": {
+      "passed": 32,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "f1316a033720528852e7887f72aa11b074bd3d4e2da559dfb56a6a925b30ac6f"
+    }
+  },
+  "fixture": "D:\\nxs-pre-si-migration-66e20460",
+  "candidate": "D:\\nxs-busy-command-wheel-60ab32d9",
+  "campaign": "NOT_RUN",
+  "audit": {
+    "source_schema": 168,
+    "target_schema": 187,
+    "migrations_applied": [
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187
+    ],
+    "second_apply": [],
+    "legacy_table_count": 161,
+    "legacy_row_count": 90,
+    "legacy_columns_equal": true,
+    "legacy_receipts_validated_by_current_core": 4,
+    "receipt_histories": 3,
+    "legacy_result_count": 1,
+    "selected_table_hashes": {
+      "execution_receipts": {
+        "rows": 4,
+        "sha256": "982b70f10baf662de6c23b450ca75de22a6e011a81198a19c2dc7530d106b5a7"
+      },
+      "execution_operations": {
+        "rows": 3,
+        "sha256": "9fce89d8b8b92e40554a9638d850336833c52620a645704271698058f17b9dc1"
+      },
+      "execution_results": {
+        "rows": 1,
+        "sha256": "83406dc51a0e19f117b236baf9b0fb1dd32de75f2e3604d7c3ff39ae029a5e95"
+      },
+      "execution_sessions": {
+        "rows": 1,
+        "sha256": "93c28bc500ceec367d0a0c7d8c407479b1640e03aa292030a3b8be2f8fcf1486"
+      },
+      "execution_event_ingress": {
+        "rows": 4,
+        "sha256": "a65d57bea77811832259638351c12e461110337a100bb898f2cbf9b1e24864ad"
+      }
+    },
+    "nullable_absent_fields": [
+      "native_launch_build_json",
+      "saved_resume_json"
+    ],
+    "new_tables_empty": [
+      "session_interaction_inputs",
+      "session_interaction_controls",
+      "session_attachments",
+      "embedded_saved_contexts"
+    ],
+    "http_projection": {
+      "matched": true,
+      "views": 3,
+      "unauthenticated_status": 401,
+      "sha256": "62560f0e54704a122917d7d3cfd902c36e1943cfb2b9914fa7d0f570577df4e0"
+    },
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "original_unchanged": true,
+    "backup_unchanged": true,
+    "pre_migration_backup_sha256": "c5c5a980ec8df0786dcdcb8fb822c1e349c9f028be170d59605f4f046ea9cf0b",
+    "restore": {
+      "schema": 168,
+      "legacy_columns_equal": true,
+      "legacy_http_projection_equal": true
+    },
+    "tool_sha256": {
+      "audit_upgrade.py": "640f675e633336be8378c0f85d1f9671ef074d868b24adafb6745ada21c76ad7",
+      "read_history.py": "e936c94b57192cb0588cdc5a023c09041b10ac35390cec3a79fa5a544044e662"
+    }
+  }
+}
