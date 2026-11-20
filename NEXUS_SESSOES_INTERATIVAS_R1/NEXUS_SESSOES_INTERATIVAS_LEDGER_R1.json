@@ -756,7 +756,9 @@
         "execution/si012-claude-stream-attribution.md",
         "execution/si012-claude-stream-attribution.json",
         "execution/si012-history-gap-and-paging.md",
-        "execution/si012-history-gap-and-paging.json"
+        "execution/si012-history-gap-and-paging.json",
+        "execution/si034-transcript-privacy.md",
+        "execution/si034-transcript-privacy.json"
       ]
     },
     {
@@ -1990,7 +1992,9 @@
         "execution/si034-inert-terminal-output.md",
         "execution/si034-inert-terminal-output.json",
         "execution/si034-terminal-command-authority.md",
-        "execution/si034-terminal-command-authority.json"
+        "execution/si034-terminal-command-authority.json",
+        "execution/si034-transcript-privacy.md",
+        "execution/si034-transcript-privacy.json"
       ]
     },
     {
@@ -5372,8 +5376,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si034-transcript-privacy.md",
+        "execution/si034-transcript-privacy.json"
+      ]
     },
     {
       "id": "SI-T-I01",
