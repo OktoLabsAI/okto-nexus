@@ -1,0 +1,207 @@
+{
+  "task": "SI-038",
+  "candidate": {
+    "nexus_head": "f44cebecdb30b9b0f087cf11cd27e49ad14861f7",
+    "fetched_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "nexus_installed_wheel_sha256": "528459e8d7854e54147bf26d6ea1535aedaaadf7d380e8666380fc3526e5802a",
+    "connector_head": "3a0f46a89ce808fc152d43b05014a7e0d1f7c743",
+    "core_head": "2c034665508a9bca61d2b59b74964cef862fcf60",
+    "installed_dependencies": [
+      {
+        "path": "vendor/wheels/okto_nexus_connector_core-0.0.16-py3-none-any.whl",
+        "sha256": "04bfa3bbef7ff3c9083453c37b1a3837ff5d3460714c59c4318b9474e29b1d97"
+      },
+      {
+        "path": "vendor/ci/okto_nexus_connector-0.0.15-py3-none-any.whl",
+        "sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+      }
+    ]
+  },
+  "native_binary": {
+    "version": "0.157.0",
+    "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+  },
+  "viewer": {
+    "version": "0.170.0",
+    "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "platform": "Windows x64, ConPTY and Edge",
+  "fixture_sha256": "4385eb7f2e268ea87050f7ae71b03b7347d8c4aff1b943ca364c12c22c913f04",
+  "fixture_contract": {
+    "stdio_mcp": {
+      "single_read_only_tool": true,
+      "arguments_validated": true,
+      "additional_path_ignored": true,
+      "timeout": true,
+      "wrong_marker": true,
+      "valid_marker": true,
+      "preset_render": true,
+      "cleanup": true
+    },
+    "check_sha256": "edaaef1f1ccb6d5b917d8e8805da7568b3e1ac4448c7db48b7500797721d2266"
+  },
+  "native_probe": {
+    "cases": {
+      "release": {
+        "native_tool_start": "inProgress",
+        "native_tool_terminal": {
+          "status": "completed",
+          "tool": "wait_for_marker",
+          "marker": "{\"content\": [{\"type\": \"text\", \"text\": \"NEXUS_GATE_RELEASED\"}], \"structuredContent\": {\"result\": \"NEXUS_GATE_RELEASED\"}, \"_meta\": null}"
+        },
+        "steer_ack_for_exact_turn": true,
+        "turn_status": "completed"
+      },
+      "timeout": {
+        "native_tool_start": "inProgress",
+        "native_tool_terminal": {
+          "status": "completed",
+          "tool": "wait_for_marker",
+          "marker": "{\"content\": [{\"type\": \"text\", \"text\": \"NEXUS_GATE_TIMED_OUT\"}], \"structuredContent\": {\"result\": \"NEXUS_GATE_TIMED_OUT\"}, \"_meta\": null}"
+        },
+        "steer_ack_for_exact_turn": null,
+        "turn_status": "completed"
+      }
+    },
+    "provider_requests": 6,
+    "direct_tool_search_then_use": true,
+    "steer_observed_in_request_after_marker": true,
+    "probe_sha256": "3c98dd5ffc00bbcf8611903f0e2b517d7079e4f8d43f3d2dbe8496684d04d471",
+    "proof_sha256": "9e7dfa0f20c333b774d8117feafcca6895e56a578b45ebb01447fcc0c42fcc98"
+  },
+  "installed": {
+    "passed_native_browser_tests": 1,
+    "junit_sha256": "655ba70f271e0628cdf902be4c453bd0910db8c77e5d17ccaa33364b717544e0",
+    "verified_wheel_imports": true,
+    "proof": {
+      "connect_i_restored_read_only_view": true,
+      "explicit_writer_started_native_turn": true,
+      "browser_default_queue_receipt": true,
+      "one_reviewed_native_steer": true,
+      "browser_queue_started_separate_turn": true,
+      "native_thread_count": 1,
+      "native_turn_starts": 3,
+      "native_steers": 1,
+      "native_pid_preserved": true,
+      "loopback_response_requests": 5,
+      "external_provider_requests": 0,
+      "both_viewers_detached": true,
+      "canonical_close": true
+    },
+    "release": {
+      "released_after_both_detaches": true,
+      "canonical_steer_accepted_before_release": true
+    },
+    "journal_order": {
+      "same_native_turn_and_session": true,
+      "tool_started": 23,
+      "tool_completed": 25,
+      "turn_completed": 36,
+      "steer_receipt": "SUCCEEDED",
+      "fixture_function_ast_matches": true
+    },
+    "durable_session": {
+      "operations": {
+        "runtime.open": 1,
+        "turn.submit": 3,
+        "turn.steer": 1,
+        "runtime.close": 1
+      },
+      "one_closed_session": true,
+      "attachments": {
+        "read": "DETACHED",
+        "write": "DETACHED"
+      },
+      "canonical_inputs": [
+        {
+          "surface": "native_terminal",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.submit"
+        },
+        {
+          "surface": "web",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.submit"
+        },
+        {
+          "surface": "nexus_cli",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.steer"
+        }
+      ],
+      "result_rows": 3,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "connector_native_launches": 1
+    },
+    "observed_synthetic_usage": {
+      "total": 1575,
+      "usage_seen": true,
+      "native_identities": 1,
+      "started_operations": 3,
+      "terminal_operations": 3,
+      "covered_started_operations": 3,
+      "usage_events": [
+        {
+          "journal_sequence": 13,
+          "cumulative_total": 105
+        },
+        {
+          "journal_sequence": 21,
+          "cumulative_total": 315
+        },
+        {
+          "journal_sequence": 26,
+          "cumulative_total": 630
+        },
+        {
+          "journal_sequence": 33,
+          "cumulative_total": 1050
+        },
+        {
+          "journal_sequence": 44,
+          "cumulative_total": 1575
+        }
+      ],
+      "reported_accounting_final": false,
+      "one_launch_and_journal_checks_passed": true,
+      "usage_observer_source_sha256": "6f238ede81e7ad6421b33be66e251e58419cec814a6a11125d67022fb812d2b2"
+    },
+    "provider_phases": [
+      "seed",
+      "tool_search",
+      "tool_call",
+      "steered_result",
+      "queued_result"
+    ],
+    "fixture_sha256": "521e3c84eb9cd3b33eb902e0e0a231f79339c5cce4e0cd4a248420d07135648f",
+    "browser_evidence_sha256": {
+      "queue": "2e1ee18d42614efe43feeca519d625985292dfbfeb4d25e00358486d43d00059",
+      "after-detach": "2555ae6ec6dc75ba38bdd3de02dc04949c9c873bebdbcd78f0f9ac743a451996",
+      "result": "c829e3ceb97d2380e11e8dbefc5c302f635c210e46358236a0a225ad16e8f46d"
+    }
+  },
+  "earlier_trials": [
+    {
+      "outcome": "shell_command unavailable; exec_command rejected by the observed policy",
+      "raw_proof_sha256": "7c78a88c82be8e68d4f1ce8f5990505fa14676cf882dc41f0234d6bb8fafde91"
+    },
+    {
+      "outcome": "tool ready but deferred; explicit tool_search needed",
+      "raw_proof_sha256": "4aa1804cdbc853567f6c522eb4819f2401713b0a1ed0e3c4892363911c713c65"
+    },
+    {
+      "outcome": "unannotated MCP tool asked for approval under never policy",
+      "raw_proof_sha256": "de4c4567ad3da77f6702526dc928231c23577daea2673256c4b1f951e251e68f"
+    }
+  ],
+  "qualification": "Real Codex processes and installed journey with an owned MCP fixture and deterministic loopback peer. Effective per-project preset and actual model tool choice remain for provider qualification.",
+  "needs_auth_for_real_campaign": true,
+  "external_provider_requests": 0,
+  "credentials_used": false,
+  "cleanup": {
+    "native_profiles_isolated": true,
+    "listener_and_test_processes_exited": true
+  },
+  "rollback": "Revert the evidence and fixture commit. No production code or migration."
+}

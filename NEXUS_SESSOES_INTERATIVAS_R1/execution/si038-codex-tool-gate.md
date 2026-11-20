@@ -1,0 +1,11 @@
+# SI-038 · Espera controlada no turno do Codex
+
+A ferramenta `wait_for_marker` mantém um turno ativo enquanto o operador usa a Home e o terminal. Ela lê apenas um marcador conhecido ao lado do script, com prazo de 180 segundos. O ensaio também cobriu um prazo de três segundos para a ausência do marcador. Um conteúdo inválido é recusado. O servidor MCP local anuncia uma única ferramenta de leitura. [Fixture](fixtures/si038_gate_mcp.py)
+
+O primeiro ensaio contou com um comando de shell que o Codex recusou pela política vigente. A alternativa manteve o perfil somente leitura e usou o MCP no projeto descartável. O app-server precisava reportar o MCP pronto e, neste build, o simulador precisou emitir a busca de ferramenta antes da chamada. A marcação da ferramenta como somente leitura permitiu a chamada nessa configuração. A validação por stdio confirmou o prazo, os dois resultados do marcador e a impossibilidade de escolher outro caminho por argumento. [Anotações de ferramentas MCP](https://developers.openai.com/plugins/reference)
+
+No candidato instalado com app-server Codex 0.157.0, visualizador 0.170.0, ConPTY e Edge, o journal registrou o início da ferramenta na thread e no turno revisados. A Home enfileirou uma mensagem, o Nexus CLI confirmou a reorientação do turno ativo e os dois visualizadores desanexaram. Só então o roteiro gravou o marcador. O pedido que produziu a resposta final do mesmo turno incluía a reorientação, e a fila iniciou um turno separado. O app-server fechou canonicamente e o listener e os processos do ensaio saíram.
+
+O simulador recebeu cinco chamadas no ensaio instalado. Três pertenceram ao mesmo turno ativo, incluindo a busca da ferramenta e a retomada após a leitura do marcador. O contador sintético foi reconciliado por thread. A campanha com provedor precisará observar todos esses pedidos no orçamento e conferir a disponibilidade da ferramenta no preset efetivo. O preset com um nome fora do namespace reservado passou pela validação e renderização locais. O ensaio integrado configurou o MCP no perfil descartável. [Dados e hashes](si038-codex-tool-gate.json)
+
+Este marco acrescenta a fixture e as evidências ao repositório. A reversão dispensa migração. A seleção efetiva da ferramenta pelo modelo e a campanha real continuam pendentes.
