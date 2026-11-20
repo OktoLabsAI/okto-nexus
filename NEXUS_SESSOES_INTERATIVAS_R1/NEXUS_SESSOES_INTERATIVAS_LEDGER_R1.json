@@ -2263,7 +2263,7 @@
         "SI-T-I09",
         "SI-T-G11"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si041-two-session-native-ack.md",
         "execution/si041-two-session-native-ack.json",
@@ -2272,7 +2272,9 @@
         "execution/si038-home-terminal-home-loopback.md",
         "execution/si038-home-terminal-home-loopback.json",
         "execution/si038-terminal-home-queue-steer-loopback.md",
-        "execution/si038-terminal-home-queue-steer-loopback.json"
+        "execution/si038-terminal-home-queue-steer-loopback.json",
+        "execution/si038-codex-campaign-preflight.md",
+        "execution/si038-codex-campaign-preflight.json"
       ]
     },
     {
@@ -5585,7 +5587,9 @@
         "execution/si039-codex-build-capabilities.md",
         "execution/si039-codex-build-capabilities.json",
         "execution/si039-wheel-regression-audit.md",
-        "execution/si039-wheel-regression-audit.json"
+        "execution/si039-wheel-regression-audit.json",
+        "execution/si038-codex-campaign-preflight.md",
+        "execution/si038-codex-campaign-preflight.json"
       ]
     },
     {
@@ -5631,7 +5635,9 @@
         "execution/si030-terminal-session-controls.md",
         "execution/si030-terminal-session-controls.json",
         "execution/si038-terminal-home-queue-steer-loopback.md",
-        "execution/si038-terminal-home-queue-steer-loopback.json"
+        "execution/si038-terminal-home-queue-steer-loopback.json",
+        "execution/si038-codex-campaign-preflight.md",
+        "execution/si038-codex-campaign-preflight.json"
       ]
     },
     {

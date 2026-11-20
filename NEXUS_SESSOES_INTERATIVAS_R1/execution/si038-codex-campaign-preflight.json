@@ -1,0 +1,196 @@
+{
+  "task": "SI-038",
+  "scope": "Windows installed candidate rehearsal and unauthenticated catalog only",
+  "plan_status": "IN_PROGRESS",
+  "current_inference_campaign": "NOT_RUN_NO_CONSENT",
+  "authenticated_catalog": "PENDING_USER_AUTHORIZATION",
+  "nexus": {
+    "branch": "feature/v0.3.8",
+    "head": "c018d7d42001b420057b594fc75dd27a1dfd9abf",
+    "fetched_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "behind_main": 0,
+    "ahead_of_main": 539,
+    "wheel_sha256": "528459e8d7854e54147bf26d6ea1535aedaaadf7d380e8666380fc3526e5802a"
+  },
+  "connector": {
+    "branch": "feature/v0.0.15",
+    "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+    "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+  },
+  "core": {
+    "branch": "feature/v0.0.16",
+    "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+    "wheel_sha256": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "platform": "Windows with ConPTY and isolated Edge",
+  "engine": {
+    "version": "0.157.0",
+    "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+  },
+  "viewer": {
+    "version": "0.170.0",
+    "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "catalog": {
+    "provider_session_present": false,
+    "native_methods": [
+      "initialize",
+      "initialized",
+      "account/read",
+      "model/list",
+      "configRequirements/read"
+    ],
+    "catalog_models": [
+      "gpt-6-astra",
+      "gpt-6-sol",
+      "gpt-6-luna",
+      "gpt-5.6-sol",
+      "gpt-5.6-terra",
+      "gpt-5.6-luna",
+      "gpt-5.5"
+    ],
+    "catalog_defaults": [
+      "gpt-6-astra"
+    ],
+    "prior_rejected_model_listed": false,
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "inference_allowed": false,
+    "loopback_rejecting_proxy": true
+  },
+  "previous_campaign": {
+    "plan": "Nexus UI R1",
+    "model": "gpt-5.3-codex",
+    "setup_terminal": "failed",
+    "native_error": "modelNotFound",
+    "usage": "unknown",
+    "evidence": "../../NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-terminal-ro.json"
+  },
+  "installed_journey": {
+    "test_result": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "416ef25d8b1e76c56301ff9abd4cf2d301e59ed5cf62d180a4de0918622a6cc5"
+    },
+    "wheel_imports_proven": true,
+    "provider": "loopback Responses SSE with deterministic output and usage numbers",
+    "native_observations": {
+      "connect_i_restored_read_only_view": true,
+      "explicit_writer_started_native_turn": true,
+      "browser_default_queue_receipt": true,
+      "one_reviewed_native_steer": true,
+      "browser_queue_started_separate_turn": true,
+      "native_thread_count": 1,
+      "native_turn_starts": 3,
+      "native_steers": 1,
+      "native_pid_preserved": true,
+      "loopback_response_requests": 4,
+      "external_provider_requests": 0,
+      "both_viewers_detached": true,
+      "canonical_close": true
+    },
+    "canonical_observations": {
+      "operations": {
+        "runtime.open": 1,
+        "turn.submit": 3,
+        "turn.steer": 1,
+        "runtime.close": 1
+      },
+      "one_closed_session": true,
+      "attachments": {
+        "read": "DETACHED",
+        "write": "DETACHED"
+      },
+      "canonical_inputs": [
+        {
+          "surface": "native_terminal",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.submit"
+        },
+        {
+          "surface": "web",
+          "status": "ACCEPTED_NATIVE",
+          "action": "turn.submit"
+        },
+        {
+          "surface": "nexus_cli",
+          "status": "DISPATCHING",
+          "action": "turn.steer"
+        }
+      ],
+      "result_rows": 3,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "connector_native_launches": 1
+    },
+    "observed_usage": {
+      "total": 1050,
+      "usage_seen": true,
+      "native_identities": 1,
+      "started_operations": 3,
+      "terminal_operations": 3,
+      "covered_started_operations": 3,
+      "usage_events": [
+        {
+          "journal_sequence": 11,
+          "cumulative_total": 105
+        },
+        {
+          "journal_sequence": 23,
+          "cumulative_total": 315
+        },
+        {
+          "journal_sequence": 30,
+          "cumulative_total": 630
+        },
+        {
+          "journal_sequence": 41,
+          "cumulative_total": 1050
+        }
+      ],
+      "reported_accounting_final": false,
+      "one_launch_and_journal_checks_passed": true,
+      "usage_observer_source_sha256": "6f238ede81e7ad6421b33be66e251e58419cec814a6a11125d67022fb812d2b2"
+    },
+    "browser_checkpoints": {
+      "queue": "0f80bfbbc968def8d05ecb60ee52bb4f9b400588c1772585adf3bc98b090b00a",
+      "after-detach": "2555ae6ec6dc75ba38bdd3de02dc04949c9c873bebdbcd78f0f9ac743a451996",
+      "result": "c829e3ceb97d2380e11e8dbefc5c302f635c210e46358236a0a225ad16e8f46d"
+    },
+    "cleanup": {
+      "nexus_listener_closed": true,
+      "viewer_and_engine_processes_exited": true,
+      "fixture_vault_injection_removed": true
+    }
+  },
+  "initial_rehearsal_failures": [
+    {
+      "phase": "connect -i",
+      "failure": "Fixture vault relied on variables removed by the Connector child allowlist",
+      "junit_sha256": "ae450238428d15cc5126fec1551f7d0a4db85abcd1e9532330bf50407a332d35"
+    },
+    {
+      "phase": "Home queue",
+      "failure": "Old browser launcher blocked when run with output redirection",
+      "junit_sha256": "9d85c34ac17dceef1600ba2e3df6eb7a0a0e3429c46e4b9705e72f4f12e99828"
+    }
+  ],
+  "probe_sha256": {
+    "catalog": "3374acdcf8341290269d1dbd4ce3d2a91d40c5179d729b197ab9b1be55838949",
+    "verify_usage": "77764ecce0b04d8884652f0cbaba7841a4e3967a39d18f74777c7c906747cbf9",
+    "run.ps1": "de62c218151189efeb393b3b133d371cea5d8a0ac7b9f9fdae61fb6001690089",
+    "drive.ps1": "ca4ffacf589ea8209ba7e93bcdbeef94d909f7a346185ac01b3f6f09dbe2a6bf",
+    "sitecustomize.py": "c5f1efff9ccf9a4439cca06ce833b2456af3e90d788dcdbc2ab06e8a561cde74",
+    "test_terminal_home.py": "71f2f9d7c203a0ef142995bc8891d151973eb16e4a2cbd280a7f96192663c31e",
+    "prove_durability.py": "047e2d0f2feaea71919e11d86a016b985a7322cd976c26761a73e3d54557cb62"
+  },
+  "rollback": "Revert this evidence and ledger commit. No code, migration or changes to personal installations.",
+  "additional_installed_regressions": {
+    "tests": 74,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit_sha256": "edfd5057d0ae0ad4a10a64d0da9ca36d3f64ec3d045cbe4f7ab44e11481f3ba6"
+  }
+}
