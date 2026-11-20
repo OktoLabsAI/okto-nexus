@@ -268,7 +268,9 @@
           "limitations": "New routes, target proof at effect, TypeScript client and native capabilities still untested. No literal scenario promoted."
         },
         "execution/si007-concurrent-browser-fifo.md",
-        "execution/si007-concurrent-browser-fifo.json"
+        "execution/si007-concurrent-browser-fifo.json",
+        "execution/si028-connect-invalid-presentation.md",
+        "execution/si028-connect-invalid-presentation.json"
       ]
     },
     {
@@ -1599,7 +1601,9 @@
       "evidence": [
         "execution/si028-connect-presentation.md",
         "execution/si028-interactive-json-refusal.md",
-        "execution/si028-interactive-json-refusal.json"
+        "execution/si028-interactive-json-refusal.json",
+        "execution/si028-connect-invalid-presentation.md",
+        "execution/si028-connect-invalid-presentation.json"
       ]
     },
     {
@@ -4021,8 +4025,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si028-connect-invalid-presentation.md",
+        "execution/si028-connect-invalid-presentation.json"
+      ]
     },
     {
       "id": "SI-T-F07",
@@ -4057,8 +4064,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si028-connect-invalid-presentation.md",
+        "execution/si028-connect-invalid-presentation.json"
+      ]
     },
     {
       "id": "SI-T-F09",
@@ -4093,8 +4103,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si028-connect-invalid-presentation.md",
+        "execution/si028-connect-invalid-presentation.json"
+      ]
     },
     {
       "id": "SI-T-F11",

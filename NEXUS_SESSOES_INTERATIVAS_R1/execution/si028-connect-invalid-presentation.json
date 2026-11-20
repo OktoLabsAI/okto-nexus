@@ -1,0 +1,116 @@
+{
+  "scenarios": [
+    "SI-T-F06",
+    "SI-T-F08",
+    "SI-T-F10"
+  ],
+  "status": "PASS",
+  "source_baseline": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "installed_executable_sha256": "eaca277e4ddfbc31e661c9748586f3dfd3c801abe45fbb1644a263e5e3c67605",
+  "platform": "Windows x64",
+  "invocations": [
+    {
+      "scenario": "SI-T-F06",
+      "flags": [
+        "-i"
+      ],
+      "exit_code": 2,
+      "terminal": "redirected stdin and stdout",
+      "diagnostic_observed": "requires terminal input and output",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "-i",
+        "--no-interactive"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "--no-interactive",
+        "-i"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "-i",
+        "--no-chat"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "--no-chat",
+        "-i"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F10",
+      "flags": [
+        "-ni"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "use --no-interactive instead of -ni",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F10",
+      "flags": [
+        "--inter"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "unrecognized argument: --inter",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    }
+  ],
+  "tests_passed": 7,
+  "limits": "No successful or planned connect scenarios are covered by this run",
+  "fixture_path": "D:/nxs-cli-presentation-36073788",
+  "hashes": [
+    {
+      "file": "test_refusal.py",
+      "sha256": "c7fabd203e4fbf0a569d0b5d437497e6dabaf47125bf775e9ea5e60475a19e9a"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "300989cdb3e0412752f284341a9e03076314ab9f5006030902e3eba5b6cd3c93"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "00a0be068f5498a4e5b049db0b2b5ef344423ef9fb9d65518adb8f669873eb8b"
+    }
+  ]
+}
