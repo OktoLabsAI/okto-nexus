@@ -9,7 +9,7 @@ from test_harness_canonical import qualified_bridge
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
 from test_canonical_grant_regressions import mcp_helpers
 from test_agent_recovery_isolation import eventually
-from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+from test_harness_codex_connector import _FAKE_SERVER_SOURCE, with_account_observation
 from test_canonical_delivery import connected_local as work_connected
 
 
@@ -24,17 +24,7 @@ def install_native(connected, source, *, environment=None):
     _, app, _, _, *_, root = setup
     peers = []
     log = root / "native-wire.jsonl"
-    # The legacy fake predates the Core's mandatory read-only account handshake.
-    # This is an explicitly unauthenticated synthetic peer, never a real login.
-    marker = '        elif method == "thread/start":\n'
-    if marker in source and 'elif method == "account/read":' not in source:
-        added = (
-            '        elif method == "account/read":\n'
-            '            write_msg({"jsonrpc":"2.0","id":req_id,"result":{"requiresOpenaiAuth":False,"account":None}})\n'
-        )
-        if 'elif method == "initialized":' not in source:
-            added = '        elif method == "initialized":\n            continue\n' + added
-        source = source.replace(marker, added + marker, 1)
+    source = with_account_observation(source)
 
     class Factory:
         async def open(self, prepared, session_id, context, *, stream_epoch,

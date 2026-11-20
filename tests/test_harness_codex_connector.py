@@ -220,6 +220,20 @@ if __name__ == "__main__":
 '''
 
 
+def with_account_observation(source: str) -> str:
+    """Add the Core's read-only account observation to a synthetic Codex peer."""
+    marker = '        elif method == "thread/start":\n'
+    if marker not in source or 'elif method == "account/read":' in source:
+        return source
+    account = (
+        '        elif method == "account/read":\n'
+        '            write_msg({"jsonrpc":"2.0","id":req_id,"result":{"requiresOpenaiAuth":False,"account":None}})\n'
+    )
+    if 'elif method == "initialized":' not in source:
+        account = '        elif method == "initialized":\n            continue\n' + account
+    return source.replace(marker, account + marker, 1)
+
+
 @pytest.fixture()
 def fake_server_script(tmp_path: Path) -> Path:
     script = tmp_path / "fake_codex_app_server.py"

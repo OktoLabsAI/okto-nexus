@@ -9,7 +9,7 @@ import pytest
 from test_harness_canonical import qualified_bridge
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
 from test_canonical_grant_regressions import mcp_helpers
-from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+from test_harness_codex_connector import _FAKE_SERVER_SOURCE, with_account_observation
 
 
 def approval_peer(connected, *, method="item/commandExecution/requestApproval", cancel_only=False, operator_turn=False,
@@ -32,6 +32,7 @@ def approval_peer(connected, *, method="item/commandExecution/requestApproval", 
         '        text = json.dumps(_approval_reply)\n') + source[end:]
     source = source.replace('            log({"response_to_server_request": msg})',
         '            log({"response_to_server_request": msg})\n            _approval_reply.update(msg)\n            _approval_ready.set()')
+    source = with_account_observation(source)
     peers = []
     log = setup[-1] / "native-approval-wire.jsonl"
     class Factory:

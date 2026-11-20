@@ -26,6 +26,19 @@
     "junit_sha256": "cb8f8dd0a4fae11ff6a05a860cd59957057d307676a355e3fcfa1578fe8bd93c",
     "primary": "tests/execution_r4/test_terminal_work.py::test_dashboard_and_terminal_share_one_native_question_decision"
   },
+  "supplementary_pipe_regression": {
+    "initial_failure": "Legacy synthetic peer omitted the mandatory read-only account handshake and stopped before the session opened.",
+    "fixture_change": "Reuse the synthetic account observation and preserve explicitly configured negative responses.",
+    "question_contract_and_terminal": {
+      "passed": 28,
+      "junit_sha256": "3592da041dad3b0124fd66aaf96b0fe5d3e7fa6923d344e34fbf1e5a30390049"
+    },
+    "approval_and_idempotency": {
+      "passed": 4,
+      "junit_sha256": "8cbd65f0df8c6d78e1abf66305dc6c981f0577e7b0b90dd0e173bb368fbfa3a2"
+    },
+    "external_provider_calls": 0
+  },
   "limitations": [
     "HTTP used TestClient and the dashboard route. The test did not render the React dashboard or invoke an installed harness."
   ]
