@@ -654,7 +654,9 @@
         "execution/si010-unqualified-steer.md",
         "execution/si010-unqualified-steer.json",
         "execution/si026-claude-requesting-refusal.md",
-        "execution/si026-claude-requesting-refusal.json"
+        "execution/si026-claude-requesting-refusal.json",
+        "execution/si026-claude-home-compound-reorientation.md",
+        "execution/si026-claude-home-compound-reorientation.json"
       ]
     },
     {
@@ -860,7 +862,9 @@
         "execution/si007-pi-tool-boundary.md",
         "execution/si007-pi-tool-boundary.json",
         "execution/si009-isolated-cancellation-and-promotion.md",
-        "execution/si009-isolated-cancellation-and-promotion.json"
+        "execution/si009-isolated-cancellation-and-promotion.json",
+        "execution/si026-claude-home-compound-reorientation.md",
+        "execution/si026-claude-home-compound-reorientation.json"
       ]
     },
     {
@@ -1571,7 +1575,9 @@
         "execution/si012-claude-stream-attribution.md",
         "execution/si012-claude-stream-attribution.json",
         "execution/si026-claude-requesting-refusal.md",
-        "execution/si026-claude-requesting-refusal.json"
+        "execution/si026-claude-requesting-refusal.json",
+        "execution/si026-claude-home-compound-reorientation.md",
+        "execution/si026-claude-home-compound-reorientation.json"
       ]
     },
     {
@@ -3117,12 +3123,14 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si026-claude-compound-steer.json",
         "execution/si026-claude-reviewed-target.json",
         "execution/si026-claude-operator-steer.json",
-        "execution/si026-claude-terminal-steer.json"
+        "execution/si026-claude-terminal-steer.json",
+        "execution/si026-claude-home-compound-reorientation.md",
+        "execution/si026-claude-home-compound-reorientation.json"
       ]
     },
     {

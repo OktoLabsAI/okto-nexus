@@ -1,0 +1,98 @@
+{
+  "scenario": "SI-T-C05",
+  "status": "PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "a6522d70263d429160b30cec78c6bb8b9a63e14c",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 514
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    }
+  },
+  "nexus_product_wheel_source": "1bb082dbfdd7e53c8e46df47cc0554cec8eb6450 (identical tracked product sources at baseline)",
+  "installed_wheel_sha256": {
+    "nexus": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "native_profile": {
+    "operating_system": "Windows x64 build 26300",
+    "claude": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "driver": "Playwright CLI",
+    "permission_profile": "plan with tools denied",
+    "provider": "deterministic simulated SSE on loopback",
+    "external_provider_calls": 0
+  },
+  "browser": {
+    "one_confirm_click": true,
+    "concurrent_http_statuses": [
+      202,
+      202
+    ],
+    "same_exact_turn": true,
+    "both_receipt_stages_visible": true,
+    "final": {
+      "status": "ACCEPTED_NATIVE",
+      "sameOperation": true,
+      "interruption": "confirmed",
+      "replacement": "submitted",
+      "browserClearedPending": true,
+      "browserPosts": 1
+    }
+  },
+  "native": {
+    "same_process_and_scope": true,
+    "terminal_writes": [
+      "escape",
+      "replacement"
+    ],
+    "other_operator_login_receipt_status": 404,
+    "canonical_close": "SUCCEEDED",
+    "fixture_provider_requests_for_steer": 2
+  },
+  "fixture_job_remaining_processes": 0,
+  "native_fixture_exit_code": 0,
+  "browser_driver_exit_code": 0,
+  "database": {
+    "original_turn": "CANCELLED",
+    "cancel_before_confirm_and_send": true,
+    "durable_steer_operations": 1,
+    "result_in_same_session": true,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "installed_regressions": {
+    "core": {
+      "passed": 21,
+      "junit_sha256": "7ffc17873d3c139850ba29cdf67239c0bf4f9e578eb5b658096bd2ce90526dcf"
+    },
+    "nexus": {
+      "passed": 6,
+      "junit_sha256": "53005c3e24930f5cff3a8e7f02996d1c38e0e460839f08cff9c1d13b49ee52f9"
+    }
+  },
+  "artifact_sha256": {
+    "probe.py": "e1b7a47e3223343f45c6325645e4ae4b2d00c7a373eefe7e8a39ac37d019e8bd",
+    "compound-review.yml": "239f19d8183a39f065b81d23fad2cbd5928c5c819106218d564fa9a4f9de287c",
+    "browser-observation.json": "747353aeb90ccd2bc5e903f29deb1d70a209fef87a14777fadd5048073e536b3",
+    "browser-final.json": "1420b6fed75b117cc0f3d791c337fdfaa631fa45cc6b925e8595e10efe358f8a",
+    "result.json": "1cc7b7b3ae9efadc3fa31162b80f049483098016c5543a820b51055ab0073f24"
+  },
+  "limitations": [
+    "Automated Edge interaction and a real archived Claude executable, with an isolated profile and simulated provider. Separate human acceptance, screen-reader, other platforms, and native remote-host qualification remain open."
+  ]
+}
