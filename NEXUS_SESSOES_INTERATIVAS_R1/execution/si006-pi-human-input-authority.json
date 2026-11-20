@@ -1,0 +1,89 @@
+{
+  "scenarios": [
+    "SI-T-A01",
+    "SI-T-A02",
+    "SI-T-A03"
+  ],
+  "status": "PASS",
+  "installed_wheels": {
+    "nexus": "489dfb0ee4c718026f0f0d1e2fa185eb5f406698652592e6c21a80146fd01031",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "engine": "Pi 0.87.1",
+    "engine_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "owner": "Installed embedded Nexus execution host on loopback",
+    "provider": "Deterministic Pi fixture with native-process external networking disabled"
+  },
+  "integration": {
+    "native_role": "user",
+    "native_text_exact": true,
+    "explicit_human_turns": 1,
+    "original_turns": 1,
+    "original_session_preserved": true,
+    "forgery_status": 422,
+    "durable_queue_receipt_status": 202,
+    "stored_human_reference_exact": true,
+    "backend": "embedded Windows owner with Pi 0.87.1 and deterministic fixture",
+    "unchanged_coordination_tables": [
+      "messages",
+      "message_deliveries",
+      "handoffs",
+      "runtime_message_causality",
+      "execution_message_origins",
+      "runtime_handoff_notifications",
+      "execution_decisions"
+    ],
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "durable_audit": {
+    "physical_integrity": "ok",
+    "foreign_key_violations": 0,
+    "exact_session_closed": true,
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "results": 2,
+    "coordination_rows": {
+      "messages": 0,
+      "message_deliveries": 0,
+      "handoffs": 0,
+      "runtime_message_causality": 0,
+      "execution_message_origins": 0,
+      "runtime_handoff_notifications": 0,
+      "execution_decisions": 0
+    },
+    "accepted_web_receipt_linked_to_exact_native_user_turn": true,
+    "native_history_files": 1
+  },
+  "verification": {
+    "native_http_cases": 1,
+    "same_build_regressions": 6,
+    "same_build_regression_evidence": "si006-queue-commit-refusal.json",
+    "fixture_directory": "D:/nxs-local-author-35097082",
+    "fixture_artifact_sha256": {
+      "run.ps1": "402b4bee1ea83880051c2452e853f91ddbb4ec1798d70fc316f2e67336310e0d",
+      "test_author.py": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc",
+      "local_author_probe.py": "6f896f4a7388a2879e2e87b56f60c6a2d42fe56be345697712ba11e9b81c1c32",
+      "audit_durable.py": "52f903cc6c175dbf70baa6f55aca87cd4661f06d4c3e08ca827adb9f0eda5476",
+      "focus.xml": "f1b056f78225c05e90f101c4bd5e43022b669fa612b57f9224d6f7f6f942db16",
+      "proof.json": "a345af077f6793607569144d0ef4e67be839f9b33a35a19aecf53a9f317a931f",
+      "durable-audit.json": "eb6188355617ac43572fa6e6add44a337f61bb65c0ef200a12afa2bd60b14eb8"
+    },
+    "earlier_remote_junit_sha256": "b7e2711a8beaabf7b0723a21352a8a97f11f5151e1eda667feca8c322b7e346d",
+    "earlier_local_discovery_junit_sha256": "3b39a8156a2bbb49c8270e81b1518b6a0f008174b0fc9617cd7683825605febe",
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "<candidate-venv>/Scripts/python.exe <isolated-root>/audit_durable.py"
+    ]
+  },
+  "limits": [
+    "The fixture supplied the one measured Pi candidate to embedded discovery; realization, authorization, queue, dispatch and the native process ran installed code.",
+    "The HTTP case used the embedded local executor. Remote and other harness qualification remain scoped to their own scenarios."
+  ]
+}
