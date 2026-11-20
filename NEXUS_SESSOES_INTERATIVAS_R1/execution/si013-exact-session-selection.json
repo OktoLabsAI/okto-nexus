@@ -1,0 +1,95 @@
+{
+  "scenario": "SI-T-A12",
+  "status": "PASS",
+  "wheel_source_revision": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "checked_branch_head": "bb5fbeac657a617f5cc1c5e073ba923ed828dac1",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "platform": "Windows x64 and Edge",
+  "harness": {
+    "version": "Pi 0.87.1",
+    "installation_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b"
+  },
+  "browser": {
+    "checkpoint": "EXACT_SESSION_CHOSEN_BEFORE_SEND",
+    "offered_sessions": 2,
+    "automatic_selection": false,
+    "composer_before_selection": false,
+    "writes_before_selection": 0,
+    "writes_after_selection": 1
+  },
+  "runtime": {
+    "connection_has_two_sessions": true,
+    "older_session_received_only_browser_send": true,
+    "newer_sibling_received_no_work": true,
+    "exact_browser_send_count": 1,
+    "older_owner_preserved": true,
+    "newer_owner_preserved": true,
+    "native_prompts_including_warmup": 2,
+    "external_provider_calls": 0,
+    "canonical_closes": 2
+  },
+  "audit": {
+    "sessions": 2,
+    "same_binding_and_workspace": true,
+    "accepted_browser_messages": 1,
+    "all_results_in_selected_session": true,
+    "operations": {
+      "runtime.close": 2,
+      "runtime.open": 2,
+      "turn.submit": 2
+    },
+    "database_integrity": "ok"
+  },
+  "fixture_path": "D:/nxs-two-session-26279447",
+  "hashes": [
+    {
+      "file": "focus.xml",
+      "sha256": "045f1e3c84c54ce53a0823b5437c44818aee8dedd1706e5149de3caea5be25cd"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "c4dce183e04f5b86ddf09262ce3861fbdd6c76e172b3fa55c4a989f0b814dbab"
+    },
+    {
+      "file": "audit.json",
+      "sha256": "0d23a6df988aa7e942e52c50941dc46777795a5b3caa9b481e938bff47077a12"
+    },
+    {
+      "file": "browser-verified.json",
+      "sha256": "5836d3abb7d46e9757e3a57c33efe4ee037cb50e1a40757978c206e4cca21a1f"
+    },
+    {
+      "file": "drive.ps1",
+      "sha256": "6633a669513f5986d3573e4b88dbb67c9433e400cefac7399268f916b39e9245"
+    },
+    {
+      "file": "open.js",
+      "sha256": "2ac66a151f08451876945802d0c0347ec23417cf8dd883ae3da03f9a258f90da"
+    },
+    {
+      "file": "local_author_probe.py",
+      "sha256": "43fddd65067c5c7ad733bdd7e5490bdad92f7352d04c20bd9ae6f0a25527d560"
+    },
+    {
+      "file": "audit_exact.py",
+      "sha256": "098571998505c70b8d2d24f2f0544d41dcb8b4e849653502039b92a509b7da9f"
+    },
+    {
+      "file": "test_author.py",
+      "sha256": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc"
+    },
+    {
+      "file": "run.ps1",
+      "sha256": "f2d0a0909c2cec4cf72e903e692f62fced2898fb94470b25d052e7d851da688f"
+    }
+  ],
+  "limits": [
+    "Fixture model and tool",
+    "One local binding and workspace",
+    "No screen reader or different platform"
+  ]
+}

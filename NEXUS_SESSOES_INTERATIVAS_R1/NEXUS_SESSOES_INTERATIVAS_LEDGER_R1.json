@@ -788,7 +788,9 @@
         "execution/si017-live-draft-focus.md",
         "execution/si017-live-draft-focus.json",
         "execution/si006-pi-human-input-authority.md",
-        "execution/si006-pi-human-input-authority.json"
+        "execution/si006-pi-human-input-authority.json",
+        "execution/si013-exact-session-selection.md",
+        "execution/si013-exact-session-selection.json"
       ]
     },
     {
@@ -2515,8 +2517,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si013-exact-session-selection.md",
+        "execution/si013-exact-session-selection.json"
+      ]
     },
     {
       "id": "SI-T-B01",
