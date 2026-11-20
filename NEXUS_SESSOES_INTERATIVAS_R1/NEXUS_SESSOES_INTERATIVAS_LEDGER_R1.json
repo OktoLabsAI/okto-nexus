@@ -1103,7 +1103,9 @@
         "execution/si034-viewer-credential-channels.md",
         "execution/si034-viewer-credential-channels.json",
         "execution/si034-browser-websocket-origin.md",
-        "execution/si034-browser-websocket-origin.json"
+        "execution/si034-browser-websocket-origin.json",
+        "execution/si034-native-attachment-ticket-replay.md",
+        "execution/si034-native-attachment-ticket-replay.json"
       ]
     },
     {
@@ -1272,7 +1274,9 @@
         "execution/si022-pi-full-reconnect.md",
         "execution/si022-pi-full-reconnect.json",
         "execution/si035-pi-reconnect-candidate.md",
-        "execution/si035-pi-reconnect-candidate.json"
+        "execution/si035-pi-reconnect-candidate.json",
+        "execution/si034-native-attachment-ticket-replay.md",
+        "execution/si034-native-attachment-ticket-replay.json"
       ]
     },
     {
@@ -1970,7 +1974,9 @@
         "execution/si034-viewer-credential-channels.md",
         "execution/si034-viewer-credential-channels.json",
         "execution/si034-browser-websocket-origin.md",
-        "execution/si034-browser-websocket-origin.json"
+        "execution/si034-browser-websocket-origin.json",
+        "execution/si034-native-attachment-ticket-replay.md",
+        "execution/si034-native-attachment-ticket-replay.json"
       ]
     },
     {
@@ -4976,9 +4982,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si034-native-attachment-ticket-replay.md",
+        "execution/si034-native-attachment-ticket-replay.json"
       ]
     },
     {

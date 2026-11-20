@@ -1,0 +1,102 @@
+{
+  "scenario": "SI-T-H04",
+  "scope": "Reviewed Codex pair in Windows x64 ConPTY; installed Nexus WSS router and durable broker; fixture catalog",
+  "windows_build": 26300,
+  "work_directory": "D:\\nxs-native-ticket-binding-8d0c78ba",
+  "candidate": "D:\\nxs-busy-command-wheel-60ab32d9",
+  "nexus_wheel_product_head": "ba6a8d4602e68ee439067b1c8123bc33a74f5491",
+  "repos": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "58f3f0228213bc9cfe72413acf25db9c4ef32a3f",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead_main": [
+        0,
+        527
+      ],
+      "wheel_sha256": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead_main": [
+        0,
+        87
+      ],
+      "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead_main": [
+        0,
+        66
+      ],
+      "wheel_sha256": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+    }
+  },
+  "working_trees_initially_clean_and_synced": true,
+  "observations": {
+    "different_executor_and_workspace_same_short_session_id": 4409,
+    "different_owner_generation": 4409,
+    "wrong_audience_local_instead_of_remote": 4409,
+    "second_channel_during_challenge": 4409,
+    "replay_while_native_reader_active": 4409,
+    "replay_after_detach": 4409,
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "native_verbs": [
+      "initialize",
+      "account/read",
+      "thread/start",
+      "thread/read",
+      "thread/read",
+      "thread/read",
+      "thread/read",
+      "thread/read",
+      "thread/read"
+    ],
+    "rejected_handshakes_without_frames": 6,
+    "successful_attach_count": 1,
+    "distinct_protocol_audiences_reached": true,
+    "states_unchanged_after_refusals": true,
+    "same_engine_and_native_thread_after_detach": true,
+    "no_productive_operations": true,
+    "external_provider_calls": 0,
+    "both_processes_closed": true
+  },
+  "sqlite": {
+    "detached_attachments": 1,
+    "retained_ticket_or_challenge_hashes": 0,
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "execution_operations": 0,
+    "session_interaction_inputs": 0,
+    "session_interaction_controls": 0
+  },
+  "test_results": {
+    "native_WSS_integration": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "8541038ce659d9d0baedf34aec45f3bd4e71e80bb351982bde92286a06657e51"
+    },
+    "installed_regressions": {
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "74e7e584dd2ed42aad31566eb275c8acf0c670f53c2600714a73f6d36b347f47"
+    }
+  },
+  "files_sha256": {
+    "test_ticket.py": "5bf82f705327b7055a55f16cfa6eb50e7e51d66d7d225f0daf60e6e090c836d4",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "run.ps1": "7ccc74ea60ee7c4e25072ce5f844c6c6407f13c8a9bcb4a1e1bcd4c3d4950fc6",
+    "viewer.py": "4313f2035e640da685246a0715472a1eb1ad7e30d738726cf118c5e1c6f6b219",
+    "proof.json": "3e1789d16447665984b28beae5156b646d8688b34427428d13c2cf8a86675251",
+    "viewer-ready.json": "fa6fdeb16c6623d18aeb44f08a7faa0d3a360c3484de44005e701b55cd5aefac",
+    "viewer-detach.json": "3a5aeab88316944c489ed10d95c61908e9f674c10f4cd330c42f47f9843463da"
+  }
+}
