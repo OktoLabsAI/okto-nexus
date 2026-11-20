@@ -1,0 +1,73 @@
+{
+  "scenarios": ["SI-T-G06", "SI-T-G07"],
+  "baseline": {
+    "nexus": "85ca3dad5b7ef5070ced1952e889b0762a68b2d6",
+    "connector": "3970610523eb4bd85bf4605771b06b1b83c7a678",
+    "core": "24ba3cba04266bc1e854c83842d1ea72546d3d1e",
+    "nexus_wheel_sha256": "ba584547dbd5c681644a8f62cb04dd860efd9baf719cccb3c8683bcb748bcba1",
+    "connector_wheel_sha256": "3dac4417a143414e0b237dcea63a8f8879e8fb6c303e8ee78c35c7fe32facb45",
+    "core_wheel_sha256": "76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1",
+    "one_writer_won": true,
+    "read_only_attach_failed_with_writer_active": true
+  },
+  "candidate": {
+    "nexus_source_tree": "14d51aa02719a30012fa6e6579db3887d6f70335",
+    "nexus_wheel_sha256": "b9ab9556209f92d68a71f98ffa418ea424416f5caa9b530d1fbe005eb9f2a941",
+    "connector": "1d9d97e2180e8c72115a8fda925b68a76fa0fd91",
+    "connector_wheel_sha256": "1c9c072ca30756b140cd17ef6cae006997e4db34e766b625b8195075d7e2595e",
+    "core": "226db2c143f92c6c6da2484e7974fd3c4f28887a",
+    "core_wheel_sha256": "e378513e9b720372bdaec9e03f24d2da1844d931057afbe36f0ae4c19b97824b"
+  },
+  "local_native": {
+    "platform": "Windows x64, installed wheels, loopback, ConPTY",
+    "pi_version": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "operator_account_count": 1,
+    "distinct_authenticated_operator_sessions": 2,
+    "concurrent_writer_offers": 2,
+    "active_writers_after_activation": 1,
+    "losing_writer_was_refused": true,
+    "epoch_after_decline": 1,
+    "epoch_after_explicit_confirmation": 2,
+    "replaced_writer_created_no_queue_entry": true,
+    "observer_stayed_attached_through_transfer": true,
+    "concurrent_readers_with_replacement_writer": 2,
+    "same_pi_process_session_and_active_turn_through_transfer": true,
+    "queue_entries_from_replacement": 1,
+    "original_turn": "SUCCEEDED",
+    "queued_turn": "SUCCEEDED",
+    "real_pi_prompt_writes": 2,
+    "native_user_messages": 2,
+    "both_readers_saw_both_results": true,
+    "responses": "deterministic local fixture provider",
+    "external_provider_calls": 0,
+    "canonical_close_and_native_process_exit": true,
+    "sqlite_quick_and_foreign_key_checks_passed": true
+  },
+  "regressions": {
+    "installed_core_pi_tests_passed": 6,
+    "installed_connector_r4_contract_tests_passed": 33,
+    "installed_nexus_broker_presentation_and_r4_tests_passed": 42,
+    "additional_r4_concurrent_readers_test_passed": true,
+    "r4_concurrent_test_renderer": "fixture",
+    "core_full_before_fixture_and_docs_repairs": {
+      "passed": 2421,
+      "failed": 3,
+      "skipped": 70,
+      "failures_reproduced_on_baseline": [
+        "test_events_stays_live_after_a_failed_start_is_followed_by_a_successful_retry",
+        "test_production_allowlist_grants_only_the_recorded_real_builds",
+        "test_api_guide_covers_every_top_level_export"
+      ]
+    },
+    "core_fixture_and_docs_repair": "049feff",
+    "core_focused_after_repairs": {"passed": 25, "skipped": 2},
+    "generated_protocol_checks_passed": true,
+    "offline_lock_install_and_strict_package_checks_passed": true,
+    "vendored_payload_deltas": [
+      "nexus_connector_core/pi_extension/hosted_renderer.js",
+      "okto_nexus_connector/transport/pi_presentation.py"
+    ]
+  },
+  "qualification": "Controlled local native evidence and R4 transport regression. Campaign gates remain pending."
+}

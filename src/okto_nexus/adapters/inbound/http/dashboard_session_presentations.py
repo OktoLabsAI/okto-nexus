@@ -103,8 +103,8 @@ class LocalPiPresentations:
     execution_access: object | None = None
     next_turn_revision: Callable[[object, InputScope], str | None] | None = None
     open_editor: Callable[..., AbstractAsyncContextManager] | None = None
-    renderer_locks: WeakValueDictionary[InputScope, asyncio.Lock] = field(default_factory=WeakValueDictionary,
-                                                                          repr=False, compare=False)
+    writer_locks: WeakValueDictionary[InputScope, asyncio.Lock] = field(default_factory=WeakValueDictionary,
+                                                                        repr=False, compare=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -553,10 +553,10 @@ async def _present_pi(ws, services, active, hello, *, presentation):
 
     async with AsyncExitStack() as stack:
         with anyio.fail_after(10):
-            # A replaced writer retires on its next broker check before the
-            # next viewer opens the single renderer slot.
-            lock = services.renderer_locks.setdefault(active['scope'], asyncio.Lock())
-            await stack.enter_async_context(lock)
+            if access == 'write':
+                # A replaced writer releases its renderer before the new writer opens one.
+                lock = services.writer_locks.setdefault(active['scope'], asyncio.Lock())
+                await stack.enter_async_context(lock)
             await verify()
             viewport = {'columns': hello.columns, 'rows': hello.rows}
             if hello.editor:

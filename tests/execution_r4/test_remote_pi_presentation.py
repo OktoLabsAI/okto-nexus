@@ -3,7 +3,7 @@
 import asyncio
 import json
 import time
-from contextlib import asynccontextmanager
+from contextlib import ExitStack, asynccontextmanager
 from dataclasses import replace
 from types import SimpleNamespace
 
@@ -171,16 +171,28 @@ def test_remote_pi_viewer_and_editor_keep_the_connector_owner_and_queue(tmp_path
                 intent = 'pi_input_' + 'd' * 32
 
                 def write(link, recover):
-                    assert link.read_pi_output() == b'One exact Pi editor'
-                    if silent is not None:
-                        verify_keepalive(link)
-                    assert link.edit_pi_input(intent=intent, key='insert', text='One durable draft',
-                                              output=lambda _: None) == (False, None)
-                    assert not project.rows('session_interaction_inputs')
-                    assert link.review_pi_control(action='interrupt', intent='pi_interrupt_' + 'b' * 32,
-                                                  output=lambda _: None) is None
-                    limited, queued = link.edit_pi_input(intent=intent, key='enter', text=None, output=lambda _: None)
-                    assert limited is False and queued['status'] == 'QUEUED'
+                    with ExitStack() as stack:
+                        if silent is None:
+                            target = {'scope': exact, 'expected_session_generation': generation}
+                            revision = local_presenter_client.review_local_presentation(project.http, **target,
+                                                                                         presentation='pi_remote')
+                            for index in range(2):
+                                observer = stack.enter_context(local_presenter_client.open_local_presentation(
+                                    project.http, **target, capability_revision=revision,
+                                    client_intent_id=f'remote-reader-{index}', pi_viewport=(80, 24), remote=True))
+                                read(observer)
+                            active = [row['access'] for row in project.rows('session_attachments') if row['state'] == 'ACTIVE']
+                            assert sorted(active) == ['read', 'read', 'write']
+                        assert link.read_pi_output() == b'One exact Pi editor'
+                        if silent is not None:
+                            verify_keepalive(link)
+                        assert link.edit_pi_input(intent=intent, key='insert', text='One durable draft',
+                                                  output=lambda _: None) == (False, None)
+                        assert not project.rows('session_interaction_inputs')
+                        assert link.review_pi_control(action='interrupt', intent='pi_interrupt_' + 'b' * 32,
+                                                      output=lambda _: None) is None
+                        limited, queued = link.edit_pi_input(intent=intent, key='enter', text=None, output=lambda _: None)
+                        assert limited is False and queued['status'] == 'QUEUED'
 
                 monkeypatch.setattr(session_cli, 'show_pi_editor', write)
                 # Exercise the Windows editor branch with the fixture console on every CI host.

@@ -504,17 +504,23 @@ def test_pi_writer_replaces_the_exact_writer_and_replays_only_one_queued_input(t
         assert current['writer_occupied'] is True and current['writer_epoch'] == 1
         assert writer_offer('pi-no-takeover', current).status_code == 409
         replacement = writer_offer('pi-next-writer', current, takeover=True).json()
-        with stream(transport, replacement, protocol=PI_PRESENTATION_SUBPROTOCOL) as successor:
-            _prove_pi_ticket(successor, scope)
-            assert successor.receive_json()['access'] == 'write'
-            assert successor.receive_bytes()
-            with pytest.raises(WebSocketDisconnect):
-                original.receive_json()
-            successor.send_json(payload | {'request_id': 2})
-            assert successor.receive_json() == receipt | {'request_id': 2}
-            successor.send_json(payload | {'request_id': 3, 'scope': document(transport.sibling)['scope']})
-            with pytest.raises(WebSocketDisconnect):
-                successor.receive_json()
+        observation = _pi_prepare(transport, client_intent_id='pi-observe-transfer').json()
+        with stream(transport, observation, protocol=PI_PRESENTATION_SUBPROTOCOL) as observer:
+            _prove_pi_ticket(observer, scope)
+            assert observer.receive_json()['access'] == 'read'
+            assert observer.receive_bytes()
+            with stream(transport, replacement, protocol=PI_PRESENTATION_SUBPROTOCOL) as successor:
+                _prove_pi_ticket(successor, scope)
+                assert successor.receive_json()['access'] == 'write'
+                assert successor.receive_bytes()
+                with pytest.raises(WebSocketDisconnect):
+                    original.receive_json()
+                assert attachment_state(transport, observation)[0] == 'ACTIVE'
+                successor.send_json(payload | {'request_id': 2})
+                assert successor.receive_json() == receipt | {'request_id': 2}
+                successor.send_json(payload | {'request_id': 3, 'scope': document(transport.sibling)['scope']})
+                with pytest.raises(WebSocketDisconnect):
+                    successor.receive_json()
 
     assert attachment_state(transport, offer)[0] == 'REPLACED'
     assert attachment_state(transport, replacement)[0] == 'DETACHED'

@@ -1,5 +1,12 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `226db2c143f92c6c6da2484e7974fd3c4f28887a`.
+The unpublished wheel SHA-256 is `e378513e9b720372bdaec9e03f24d2da1844d931057afbe36f0ae4c19b97824b`.
+The Pi renderer admits two independent readers alongside its single editor.
+The Nexus CI manifest identifies the matching Connector wheel.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `f07c643451c59f54f80298110de1e0c81bbfb48d`.
 The unpublished wheel SHA-256 is `76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1`.
 R4 negotiates explicit literal Pi turns and binds the literal intent to the live and recovered operation receipts.
@@ -99,7 +106,7 @@ a published release or independent-host qualification.
 
 ## Historical dependency records
 
-# Current development dependency
+## Previous development dependency
 
 Core 0.0.10 is required by Nexus 0.3.0 and Connector 0.0.8.
 Shared wheel SHA-256: `d66b60df1db82fafd0f9f9da1a786f229a41e4fe15eacbf158ad836651fad73e`.
