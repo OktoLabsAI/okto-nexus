@@ -1,0 +1,94 @@
+{
+  "scenarios": [
+    "SI-T-B20",
+    "SI-T-C08"
+  ],
+  "status": "PASS",
+  "source_baseline": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "platform": "Windows x64",
+  "cancellation_runtime": {
+    "version": "Pi 0.87.1",
+    "installation_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "proof": {
+      "original_turn_succeeded": true,
+      "cancellation_http_status": 200,
+      "cancelled_input_never_dispatched": true,
+      "follower_retained_queue_sequence": true,
+      "follower_outcome": "ACCEPTED_NATIVE",
+      "follower_dispatched_after_agent_settled": true,
+      "native_queue_writes": [
+        "prompt",
+        "prompt",
+        "prompt"
+      ],
+      "same_exact_session": true,
+      "external_provider_calls": 0,
+      "canonical_close": "SUCCEEDED"
+    },
+    "audit": {
+      "operations": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 3
+      },
+      "original_results": 3,
+      "cancelled_sequence": 2,
+      "continued_sequence": 3,
+      "cancelled_text_never_reached_a_canonical_operation": true,
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0
+    }
+  },
+  "promotion_and_concurrency_peer": "synthetic Codex peer with actual Nexus HTTP, SQLite and scheduler",
+  "api_regressions": [
+    "test_dashboard_queue_pages_and_cancels_only_the_original_human_input",
+    "test_queue_dispatch_serializes_with_dashboard_controls[cancel]",
+    "test_queue_dispatch_serializes_with_dashboard_controls[dispatch]",
+    "test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo"
+  ],
+  "fixture_path": "D:/nxs-cancel-active-81324296",
+  "hashes": [
+    {
+      "file": "local_author_probe.py",
+      "sha256": "65563b75ad9a3ec5e1547b329e3c77ce743fb10b803797f741e77b919018b18e"
+    },
+    {
+      "file": "test_author.py",
+      "sha256": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc"
+    },
+    {
+      "file": "run.ps1",
+      "sha256": "f2d0a0909c2cec4cf72e903e692f62fced2898fb94470b25d052e7d851da688f"
+    },
+    {
+      "file": "audit_durable.py",
+      "sha256": "ada79a86a29d3b8eb10b27b6aa063b9e87a56c2e6639883f3de47b01d54dd205"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "52c27ebaf1ea44339c79d63f1391cd9a03b40f35cb13af19b511a87e8c0b1b59"
+    },
+    {
+      "file": "api.xml",
+      "sha256": "d40336cb0fa56fc783e58e91fb2dcfd0db2ededc2fbf9887d412c24be4676404"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "827881f56d3eb529534cef594d79c2770d167a4b8e9384c758d4c3cb759b875d"
+    },
+    {
+      "file": "audit.json",
+      "sha256": "87b985bcdea4eff618d986aa25001a68723953b56e8d692905aa306561a195f8"
+    }
+  ],
+  "limits": [
+    "Cancellation uses fixture model responses",
+    "Promotion is not a native frontend scenario",
+    "No cross-machine or provider campaign"
+  ]
+}
