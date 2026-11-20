@@ -1,0 +1,153 @@
+{
+  "scenario": "SI-T-A11",
+  "status": "PASS",
+  "baseline": {
+    "nexus_branch_at_start": "5df4dc8626b37135d3183a2d397c8f91d24f8365",
+    "installed_core_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "installed_nexus_sha256": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "observations": {
+      "real_pi_prompt_acks": 2,
+      "actual_agent_start_held_after_ack": true,
+      "output_before_agent_start": false,
+      "new_tool_activity_before_agent_start": false,
+      "stage_before_agent_start": "SUBMITTED",
+      "entry_before_agent_start": "DISPATCHING",
+      "input_reached_exact_session": true,
+      "external_provider_calls": 0,
+      "canonical_close": "SUCCEEDED"
+    }
+  },
+  "source": {
+    "core": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+    "connector": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487"
+  },
+  "verified_wheels": {
+    "nexus": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "platform": "Windows x64 and Edge",
+  "harness": {
+    "name": "Pi",
+    "version": "0.87.1",
+    "installation_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b"
+  },
+  "browser": {
+    "checkpoint": "PI_ACCEPTS_WITHOUT_STARTING",
+    "one_submission": true,
+    "accepted_label_visible": true,
+    "no_new_assistant_output": true
+  },
+  "runtime": {
+    "real_pi_prompt_acks": 2,
+    "actual_agent_start_held_after_ack": true,
+    "output_before_agent_start": false,
+    "new_tool_activity_before_agent_start": false,
+    "stage_before_agent_start": "ACCEPTED",
+    "entry_before_agent_start": "ACCEPTED_NATIVE",
+    "same_exact_session": true,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "audit": {
+    "stages": [
+      "ACCEPTED",
+      "SUCCEEDED"
+    ],
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "two_results_in_same_closed_session": true,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "regressions": {
+    "core": 84,
+    "connector": 36,
+    "nexus_before_legacy_compatibility_refinement": 69,
+    "nexus_revised_receipts": 15,
+    "shutdown_timeout_reproduced_before_change": true
+  },
+  "packaging": "Clean source snapshots. Last Nexus import wrapping change is AST-identical to installed code.",
+  "probe_path": "D:/nxs-pi-accepted-72474706/ack-reviewed",
+  "hashes": [
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/focus.xml",
+      "sha256": "ccf8022068560ab1cbebff776cb6cb2208cfa20dfcd8081d5a08275354f69103"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/proof.json",
+      "sha256": "2d89d2b1b51c4f9612ba549daf7ba9946af454e67b9bfebf277f44835d3c7a59"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/browser-verified.json",
+      "sha256": "604c629b55d1d27de5bce05ab0dd4fbf4aa44d9636a6d89d91e719ff79a568b7"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/audit.json",
+      "sha256": "dca0f5943984d856e36cd240cd25f984eccfa4cb32d5c2437ea2679d0f7e3439"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/audit.py",
+      "sha256": "3ec047ee139195fc1b85041d9d08b80b0eab9a4cb7fd9adefda097307f9d7906"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/local_author_probe.py",
+      "sha256": "30b69ca04321a43802889e22565cd9b8811edc33ff85bb600efa32f9a2d94eaa"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/ack-reviewed/open.js",
+      "sha256": "493d12c013c6eb2c5668f4fcc7e13445d312c1a73171f3b03812559cf80f13a7"
+    },
+    {
+      "file": "D:/nxs-pi-ack-before-start-99655613/proof.json",
+      "sha256": "cc93a41dc76ae48d85c5071b4638e11fbd5e0ea714c217d12bff5020de093943"
+    },
+    {
+      "file": "D:/nxs-pi-ack-before-start-99655613/focus.xml",
+      "sha256": "4d5e20dcd2cb42c0edfbc30ad535a57b8437d28761910aefc11e344e67c3b049"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/clean-wheels.json",
+      "sha256": "4fcc8f737be9a0b1c0dc6c595253ac78ad998887bccf3dcc6d7c84c55e140791"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/revised-nexus.json",
+      "sha256": "c496b2af565cc8917c766236baa65b1ac0d9f85367b34e93a229e6e45932cf44"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/core-installed.xml",
+      "sha256": "b3378701d9e81696537f261881b4b140ce3f8120e57cf0a5fe31253c5f66e3d8"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/connector-installed.xml",
+      "sha256": "afb9e5550a57d01ac22acea5439796fc6970556b62f4b258cdf345077b73660e"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/nexus-final.xml",
+      "sha256": "248c3842d5e12d6cc3d49c58a800375fefbfe408f8642c7758b72850b18b4b6f"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/revised-receipts.xml",
+      "sha256": "1683830f49b1912d88ed87fd4473364dcea13e4c35bd04fd3a25e3406efdff02"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/baseline-shutdown.xml",
+      "sha256": "680fab2a0a2d2e1fb25e73351a86d48c37a3446453e03c3a92325bf5554f48af"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/nexus.xml",
+      "sha256": "8bdc7b1c6de869ec3b0ef7398595788c62b5308db11940dce4b441f5605d5fd6"
+    },
+    {
+      "file": "D:/nxs-pi-accepted-72474706/lint.json",
+      "sha256": "296434e17c86781e4913d532fb00d8cbc02a387eeebceab7183eeb3161a16843"
+    }
+  ],
+  "limits": [
+    "Native Pi with a test-controlled gate and simulated model responses",
+    "No remote physical host or mixed-version qualification"
+  ]
+}

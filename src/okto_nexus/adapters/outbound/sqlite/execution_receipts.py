@@ -421,8 +421,25 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 (key[0], key[1], parsed['session_id'], scope['session_owner_generation'],
                  projection.source_connection_id, projection.source_connection_generation))
         from ....application.execution_domain_delivery import project_delivery_receipt
+        delivery_stage = projection.stage
+        if delivery_stage == 'ACCEPTED' and operation['action'] == 'turn.submit' and scope:
+            from ....application.execution_native_session_mapping import (
+                read_managed_native_session,
+                reviewed_pi_context,
+            )
+            from ....domain.execution.keys import SessionKey, SessionOwnerGeneration
+            from ....domain.session_interaction import InputScope
+
+            exact = InputScope(SessionKey(scope['server_id'], scope['executor_id'], scope['session_id']),
+                               SessionOwnerGeneration(scope['session_owner_generation']), scope['binding_id'],
+                               scope['workspace_id'], scope['workspace_binding_id'], scope['agent_id'])
+            native = read_managed_native_session(uow, exact)
+            if native is not None and reviewed_pi_context(native):
+                # Pi's correlated preflight acknowledgement previously arrived
+                # as SUBMITTED. Preserve that fact for the legacy delivery view.
+                delivery_stage = 'SUBMITTED'
         project_delivery_receipt(conn, server_id=key[0], executor_id=key[1], operation_id=key[2],
-                                 action=operation["action"], stage=projection.stage)
+                                 action=operation["action"], stage=delivery_stage)
         if operation['action'] in ('turn.submit', 'turn.steer'):
             from .session_interaction import project_input_receipt
             project_input_receipt(conn, operation_key=key, stage=projection.stage,

@@ -193,7 +193,7 @@ class ExecutionReconciliation:
                 # separate facts. Intermediate/unknown receipts can reconcile
                 # once every resource is proven released and its stream drained.
                 # They remain unchanged and never authorize another native send.
-                if summary['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN',
+                if summary['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','ACCEPTED','RUNNING','OUTCOME_UNKNOWN',
                                              'SUCCEEDED','FAILED','CANCELLED'):
                     self.blocked = True
             facts = {r['session_id']: r for r in report['ownership_facts']}

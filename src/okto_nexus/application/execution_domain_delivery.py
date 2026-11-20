@@ -275,7 +275,7 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
         "AND d.status IN ('PENDING','CLAIMED','SENDING','ACCEPTED','SENT_UNCONFIRMED','OUTCOME_UNKNOWN') "
         "AND (SELECT stage FROM execution_receipts r WHERE r.server_id=p.server_id "
         "AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id "
-        "ORDER BY receipt_revision DESC LIMIT 1) IN ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN')",
+        "ORDER BY receipt_revision DESC LIMIT 1) IN ('SUBMISSION_STARTED','SUBMITTED','ACCEPTED','RUNNING','OUTCOME_UNKNOWN')",
         (server_id, executor_id, session_id)).fetchall()
     for row in rows:
         conn.execute("INSERT INTO execution_delivery_releases VALUES(?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now')) "

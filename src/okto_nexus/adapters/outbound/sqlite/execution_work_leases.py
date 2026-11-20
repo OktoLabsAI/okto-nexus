@@ -35,7 +35,7 @@ class SqliteRunningHandoffRepository:
             "(SELECT r.stage FROM execution_receipts r WHERE r.server_id=p.server_id "
             "AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id "
             "ORDER BY r.receipt_revision DESC LIMIT 1) "
-            "IN ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN'),"
+            "IN ('SUBMISSION_STARTED','SUBMITTED','ACCEPTED','RUNNING','OUTCOME_UNKNOWN'),"
             "x.dispatch_state IN ('SENDING','RECONCILING'))",
             (scope['server_id'], scope['executor_id'], scope['session_id'])).fetchall()
         return tuple(RunningHandoff(dict(row), row['work_epoch'], row['current_epoch'],

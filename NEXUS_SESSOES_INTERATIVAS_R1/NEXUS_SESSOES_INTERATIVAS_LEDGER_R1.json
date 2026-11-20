@@ -800,7 +800,9 @@
         "execution/si006-pi-human-input-authority.md",
         "execution/si006-pi-human-input-authority.json",
         "execution/si013-exact-session-selection.md",
-        "execution/si013-exact-session-selection.json"
+        "execution/si013-exact-session-selection.json",
+        "execution/si025-pi-acceptance-before-start.md",
+        "execution/si025-pi-acceptance-before-start.json"
       ]
     },
     {
@@ -1461,7 +1463,9 @@
         "execution/si007-pi-tool-boundary.md",
         "execution/si007-pi-tool-boundary.json",
         "execution/si025-pi-delayed-settlement.md",
-        "execution/si025-pi-delayed-settlement.json"
+        "execution/si025-pi-delayed-settlement.json",
+        "execution/si025-pi-acceptance-before-start.md",
+        "execution/si025-pi-acceptance-before-start.json"
       ]
     },
     {
@@ -2519,8 +2523,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si025-pi-acceptance-before-start.md",
+        "execution/si025-pi-acceptance-before-start.json"
+      ]
     },
     {
       "id": "SI-T-A12",
