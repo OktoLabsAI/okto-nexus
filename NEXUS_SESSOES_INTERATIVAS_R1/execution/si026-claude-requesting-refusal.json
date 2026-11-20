@@ -1,0 +1,54 @@
+{
+  "scenario": "SI-T-C06",
+  "status": "PASS",
+  "baseline": {
+    "nexus": "a6522d70263d429160b30cec78c6bb8b9a63e14c",
+    "connector": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+    "core": "a10e4d665f00d8a8c97f0d386b30f964c97602ff"
+  },
+  "nexus_product_wheel_source": "1bb082dbfdd7e53c8e46df47cc0554cec8eb6450 (identical tracked product sources at baseline)",
+  "installed_wheel_sha256": {
+    "nexus": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "native": {
+    "platform": "Windows",
+    "version": "2.1.328",
+    "binary_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "permission_profile": "plan with tools denied",
+    "external_provider_calls": 0
+  },
+  "before_generation": {
+    "catalog_state": "disabled_for_state",
+    "before_native_generation": true,
+    "concurrent_http_status": [
+      409,
+      409
+    ],
+    "durable_control_operations": 0,
+    "terminal_writes": [],
+    "active_exact_original_process": true,
+    "native_attempts_before_generation": 1,
+    "input_receipts_from_early_attempts": 0
+  },
+  "after_explicit_new_review": {
+    "writes": [
+      "escape",
+      "replacement"
+    ],
+    "result": "ACCEPTED_NATIVE",
+    "same_process_and_exact_scope": true,
+    "close": "SUCCEEDED",
+    "durable_steer_operations": 1
+  },
+  "sqlite_integrity": "ok",
+  "foreign_key_violations": 0,
+  "artifact_sha256": {
+    "probe": "7e7a5a590ef0365f63a6d078435f2ab917d71487cdac6b78c2c9b974007a9377",
+    "observations": "f645460bb13a0ed754a1b03c6418772675e540f44a0774d4f7ae6094536d350e"
+  },
+  "limitations": [
+    "Real isolated Claude executable with a synthetic provider. HTTP used TestClient. This result does not qualify browser interaction, the current personal Claude build or other platforms."
+  ]
+}
