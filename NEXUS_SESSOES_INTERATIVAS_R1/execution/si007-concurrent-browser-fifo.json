@@ -1,0 +1,102 @@
+{
+  "scenarios": [
+    "SI-T-B02",
+    "SI-T-B03",
+    "SI-T-B04",
+    "SI-T-B05",
+    "SI-T-B11"
+  ],
+  "status": "PASS",
+  "source_baseline": "3f27a03763c75bf7e37089e8596c025823bc0290",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "browser": "Microsoft Edge, two independent Playwright contexts",
+    "harness": "Pi 0.87.1",
+    "engine_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "owner": "Installed embedded Nexus execution host on loopback",
+    "provider": "Deterministic fixture with external networking disabled in the Pi process"
+  },
+  "browser": {
+    "isolated_logins": true,
+    "same_disposable_account": true,
+    "visible_queued_receipts": 3,
+    "assigned_order": [
+      "B",
+      "A",
+      "C"
+    ],
+    "closed_before_original_turn_release": true
+  },
+  "native_result": {
+    "concurrent_requests_waiting_at_server": 2,
+    "authors": 2,
+    "queue_sequences": [
+      1,
+      2,
+      3
+    ],
+    "browser_order": [
+      "B",
+      "A",
+      "C"
+    ],
+    "queued_while_original_turn_active": 3,
+    "native_turns_before_browser_exit": 1,
+    "native_turns_created_after_browser_exit": 3,
+    "native_turns_total": 4,
+    "delivered_verbatim_in_server_order": true,
+    "one_operation_per_message": true,
+    "one_exact_native_session": true,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "durable_audit": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 4
+    },
+    "verified_receipts": 3,
+    "same_session_results": 4,
+    "authors": 2,
+    "closed_browsers_before_dispatch": true,
+    "native_operations_match_messages": true,
+    "physical_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "verification": {
+    "real_browser_and_pi_cases": 1,
+    "installed_storage_cases": 2,
+    "fixture_directory": "D:/nxs-fifo-74072850",
+    "fixture_sha256": {
+      "run.ps1": "f2d0a0909c2cec4cf72e903e692f62fced2898fb94470b25d052e7d851da688f",
+      "local_author_probe.py": "69bbd0cc48ae07b6c7b7d6f88cca961cc8ae09ae50a32de97cb45bf4702cde29",
+      "test_author.py": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc",
+      "drive.ps1": "8d53a5c31c13e97af3458e05e18869a846b0d1f41f63d69c148dbeee8d753448",
+      "open.js": "a8426e5d32a4721c543f85d3dce0b0aed9a7ca3e1631149034aabc8482911be8",
+      "audit_durable.py": "ab31c375da483ce50c097c68738ffc9c0ca02e68ef11d74d3edeffdfcf5381f3",
+      "focus.xml": "fbca479d3e08c5cb10deb71665ed1e8c5f559eaef6cd62e232bf34908c7829c2",
+      "storage.xml": "481dfc50bc90535951a6cb5596bcb3b408fb9e413f3a6dd43c4f2e39db35be64",
+      "browser-verified.json": "7f876c09e056a660cae2785c7b9eed10c8d9ea166cb228bf52550803d8ac816b",
+      "browser-closed.json": "fc77b5831e1795c8de5fcce3b8939de723c7abc50225584ea800a2c7355ed241",
+      "proof.json": "1fb40e7e697f50a0238565f701241e6c2df9d486a6d48d60cfad3fea827cff19",
+      "audit.json": "b812ffba6a0aa8323bccf46178cd86b95458c0911ed7d5dcf480034fd8a854e5",
+      "cookie-path-assertion.log": "85868e450a7696d10aea2aad7ac2afe5a3cac65d74dcd6e0ebb3104021d60070"
+    },
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "pwsh -NoProfile -File drive.ps1 -Root <isolated-root>",
+      "<candidate-venv>/Scripts/python.exe <isolated-root>/audit_durable.py"
+    ]
+  },
+  "limits": [
+    "The first two HTTP requests were released by a test barrier after both arrived. The order was assigned by the installed Server.",
+    "The initial browser assertion checked cookies at the site root; the accepted run validated the /api/v1-scoped cookie. It used the same already-running Pi session.",
+    "The fixture supplies the one measured Pi installation to discovery. External providers and remote hosts were outside this run."
+  ]
+}

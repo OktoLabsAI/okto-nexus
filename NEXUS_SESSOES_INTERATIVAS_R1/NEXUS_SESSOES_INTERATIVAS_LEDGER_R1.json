@@ -266,7 +266,9 @@
           "artifact_path": "execution/si003-interaction-contract.md",
           "result": "17 final typed contract tests and scoped 14 predecessor canonical runtime tests passed",
           "limitations": "New routes, target proof at effect, TypeScript client and native capabilities still untested. No literal scenario promoted."
-        }
+        },
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
       ]
     },
     {
@@ -485,7 +487,9 @@
         "execution/si007-registered-capacity.md",
         "execution/si007-serve-capacity.md",
         "execution/si009-queue-limit-and-expiration.md",
-        "execution/si009-queue-limit-and-expiration.json"
+        "execution/si009-queue-limit-and-expiration.json",
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
       ]
     },
     {
@@ -2511,8 +2515,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
+      ]
     },
     {
       "id": "SI-T-B03",
@@ -2528,8 +2535,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
+      ]
     },
     {
       "id": "SI-T-B04",
@@ -2545,8 +2555,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
+      ]
     },
     {
       "id": "SI-T-B05",
@@ -2562,8 +2575,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
+      ]
     },
     {
       "id": "SI-T-B06",
@@ -2673,8 +2689,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-concurrent-browser-fifo.md",
+        "execution/si007-concurrent-browser-fifo.json"
+      ]
     },
     {
       "id": "SI-T-B12",
