@@ -843,6 +843,13 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
     assert client.post(path + '/inputs', json=body | {'capability_revision': 'stale'}, headers=ui).status_code == 409
     catalog = client.get(path + '/commands', params=query).json()
     command = body | {'command': 'send', 'catalog_revision': catalog['capability_revision'], 'confirmed': True}
+    shell_text = '! fixture punctuation < > | & ; ( )'
+    rejected = client.post(path + '/commands:execute',
+                           json=command | {'content': [{'type': 'text', 'text': shell_text}]}, headers=ui)
+    assert rejected.status_code == 422 and shell_text not in rejected.text
+    rejected = client.post(path + '/commands:execute', json=command | {'command': 'turn/start'}, headers=ui)
+    assert rejected.status_code == 422
+    assert not native.native.sent
     assert client.post(path + '/commands:execute', json=command | {'confirmed': False}, headers=ui).status_code == 422
     stale_command = client.post(path + '/commands:execute', json=command | {'catalog_revision': 'stale'}, headers=ui)
     assert stale_command.status_code == 409 and 'Session commands changed.' in stale_command.text

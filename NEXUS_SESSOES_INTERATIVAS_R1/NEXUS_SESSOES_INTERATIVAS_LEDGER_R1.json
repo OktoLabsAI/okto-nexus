@@ -884,7 +884,9 @@
         "execution/si016-stale-catalog-settings.md",
         "execution/si016-stale-catalog-settings.json",
         "execution/si021-codex-viewer-switch.md",
-        "execution/si021-codex-viewer-switch.json"
+        "execution/si021-codex-viewer-switch.json",
+        "execution/si016-shell-api-regressions.md",
+        "execution/si016-shell-api-regressions.json"
       ]
     },
     {
@@ -3408,7 +3410,10 @@
         "SI-R20"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si016-shell-api-regressions.md",
+        "execution/si016-shell-api-regressions.json"
+      ]
     },
     {
       "id": "SI-T-D10",

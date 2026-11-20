@@ -1,0 +1,44 @@
+{
+  "scenario_evidence_partial": "SI-T-D09",
+  "scenario_status": "NOT_RUN",
+  "nexus_before_evidence": "6f3561f509b563d0e489f91793fccd26a99ff008",
+  "installed_wheels": {
+    "nexus": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "api_regression": {
+    "case": "test_dashboard_admits_exact_input_once_under_the_original_human_login",
+    "send_with_bang_prefix_status": 422,
+    "unlisted_native_method_status": 422,
+    "refused_text_excluded_from_error": true,
+    "native_sends_before_valid_submission": 0,
+    "valid_submission_retained": 1
+  },
+  "installed_pi_probe": {
+    "engine": "Pi 0.87.1",
+    "transport": "R4 on loopback",
+    "provider": "Deterministic fixture with external networking disabled in the Pi process",
+    "unlisted_shell_name_status": 422,
+    "unlisted_native_method_status": 422,
+    "typed_send_bang_prefix_status": 422,
+    "typed_status_extra_arguments_status": 422,
+    "ready_marker_after_api_assertions": true,
+    "browser_outcome": "Timed out waiting for the disposable sign-in form",
+    "integrated_test_passed": false
+  },
+  "verification": {
+    "installed_api_cases": 2,
+    "node_component_cases": 20,
+    "ruff": "passed",
+    "fixture_directory": "D:/nxs-command-71804507",
+    "sha256": {
+      "api-regressions.xml": "da685819246ef13dd4d8e5576a1c6551a345beaf427454925a467e034d30caba",
+      "frontend.tap": "58f21c6126117da3e87ba3d9c459387800cbbd2db7ee5bcc001e81472611d486",
+      "test_live_draft.py": "c9a295fc57c28f710799407d11601aadfbefa7ee70d7865ba48e0d36b269fa1e",
+      "ready.json": "8944968c2afe68488308b28c0b77eee45f421ded50a2c8a9187c0c5ad127aa21",
+      "focus.xml": "b249fafe258a097caec604bfb79b67f44b08208a911a38e67ed519e256e67477",
+      "open.log": "e8149e8272a3ffe6dc230470ab683678b0dae94a464ec5c0fba80a908014f472"
+    }
+  }
+}
