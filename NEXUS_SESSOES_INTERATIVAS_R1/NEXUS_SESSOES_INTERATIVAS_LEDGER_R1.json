@@ -346,6 +346,11 @@
           "artifact_path": "execution/si026-claude-background-windows.json",
           "result": "A native background worker preserved its exact session across terminal detach. A finished stream-json conversation also resumed in background under the same UUID, including without a new prompt.",
           "limitations": "Single Windows machine and synthetic loopback model responses. HTTP prompt hooks admitted work after an HTTP 503. Product authorization, native tool approvals and Connector transport remain open."
+        },
+        {
+          "artifact_path": "execution/si026-claude-fresh-terminal-history.json",
+          "result": "Confirmed the chosen fresh Claude UUID by native startup hook and the held process registry. The installed Core verified the same terminal history through owner close.",
+          "limitations": "Disposable local prototype with loopback fixture. Canonical fresh opening and Connector presentation remain open."
         }
       ]
     },
@@ -1375,6 +1380,8 @@
         "execution/si026-claude-retained-identity.json",
         "execution/si026-claude-source-retirement.json",
         "execution/si026-claude-owned-successor.json",
+        "execution/si026-claude-fresh-terminal-history.md",
+        "execution/si026-claude-fresh-terminal-history.json",
         "execution/si026-claude-nexus-resume.json",
         "execution/si023-retired-session-queue.md",
         "execution/si023-retired-session-queue.json",
@@ -1639,6 +1646,8 @@
         "execution/si026-claude-local-attach.json",
         "execution/si026-claude-terminal-retained-output.md",
         "execution/si026-claude-terminal-retained-output.json",
+        "execution/si026-claude-fresh-terminal-history.md",
+        "execution/si026-claude-fresh-terminal-history.json",
         "execution/si026-claude-terminal-cancellation.md",
         "execution/si026-claude-terminal-cancellation.json",
         "execution/si026-claude-terminal-generation.md",

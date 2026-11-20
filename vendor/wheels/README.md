@@ -1,5 +1,12 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `20a3d31b4e97be1bf07d2d31233cf738a0e03420`.
+The unpublished wheel SHA-256 is `2d38a81a5e107b50e8a7fb43063847bfdfad5800b21346cc3694edfba5e55d1e`.
+Claude history verification accepts an empty file snapshot when it matches the exact main-thread user message.
+The Nexus CI manifest identifies the matching Connector wheel.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `ea339aee529feddde5e46f6857164dfefc557065`.
 The unpublished wheel SHA-256 is `1f4587c47247c90668203fa88e8de257cf945d69008dec9bb0159512e43b5812`.
 The managed Claude terminal retains filtered text and can open a new reader after output eviction.

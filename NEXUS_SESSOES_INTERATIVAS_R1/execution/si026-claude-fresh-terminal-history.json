@@ -1,0 +1,72 @@
+{
+  "tasks": ["SI-004", "SI-023", "SI-026"],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "040ee0cdf9c3fd02e5865ecd0226d341a114d613",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 556,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "44938d4a86a9385ba47c59b2d8f81c7c34502d2d",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 94,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "ea339aee529feddde5e46f6857164dfefc557065",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 76,
+      "behind_main": 0
+    },
+    "worktrees_clean": true,
+    "upstream_drift": [0, 0]
+  },
+  "artifacts": {
+    "core_commit": "20a3d31b4e97be1bf07d2d31233cf738a0e03420",
+    "core_build_tree": "f7b9686a54547a92759b5596ca578e3afeb0b531",
+    "prior_core_wheel_sha256": "1f4587c47247c90668203fa88e8de257cf945d69008dec9bb0159512e43b5812",
+    "core_wheel_sha256": "2d38a81a5e107b50e8a7fb43063847bfdfad5800b21346cc3694edfba5e55d1e",
+    "connector_wheel_sha256": "1c9c072ca30756b140cd17ef6cae006997e4db34e766b625b8195075d7e2595e",
+    "nexus_wheel_sha256": "5030f187ea317c410f6a3bc0d26afe7baf5c6736efc26e0abdc405c50d42e814",
+    "strict_core_wheel_check": "PASS",
+    "offline_nexus_lock_check": "PASS",
+    "installed_dependency_check": "PASS"
+  },
+  "verification": {
+    "core_source_tests_passed": 61,
+    "core_installed_tests_passed": 61,
+    "connector_installed_tests_passed": 46,
+    "nexus_installed_tests_passed": 55,
+    "installed_import_paths_verified": true,
+    "changed_core_sources_lint": "PASS"
+  },
+  "native_probe": {
+    "platform": "Windows x64 ConPTY",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "model_endpoint": "isolated loopback fixture",
+    "external_model_requests": 0,
+    "personal_credentials": false,
+    "start_hook_source": "startup",
+    "exact_hook_and_held_process_registry_match": true,
+    "model_requests_before_explicit_turn": 0,
+    "transcript_before_first_prompt": false,
+    "explicit_turns_in_owner_close_run": 1,
+    "unapproved_prompt_blocked_in_separate_run": true,
+    "same_owner_finished_after_reader_cursor_discard": true,
+    "owner_terminal_exit_code": 1,
+    "owner_exit_and_job_cleanup_confirmed": true,
+    "post_close_file_and_prefix_witness": true,
+    "previous_wheel_could_verify_same_file": false,
+    "native_slash_exit_orphan_snapshot_observed_and_refused": true
+  },
+  "limits": [
+    "Fresh managed terminal launched by a prototype using product Core process containment and prompt submission",
+    "No change to canonical Nexus opening or Connector terminal presentation",
+    "No production provider, other platform or two-host qualification"
+  ]
+}
