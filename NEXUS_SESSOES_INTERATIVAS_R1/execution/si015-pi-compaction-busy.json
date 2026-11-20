@@ -1,0 +1,117 @@
+{
+  "scenario": "SI-T-D03",
+  "environment": {
+    "os": "Windows",
+    "browser": "Microsoft Edge via Playwright",
+    "harness": "Pi 0.87.1",
+    "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "provider": "Deterministic local Pi fixture with outbound networking disabled",
+    "temporary_process_exit_verified": true,
+    "fixture_root": "D:/nxs-pi-compact-busy-home-72ac0289-recheck",
+    "candidate_root": "D:/nxs-busy-command-wheel-60ab32d9"
+  },
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "393a03f9a3347e891659793cf6e1a6a0cf2e38a9",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead_main": [
+        0,
+        523
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead_main": [
+        0,
+        87
+      ],
+      "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead_main": [
+        0,
+        66
+      ],
+      "wheel_sha256": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+    },
+    "working_trees_clean": true,
+    "feature_branches_matched_upstream": true
+  },
+  "proof": {
+    "exact_reviewed_pi": true,
+    "active_ui_reason": "This Pi turn is active. Compaction would interrupt it and is unavailable from the dashboard.",
+    "active_server_status": 409,
+    "idle_server_status": 422,
+    "stale_catalog_status": 409,
+    "invalid_body_status": 422,
+    "busy_catalog_revision_changed": true,
+    "kept_draft_in_both_states": true,
+    "native_productive_verbs_before_cleanup": [
+      "prompt"
+    ],
+    "original_turn_terminal": "SUCCEEDED",
+    "browser_session_posts": 0,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "browser": {
+    "busy": {
+      "checkpoint": "PI_COMPACTION_BLOCKED_WHILE_BUSY",
+      "session_posts": 0,
+      "exact_catalog": true
+    },
+    "idle": {
+      "checkpoint": "PI_COMPACTION_STILL_UNQUALIFIED",
+      "session_posts": 0,
+      "exact_catalog": true
+    }
+  },
+  "sqlite": {
+    "sessions": 1,
+    "closed_sessions": 1,
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "results_for_exact_session": 1,
+    "new_interaction_effects": {
+      "session_interaction_inputs": 0,
+      "session_interaction_controls": 0,
+      "session_attachments": 0
+    },
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "fixture_loopback_closed": true,
+  "test_counts": {
+    "source_contract": 22,
+    "installed_contract_and_codex_reorientation": 23,
+    "installed_pi_and_edge": 1
+  },
+  "artifact": {
+    "wheel_sha256": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "product_files": 810,
+    "checkout_mismatches": [],
+    "checkout_files_compared": 810,
+    "product_changes": [
+      "okto_nexus/adapters/inbound/http/dashboard_session_commands.py",
+      "okto_nexus/adapters/inbound/http/session_interaction_contract.py"
+    ]
+  },
+  "fixture_artifact_sha256": {
+    "test_connect_pi.py": "bbdb79e497ae1a7075ec7a38d0f3717bfa380076b0fac37c24f7b94afb4ecb91",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "busy.js": "22027f6035540a1281068519a046fd869892a15a71057d0071a24fe3e445fcd7",
+    "idle.js": "3898d08d68cb4d704916a436c92eb92169a3c012f1255cfaf9028b17d0a8318d",
+    "drive.ps1": "2fa7e75425a95a49a756b0d2b6b5c5e52b65fb63c181dc52d2f8a0b0ee152830",
+    "focus.xml": "4101964816405bf6c42b22a64d7f38b819ed55f53b44950bc37e190c1fc527ec",
+    "proof.json": "8993c5c3b5f5c40175f272dd5e117c8e02a1245ec0ac5fa6dbfe4405bd0936d8"
+  }
+}

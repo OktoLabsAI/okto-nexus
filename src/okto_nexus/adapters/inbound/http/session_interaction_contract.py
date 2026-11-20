@@ -284,6 +284,13 @@ class ReadSessionCommand(ScopedSession):
     catalog_revision: Identifier
 
 
+class CompactSessionCommand(ScopedSession):
+    """A scoped compaction request can report refusal without admitting work."""
+
+    command: Literal["compact"]
+    catalog_revision: Identifier
+
+
 class EnqueueSessionCommand(EnqueueInput):
     command: Literal["send"]
     catalog_revision: Identifier
@@ -303,6 +310,6 @@ class InterruptSessionCommand(InterruptInput):
 
 
 SessionCommand = Annotated[
-    ReadSessionCommand | EnqueueSessionCommand | SteerSessionCommand | InterruptSessionCommand,
+    ReadSessionCommand | CompactSessionCommand | EnqueueSessionCommand | SteerSessionCommand | InterruptSessionCommand,
     Field(discriminator="command"),
 ]

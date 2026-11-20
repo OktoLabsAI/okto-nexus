@@ -1,7 +1,7 @@
 """Contract tests. A valid document does not authorize runtime execution."""
 
 import pytest
-from pydantic import ValidationError
+from pydantic import TypeAdapter, ValidationError
 
 from okto_nexus.adapters.inbound.http.session_interaction_contract import (
     EnqueueInput,
@@ -9,6 +9,7 @@ from okto_nexus.adapters.inbound.http.session_interaction_contract import (
     InterruptInput,
     PrepareAttachment,
     PromoteInput,
+    SessionCommand,
     SteerInput,
 )
 from okto_nexus.domain.session_interaction import (
@@ -17,6 +18,40 @@ from okto_nexus.domain.session_interaction import (
     may_dispatch,
     may_promote,
 )
+
+
+def test_compact_accepts_only_a_scoped_refusal_request(wire):
+    adapter = TypeAdapter(SessionCommand)
+    request = dict(wire)
+    request.pop('capability_revision')
+    request.update(command='compact', catalog_revision='commands-1')
+    assert adapter.validate_python(request).command == 'compact'
+    with pytest.raises(ValidationError):
+        adapter.validate_python(request | {'text': 'Must not become a prompt.'})
+
+
+@pytest.mark.parametrize('timing,expected', [
+    ('busy', 'disabled_for_state'), ('idle', 'unqualified'), ('unknown', 'unqualified'),
+])
+def test_reviewed_pi_compaction_describes_the_busy_refusal_without_a_handler(monkeypatch, timing, expected):
+    from types import SimpleNamespace
+    from okto_nexus.adapters.inbound.http import dashboard_session_commands as commands
+
+    uow, scope = object(), object()
+    mapping = SimpleNamespace(stream_epoch='epoch', receipt_connection_id='connection',
+                              receipt_connection_generation=3)
+    monkeypatch.setattr(commands, 'read_managed_native_session', lambda *_: mapping)
+    monkeypatch.setattr(commands, 'reviewed_pi_context', lambda _: True)
+
+    def observed(owner_uow, owner_scope, **reference):
+        assert (owner_uow, owner_scope) == (uow, scope)
+        assert reference == dict(stream_epoch='epoch', connection_id='connection', connection_generation=3)
+        return timing
+
+    monkeypatch.setattr(commands, 'next_turn_state', observed)
+    action = commands._compact_command(uow, scope, adapter='pi_rpc', input_revision='revision')
+    assert action.state == expected and action.handler is None
+    assert ('would interrupt it' in action.reason) == (timing == 'busy')
 
 
 @pytest.fixture

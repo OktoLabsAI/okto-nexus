@@ -14,9 +14,11 @@ from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
     has_unresolved_interrupt,
     is_input_queue_paused,
 )
+from ....application.execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
 from ....application.execution_operator_authority import require_operator_request
 from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import require_session_input_grant
+from ....application.session_interaction_capability import next_turn_state
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_targets import (
     active_claude_operation,
@@ -42,6 +44,7 @@ from .session_interaction_contract import (
     CommandHandler,
     CommandId,
     CommandState,
+    CompactSessionCommand,
     EnqueueSessionCommand,
     InterruptSessionCommand,
     ReadSessionCommand,
@@ -70,9 +73,10 @@ _READ_ACTIONS = (
     _action('status', 'Session status', 'Show the current session status.', 'session_status'),
 )
 
+_COMPACT = _unavailable('compact', 'Compact context', 'Summarize the conversation context.', 'unqualified',
+                        'Context compaction has no qualified dashboard handler.')
+
 _UNQUALIFIED = (
-    _unavailable('compact', 'Compact context', 'Summarize the conversation context.', 'unqualified',
-                 'Context compaction has no qualified dashboard handler.'),
     _unavailable('model', 'Choose model', 'Change the model for subsequent turns.', 'unqualified',
                  'Model changes have no qualified dashboard handler.'),
     _unavailable('effort', 'Choose effort', 'Change reasoning effort for subsequent turns.', 'unqualified',
@@ -84,6 +88,23 @@ _UNQUALIFIED = (
     _unavailable('clear', 'Clear context', 'Start with an empty conversation context.', 'unsupported',
                  'Clearing the context is unavailable in the dashboard.'),
 )
+
+
+def _compact_command(uow, scope, *, adapter, input_revision):
+    if adapter != 'pi_rpc' or input_revision is None:
+        return _COMPACT
+    mapping = read_managed_native_session(uow, scope)
+    if mapping is None or not reviewed_pi_context(mapping):
+        return _COMPACT
+    if next_turn_state(uow, scope, stream_epoch=mapping.stream_epoch, connection_id=mapping.receipt_connection_id,
+                       connection_generation=mapping.receipt_connection_generation) != 'busy':
+        return _COMPACT
+    # The reviewed Pi compaction calls abort() before summarizing. The
+    # dashboard must never turn the request into an implicit interruption.
+    return _COMPACT.model_copy(update={
+        'state': 'disabled_for_state',
+        'reason': 'This Pi turn is active. Compaction would interrupt it and is unavailable from the dashboard.',
+    })
 
 
 def _availability(check):
@@ -172,7 +193,8 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
                           'native_only' if adapter == 'codex_app_server' else 'unqualified',
                           'Use a compatible Codex terminal. Check whether your terminal supports resume.'
                           if adapter == 'codex_app_server' else 'Resuming saved sessions has no qualified dashboard handler.')
-    items = (*_READ_ACTIONS, send, steer, interrupt, *_UNQUALIFIED, resume)
+    compact = _compact_command(uow, scope, adapter=adapter, input_revision=revision)
+    items = (*_READ_ACTIONS, send, steer, interrupt, compact, *_UNQUALIFIED, resume)
     _, agent_revisions, _ = current_agent_revisions(
         factory, agent_id=scope.agent_id, uow=uow, persist=False, require_active=False)
     catalog_facts = {'version': 1, 'scope': exact, 'adapter': adapter, 'input': revision,
@@ -231,6 +253,8 @@ def build_router():
             if catalog.capability_revision != body.catalog_revision:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'Session commands changed. Review the current action again.', {})
             action = next(item for item in catalog.items if item.command_id == body.command)
+            if isinstance(body, CompactSessionCommand) and action.state != 'disabled_for_state':
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Context compaction has no qualified dashboard handler.', {})
             if action.state != 'supported':
                 code = ErrorCode.PERMISSION_DENIED if action.state == 'denied_by_policy' else ErrorCode.CONFLICT
                 raise OktoNexusError(code, action.reason or 'The session command is unavailable.', {})
@@ -242,7 +266,7 @@ def build_router():
         if isinstance(body, InterruptSessionCommand):
             return await interrupt_response(session_id, body, request, verify_command=verify_command,
                                             surface=surface)
-        if not isinstance(body, ReadSessionCommand):
+        if not isinstance(body, (ReadSessionCommand, CompactSessionCommand)):
             return await steer_response(session_id, body, request, steer_human_input, {
                 'client_intent_id': body.client_intent_id, 'text': body.content[0].text, 'verify_command': verify_command,
             }, surface=surface)
