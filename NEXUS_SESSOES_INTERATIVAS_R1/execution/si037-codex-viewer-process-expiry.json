@@ -1,0 +1,122 @@
+{
+  "scenario": "SI-T-H09",
+  "qualification": "Partial. The controlled integration did not pass.",
+  "scope": "Windows Codex 0.157.0 app-server, 0.170.0 viewer, installed Nexus and Connector, local WSS with test-only deferred disconnect and a controlled presenter clock",
+  "repositories_before_change": {
+    "Nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "220b6be1b1daa6c23819705302b214fd553e11a4",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead": [
+        0,
+        534
+      ]
+    },
+    "Connector": {
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead": [
+        0,
+        88
+      ]
+    },
+    "Core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead": [
+        0,
+        67
+      ]
+    }
+  },
+  "initial_working_trees_clean": true,
+  "wheel_sha256": {
+    "nexus": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "test_environment": {
+    "external_provider_calls": 0,
+    "temporary_listener_and_profiles": true
+  },
+  "runs": [
+    {
+      "observation": "The killed presentation retired after the presenter deadline, with original native process and queued input preserved. Review of a replacement writer then returned a capability conflict.",
+      "durable": {
+        "detached_writers": 1,
+        "input_status": "QUEUED",
+        "results": [],
+        "canonical_operations": {
+          "runtime.open": 1,
+          "turn.submit": 1
+        },
+        "tls_listener_closed": true,
+        "tls_private_key_removed": true,
+        "sqlite_integrity": "ok"
+      },
+      "suite": {
+        "failures": 1,
+        "passed": 0,
+        "sha256": "0598852b4b651ee3c69ac4e1d44818407fb84fbb1729e58aacf8689e9c401833"
+      }
+    },
+    {
+      "observation": "The first presenter was killed and its writer expired while the original Connector and engine were live. A second writer attached without takeover. The original and queued outputs were recorded, but the extra live terminal render check did not observe the second output.",
+      "durable": {
+        "detached_writers": 2,
+        "input_status": "ACCEPTED_NATIVE",
+        "results": [
+          "success",
+          "success"
+        ],
+        "canonical_operations": {
+          "runtime.open": 1,
+          "turn.submit": 2
+        },
+        "tls_listener_closed": true,
+        "tls_private_key_removed": true,
+        "sqlite_integrity": "ok"
+      },
+      "suite": {
+        "failures": 1,
+        "passed": 0,
+        "sha256": "54e2d0fe335a9b673c8f94912f541a3254badff2e691407ea8021232664aa574"
+      }
+    },
+    {
+      "observation": "The process exited, but the test did not observe the delayed WebSocket disconnect at the required interception point. The run stopped before proving both outputs.",
+      "durable": {
+        "detached_writers": 1,
+        "input_status": "QUEUED",
+        "results": [],
+        "canonical_operations": {
+          "runtime.open": 1,
+          "turn.submit": 1
+        },
+        "tls_listener_closed": true,
+        "tls_private_key_removed": true,
+        "sqlite_integrity": "ok"
+      },
+      "suite": {
+        "failures": 1,
+        "passed": 0,
+        "sha256": "9828672f76fa11f94f9e0abc52b75ce1fb01f81d448d6b3660bc84dfaa678482"
+      }
+    }
+  ],
+  "teardown_limitations": "The integration runs reported failures while shutting down the temporary runtime. Post-run inspection found no associated Python or Codex test worker and confirmed the TLS listeners had closed.",
+  "tests": {
+    "installed_silent_writer_and_queue_regressions": {
+      "failures": 0,
+      "passed": 14,
+      "sha256": "af6752839c5dacce1792dda94f60daac94d335dd4d6cfce8aaa009c643f198f5"
+    }
+  },
+  "artifacts_sha256": {
+    "nxs-si-h09-viewer-lease-cd0a9e22": "c723ee08babd4b31670f77dd36f6218bd4b0bd971dad0689a723dba067465b69",
+    "nxs-si-h09-viewer-lease-cd0a9e22-verified": "4d913f0638cf695ce647db4ec1b1256c8f7e09c5773a6d40d8fb5e848a2ece69",
+    "nxs-si-h09-viewer-lease-cd0a9e22-final": "257d76d4877ec38ef2b85abd15f6c1becc9ee5aca6f01097804c22e63cb41e77"
+  }
+}
