@@ -1109,7 +1109,9 @@
         "execution/si034-native-attachment-ticket-replay.md",
         "execution/si034-native-attachment-ticket-replay.json",
         "execution/si034-codex-thread-and-credential-scope.md",
-        "execution/si034-codex-thread-and-credential-scope.json"
+        "execution/si034-codex-thread-and-credential-scope.json",
+        "execution/si022-remote-cwd-and-human-authority.md",
+        "execution/si022-remote-cwd-and-human-authority.json"
       ]
     },
     {
@@ -1298,7 +1300,9 @@
         "execution/si037-codex-viewer-process-expiry.md",
         "execution/si037-codex-viewer-process-expiry.json",
         "execution/si037-codex-transport-expiry.md",
-        "execution/si037-codex-transport-expiry.json"
+        "execution/si037-codex-transport-expiry.json",
+        "execution/si022-remote-cwd-and-human-authority.md",
+        "execution/si022-remote-cwd-and-human-authority.json"
       ]
     },
     {
@@ -1841,7 +1845,9 @@
         "execution/si031-connector-connect-terminal.md",
         "execution/si031-connector-connect-terminal.json",
         "execution/si031-connector-pi-offer.md",
-        "execution/si031-connector-pi-offer.json"
+        "execution/si031-connector-pi-offer.json",
+        "execution/si022-remote-cwd-and-human-authority.md",
+        "execution/si022-remote-cwd-and-human-authority.json"
       ]
     },
     {
@@ -2016,7 +2022,9 @@
         "execution/si034-transcript-privacy.md",
         "execution/si034-transcript-privacy.json",
         "execution/si034-codex-thread-and-credential-scope.md",
-        "execution/si034-codex-thread-and-credential-scope.json"
+        "execution/si034-codex-thread-and-credential-scope.json",
+        "execution/si022-remote-cwd-and-human-authority.md",
+        "execution/si022-remote-cwd-and-human-authority.json"
       ]
     },
     {
@@ -4993,10 +5001,12 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si022-remote-codex-context.json",
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si022-remote-cwd-and-human-authority.md",
+        "execution/si022-remote-cwd-and-human-authority.json"
       ]
     },
     {
@@ -5015,10 +5025,12 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si022-remote-codex-context.json",
-        "execution/si022-codex-remote-attach.json"
+        "execution/si022-codex-remote-attach.json",
+        "execution/si022-remote-cwd-and-human-authority.md",
+        "execution/si022-remote-cwd-and-human-authority.json"
       ]
     },
     {

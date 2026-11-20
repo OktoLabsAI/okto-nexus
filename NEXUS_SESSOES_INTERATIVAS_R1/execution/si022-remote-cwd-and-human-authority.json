@@ -1,0 +1,135 @@
+{
+  "scenarios": [
+    "SI-T-H02",
+    "SI-T-H03"
+  ],
+  "qualification_scope": "Installed Linux operator work CLI and PTY, Windows Server and real Connector-hosted Pi 0.87.1, HTTPS and WSS across a disposable local WSL2 container",
+  "repositories_before_change": {
+    "Nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "1070db5a8eeabcd1492e1497b0cd73423545d294",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead": [
+        0,
+        537
+      ]
+    },
+    "Connector": {
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead": [
+        0,
+        88
+      ]
+    },
+    "Core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead": [
+        0,
+        67
+      ]
+    }
+  },
+  "working_trees_clean": true,
+  "wheel_sha256": {
+    "nexus": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "fixture": "D:\\nxs-si-h02-remote-root-c8a7b2e1-confirmed",
+  "environment": {
+    "linux_image_sha256": "896edfbcbf0c29ad15681617a8886cb9871b7f24c5fde4606114c8ee6bfe4c70",
+    "provider": "deterministic local Pi response",
+    "operator_vault": "disposable volatile store with real Server login",
+    "tls": "CA trusted only by fixture clients, certificate checking kept enabled",
+    "git": "Operator cwd was a nested directory in a checkout created for the fixture"
+  },
+  "proof": {
+    "cwd": {
+      "rootMatches": true,
+      "markerMatches": true,
+      "localMarkerMissing": true,
+      "promptMatches": true
+    },
+    "linux": {
+      "linux_kernel": "5.15.146.1-microsoft-standard-WSL2",
+      "machine": "x86_64",
+      "python": "3.11.18",
+      "actual_cli_default_profile_contains_linux_cwd": true,
+      "remote_read_only_pi_over_wss": true,
+      "pty_child_exit": 0,
+      "native_prompt_visible_in_terminal": true
+    },
+    "agent_credential_proven_valid": true,
+    "agent_token_only_attach_refusals": {
+      "review_explicit_human_required": 401,
+      "review_flag_omitted": 403,
+      "prepare_explicit_human_required": 401,
+      "prepare_flag_omitted": 403
+    },
+    "actual_human_attached_to_same_session": true,
+    "native_open_observed_once": true,
+    "result_kept": true,
+    "real_connector_remote_owner": true,
+    "local_git_root_and_cwd_differ": true,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_calls": 0
+  },
+  "sqlite": {
+    "observations_detached": 1,
+    "canonical_operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "new_session_inputs": 0,
+    "new_session_controls": 0,
+    "successful_results": 1,
+    "foreign_key_violations": 0,
+    "integrity": "ok"
+  },
+  "cleanup": {
+    "listener_closed": true,
+    "tls_private_key_removed": true,
+    "engine_process_gone_after_canonical_close": true
+  },
+  "tests": {
+    "installed_native_integration": {
+      "passed": 1,
+      "junit_sha256": "3f037be4f39d05502b6237808705d070e38d50b1222238f7dead52aeba9c0a95"
+    },
+    "installed_remote_scope_login_and_quick_connect_regressions": {
+      "passed": 69,
+      "junit_sha256": "773ba1e23d86152231feabc29ea5cb844224440fce09a60cc7f6aff5a7404998"
+    }
+  },
+  "earlier_fixture_corrections": [
+    {
+      "issue": "The disjoint provider home directory must exist before it is reviewed.",
+      "junit_sha256": "10ce3b1359551be203064bbd919007c8b0ac5e7f8b8c0e6cbf3fd95b4c15961f"
+    },
+    {
+      "issue": "The loopback Connector HTTP client needs an explicit validating test CA context.",
+      "junit_sha256": "2b690af193f6630258df531d3740dbe404796a30bc507e826f70178748ca4527"
+    },
+    {
+      "issue": "Renamed the Linux fixture script to avoid shadowing the Python standard library operator module.",
+      "junit_sha256": "da53d4a8943bfbc6d83b410e1eb1ebfad97557c54663d63047741a45e2b43b52"
+    },
+    {
+      "issue": "Verify agent identity without the operator-required header. The header belongs only to the negative presentation test.",
+      "junit_sha256": "ecf112bd59178061540af6b8bff21b37baa57e6897b338ced6e18cc6ff4737f9"
+    }
+  ],
+  "artifacts_sha256": {
+    "test_remote_root.py": "4187328e47617922a9b611fd3ccef890761fd914982f9434ce862a34a53dbf30",
+    "linux_operator.py": "72c3116093590274df321eb440b59844fc7529d9acce371abc2dab23fa38d866",
+    "remote_pi_project.py": "554172cf54e83902f4aae98c61056324cb6f2e62608f137cee5a02a37d438bd5",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "proof.json": "6bcda8737cbbc495d56e1787aaa2c2de550d8e8fabec33db5de49db366c91545"
+  }
+}
