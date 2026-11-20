@@ -1058,7 +1058,9 @@
         "execution/si032-codex-abrupt-viewer-exit.json",
         "execution/si037-pi-viewer-backpressure.json",
         "execution/si020-browser-exit-preserves-work.md",
-        "execution/si020-browser-exit-preserves-work.json"
+        "execution/si020-browser-exit-preserves-work.json",
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
       ]
     },
     {
@@ -1282,7 +1284,9 @@
         "execution/si024-capability-downgrade.md",
         "execution/si024-capability-downgrade.json",
         "execution/si027-codex-viewer-refusal.md",
-        "execution/si027-codex-viewer-refusal.json"
+        "execution/si027-codex-viewer-refusal.json",
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
       ]
     },
     {
@@ -1728,7 +1732,9 @@
         "execution/si035-pi-reconnect-candidate.md",
         "execution/si035-pi-reconnect-candidate.json",
         "execution/si037-controlled-connector-stop.md",
-        "execution/si037-controlled-connector-stop.json"
+        "execution/si037-controlled-connector-stop.json",
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
       ]
     },
     {
@@ -1995,7 +2001,9 @@
         "execution/si037-pi-viewer-backpressure.md",
         "execution/si037-pi-viewer-backpressure.json",
         "execution/si037-controlled-connector-stop.md",
-        "execution/si037-controlled-connector-stop.json"
+        "execution/si037-controlled-connector-stop.json",
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
       ]
     },
     {
@@ -2133,7 +2141,9 @@
         "execution/si040-session-action-guide.md",
         "execution/si040-session-action-guide.json",
         "execution/si039-wheel-regression-audit.md",
-        "execution/si039-wheel-regression-audit.json"
+        "execution/si039-wheel-regression-audit.json",
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
       ]
     },
     {
@@ -4747,8 +4757,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
+      ]
     },
     {
       "id": "SI-T-H11",
@@ -4766,12 +4779,14 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si020-codex-keyboard-detach-windows.md",
         "execution/si020-codex-keyboard-detach-windows.json",
         "execution/si022-codex-remote-attach.json",
-        "execution/si032-exact-reattach-command.json"
+        "execution/si032-exact-reattach-command.json",
+        "execution/si032-codex-interrupt-and-detach.md",
+        "execution/si032-codex-interrupt-and-detach.json"
       ]
     },
     {

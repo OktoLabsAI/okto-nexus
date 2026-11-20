@@ -114,8 +114,9 @@ available in Home and for later attachment.
 
 The default is read-only. `--write` also requires current executor capacity and
 an execution grant for the selected session. Enter while idle records plain
-text in the Nexus queue. During a turn, Enter reviews reorientation and Esc
-reviews interruption. Confirming interruption pauses the queue. Nexus can also
+text in the Nexus queue. During a turn, Enter reviews reorientation. Esc or
+Ctrl+C opens an interruption review for the active turn. Ctrl+Y confirms the
+interruption and pauses the queue. Ctrl+N cancels the review. Nexus can also
 queue a message for the next turn while the harness is busy.
 
 Press Ctrl+] to detach. On Windows, closing the viewer's console also leaves

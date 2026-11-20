@@ -1,0 +1,130 @@
+{
+  "scenarios": [
+    "SI-T-H10",
+    "SI-T-H11"
+  ],
+  "scope": "Installed Windows x64 ConPTY writer with reviewed Codex and real Connector R4 on loopback",
+  "status": "PASS",
+  "baseline": {
+    "nexus": "c4f51ff7ec7e8a55745e55c3d7795c955c4236c6",
+    "connector": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+    "core": "454c9700e0def181c81fe633857a25b48e125512",
+    "working_trees_clean": true,
+    "upstream_drift": 0
+  },
+  "candidate": {
+    "nexus_wheel_sha256": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "nexus_sdist_sha256": "84016df996ff776c2a1c56ea2becd880babd0ea2bf097f35d8c078188375ac77",
+    "connector_wheel_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+    "session_cli_source_sha256": "aed3544b7de9c5a4bc599a74aa6e710651a65620f5360038df2e6fc7fab3e121",
+    "offline_build": "PASS",
+    "strict_twine": "PASS",
+    "scoped_ruff": "PASS",
+    "offline_lock_check": "PASS",
+    "installed_cli_bytes_match_source_and_wheel": true
+  },
+  "runtime": {
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer": "Codex 0.170.0",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "provider": "Deterministic SSE on loopback with separate temporary profile and no provider credentials",
+    "loopback_provider_calls": 1
+  },
+  "checkpoints": {
+    "cancelled": {
+      "observation": {
+        "banner_matches_tested_shortcuts": true,
+        "review_cancelled": true,
+        "same_native_turn_still_running": true,
+        "canonical_interrupts": 0,
+        "queue_paused": false
+      },
+      "sha256": "8f8e3e9458b4f302f30f87a84954a36dd22b38343c69159e38c3c65aa82868dd"
+    },
+    "ctrl-c-review": {
+      "observation": {
+        "gesture": "Ctrl+C",
+        "reviewed_exact_native_turn": true,
+        "native_control_sent_before_confirmation": false,
+        "viewer_still_active": true
+      },
+      "sha256": "225c61fcd80e38c254b4669b3070b28b80916b7a9f08e18e145ac96e16953f0b"
+    },
+    "detach": {
+      "observation": {
+        "exact_detach": true,
+        "native_calls_interrupt_close_or_unsubscribe": 0,
+        "original_pid_still_running": true,
+        "original_turn_still_active": true,
+        "pending_review_discarded": true
+      },
+      "sha256": "b4378e70bad40c5494d7c9c356e49e0983145a78b7285aebfa256b484ce3a183"
+    },
+    "proof": {
+      "observation": {
+        "ctrl_c_reviewed_target": true,
+        "cancel_left_turn_active": true,
+        "detach_left_turn_active": true,
+        "ctrl_y_confirmed_one_native_interrupt": true,
+        "same_native_thread_and_pid": true,
+        "paused_before_native_send": true,
+        "same_generation": true,
+        "handoff_to_same_session": true,
+        "canonical_close": true,
+        "external_provider_calls": 0
+      },
+      "sha256": "0f921ac8f385c8f4f6204ec6d623a19dae410375ca246edc09147def34036dfc"
+    },
+    "durable-audit": {
+      "observation": {
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.interrupt": 1,
+          "turn.submit": 1
+        },
+        "closed_exact_session": true,
+        "writer_attachments_detached": 3,
+        "exact_original_turn": "CANCELLED",
+        "control_surface": "native_terminal",
+        "native_launches": 1,
+        "queued_inputs": 0,
+        "productive_grants_revoked": 0,
+        "integrity": "ok",
+        "foreign_key_violations": 0
+      },
+      "sha256": "dc3d3b013ac43a717e487d56a9e1ed7b3653f6cd8806f049178e1f11bd92a651"
+    }
+  },
+  "verification": {
+    "native_candidates_passed": 1,
+    "baseline_native_open_review_detach_and_confirm_passed": 1,
+    "baseline_native_junit_sha256": "0a41febc365786d8ee4feb818a9f3bf4f818ed190bd9b821672c6fee5d2204bd",
+    "installed_regressions_passed": 20,
+    "candidate_native_junit_sha256": "99622eba106d7e38ef9c291c7b38f3fe940d413a9cf3136d26c06233103cb193",
+    "candidate_regressions_junit_sha256": "8bb28ba4928ca63d633ea4397c50371491ebab241626c37a466ff70fec57f5d2",
+    "setup": "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+    "local_fixture_directory": "D:/nxs-console-42197900/confirmed",
+    "fixture_sha256": {
+      "run.ps1": "27ab370d523292ef654ed2645f90098466b285fb3d9d6679cac8ff513116eadb",
+      "viewer.py": "4b56d198c5eac8f6c91c6a634e7138a6f74b2d8fd4532236b19f897dc4673635",
+      "test_live_draft.py": "5c217ef5c82a698b504ac620b46ab04eb29add46dc7a7fa17230d03e09e04899",
+      "audit_durable.py": "8d71b864f3ff1975c18e1ee649ddc58624a8107ab5a10961c0c7f49137f59558"
+    },
+    "sanitized_terminal_and_rpc_sha256": {
+      "cancel-terminal.txt": "dc5e787dd6cebd64d9a28bdedede7d8e0aad239c3d6233a30e8dc279db17ec0a",
+      "detach-terminal.txt": "b9b160d55046417e3d1a781da66be3c3123a76fb12be07e8bd37a91031ae9f12",
+      "confirm-terminal.txt": "50eb263340853a941f380386ba3cc355bd4b9d6579ae4f948c9fa75613e33b18",
+      "cancel.jsonl": "8263491dd38d7b3e472ca66760d88641bb59e2f93bfa8abbfe47722cd4c3945a",
+      "detach.jsonl": "8263491dd38d7b3e472ca66760d88641bb59e2f93bfa8abbfe47722cd4c3945a",
+      "confirm.jsonl": "8263491dd38d7b3e472ca66760d88641bb59e2f93bfa8abbfe47722cd4c3945a"
+    }
+  },
+  "limitations": [
+    "The first keyboard script observed cancellation followed by a timeout waiting for a second review in the same viewer. The final run used separate exact attachments.",
+    "The first fresh install probe needed current pywin32 paths in the disposable environment. One later loopback presentation was refused before keyboard actions. Its session and attachment were confirmed closed before the passing new project.",
+    "The tested shortcuts apply to the reviewed Windows Codex writer. Other platform and provider qualification remains separate."
+  ]
+}

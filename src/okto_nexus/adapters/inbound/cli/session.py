@@ -273,7 +273,7 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
     if writer:
         print('Enter sends plain text when idle and opens a reorientation review during a turn.')
-        print('Esc requests an interruption review for the active turn.')
+        print('Esc or Ctrl+C requests an interruption review for the active turn.')
         print('Use Nexus to put a message in the durable queue while the turn runs.')
         print('Tab retains text in this viewer until it can send.')
     print('Press Ctrl+] to detach from this session.', flush=True)
