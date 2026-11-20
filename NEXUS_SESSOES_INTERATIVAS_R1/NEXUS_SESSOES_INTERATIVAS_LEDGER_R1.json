@@ -1597,7 +1597,9 @@
       ],
       "status": "IMPLEMENTED",
       "evidence": [
-        "execution/si028-connect-presentation.md"
+        "execution/si028-connect-presentation.md",
+        "execution/si028-interactive-json-refusal.md",
+        "execution/si028-interactive-json-refusal.json"
       ]
     },
     {
@@ -3998,8 +4000,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si028-interactive-json-refusal.md",
+        "execution/si028-interactive-json-refusal.json"
+      ]
     },
     {
       "id": "SI-T-F06",

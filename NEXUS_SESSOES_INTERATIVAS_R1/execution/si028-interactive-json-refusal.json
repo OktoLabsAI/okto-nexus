@@ -1,0 +1,36 @@
+{
+  "scenario": "SI-T-F05",
+  "status": "PASS",
+  "source_baseline": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": "Windows x64 ConPTY with disposable profile, Nexus home and project",
+  "installed_executable_sha256": "eaca277e4ddfbc31e661c9748586f3dfd3c801abe45fbb1644a263e5e3c67605",
+  "outcomes": [
+    {
+      "flag": "-i",
+      "exit_code": 2,
+      "parser_error": true,
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "flag": "--interactive",
+      "exit_code": 2,
+      "parser_error": true,
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    }
+  ],
+  "verification": {
+    "parser_cases": 4,
+    "installed_pty_cases": 1,
+    "fixture_directory": "D:/nxs-cli-json-26119641",
+    "probe_sha256": "c0d084b988f2b9990b42bc92b27e8909625ff0745af602a64fc6bd941c3acd85",
+    "proof_sha256": "aebb9b5f51f4216530a2737d6ea64e11bb0dca043587fa172270e0bc7d0bdd02",
+    "junit_sha256": "054dbe164ddce007d0e287155ccc16a74e57cca81caf9d2a40fb4de351a62611"
+  }
+}
