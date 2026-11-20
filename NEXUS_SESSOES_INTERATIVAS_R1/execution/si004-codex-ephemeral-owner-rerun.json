@@ -1,0 +1,30 @@
+{
+  "candidate": "85ca3dad5b7ef5070ced1952e889b0762a68b2d6",
+  "nexus_wheel_sha256": "ba584547dbd5c681644a8f62cb04dd860efd9baf719cccb3c8683bcb748bcba1",
+  "platform": "Windows ConPTY",
+  "codex_version": "0.170.0",
+  "codex_binary_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+  "isolated_profiles_and_projects": true,
+  "viewer_transport": "authenticated prototype loopback WebSocket",
+  "owner_transport": "stdio",
+  "thread": "ephemeral and idle",
+  "prompts": 0,
+  "viewer_authentication_succeeded": true,
+  "viewer_rendered_exact_thread": true,
+  "viewer_disconnected_after_exit": true,
+  "same_thread_session_workspace_and_status_after_viewer_exit": true,
+  "same_app_server_after_viewer_exit": true,
+  "engine_requests": {
+    "initialize": 1,
+    "thread/start": 1,
+    "thread/read": 5
+  },
+  "history_projection": {
+    "source": "empty fixture snapshot",
+    "turns_limit": 5,
+    "items_limit": 100
+  },
+  "connections_rejected_by_local_proxy": 5,
+  "engine_exit_code": 0,
+  "both_temporary_processes_exited": true
+}

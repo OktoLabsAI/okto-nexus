@@ -333,6 +333,11 @@
           "limitations": "Empty native thread, no Core-managed runtime or model. History paging replies were empty for this fixture. Active work, saved history, policy enforcement and remote ownership remain unqualified."
         },
         {
+          "artifact_path": "execution/si004-codex-ephemeral-owner-rerun.json",
+          "result": "The authorized Codex 0.170.0 rerun reproduced viewer exit while the same idle thread remained readable on the same app-server. The installed Nexus wheel supplied the reader and empty history projection.",
+          "limitations": "Local prototype transport, disposable idle thread and no inference. No change to production qualification."
+        },
+        {
           "artifact_path": "execution/si026-claude-remote-steer.json",
           "result": "Claude Code 2.1.328 listed the exact stream-json UUID and process, but its native attach rejected that UUID while the original owner stayed alive.",
           "limitations": "The isolated idle stream received only initialize. Background ownership, retained configuration, native detach and remote terminal presentation remain unverified."
