@@ -1,0 +1,195 @@
+{
+  "scenario": "SI-T-H13",
+  "scope": "Windows x64, embedded native Pi 0.87.1, actual TLS loopback and native ConPTY replacement",
+  "fixture": "D:\\nxs-pi-socket-pressure-cf47e7d1-qualified",
+  "candidate": "D:\\nxs-pi-wss-recovery-wheel-e6484e27",
+  "nexus_product_head": "ba6a8d4602e68ee439067b1c8123bc33a74f5491",
+  "core_product_head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+  "connector_pin_head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+  "previous_core_wheel": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e",
+  "baseline_renderer_regression_reproduced": true,
+  "baseline_renderer_junit_sha256": "4ed27d3235cfc35e869215041c2525a941cd1860657f0154d582415eedb621f4",
+  "baseline_native_failure_junit_sha256": "e7d8124a887a5ebb3e95e49f1fdfceee9b82b247f9cce668f66b04ac70d05b58",
+  "verified_wheel_product_delta": [
+    "nexus_connector_core/pi_extension/hosted_renderer.js"
+  ],
+  "offline_lock_and_r4_contracts_unchanged": true,
+  "repos": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "3b68508647fe5b3a4ff5507e7552923108af16cf",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead_main": [
+        0,
+        528
+      ],
+      "wheel_sha256": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead_main": [
+        0,
+        87
+      ],
+      "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead_main": [
+        0,
+        66
+      ],
+      "wheel_sha256": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+    }
+  },
+  "initial_working_trees_clean_and_synced": true,
+  "proof": {
+    "pi_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "response_bytes": 192076,
+    "sessions_before_close": 1,
+    "transport": "WSS loopback, stock wsproto on Windows selector sockets",
+    "socket_observations": {
+      "pending": 0,
+      "high_water": 1,
+      "sends_cancelled": 1,
+      "receive_socket_buffer": 2048,
+      "send_socket_buffer": 2048
+    },
+    "maximum_slow_frame_bytes": 12288,
+    "total_slow_frames_attempted": 16,
+    "real_socket_pause_sizes": [
+      6224
+    ],
+    "same_native_process_while_streaming_and_after_reattach": true,
+    "continued_native_deltas_after_pressure": true,
+    "replacement_attached_during_original_turn": true,
+    "viewer_tail_rendered": true,
+    "omitted_prefix_retained_in_canonical_result": true,
+    "external_provider_requests": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "socket_and_replacement_console_observations": {
+    "sockets": [
+      {
+        "slow": true,
+        "pauses": 1,
+        "frames": 16,
+        "has_result": false,
+        "closes": [
+          4409
+        ],
+        "errors": [
+          "CancelledError"
+        ]
+      },
+      {
+        "slow": false,
+        "pauses": 0,
+        "frames": 182,
+        "has_result": true,
+        "closes": [],
+        "errors": []
+      }
+    ],
+    "renderers": [
+      {
+        "frames": 16,
+        "error": null,
+        "eof": false,
+        "has_result": false
+      },
+      {
+        "frames": 182,
+        "error": {
+          "kind": "CancelledError",
+          "code": ""
+        },
+        "eof": false,
+        "has_result": true
+      }
+    ],
+    "broker_faults": [],
+    "output": {
+      "subprocess_exited_at_checkpoint": 0,
+      "record_numbers_in_tail": [
+        "1992",
+        "1993",
+        "1994",
+        "1995",
+        "1996",
+        "1997",
+        "1998",
+        "1999"
+      ],
+      "saw_end_marker": true,
+      "bytes": 525685
+    }
+  },
+  "fixture_diagnostics": {
+    "intermediate_reader_exit_sha256": "bced114c45f175f52a2768e897dcc763bcf653f379e0f98d3f5f50cbafc7bfd4",
+    "diagnostic_with_final_marker_and_receipt_projection_race_sha256": "c480e2f8ca9b8009510134e49888521961355934763ee06316f1dadf134cc214"
+  },
+  "cleanup": {
+    "test_leaf_key_removed": true,
+    "temporary_listener_closed": true
+  },
+  "database": {
+    "closed_sessions": 1,
+    "retired_readers": 2,
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "untruncated_exact_result": true,
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "new_inputs": 0,
+    "new_controls": 0
+  },
+  "test_runs": {
+    "installed_native_wss": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "d17bb7843d85e1a5a980fed60e63e96ab78daea4b6e3b5d81b28c8eea38257b0"
+    },
+    "installed_nexus_regressions": {
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "4a7ba5de594ed1fc07899498d4fd7d2d02f53635499805d9082950bf9f441021"
+    },
+    "source_core_regressions": {
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "8f70fe50fd01acce24e293fdc38cf959614981a1dc5ea496eb80a9b3ce7c867d"
+    },
+    "installed_core_regressions": {
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "f9cb464e69719d08e76c7668f646abf39da08c34aa2742ad5491c6ab19c7f6fc"
+    },
+    "installed_connector_regressions": {
+      "passed": 87,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "286393b65fa8df1ee9202f579dad97d03115b146e0d5d07c42e06ab4d7b915e9"
+    }
+  },
+  "artifact_sha256": {
+    "test_slow.py": "6bfe4f06c03336b174eaea2a74bfe143e75e6fe25635306dedb93e9d6cc42957",
+    "reader.py": "d7eef14ef7f8768f8d3f7b16d25a689c363d2bc022d16d25c8aed21667694421",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "run.ps1": "fee69011e6b4c68d39f128d82b17b2f91ce84022440927136314022214ac0433",
+    "proof.json": "d613051fbfdab39141cd6f8bcae2d28ebb4dcaa5d850610bb30ac2fe5724b85f",
+    "transport-observation.json": "138145065a5cda439c4be5eda887ad413c339e496d8eff2f5d50c5b3dfb142b4"
+  }
+}

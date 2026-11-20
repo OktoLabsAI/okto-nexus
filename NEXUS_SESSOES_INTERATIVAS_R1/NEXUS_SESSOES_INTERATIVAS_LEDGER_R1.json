@@ -1156,7 +1156,9 @@
         "execution/si032-codex-interrupt-and-detach.md",
         "execution/si032-codex-interrupt-and-detach.json",
         "execution/si032-queue-without-terminal.md",
-        "execution/si032-queue-without-terminal.json"
+        "execution/si032-queue-without-terminal.json",
+        "execution/si037-pi-wss-slow-reader.md",
+        "execution/si037-pi-wss-slow-reader.json"
       ]
     },
     {
@@ -1489,7 +1491,9 @@
         "execution/si025-pi-delayed-settlement.md",
         "execution/si025-pi-delayed-settlement.json",
         "execution/si025-pi-acceptance-before-start.md",
-        "execution/si025-pi-acceptance-before-start.json"
+        "execution/si025-pi-acceptance-before-start.json",
+        "execution/si037-pi-wss-slow-reader.md",
+        "execution/si037-pi-wss-slow-reader.json"
       ]
     },
     {
@@ -2165,7 +2169,9 @@
         "execution/si032-codex-interrupt-and-detach.md",
         "execution/si032-codex-interrupt-and-detach.json",
         "execution/si032-queue-without-terminal.md",
-        "execution/si032-queue-without-terminal.json"
+        "execution/si032-queue-without-terminal.json",
+        "execution/si037-pi-wss-slow-reader.md",
+        "execution/si037-pi-wss-slow-reader.json"
       ]
     },
     {
@@ -5199,8 +5205,12 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": ["execution/si037-pi-viewer-backpressure.json"]
+      "status": "PASS",
+      "evidence": [
+        "execution/si037-pi-viewer-backpressure.json",
+        "execution/si037-pi-wss-slow-reader.md",
+        "execution/si037-pi-wss-slow-reader.json"
+      ]
     },
     {
       "id": "SI-T-H14",

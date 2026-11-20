@@ -1,0 +1,11 @@
+# Reconexão do Pi durante saída contínua
+
+No Core anterior, o servidor retirava o visualizador que deixava de ler, e o Pi continuava gravando a resposta. O terminal que se reconectava durante o turno perdia o evento de início da mensagem e ficava sem mostrar as atualizações. O renderer agora inicia a visualização com a mensagem parcial da mesma sessão. Se a reconexão coincide com a publicação da resposta final, usa o evento recebido para montar a mensagem. A regressão verifica também que o início repetido não duplica a resposta.
+
+O ensaio final usou Pi 0.87.1 e Nexus instalados em Windows, com tráfego WSS real em loopback. A fixture reduziu os buffers TCP do primeiro cliente e deixou o socket aberto sem ler. O transporte sinalizou pressão de escrita, cancelou um envio pendente e retirou apenas o anexo afetado. Os frames observados respeitaram o limite de 12 KiB. [Dados, pacotes e hashes](si037-pi-wss-slow-reader.json)
+
+O terminal ConPTY de substituição abriu a mesma sessão durante a resposta, acompanhou as novas atualizações e exibiu o fim do turno. O SQLite preservou os 192.076 bytes do resultado, inclusive o prefixo que já havia saído da janela do terminal. Havia uma única sessão do Pi, uma operação de turno, um resultado bem-sucedido e dois anexos encerrados. O Core confirmou a mesma identidade de processo até o fechamento canônico.
+
+Uma rodada intermediária perdeu o terminal substituto antes do fim. A rodada de diagnóstico seguinte exibiu o marcador final e identificou que o recibo de conclusão podia anteceder a projeção do resultado. A confirmação final aguardou ambos e verificou a desconexão voluntária do terminal após a leitura. O provedor de resposta era determinístico e local. A evidência cobre SI-T-H13 neste cenário de Windows e loopback. A saída prolongada sem nenhum visualizador continua em SI-T-H14.
+
+Passaram a integração nativa, 15 regressões do Core instalado, 87 do Connector instalado e 36 do Nexus instalado. O Nexus e o Connector fixam o mesmo wheel corrigido. A validação estrita do wheel e a conferência dos contratos gerados passaram. O rollback consiste em reverter a correção e restaurar o pin anterior nos dois consumidores, sem migração de dados.
