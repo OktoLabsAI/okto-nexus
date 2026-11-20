@@ -1,0 +1,154 @@
+{
+  "tasks": [
+    "SI-016",
+    "SI-039"
+  ],
+  "scenarios": {
+    "SI-T-D06": "NOT_RUN",
+    "SI-T-I06": "NOT_RUN"
+  },
+  "windows_x64_node": "24.15.0",
+  "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "964fd74cb28894668073e545f78953b8ba5dc494",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 544
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "186a3dae4818edf1330395959d2efda6de885b36",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 90
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "26a157abcc4d8fc79ac92cfb6a456747f19f36d1",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 69
+    },
+    "worktrees_clean_and_synced": true
+  },
+  "installed_wheels_sha256": {
+    "nexus_0.3.8": "528459e8d7854e54147bf26d6ea1535aedaaadf7d380e8666380fc3526e5802a",
+    "connector_0.0.15": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core_0.0.16": "f88f0e24036df292164e8b9168e2097b0e47ec575611b476e1fbb6a080353441"
+  },
+  "reproduction": {
+    "commands": [
+      "<venv-python> -B execution/fixtures/pi_literal_probe.py <empty-report-dir> <node> <pi-0.87.1-release>",
+      "<venv-python> -B execution/fixtures/pi_literal_guard_probe.py <empty-report-dir> <node> <pi-0.87.1-release>",
+      "<venv-python> -I -B execution/fixtures/pi_installation_inventory_probe.py <node> <pi-managed-install-root> <inventory-json>"
+    ],
+    "fixture_sha256": {
+      "pi_literal_probe.py": "c6fb31c3f443929834351893d73943cf392b04ebc27a3e0234bde2b0de7a90a6",
+      "pi_literal_guard_probe.py": "cfdd2fb2a2769e5b94aa27067f57e6bd35eef25351c18cfad6e42928910e7ff5",
+      "pi_installation_inventory_probe.py": "3577d136dc6c2b3d5d6a65d16f8730704d87eafceb1c185a88e868401ae038d4"
+    }
+  },
+  "native_sdk_probe": {
+    "build": "0.87.1",
+    "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_cli_sha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774",
+    "windows_reviewed_build": true,
+    "probe": [
+      {
+        "same_session": true,
+        "synthetic_model_requests": 5,
+        "stock_option_ignored_and_expanded": true,
+        "sdk_literal_matches": 3,
+        "registered_command_not_executed_by_sdk_literal": true,
+        "extension_input_can_transform_sdk_literal": false
+      },
+      {
+        "same_session": true,
+        "synthetic_model_requests": 1,
+        "stock_option_ignored_and_expanded": false,
+        "sdk_literal_matches": 0,
+        "registered_command_not_executed_by_sdk_literal": false,
+        "extension_input_can_transform_sdk_literal": true
+      }
+    ],
+    "external_provider_requests": 0,
+    "paid_tokens": 0
+  },
+  "guarded_host_probe": {
+    "guarded_host_fixture": true,
+    "cases": [
+      {
+        "input_extensions_present": false,
+        "ordinary_prompt_unchanged": true,
+        "exact_literal_count": 3,
+        "malformed_refused_before_turn": true,
+        "guard_refused_before_turn": false,
+        "same_session": true
+      },
+      {
+        "input_extensions_present": true,
+        "ordinary_prompt_unchanged": true,
+        "exact_literal_count": 0,
+        "malformed_refused_before_turn": true,
+        "guard_refused_before_turn": true,
+        "same_session": true
+      }
+    ],
+    "provider_requests": 0,
+    "paid_tokens": 0
+  },
+  "passive_pi_inventory": {
+    "selected_installation_version": "1.5.2",
+    "inventory_revision": "sha256:11fbda3b291f60f2880ca6a85c2a1aea22538a5a29c25f48ff774b2b45fd6c13",
+    "cases": [
+      {
+        "version": "0.87.1",
+        "architecture": "x86_64",
+        "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+        "outcome": "READY_FOR_RUNTIME",
+        "qualification": "qualified",
+        "controls": [
+          "turn.interrupt",
+          "turn.steer"
+        ],
+        "reasons": [],
+        "reviewed_native_renderer": true
+      },
+      {
+        "version": "1.5.2",
+        "architecture": "x86_64",
+        "build_identity": "sha256:785c316bc1ad92f723c1aa08720bfe8a498671fc87205163fdbc55140fd2e5b8",
+        "outcome": "READY_FOR_RUNTIME",
+        "qualification": "unqualified",
+        "controls": [],
+        "reasons": [],
+        "reviewed_native_renderer": false
+      }
+    ],
+    "core_validation": "PASS",
+    "harness_execution_requested": false,
+    "provider_calls": 0
+  },
+  "installed_pytest": {
+    "tests": 23,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "junit_sha256": "a34ec71aa3613d2aa8547a257d69a69333b8ed6471a202f1c190feddecc2b371",
+    "verified_imports": "site-packages",
+    "targets": [
+      "tests/session_interaction/test_contract.py",
+      "tests/execution_r4/test_session_input_runtime.py::test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo"
+    ],
+    "opts": "-o pythonpath= -p assert_wheel_imports"
+  },
+  "initial_probe_setup_errors": [
+    "Pi ancestor resource discovery exceeded the Node read allowance.",
+    "Fixture extension with .mjs suffix was not loaded by automatic discovery."
+  ],
+  "all_native_processes_exited": true,
+  "authenticated_providers_used": false,
+  "personal_installation_changed": false,
+  "external_inference_calls": 0,
+  "migration_required": false,
+  "local_evidence_directory": "D:\\nxs-si-d06-pi-964fd74c"
+}
