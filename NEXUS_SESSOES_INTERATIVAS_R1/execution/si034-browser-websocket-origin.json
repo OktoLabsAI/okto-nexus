@@ -1,0 +1,134 @@
+{
+  "scenario": "SI-T-H06",
+  "scope": "Installed Windows Nexus remote Codex presenter router over verified local TLS; Edge and protocol client",
+  "windows_build": 26300,
+  "external_provider_calls": 0,
+  "catalog_and_native_context": "deterministic fixture",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "201ea1a459b6a5633a062cf302b80eddae484081",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead_main": [
+        0,
+        526
+      ],
+      "product_head": "ba6a8d4602e68ee439067b1c8123bc33a74f5491",
+      "wheel_sha256": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead_main": [
+        0,
+        87
+      ],
+      "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead_main": [
+        0,
+        66
+      ],
+      "wheel_sha256": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+    },
+    "feature_working_trees_clean_and_synced": true
+  },
+  "fixture": "D:\\nxs-browser-websocket-origin-3c9bf0e6-clean",
+  "verified_cleanup": {
+    "edge_closed": true,
+    "tls_listeners_closed": 2,
+    "test_tls_private_key_removed": true
+  },
+  "sqlite": {
+    "detached_attachments": 1,
+    "ticket_hash_and_challenge_cleared": true,
+    "new_work_operations": 0,
+    "input_rows": 0,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "runs": {
+    "browser_integration": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "f13a115fce4fc8df97336a04e931ae54cffb818f0543cadfba16faceabe7076f"
+    },
+    "installed_regressions": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "79f1c555d6ff4c5810876ba83d56d6d1f54cccf84febf42a0ddcb28cd0699b63"
+    }
+  },
+  "observations": {
+    "browser_ws_close_code": 1006,
+    "browser_name": "Edge",
+    "browser_cookie_httponly_secure_samesite_strict": true,
+    "cross_origin_review_status": 403,
+    "same_origin_review_missing_csrf_status": 403,
+    "rejected_native_statuses": [
+      403,
+      403
+    ],
+    "prepared_offer_unchanged_after_all_refusals": true,
+    "allowed_exact_context": true,
+    "durably_detached": true,
+    "productive_operations": 0,
+    "socket_observations": [
+      {
+        "proper_cookie": true,
+        "real_ticket": false,
+        "origin": "other",
+        "fetch_site": "",
+        "frames": 0,
+        "accepted": false,
+        "pre_upgrade_code": 4403
+      },
+      {
+        "proper_cookie": true,
+        "real_ticket": true,
+        "origin": "other",
+        "fetch_site": "",
+        "frames": 0,
+        "accepted": false,
+        "pre_upgrade_code": 4403
+      },
+      {
+        "proper_cookie": true,
+        "real_ticket": true,
+        "origin": "absent",
+        "fetch_site": "",
+        "frames": 0,
+        "accepted": false,
+        "pre_upgrade_code": 4403
+      },
+      {
+        "proper_cookie": true,
+        "real_ticket": true,
+        "origin": "nexus",
+        "fetch_site": "",
+        "frames": 3,
+        "accepted": true,
+        "pre_upgrade_code": null
+      }
+    ],
+    "browser_origin_topology": "Distinct HTTPS ports on the same loopback host",
+    "browser_sent_sec_fetch_site_header": false
+  },
+  "artifact_sha256": {
+    "test_origin.py": "bedf469cfaa9d4cec71c912d58e2da277d37cd0a7e22011849e24c63fdbf9d4c",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "run.ps1": "66fae61e6aac0fc3e94e8ae25e497e9d3f0bfc123ae1c9eb73d1a83c7aadd4fd",
+    "drive.ps1": "2ccad958227c915b78aec0c383bc22297d88c04729a5fb2d3dd8049870bbf1cc",
+    "sign-in.js": "2b539cdfef3e9bedb508d3b5c4fb8e81d5bc393abf926aef0764cc59726c8857",
+    "foreign.js": "3d94d53b216b5e31b784c068e63fc8629c60fc85430fe94e3408a9dddf61c5ed",
+    "proof.json": "74702f78d7c7cae432ad24728fd200f743e4e95e2afbe1f0549821aafeacc09f",
+    "browser-proof.json": "473ea77c9a0b6337420bb59e89b690e6d15d9c835163841ea3360d78f1662c71"
+  }
+}

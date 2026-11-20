@@ -1101,7 +1101,9 @@
         "execution/si019-codex-presenter-reads.md",
         "execution/si019-local-presentation-transport.md",
         "execution/si034-viewer-credential-channels.md",
-        "execution/si034-viewer-credential-channels.json"
+        "execution/si034-viewer-credential-channels.json",
+        "execution/si034-browser-websocket-origin.md",
+        "execution/si034-browser-websocket-origin.json"
       ]
     },
     {
@@ -1966,7 +1968,9 @@
         "execution/si006-pi-human-input-authority.md",
         "execution/si006-pi-human-input-authority.json",
         "execution/si034-viewer-credential-channels.md",
-        "execution/si034-viewer-credential-channels.json"
+        "execution/si034-viewer-credential-channels.json",
+        "execution/si034-browser-websocket-origin.md",
+        "execution/si034-browser-websocket-origin.json"
       ]
     },
     {
@@ -5015,8 +5019,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si034-browser-websocket-origin.md",
+        "execution/si034-browser-websocket-origin.json"
+      ]
     },
     {
       "id": "SI-T-H07",
