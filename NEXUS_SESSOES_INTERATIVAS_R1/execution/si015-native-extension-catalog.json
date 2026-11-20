@@ -1,0 +1,85 @@
+{
+  "scenario": "SI-T-D12",
+  "status": "PASS",
+  "nexus_before_evidence": "6970156958a6fe3ba2d11a647e4d8b1ac8e8fd12",
+  "installed_wheels": {
+    "nexus": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge in an isolated Playwright CLI session",
+    "engine": "Pi 0.87.1",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "transport": "Installed Connector R4 on loopback",
+    "provider": "Deterministic fixture with external networking disabled in the Pi process",
+    "extension": "Disposable registration with fixture-only local invocation marker"
+  },
+  "native": {
+    "actual_pi_reported_registered_extension": true,
+    "source": "extension",
+    "native_command_available": true
+  },
+  "browser": {
+    "checkpoint": "PI_EXTENSION_REMAINS_NATIVE_ONLY",
+    "unknown_posts": 0,
+    "typed_status_posts": 1,
+    "status": 200
+  },
+  "server": {
+    "native_extension_count": 1,
+    "extension_handler_invocations": 0,
+    "extension_absent_in_dashboard_catalog": true,
+    "direct_typed_refusal_status": 422,
+    "browser_kept_draft_without_execution": true,
+    "trusted_status_action_status": 200,
+    "one_original_native_turn": true,
+    "original_result_retained": true,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_calls": 0
+  },
+  "durable_sqlite_and_journal": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "result_rows": 1,
+    "closed_exact_session": true,
+    "queued_inputs": 0,
+    "queued_native_operations": 0,
+    "native_launches": 1,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "verification": {
+    "native_browser_cases": 1,
+    "junit_test": "test_extension_command_has_no_dashboard_authority",
+    "fixture_directory": "D:/nxs-extension-43978215",
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "pwsh -NoProfile -File drive.ps1 -Root <isolated-root>",
+      "<installed-candidate-venv>/Scripts/python.exe <isolated-root>/audit_durable.py"
+    ],
+    "fixture_sha256": {
+      "run.ps1": "f93ff866151fa38afcf9b6c1a56baa930289e7a70e7950b2ccde8895712c3f15",
+      "drive.ps1": "16037a6030049b991fb6437df7cbeaa69deb14f28e8b623c85884b754d3d25f1",
+      "test_live_draft.py": "63160b95862c2ae47b24365b91f26c5aa81fc782a040ae9557ac420ae7f8739f",
+      "open.js": "7efcaf74dfcf2169281b6ca1890fa92cf450e1b00e2c3f23a08b4222ecdd80fd",
+      "audit_durable.py": "ed01965013c892e11ecb69773f7e8568230e8a03673507b146185383b80fcee2"
+    },
+    "result_sha256": {
+      "native.json": "60850182eaaf90f4de6983098e9b5a14ecf45057c39a3c9187760a6e5e988363",
+      "browser-verified.json": "09e19e3f551ea7ebb0374fc475978988016ea4b7e98ba7a72902f0b2bf7b03f9",
+      "proof.json": "ddc66b67f90e270083e070c4964e7ccd8b7d07fa67495d057aeb261b41e9b262",
+      "durable-audit.json": "8058b45bb62c2e8dada8b226442c516d0e99043cd91d00d157c0e9667f72f36c",
+      "focus.xml": "cb261936aca7742c5c9a855779f00d2dab8b38826a69c3a292755060715d2f88"
+    },
+    "same_build_regressions": "si016-stale-catalog-settings.json"
+  },
+  "limits": [
+    "The actual Pi process registered the synthetic extension inside a disposable Pi profile.",
+    "Provider output was simulated; no provider inference or production extension was exercised."
+  ]
+}

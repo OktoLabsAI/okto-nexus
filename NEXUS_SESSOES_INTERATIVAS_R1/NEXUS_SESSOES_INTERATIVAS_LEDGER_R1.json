@@ -837,7 +837,9 @@
         "execution/si016-browser-terminal-only.md",
         "execution/si016-browser-terminal-only.json",
         "execution/si016-stale-catalog-settings.md",
-        "execution/si016-stale-catalog-settings.json"
+        "execution/si016-stale-catalog-settings.json",
+        "execution/si015-native-extension-catalog.md",
+        "execution/si015-native-extension-catalog.json"
       ]
     },
     {
@@ -1964,7 +1966,9 @@
         "execution/si020-browser-exit-preserves-work.md",
         "execution/si020-browser-exit-preserves-work.json",
         "execution/si016-stale-catalog-settings.md",
-        "execution/si016-stale-catalog-settings.json"
+        "execution/si016-stale-catalog-settings.json",
+        "execution/si015-native-extension-catalog.md",
+        "execution/si015-native-extension-catalog.json"
       ]
     },
     {
@@ -3459,8 +3463,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si015-native-extension-catalog.md",
+        "execution/si015-native-extension-catalog.json"
+      ]
     },
     {
       "id": "SI-T-D13",
