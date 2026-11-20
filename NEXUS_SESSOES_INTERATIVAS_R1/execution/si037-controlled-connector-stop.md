@@ -13,9 +13,9 @@ estado descartável do daemon.
    app-server, e o daemon liberou a instância. O journal registrou um
    lançamento e o Nexus reteve o resultado original. A drenagem foi normal.
 3. Depois da parada, a API ainda entregou o resultado da sessão exata.
-   O catálogo apresentou o controle, o envio e a reorientação como
-   indisponíveis, assim como a interrupção. A linha de sessão e a lease
-   permaneceram registradas no primeiro ensaio. A API combina o registro da sessão e da lease com o estado da conexão. Com o host desconectado, os controles ficam indisponíveis.
+   Embora o primeiro ensaio tenha preservado as linhas da sessão e da
+   lease, a API usou o estado desconectado do host para desabilitar
+   envio, reorientação e interrupção.
 
 Passaram os dois ensaios de processo e 23 regressões instaladas de
 drenagem e ciclo de vida. Cada ensaio usou um único pedido ao simulador

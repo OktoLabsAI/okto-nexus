@@ -1056,7 +1056,9 @@
         "execution/si020-codex-keyboard-detach-windows.json",
         "execution/si032-codex-abrupt-viewer-exit.md",
         "execution/si032-codex-abrupt-viewer-exit.json",
-        "execution/si037-pi-viewer-backpressure.json"
+        "execution/si037-pi-viewer-backpressure.json",
+        "execution/si020-browser-exit-preserves-work.md",
+        "execution/si020-browser-exit-preserves-work.json"
       ]
     },
     {
@@ -1814,7 +1816,9 @@
         "execution/si036-mobile-native-zoom.md",
         "execution/si036-mobile-native-zoom.json",
         "execution/si036-browser-authorization-loss.md",
-        "execution/si036-browser-authorization-loss.json"
+        "execution/si036-browser-authorization-loss.json",
+        "execution/si020-browser-exit-preserves-work.md",
+        "execution/si020-browser-exit-preserves-work.json"
       ]
     },
     {
@@ -1946,7 +1950,9 @@
         "execution/si036-home-states-native-detach.md",
         "execution/si036-home-states-native-detach.json",
         "execution/si017-live-draft-focus.md",
-        "execution/si017-live-draft-focus.json"
+        "execution/si017-live-draft-focus.json",
+        "execution/si020-browser-exit-preserves-work.md",
+        "execution/si020-browser-exit-preserves-work.json"
       ]
     },
     {
@@ -4895,8 +4901,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si020-browser-exit-preserves-work.md",
+        "execution/si020-browser-exit-preserves-work.json"
+      ]
     },
     {
       "id": "SI-T-H18",

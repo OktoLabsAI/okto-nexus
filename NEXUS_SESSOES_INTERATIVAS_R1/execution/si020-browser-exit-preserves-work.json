@@ -1,0 +1,98 @@
+{
+  "scenario": "SI-T-H17",
+  "status": "PASS",
+  "scope": "Windows Edge, exact Nexus conversation over HTTP/SSE and a real R4 remote-connector channel on loopback",
+  "baseline": {
+    "nexus": "715cee0afebafdf7958033f470eb703b917a9409",
+    "connector": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+    "core": "454c9700e0def181c81fe633857a25b48e125512",
+    "clean_at_start": true,
+    "upstream_drift": {
+      "nexus": 0,
+      "connector": 0,
+      "core": 0
+    }
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "native": {
+    "app_server": "Codex app-server 0.157.0",
+    "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "provider": "isolated deterministic Responses SSE"
+  },
+  "browser": {
+    "open": {
+      "result": "EXACT_BUSY_SESSION_BROWSER_OPEN",
+      "log_sha256": "289047907b6b69977277c3037898b2c8fb3bc9d77d346eb2d17813fe71949083"
+    },
+    "return": {
+      "result": "ORIGINAL_RESULT_ON_FRESH_BROWSER",
+      "log_sha256": "ea84ed516a95518fd7e797977942600294599d3bffc5e01e270b7feb48ac07ad"
+    }
+  },
+  "browser_exit_log_sha256": "3723b3a4ae2bf100797b5353401a0da64e8610cf3daa1ce168cb9025bad9bb9b",
+  "server_verified_stream_disconnect": {
+    "active": 0,
+    "client_disconnects": 2,
+    "terminated": 2,
+    "grant_unchanged": true,
+    "lease_unchanged": true
+  },
+  "process_checkpoints": {
+    "one_installed_native_app_server": true,
+    "original_turn_completed_after_browser_closed": true,
+    "no_stream_at_result": true,
+    "same_exact_result_after_reopen": true,
+    "same_grant_revision_and_charges": true,
+    "same_authorization_and_owner_generation": true,
+    "no_implicit_new_work": true,
+    "canonical_close": "SUCCEEDED",
+    "provider_loopback_requests": 1,
+    "external_provider_calls": 0
+  },
+  "durable_sqlite_and_journal": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "one_result_for_original_native_turn": true,
+    "one_final_closed_session": true,
+    "grant_revision": 1,
+    "grant_revoked": false,
+    "native_launches": 1,
+    "queued_inputs": 0,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "reg": {
+    "browser_and_native_cases": 1,
+    "installed_attachment_authority_stream_and_queue_cases": 24,
+    "browser_and_native_junit_sha256": "66dee476e0a08f4a996192d610ea02978fa1ee190f65ee93883b45ca62e6bab6",
+    "regression_junit_sha256": "ba93b0951ac4b6ea3dbc50ce0f301b41790778a5d12fdd997f51cbe6241e02dc",
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "pwsh -NoProfile -File drive.ps1 -Root <isolated-root>"
+    ],
+    "fixture_directory": "D:/nxs-ui-exit-40884153/final",
+    "fixture_sha256": {
+      "run.ps1": "5497416b681c13db98b78af0459a70af6552ab3aa4c2eb80b772210cf4b8aecb",
+      "drive.ps1": "d9212392a5834fc55c989a5708f1cf9cc90f0b2994f549942a9958d9e47a2ed3",
+      "test_live_draft.py": "1742b57050fdd9545c99b1f94358371bb4edcc27740839c7e94d90c26a841c6f",
+      "browser.js": "20690671045a95d3b297f3f02b323ba49ec11dc3f6cab2d75d728d13608bf81b",
+      "audit_durable.py": "76c25de6e8a002f9796ee4dc90dd2f3748209f93686e7d0cc51d904d2ce9473d"
+    }
+  },
+  "setup_diagnostics": [
+    "An early lifecycle observer required both a disconnect and the absence of every outer middleware final-body frame. The completed test proved the browser exit, disconnect and absence of an open conversation request separately.",
+    "The first result assertion required operation_id on every projected conversation update. The completed test verifies the exact operation against the durable execution result.",
+    "A subsequent snapshot caught the next lease in ISSUED while the earlier applied lease remained effective. The completed test uses the canonical effective-lease reader.",
+    "One isolated attempt failed before runtime admission completed during an inventory link failure. The journal confirmed zero native launches and zero results before a fresh project was used."
+  ],
+  "limitations": [
+    "Controlled responses without a live model provider. No distinct physical host or Windows sign-out/shutdown was involved."
+  ]
+}
