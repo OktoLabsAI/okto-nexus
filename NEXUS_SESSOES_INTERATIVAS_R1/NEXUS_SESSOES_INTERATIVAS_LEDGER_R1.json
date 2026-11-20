@@ -1075,7 +1075,9 @@
         "execution/si006-exact-input-boundaries.md",
         "execution/si006-exact-input-boundaries.json",
         "execution/si006-stale-session-generation.md",
-        "execution/si006-stale-session-generation.json"
+        "execution/si006-stale-session-generation.json",
+        "execution/si030-cli-empty-new-context.md",
+        "execution/si030-cli-empty-new-context.json"
       ]
     },
     {
@@ -1370,7 +1372,9 @@
         "execution/si035-codex-productive-transfer.md",
         "execution/si035-codex-productive-transfer.json",
         "execution/si023-si024-codex-fork-refusal.md",
-        "execution/si023-si024-codex-fork-refusal.json"
+        "execution/si023-si024-codex-fork-refusal.json",
+        "execution/si030-cli-empty-new-context.md",
+        "execution/si030-cli-empty-new-context.json"
       ]
     },
     {
@@ -1821,7 +1825,9 @@
         "execution/si030-terminal-session-selection.md",
         "execution/si023-codex-saved-resume.md",
         "execution/si030-terminal-session-controls.md",
-        "execution/si030-terminal-session-controls.json"
+        "execution/si030-terminal-session-controls.json",
+        "execution/si030-cli-empty-new-context.md",
+        "execution/si030-cli-empty-new-context.json"
       ]
     },
     {
@@ -5018,7 +5024,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si030-cli-empty-new-context.md",
+        "execution/si030-cli-empty-new-context.json"
+      ]
     },
     {
       "id": "SI-T-H01",

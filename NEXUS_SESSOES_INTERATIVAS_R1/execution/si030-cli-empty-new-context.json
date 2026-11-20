@@ -1,0 +1,138 @@
+{
+  "tasks": [
+    "SI-018",
+    "SI-023",
+    "SI-030"
+  ],
+  "scenario": {
+    "id": "SI-T-G20",
+    "status": "NOT_RUN",
+    "limited_evidence": "Authorized canonical embedded CLI opening with installed product and real Pi; simulated model replies"
+  },
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "e7c2c4f699f560688cebdcb3a1e20a95dbc7fb5f",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 549,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "3970610523eb4bd85bf4605771b06b1b83c7a678",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 92,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "24ba3cba04266bc1e854c83842d1ea72546d3d1e",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 73,
+      "behind_main": 0
+    },
+    "working_trees_clean": true,
+    "branch_upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "artifacts": {
+    "nexus_build_tree": "e05bd7a73bf9f661a0ec13a62bef4df09a5bfe0a",
+    "nexus_wheel_sha256": "0a41f0acae85037f03070efcadaf4f1d4db0c59bc33ae2fa906bddded6d4ec09",
+    "connector_wheel_sha256": "3dac4417a143414e0b237dcea63a8f8879e8fb6c303e8ee78c35c7fe32facb45",
+    "core_wheel_sha256": "76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1",
+    "offline_lock_and_wheel_metadata": "PASS"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "terminal": "ConPTY",
+    "python": "3.13.1",
+    "node": "24.15.0",
+    "pi": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "controlled_native_case": "embedded Pi with actual installed Core and Nexus",
+    "remote_attempt": "actual authenticated R4 loopback",
+    "test_model": "deterministic Pi provider in temporary profile with external network denied"
+  },
+  "native_journey": {
+    "terminal_decline_created_no_operation": true,
+    "successful_open_response_lost_and_recovered": true,
+    "exact_opening_operation_posts": 1,
+    "initial_turn_from_empty_open": false,
+    "explicit_new_context": true,
+    "real_pi_processes": 2,
+    "same_embedded_owner_generation": true,
+    "work_checkpoint_unchanged_at_open": true,
+    "source_queue_receipt_unchanged_at_open_and_attach": true,
+    "new_context_attachment_detached": true,
+    "native_conversations": 2,
+    "detach_exit_code": 130,
+    "model_boundary_calls": 3,
+    "source_queue_consumed_once_only_by_source": true,
+    "canonical_results": 3,
+    "canonical_closes": 2,
+    "external_provider_calls": 0
+  },
+  "remote_attempt": {
+    "status": "INCONCLUSIVE",
+    "admitted_second_open": true,
+    "core_second_process_and_receipt_retained": true,
+    "opening_operation_posts": 1,
+    "lost_terminal_response_was_intentional_fixture_injection": true,
+    "control_dispatch_error": "PERMISSION_DENIED",
+    "receipt_publication_error": "OUTCOME_UNKNOWN",
+    "reconciliation": "Connection generation advanced; startup remained pending during observation and both sessions closed during fixture cleanup",
+    "previous_queue_not_transferred": true,
+    "junit_sha256": "c75adc3152a16ae0748a676f8c90a05d116684bdd6af690ec216a9d862bf59ee"
+  },
+  "compatibility": {
+    "pending_format_1": "Recovered using the original request shape",
+    "pending_format_2_at_previous_cli": "Refused before HTTP with checkpoint preserved",
+    "database_migration": false,
+    "work_checkpoint_ownership": "Existing profile and work checkpoint retained across empty opening"
+  },
+  "regressions": {
+    "source": {
+      "tests": 134,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "849cc66a7073748885c536c1b23c446848a2f714a21924d492d5ed70fc819524"
+    },
+    "installed": {
+      "tests": 134,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "ad05318f7a596c5eb3cbed3e1a2942c56abb3cc08f33dafe5312874c6c7f6c7f"
+    },
+    "native_installed": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "0b7c4690f05d21cf7b95f9233fa86ab6435a1638812cb853fddc1f634f32ac33"
+    },
+    "new_ruff_diagnostics": 0
+  },
+  "fixture_sha256": {
+    "test_embedded_context_open.py": "ca142af43e0b826da45aee9df78d0155f7760c75dd4bdc1022eecf5a7c698877",
+    "cli_embedded.py": "ebad238a0b407b91201a7de0a119a760a92753dafcc32e9ce060de43ae16ec63",
+    "test_context_stable.py": "4b1bd91a4866bc01d83624f174df0b18af6045ecaf19771e8b7f9424f69c5ed5",
+    "cli.py": "60f14e12c75176cdd449b53fe74cc15131fed33a0543ea9fbf2f22e658a74486"
+  },
+  "reproduction": {
+    "installed_native_argv": "pytest -o pythonpath= -p assert_wheel_imports test_embedded_context_open.py",
+    "terminal_argv": [
+      "okto-nexus session open --id <Harness ID> --workspace-id <exact workspace>",
+      "okto-nexus session attach --id <Harness ID> --workspace-id <exact workspace> --session-id <new session>"
+    ],
+    "regressions_argv": "pytest tests/session_interaction/test_session_cli.py tests/execution_r4/test_terminal_session_picker.py tests/execution_r4/test_terminal_connect.py tests/execution_r4/test_terminal_work.py"
+  },
+  "limits": [
+    "The installed CLI ran in ConPTY. The fixture injected only the approved binding selector and temporary operator vault into the child.",
+    "Harness-internal context mutation and provider campaign have separate qualification.",
+    "The embedded journey reached both outcomes. The remote retry observed lost control/receipt publication and does not qualify the Connector journey."
+  ]
+}

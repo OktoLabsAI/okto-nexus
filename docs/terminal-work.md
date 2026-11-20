@@ -67,13 +67,19 @@ supports. Queue acceptance and native delivery have separate receipt states.
 | Continue work in a live session | Select it in Home or use `work chat --session-id SESSION_ID` and submit the next request. |
 | Resume retained native history | Use `session resume` for an eligible retired source on the embedded executor. Nexus opens a successor after checking verified history and exclusive ownership. The original queue stays with the source. |
 | Recover an interrupted submission | Use `work resume` for a Nexus work request, or `session receipt` with the original intent and owner generation for native input. If a saved resume lost its response, run the same `session resume` command to recover its receipt. |
-| Start a separate session | Use `work send --new-session` with an explicit request. Check an unconfirmed receipt before deciding whether to send again. |
+| Start a separate session | Use `session open` to confirm an empty session, or `work send --new-session` with a first request. Check an unconfirmed receipt before deciding whether to send again. |
 | Interrupt or close work | Use the explicit interrupt or close control. An interruption targets the current run. Closing retires the session and leaves its unsent queue receipts on the original session. |
 
 ```sh
 okto-nexus session list --id HARNESS_ID --workspace-id WORKSPACE_ID --operator-profile OPERATOR
+okto-nexus session open --id HARNESS_ID --workspace-id WORKSPACE_ID --operator-profile OPERATOR
 okto-nexus session resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SOURCE_SESSION_ID --operator-profile OPERATOR
 ```
+
+`session open` uses the connection's current authorization and leaves work and
+pending messages with their original session. It prints the new session ID
+after the Server confirms the opening. If the opening is unconfirmed, repeat the
+same command to recover its receipt before requesting another session.
 
 The saved-resume command requires a human operator session that the Server
 recognizes as local. Check the successor and receipt it returns before

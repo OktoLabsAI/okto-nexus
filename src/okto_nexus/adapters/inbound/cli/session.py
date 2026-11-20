@@ -45,6 +45,7 @@ from .session_commands import (
     recover_session_command,
     valid_receipt_intent,
 )
+from .session_open import empty_session
 from .terminal_target import resolve_terminal_target, terminal_target_selection
 from .work import open_work
 
@@ -370,7 +371,7 @@ def _target(args, service_args, profile):
 
 def run_session(argv):
     parser = argparse.ArgumentParser(prog='okto-nexus session', description='Inspect or control an exact session.')
-    parser.add_argument('action', choices=('list', 'attach', 'resume', *COMMANDS, 'receipt'))
+    parser.add_argument('action', choices=('list', 'open', 'attach', 'resume', *COMMANDS, 'receipt'))
     connection = parser.add_mutually_exclusive_group()
     connection.add_argument('--id', dest='connect_id', help='public Harness ID in the selected workspace')
     connection.add_argument('--profile', help='existing project profile')
@@ -409,10 +410,12 @@ def run_session(argv):
         parser.error('--viewer-executable requires attach')
     if args.write and (args.action != 'attach' or args.json):
         parser.error('--write requires interactive attach')
-    if args.action == 'list' and args.session_id is not None:
+    if args.action in ('list', 'open') and args.session_id is not None:
         parser.error('--session-id requires a specific session action')
-    if args.action not in ('list', 'attach') and args.session_id is None:
+    if args.action not in ('list', 'open', 'attach') and args.session_id is None:
         parser.error(f'{args.action} requires the exact --session-id')
+    if args.action == 'open' and (args.json or not sys.stdin.isatty() or not sys.stdout.isatty()):
+        parser.error('open requires an interactive terminal for confirmation')
     if args.message_file is not None and args.action not in ('send', 'steer'):
         parser.error('--message-file requires send or steer')
     if args.action in COMMANDS and args.json:
@@ -453,6 +456,15 @@ def run_session(argv):
             call, binding = flow.call, flow.binding()
         if status.get('server_id') not in (None, binding['server_id']):
             raise ConnectionError('SERVER_ID_MISMATCH', 'The session catalog belongs to another Server.')
+        if args.action == 'open':
+            if not getattr(call, 'token', None):
+                raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'Sign in with operator login and pass --operator-profile.')
+            opened = empty_session(service, call, binding, allow_new=True)
+            if opened is None:
+                print('Opening cancelled.')
+            else:
+                print(f'Opened empty session {display_text(opened)}. Use session attach with this exact --session-id.')
+            return 0
         if args.action == 'attach':
             attached = attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
                                       interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(), write=args.write)

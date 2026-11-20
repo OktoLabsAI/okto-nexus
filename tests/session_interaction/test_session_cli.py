@@ -11,13 +11,16 @@ import pytest
 
 from okto_nexus.adapters.inbound.cli import codex_viewer_process, session
 from okto_nexus.adapters.inbound.cli.main import main
-from okto_nexus.application.terminal_connection import ConnectionError
+from okto_nexus.application.terminal_connection import (
+    ConnectionError,
+    document_revision,
+)
 
 BINDING = {'server_id': 'server', 'executor_id': 'executor', 'binding_id': 'binding', 'agent_id': 'agent',
                'workspace_id': 'workspace', 'workspace_binding_id': 'realization', 'endpoint_id': 'endpoint'}
 
 
-@pytest.mark.parametrize('answer', ['no', 'yes', 'lost-receipt', 'no-grant'])
+@pytest.mark.parametrize('answer', ['no', 'yes', 'lost-receipt', 'no-grant', 'legacy-recovery'])
 def test_empty_open_requires_confirmation_and_recovers_the_same_receipt(tmp_path, monkeypatch, answer):
     from okto_nexus.adapters.inbound.cli.session_open import empty_session
 
@@ -56,17 +59,30 @@ def test_empty_open_requires_confirmation_and_recovers_the_same_receipt(tmp_path
                 return operation
             if path.endswith('/runtime/sessions/exact-session?executor_id=executor'):
                 return {'scope': scope, 'control_available': True}
+            if answer == 'legacy-recovery' and path.endswith('/runtime/intents/' + legacy_intent):
+                raise ConnectionError('NOT_FOUND', 'No resolution was recorded', http_status=404)
             assert path.endswith('/runtime/intents/' + resolution['client_intent_id'])
             return {'resolution': resolution, 'operation': operation, 'initial_turn_operation_id': None}
 
     call = Human()
     assert empty_session(service, call, binding) is None
     monkeypatch.setattr('builtins.input', lambda _: '' if answer == 'no' else 'y')
+    legacy_intent = 'empty_open_' + 'a' * 32
     if answer == 'no':
         assert empty_session(service, call, binding, allow_new=True) is None
         assert writes == [] and not list((home / 'terminal/session-openings').glob('*.json'))
     elif answer == 'yes':
         assert empty_session(service, call, binding, allow_new=True) == 'exact-session'
+    elif answer == 'legacy-recovery':
+        old_scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'}
+        directory = home / 'terminal/session-openings'
+        directory.mkdir()
+        (directory / (document_revision(old_scope) + '.json')).write_text(json.dumps({
+            'format': 1, 'state': 'pending', 'scope': old_scope, 'intent': legacy_intent, 'binding_revision': 1,
+            'actor': {'origin': call.base, 'username': call.username},
+        }), encoding='utf-8')
+        assert empty_session(service, call, binding) == 'exact-session'
+        assert writes[0]['client_intent_id'] == legacy_intent
     else:
         expected = 'OUTCOME_UNKNOWN' if answer == 'lost-receipt' else 'PERMISSION_DENIED'
         with pytest.raises(ConnectionError) as rejected:
@@ -81,7 +97,11 @@ def test_empty_open_requires_confirmation_and_recovers_the_same_receipt(tmp_path
     if answer != 'no':
         assert len(writes) == 2
         assert writes[0]['intent'] == 'runtime.start' and 'text' not in writes[0]
+        assert ('new_session' in writes[0]) == (answer != 'legacy-recovery')
+        assert writes[0].get('new_session', True) is True
         assert writes[1]['client_intent_id'] == writes[0]['client_intent_id']
+        checkpoint, = (home / 'terminal/session-openings').glob('*.json')
+        assert json.loads(checkpoint.read_text(encoding='utf-8'))['format'] == (1 if answer == 'legacy-recovery' else 2)
     assert retained_work.read_bytes() == b'{ "work": "retained" }'
 
 
@@ -134,6 +154,36 @@ class Catalog:
             return {'scope': BINDING | {'session_id': ident, 'session_owner_generation': 7},
                     'control_available': ident == 'session-a'}
         pytest.fail(f'Unexpected route {path}')
+
+
+def test_session_open_confirms_the_selected_connection_without_attaching(monkeypatch, capsys):
+    catalog = Catalog(two_live=True)
+    catalog.token = 'operator-fixture'
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    terminal = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=terminal, stdout=terminal))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *_: service)
+
+    def open_empty(selected_service, call, binding, *, allow_new):
+        assert selected_service is service and call is catalog
+        assert binding == BINDING | {'binding_revision': 4} and allow_new is True
+        return 'empty-new'
+
+    monkeypatch.setattr(session, 'empty_session', open_empty)
+    monkeypatch.setattr(session, 'attach_session', lambda *_args, **_kwargs: pytest.fail('Open must not attach'))
+    assert main(['session', 'open', '--id', 'reviewer', '--workspace-id', 'workspace']) == 0
+    assert 'Opened empty session empty-new.' in capsys.readouterr().out
+    assert '/runtime/sessions' not in catalog.routes
+
+
+@pytest.mark.parametrize(('tty', 'extra'), [(False, []), (True, ['--json']), (True, ['--session-id', 'existing'])])
+def test_session_open_rejects_implicit_or_conflicting_selection_before_connecting(tty, extra, monkeypatch):
+    terminal = SimpleNamespace(isatty=lambda: tty)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=terminal, stdout=terminal))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *_: pytest.fail('Invalid opening accessed the Server'))
+    with pytest.raises(SystemExit) as refused:
+        main(['session', 'open', '--id', 'reviewer', *extra])
+    assert refused.value.code == 2
 
 
 @pytest.mark.parametrize('remote', [False, True])

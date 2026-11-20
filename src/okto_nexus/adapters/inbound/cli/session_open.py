@@ -45,13 +45,16 @@ def _admit_empty(call, binding, checkpoint, save, *, recovery):
 
     if operation is None and checkpoint['binding_revision'] != binding['binding_revision']:
         raise ConnectionError('OPENING_SCOPE_CHANGED', 'The binding changed. Review the opening receipt before continuing.')
+    request = {'client_intent_id': intent, 'intent': 'runtime.start',
+               'agent_id': binding['agent_id'], 'binding_id': binding['binding_id'],
+               'workspace_binding_id': binding['workspace_binding_id']}
+    # Checkpoints issued before explicit empty openings used the default
+    # selection. Keep their original request shape during recovery.
+    if checkpoint['format'] == 2:
+        request['new_session'] = True
     try:
         resolution = recovered['resolution'] if recovered is not None else call(
-            'POST', PREFIX + '/runtime/intents:resolve', {
-                'client_intent_id': intent, 'intent': 'runtime.start',
-                'agent_id': binding['agent_id'], 'binding_id': binding['binding_id'],
-                'workspace_binding_id': binding['workspace_binding_id'],
-            })
+            'POST', PREFIX + '/runtime/intents:resolve', request)
         scope = resolution['scope']
         session_id = scope['session_id']
         if (any(scope.get(field) != binding[field] for field in _SCOPE)
@@ -127,7 +130,7 @@ def empty_session(service, call, binding, *, allow_new=False):
         actor = {'origin': call.base, 'username': call.username}
         pending = prior is not None and prior.get('state') != 'settled'
         if pending:
-            if (prior.get('format') != 1 or prior.get('state') != 'pending' or prior.get('scope') != scope
+            if (prior.get('format') not in (1, 2) or prior.get('state') != 'pending' or prior.get('scope') != scope
                     or prior.get('actor') != actor or not isinstance(prior.get('intent'), str)
                     or not re.fullmatch(r'empty_open_[0-9a-f]{32}', prior['intent'])):
                 raise ConnectionError('OPENING_CHECKPOINT_UNCONFIRMED', 'The saved opening belongs to a different scope or operator.')
@@ -141,7 +144,7 @@ def empty_session(service, call, binding, *, allow_new=False):
             print(f"An empty session will use the existing execution authorization and policy ({display_text(policy['session_policy'])}). No prompt will be sent.")
             if input('Open an empty session? [y/N] ').strip().lower() != 'y':
                 return None
-            checkpoint = {'format': 1, 'state': 'pending', 'scope': scope, 'actor': actor,
+            checkpoint = {'format': 2, 'state': 'pending', 'scope': scope, 'actor': actor,
                           'intent': 'empty_open_' + uuid4().hex, 'binding_revision': binding['binding_revision']}
             atomic_json(path, checkpoint)
 

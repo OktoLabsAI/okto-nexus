@@ -20,7 +20,7 @@ Usage:
   okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
   okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
-  okto-nexus session list|attach|resume [--id HARNESS_ID | --profile NAME] [options]
+  okto-nexus session list|open|attach|resume [--id HARNESS_ID | --profile NAME] [options]
   okto-nexus message send [options]  Send conversation using a participant profile
   okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
   okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
