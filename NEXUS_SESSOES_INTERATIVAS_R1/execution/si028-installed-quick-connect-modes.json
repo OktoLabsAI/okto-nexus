@@ -1,0 +1,112 @@
+{
+  "tasks": [
+    "SI-028",
+    "SI-033"
+  ],
+  "passed_scenarios": [
+    "SI-T-F17"
+  ],
+  "status": "INSTALLED_QUICK_CONNECT_MODE_INVARIANTS_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "85049ec7292267b9bea7bd56414bde6deef2e312",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 522
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "tested_product_commit": "3546b8d35080b17fc00581aa2dbef0516bb32eb3",
+  "installed_wheel_sha256": {
+    "nexus": "6899291fe034b25833429f3cf0a7a0a30154dc6ae4267f77acbd40b7257034cc",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "terminal": "Installed okto-nexus.exe in Windows ConPTY",
+    "git_version": "2.34.1.windows.1",
+    "git_source": "Trusted installed absolute executable, two real fixture repositories with local origin config",
+    "server": "Installed Nexus in loopback with real ServeLock and SQLite",
+    "fixture": "Synthetic harness inventory, version probe and connection test; no harness launched or provider request"
+  },
+  "native_terminal_observations": {
+    "observations": {
+      "same_plan_revision_and_profile_across_modes": true,
+      "git_parent_supplies_name_child_remains_execution_root": true,
+      "occupied_id_canceled_in_both_modes_before_setup": true,
+      "custom_id_keeps_reviewed_name_cwd_and_execution_root": true,
+      "customization_requires_new_approved_revision_and_intent": true,
+      "superseded_review_cannot_be_reused": true,
+      "mode_change_and_changed_git_origin_preserve_profile_bytes": true,
+      "both_resumes_keep_same_binding_setup_and_grant": true
+    },
+    "approved_fixture_connection_tests": 2,
+    "fixture_version_probes": 1,
+    "external_provider_calls": 0,
+    "presentation_sessions": 0,
+    "same_service_generation": true,
+    "sqlite_integrity": "ok"
+  },
+  "independent_read_only_audit": {
+    "git_child_roots_and_public_ids_confirmed": true,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "counts": {
+      "connection_setup_commits": 2,
+      "execution_bindings": 2,
+      "runtime_execution_grants": 2,
+      "execution_operations": 0,
+      "execution_sessions": 0,
+      "session_attachments": 0,
+      "session_interaction_inputs": 0
+    },
+    "product_files_matching_checkout": 810,
+    "superseded_revision_differs_from_retained_approval": true
+  },
+  "tests": {
+    "installed_integration": 1,
+    "installed_regressions": 94,
+    "installed_imports_verified": true
+  },
+  "fixture_directory": "D:/nxs-quick-connect-git-real-0a8a19a3",
+  "artifact_sha256": {
+    "test_connect.py": "08d2f9f38ee65723b84b69ad65a7eef1218436937fd8be6126b0de58f938309f",
+    "pty_probe.py": "cac1f70fc3d341cd4f977730ad5d54efe5942cd16c32d4434adb7bc5ded131cc",
+    "run.ps1": "cdb929bea4d0486516d59012ab9cc8e2c2984529d659ceb9740ae74059491671",
+    "focus.xml": "a2d2d2c5d718c1c0311e784393dbf6738f4c73e2711441a80b0372c6a32f7249",
+    "proof.json": "03792c121af5bf4c8ac94980b1574678f961bda4839bf5b8cddce5e86a7a085c",
+    "audit.json": "f8b4fd740f48321ead43e12bd17ae8ea6b01f08105d2660d535a4466d356aa34",
+    "plan-no-interactive.txt": "18a0e089690aa47539f25675230a85c442f3df8b4135775da26f43f09b86f1b5",
+    "plan-interactive.txt": "b9570539f5a9a90f3eb8933a2de2c3807e75867486d9978ea7564e90584525c8",
+    "git-no-interactive.txt": "30dc07dfc4fd72bf3370953ab0b437cf792a2523dc431f7f7183b2621e43278e",
+    "collision-no-interactive.txt": "7b23350646cd84d04f1cd3a9f48ed8fbb52d5e24ad1310f26c7ac5be56968ae6",
+    "collision-interactive.txt": "7b23350646cd84d04f1cd3a9f48ed8fbb52d5e24ad1310f26c7ac5be56968ae6",
+    "customize-interactive.txt": "1fdcb73029b66b7f40e30f4eef59d1faf721fa87477ef31fff3b762bac450e27",
+    "superseded-review.txt": "ed414e3a4a32553043814732957337c9cc254aeb52e4d5da730a4901b606fee3",
+    "resume-no-interactive.txt": "382d6122124f9951e7775b2fe4ec917990a202103f3526cb90c793d24565a5a0",
+    "resume-interactive.txt": "fb0e2b5304860fcec3a9fb01d89a80bf6ace994b3256953501ab346f3c759dd9",
+    "regressions.xml": "26b9df1f1229c0083e6f637f12012816232a0ed417a902ac8e754f13b184c8e0"
+  },
+  "cleanup": {
+    "listeners": 0,
+    "fixture_processes": 0
+  },
+  "limits": [
+    "The installed conformance test covers CLI review, Git naming, identity and setup storage; the harness is a fixture."
+  ],
+  "migration": "none"
+}

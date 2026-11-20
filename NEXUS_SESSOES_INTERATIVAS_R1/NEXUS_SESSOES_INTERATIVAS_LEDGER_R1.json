@@ -1659,6 +1659,8 @@
       ],
       "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si028-installed-quick-connect-modes.md",
+        "execution/si028-installed-quick-connect-modes.json",
         "execution/si029-installed-connect-modes.md",
         "execution/si029-installed-connect-modes.json",
         "execution/si028-connect-presentation.md",
@@ -1896,6 +1898,8 @@
       ],
       "status": "TODO",
       "evidence": [
+        "execution/si028-installed-quick-connect-modes.md",
+        "execution/si028-installed-quick-connect-modes.json",
         "execution/si030-installed-work-resume.md",
         "execution/si030-installed-work-resume.json",
         "execution/si032-exact-reattach-command.json",
@@ -4417,8 +4421,12 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": ["execution/si032-exact-reattach-command.json"]
+      "status": "PASS",
+      "evidence": [
+        "execution/si028-installed-quick-connect-modes.md",
+        "execution/si028-installed-quick-connect-modes.json",
+        "execution/si032-exact-reattach-command.json"
+      ]
     },
     {
       "id": "SI-T-G01",
