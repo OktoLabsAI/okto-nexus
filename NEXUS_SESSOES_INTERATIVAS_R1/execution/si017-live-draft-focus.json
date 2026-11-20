@@ -122,7 +122,73 @@
     }
   },
   "limitations": [
-    "The earlier embedded fixture received PROFILE_DRIFT before native launch. The completed run used the approved remote Connector path on the same host.",
+    "The first embedded setup reported PROFILE_DRIFT. A new isolated open/close probe and a new full embedded browser run both passed. The original refusal did not recur.",
     "Separate gates cover screen-reader output, manual acceptance, and a real provider."
-  ]
+  ],
+  "embedded_repeat": {
+    "installed_open_and_close_without_prompt": "PASS",
+    "installed_open_and_close_junit_sha256": "d8db543f2b1d6ac3bec1c987c37bdc549c20cc2857ede15b3f68eb7111550856",
+    "installed_browser": "PASS",
+    "installed_browser_junit_sha256": "45456c291a032d23c9f58db5ffbc91610e9a76c2357c43fcf695c0393e9608fb",
+    "fixture_directory": "D:/nxs-draft-39944496/embedded-browser",
+    "fixture_sha256": "226544513b0285c9c9c7eb8f96f90bfb477b2409c7a412fc8906840e9f7b6d49",
+    "browser": {
+      "prepare": {
+        "result": {
+          "checkpoint": "EXACT_STREAM_DRAFT_FOCUSED",
+          "scope": true,
+          "characters": 32,
+          "selection": 3
+        },
+        "log_sha256": "9ae16055d3ef0d8456f041fdc138bfe173cbfb733a114372e2dbcd7fe52cb2ed"
+      },
+      "first": {
+        "result": {
+          "checkpoint": "FOCUS_DRAFT_AND_SELECTION_PRESERVED",
+          "phase": "first",
+          "characters": 32,
+          "selection": 3
+        },
+        "log_sha256": "1ac6cce80d18b3229f8f495b567017480633428236635ac72cb7435c284f5638"
+      },
+      "second": {
+        "result": {
+          "checkpoint": "FOCUS_DRAFT_AND_SELECTION_PRESERVED",
+          "phase": "second",
+          "characters": 51,
+          "selection": 2
+        },
+        "log_sha256": "9d4c685858f95206c35357142565b4e79a9b127031c8bf5991f3c03a41149854"
+      },
+      "complete": {
+        "result": {
+          "checkpoint": "FOCUS_DRAFT_AND_SELECTION_PRESERVED",
+          "phase": "complete",
+          "characters": 69,
+          "selection": 2
+        },
+        "log_sha256": "091892013d7ddd2d7529673156c9d7c66e14d463b84ef8d3a044493e518ad0a3"
+      }
+    },
+    "service": {
+      "native_codex_deltas": 2,
+      "conversation_appends": 2,
+      "complete_snapshots": 1,
+      "stable_message_identity": true,
+      "exact_final_text": true,
+      "canonical_close": "SUCCEEDED",
+      "loopback_model_requests": 1,
+      "external_provider_calls": 0,
+      "no_input_admitted_for_unsubmitted_draft": true
+    },
+    "persistence": {
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "sessions_closed": 1,
+      "canonical_results": 1,
+      "queued_draft_inputs": 0
+    },
+    "process_launch_records": 1,
+    "initial_profile_drift_reproduced": false
+  }
 }

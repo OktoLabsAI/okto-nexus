@@ -23,7 +23,11 @@ O cenário no navegador real, 20 verificações de componentes e 28 testes
 de API e transcript passaram. As verificações de componentes reproduziram
 os avisos de `useLayoutEffect` da renderização no servidor. O primeiro
 ensaio recebeu `PROFILE_DRIFT` com a fixture de configuração embutida antes
-de abrir o Codex. A execução concluída usou o perfil revisado via Connector.
+de abrir o Codex. O ensaio via Connector passou. Em perfis locais novos, passaram também a
+abertura e o fechamento sem prompt e o fluxo completo no Edge com o Nexus
+gerenciando o app-server diretamente. A recusa inicial não se repetiu.
+O segundo ensaio no navegador confirmou os mesmos checkpoints, uma única
+execução Codex e zero entradas para o rascunho.
 
 O ledger registra `PASS` para SI-T-E09. A validação com leitor de tela,
 a aceitação manual e a campanha com provedor real continuam pendentes.
