@@ -13,13 +13,20 @@ input and operation IDs. Unsent work from the retired session remained
 opened no successor and neither input was replayed.
 
 All 29 installed tests passed, including four restart cases and 25 queue
-and capacity cases. The document package validator passed. Ruff reported
+and capacity cases. In the isolated environment, run the regression with
+the installed wheels and the tests from the worktree.
+
+```sh
+python -m pytest -q tests/execution_r4/test_session_input_runtime.py::test_restart_reconciles_queued_input_receipts_without_resending tests/session_interaction/test_capacity_attempts.py tests/session_interaction/test_queue_storage.py
+```
+
+The document package validator passed. Ruff reported
 the same two import blocks in the file before and after this increment.
 The guide explains how to switch Home in one browser and how to keep
 reconciliation active while preparing a Server rollback. [Terminal guide](../../docs/terminal-work.md#roll-back-the-session-interface)
 
-This is a controlled restart of the embedded test owner using a copied
-test home. The separate browser probe exercises a live Connector and
+This is a controlled restart of the embedded test owner using the same
+disposable test home. The separate browser probe exercises a live Connector and
 Pi process while changing Home without restarting them. The full
 provider campaign and release decision remain open. Changes are limited
 to the regression, guide and evidence. Revert this commit to remove those
