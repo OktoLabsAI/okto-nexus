@@ -77,6 +77,25 @@ review each action there or in its terminal command. For scripts,
 `connect --json` reports setup and the receipt. Interactive viewers need a
 terminal.
 
+## Roll back the session interface
+
+Choose **Use classic Home** in **Settings** to switch the current browser
+back to its classic view. The Server continues to reconcile admitted work
+and process its queue. Return to operational Home or use the terminal to
+check the same session.
+
+For a Server rollback, stop admitting new inputs and keep the current
+executor and its reconciliation running until outstanding inputs are
+resolved or explicitly paused. Use **Pause queue** on the exact session
+when the control is available and pending messages need to wait.
+
+The session interaction flag applies at Server startup. With the flag off,
+the Server refuses new queue submissions and can still reconcile retained
+work. After a restart retires an
+embedded session, unsent inputs keep their original receipts on that
+session. Use the original intent and generation to check uncertain delivery
+before deciding whether to submit new work.
+
 ## Follow a live Codex session
 
 Use a saved human operator login for the Nexus server and select the exact

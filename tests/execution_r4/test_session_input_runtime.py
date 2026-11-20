@@ -609,8 +609,15 @@ def test_server_dispatches_queue_after_busy_boundary_without_handoff_acquisition
     assert len(native.native.sent) == 3
 
 
-@pytest.mark.parametrize('terminal_recorded', [False, True], ids=['unknown', 'completed'])
-def test_restart_reconciles_queued_input_receipts_without_resending(tmp_path, monkeypatch, terminal_recorded):
+@pytest.mark.parametrize(('terminal_recorded', 'enable_on_restart'), [
+    pytest.param(False, True, id='unknown'),
+    pytest.param(True, True, id='completed'),
+    pytest.param(False, False, id='unknown-admissions-disabled'),
+    pytest.param(True, False, id='completed-admissions-disabled'),
+])
+def test_restart_reconciles_queued_input_receipts_without_resending(
+    tmp_path, monkeypatch, terminal_recorded, enable_on_restart,
+):
     from okto_nexus.bootstrap import embedded_dispatch, server_runtime
 
     def receipt(client, intent):
@@ -748,8 +755,9 @@ def test_restart_reconciles_queued_input_receipts_without_resending(tmp_path, mo
 
     monkeypatch.setattr(server_runtime, 'start_runtime_services', start)
     restarted_deps, restarted = embedded_app(tmp_path / 'home')
-    restarted_deps.config.runtime_session_interaction_enabled = True
+    restarted_deps.config.runtime_session_interaction_enabled = enable_on_restart
     with TestClient(restarted) as client:
+        assert bool(restarted.state.session_input_dispatch_options) is enable_on_restart
         restarted_owner = restarted.state.embedded_dispatch_owner
         assert restarted_owner.channel.connection_generation > first_generation
         client.cookies.set('nexus_operator_session', token)
@@ -770,6 +778,8 @@ def test_restart_reconciles_queued_input_receipts_without_resending(tmp_path, mo
             'client_intent_id': 'new-after-restart', 'content': [{'type': 'text', 'text': 'No implicit reroute'}],
         })
         assert refused.status_code in (404, 409), refused.text
+        if not enable_on_restart:
+            assert refused.status_code == 409 and 'session queue is disabled' in refused.text
         assert receipt(client, 'maybe-sent') == recovered
         with restarted_deps.connection_factory.unit_of_work(write=False) as uow:
             rows = uow.connection.execute('SELECT input_id,session_id,content FROM session_interaction_inputs '

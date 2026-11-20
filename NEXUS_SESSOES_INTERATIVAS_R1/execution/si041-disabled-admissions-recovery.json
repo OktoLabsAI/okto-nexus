@@ -1,0 +1,29 @@
+{
+  "task": "SI-041",
+  "related_scenario": "SI-T-I03",
+  "candidate_nexus_sha256": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+  "candidate_connector_sha256": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+  "candidate_core_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+  "scope": "installed Nexus with its embedded R4 and Core, synthetic native peer",
+  "after_restart_disabled": {
+    "refused_new_admission_http": 409,
+    "recovered_completed_input": "ACCEPTED_NATIVE",
+    "recovered_unknown_input": "DELIVERY_UNKNOWN",
+    "retained_unsent_input": "BLOCKED_SESSION",
+    "receipt_identity_preserved": true,
+    "no_native_replay_or_new_open": true
+  },
+  "tests": {
+    "restart_cases": 4,
+    "capacity_and_queue_cases": 25,
+    "passed": 29,
+    "failed": 0,
+    "junit_sha256": "9db775453a641c7be32c6ee5890e37a52f348f03fb875148d73614dc7dc06857"
+  },
+  "lint": {
+    "new_diagnostics": 0,
+    "baseline_unsorted_import_blocks": 2
+  },
+  "package_document_validator": "PASS",
+  "external_provider_campaign": "not_run"
+}
