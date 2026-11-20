@@ -2177,7 +2177,9 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
     client.cookies.clear()
 
 
-def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interactive_runtime):
+def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interactive_runtime, monkeypatch):
+    from okto_nexus.application import session_interaction_targets
+
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup
     opened = admit(setup, binding, 'steer-open', 'runtime.start', new_session=True)
@@ -2287,6 +2289,40 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
 
     body = confirmation(preview()) | {'client_intent_id': 'direct-steer',
         'content': [{'type': 'text', 'text': 'First reorientation'}]}
+    original_contract = session_interaction_targets.get_control_targeting
+
+    def without_steer(adapter_id, action):
+        contract = original_contract(adapter_id, action)
+        if (adapter_id, action) == ('codex_app_server', 'turn.steer'):
+            return replace(contract, supported=False)
+        return contract
+
+    with monkeypatch.context() as capabilities:
+        capabilities.setattr(session_interaction_targets, 'get_control_targeting', without_steer)
+        assert preview() is None
+        unqualified_revision, unqualified_commands = catalog()
+        assert unqualified_commands['steer']['state'] == 'unqualified'
+        assert unqualified_commands['interrupt']['state'] == 'supported'
+        assert unqualified_commands['send']['state'] == 'supported'
+        unqualified = body | {'client_intent_id': 'unsupported-steer'}
+        with ThreadPoolExecutor(max_workers=2) as requests:
+            direct_attempt = requests.submit(client.post, path + '/steer', headers=ui, json=unqualified)
+            command_attempt = requests.submit(client.post, path + '/commands:execute', headers=ui, json=unqualified | {
+                'command': 'steer', 'catalog_revision': unqualified_revision, 'confirmed': True,
+            })
+            rejected, unavailable = direct_attempt.result(), command_attempt.result()
+        assert rejected.status_code == 409 and 'reorientation capability or effect changed' in rejected.text
+        assert unavailable.status_code == 409 and unqualified_commands['steer']['reason'] in unavailable.text
+        assert client.get(path + '/inputs/receipt', params=query | {
+            'client_intent_id': 'unsupported-steer',
+        }).status_code == 404
+        assert native.native.sent == [('send_turn', active['operation_id'])]
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            actions = [row['action'] for row in uow.connection.execute(
+                'SELECT action FROM execution_operations WHERE session_id=? ORDER BY action', (session,),
+            )]
+        assert actions == ['runtime.open', 'turn.submit']
+
     stale = client.post(path + '/steer', headers=ui, json=body | {'confirmed_effect_revision': 'stale-effect'})
     assert stale.status_code == 409
     assert client.get(path + '/inputs/receipt', params=query | {'client_intent_id': 'direct-steer'}).status_code == 404

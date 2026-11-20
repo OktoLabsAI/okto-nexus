@@ -650,7 +650,9 @@
         "execution/si007-pi-tool-boundary.md",
         "execution/si007-pi-tool-boundary.json",
         "execution/si009-isolated-cancellation-and-promotion.md",
-        "execution/si009-isolated-cancellation-and-promotion.json"
+        "execution/si009-isolated-cancellation-and-promotion.json",
+        "execution/si010-unqualified-steer.md",
+        "execution/si010-unqualified-steer.json"
       ]
     },
     {
@@ -3220,8 +3222,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si010-unqualified-steer.md",
+        "execution/si010-unqualified-steer.json"
+      ]
     },
     {
       "id": "SI-T-C11",
