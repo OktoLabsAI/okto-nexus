@@ -1,0 +1,59 @@
+{
+  "task": "SI-023",
+  "scenarios": ["SI-T-G11", "SI-T-G13", "SI-T-G14"],
+  "baseline_nexus": "04f62c1d999ddaaf04b8a771d5bc8bfd5a8839e9",
+  "baseline_nexus_wheel_sha256": "b9ab9556209f92d68a71f98ffa418ea424416f5caa9b530d1fbe005eb9f2a941",
+  "baseline_contract": {
+    "saved_resume_http_status": 409,
+    "generic_no_saved_context_diagnostic": true,
+    "junit_sha256": "9ad56d481d0f1533b89defc438d5fdb51fe5cbbe6473e98a8174accd722de382"
+  },
+  "baseline_native": {
+    "saved_resume_http_status": 409,
+    "generic_no_saved_context_diagnostic": true,
+    "same_tool_and_turn_completed_once": true,
+    "native_viewer_attached_and_detached_during_tool": true,
+    "junit_sha256": "f3262e7127367e878b3e5f19f899e1283202e50508755e39739924a45ddbf334"
+  },
+  "candidate_nexus_source_tree": "d680c2dfdbc808774f0c833ce6c7f6a6ddb3a95c",
+  "candidate_nexus_wheel_sha256": "bd5a39fd831e188f155b62c5c2f468895bc12129f947e38c6d4978178be208de",
+  "connector_wheel_sha256": "1c9c072ca30756b140cd17ef6cae006997e4db34e766b625b8195075d7e2595e",
+  "core_wheel_sha256": "e378513e9b720372bdaec9e03f24d2da1844d931057afbe36f0ae4c19b97824b",
+  "platform": "Windows x64, local embedded runtime, loopback and ConPTY",
+  "engine": {"version": "0.157.0", "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"},
+  "viewer": {"version": "0.170.0", "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"},
+  "installed_candidate": {
+    "junit_sha256": "e117e6556229101bca6449340c8e3e0f2fbf336594265536383061f9aa7045d5",
+    "saved_resume_http_status": 409,
+    "live_specific_diagnostic": true,
+    "saved_resume_created_no_operation_or_close_evidence": true,
+    "native_viewer_attached_and_detached_during_tool": true,
+    "same_canonical_session_native_thread_and_process": true,
+    "original_tool_starts": 1,
+    "original_tool_completions": 1,
+    "native_engine_launches": 1,
+    "native_turn_starts": 1,
+    "original_turn": "SUCCEEDED",
+    "correlated_runtime_result": true,
+    "canonical_close_and_engine_exit": true,
+    "sqlite_integrity": "ok",
+    "local_simulated_model_requests": 3,
+    "external_model_requests": 0
+  },
+  "regressions": {
+    "installed_nexus_tests_passed": 54,
+    "installed_nexus_junit_sha256": "b6c14dd1b1202c1cc33d79d7cb2627a046d97d4060a44500358962bfccc96d00",
+    "installed_core_claude_control_tests_passed": 23,
+    "installed_core_claude_junit_sha256": "4df8f96a80cc837bdc1bc2fcfb1ef1f313b11981917abe68f0248fa861be8c94",
+    "core_full_source_rerun": {
+      "commit": "049feff6d77d36b74bd4126069e9335ab4342f0b",
+      "passed": 2424,
+      "failed": 0,
+      "skipped": 70,
+      "passing_subtests": 15,
+      "junit_sha256": "96d940fc099b1193662f27f151777c08f86199e206f167838241868bbd4d48ad"
+    },
+    "offline_lock_install_and_strict_package_checks_passed": true
+  },
+  "limitations": "The local tool belongs to the active turn. Independent background processes, other hosts and campaign checks are still open."
+}

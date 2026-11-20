@@ -1931,6 +1931,21 @@ def test_saved_codex_context_requires_retirement_and_same_history(
 
     eventually(mapping)
     source = mapping()
+    if condition == 'intact':
+        auth = app.state.operator_auth
+        assert auth.configure('resume-fixture', 'fixture-resume-password', local=True)
+        token = auth.login('resume-fixture', 'fixture-resume-password')
+        headers = {'cookie': f'nexus_operator_session={token}', 'x-nexus-ui': '1', 'origin': 'http://127.0.0.1'}
+        url = 'http://127.0.0.1/api/v1/runtime-management/runtime/intents:resolve'
+        request = {'client_intent_id': 'saved-resume-while-open', 'intent': 'runtime.resume_saved',
+                   'agent_id': binding['agent_id'], 'binding_id': scope.binding_id,
+                   'workspace_binding_id': scope.workspace_binding_id, 'session_id': session,
+                   'source_session_generation': scope.generation.value}
+        live = client.post(url, headers=headers, json=request)
+        assert live.status_code == 409 and 'source session is still active' in live.text
+        stale = client.post(url, headers=headers, json=request | {'source_session_generation': scope.generation.value + 1})
+        assert stale.status_code == 409 and 'no verified saved context' in stale.text
+        assert native.opens == 1 and not native.native.stopped and native.native.sent == []
     with factory.unit_of_work(write=False) as uow:
         epoch = uow.connection.execute(
             'SELECT stream_epoch FROM execution_local_streams WHERE server_id=? AND executor_id=? AND session_id=?',

@@ -1,0 +1,13 @@
+# SI-023 · Retomada salva durante um turno do Codex
+
+`session resume` agora informa quando a sessão local exata ainda está ativa. A retomada salva exige um encerramento verificado. O diagnóstico indica o caminho de acompanhamento ao vivo quando disponível. Para uma geração divergente, a API continua retornando a mensagem de contexto salvo indisponível. A consulta permanece restrita ao Server, executor, conexão e projeto selecionados. O wheel anterior também recusou a retomada e preservou a ferramenta, com a mensagem genérica de contexto salvo indisponível.
+
+No Windows, o Nexus instalado abriu uma sessão com o app-server Codex 0.157.0 e iniciou um turno com a ferramenta MCP `wait_for_marker`. Com a ferramenta em andamento, o operador pediu a retomada salva. O CLI recebeu HTTP 409, e a inspeção do banco confirmou que o pedido não criou uma operação nem uma prova de encerramento. O mesmo processo e a mesma thread permaneceram ativos.
+
+O visualizador nativo Codex 0.170.0 abriu a sessão como um processo separado em ConPTY e mostrou o estado em andamento. O operador desanexou com Ctrl+]. A ferramenta permaneceu em espera até a liberação do marcador e registrou um único início e uma única conclusão na mesma thread e no mesmo turno. O resultado apareceu no registro da operação original. O fechamento canônico encerrou o app-server. O SQLite passou nas verificações de integridade e de chaves estrangeiras.
+
+O ensaio usou um perfil descartável, o modelo simulado em loopback e a ferramenta de leitura já usada em SI-038. O primeiro watchdog de abertura era insuficiente para o ensaio. A coleta passou a correlacionar o evento MCP pelos IDs nativos da thread e do turno. A repetição com o wheel anterior aguardou a prontidão do MCP. Os 54 testes com wheels instalados exercitaram a retomada, a recusa de geração divergente e a preservação das evidências anteriores. A nova execução da suíte completa do Core confirmou os reparos da etapa anterior, com 2.424 testes aprovados e 70 ignorados. [Resultados e hashes](si023-codex-live-resume-refusal.json)
+
+A evidência de SI-T-G13 e SI-T-G14 cobre uma ferramenta ativa vinculada ao turno local. A qualificação de processos em background independentes do turno, outros hosts e campanhas continua pendente. SI-T-G11 também passa a referenciar o ensaio anterior de `connect -i` com o visualizador real. SI-T-G17 referencia a recusa do Claude antes do início da geração, complementada por 23 testes de controle com o Core instalado. Os gates mantêm o status de qualificação pendente. [Teste anterior de `connect -i`](si038-codex-tool-gate.md) · [Recusa do Claude](si026-claude-requesting-refusal.md)
+
+A alteração dispensa migração de banco. Para reverter, volte ao wheel anterior do Nexus.

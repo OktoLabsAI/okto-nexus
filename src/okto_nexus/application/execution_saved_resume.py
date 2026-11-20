@@ -50,18 +50,22 @@ def require_saved_resume_operator(*, actor, context, enabled):
 
 def saved_source(conn, scope, source_session_id, source_generation, *, adapter_id='codex_app_server'):
     row = conn.execute("""
-        SELECT c.witness_json, c.close_operation_id, c.release_digest
-        FROM embedded_saved_contexts c
-        JOIN execution_sessions s USING (server_id, executor_id, session_id)
+        SELECT c.witness_json, c.close_operation_id, c.release_digest, s.lifecycle_state, s.lease_state
+        FROM execution_sessions s
         JOIN execution_executors e USING (server_id, executor_id)
-        WHERE c.server_id=? AND c.executor_id=? AND c.session_id=? AND c.owner_generation=?
-          AND c.status='VERIFIED' AND c.adapter_id=? AND e.kind='embedded' AND s.binding_id=?
-          AND s.workspace_id=? AND s.workspace_binding_id=? AND s.owner_generation=c.owner_generation
+        LEFT JOIN embedded_saved_contexts c ON c.server_id=s.server_id AND c.executor_id=s.executor_id
+          AND c.session_id=s.session_id AND c.owner_generation=s.owner_generation
+          AND c.status='VERIFIED' AND c.adapter_id=?
           AND s.open_operation_id=c.opening_operation_id AND s.stream_epoch=c.stream_epoch
           AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED'
-    """, (scope['server_id'], scope['executor_id'], source_session_id, source_generation, adapter_id, scope['binding_id'],
+        WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? AND s.owner_generation=?
+          AND e.kind='embedded' AND s.binding_id=? AND s.workspace_id=? AND s.workspace_binding_id=?
+    """, (adapter_id, scope['server_id'], scope['executor_id'], source_session_id, source_generation, scope['binding_id'],
           scope['workspace_id'], scope['workspace_binding_id'])).fetchone()
-    if row is None:
+    if row is not None and row['lifecycle_state'] == 'READY' and row['lease_state'] == 'ACTIVE':
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The source session is still active. Saved resume requires a verified '
+                          'close. Use live attachment when available.', {})
+    if row is None or row['witness_json'] is None:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact session has no verified saved context on this host.', {})
     witness = json.loads(row['witness_json'])
     if adapter_id == 'claude_stream' and not witness.get('opening_profile', {}).get('claude_resume_profile'):

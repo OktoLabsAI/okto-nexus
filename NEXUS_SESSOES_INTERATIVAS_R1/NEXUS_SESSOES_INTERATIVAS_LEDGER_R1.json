@@ -1369,6 +1369,8 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si023-codex-saved-resume.md",
+        "execution/si023-codex-live-resume-refusal.md",
+        "execution/si023-codex-live-resume-refusal.json",
         "execution/si026-claude-background-windows.json",
         "execution/si026-claude-retained-identity.json",
         "execution/si026-claude-source-retirement.json",
@@ -4837,7 +4839,12 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si038-codex-tool-gate.md",
+        "execution/si038-codex-tool-gate.json",
+        "execution/si023-codex-live-resume-refusal.md",
+        "execution/si023-codex-live-resume-refusal.json"
+      ]
     },
     {
       "id": "SI-T-G12",
@@ -4880,7 +4887,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si023-codex-live-resume-refusal.md",
+        "execution/si023-codex-live-resume-refusal.json"
+      ]
     },
     {
       "id": "SI-T-G14",
@@ -4900,7 +4910,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si023-codex-live-resume-refusal.md",
+        "execution/si023-codex-live-resume-refusal.json"
+      ]
     },
     {
       "id": "SI-T-G15",
@@ -4971,7 +4984,11 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si026-claude-requesting-refusal.md",
+        "execution/si026-claude-requesting-refusal.json",
+        "execution/si023-codex-live-resume-refusal.json"
+      ]
     },
     {
       "id": "SI-T-G18",
