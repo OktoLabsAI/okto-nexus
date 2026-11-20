@@ -700,7 +700,9 @@
         "execution/si026-claude-terminal-interrupt.md",
         "execution/si026-claude-terminal-interrupt.json",
         "execution/si011-interrupt-refusal-keeps-turn.md",
-        "execution/si011-interrupt-refusal-keeps-turn.json"
+        "execution/si011-interrupt-refusal-keeps-turn.json",
+        "execution/si011-concurrent-native-decision.md",
+        "execution/si011-concurrent-native-decision.json"
       ]
     },
     {
@@ -3402,8 +3404,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si011-concurrent-native-decision.md",
+        "execution/si011-concurrent-native-decision.json"
+      ]
     },
     {
       "id": "SI-T-C19",

@@ -1,0 +1,32 @@
+{
+  "scenario": "SI-T-C18",
+  "status": "PASS",
+  "scope": "Installed R4 HTTP handlers and TerminalWork, with concurrent operator requests and an in-process synthetic native peer",
+  "baseline": {
+    "nexus": "1bb082dbfdd7e53c8e46df47cc0554cec8eb6450",
+    "connector": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+    "core": "a10e4d665f00d8a8c97f0d386b30f964c97602ff"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "assertions": {
+    "concurrent_confirmation_attempts": 2,
+    "accepted_new_decisions": 1,
+    "competing_status": 409,
+    "matching_receipt_from_both_surfaces": true,
+    "durable_input_provide_operations": 1,
+    "native_replies": 1,
+    "original_turn_completed": true
+  },
+  "tests": {
+    "passed": 4,
+    "junit_sha256": "cb8f8dd0a4fae11ff6a05a860cd59957057d307676a355e3fcfa1578fe8bd93c",
+    "primary": "tests/execution_r4/test_terminal_work.py::test_dashboard_and_terminal_share_one_native_question_decision"
+  },
+  "limitations": [
+    "HTTP used TestClient and the dashboard route. The test did not render the React dashboard or invoke an installed harness."
+  ]
+}

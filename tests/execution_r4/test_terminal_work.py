@@ -1,6 +1,8 @@
 """Terminal facade over real operator HTTP, admission, dispatch and receipts."""
+from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 import json
+from threading import Barrier
 from types import SimpleNamespace
 import time
 
@@ -336,9 +338,7 @@ def test_unconfirmed_resolution_requires_exact_original_request(work):
     assert t.native.opens == 1
 
 
-@pytest.mark.parametrize('kind,enabled', [('input', True), ('approval', True), ('approval', False)])
-def test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile(work, kind, enabled):
-    t = work
+def prepare_terminal_native_request(t, kind, enabled):
     t.deps.config.feature_hitl = enabled  # Qualify the existing native-decision policy explicitly.
     operation = t.flow.submit('Ask before proceeding')
     turn = {'operation_id': operation['follow_up_operation_ids'][0]}
@@ -369,6 +369,13 @@ def test_native_decision_response_loss_recovers_canonical_result_and_keeps_answe
     detail = observed['requests']['items'][0]
     proposal = detail['request_payload']['kwargs']
     assert proposal.get('recipient_agent_id', 'operator') == 'operator'
+    return turn, detail, proposal, replies
+
+
+@pytest.mark.parametrize('kind,enabled', [('input', True), ('approval', True), ('approval', False)])
+def test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile(work, kind, enabled):
+    t = work
+    turn, detail, proposal, replies = prepare_terminal_native_request(t, kind, enabled)
     response = {'answers': {'question': {'answers': ['Private answer marker']}}} if kind == 'input' else None
     if kind == 'input':
         with pytest.raises(ConnectionError) as invalid:
@@ -405,6 +412,67 @@ def test_native_decision_response_loss_recovers_canonical_result_and_keeps_answe
     assert len(replies) == 1
     complete(t, turn)
     assert resumed.observe()['state'] == 'completed'
+
+
+def test_dashboard_and_terminal_share_one_native_question_decision(work):
+    t = work
+    turn, detail, proposal, replies = prepare_terminal_native_request(t, 'input', True)
+    approval_id = detail['approval_id']
+    decision_url = '/api/v1/runtime-management/runtime/approval-decisions'
+    ui_intent = {key: proposal[key] for key in ('approval_key', 'expected_revision', 'request_hash', 'cas_token')}
+    ui_intent.update(client_intent_id='dashboard-question-decision', decision='deny')
+    answer = {'answers': {'question': {'answers': ['Terminal fixture answer']}}}
+    gate = Barrier(2, timeout=10)
+
+    def terminal_http(method, path, body=None):
+        if method == 'POST' and path.endswith('/runtime/approval-decisions'):
+            gate.wait()
+        return t.call(method, path, body)
+
+    def terminal_decision():
+        try:
+            return terminal.decide(approval_id, 'approve', response=answer, reviewed_revision=document_revision(proposal))
+        except ConnectionError as error:
+            assert error.code == 'CONFLICT' and 'already has a decision' in str(error)
+            return None
+
+    terminal = TerminalWork(terminal_http, t.save, t.connection, t.flow.document)
+    with ThreadPoolExecutor(max_workers=1) as attempts:
+        from_terminal = attempts.submit(terminal_decision)
+        gate.wait()
+        from_dashboard = t.setup[2].post(decision_url, headers={'X-Nexus-UI': '1'}, json=ui_intent)
+        terminal_result = from_terminal.result(timeout=15)
+    if terminal_result is None:
+        assert from_dashboard.status_code == 202, from_dashboard.text
+        decision = from_dashboard.json()
+        expected_choice = 'DENIED'
+    else:
+        assert from_dashboard.status_code == 409 and 'already has a decision' in from_dashboard.text
+        decision = terminal_result
+        expected_choice = 'CONFIRMED'
+    assert decision['canonical_state'] == expected_choice
+    assert decision['approval_key'] == proposal['approval_key']
+
+    resolved = t.call('GET', f'/api/v1/approvals/{approval_id}')['data']
+    assert resolved['executed_result']['decision_id'] == decision['decision_id']
+    replay = terminal.decide(approval_id, 'approve')
+    assert replay['decision_id'] == decision['decision_id']
+    assert replay['native_operation_id'] == decision['native_operation_id']
+    assert sum(method == 'POST' and path.endswith('/runtime/approval-decisions') for method, path in t.calls) == 1
+    deadline = time.monotonic() + 15
+    while True:
+        recorded = terminal.api('GET', '/runtime/approval-decisions/' + decision['decision_id'])
+        if recorded['native_stage'] == 'SUBMITTED':
+            break
+        assert time.monotonic() < deadline, recorded
+        time.sleep(.03)
+    assert replies == ([('accept', answer)] if terminal_result is not None else [('cancel', None)])
+    with t.deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_decisions').fetchone()[0] == 1
+        assert uow.connection.execute(
+            "SELECT COUNT(*) FROM execution_operations WHERE action='input.provide'",
+        ).fetchone()[0] == 1
+    complete(t, turn)
 
 
 def test_cli_submission_resume_watch_and_project_mismatch(work, tmp_path, monkeypatch, capsys):
