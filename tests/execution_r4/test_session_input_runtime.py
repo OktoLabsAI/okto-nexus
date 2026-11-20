@@ -881,6 +881,72 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
         assert uow.connection.execute('SELECT count(*) FROM session_interaction_inputs').fetchone()[0] == 1
 
 
+def test_queue_commit_failure_returns_no_receipt_or_native_send(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'commit-failure-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    generation = scope['session_owner_generation']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'session_id', 'binding_id',
+                                        'workspace_id', 'workspace_binding_id', 'agent_id')}
+    path = f'/api/v1/runtime-management/runtime/sessions/{exact["session_id"]}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('queue-commit', 'synthetic-queue-commit-password', local=True)
+    client.cookies.set('nexus_operator_session', auth.login('queue-commit', 'synthetic-queue-commit-password'))
+    capability = client.get(path + '/interaction', params=query).json()['next_turn']
+    assert capability['supported']
+    intent = 'queue-commit-probe'
+    body = {'scope': exact, 'expected_session_generation': generation,
+            'capability_revision': capability['capability_revision'], 'client_intent_id': intent,
+            'content': [{'type': 'text', 'text': 'Dispatch only after durable acceptance'}]}
+    factory = deps.connection_factory
+    with factory.unit_of_work() as uow:
+        # The insert succeeds and creates a queue receipt in the transaction.
+        # Only the deferred foreign key fails, when the route would commit.
+        uow.connection.execute("""
+            CREATE TABLE commit_fault (
+                agent_id TEXT REFERENCES agents(agent_id) DEFERRABLE INITIALLY DEFERRED
+            )
+        """)
+        uow.connection.execute("""
+            CREATE TRIGGER reject_fixture_commit AFTER INSERT ON session_interaction_inputs
+            WHEN NEW.client_intent_id = 'queue-commit-probe'
+            BEGIN INSERT INTO commit_fault(agent_id) VALUES ('absent-commit-fault-agent'); END
+        """)
+
+    refused = client.post(path + '/inputs', headers=ui, json=body)
+    assert refused.status_code == 500
+    assert refused.headers['cache-control'] == 'no-store'
+    assert refused.json()['error']['message'] == 'Session interaction is temporarily unavailable.'
+    assert 'input_id' not in refused.json()
+    receipt_path = path + '/inputs/receipt'
+    receipt_query = query | {'client_intent_id': intent}
+    assert client.get(receipt_path, params=receipt_query).status_code == 404
+    with factory.unit_of_work() as uow:
+        for table in ('commit_fault', 'session_interaction_inputs', 'session_interaction_queues'):
+            assert uow.connection.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0] == 0
+        assert uow.connection.execute(
+            "SELECT COUNT(*) FROM execution_operations WHERE action = 'turn.submit'"
+        ).fetchone()[0] == 0
+        uow.connection.execute('DROP TRIGGER reject_fixture_commit')
+        uow.connection.execute('DROP TABLE commit_fault')
+    assert not native.native.sent
+
+    accepted = client.post(path + '/inputs', headers=ui, json=body)
+    assert accepted.status_code == 202 and accepted.json()['status'] == 'QUEUED'
+    receipt = accepted.json()
+    eventually(lambda: len(native.native.sent) == 1)
+    recovered = client.get(receipt_path, params=receipt_query).json()
+    assert recovered['input_id'] == receipt['input_id']
+    assert recovered['enqueue_sequence'] == 1
+    assert recovered['operation_id'] == native.native.sent[0][1]
+    client.cookies.clear()
+
+
 def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interactive_runtime):
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup

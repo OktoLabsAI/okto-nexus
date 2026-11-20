@@ -1,0 +1,52 @@
+{
+  "scenario": "SI-T-B10",
+  "status": "PASS",
+  "source_baseline": "9a9edf1d822bfb25399c49b8cedf3b6fc449a1e3",
+  "wheel_sha256": {
+    "baseline_nexus": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "fixed_nexus": "489dfb0ee4c718026f0f0d1e2fa185eb5f406698652592e6c21a80146fd01031",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "source_archive_sha256": "d55a9f67b27fc4a1ca5ac60c25b6fca5ce61fb352d93fff5652e92b25fba53ac",
+  "verification": {
+    "fixture_directory": "D:/nxs-durable-85039682",
+    "red_junit_sha256": "ad7682fdd01a58e68bb3e331c57a9dd2b3d2c7e16a761e3a4e02f91b8ca0371c",
+    "fixed_junit_sha256": "d8ca7414a5c4a6641df98dd75473d267a6e6674df053c35d0a3c540f9c090eb8",
+    "reproduced_failure": "HTTP 500 escaped the session error envelope and had no Cache-Control header",
+    "installed_cases": [
+      "test_queue_commit_failure_returns_no_receipt_or_native_send",
+      "test_dashboard_admits_exact_input_once_under_the_original_human_login",
+      "test_dashboard_queue_pages_and_cancels_only_the_original_human_input",
+      "test_queue_dispatch_serializes_with_dashboard_controls[cancel]",
+      "test_queue_dispatch_serializes_with_dashboard_controls[dispatch]",
+      "test_atomic_storage_and_retry_do_not_create_r4_operations"
+    ],
+    "installed_cases_passed": 6,
+    "ruff": "PASS",
+    "strict_twine": "PASS",
+    "pip_check": "PASS",
+    "commands": [
+      "uv --offline build --out-dir <isolated-root>/dist",
+      "twine check --strict <wheel> <sdist>",
+      "python -m pytest -o pythonpath= -p assert_wheel_imports <six focused cases>"
+    ]
+  },
+  "result": {
+    "fault": "SQLite deferred foreign-key violation at COMMIT",
+    "failure_http": 500,
+    "failure_cache_control": "no-store",
+    "failure_has_receipt": false,
+    "failed_intent_receipt_http": 404,
+    "queued_rows_after_failure": 0,
+    "turn_operations_after_failure": 0,
+    "adapter_sends_after_failure": 0,
+    "repeated_intent_http": 202,
+    "first_sequence": 1,
+    "exact_delivery_after_retry": 1
+  },
+  "limits": [
+    "HTTP/ASGI, SQLite and the embedded dispatcher are installed code. The native adapter is a deterministic test peer.",
+    "The temporary Python installation reused the pinned Connector/Core distributions and imported dependencies from a prior isolated venv. Pip followed that import path for its dependency check."
+  ]
+}

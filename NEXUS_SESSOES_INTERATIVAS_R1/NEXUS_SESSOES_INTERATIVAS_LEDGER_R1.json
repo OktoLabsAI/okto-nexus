@@ -421,7 +421,9 @@
       "evidence": [
         "execution/si006-storage.md",
         "execution/si006-human-authority.md",
-        "execution/si006-authorized-intake.md"
+        "execution/si006-authorized-intake.md",
+        "execution/si006-queue-commit-refusal.md",
+        "execution/si006-queue-commit-refusal.json"
       ]
     },
     {
@@ -2603,8 +2605,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-queue-commit-refusal.md",
+        "execution/si006-queue-commit-refusal.json"
+      ]
     },
     {
       "id": "SI-T-B11",

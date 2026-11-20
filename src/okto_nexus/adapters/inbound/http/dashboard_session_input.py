@@ -2,6 +2,7 @@
 
 from dataclasses import asdict
 from functools import partial
+import sqlite3
 
 import anyio
 from fastapi import APIRouter, Request
@@ -168,6 +169,8 @@ async def enqueue_input_response(session_id: str, body: EnqueueInput, request: R
         return JSONResponse(await anyio.to_thread.run_sync(submit), status_code=202, headers=_HEADERS)
     except OktoNexusError as error:
         return _runtime_error(error)
+    except sqlite3.Error:
+        return _error(500, 'INTERNAL', 'Session interaction is temporarily unavailable.')
 
 async def interrupt_response(session_id: str, body: InterruptInput, request: Request, *, verify_command=None,
                              surface='web'):
