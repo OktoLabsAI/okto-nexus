@@ -1368,7 +1368,9 @@
         "execution/si022-pi-full-reconnect.md",
         "execution/si022-pi-full-reconnect.json",
         "execution/si035-codex-productive-transfer.md",
-        "execution/si035-codex-productive-transfer.json"
+        "execution/si035-codex-productive-transfer.json",
+        "execution/si023-si024-codex-fork-refusal.md",
+        "execution/si023-si024-codex-fork-refusal.json"
       ]
     },
     {
@@ -1434,7 +1436,9 @@
         "execution/si034-viewer-credential-channels.md",
         "execution/si034-viewer-credential-channels.json",
         "execution/si024-codex-steer-ack.md",
-        "execution/si024-codex-steer-ack.json"
+        "execution/si024-codex-steer-ack.json",
+        "execution/si023-si024-codex-fork-refusal.md",
+        "execution/si023-si024-codex-fork-refusal.json"
       ]
     },
     {
@@ -4916,7 +4920,11 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si021-codex-viewer-switch.json",
+        "execution/si023-si024-codex-fork-refusal.md",
+        "execution/si023-si024-codex-fork-refusal.json"
+      ]
     },
     {
       "id": "SI-T-G17",
@@ -4987,7 +4995,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si023-si024-codex-fork-refusal.md",
+        "execution/si023-si024-codex-fork-refusal.json"
+      ]
     },
     {
       "id": "SI-T-G20",

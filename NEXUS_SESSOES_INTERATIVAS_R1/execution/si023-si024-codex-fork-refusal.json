@@ -1,0 +1,218 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-024"
+  ],
+  "scenarios": {
+    "SI-T-G16": {
+      "status": "NOT_RUN",
+      "controlled_layer": "PASS",
+      "pending": "Campaign"
+    },
+    "SI-T-G19": {
+      "status": "NOT_RUN",
+      "controlled_layer": "PASS",
+      "pending": "Campaign"
+    }
+  },
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "5fa51a411119762729371d46129b6acd7ecc8a5c",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 548,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "3970610523eb4bd85bf4605771b06b1b83c7a678",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 92,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "f07c643451c59f54f80298110de1e0c81bbfb48d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 72,
+      "behind_main": 0
+    },
+    "clean_worktrees": true,
+    "feature_branch_upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "artifacts": {
+    "nexus_0_3_8_wheel_sha256": "e2ce42521bbc4db6e0605a10073ffb793c13c964b0633740a36139a936cfcf80",
+    "connector_0_0_15_wheel_sha256": "3dac4417a143414e0b237dcea63a8f8879e8fb6c303e8ee78c35c7fe32facb45",
+    "core_0_0_16_wheel_sha256": "76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1",
+    "core_tests_commit": "24ba3cba04266bc1e854c83842d1ea72546d3d1e"
+  },
+  "environment": {
+    "platform": "Windows x64, ConPTY, Python 3.13.1",
+    "native_app_server": "Codex 0.157.0",
+    "native_viewer": "Codex 0.170.0",
+    "broker": "Installed Nexus relay and SQLite; WSS loopback with a throwaway test CA",
+    "model_turns": 0,
+    "test_credentials_only": true
+  },
+  "real_processes_with_scoped_relay": {
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "two_actual_threads_on_one_engine": true,
+    "core_refused_sibling_metadata_before_native_io": true,
+    "relay_refusals": {
+      "list_all": -32601,
+      "list_loaded": -32601,
+      "sibling_read": -32602,
+      "sibling_resume": -32602,
+      "sibling_history": -32602
+    },
+    "server_sibling_history_close": 4409,
+    "diagnostic_sockets": 3,
+    "all_attached_channels_retired": true,
+    "native_viewer": {
+      "read_and_resume_exact_thread": true,
+      "list_methods_refused_at_relay": [
+        "thread/list",
+        "thread/loaded/list"
+      ]
+    },
+    "native_viewer_launch_audit": {
+      "verified_binary_launched": true,
+      "empty_auth_profile": true,
+      "engine_provider_credential_absent": true
+    },
+    "exact_native_fork_refusal": {
+      "exact_source": true,
+      "rpc_error": -32601,
+      "successor_exposed": false
+    },
+    "exact_native_start_refusal": {
+      "rpc_error": -32601,
+      "new_thread_exposed": false
+    },
+    "native_detach_audit": {
+      "detached": true,
+      "restored_console": true
+    },
+    "only_exact_thread_read_reached_engine_during_observation": 9,
+    "both_threads_unchanged_and_readable_after_viewer_exit": true,
+    "operator_ticket_sibling_and_engine_canary_absent_from_console": true,
+    "native_engine_process_cleaned_up": true,
+    "native_work_operations": 0,
+    "external_provider_calls": 0
+  },
+  "real_app_server_with_empty_unmaterialized_history": {
+    "first_engine_closed_before_resume": true,
+    "exact_resume_requests": 1,
+    "native_resume_error_code": -32600,
+    "resume_phase_methods": [
+      "initialize",
+      "account/read",
+      "thread/resume"
+    ],
+    "successor_session_admitted": false,
+    "durable_rollout_created": false,
+    "both_processes_observed_exited": true,
+    "external_provider_calls": 0
+  },
+  "core_stdio_peer_only": {
+    "reply_to_exact_resume": -32601,
+    "alternative_methods_implemented_by_peer": [
+      "thread/fork",
+      "thread/start"
+    ],
+    "adapter_requests": [
+      "initialize",
+      "initialized",
+      "account/read",
+      "thread/resume"
+    ],
+    "admitted_runtime_sessions": 0,
+    "disposable_process_exit_confirmed": true
+  },
+  "tests": {
+    "installed_real_viewer": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "9c18325bf74e0e22da95cb66ee55bdebdace0a8cf6af3a0bf930761b8abe9eaa"
+    },
+    "installed_real_saved_resume_refusal": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "03fd2a766b998eedaf3ba20bff0fc2cd7dd7a6f56a20fd2c9dbdf1c06c32a7c5"
+    },
+    "core_source": {
+      "tests": 11,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "bacb25526bcf1358c0f60c593cb01e4ec355c18bfda94813c39e78f5040863ba"
+    },
+    "core_installed": {
+      "tests": 11,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "dccbbf0a7d345d1d98e79ea0b40ca2287f6acea317937c2be42ff9976e8f4676"
+    },
+    "nexus_installed_transport_cli": {
+      "tests": 104,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "cf97c9ac142e2f1bbc76ef26d7d2c3161d1dc259ba1f2f172c7740e400eecbfb"
+    },
+    "core_ruff_preexisting_import_diagnostics": 2,
+    "core_ruff_new_diagnostics": 0,
+    "installed_real_native_default_handshake": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "bcc31008fe8dcdf123ae9ee5310ab1795b0ee4a0f675daa22184ab08c2ede38d"
+    }
+  },
+  "fixture_sha256": {
+    "test_engine_scope.py": "0aa91d39606060a67d5c6f006a8e569390c18c8eb45e3c793ff0378ca712ecd9",
+    "viewer.py": "5fcb89a489bc93cde0d139ed0d243f09b2278873e692074caaa894605418c592",
+    "run.ps1": "179e189d67dfed95cab80031102b33dbc16311b346dd7c4059af331dde04705e",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "test_real_resume_refusal.py": "ffb9fffa5fc0c417eeaa2fc98c85383b0889ae55e266793d91ed95e98d7761e2",
+    "run-saved.ps1": "e1f80524945b9d0fbbff781977e0be81df092a622ad9f7f034b667b7a166200a",
+    "handshake-final/test_engine_scope.py": "333b8acc435853acc91ad61f7c29d55b315b830a027a21c19d97cd809919e604"
+  },
+  "reproduction": {
+    "environment": "Pinned installed Nexus/Core/Connector wheels, reviewed Codex viewer and engine",
+    "native_scoped_viewer": "pytest -o pythonpath= -p assert_wheel_imports <fixture>/test_engine_scope.py",
+    "native_empty_history": "pytest -o pythonpath= -p assert_wheel_imports <fixture>/test_real_resume_refusal.py",
+    "core_regressions": "pytest tests/test_codex_resume.py",
+    "nexus_regressions": "pytest tests/session_interaction/test_codex_presenter_requests.py tests/session_interaction/test_presentation_transport.py tests/session_interaction/test_session_cli.py",
+    "native_default_viewer": "pytest -o pythonpath= -p assert_wheel_imports <fixture>/handshake-final/test_engine_scope.py"
+  },
+  "limits": [
+    "The controlled broker used a fixture session catalogue and a production Core connector with real binaries.",
+    "No provider campaign, inference or active tool was involved in either native run."
+  ],
+  "default_native_startup_without_id": {
+    "thread_start_refused": true,
+    "native_viewer_exited_with_error": true,
+    "primary_thread_still_readable": true,
+    "requests": [
+      [
+        "thread/start",
+        -32601
+      ],
+      [
+        "thread/start",
+        -32601
+      ]
+    ]
+  }
+}
