@@ -835,7 +835,9 @@
         "execution/si015-session-command-catalog.md",
         "execution/si016-home-session-commands.md",
         "execution/si016-browser-terminal-only.md",
-        "execution/si016-browser-terminal-only.json"
+        "execution/si016-browser-terminal-only.json",
+        "execution/si016-stale-catalog-settings.md",
+        "execution/si016-stale-catalog-settings.json"
       ]
     },
     {
@@ -876,7 +878,9 @@
       "evidence": [
         "execution/si016-home-session-commands.md",
         "execution/si016-browser-terminal-only.md",
-        "execution/si016-browser-terminal-only.json"
+        "execution/si016-browser-terminal-only.json",
+        "execution/si016-stale-catalog-settings.md",
+        "execution/si016-stale-catalog-settings.json"
       ]
     },
     {
@@ -1958,7 +1962,9 @@
         "execution/si017-live-draft-focus.md",
         "execution/si017-live-draft-focus.json",
         "execution/si020-browser-exit-preserves-work.md",
-        "execution/si020-browser-exit-preserves-work.json"
+        "execution/si020-browser-exit-preserves-work.json",
+        "execution/si016-stale-catalog-settings.md",
+        "execution/si016-stale-catalog-settings.json"
       ]
     },
     {
@@ -3411,8 +3417,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si016-stale-catalog-settings.md",
+        "execution/si016-stale-catalog-settings.json"
+      ]
     },
     {
       "id": "SI-T-D11",

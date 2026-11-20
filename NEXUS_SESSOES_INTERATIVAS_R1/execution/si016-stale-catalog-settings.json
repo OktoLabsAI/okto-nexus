@@ -1,0 +1,99 @@
+{
+  "scenario": "SI-T-D10",
+  "status": "PASS",
+  "baseline": {
+    "nexus": "b21ad18444b02cd31c1b0ebdee18111f6476ac6e",
+    "connector": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+    "core": "454c9700e0def181c81fe633857a25b48e125512",
+    "clean_worktrees": true,
+    "upstream_drift": 0
+  },
+  "installed_wheels": {
+    "nexus": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "browser": "Microsoft Edge in an isolated Playwright CLI session",
+    "platform": "Windows",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "transport": "installed Connector R4 on loopback",
+    "responses": "deterministic SSE on loopback"
+  },
+  "browser": {
+    "open": {
+      "result": "CATALOGUE_VISIBLE",
+      "sha256": "7f971cb5af14b879fd5aaf54e61eadb682e78019dc58391c14e15a78189c475b"
+    },
+    "stale": {
+      "result": "STALE_CATALOG_REJECTED_AND_DRAFT_RETAINED",
+      "sha256": "84960317dc0c44d10fbad4187c717d9043fe5714316f50ecf3505e4e805d7696"
+    },
+    "fresh": {
+      "result": "FRESH_EXPLICIT_CONFIRMATION_QUEUED_ONCE",
+      "sha256": "f0e5344a0b4d6dd5cf9fedb7c31d582343562146a45535c9426f943b4318cd8e"
+    },
+    "done": {
+      "result": "ORIGINAL_RESULT_VISIBLE_AND_QUEUED_INPUT_UNSENT",
+      "sha256": "4ec79cf4f691d44a3a333bae85915978c10aabffa2bdbdcd24e53ac5583875a0"
+    }
+  },
+  "server": {
+    "browser_stale_status": 409,
+    "new_revision_after_queue_pause": true,
+    "stale_draft_preserved": true,
+    "stale_input_or_operation_created": false,
+    "explicit_refresh_then_send_status": 202,
+    "one_pending_input_preserved_by_close": true,
+    "same_original_result": true,
+    "one_original_native_turn": true,
+    "operator_settings_configuration_revision_changed": true,
+    "pre_settings_catalog_status": 409,
+    "new_catalog_status": 200,
+    "external_provider_calls": 0
+  },
+  "durable_sqlite_and_journal": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "result_rows": 1,
+    "closed_exact_session": true,
+    "fresh_input_retained": "BLOCKED_SESSION",
+    "queued_native_operations": 0,
+    "native_launches": 1,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "verification": {
+    "installed_native_browser_cases": 1,
+    "installed_api_cases": 4,
+    "node_components": 20,
+    "browser_junit_sha256": "a8ceab26b8996766df318324621951b3501d3f55dc60732e74a9c890b04e5ccc",
+    "api_junit_sha256": "48909482952d60829247a51517ef665bdab370bfd40213a609b3450da5d9c429",
+    "component_tap_sha256": "71f37cdc2c4db0deb460892b9bd2b488b04a89058c27867075e750396ca138db",
+    "driver_initial_error_log_sha256": "03d493b932f502cd18cac2dcf40e26694d95e0eb5f8b1422c5440cf76162376b",
+    "fixture_directory": "D:/nxs-catalog-43428752",
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "pwsh -NoProfile -File drive.ps1 -Root <isolated-root>",
+      "node --test tests/uiSessionInspection.test.mjs"
+    ],
+    "fixture_sha256": {
+      "run.ps1": "27ab370d523292ef654ed2645f90098466b285fb3d9d6679cac8ff513116eadb",
+      "drive.ps1": "ff426c779ca0d598e933b4e646a3b0515ddc5af15153c54b5ef9435f106b0e55",
+      "test_live_draft.py": "18c4b49c1fdaf2eeb159cdc10ca395d58d514ed0255d2d26e153332b05a2c09b",
+      "open.js": "cec2b9deee201535fa549c2c066b7ce0b7c325037a554a88bc77db46ff468e70",
+      "stale.js": "f532e815770d61cec357444fac475f4b678c41c4c2062dd729e5458f42e2568e",
+      "fresh.js": "48e339cfdb6402aaa083039c47daa10319c7638ebde9fe441ef31c70f5358ffc",
+      "done.js": "fc7148b1cb1f16ba840d9b68c0ce7e6ba823d39199d0e0d03f4bbd818380f19c",
+      "audit_durable.py": "d53432ad7449b21b87d8bc2b281a8194325b1c9d82c38956a39eebf12d716bb3"
+    }
+  },
+  "limits": [
+    "The initial browser script accessed the page window from the driver. The controller reopened the same exact session while the original turn remained held, then completed the whole route.",
+    "The real configuration change updated agent metadata in the disposable project. It did not change the native provider or model."
+  ]
+}
