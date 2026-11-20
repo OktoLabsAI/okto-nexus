@@ -1,0 +1,62 @@
+{
+  "scenario": "SI-T-B21",
+  "status": "PASS",
+  "wheel_source_revision": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "checked_branch_start": "5df4dc8626b37135d3183a2d397c8f91d24f8365",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "fixture": "Real Nexus HTTP, handoff creation, discovery, claim, transfer, scheduler and Core slot ledger with a synthetic protocol peer",
+  "cases": {
+    "handoff": {
+      "winner": "handoff",
+      "both_requests_for_exact_session_and_generation": true,
+      "loser_held_back_by_host": "BUSY_AFFINITY",
+      "work_runs_sequentially": true,
+      "claims_committed": 1,
+      "human_messages_delivered": 1,
+      "native_turns": 2,
+      "canonical_close": "SUCCEEDED",
+      "result_rows_for_one_session": 2,
+      "active_core_slots_at_close": 0
+    },
+    "human": {
+      "winner": "human",
+      "both_requests_for_exact_session_and_generation": true,
+      "loser_held_back_by_host": "BUSY_AFFINITY",
+      "work_runs_sequentially": true,
+      "claims_committed": 1,
+      "human_messages_delivered": 1,
+      "native_turns": 2,
+      "canonical_close": "SUCCEEDED",
+      "result_rows_for_one_session": 2,
+      "active_core_slots_at_close": 0
+    }
+  },
+  "fixture_path": "D:/nxs-shared-arbiter-62087486",
+  "hashes": [
+    {
+      "file": "test_handoff_input.py",
+      "sha256": "31c361950204724a7c4ba7eb202d583ec258079744f3839e2a890336c06ebdd9"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "7ec15b0f7100ca39f711b539ce8f2c6c449a41e0e389409c2f4511706ea9a4c4"
+    },
+    {
+      "file": "audit.py",
+      "sha256": "2fd96688f7c14c92161b38edcb25b45e122db601bd26ab640a59b17edcc0750e"
+    },
+    {
+      "file": "audit.json",
+      "sha256": "ecaa38d8b13f5e3b65d880ecb010c51c7a61efdf26540566cb99321f7cc06f8d"
+    }
+  ],
+  "limits": [
+    "Synthetic Codex model peer",
+    "Local embedded Core",
+    "No sustained-load fairness claim"
+  ]
+}

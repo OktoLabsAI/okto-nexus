@@ -225,7 +225,9 @@
           "limitations": "Source audit; native wire/actor and concurrent dispatch still need focal tests"
         },
         "execution/si006-pi-human-input-authority.md",
-        "execution/si006-pi-human-input-authority.json"
+        "execution/si006-pi-human-input-authority.json",
+        "execution/si007-shared-turn-arbitration.md",
+        "execution/si007-shared-turn-arbitration.json"
       ]
     },
     {
@@ -503,7 +505,9 @@
         "execution/si025-pi-delayed-settlement.md",
         "execution/si025-pi-delayed-settlement.json",
         "execution/si032-queue-without-terminal.md",
-        "execution/si032-queue-without-terminal.json"
+        "execution/si032-queue-without-terminal.json",
+        "execution/si007-shared-turn-arbitration.md",
+        "execution/si007-shared-turn-arbitration.json"
       ]
     },
     {
@@ -1186,7 +1190,9 @@
         "execution/si021-codex-viewer-switch.md",
         "execution/si021-codex-viewer-switch.json",
         "execution/si006-pi-human-input-authority.md",
-        "execution/si006-pi-human-input-authority.json"
+        "execution/si006-pi-human-input-authority.json",
+        "execution/si007-shared-turn-arbitration.md",
+        "execution/si007-shared-turn-arbitration.json"
       ]
     },
     {
@@ -2952,8 +2958,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si007-shared-turn-arbitration.md",
+        "execution/si007-shared-turn-arbitration.json"
+      ]
     },
     {
       "id": "SI-T-B22",
