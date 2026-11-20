@@ -1,0 +1,76 @@
+{
+  "tasks": ["SI-010", "SI-022", "SI-026"],
+  "scenarios": ["SI-T-C05", "SI-T-C06", "SI-T-C07"],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "480bdfdc75c28a38ae11bb3ab907768906ac1838",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 559
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "857d833e2b70be9c782b37fbe70ea0f857255b2e",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 99
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a7b22737bc86485d45dd5ad0a1a49e18d46ddd5d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 79
+    },
+    "behind_main": 0,
+    "worktrees_clean": true,
+    "upstream_drift": [0, 0]
+  },
+  "artifacts": {
+    "nexus_build_tree": "e8adce0bc9db39144023b37fa3090a697dbadb7c",
+    "nexus_wheel_sha256": "792a81a3a9d41bd000e6b517c0916970e2023c75d7923e33345af6cbf838eaca",
+    "connector_wheel_sha256": "70b4bae75062e87229f903624a82208408867ad0a41a097fcc9f08c4498a0ab4",
+    "core_wheel_sha256": "6efd71674e39964f866778abb9ddc4a714bb38c85f7c454cec8686e2519a18cb"
+  },
+  "native_probe": {
+    "topology": "one Windows host, production CLI, Nexus HTTP and WebSocket, Connector daemon and R4, Windows ConPTY",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "probe_sha256": "1c4b22719139a2ccf79976b8d14a52d23584128939e8a2869c409c3cdaa955d7",
+    "result_sha256": "e100eeddf039d82f21db88db217e719838c5296b2ea2d584f654bcfcdbab6570",
+    "baseline": "real managed terminal generated but Nexus returned no steer review",
+    "refused_before_generation": true,
+    "stale_queue_revision_http_status": 409,
+    "original_turn": "CANCELLED",
+    "simulated_loss_of": ["operator HTTP response after commit", "local confirmation after replacement write"],
+    "recovered_receipt_before_result": {
+      "status": "DELIVERY_UNKNOWN",
+      "interruption": "confirmed",
+      "replacement": "write_unknown"
+    },
+    "recovered_receipt_after_result": "ACCEPTED_NATIVE",
+    "native_writes": ["escape", "replacement"],
+    "loopback_streaming_requests": ["original", "replacement"],
+    "external_provider_requests": 0,
+    "same_operation_after_review_replay_and_recovery": true,
+    "presenter_saw_replacement_in_same_process": true,
+    "canonical_close_completed": true,
+    "sqlite_quick_check": "ok"
+  },
+  "verification": {
+    "native_installed_probe_passed": 1,
+    "nexus_installed_regression_passed": 89,
+    "nexus_installed_regression_failed": 1,
+    "failed_case": "test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt",
+    "failed_case_observation": "the receipt was OUTCOME_UNKNOWN before the fixture recorded its hook reply",
+    "failed_case_candidate_isolated_rerun": "PASS",
+    "failed_case_baseline_isolated_rerun": "PASS",
+    "strict_wheel_validation": "PASS",
+    "offline_nexus_lock_check": "PASS",
+    "installed_dependency_check": "PASS",
+    "ruff_syntax_and_undefined_names": "PASS"
+  },
+  "pending_qualification": [
+    "standalone remote Claude interrupt",
+    "separate machines",
+    "authorized real-provider campaign"
+  ]
+}

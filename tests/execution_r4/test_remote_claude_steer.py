@@ -17,7 +17,9 @@ from okto_nexus.adapters.inbound.cli.session_commands import (
 from okto_nexus.application.terminal_connection import PREFIX, ConnectionError
 
 
-def test_remote_claude_command_retains_exact_target_and_uncertain_replacement(tmp_path, monkeypatch, request):
+@pytest.mark.parametrize('generating_event', ['nexus_claude_generating', 'core.claude_terminal_generating'])
+def test_remote_claude_command_retains_exact_target_and_uncertain_replacement(
+        tmp_path, monkeypatch, request, generating_event):
     original = tcp.build_app
 
     def app(deps, **kwargs):
@@ -71,8 +73,11 @@ def test_remote_claude_command_retains_exact_target_and_uncertain_replacement(tm
                     await asyncio.to_thread(review_command)
                 assert not offered
 
-                await native.queue.put(event('tool_activity', 'nexus_claude_generating', {'schema_version': 1}, active_id))
-                await project.eventually(lambda: any('nexus_claude_generating' in row['payload_json']
+                generation_evidence = {'schema_version': 1}
+                if generating_event == 'core.claude_terminal_generating':
+                    generation_evidence['interruptible'] = True
+                await native.queue.put(event('tool_activity', generating_event, generation_evidence, active_id))
+                await project.eventually(lambda: any(generating_event in row['payload_json']
                     for row in project.rows('execution_event_ingress')))
 
                 # A rolling upgrade can leave the current capacity host without

@@ -125,7 +125,7 @@ def active_claude_operation(uow, scope: InputScope, *, current_next_turn_revisio
     evidence = _active_start(uow, scope, 'claude_stream', 'nexus_claude_generating',
                              'tool_activity', phase=None, remote_channel=channel)
     if evidence is None:
-        evidence = _active_claude_terminal_start(uow, scope)
+        evidence = _active_claude_terminal_start(uow, scope, remote_channel=channel)
     if evidence is None:
         return None
     selected, start, payload = evidence
@@ -137,9 +137,9 @@ def active_claude_operation(uow, scope: InputScope, *, current_next_turn_revisio
     return ExactClaudeOperation(selected['operation_id'], revision, selected['stream_epoch'])
 
 
-def _active_claude_terminal_start(uow, scope):
+def _active_claude_terminal_start(uow, scope, *, remote_channel=None):
     evidence = _active_start(uow, scope, 'claude_stream', 'core.claude_terminal_generating',
-                             'tool_activity', phase=None)
+                             'tool_activity', phase=None, remote_channel=remote_channel)
     if evidence is not None and evidence[2].get('interruptible') is True:
         return evidence
     return None
