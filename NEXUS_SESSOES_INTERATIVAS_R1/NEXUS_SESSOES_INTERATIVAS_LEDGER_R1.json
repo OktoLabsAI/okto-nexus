@@ -2091,7 +2091,12 @@
         "SI-T-I09"
       ],
       "status": "TODO",
-      "evidence": ["execution/si032-exact-reattach-command.md", "execution/si032-exact-reattach-command.json"]
+      "evidence": [
+        "execution/si032-exact-reattach-command.md",
+        "execution/si032-exact-reattach-command.json",
+        "execution/si040-session-action-guide.md",
+        "execution/si040-session-action-guide.json"
+      ]
     },
     {
       "id": "SI-041",

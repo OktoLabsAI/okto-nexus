@@ -1,0 +1,26 @@
+{
+  "task": "SI-040",
+  "inspected_nexus_head": "7cd84770f3bdb444fcf4ae494360b7e368806f05",
+  "nexus_wheel_sha256": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+  "core_wheel_sha256": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b",
+  "artifact": "../../docs/terminal-work.md",
+  "cli_help_checked": [
+    "session list",
+    "session resume"
+  ],
+  "configuration_checked": [
+    "default false",
+    "OKTO_NEXUS_RUNTIME_SESSION_INTERACTION_ENABLED=true"
+  ],
+  "installed_regressions": {
+    "files": [
+      "tests/execution_r4/test_terminal_connect.py",
+      "tests/session_interaction/test_session_cli.py"
+    ],
+    "passed": 69,
+    "failed": 0,
+    "junit_sha256": "b5410f4745aa517cfcd996e62d54a06193ca273f91ba52c51a629d22d3c02569"
+  },
+  "user_acceptance": "not_run",
+  "platform_qualification_from_this_evidence": "none"
+}

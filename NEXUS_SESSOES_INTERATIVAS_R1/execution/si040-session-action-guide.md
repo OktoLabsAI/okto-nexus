@@ -1,0 +1,21 @@
+# SI-040 choose a session action from the terminal
+
+The [terminal guide](../../docs/terminal-work.md#choose-a-session-action)
+now describes the operator prompt, native user input, queue acceptance and
+reviewed steer. It gives separate instructions for live attach, native
+saved resume, receipt recovery, new work, interrupt and close. It identifies
+the server feature default and the authority required for a local saved
+resume. Per-harness viewer instructions retain their specific detach keys
+and qualified platform scope.
+
+The installed Nexus 0.3.8 command launcher exposed the documented list and
+resume flags. A separate check against the installed configuration parser
+confirmed that session interaction defaults to off and that the documented
+environment variable enables it. The installed terminal connect and session
+CLI suites passed all 69 tests, including exact-session selection and
+recovery of the same receipt after an uncertain submission. These checks
+used existing test fixtures for receipts and terminal review.
+
+The tests do not supply the outstanding harness and platform qualification
+or user acceptance needed by SI-040. This increment edits only the guide
+and evidence. It can be reverted without a database, queue or service change.

@@ -40,6 +40,43 @@ the exact `work chat` command. Run it from the project directory with the
 matching saved connection profile. Opening the prompt lets you inspect and
 continue that session. Entering a new message is a separate action.
 
+## Choose a session action
+
+Use the Nexus work prompt for Operator work requests. A supported native
+viewer can submit a message as the harness user through the session queue.
+The queue records a receipt before delivery. A queued message waits for a new
+turn. A reviewed steer targets the current turn at a boundary the harness
+supports. Queue acceptance and native delivery have separate receipt states.
+
+| Intent | Action |
+| --- | --- |
+| Follow an existing live session | Use `session attach` with its exact session ID. Detach to leave work and the queue with the current executor. |
+| Continue work in a live session | Select it in Home or use `work chat --session-id SESSION_ID` and submit the next request. |
+| Resume retained native history | Use `session resume` for an eligible retired source on the embedded executor. Nexus opens a successor after checking verified history and exclusive ownership. The original queue stays with the source. |
+| Recover an interrupted submission | Use `work resume` for a Nexus work request, or `session receipt` with the original intent and owner generation for native input. If a saved resume lost its response, run the same `session resume` command to recover its receipt. |
+| Start a separate session | Use `work send --new-session` with an explicit request. Check an unconfirmed receipt before deciding whether to send again. |
+| Interrupt or close work | Use the explicit interrupt or close control. An interruption targets the current run. Closing retires the session and leaves its unsent queue receipts on the original session. |
+
+```sh
+okto-nexus session list --id HARNESS_ID --workspace-id WORKSPACE_ID --operator-profile OPERATOR
+okto-nexus session resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SOURCE_SESSION_ID --operator-profile OPERATOR
+```
+
+The saved-resume command requires a human operator session that the Server
+recognizes as local. Check the successor and receipt it returns before
+continuing. An unavailable saved context does not open a fresh conversation.
+Follow the detach key shown by the attached viewer. Ctrl+C in a harness
+started outside Nexus follows that harness's terminal behavior.
+
+Session interaction is off by default. A Server administrator can enable the
+session interaction flag with
+`OKTO_NEXUS_RUNTIME_SESSION_INTERACTION_ENABLED=true`. The available actions
+still depend on the exact harness build, platform, executor, session state and
+operator authority. Use Home or `session list` for the current session and
+review each action there or in its terminal command. For scripts,
+`connect --json` reports setup and the receipt. Interactive viewers need a
+terminal.
+
 ## Follow a live Codex session
 
 Use a saved human operator login for the Nexus server and select the exact
