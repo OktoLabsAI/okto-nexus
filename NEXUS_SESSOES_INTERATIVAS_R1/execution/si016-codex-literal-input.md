@@ -1,0 +1,7 @@
+# SI-T-D06 e SI-T-D07 · Texto literal no Codex
+
+O app-server 0.157.0 recebeu `/compact`, `//compact`, `/tmp/file` e um caminho com Unicode, quebra de linha e espaços finais pela mesma forma de `turn/start` usada pelo Core. O simulador de modelo recebeu cada mensagem integral uma vez, com um turno normal concluído. A barra inicial e a dupla barra passaram como caracteres do texto.
+
+Quando a mensagem mencionou uma skill instalada no projeto descartável, o simulador recebeu a mensagem integral **e o corpo da skill** em outra parte da solicitação. A expansão também ocorreu ao marcar o texto com `text_elements` e ao passar o nome da skill em `disabledPluginIds`. Desabilitar a skill por configuração explícita no momento de criar uma nova thread suprimiu o corpo nessa thread. Esse ajuste atua na abertura da sessão, enquanto **Enviar como texto** precisa preservar a configuração da sessão em curso.
+
+O ensaio usou o binário fixado no Windows, o transporte do Core instalado e um servidor Responses SSE em loopback. As duas execuções usaram perfis sintéticos sem conta e encerraram os processos temporários. Passaram 24 testes instalados de contrato e API e 21 testes de componentes. A opção de texto literal continua indisponível para esse build. SI-T-D06 permanece aberto até haver um caminho comprovado sem expansão na sessão atual. SI-T-D07 continua aprovado. Este marco registra evidência e dispensa migração. [Medições e hashes](si016-codex-literal-input.json)

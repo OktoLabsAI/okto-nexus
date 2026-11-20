@@ -962,7 +962,9 @@
         "execution/si016-shell-api-regressions.md",
         "execution/si016-shell-api-regressions.json",
         "execution/si016-browser-shell-boundary.md",
-        "execution/si016-browser-shell-boundary.json"
+        "execution/si016-browser-shell-boundary.json",
+        "execution/si016-codex-literal-input.md",
+        "execution/si016-codex-literal-input.json"
       ]
     },
     {
@@ -3685,7 +3687,10 @@
         "SI-R20"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si016-codex-literal-input.md",
+        "execution/si016-codex-literal-input.json"
+      ]
     },
     {
       "id": "SI-T-D07",
@@ -3705,7 +3710,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si016-browser-terminal-only.md",
-        "execution/si016-browser-terminal-only.json"
+        "execution/si016-browser-terminal-only.json",
+        "execution/si016-codex-literal-input.md",
+        "execution/si016-codex-literal-input.json"
       ]
     },
     {

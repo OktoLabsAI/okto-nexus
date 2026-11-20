@@ -1,0 +1,226 @@
+{
+  "task": "SI-016",
+  "scenarios": {
+    "SI-T-D06": "PARTIAL_NATIVE_COUNTEREXAMPLE_ONLY",
+    "SI-T-D07": "EXISTING_PASS_PRESERVED"
+  },
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "10fd4cf6bdbd6343321f403be95503acc124e373",
+      "fetched_main": "8d77b50c00b417c86818d027aed7497fababac34"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "wheel_sha256": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+    }
+  },
+  "platform": "Windows x64",
+  "condition": "Actual pinned Codex binary with clean profiles and one scratch-project skill. Production Core's text shape on its installed JSON-RPC transport. Provider fixture only.",
+  "external_inference_calls": 0,
+  "paid_usage": 0,
+  "native_schema": {
+    "file": "codex_app_server_0_157_0.schemas.json",
+    "sha256": "2719fccd25a97a7ce355497ca5e9123a63f6dce7f9f83724a5b73fd927811f59",
+    "notes": [
+      "The pinned TurnStartParams has no per-turn literal-text setting.",
+      "TextElement fields describe byte range and a rendering placeholder.",
+      "TurnStartParams.disabledPluginIds is separate from regular repository-local skills.",
+      "ThreadStartParams.config can disable a known path on initial thread creation."
+    ]
+  },
+  "fixture": {
+    "skill_kind": "repository-local .agents/skills",
+    "control": "Compare the digest-independent exact input text and the synthetic skill-body marker in separate ephemeral threads.",
+    "text_elements_scope": "full byte range over the unchanged message",
+    "plugin_id": "the test skill name, with no plugin installed",
+    "thread_config": "skills.config sets enabled:false for the exact test SKILL.md path"
+  },
+  "initial_probe": {
+    "script_sha256": "b18c1ffe8ab2284d067b7c1ff323f22164927588346720b32497806405706c31",
+    "result_sha256": "6a411f296130e97ad00a150494d9d333d0ae1792cd81556b9ba3a1c2818c7457",
+    "requests": 5,
+    "process_exit": 0
+  },
+  "full_probe_sha256": "6768fbe7cbe59d6c76076e5f168186c702fa5b707d66fa0275a5097241316524",
+  "native_observations": {
+    "codex_app_server": "0.157.0",
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "native_input": {
+      "method": "turn/start",
+      "input_type": "text"
+    },
+    "skill_catalog_fixture_found": true,
+    "synthetic_profiles": true,
+    "proxy": "rejecting loopback",
+    "provider": "loopback only",
+    "provider_request_count": 8,
+    "cases": {
+      "slash_command": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": false,
+        "other_user_text_parts": 1,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "double_slash": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": false,
+        "other_user_text_parts": 1,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "absolute_path": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": false,
+        "other_user_text_parts": 1,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "unicode_and_newline": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": false,
+        "other_user_text_parts": 1,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "explicit_skill_reference": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": true,
+        "other_user_text_parts": 2,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28",
+          "6820711ec8e6320fb890430a84665d3b8e1796717e1b59d664d7aca1e616a620"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "skill_with_text_elements": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": true,
+        "other_user_text_parts": 2,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28",
+          "6820711ec8e6320fb890430a84665d3b8e1796717e1b59d664d7aca1e616a620"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "skill_with_plugin_id_disabled": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": true,
+        "other_user_text_parts": 2,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28",
+          "6820711ec8e6320fb890430a84665d3b8e1796717e1b59d664d7aca1e616a620"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      },
+      "skill_with_thread_config_disabled": {
+        "terminal_status": "completed",
+        "provider_requests": 1,
+        "exact_user_text_once": true,
+        "fixture_skill_body_in_request": false,
+        "other_user_text_parts": 1,
+        "other_user_text_part_digests": [
+          "52e9792d25143e37d89c790e55a237ab2b20fdb4b3043ddba92808adc034dd28"
+        ],
+        "native_notifications": [
+          "item/agentMessage/delta",
+          "item/completed",
+          "item/started",
+          "thread/status/changed",
+          "thread/tokenUsage/updated",
+          "turn/completed",
+          "turn/started"
+        ]
+      }
+    },
+    "owned_process_exit": 0
+  },
+  "verification": {
+    "installed_contract_and_api_tests": 24,
+    "installed_junit_sha256": "cf010229cff3913f545dd964fb7a565ed47cb4fa2f43dc565f1362ea152b8e3c",
+    "frontend_component_tests": 21,
+    "frontend_log_sha256": "0ce473d3136cd92ca549fa409e5dfb1a94868a3378c5aa289d2bcc0bf873595d"
+  },
+  "qualification": "The common input type preserves slash characters but can add expanded skill content. An exact-session per-input escape is unproven. The configured new-thread control is insufficient for the existing-session UI contract.",
+  "rollback": "Evidence-only Nexus commit. No migration."
+}
