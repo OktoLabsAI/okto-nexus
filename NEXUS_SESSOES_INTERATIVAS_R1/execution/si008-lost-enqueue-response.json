@@ -1,0 +1,41 @@
+{
+  "scenarios": [
+    "SI-T-B14",
+    "SI-T-B15"
+  ],
+  "status": "PASS",
+  "source_baseline": "00a7242698cc7ed36cdb7c78a795eaf450e93821",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "result": {
+    "transport": "Actual HTTP over disposable loopback",
+    "fault": "Connection closed after 202 headers, before the committed receipt body",
+    "durable_inputs_at_fault": 1,
+    "initial_queue_sequence": 1,
+    "initial_status": "QUEUED",
+    "recovered_receipt_http": 200,
+    "same_intent_replay_http": 202,
+    "same_receipt_and_sequence": true,
+    "changed_text_http": 409,
+    "original_content_and_fingerprint_retained": true,
+    "adapter_sends_before_resume": 0,
+    "adapter_sends_after_resume": 1,
+    "canonical_operation_text_matches_original": true
+  },
+  "verification": {
+    "installed_cases": 2,
+    "pytest_cases": [
+      "test_lost_queue_reply_recovers_same_receipt_and_rejects_changed_text",
+      "test_atomic_storage_and_retry_do_not_create_r4_operations"
+    ],
+    "directory": "D:/nxs-lost-receipt-19858041",
+    "junit_sha256": "45b1154f2a565a1e6731ca870f118afaea6a6a261fb182806366b330748d9100",
+    "ruff": "PASS"
+  },
+  "limits": [
+    "The installed dispatcher uses a synthetic protocol peer. No external provider was exercised."
+  ]
+}

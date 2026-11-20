@@ -429,7 +429,9 @@
         "execution/si006-pi-human-input-authority.md",
         "execution/si006-pi-human-input-authority.json",
         "execution/si006-exact-input-boundaries.md",
-        "execution/si006-exact-input-boundaries.json"
+        "execution/si006-exact-input-boundaries.json",
+        "execution/si008-lost-enqueue-response.md",
+        "execution/si008-lost-enqueue-response.json"
       ]
     },
     {
@@ -526,7 +528,9 @@
         "execution/si035-input-restart-receipts.md",
         "execution/si035-input-restart-receipts.json",
         "execution/si008-recorded-grant-expiration.md",
-        "execution/si008-recorded-grant-expiration.json"
+        "execution/si008-recorded-grant-expiration.json",
+        "execution/si008-lost-enqueue-response.md",
+        "execution/si008-lost-enqueue-response.json"
       ]
     },
     {
@@ -2723,8 +2727,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": ["execution/si023-retired-session-queue.json"]
+      "status": "PASS",
+      "evidence": ["execution/si023-retired-session-queue.json",
+        "execution/si008-lost-enqueue-response.md",
+        "execution/si008-lost-enqueue-response.json"
+      ]
     },
     {
       "id": "SI-T-B15",
@@ -2740,8 +2747,11 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si008-lost-enqueue-response.md",
+        "execution/si008-lost-enqueue-response.json"
+      ]
     },
     {
       "id": "SI-T-B16",

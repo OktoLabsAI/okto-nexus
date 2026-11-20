@@ -1104,6 +1104,117 @@ def test_unstaged_input_blocks_when_its_recorded_grant_expires(interactive_runti
     client.cookies.clear()
 
 
+def test_lost_queue_reply_recovers_same_receipt_and_rejects_changed_text(interactive_runtime):
+    import socket
+
+    import httpx
+    import uvicorn
+
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'lost-reply-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    original = opened['scope']
+    generation = original['session_owner_generation']
+    exact = {key: original[key] for key in ('server_id', 'executor_id', 'session_id', 'binding_id',
+                                            'workspace_id', 'workspace_binding_id', 'agent_id')}
+    route = f'/api/v1/runtime-management/runtime/sessions/{exact["session_id"]}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('lost-reply', 'synthetic-lost-reply-password', local=True)
+    token = auth.login('lost-reply', 'synthetic-lost-reply-password')
+    assert token
+    dropped = False
+
+    async def drop_committed_reply(scope, receive, send):
+        async def send_until_cut(message):
+            nonlocal dropped
+            await send(message)
+            if message['type'] == 'http.response.start' and message['status'] == 202:
+                dropped = True
+                raise ConnectionResetError('Fixture drops the response before its receipt body')
+
+        if scope['type'] == 'http' and scope['method'] == 'POST' and scope['path'] == route + '/inputs' and not dropped:
+            await app(scope, receive, send_until_cut)
+        else:
+            await app(scope, receive, send)
+
+    base = {'scope': exact, 'expected_session_generation': generation}
+    intent = 'same-intent-after-lost-reply'
+    original_text = 'Original text with an accent: café.\n  Keep this line as entered.'
+    factory = deps.connection_factory
+
+    def stored():
+        with factory.unit_of_work(write=False) as uow:
+            return [tuple(row) for row in uow.connection.execute("""
+                SELECT input_id, enqueue_sequence, fingerprint, content, status, operation_id
+                FROM session_interaction_inputs ORDER BY enqueue_sequence
+            """)]
+
+    with socket.socket() as listener:
+        listener.bind(('127.0.0.1', 0))
+        listener.listen()
+        address = f'http://127.0.0.1:{listener.getsockname()[1]}'
+        server = uvicorn.Server(uvicorn.Config(drop_committed_reply, lifespan='off', log_level='critical'))
+        running = client.portal.start_task_soon(partial(server.serve, sockets=[listener]))
+        try:
+            eventually(lambda: server.started, seconds=30)
+            with httpx.Client(base_url=address, cookies={'nexus_operator_session': token},
+                              headers=ui, trust_env=False, timeout=20) as wire:
+                def pause(paused):
+                    queue = wire.get(route + '/inputs', params=query)
+                    assert queue.status_code == 200, queue.text
+                    page = queue.json()
+                    changed = wire.post(route + '/inputs/queue-state', json=base | {
+                        'capability_revision': page['pause_capability_revision'],
+                        'expected_queue_revision': page['queue_revision'], 'paused': paused,
+                    })
+                    assert changed.status_code == 200, changed.text
+
+                pause(True)
+                revision = wire.get(route + '/interaction', params=query).json()['next_turn']['capability_revision']
+                assert revision
+                body = base | {'client_intent_id': intent, 'capability_revision': revision,
+                               'content': [{'type': 'text', 'text': original_text}]}
+                with pytest.raises((httpx.RemoteProtocolError, httpx.ReadError)):
+                    wire.post(route + '/inputs', json=body)
+                assert dropped and not native.native.sent
+                (retained,) = stored()
+                input_id, sequence, _, text, status, operation = retained
+                assert (sequence, text, status, operation) == (1, original_text, 'QUEUED', None)
+
+                receipt_route = route + '/inputs/receipt'
+                selector = query | {'client_intent_id': intent}
+                recovered = wire.get(receipt_route, params=selector)
+                assert recovered.status_code == 200
+                replay = wire.post(route + '/inputs', json=body)
+                assert replay.status_code == 202 and replay.json() == recovered.json()
+                assert (replay.json()['input_id'], replay.json()['enqueue_sequence']) == (input_id, sequence)
+                changed = wire.post(route + '/inputs', json=body | {
+                    'content': [{'type': 'text', 'text': 'Different text under the same intent'}],
+                })
+                assert changed.status_code == 409
+                assert changed.json()['error']['message'] == 'This input ID already identifies a different intent.'
+                assert stored() == [retained]
+                assert wire.get(receipt_route, params=selector).json() == recovered.json()
+
+                pause(False)
+                eventually(lambda: len(native.native.sent) == 1, seconds=30)
+                [(action, native_operation)] = native.native.sent
+                assert action == 'send_turn'
+                assert stored() == [(*retained[:4], 'DISPATCHING', native_operation)]
+                with factory.unit_of_work(write=False) as uow:
+                    payload, = uow.connection.execute(
+                        'SELECT semantic_payload FROM execution_operations WHERE operation_id=?',
+                        (native_operation,)).fetchone()
+                assert json.loads(payload)['payload']['text'] == original_text
+        finally:
+            server.should_exit = True
+            running.result(timeout=30)
+
+
 def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interactive_runtime):
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup
