@@ -1,0 +1,76 @@
+{
+  "tasks": ["SI-023", "SI-026", "SI-029"],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "c8763187b9c603a13deb409f5db28cf5427c16a9",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 557,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "9d04807aa8dc87034f29b2574b202c31d035f50c",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 95,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "20a3d31b4e97be1bf07d2d31233cf738a0e03420",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 77,
+      "behind_main": 0
+    },
+    "worktrees_clean": true,
+    "upstream_drift": [0, 0]
+  },
+  "artifacts": {
+    "core_commit": "bf783fe7ab9ed88214ac6dcc444302bf520d895a",
+    "core_build_tree": "91974a6c5212d4fdd16051814b20497f14436980",
+    "nexus_build_tree": "40927d4869e8da39ba6885900913b5af39836af5",
+    "prior_core_wheel_sha256": "2d38a81a5e107b50e8a7fb43063847bfdfad5800b21346cc3694edfba5e55d1e",
+    "core_wheel_sha256": "4b72410c11b8921eb13bb81faec09607f8962815f187d6d0f84f99ba01bec843",
+    "connector_wheel_sha256": "1c9c072ca30756b140cd17ef6cae006997e4db34e766b625b8195075d7e2595e",
+    "nexus_wheel_sha256": "f634976b02fbc726c3ac75f337181a59760bf5a98981791a5d605de5a6e28761",
+    "strict_wheel_validation": "PASS",
+    "offline_nexus_lock_check": "PASS",
+    "installed_dependency_check": "PASS",
+    "generated_core_contracts_check": "PASS"
+  },
+  "verification": {
+    "core_source_tests_passed": 62,
+    "core_installed_tests_passed": 62,
+    "connector_installed_tests_passed": 46,
+    "nexus_installed_tests_passed": 63,
+    "installed_import_paths_verified": true
+  },
+  "native_probe": {
+    "platform": "Windows x64 ConPTY",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "operator_and_presenter_client": "Nexus HTTP and WebSocket APIs via TestClient",
+    "model_endpoint": "isolated loopback fixture",
+    "external_model_requests": 0,
+    "personal_credentials": false,
+    "canonical_empty_opening": true,
+    "admission_replay_returns_same_receipt": true,
+    "native_startup_verified_exact_uuid": true,
+    "model_requests_during_openings": 0,
+    "detach_during_pending_turn_preserved_process": true,
+    "reattachment_delivered_result_from_same_process": true,
+    "canonical_close_verified_fresh_terminal_history": true,
+    "successor_reused_native_uuid_after_owner_release": true,
+    "successor_used_original_history_in_continuation": true,
+    "distinct_model_fixture_turns": 2,
+    "canonical_closes": 2,
+    "sqlite_quick_check": "ok",
+    "sqlite_foreign_key_errors": 0,
+    "remaining_fixture_processes": 0
+  },
+  "limits": [
+    "Native Claude process and Nexus authorization on one Windows host with a loopback model fixture",
+    "The fixture supplies an isolated provider environment and reads the text presenter API",
+    "No remote Claude presenter, second-host or real provider campaign qualification"
+  ]
+}

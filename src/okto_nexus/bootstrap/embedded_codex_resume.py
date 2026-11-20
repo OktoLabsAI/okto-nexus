@@ -27,8 +27,8 @@ def _refuse(code='PROFILE_DRIFT'):
     return CoreError(code, 'saved_codex_resume', retry_safe=True)
 
 
-def resume_for_open(owner, frame):
-    """Resolve a durable successor from the admitted operation, never from wire parameters."""
+def native_opening_for_operation(owner, frame):
+    """Read the durable saved lineage or the operator's explicit empty opening."""
     with owner.factory.unit_of_work(write=False) as uow:
         owner.verify(uow=uow)
         row = uow.connection.execute("""
@@ -39,7 +39,14 @@ def resume_for_open(owner, frame):
                 WHERE i.server_id=s.server_id AND i.operation_id=s.open_operation_id
                   AND json_type(i.resolved_json, '$.saved_resume') IS NOT NULL
                 LIMIT 1
-            ) AS saved_intent
+            ) AS saved_intent, EXISTS (
+                SELECT 1 FROM execution_client_intents i
+                JOIN execution_operations p ON p.server_id=s.server_id AND p.executor_id=s.executor_id
+                    AND p.operation_id=s.open_operation_id AND p.actor_agent_id=i.actor_agent_id
+                WHERE i.server_id=s.server_id AND i.operation_id=s.open_operation_id
+                  AND i.actor_agent_id='operator' AND i.session_selection='explicit'
+                  AND i.initial_turn_json IS NULL
+            ) AS explicit_empty
             FROM execution_sessions s
             WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? AND s.open_operation_id=?
         """, tuple(frame[k] for k in ('server_id', 'executor_id', 'session_id', 'operation_id'))).fetchone()
@@ -49,13 +56,13 @@ def resume_for_open(owner, frame):
         if lineage != json.loads(row['saved_intent'] or 'null'):
             raise _refuse('RECONCILIATION_REQUIRED')
         if lineage is None:
-            return None
+            return None, bool(row['explicit_empty'])
         if not owner.deps.config.runtime_session_interaction_enabled:
             raise _refuse('CAPABILITY_UNSUPPORTED')
         if frame['payload']['adapter_id'] == 'claude_stream':
             from .embedded_claude_resume import SavedClaudeOpening
-            return SavedClaudeOpening(owner, frame, lineage)
-        return SavedCodexOpening(owner, frame, lineage)
+            return SavedClaudeOpening(owner, frame, lineage), False
+        return SavedCodexOpening(owner, frame, lineage), False
 
 
 def read_retired_source(owner, frame, lineage, *, ready=False):

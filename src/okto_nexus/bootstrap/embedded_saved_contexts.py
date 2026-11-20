@@ -84,7 +84,8 @@ class EmbeddedSavedContexts:
             frame['workspace_id'], frame['workspace_binding_id'], frame['agent_id'])
         try:
             async with asyncio.timeout(budget):
-                async with self.owner._native_presentation_context(scope) as (runtime_scope, mapping, target, channel):
+                async with self.owner._native_presentation_context(
+                        scope, include_claude_history=True) as (runtime_scope, mapping, target, channel):
                     connection = dict(connection_id=channel.connection_id,
                                       connection_generation=channel.connection_generation)
                     if reviewed_codex_context(mapping):

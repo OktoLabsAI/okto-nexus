@@ -41,7 +41,7 @@ class EmbeddedExecutor:
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         request_grant: Callable[[dict], Awaitable[Mapping[str, object]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
-        saved_resume=None,
+        saved_resume=None, fresh_claude=False,
     ) -> tuple[EmbeddedExecutor, R4LeaseApplication]:
         """Install canonical Server authority before prepare or native open.
 
@@ -62,13 +62,14 @@ class EmbeddedExecutor:
             resume_grant[saved_resume.callback_key] = saved_resume.grant
             if saved_resume.callback_key == 'claude_resume':
                 saved_resume.local_launch = local_launch
+        fresh_grant = local_launch.fresh_claude_grant if fresh_claude and local_launch is not None else None
         runtime = await host.acquire(
             server_id=scope["server_id"], executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
             workspace_roots={scope["workspace_id"]: workspace_root},
             environment=environment, native_factory=native_factory,
             native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled,
-            **resume_grant)
+            claude_fresh=fresh_grant, **resume_grant)
         attempt = await runtime.begin_r4_lease_request(
             scope=scope, grant_id=grant_id, connection_id=connection_id,
             connection_generation=connection_generation, purpose="initial")
@@ -81,6 +82,7 @@ class EmbeddedExecutor:
             native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
         executor.local_launch = local_launch
         executor.saved_resume = saved_resume
+        executor.claude_fresh = fresh_grant
         executor.lease_request_started = attempt.sent_at_monotonic
         return executor, application
 
@@ -139,6 +141,7 @@ class EmbeddedExecutor:
         self.native_approvals_enabled = native_approvals_enabled
         self.local_launch = None
         self.saved_resume = None
+        self.claude_fresh = None
 
     async def _runtime(self):
         return await self.host.acquire(
@@ -148,6 +151,7 @@ class EmbeddedExecutor:
             environment=self.environment, native_factory=self.native_factory,
             native_action_factory=self.native_action_factory,
             native_approvals_enabled=self.native_approvals_enabled,
+            claude_fresh=self.claude_fresh,
             **({self.saved_resume.callback_key: self.saved_resume.grant} if self.saved_resume is not None else {}),
         )
 

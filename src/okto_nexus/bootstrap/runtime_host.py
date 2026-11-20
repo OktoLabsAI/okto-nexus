@@ -135,10 +135,11 @@ class EmbeddedRuntimeHost:
     def has_owned_claude_terminal(self, server_id: str, executor_id: str, session_id: str) -> bool:
         scope = {'server_id': server_id, 'executor_id': executor_id, 'session_id': session_id}
         try:
-            _, selection, task = self._existing_presentation_runtime(scope, 'claude_terminal_read')
+            _, _, task = self._existing_presentation_runtime(scope, 'claude_terminal_read')
         except CoreError:
             return False
-        return selection[7] is not None and callable(getattr(task.result()[0], 'open_live_claude_terminal', None))
+        owned = getattr(task.result()[0], 'has_owned_claude_terminal', None)
+        return callable(owned) and owned(SessionKey(server_id, executor_id, session_id))
 
     @asynccontextmanager
     async def open_r4_claude_terminal(self, scope: Mapping, target: NativeSessionTarget, *,
@@ -146,7 +147,7 @@ class EmbeddedRuntimeHost:
         stage = 'claude_terminal_read'
         key, selection, task = self._existing_presentation_runtime(scope, stage)
         attach = getattr(task.result()[0], 'open_live_claude_terminal', None)
-        if selection[7] is None or not callable(attach):
+        if not callable(attach):
             raise CoreError('CAPABILITY_UNSUPPORTED', stage)
         async with attach(scope, target, connection_id=connection_id,
                           connection_generation=connection_generation) as frames:
@@ -426,7 +427,7 @@ class EmbeddedRuntimeHost:
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
-        codex_resume=None, claude_resume=None,
+        codex_resume=None, claude_resume=None, claude_fresh=None,
     ) -> RuntimeCore:
         for value, label in ((server_id, "server"), (executor_id, "executor"), (session_id, "session")):
             if (not isinstance(value, str) or not value or len(value) > 160 or
@@ -448,11 +449,14 @@ class EmbeddedRuntimeHost:
         if claude_resume is not None and (not callable(claude_resume)
                 or set(candidates) != {"claude_stream"} or native_factory is not None):
             raise CoreError("CAPABILITY_UNSUPPORTED", "saved_claude_resume", retry_safe=True)
+        if claude_fresh is not None and (not callable(claude_fresh) or claude_resume is not None
+                or set(candidates) != {"claude_stream"} or native_factory is not None):
+            raise CoreError("CAPABILITY_UNSUPPORTED", "claude_terminal_open", retry_safe=True)
         pi = candidates.get('pi_rpc')
         hosted_pi = (self.pi_presentation_enabled and native_factory is None and pi is not None
                      and bool(pi.launch_script) and reviewed_pi_build(pi.version, sys.platform, pi.architecture, pi.build_identity))
         selection = (dict(candidates), dict(workspace_roots), native_action_factory,
-                     native_approvals_enabled, server_id, codex_resume, hosted_pi, claude_resume)
+                     native_approvals_enabled, server_id, codex_resume, hosted_pi, claude_resume, claude_fresh)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -494,6 +498,7 @@ class EmbeddedRuntimeHost:
                 native_approvals_enabled=selection[3],
                 codex_resume=selection[5],
                 **({'claude_resume': selection[7]} if selection[7] is not None else {}),
+                **({'claude_fresh': selection[8]} if selection[8] is not None else {}),
                 **({'pi_hosted_rpc': True} if selection[6] else {}),
             )
             if selection[2] is not None:

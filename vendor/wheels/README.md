@@ -1,5 +1,11 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `bf783fe7ab9ed88214ac6dcc444302bf520d895a`.
+The unpublished wheel SHA-256 is `4b72410c11b8921eb13bb81faec09607f8962815f187d6d0f84f99ba01bec843`.
+The reviewed Claude terminal can open an empty session and verify its saved dialogue on canonical close.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `20a3d31b4e97be1bf07d2d31233cf738a0e03420`.
 The unpublished wheel SHA-256 is `2d38a81a5e107b50e8a7fb43063847bfdfad5800b21346cc3694edfba5e55d1e`.
 Claude history verification accepts an empty file snapshot when it matches the exact main-thread user message.

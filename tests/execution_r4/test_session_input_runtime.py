@@ -196,7 +196,9 @@ def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt
 
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
 @pytest.mark.parametrize('condition', ['normal_close', 'replaced_history', 'changed_build', 'later_unverified_result'])
-def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_runtime, local_setup, condition, monkeypatch):
+@pytest.mark.parametrize('terminal_kind', ['result:success', 'Stop'])
+def test_managed_claude_history_uses_latest_scoped_terminal_fact(
+        interactive_runtime, local_setup, condition, terminal_kind, monkeypatch):
     import re
 
     from nexus_connector_core import OperationKey, ProcessBirthEvidence
@@ -234,7 +236,7 @@ def test_managed_claude_history_uses_latest_scoped_terminal_fact(interactive_run
             payload['claude_history_identity'] = {'schema_version': 1, 'session_id': history_uuid}
         client.portal.call(native.native.queue.put, RuntimeEvent(
             scope.session.server_id, scope.session.executor_id, session, stream, 0, 'turn_state',
-            'result:success', payload, operation_id=work['operation_id']))
+            terminal_kind, payload, operation_id=work['operation_id']))
         wait_receipt(setup, work, stages=('SUCCEEDED',))
 
         def committed_result():

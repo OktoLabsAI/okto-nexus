@@ -230,15 +230,26 @@ message to a different session, select that session and submit it explicitly.
 
 ## Follow or reorient a managed Claude session
 
-On Windows, a local Claude session resumed into the Core-managed terminal
-can be followed in a read-only viewer. Press Ctrl+C to leave the viewer while
-the managed terminal and its work continue. Use Home or the explicit session
-commands to control work. If older terminal output has rolled out of the
-buffer, a new viewer shows a notice and displays the retained output.
+On Windows x64, an explicit empty opening from `session open` or Connect can
+start the reviewed Claude Code 2.1.328 build in the Core-managed terminal.
+This requires session interaction, the approved `plan` settings, a reviewed
+Claude state directory and a current execution grant. The opening sends no
+prompt. The native viewer is available when the selected session has a
+managed terminal.
+
+Attach with the exact session ID to follow a new or resumed managed session
+in a read-only viewer. Press Ctrl+C to leave while the terminal and its
+work continue. Use Home or the explicit session commands to control work.
+If older output has rolled out of the buffer, a new viewer shows a notice
+and displays the retained output.
 
 ```sh
 okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
+
+After canonical closure, a managed session with verified saved history can
+be selected by `session resume`. Confirm the successor before sending more
+work. The saved conversation retains its native identity across that opening.
 
 From an interactive terminal, review a reorientation for the selected session.
 Claude needs a confirmed active turn. The command asks you to confirm interrupting

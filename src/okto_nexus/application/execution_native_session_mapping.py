@@ -184,7 +184,7 @@ def _claude_history(conn, scope, stream_epoch):
     if (tuple(document.get(key) for key in ('server_id', 'executor_id', 'session_id', 'stream_epoch', 'sequence'))
             != (scope.session.server_id, scope.session.executor_id, scope.session.session_id, stream_epoch, event['sequence'])
             or document.get('category') != 'turn_state' or document.get('operation_id') != event['operation_id']
-            or document.get('native_type') != 'result:success'):
+            or document.get('native_type') not in ('result:success', 'Stop')):
         return None
     payload = document.get('payload')
     if (type(payload) is not dict or payload.get('delivery_phase') != 'terminal'
@@ -196,7 +196,7 @@ def _claude_history(conn, scope, stream_epoch):
     return ClaudeHistoryIdentity(session_uuid, event['operation_id'], event['event_hash'])
 
 
-def read_managed_native_session(uow, scope: InputScope) -> ManagedNativeSession | None:
+def read_managed_native_session(uow, scope: InputScope, *, include_claude_history=True) -> ManagedNativeSession | None:
     """Resolve retained identity only. Process ownership and access need separate proof."""
     row = uow.connection.execute("""
         SELECT s.stream_epoch, s.native_launch_build_json, p.operation_id, p.semantic_payload,
@@ -237,7 +237,8 @@ def read_managed_native_session(uow, scope: InputScope) -> ManagedNativeSession 
     if adapter == 'codex_app_server' and row['stream_epoch'] is not None:
         thread, configuration_hash = _codex_opening_thread(uow.connection, scope, row['stream_epoch'])
     claude_history = (_claude_history(uow.connection, scope, row['stream_epoch'])
-                      if adapter == 'claude_stream' and row['stream_epoch'] is not None else None)
+                      if include_claude_history and adapter == 'claude_stream'
+                      and row['stream_epoch'] is not None else None)
     return ManagedNativeSession(scope, row['operation_id'], adapter, native_id, row['stream_epoch'],
         candidate, inventory, revision, build, row['source_connection_id'], row['source_connection_generation'],
         thread, configuration_hash, claude_history)

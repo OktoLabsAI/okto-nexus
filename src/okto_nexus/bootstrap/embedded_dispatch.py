@@ -268,7 +268,7 @@ class EmbeddedDispatchOwner:
 
     @asynccontextmanager
     async def open_native_claude_terminal(self, scope: InputScope):
-        """Read the canonical successor without transferring its input or lifecycle."""
+        """Read the canonical terminal without transferring its input or lifecycle."""
         async with AsyncExitStack() as stack:
             async with self._native_presentation_context(scope) as selected:
                 runtime_scope, mapping, target, channel = selected
@@ -352,13 +352,13 @@ class EmbeddedDispatchOwner:
         if not self._presentation_session_live(key, session):
             raise CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
         runtime_scope = dict(session['scope'])
-        mapping = self._native_presentation_mapping(scope, runtime_scope, uow=uow)
+        mapping = self._native_presentation_mapping(scope, runtime_scope, uow=uow, include_claude_history=False)
         if not self._presentation_session_live(key, session) or session['scope'] != runtime_scope:
             raise CoreError('STALE_GENERATION', 'native_presentation_owner')
         return mapping
 
     @asynccontextmanager
-    async def _native_presentation_context(self, scope):
+    async def _native_presentation_context(self, scope, *, include_claude_history=False):
         key = scope.session.session_id
         session = self.sessions.get(key)
         unavailable = CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
@@ -373,21 +373,24 @@ class EmbeddedDispatchOwner:
         exact_scope['session_owner_generation'] = exact_scope.pop('owner_generation')
         if any(runtime_scope.get(name) != value for name, value in exact_scope.items()):
             raise unavailable
-        mapping = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope)
+        mapping = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope,
+                                          include_claude_history=include_claude_history)
         if not live():
             raise unavailable
         channel = self.channel
         target = NativeSessionTarget(mapping.opening_operation_id, mapping.adapter_id,
                                      mapping.native_session_id, mapping.stream_epoch)
         yield runtime_scope, mapping, target, channel
-        current = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope)
+        current = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope,
+                                          include_claude_history=include_claude_history)
         if not live() or session['scope'] != runtime_scope or self.channel != channel or current != mapping:
             raise CoreError('STALE_GENERATION', 'native_presentation_owner')
 
-    def _native_presentation_mapping(self, scope, runtime_scope, *, uow=None):
+    def _native_presentation_mapping(self, scope, runtime_scope, *, uow=None, include_claude_history=True):
         if uow is None:
             with self.factory.unit_of_work(write=False) as unit:
-                return self._native_presentation_mapping(scope, runtime_scope, uow=unit)
+                return self._native_presentation_mapping(scope, runtime_scope, uow=unit,
+                                                         include_claude_history=include_claude_history)
         self.verify(uow=uow)
         params = _scope_params(scope)
         if not _current_session(uow.connection, params, require_active_lease=True):
@@ -403,7 +406,9 @@ class EmbeddedDispatchOwner:
                 or json.loads(lease['scope_json'] or 'null') != runtime_scope
                 or stamp(lease['valid_until_server']) <= stamp(self.deps.clock.now_iso())):
             raise CoreError('STALE_GENERATION', 'native_presentation_owner')
-        mapping = read_managed_native_session(uow, scope)
+        # A successful turn can advance the saved history witness while a
+        # reader stays attached to the same owner and opening.
+        mapping = read_managed_native_session(uow, scope, include_claude_history=include_claude_history)
         if (mapping is None or not mapping.stream_epoch or mapping.launch_build is None
                 or (mapping.receipt_connection_id, mapping.receipt_connection_generation) != connection):
             raise CoreError('SESSION_CONFLICT', 'native_presentation_owner')
@@ -822,8 +827,9 @@ class EmbeddedDispatchOwner:
             if session.get('recovering'):
                 raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_session_recovery')
             if action == "runtime.open" and not resuming:
-                from .embedded_codex_resume import resume_for_open
-                saved_resume = await asyncio.to_thread(resume_for_open, self, frame)
+                from nexus_connector_core import reviewed_claude_terminal_candidate
+                from .embedded_codex_resume import native_opening_for_operation
+                saved_resume, explicit_empty = await asyncio.to_thread(native_opening_for_operation, self, frame)
                 from .embedded_session_catalog import EmbeddedSessionCatalog
                 await asyncio.to_thread(EmbeddedSessionCatalog(self).register, key)
                 setup = await asyncio.to_thread(ApprovedLocalLaunch, self.inventory, session["scope"])
@@ -836,6 +842,9 @@ class EmbeddedDispatchOwner:
                     environment=setup.environment, native_factory=self.native_factory,
                     native_action_factory=tool_config["native_factory"] if tool_config else None,
                     saved_resume=saved_resume,
+                    fresh_claude=(explicit_empty and self.native_factory is None
+                        and self.deps.config.runtime_session_interaction_enabled
+                        and reviewed_claude_terminal_candidate(setup.candidate)),
                     native_approvals_enabled=bool(self.deps.config.feature_hitl and
                         (getattr(saved_resume, 'callback_key', None) != 'claude_resume' or
                          saved_resume.profile.get('question_only') is True or

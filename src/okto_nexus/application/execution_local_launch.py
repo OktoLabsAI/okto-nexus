@@ -143,6 +143,31 @@ class ApprovedLocalLaunch:
         if snapshot != self._snapshot:
             raise _refuse()
 
+    async def fresh_claude_grant(self, prepared, session_id, context, environment):
+        from nexus_connector_core import ClaudeTerminalFreshGrant
+        from .execution_claude_resume_profile import observe_claude_resume_profile
+
+        profile = self.claude_resume_profile
+        if profile is None:
+            return None
+        fields = ('server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id',
+                  'session_owner_generation', 'authorization_revision', 'configuration_revision')
+        if (session_id != self.scope['session_id']
+                or environment.get('CLAUDE_CONFIG_DIR') != profile['state_home']
+                or any(self.scope[name] != getattr(context, name) for name in fields)):
+            raise _refuse()
+
+        def require_current():
+            self.check()
+            if observe_claude_resume_profile(profile['state_home'], prepared.cwd) != profile:
+                raise _refuse()
+
+        await asyncio.to_thread(require_current)
+        return ClaudeTerminalFreshGrant(profile['state_home'], session_id,
+            *(getattr(context, name) for name in fields), prepared.profile_fingerprint, prepared.root_fingerprint,
+            require_current, question_only=profile.get('question_only') is True,
+            read_approval=profile.get('read_approval') is True)
+
     async def environment(self, prepared):
         await asyncio.to_thread(self.check)
         if (prepared.intent.adapter_id != self.candidate.adapter_id
