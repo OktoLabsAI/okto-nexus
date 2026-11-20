@@ -1220,7 +1220,9 @@
         "execution/si006-pi-human-input-authority.md",
         "execution/si006-pi-human-input-authority.json",
         "execution/si007-shared-turn-arbitration.md",
-        "execution/si007-shared-turn-arbitration.json"
+        "execution/si007-shared-turn-arbitration.json",
+        "execution/si034-terminal-command-authority.md",
+        "execution/si034-terminal-command-authority.json"
       ]
     },
     {
@@ -1986,7 +1988,9 @@
         "execution/si034-native-attachment-ticket-replay.md",
         "execution/si034-native-attachment-ticket-replay.json",
         "execution/si034-inert-terminal-output.md",
-        "execution/si034-inert-terminal-output.json"
+        "execution/si034-inert-terminal-output.json",
+        "execution/si034-terminal-command-authority.md",
+        "execution/si034-terminal-command-authority.json"
       ]
     },
     {
@@ -5346,8 +5350,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si034-terminal-command-authority.md",
+        "execution/si034-terminal-command-authority.json"
+      ]
     },
     {
       "id": "SI-T-H20",

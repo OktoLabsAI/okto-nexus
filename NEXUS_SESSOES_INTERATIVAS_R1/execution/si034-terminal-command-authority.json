@@ -1,0 +1,101 @@
+{
+  "scenario": "SI-T-H19",
+  "qualification_scope": "Typed terminal command route and authenticated Pi writer gateway on Windows, installed Nexus, HTTPS and WSS in loopback, native ConPTY reader",
+  "repos": {
+    "Nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "5ef721851020f66e58f041fdfd129e845acda83b",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead": [
+        0,
+        531
+      ]
+    },
+    "Connector": {
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead": [
+        0,
+        88
+      ]
+    },
+    "Core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead": [
+        0,
+        67
+      ]
+    }
+  },
+  "initial_working_trees_clean": true,
+  "wheel_sha256": {
+    "nexus": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "wheel_source_reference": "si037-pi-headless-output.json",
+  "fixture": "D:\\nxs-si-h19-command-authority-d44f6038",
+  "proof": {
+    "build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "typed_http_refusals": {
+      "unqualified_permission_mode": 422,
+      "unqualified_execution": 422,
+      "foreign_permission_option": 422
+    },
+    "operator_scoped_status": 200,
+    "agent_key_only_status": 401,
+    "established_writer_wss_refusals": {
+      "undeclared_request": 4409,
+      "extra_permission_option": 4409,
+      "reserved_input_text": 4409
+    },
+    "native_verbs_during_refusals": [],
+    "no_native_turn_prior_to_authorized_submit": true,
+    "same_pid_after_all_refusals": true,
+    "native_reader_rendered_authorized_result": true,
+    "provider_network_calls": 0,
+    "original_turn_conserved": true,
+    "canonical_close": "SUCCEEDED"
+  },
+  "sqlite": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "canonical_results": 1,
+    "new_session_inputs": 0,
+    "new_session_controls": 0,
+    "foreign_key_violations": 0,
+    "integrity": "ok",
+    "session_closed": true,
+    "retired_writers": 3,
+    "retired_readers": 1
+  },
+  "cleanup": {
+    "listener_closed": true,
+    "tls_private_key_removed": true
+  },
+  "tests": {
+    "installed_native_integration": {
+      "passed": 1,
+      "sha256": "8a7747bb104821e0403649a8ccf48d30f995b854b905e3f8cc2157b29be8cf3e"
+    },
+    "installed_terminal_and_presentation_regressions": {
+      "passed": 104,
+      "sha256": "87bc169eab6d285e5cacd038c1bf52cccde2e791d1a713643c2295bfb8a71997"
+    }
+  },
+  "artifacts_sha256": {
+    "test_command_authority.py": "201f09450a5579893237104998f4ce8f9941ad3c8355d2906aed087c6fb3a772",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "reader.py": "d7eef14ef7f8768f8d3f7b16d25a689c363d2bc022d16d25c8aed21667694421",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "test_headless_setup.py": "3fc482d92893f88d1c64e58d3be5257832910eda66fbcf8d9d3924b4cc2765cc",
+    "run.ps1": "a610f35853a723ca824b70b0bfd0abef8114ead01a61b60671125c33a091e6cd",
+    "proof.json": "69fd9f8427a2848e934923902a7444c5a91349c4aca77417624f86a1b6c599c1"
+  }
+}
