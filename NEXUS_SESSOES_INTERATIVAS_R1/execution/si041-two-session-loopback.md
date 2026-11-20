@@ -1,0 +1,11 @@
+# Demonstração local com duas sessões do mesmo agente
+
+O Nexus abriu duas sessões Pi na mesma conexão, no mesmo projeto, com processos nativos distintos. Abri o terminal somente leitura da primeira sessão durante o turno e saí com Ctrl+C. A saída restaurou os modos do console e gravou o detach. O mesmo processo continuou executando o turno.
+
+Na segunda sessão, a fila recebeu duas entradas. Uma foi promovida a reorientação e o Pi a aplicou após a conclusão da ferramenta, com o turno ainda em execução. O ensaio descartou a confirmação HTTP depois da admissão e recuperou a operação pelo recibo da entrada original. A interrupção atingiu o turno exato da segunda sessão e pausou sua fila. Após expirar o login que registrou a entrada comum, outro login retomou a fila. A entrada ficou em `BLOCKED_AUTH`, sem operação vinculada. Durante essas ações, a primeira sessão manteve o mesmo processo, com o turno ativo.
+
+No Edge, o seletor da Home exigiu uma escolha entre as duas sessões. A primeira conversa exibiu o trabalho em andamento após o detach e, depois, mostrou seu resultado uma vez. A segunda exibiu o próprio trabalho. Ao digitar `/compact` nela, a Home explicou a indisponibilidade, manteve o rascunho e não enviou trabalho. Uma requisição direta da fixture a esse comando recebeu HTTP 422. Voltei à primeira conversa e reabri seu terminal somente leitura, que mostrou o mesmo resultado. O SQLite confirmou os dois detaches na primeira sessão, uma única reorientação e uma única interrupção na segunda, e o fechamento canônico de ambas. [Dados e hashes](si041-two-session-loopback.json)
+
+Passaram a integração com Edge, Windows ConPTY e Pi 0.87.1 e 18 regressões de autorização, fila, recibos e anexação com os wheels instalados. A fixture usou respostas determinísticas, um relógio controlado só para a expiração do login e zero chamadas a provedores externos. As rodadas de preparação corrigiram a espera pela projeção do recibo, o tratamento do cancelamento pelo provedor simulado e a captura do status HTTP.
+
+Este marco documenta a demonstração em loopback. A matriz ainda exige qualificação de campanhas consentidas, hosts distintos e recuperação de uma escrita nativa de resultado incerto. O registro dispensa migração e pode ser revertido pelo commit.

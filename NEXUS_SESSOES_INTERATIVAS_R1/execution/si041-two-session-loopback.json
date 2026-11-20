@@ -1,0 +1,129 @@
+{
+  "gate": "Two-session demonstration required by section 17 of the plan",
+  "tasks": [
+    "SI-038",
+    "SI-041"
+  ],
+  "scope": "Windows installed integration with the same agent, project and binding, two native sessions, real browser and ConPTY",
+  "status": "LOCAL_DEMONSTRATION_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "097ad228301be7d86b3221c4dfac0b35598c6bd1",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 516
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "product_source_for_nexus_wheel": "1bb082dbfdd7e53c8e46df47cc0554cec8eb6450 (identical tracked product sources at baseline)",
+  "installed_wheel_sha256": {
+    "nexus": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "pi": "0.87.1",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "driver": "Playwright CLI",
+    "terminal": "Windows ConPTY with installed Nexus read-only presentation handler",
+    "transport": "Local embedded Core owner, HTTP browser and presentation on loopback",
+    "provider": "Deterministic in-process Pi extension with external networking disabled"
+  },
+  "runtime": {
+    "same_agent_binding_workspace": true,
+    "distinct_process_owners": true,
+    "alpha_continued_through_beta_controls": true,
+    "exact_read_only_terminal_detaches": 2,
+    "beta_queue_retained_without_operation": true,
+    "beta_steer_boundary": "applied",
+    "beta_expired_operator_login_http_status": 401,
+    "beta_ordinary_queue_after_expiry": "BLOCKED_AUTH",
+    "beta_http_confirmation_loss_recovered_by_lookup": true,
+    "beta_original_turn": "CANCELLED",
+    "alpha_original_turn": "SUCCEEDED",
+    "beta_unsupported_command_http_status": 422,
+    "native_writes_before_canonical_close": [
+      "prompt",
+      "prompt",
+      "steer"
+    ],
+    "edge_requested": true,
+    "external_provider_calls": 0,
+    "canonical_closes": 2
+  },
+  "browser": {
+    "while_working": {
+      "checkpoint": "ALPHA_STILL_WORKING_AFTER_TERMINAL_DETACH",
+      "twoChoices": true,
+      "explicitSelection": true,
+      "productivePosts": 0
+    },
+    "after_result": {
+      "checkpoint": "ALPHA_RESULT_AND_EXACT_RETURN",
+      "alphaResultVisibleOnce": true,
+      "betaTranscriptIsolated": true,
+      "betaUnsupportedCommandExplained": true,
+      "sameSessionReturned": true,
+      "productivePosts": 0
+    }
+  },
+  "sqlite": {
+    "per_session_operations": {
+      "alpha": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 1
+      },
+      "beta": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.interrupt": 1,
+        "turn.steer": 1,
+        "turn.submit": 1
+      }
+    },
+    "alpha_only_detachments": 2,
+    "beta_queue_has_no_operation": true,
+    "alpha_result_in_original_session": true,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "tests": {
+    "integration": 1,
+    "regressions": 18,
+    "regressions_junit_sha256": "88c1c61d0f89e74b9f046307bdc657be5ab74a6c4ebbc5048eb3cb8bf1bcfa6b",
+    "installed_imports_verified": true
+  },
+  "fixture_directory": "D:/nxs-sibling-verified-bce3db0d",
+  "artifact_sha256": {
+    "local_author_probe.py": "8721662c6bbb8eeb21951c6f4c8c85380e04563c332fcee6f87daf639c429831",
+    "drive-demo.ps1": "d1bb6b242591a866de48a084820ed9198519af5650455797b5235910bd2d6df7",
+    "home-working.js": "6d1af3e50a2771996d74b168c092e9b2ece9fc7f7fce7dcdb05531de37ae5363",
+    "home-result.js": "00f7554861deb49949fdc488d274327be0e7bd785f6d2d638de4e079644b2230",
+    "focus.xml": "035fe1282f44d155dd8c68fbfbee5330bdcd27f751c7f7b32700c79025fa4cd7",
+    "proof.json": "635f500a87a3869096d9a70aebda579000e7ca30d32f5479b436ed2583bbacd1",
+    "browser-working.json": "4091c9cb00326188dc9259c47b1f41565a4ba6401013aeb35379d51ee94182af",
+    "browser-returned.json": "8dd91c25c1aeea3f3ea84b0ad034fa313f2fd2b8004af80a45cdbf67c39f843e"
+  },
+  "limitations": [
+    "The clock fault applies only to the fixture operator login.",
+    "The uncertain client observation is loss of the HTTP response after admission, followed by lookup of the original exact input.",
+    "Native write uncertainty, campaigns with a real provider and distinct-host qualification retain their previous gates."
+  ],
+  "migration": "none"
+}
