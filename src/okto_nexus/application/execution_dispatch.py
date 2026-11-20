@@ -11,7 +11,9 @@ import secrets
 from typing import Mapping
 
 from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
-from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC, PI_RUN_CONTROL_CODEC
+from nexus_connector_core.targeted_control_link import (
+    CLAUDE_OPERATION_INTERRUPT_CODEC, CLAUDE_OPERATION_STEER_CODEC, PI_RUN_CONTROL_CODEC,
+)
 from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from nexus_connector_core.protocol import canonical_json
 
@@ -30,7 +32,12 @@ from .execution_semantics import (
 _CONTROL = frozenset({"turn.steer", "turn.interrupt", "runtime.close",
                       "approval.decide", "input.provide"})
 _REGULAR = frozenset({"runtime.open", "turn.submit"})
-_TARGETED_CONTROLS = {'claude_stream': CLAUDE_OPERATION_STEER_CODEC, 'pi_rpc': PI_RUN_CONTROL_CODEC}
+_TARGETED_CONTROLS = {
+    ('claude_stream', 'turn.steer'): CLAUDE_OPERATION_STEER_CODEC,
+    ('claude_stream', 'turn.interrupt'): CLAUDE_OPERATION_INTERRUPT_CODEC,
+    ('pi_rpc', 'turn.steer'): PI_RUN_CONTROL_CODEC,
+    ('pi_rpc', 'turn.interrupt'): PI_RUN_CONTROL_CODEC,
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -699,7 +706,7 @@ def begin_execution_send(
             if (binding['kind'] == 'remote' and linked_control is not None
                     and row['action'] in ('turn.steer', 'turn.interrupt')
                     and semantic['target']['kind'] == 'current_run'):
-                codec = _TARGETED_CONTROLS.get(binding['adapter_id'])
+                codec = _TARGETED_CONTROLS.get((binding['adapter_id'], row['action']))
                 if codec is None or channel is None or codec.revision not in channel.control_capabilities:
                     raise OktoNexusError(ErrorCode.CONFLICT, 'The connected owner cannot target the reviewed run.', {})
                 wire_extension = codec.encode(frame, linked_control['target_ref'])

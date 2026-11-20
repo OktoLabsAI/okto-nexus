@@ -1,0 +1,81 @@
+{
+  "tasks": ["SI-011", "SI-022", "SI-026"],
+  "related_scenarios": {
+    "SI-T-C12": "pause persisted before the native write with one item pending",
+    "SI-T-C14": "the original item was still pending after cancellation, verified by the receipt and queue API",
+    "SI-T-C15": "explicit queue resume delivered the original item once under the same process"
+  },
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "8e90ddc29edc648d19e2ac8acec887bec672dc0a",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 560
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "857d833e2b70be9c782b37fbe70ea0f857255b2e",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 99
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a7b22737bc86485d45dd5ad0a1a49e18d46ddd5d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 79
+    },
+    "behind_main": 0,
+    "worktrees_clean": true,
+    "upstream_drift": [0, 0]
+  },
+  "artifacts": {
+    "core_commit": "8153311bf66a16f386ea73b8a8478fcac5bc8bd4",
+    "core_build_tree": "8358dcc8ae3a02ff50daa273ad912fe63210eba2",
+    "connector_commit": "ed6c7b631b6729569b54c625649edcd9bb792556",
+    "connector_build_tree": "2a26ed35e4105b53bfb0781e3b355af12c708af3",
+    "nexus_build_tree": "6a546d3bef155018084c6eb65e066c32075c3fb9",
+    "prior_core_wheel_sha256": "6efd71674e39964f866778abb9ddc4a714bb38c85f7c454cec8686e2519a18cb",
+    "prior_connector_wheel_sha256": "70b4bae75062e87229f903624a82208408867ad0a41a097fcc9f08c4498a0ab4",
+    "core_wheel_sha256": "809002514144def6c5894cbf4df5d1bd1b98e8992cc2cd9e4ac205d249b277dd",
+    "connector_wheel_sha256": "ad704b1b3a625702e04cfeacdd98c0c175a0568cc32a5044146e1269cdb82cb5",
+    "nexus_wheel_sha256": "8b19b949e6615c3769b8fa96f2a2eacdcccf021e7ef136340a5a5ef0bc609c39"
+  },
+  "verification": {
+    "core_installed_tests_passed": 111,
+    "connector_installed_tests_passed": 136,
+    "nexus_installed_tests_passed": 85,
+    "nexus_updated_negotiation_cases_repeated_and_passed": 2,
+    "native_installed_probe_passed": 1,
+    "strict_wheel_validation": "PASS",
+    "offline_nexus_lock_check": "PASS",
+    "installed_dependency_check": "PASS",
+    "generated_core_contracts_check": "PASS",
+    "nexus_ruff_syntax_and_undefined_names": "PASS"
+  },
+  "native_probe": {
+    "topology": "one Windows host, Nexus HTTP and WebSocket, Connector daemon and R4, real Claude binary on ConPTY",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "probe_sha256": "56239a2136c25ed9c273a5d0e9c600e990b030a5b837ba4447e174b4b7fd2564",
+    "observations_sha256": "246661983ba425614673b2389b67a6e56d62704d8b9d54b6c45ba6c7291383fc",
+    "external_provider_requests": 0,
+    "loopback_streaming_requests": 2,
+    "requesting_refused": true,
+    "simulated_steer_only_peer_refused_interrupt": true,
+    "stale_queue_revision_and_wrong_operation_refused_before_write": true,
+    "durable_barrier_before_escape": true,
+    "escape_writes": 1,
+    "original_turn_receipt": "CANCELLED",
+    "same_receipt_after_simulated_http_loss_and_confirmation_replay": true,
+    "control_receipt": {
+      "target_status": "interrupted",
+      "queue_paused": true,
+      "pending_count": 1
+    },
+    "explicit_resume_delivered_original_item_once": true,
+    "same_process_through_interrupt_resume_and_viewer": true,
+    "canonical_close": true,
+    "sqlite_quick_check": "ok"
+  },
+  "pending_qualification": ["separate machines", "authorized real-provider campaign"]
+}

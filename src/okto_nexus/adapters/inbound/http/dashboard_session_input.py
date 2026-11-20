@@ -252,9 +252,9 @@ def build_router():
                     or (mapping is not None and reviewed_pi_context(mapping)))
                 claude_steer = (revision is not None and adapter == 'claude_stream' and supported_owner
                     and read_managed_native_session(uow, scope) is not None)
-                claude_interrupt = (claude_steer and session['kind'] == 'embedded'
-                    and isinstance(active_interrupt_target(uow, scope, current_next_turn_revision=revision_for),
-                                   ExactClaudeOperation))
+                claude_interrupt = (revision is not None and adapter == 'claude_stream' and isinstance(
+                    active_interrupt_target(uow, scope, current_next_turn_revision=revision_for,
+                        remote_control_host=state.deps.runtime_availability.current_host), ExactClaudeOperation))
                 turn_state = (next_turn_state(uow, scope, stream_epoch=session['stream_epoch'],
                     connection_id=session['owner_instance_id'], connection_generation=session['generation'])
                     if signed_in and revision is not None else 'unknown')

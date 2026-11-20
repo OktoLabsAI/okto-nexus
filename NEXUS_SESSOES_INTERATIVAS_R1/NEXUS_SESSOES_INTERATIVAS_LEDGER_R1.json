@@ -709,6 +709,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si011-si026-claude-remote-interrupt.md",
+        "execution/si011-si026-claude-remote-interrupt.json",
         "execution/si011-pause-and-exact-interrupt.md",
         "execution/si014-queue-pause-and-resume.md",
         "execution/si011-dashboard-interrupt-api.md",
@@ -1303,6 +1305,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si011-si026-claude-remote-interrupt.md",
+        "execution/si011-si026-claude-remote-interrupt.json",
         "execution/si022-remote-codex-context.md",
         "execution/si022-remote-codex-context.json",
         "execution/si022-codex-remote-attach.md",
@@ -1618,6 +1622,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si011-si026-claude-remote-interrupt.md",
+        "execution/si011-si026-claude-remote-interrupt.json",
         "execution/si026-claude-compound-steer.md",
         "execution/si026-claude-compound-steer.json",
         "execution/si026-claude-reviewed-target.md",
@@ -3490,6 +3496,7 @@
       ],
       "status": "PASS",
       "evidence": [
+        "execution/si011-si026-claude-remote-interrupt.json",
         "execution/si024-codex-interrupt-queue-windows.json",
         "execution/si024-codex-interrupt-queue-windows.md",
         "execution/si024-codex-native-interrupt-confirmation.md",
@@ -3540,6 +3547,7 @@
       ],
       "status": "PASS",
       "evidence": [
+        "execution/si011-si026-claude-remote-interrupt.json",
         "execution/si024-codex-interrupt-queue-windows.json",
         "execution/si024-codex-interrupt-queue-windows.md",
         "execution/si025-pi-editor-interrupt.json"
@@ -3562,6 +3570,7 @@
       ],
       "status": "PASS",
       "evidence": [
+        "execution/si011-si026-claude-remote-interrupt.json",
         "execution/si024-codex-interrupt-queue-windows.json",
         "execution/si024-codex-interrupt-queue-windows.md",
         "execution/si024-codex-native-interrupt-confirmation.md",

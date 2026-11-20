@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from nexus_connector_core import get_control_targeting
 from nexus_connector_core.native.pi_steer_facts import valid_pi_run_id
 from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
-from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC
+from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_INTERRUPT_CODEC, CLAUDE_OPERATION_STEER_CODEC
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.attention import digest
@@ -231,7 +231,8 @@ def active_interrupt_target(uow, scope: InputScope, *, current_next_turn_revisio
         contract = get_control_targeting('pi_rpc', 'turn.interrupt')
         if contract.supported and contract.native_turn_id == 'forbidden' and contract.requires_active_run:
             return run
-    evidence = _active_claude_terminal_start(uow, scope)
+    channel = negotiated_control_channel(scope, remote_control_host, CLAUDE_OPERATION_INTERRUPT_CODEC.revision)
+    evidence = _active_claude_terminal_start(uow, scope, remote_channel=channel)
     if evidence is None:
         return None
     selected, start, payload = evidence

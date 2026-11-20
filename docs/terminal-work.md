@@ -272,6 +272,15 @@ The receipt reports interruption and replacement separately. If delivery
 is unconfirmed, use `okto-nexus session receipt` with the session, owner generation
 and intent recorded by the first command.
 
+To interrupt the selected Claude turn and pause its queue, confirm the
+review from an interactive terminal. For a Connector session, this requires
+the negotiated Claude interruption capability. The queue retains pending
+messages until the operator explicitly resumes it.
+
+```sh
+okto-nexus session interrupt --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+```
+
 ## Request identity and authorization
 
 `--request-id` supplies a stable client intent ID for an explicit submission.

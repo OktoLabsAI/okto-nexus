@@ -7,7 +7,7 @@ import pytest
 import test_pr34_remediation as tcp
 from nexus_connector_core import RuntimeEvent
 from nexus_connector_core.native.adapter_types import ErrorCode, NativeAdapterError
-from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC
+from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_INTERRUPT_CODEC, CLAUDE_OPERATION_STEER_CODEC
 from remote_renewal_helpers import RemoteProject
 
 from okto_nexus.adapters.inbound.cli.session_commands import (
@@ -80,10 +80,35 @@ def test_remote_claude_command_retains_exact_target_and_uncertain_replacement(
                 await project.eventually(lambda: any(generating_event in row['payload_json']
                     for row in project.rows('execution_event_ingress')))
 
-                # A rolling upgrade can leave the current capacity host without
-                # the extension. The generating fact alone confers no control.
                 host = project.deps.runtime_availability.current_host(scope['server_id'], scope['executor_id'])
                 current = host.channel
+                interrupt_capability = CLAUDE_OPERATION_INTERRUPT_CODEC.revision
+                assert interrupt_capability in current.control_capabilities
+
+                def decline_interrupt(prompt):
+                    assert prompt == 'Interrupt the current Claude turn and pause the queue? [y/N] '
+                    return 'no'
+
+                def review_interrupt():
+                    return execute_session_command(project.http, binding, session, 'interrupt', interactive=True,
+                                                   message_file=None, read=decline_interrupt, write=lambda _: None)
+
+                if generating_event == 'core.claude_terminal_generating':
+                    assert (await asyncio.to_thread(review_interrupt))['state'] == 'cancelled'
+                else:
+                    with pytest.raises(ConnectionError, match='no current review'):
+                        await asyncio.to_thread(review_interrupt)
+
+                # Older peers can negotiate reorientation without interruption.
+                host.channel = replace(current, control_capabilities=tuple(
+                    revision for revision in current.control_capabilities if revision != interrupt_capability))
+                try:
+                    with pytest.raises(ConnectionError, match='no current review'):
+                        await asyncio.to_thread(review_interrupt)
+                finally:
+                    host.channel = current
+
+                # A generating fact on its own cannot authorize reorientation.
                 host.channel = replace(current, control_capabilities=tuple(
                     revision for revision in current.control_capabilities if revision != negotiated))
                 try:
