@@ -99,6 +99,41 @@ def display_reattach_command(attached, binding, *, service, operator_profile=Non
     _display_command('Reattach to this session: ', argv)
 
 
+def _local_viewer_login(service, call, server_id):
+    """Use one existing human login for this exact local origin and Server."""
+    from ...outbound.operator_client import OperatorProfile
+    from .connection_choices import MAX_PROFILES, _directory, _read
+
+    home = service.adapter.home
+    directory = home / 'terminal/operators'
+    matches = []
+    try:
+        _directory(home / 'terminal')
+        _directory(directory)
+        if directory.resolve() != directory:
+            return call, None
+        with os.scandir(directory) as entries:
+            for index, entry in enumerate(entries):
+                if index >= MAX_PROFILES:
+                    return call, None
+                if not entry.name.endswith('.json'):
+                    continue
+                profile = OperatorProfile(home, entry.name[:-5])
+                metadata = _read(directory / entry.name)
+                if (metadata.get('origin'), metadata.get('server_id')) == (call.base, server_id):
+                    matches.append(profile)
+                    if len(matches) > 1:
+                        return call, None
+    except (ConnectionError, OSError, ValueError, TypeError, RecursionError):
+        return call, None
+    if not matches:
+        return call, None
+    profile = matches[0]
+    authenticated = profile.client(expected_origin=call.base, expected_server_id=server_id)
+    authenticated.verify()
+    return authenticated, profile.name
+
+
 def present_after_connect(service, *, profile, document, interaction):
     """The configured receipt is already durable before this separate action."""
     if interaction['status'] not in ('offer', 'requested'):
@@ -112,13 +147,20 @@ def present_after_connect(service, *, profile, document, interaction):
         from .work import open_work
         flow = open_work(service, profile, connection=document)
         binding = flow.binding()
-        attached = attach_session(flow.call, binding, interactive=True)
-        display_reattach_command(attached, binding, service=service)
+        call, login = flow.call, None
+        if not hasattr(service, 'operator_profile') and getattr(call, 'base', None):
+            call, login = _local_viewer_login(service, call, binding['server_id'])
+        attached = attach_session(call, binding, interactive=True)
+        display_reattach_command(attached, binding, service=service, operator_profile=login)
     except EOFError:
         return
     except KeyboardInterrupt:
         print('Native viewer canceled. Connection configured.')
     except ConnectionError as error:
-        print('Native viewer unavailable. Connection configured. ' + display_text(error.message))
+        message = error.message
+        if error.code == 'OPERATOR_LOGIN_REQUIRED' and not hasattr(service, 'operator_profile'):
+            message = ('Sign in to this Server with operator login, then use session attach '
+                       'with --operator-profile to choose the saved human login.')
+        print('Native viewer unavailable. Connection configured. ' + display_text(message))
     except (OSError, OktoNexusError, TypeError, ValueError, KeyError):
         print('Native viewer unavailable. Connection configured. Inspect the saved connection before attaching.')

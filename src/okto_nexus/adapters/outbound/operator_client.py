@@ -59,8 +59,11 @@ class OperatorProfile:
         except Exception:
             raise ConnectionError('OPERATOR_VAULT_UNAVAILABLE', 'The protected operator session is unavailable. Unlock the OS vault or sign in again; no file fallback was used.') from None
 
-    def client(self):
+    def client(self, *, expected_origin=None, expected_server_id=None):
         value = self.read()
+        if ((expected_origin is not None and value['origin'] != expected_origin)
+                or (expected_server_id is not None and value['server_id'] != expected_server_id)):
+            raise ConnectionError('OPERATOR_PROFILE_CHANGED', 'The selected operator profile changed. Choose a login explicitly.')
         return RemoteOperatorHTTP(value['origin'], token=self.secret('get', value['origin']),
                                   server_id=value['server_id'], username=value['username'])
 

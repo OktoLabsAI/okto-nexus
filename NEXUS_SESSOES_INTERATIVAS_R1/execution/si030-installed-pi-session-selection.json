@@ -1,0 +1,158 @@
+{
+  "tasks": [
+    "SI-029",
+    "SI-030"
+  ],
+  "passed_scenarios": [
+    "SI-T-F01",
+    "SI-T-F11",
+    "SI-T-F12"
+  ],
+  "status": "INSTALLED_LOCAL_NATIVE_SESSION_SELECTION_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "f34f461c88bcde515937007dc84236146783d36c",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 519
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "baseline_wheel_sha256": "6af0ac634db551fbb3dd73d68271734bc06772d4ba38b69ba816cd1c1e85e37e",
+  "candidate_wheel_sha256": {
+    "nexus": "c5cd9e1656fe3244b9a5b6891843f8ef0218d864a11e4c4ea1d8bd50ac217861",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "wheel_audit": {
+    "wheel_sha256": "c5cd9e1656fe3244b9a5b6891843f8ef0218d864a11e4c4ea1d8bd50ac217861",
+    "source_matches_wheel": true,
+    "product_files": 809,
+    "product_changes": [
+      "okto_nexus/adapters/inbound/cli/connect_presentation.py",
+      "okto_nexus/adapters/outbound/operator_client.py"
+    ]
+  },
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "terminal": "Windows ConPTY, installed okto-nexus.exe",
+    "runtime": "Two distinct Pi 0.87.1 processes hosted by the embedded executor in a temporary Nexus project",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "authorization": "Real origin-bound human Nexus login, synthetic local vault limited to the exact fixture profile",
+    "provider": "No external networking or provider credentials; one deterministic prior result in the candidate"
+  },
+  "refused_baseline_observation": {
+    "status": "BASELINE_REFUSED_AUTHENTICATED_LOCAL_PRESENTATION",
+    "profile_configured": true,
+    "real_pi_processes": 2,
+    "picker_displayed": true,
+    "explicit_older_selection": true,
+    "paired_local_operator_login_available": true,
+    "fixture_no_host_vault": true,
+    "external_provider_calls": 0,
+    "canonical_closes": 2
+  },
+  "candidate_observation": {
+    "status": "ATTACHED",
+    "receipt_before_picker_and_viewer": true,
+    "pid_stable_after_detach": true,
+    "explicit_older_selection": true,
+    "attachment": "DETACHED",
+    "fixture_no_host_vault": true,
+    "zero_new_operations": true,
+    "paired_local_operator_login_available": true,
+    "external_provider_calls": 0,
+    "exact_public_id_and_session_attached": true,
+    "script_requires_explicit_selection": true,
+    "session_attach_picker_chooses_older": true,
+    "exact_older_detachments": 3,
+    "prior_deterministic_result_seen_before_each_detach": true,
+    "canonical_closes": 2
+  },
+  "independent_sqlite_audit": {
+    "baseline": {
+      "operations": {
+        "runtime.close": 2,
+        "runtime.open": 2
+      },
+      "detached_attachments": 0,
+      "sessions_closed_canonically": 2,
+      "integrity": "ok",
+      "foreign_key_violations": 0
+    },
+    "candidate": {
+      "operations": {
+        "runtime.close": 2,
+        "runtime.open": 2,
+        "turn.submit": 1
+      },
+      "detached_attachments": 3,
+      "sessions_closed_canonically": 2,
+      "integrity": "ok",
+      "foreign_key_violations": 0
+    }
+  },
+  "tests": {
+    "native_baseline_reproduction": 1,
+    "native_candidate_integration": 1,
+    "installed_regressions": 46,
+    "passive_connect_integration": 1,
+    "passive_connect_scenarios_retested": 6,
+    "installed_imports_verified": true,
+    "twine_strict": "PASS",
+    "ruff_f_e9": "PASS"
+  },
+  "fixture_directories": {
+    "baseline": "D:/nxs-pi-local-auth-before-95eb63be",
+    "candidate": "D:/nxs-pi-scoped-connect-complete-6fc79ed3",
+    "passive": "D:/nxs-connect-negative-regression-41593a8d"
+  },
+  "artifact_sha256": {
+    "baseline/test_connect_pi.py": "94e17c903f2384aae3ebf583e6c3198435c64cc69751d6c14713ad1bc78cb769",
+    "baseline/focus.xml": "e982a25c6743fb8828d803a0ece4a97f6dcda1ea243bd4b7da256ec9b53158f1",
+    "baseline/proof.json": "576f819f7e7c16b81f4f8363ca3de5746e8ac882d04733d88562d42024edc714",
+    "baseline/connect-refused.txt": "5ae9dc35d4ee8470dbaded66df3fb500aa0cd1c173eddba27ea4b6aa7f94d937",
+    "candidate/test_connect_pi.py": "43b408fdd22310fe5117cc536b62214149b358144fa9c357c9df4ec839ac8a60",
+    "candidate/pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "candidate/focus.xml": "87b246e8c8312353ce30dc372f15d76c537b29d6c8bf9b81117af70d5c4f75b6",
+    "candidate/proof.json": "8ea8b0a7eca59653647f4941fc3118fedf60f55a960cc6c40b63066b61ed20d1",
+    "candidate/connect-native.txt": "492a692f881bd13260346dc96c3f91f470ef714f78361c2307c5d1c3fd64e377",
+    "candidate/session-exact-public-id.txt": "29b37bb9555078177674d0d078c694e4d2667f662d0b1c9c3f6a9b286609ffc0",
+    "candidate/session-picker-exact.txt": "bf5b3918a260f54c50ae2d5e1ede965991feaa74dbf799e6d0325a89498779bf",
+    "candidate/session-script-selection.json": "1018d38f4e35f11613873e1b585ecd575bc3759e9be9b11d3c34976e90e5c4d9",
+    "regressions.xml": "b1bea001fdd7ca7fbb3570f1896a7313c4ed11d73a46225cfae930381b1eac9d",
+    "passive/focus.xml": "21125c322b41a254019504ec23fac04df55989d507ad949f8d57072dcd59a9fb"
+  },
+  "limitations": [
+    "Local attachment follows a retained live session and leaves ownership unchanged.",
+    "Additional session admission, distinct-host transports and consent-based provider runs are separate gates."
+  ],
+  "migration": "none",
+  "cleanup": {
+    "baseline": {
+      "fixture_processes": 0,
+      "listeners": 0
+    },
+    "candidate": {
+      "fixture_processes": 0,
+      "listeners": 0
+    },
+    "passive": {
+      "fixture_processes": 0,
+      "listeners": 0
+    }
+  }
+}

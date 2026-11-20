@@ -6,6 +6,12 @@ viewer and defaults to No. Use `connect -i` to request it or `connect
 finishes at setup. Use `okto-nexus work` from the project or with `--profile
 NAME` to open the Nexus project prompt and submit an explicit work request.
 
+For local `connect -i`, sign in with `okto-nexus operator login` on the same
+loopback origin as the local service. Nexus uses a single saved human login
+for that origin and Server. If you have several matching logins, choose one
+explicitly with `session attach --operator-profile OPERATOR` and the connection
+and session selectors below.
+
 The prompt supports ordinary conversation and these explicit controls:
 
 - `/status`, `/watch`: inspect or follow the current request.

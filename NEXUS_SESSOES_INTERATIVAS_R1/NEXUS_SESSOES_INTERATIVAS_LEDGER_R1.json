@@ -1700,6 +1700,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si030-installed-pi-session-selection.md",
+        "execution/si030-installed-pi-session-selection.json",
         "execution/si029-installed-connect-modes.md",
         "execution/si029-installed-connect-modes.json",
         "execution/si028-connect-presentation.md",
@@ -1742,6 +1744,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si030-installed-pi-session-selection.md",
+        "execution/si030-installed-pi-session-selection.json",
         "execution/si030-terminal-session-selection.md",
         "execution/si023-codex-saved-resume.md",
         "execution/si030-terminal-session-controls.md",
@@ -4065,8 +4069,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si030-installed-pi-session-selection.md",
+        "execution/si030-installed-pi-session-selection.json"
+      ]
     },
     {
       "id": "SI-T-F02",
@@ -4273,8 +4280,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si030-installed-pi-session-selection.md",
+        "execution/si030-installed-pi-session-selection.json"
+      ]
     },
     {
       "id": "SI-T-F12",
@@ -4291,8 +4301,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si030-installed-pi-session-selection.md",
+        "execution/si030-installed-pi-session-selection.json"
+      ]
     },
     {
       "id": "SI-T-F13",

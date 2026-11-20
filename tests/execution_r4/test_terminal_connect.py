@@ -564,6 +564,60 @@ def test_interactive_connect_preserves_configuration_on_viewer_failure(terminal,
     assert read_json(profile_path) == configured and len(t.turns) == 1
 
 
+@pytest.mark.parametrize('matching_logins', [0, 1, 2])
+def test_local_connect_uses_only_a_unique_scoped_operator_login(tmp_path, monkeypatch, matching_logins):
+    from okto_nexus.adapters.inbound.cli.connect_presentation import _local_viewer_login
+    from okto_nexus.adapters.outbound import operator_client
+    from okto_nexus.adapters.outbound.terminal_http import LocalOperatorHTTP
+
+    call = LocalOperatorHTTP(host='127.0.0.1', port=8202)
+    service = SimpleNamespace(adapter=SimpleNamespace(home=tmp_path))
+    profiles = tmp_path / 'terminal/operators'
+    profiles.mkdir(parents=True)
+    scope = {'format': 1, 'origin': call.base, 'server_id': 'same-server', 'username': 'owner'}
+    for name, metadata in (
+        ('wrong-server', scope | {'server_id': 'other-server'}),
+        ('wrong-origin', scope | {'origin': 'http://127.0.0.1:8203'}),
+        *((f'login-{index}', scope) for index in range(matching_logins)),
+    ):
+        (profiles / f'{name}.json').write_text(json.dumps(metadata), encoding='utf-8')
+    vault_reads = []
+    verifications = []
+
+    def read_secret(profile, operation, origin):
+        vault_reads.append((profile.name, operation, origin))
+        return 'a' * 64
+
+    def verify(authenticated):
+        verifications.append((authenticated.base, authenticated.server_id, authenticated.username))
+
+    monkeypatch.setattr(operator_client.OperatorProfile, 'secret', read_secret)
+    monkeypatch.setattr(operator_client.RemoteOperatorHTTP, 'verify', verify)
+    viewer_call, login = _local_viewer_login(service, call, 'same-server')
+
+    if matching_logins == 1:
+        assert login == 'login-0'
+        assert viewer_call is not call
+        assert vault_reads == [('login-0', 'get', call.base)]
+        assert verifications == [(call.base, 'same-server', 'owner')]
+    else:
+        assert (viewer_call, login) == (call, None)
+        assert not vault_reads and not verifications
+
+
+def test_operator_profile_scope_change_refuses_before_accessing_vault(tmp_path, monkeypatch):
+    from okto_nexus.adapters.outbound.operator_client import OperatorProfile
+
+    profile = OperatorProfile(tmp_path, 'operator')
+    monkeypatch.setattr(profile, 'read', lambda: {
+        'origin': 'http://127.0.0.1:8202', 'server_id': 'changed', 'username': 'owner',
+    })
+    monkeypatch.setattr(profile, 'secret', lambda *_: pytest.fail('Unexpected vault access.'))
+    with pytest.raises(ConnectionError, match='operator profile changed') as failure:
+        profile.client(expected_origin='http://127.0.0.1:8202', expected_server_id='reviewed')
+    assert failure.value.code == 'OPERATOR_PROFILE_CHANGED'
+
+
 def test_connect_interactive_rejects_redirected_output_before_resolving_service(monkeypatch, capsys):
     monkeypatch.setattr(connect, 'sys', SimpleNamespace(stdin=SimpleNamespace(isatty=lambda: True),
         stdout=SimpleNamespace(isatty=lambda: False)))
