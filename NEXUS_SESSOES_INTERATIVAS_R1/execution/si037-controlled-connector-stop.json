@@ -1,0 +1,101 @@
+{
+  "scenario": "SI-T-H18",
+  "status": "PASS",
+  "scope": "Explicit Connector daemon shutdown on Windows with an active native Codex app-server and actual R4 on loopback",
+  "baseline": {
+    "nexus": "715cee0afebafdf7958033f470eb703b917a9409",
+    "connector": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+    "core": "454c9700e0def181c81fe633857a25b48e125512",
+    "clean_at_start": true,
+    "upstream_drift": {
+      "nexus": 0,
+      "connector": 0,
+      "core": 0
+    }
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "app_server_version": "Codex app-server 0.157.0",
+  "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "stop_command": "okto-nexus-connector --state-dir <isolated-state> daemon stop --timeout 135 --json",
+  "response_source": "Deterministic SSE loopback, no provider credentials",
+  "checkpoints": {
+    "draining": {
+      "observation": {
+        "canonical_stop_accepted": true,
+        "same_daemon_generation": true,
+        "productive_work_still_running": true,
+        "force_requested": false,
+        "new_native_turns_started": 0
+      },
+      "sha256": "f2d66ef95a43da6970876a085d15a663159a5489258671d5bd38e691830af884"
+    },
+    "settled": {
+      "observation": {
+        "result_retained": true,
+        "original_turn_succeeded": true,
+        "one_provider_loopback_request": true
+      },
+      "sha256": "7ff927f47959f9798b0a764fd9219efa85fbe8f1382856aa3a32d4f9150fb0a0"
+    },
+    "after-stop-api": {
+      "observation": {
+        "same_session": true,
+        "control_available": false,
+        "next_turn_supported": false,
+        "steer_supported": false,
+        "interrupt_supported": false,
+        "original_result_unchanged": true
+      },
+      "sha256": "3b9dcaacb123f6014259ec9a1aa71f754efeb29cd0fca7576861f6f4e04205ad"
+    },
+    "proof": {
+      "observation": {
+        "ordinary_daemon_stop_reported_drained": true,
+        "daemon_owner_released": true,
+        "original_result_retained_after_stop": true,
+        "one_original_turn": true,
+        "native_process_exited": true,
+        "same_acknowledged_daemon_generation": true,
+        "force_requested": false,
+        "external_provider_calls": 0
+      },
+      "sha256": "b7579b1dec13a51db2b90094e3294a3d173ffd982e9afc95f68872e44be9e21e"
+    }
+  },
+  "first_run_durable_audit": {
+    "force_requested": false,
+    "actions": {
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "session_lifecycle": "READY",
+    "session_lease_state": "ACTIVE",
+    "one_owner_generation": true,
+    "result_rows": 1,
+    "inputs": 0,
+    "shutdown_preserved_grant": true,
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "native_launches": 1,
+    "shutdown_durable_state": "DRAINED"
+  },
+  "tests": {
+    "installed_process_case_with_api": 1,
+    "installed_process_case_without_api": 1,
+    "installed_connector_drain_and_lifecycle_regressions": 23,
+    "final_process_junit_sha256": "c90aa7e311510a07d6dddfe7abd124bcbce11de4b82db7a33933533aa815aead",
+    "first_process_junit_sha256": "11e042ecd3207101e6590b1e3b6380dd7a3d01875eada5fb26416a8f84be397b",
+    "regression_junit_sha256": "96de70aac8cf4a066bbd1b296d0621121632427d7039bc3cebcc30a5eeea9218",
+    "fixture_directory": "D:/nxs-ui-exit-40884153/drain/api",
+    "native_fixture_sha256": "c42220b3f9c57ccfd452b726018c0aa5b6e72e4888a2a3b124143557a552f483",
+    "runner_sha256": "5497416b681c13db98b78af0459a70af6552ab3aa4c2eb80b772210cf4b8aecb"
+  },
+  "limitations": [
+    "The daemon ran in the disposable pytest process, with real local IPC and a separate installed CLI process. The native Codex app-server was a real controlled Windows process.",
+    "No Windows session shutdown, service registration, other platform or distinct host was tested."
+  ]
+}
