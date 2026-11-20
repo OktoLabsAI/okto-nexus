@@ -2013,7 +2013,10 @@
         "SI-T-G11"
       ],
       "status": "TODO",
-      "evidence": []
+      "evidence": [
+        "execution/si038-home-terminal-home-loopback.md",
+        "execution/si038-home-terminal-home-loopback.json"
+      ]
     },
     {
       "id": "SI-039",
@@ -2151,7 +2154,9 @@
         "execution/si041-disabled-admissions-recovery.md",
         "execution/si041-disabled-admissions-recovery.json",
         "execution/si039-wheel-regression-audit.md",
-        "execution/si039-wheel-regression-audit.json"
+        "execution/si039-wheel-regression-audit.json",
+        "execution/si038-home-terminal-home-loopback.md",
+        "execution/si038-home-terminal-home-loopback.json"
       ]
     }
   ],
@@ -5093,7 +5098,10 @@
         "SI-R24"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si038-home-terminal-home-loopback.md",
+        "execution/si038-home-terminal-home-loopback.json"
+      ]
     },
     {
       "id": "SI-T-I08",

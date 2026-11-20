@@ -1,0 +1,78 @@
+{
+  "scenario": "SI-T-I07",
+  "scope": {
+    "installed_integration": "PASS",
+    "real_provider_campaign": "not_run"
+  },
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "c11069c841bd04d09ec3914bcf626cd0706ae3a4",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 478
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "upstream_drift": "zero in all three repositories",
+    "working_trees": "clean"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "browser": "Edge 157.0.4341.60 on Windows x64",
+    "terminal": "Windows ConPTY, read-only",
+    "r4": "real loopback",
+    "pi": "0.87.1",
+    "responses": "deterministic fixture with external networking disabled"
+  },
+  "observations": {
+    "connect_without_viewer": true,
+    "no_session_before_browser_send": true,
+    "home_sent_one_canonical_operator_message": true,
+    "message_and_turn_correlated": true,
+    "session_count": 1,
+    "native_user_messages": 1,
+    "canonical_turns": 1,
+    "canonical_results": 1,
+    "same_pi_process": true,
+    "exact_read_only_terminal_detach": true,
+    "same_browser_conversation": true,
+    "canonical_close": true,
+    "external_provider_requests": 0
+  },
+  "durable_checks": {
+    "durable_same_session_close": true,
+    "durable_attachment_read_and_detached": true,
+    "message_to_open_and_turn_mappings": 2,
+    "native_launch_records": 1,
+    "canonical_result_rows": 1,
+    "integrity_check": "ok",
+    "foreign_key_violations": 0
+  },
+  "browser_checkpoint_log_sha256": {
+    "send": "0985e8cfec93412082eda8cef33f25530d19673f4f97cf7869b21450d3e7a05e",
+    "observe": "f6361697f7fa88a708dc48c802ef5f04da7b4d10633aba44f0dcc68f6c663034",
+    "return-resumed": "deb718081ff6813d2b3197c9038ec6d1d48df4fd070b7f9916fa9d8be4c266e7",
+    "result": "a7f627580766a843f914d5a609c9a536c44d8d054d0aff5d387052c77ae1e689"
+  },
+  "regression": {
+    "native_browser_cases": 1,
+    "installed_backend_and_cli_cases": 46,
+    "application_imports_verified_in_site_packages": true,
+    "native_junit_sha256": "5d48760d4858382ce901754b0ad76e63ed2dbe09a51a75bacab9c5865c041f7d",
+    "installed_regressions_junit_sha256": "95be871491441d43283ce262ea986f923c6b0beb2d746a01b25e92a8f19be87a"
+  }
+}
