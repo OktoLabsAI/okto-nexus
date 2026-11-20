@@ -1,5 +1,11 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `f07c643451c59f54f80298110de1e0c81bbfb48d`.
+The unpublished wheel SHA-256 is `76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1`.
+R4 negotiates explicit literal Pi turns and binds the literal intent to the live and recovered operation receipts.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `af7e9d3193a1e6c39fa1b5b636325d406817eedb`.
 The unpublished wheel SHA-256 is `f90386e467cc6291012d34d490c23d8561573fff765653d8eb746562d1a8b0dd`.
 The reviewed Pi RPC owner accepts explicit literal turns and refuses them before starting a turn when request-rewriting hooks are active.

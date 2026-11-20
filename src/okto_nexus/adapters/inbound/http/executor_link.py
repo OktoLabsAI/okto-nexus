@@ -20,6 +20,7 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
 from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
+from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC
 from nexus_connector_core.presentation_link import (
     PI_PRESENTATION_LINK_REVISION, PI_PRESENTATION_RESULT, PRESENTATION_LINK_REVISION, PRESENTATION_RESULT,
@@ -428,6 +429,9 @@ def build_router() -> APIRouter:
                 if (CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']
                         and PI_RUN_CONTROL_REVISION in hello['control_capabilities']):
                     welcome['control_capabilities'].append(PI_RUN_CONTROL_REVISION)
+                if (CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']
+                        and PI_LITERAL_INPUT_REVISION in hello['control_capabilities']):
+                    welcome['control_capabilities'].append(PI_LITERAL_INPUT_REVISION)
             negotiated_capabilities = tuple(welcome['control_capabilities'])
             resumed = 'resume_connection_id' in hello
             if resume_supported:

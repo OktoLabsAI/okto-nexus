@@ -12,6 +12,7 @@ from typing import Mapping
 
 from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
 from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_STEER_CODEC, PI_RUN_CONTROL_CODEC
+from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
@@ -634,6 +635,12 @@ def begin_execution_send(
                 operator_containment=operator_containment)
         linked_control = conn.execute("SELECT * FROM session_interaction_controls WHERE server_id=? AND executor_id=? "
                                       "AND operation_id=?", key).fetchone()
+        if semantic['payload'].get('literal') is True:
+            if row['action'] != 'turn.submit' or binding['adapter_id'] != 'pi_rpc' or linked_input is None or promoted_input:
+                raise OktoNexusError(ErrorCode.CONFLICT, 'Literal input requires a queued message for the exact Pi session.', {})
+            if (binding['kind'] == 'remote' and (channel is None or
+                    PI_LITERAL_INPUT_REVISION not in channel.control_capabilities)):
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The connected Pi owner does not support literal input.', {})
         if promoted_input:
             from .session_interaction_promotion import require_promoted_send_authority
             require_promoted_send_authority(uow, factory=factory, access=access, linked=linked_input, control=linked_control,

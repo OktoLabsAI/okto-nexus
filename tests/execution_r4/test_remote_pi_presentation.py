@@ -14,6 +14,7 @@ from nexus_connector_core import LocalRuntimeCore, RuntimeEvent
 from nexus_connector_core.native.pi_renderer import PiEditorUpdate
 from nexus_connector_core.presentation_link import PI_PRESENTATION_LINK_REVISION
 from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from remote_renewal_helpers import RemoteProject
 from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
@@ -104,6 +105,7 @@ def test_remote_pi_viewer_and_editor_keep_the_connector_owner_and_queue(tmp_path
                 await project.start()
                 connection = project.control.connection
                 assert PI_PRESENTATION_LINK_REVISION in connection.state.control_capabilities
+                assert PI_LITERAL_INPUT_REVISION in connection.state.control_capabilities
                 opened = await asyncio.to_thread(project.work().submit, 'Pi work already running', new_session=True,
                                                  client_intent_id='remote-pi-open')
                 await project.operation(opened['operation_id'], stage='SUBMITTED')

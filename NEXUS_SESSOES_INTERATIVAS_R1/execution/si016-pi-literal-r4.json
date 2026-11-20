@@ -1,0 +1,165 @@
+{
+  "task": "SI-016",
+  "scenario": "SI-T-D06",
+  "scenario_state": "NOT_RUN",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "da161d836b98fb0c3bc0dac37ccd692e7ca5bacb",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead": 546
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "2682ab6c482f2a380ae5e0d7625d5255354f07c5",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead": 91
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "af7e9d3193a1e6c39fa1b5b636325d406817eedb",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead": 71
+    },
+    "behind_main": 0,
+    "clean_worktrees": true
+  },
+  "commits": {
+    "core": "f07c643451c59f54f80298110de1e0c81bbfb48d",
+    "connector": "3970610523eb4bd85bf4605771b06b1b83c7a678",
+    "nexus_wheel_input_tree": "c8f26b7d2a880333aa479d51a224e21b005f92ba"
+  },
+  "artifacts": {
+    "core_wheel_sha256": "76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1",
+    "core_sdist_sha256": "085a9dfa8a5554fa9d27f59f8d53dd6f5737f85d9a9064dc1459f736781a9c93",
+    "old_core_wheel_sha256": "f90386e467cc6291012d34d490c23d8561573fff765653d8eb746562d1a8b0dd",
+    "connector_wheel_sha256": "3dac4417a143414e0b237dcea63a8f8879e8fb6c303e8ee78c35c7fe32facb45",
+    "connector_sdist_sha256": "55bb6d7b9f59ec242774634f28379211007cce2f7d6f8edc4243881504ae1ba3",
+    "old_connector_wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "nexus_wheel_sha256": "7a6cb20249fcbd193a56d0b1e4d576f460d5e4ca6c43a97326d6d3403714f6bb"
+  },
+  "platform": {
+    "os": "Windows x64",
+    "python": "3.13.1",
+    "pi": "0.87.1",
+    "node": "24.15.0"
+  },
+  "negotiated_revision": "nexus-pi-literal-input-v1",
+  "cross_wheel_probe": {
+    "baseline": {
+      "ordinary_frame_sha256": "7c94c42c4aed731ce47327ec2ed4cc3d0840419b3d57ca4cc34c3d5ee899e54e",
+      "ordinary_intent_hash": "sha256:4dd90ae6e3f025c6e700005f4804add6855b94cd3fd2a79a93c007150fa9cc57",
+      "literal_intent_hash": "sha256:7a48ab3cc76dc0ff5b32d2c2a2c5268f6bf21e5fd65c04b78b365d3e61f150e8",
+      "unnegotiated_literal": "VALIDATION_ERROR",
+      "negotiated_literal_validated": false
+    },
+    "candidate": {
+      "ordinary_frame_sha256": "7c94c42c4aed731ce47327ec2ed4cc3d0840419b3d57ca4cc34c3d5ee899e54e",
+      "ordinary_intent_hash": "sha256:4dd90ae6e3f025c6e700005f4804add6855b94cd3fd2a79a93c007150fa9cc57",
+      "literal_intent_hash": "sha256:7a48ab3cc76dc0ff5b32d2c2a2c5268f6bf21e5fd65c04b78b365d3e61f150e8",
+      "unnegotiated_literal": "VERSION_INCOMPATIBLE",
+      "negotiated_literal_validated": true
+    },
+    "source_sha256": "1760d63f25bff375d37e70e497b2ae0cad8723e5ae86fca9e64415878602874e",
+    "command": "<venv-python> -I -B execution/fixtures/pi_literal_r4_compatibility.py <baseline|candidate> <report.json>"
+  },
+  "regressions": {
+    "core_source": {
+      "tests": 144,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "458fca2cfc6e4bd54f0a32e3b66fb830c2713d9b76407f5f07a5fa8a4b655860"
+    },
+    "core_installed": {
+      "tests": 144,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "889680550b61714826f002b60f96ab3cd8e0919782e2fad93d56fba6f2407afd"
+    },
+    "connector_source": {
+      "tests": 41,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "0488b355a158840866d769ccd28ed34b544a517ca1d3e7da5c62abff7f02cbe6"
+    },
+    "connector_installed": {
+      "tests": 41,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "462fdf2404c99eff266133004307a7ec4c642eb504d6a54180aee3dd565b1223"
+    },
+    "nexus_source": {
+      "tests": 25,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "66bb0b602f4b242b21f1f76adef496cfbda836fb369f5d06aa0dce329348a3c8"
+    },
+    "nexus_installed": {
+      "tests": 28,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "f3f38ebde72a4ff65fb61f1d1c50454aa3507def7a534668e4c5bc04caf36e28"
+    }
+  },
+  "initial_installed_core_test_import_error": {
+    "tests": 144,
+    "errors": 0,
+    "failures": 1,
+    "skipped": 0,
+    "junit_sha256": "284ae6a5811c7207e007e723397639045925e090ee58b05b3a11c0e3e4630c0b"
+  },
+  "installed_imports_verified": true,
+  "native_local_core_cases": [
+    {
+      "intercepting_hook": null,
+      "literal_requests_observed": 3,
+      "guard_refusal": false,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    },
+    {
+      "intercepting_hook": "input",
+      "literal_requests_observed": 0,
+      "guard_refusal": true,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    },
+    {
+      "intercepting_hook": "context",
+      "literal_requests_observed": 0,
+      "guard_refusal": true,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    }
+  ],
+  "receipt_projection_checks": {
+    "live_and_recovered_match": true,
+    "ordinary_hash_rejected_for_literal_receipt": true,
+    "unsupported_owner_refusal_preserves_ordinary_send": true
+  },
+  "authentication_scope": "Disposable operator and agent fixtures, authenticated loopback WebSocket",
+  "remaining_scope": [
+    "Explicit scoped command and queue persistence",
+    "Browser journey for literal queue through native Pi"
+  ],
+  "real_provider_requests": 0,
+  "paid_tokens": 0,
+  "migration_required": false,
+  "personal_installation_changed": false,
+  "local_evidence_directory": "D:\\nxs-si016-wire-da161d83"
+}

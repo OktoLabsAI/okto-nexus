@@ -23,7 +23,6 @@ from nexus_connector_core import (
     OperationKey,
     OperationNotAdmitted,
     ShutdownPolicy,
-    TurnOperation,
     prepare_r4_receipt_binding,
     project_r4_bound_receipt,
     r4_close_operation,
@@ -32,6 +31,7 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.native.adapter_types import NativeAdapterError
 from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core.turn_operation import r4_turn_operation
 from pydantic import ValidationError
 
 from ..adapters.outbound.execution.core_inventory import protocol_info
@@ -905,8 +905,9 @@ class EmbeddedDispatchOwner:
                             or receipt.operation_id != frame['operation_id']):
                         raise
             elif action == "turn.submit":
+                operation = r4_turn_operation(frame)
                 receipt = await self._command_receipt(frame, lambda: runtime.submit(
-                    TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context),
+                    operation, context),
                     reviewed_pi_prompt=self.host.has_hosted_pi_renderer(frame['server_id'], frame['executor_id'], key))
             elif action in ("turn.steer","turn.interrupt"):
                 receipt = await self._command_receipt(frame, lambda: runtime.control(control, context),
