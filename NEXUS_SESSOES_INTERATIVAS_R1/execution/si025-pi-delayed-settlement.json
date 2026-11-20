@@ -1,0 +1,81 @@
+{
+  "scenario": "SI-T-B08",
+  "status": "PASS",
+  "source_baseline": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "platform": "Windows x64",
+  "harness_version": "Pi 0.87.1",
+  "pi_installation_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+  "fault_injection": "Hold the second real agent_settled frame at the adapter transport while keeping subsequent RPC responses available, then release the original frame",
+  "proof": {
+    "real_agent_end_projected": true,
+    "real_agent_settled_held": true,
+    "dispatcher_scans_while_held": 3,
+    "writes_before_settlement": [
+      "prompt",
+      "prompt"
+    ],
+    "all_native_writes": [
+      "prompt",
+      "prompt",
+      "prompt"
+    ],
+    "next_turn_succeeded_after_release": true,
+    "same_exact_session": true,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "audit": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 3
+    },
+    "closed_session_results": 3,
+    "agent_end_sequence": 45,
+    "agent_settled_sequence": 46,
+    "next_start_sequence": 47,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "fixture_path": "D:/nxs-pi-settle-24355287",
+  "hashes": [
+    {
+      "file": "local_author_probe.py",
+      "sha256": "c360c2b4628cb0c053ee709b939aed53fb6b92d7c1bb25a3a1da1ea590c65734"
+    },
+    {
+      "file": "test_author.py",
+      "sha256": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc"
+    },
+    {
+      "file": "run.ps1",
+      "sha256": "f2d0a0909c2cec4cf72e903e692f62fced2898fb94470b25d052e7d851da688f"
+    },
+    {
+      "file": "audit_durable.py",
+      "sha256": "76198319e7ffd0aad41c93173e74356ac82520e192df106015d2a75b32b23571"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "c4c4bd1bd468eec0c690f4e748c949223256a01639eef9cf244a918af74902f6"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "89e02744314432c8139db89be4ebef3cbbf456a2dea5d618b7b3a06ef73108dd"
+    },
+    {
+      "file": "audit.json",
+      "sha256": "d3b2ac520caf72b88d6cb0246e53a42e7a0b60521abb779b97740cd5717c0fa5"
+    }
+  ],
+  "limits": [
+    "Fixture provider and tool",
+    "No retry or compaction induced inside Pi",
+    "No separate machine"
+  ]
+}

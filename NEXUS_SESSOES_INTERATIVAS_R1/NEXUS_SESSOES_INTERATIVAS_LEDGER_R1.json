@@ -380,7 +380,9 @@
           "artifact_path": "execution/si005-synthetic-peer.md",
           "result": "Deterministic peer plus actual Core byte-limited buffer test; combined30PASS",
           "limitations": "No provider, real host or TTY; scenario statuses unchanged"
-        }
+        },
+        "execution/si025-pi-delayed-settlement.md",
+        "execution/si025-pi-delayed-settlement.json"
       ]
     },
     {
@@ -493,7 +495,9 @@
         "execution/si007-concurrent-browser-fifo.md",
         "execution/si007-concurrent-browser-fifo.json",
         "execution/si007-pi-tool-boundary.md",
-        "execution/si007-pi-tool-boundary.json"
+        "execution/si007-pi-tool-boundary.json",
+        "execution/si025-pi-delayed-settlement.md",
+        "execution/si025-pi-delayed-settlement.json"
       ]
     },
     {
@@ -1435,7 +1439,9 @@
         "execution/si036-pi-browser-queue-transcript.md",
         "execution/si036-pi-browser-queue-transcript.json",
         "execution/si007-pi-tool-boundary.md",
-        "execution/si007-pi-tool-boundary.json"
+        "execution/si007-pi-tool-boundary.json",
+        "execution/si025-pi-delayed-settlement.md",
+        "execution/si025-pi-delayed-settlement.json"
       ]
     },
     {
@@ -2657,11 +2663,13 @@
         "SI-R16",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si025-pi-core-owned-session.md",
         "execution/si025-pi-core-owned-session.json",
-        "execution/si025-pi-owned-state.json"
+        "execution/si025-pi-owned-state.json",
+        "execution/si025-pi-delayed-settlement.md",
+        "execution/si025-pi-delayed-settlement.json"
       ]
     },
     {
