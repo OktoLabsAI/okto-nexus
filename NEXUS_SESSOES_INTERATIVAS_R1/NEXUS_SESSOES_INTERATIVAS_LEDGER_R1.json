@@ -886,7 +886,9 @@
         "execution/si021-codex-viewer-switch.md",
         "execution/si021-codex-viewer-switch.json",
         "execution/si016-shell-api-regressions.md",
-        "execution/si016-shell-api-regressions.json"
+        "execution/si016-shell-api-regressions.json",
+        "execution/si016-browser-shell-boundary.md",
+        "execution/si016-browser-shell-boundary.json"
       ]
     },
     {
@@ -1974,7 +1976,9 @@
         "execution/si016-stale-catalog-settings.md",
         "execution/si016-stale-catalog-settings.json",
         "execution/si015-native-extension-catalog.md",
-        "execution/si015-native-extension-catalog.json"
+        "execution/si015-native-extension-catalog.json",
+        "execution/si016-browser-shell-boundary.md",
+        "execution/si016-browser-shell-boundary.json"
       ]
     },
     {
@@ -3409,10 +3413,12 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si016-shell-api-regressions.md",
-        "execution/si016-shell-api-regressions.json"
+        "execution/si016-shell-api-regressions.json",
+        "execution/si016-browser-shell-boundary.md",
+        "execution/si016-browser-shell-boundary.json"
       ]
     },
     {

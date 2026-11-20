@@ -1,0 +1,81 @@
+{
+  "scenario": "SI-T-D09",
+  "status": "PASS",
+  "nexus_before_evidence": "e762fd2143204296374836483ebbb6ef7131038f",
+  "installed_wheels": {
+    "nexus": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Microsoft Edge in an isolated Playwright CLI session",
+    "engine": "Pi 0.87.1",
+    "engine_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "transport": "Installed Connector R4 on loopback",
+    "provider": "Deterministic fixture with external networking disabled in the Pi process"
+  },
+  "browser": {
+    "checkpoint": "SHELL_STYLE_DRAFTS_PRESERVED",
+    "blocked_attempt_posts": 0,
+    "retained_drafts": 2,
+    "typed_status_posts": 1,
+    "status": 200
+  },
+  "server": {
+    "typed_api_refusals": {
+      "unlisted_shell_name": 422,
+      "native_method_name": 422,
+      "typed_send_bang_prefix": 422,
+      "typed_status_extra_arguments": 422
+    },
+    "browser_kept_drafts_without_execution": 2,
+    "trusted_status_action_status": 200,
+    "one_original_native_turn": true,
+    "original_result_retained": true,
+    "canonical_close": "SUCCEEDED",
+    "external_provider_calls": 0
+  },
+  "durable_sqlite_and_journal": {
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "result_rows": 1,
+    "closed_exact_session": true,
+    "queued_inputs": 0,
+    "queued_native_operations": 0,
+    "native_launches": 1,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "verification": {
+    "native_browser_cases": 1,
+    "junit_test": "test_shell_prefix_never_reaches_native_pi",
+    "fixture_directory": "D:/nxs-command-15803679",
+    "artifact_sha256": {
+      "run.ps1": "f93ff866151fa38afcf9b6c1a56baa930289e7a70e7950b2ccde8895712c3f15",
+      "drive.ps1": "e6825d874db10d607d5eca7067afb0284fbebd17ed15bf562b1ed730a9a68450",
+      "open.js": "7ea3054cac8b59dbff785667b949af6b8c0376f319d93e7fd8682e4efaec6d9f",
+      "test_live_draft.py": "5ebb2bd03fd693afe5f1a348d37e89c39da50ffcd0c9c75b5d93c6540c09aaf5",
+      "audit_durable.py": "ed01965013c892e11ecb69773f7e8568230e8a03673507b146185383b80fcee2",
+      "focus.xml": "217ee7745a1dec7a88ad4ae3738f0fb0099b57ca5568af4116cd8062c4b45eb4",
+      "browser-verified.json": "1a0f81f59b495eb713a891c3f4d88d147c61ea4d2a35626703b6626acade953a",
+      "typed-api.json": "50a5e55e72a4f1630541a64df58f49a84e889e0882a017bfae84df0ed581f696",
+      "proof.json": "ced14c975bbd2404836b4e96d137007a0c5a798c5ccd6149a5d0bc77edc27945",
+      "durable-audit.json": "8058b45bb62c2e8dada8b226442c516d0e99043cd91d00d157c0e9667f72f36c"
+    },
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "pwsh -NoProfile -File drive.ps1 -Root <isolated-root>",
+      "<installed-candidate-venv>/Scripts/python.exe <isolated-root>/audit_durable.py"
+    ],
+    "first_attempt_evidence": "si016-shell-api-regressions.json",
+    "second_attempt_junit_sha256": "ad09a8bb75583da11901b6757821a9022ea538dafb60edf35b5737faa0ccd86b"
+  },
+  "limits": [
+    "The payload was inert fixture text and the provider response was simulated.",
+    "The first two browser runs stopped in test setup; the accepted run used the canonical operator login endpoint and a longer fixture startup deadline."
+  ]
+}
