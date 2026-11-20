@@ -1,0 +1,54 @@
+{
+  "scenario": "SI-T-A05",
+  "status": "PASS",
+  "wheel_source_revision": "9d57ffa9734b76f7b740f303eadd48eebd17eb2c",
+  "checked_branch_start": "bb5fbeac657a617f5cc1c5e073ba923ed828dac1",
+  "installed_wheels": {
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "fixture": "Installed HTTP, auth, SQLite, scheduler and synthetic Codex peer. Advance only the projected generation in the disposable database.",
+  "observations": {
+    "panel_obtained_valid_g1_capability": true,
+    "stale_affordance_http_status": 404,
+    "stale_write_http_status": 409,
+    "current_generation_revalidation_http_status": 200,
+    "no_receipt_under_current_generation": true,
+    "queue_operations_and_outbox_unchanged": true,
+    "native_turn_writes": 0,
+    "canonical_close_after_fixture_restore": true
+  },
+  "repo_test_names": [
+    "test_dashboard_rejects_input_from_an_older_session_generation",
+    "test_dashboard_admits_exact_input_once_under_the_original_human_login"
+  ],
+  "ruff": "PASS",
+  "fixture_path": "D:/nxs-stale-composer-84015462",
+  "hashes": [
+    {
+      "file": "test_stale_scope.py",
+      "sha256": "df678f82ddad18e991854b3c3b8f6cb490efc9c6711fcd2ee976bf7fc6c9528f"
+    },
+    {
+      "file": "focus.xml",
+      "sha256": "3b4b7ecf4c207a9ccd0e71680c9894ac2de6c2eb0ebb7252ba958f07061e8bf6"
+    },
+    {
+      "file": "repo.xml",
+      "sha256": "4e721729922cba01cee01b1f722daa19f99bb38b08e45999d2e069dd87c8d249"
+    },
+    {
+      "file": "proof.json",
+      "sha256": "bff636f83d76e916827911c3801a1ea8158f967d5f2a3d263d46794f7bf3181e"
+    },
+    {
+      "file": "test_session_input_runtime.py",
+      "sha256": "4f6fc5adf774d378d25d020464bf6dc284c881993c6e6ecbf1eff3bb1b6f8c9a"
+    }
+  ],
+  "limits": [
+    "Synthetic peer",
+    "No browser interaction during the injected generation change"
+  ]
+}

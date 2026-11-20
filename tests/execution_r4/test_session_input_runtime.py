@@ -794,6 +794,82 @@ def test_restart_reconciles_queued_input_receipts_without_resending(
     assert successor.opens == 0 and native.native.sent == [('send_turn', original), ('send_turn', operation)]
 
 
+def test_dashboard_rejects_input_from_an_older_session_generation(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'stale-panel-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    exact = {name: scope[name] for name in ('server_id', 'executor_id', 'binding_id', 'agent_id',
+                                          'workspace_id', 'workspace_binding_id', 'session_id')}
+    session_id = exact['session_id']
+    old_generation = scope['session_owner_generation']
+    new_generation = old_generation + 1
+    route = f'/api/v1/runtime-management/runtime/sessions/{session_id}'
+    query = {name: value for name, value in exact.items() if name != 'session_id'}
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('operator', 'isolated-stale-generation-operator', local=True)
+    cookie = auth.login('operator', 'isolated-stale-generation-operator')
+    assert cookie
+    client.cookies.set('nexus_operator_session', cookie)
+
+    def interaction(generation):
+        return client.get(route + '/interaction', headers=ui,
+                          params=query | {'expected_session_generation': generation})
+
+    def old_capability():
+        response = interaction(old_generation)
+        assert response.status_code == 200, response.text
+        control = response.json()['next_turn']
+        return control['capability_revision'] if control['supported'] else None
+
+    def database_counts():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return tuple(uow.connection.execute("""
+                SELECT (SELECT COUNT(*) FROM session_interaction_inputs),
+                       (SELECT COUNT(*) FROM execution_operations),
+                       (SELECT COUNT(*) FROM execution_dispatch_outbox)
+            """).fetchone())
+
+    eventually(old_capability)
+    revision = old_capability()
+    assert revision
+    original_counts = database_counts()
+    change_generation = """
+        UPDATE execution_sessions SET owner_generation = ?
+        WHERE server_id = ? AND executor_id = ? AND session_id = ? AND owner_generation = ?
+    """
+    key = (exact['server_id'], exact['executor_id'], session_id)
+    # Simulate the durable generation advancing while the panel keeps its preview.
+    with deps.connection_factory.unit_of_work() as uow:
+        assert uow.connection.execute(change_generation, (new_generation, *key, old_generation)).rowcount == 1
+
+    try:
+        assert interaction(old_generation).status_code == 404
+        refreshed = interaction(new_generation)
+        assert refreshed.status_code == 200, refreshed.text
+        assert refreshed.json()['scope'] == exact | {'session_owner_generation': new_generation}
+        stale = client.post(route + '/inputs', headers=ui, json={
+            'scope': exact, 'expected_session_generation': old_generation, 'capability_revision': revision,
+            'client_intent_id': 'stale-panel-draft', 'content': [{'type': 'text', 'text': 'Unsent draft'}],
+        })
+        assert stale.status_code == 409 and 'Reopen it to inspect its current scope' in stale.text
+        receipt = client.get(route + '/inputs/receipt', headers=ui, params=query | {
+            'expected_session_generation': new_generation, 'client_intent_id': 'stale-panel-draft',
+        })
+        assert receipt.status_code == 404
+        assert database_counts() == original_counts
+        assert native.opens == 1 and native.native.sent == []
+        assert app.state.embedded_dispatch_owner.failure is None
+    finally:
+        with deps.connection_factory.unit_of_work() as uow:
+            assert uow.connection.execute(change_generation, (old_generation, *key, new_generation)).rowcount == 1
+        closed = admit(setup, binding, 'stale-panel-close', 'runtime.close', session_id=session_id)
+        wait_receipt(setup, closed, stages=('SUCCEEDED',))
+        client.cookies.clear()
+
+
 def test_dashboard_admits_exact_input_once_under_the_original_human_login(interactive_runtime):
     setup, binding, native = interactive_runtime
     deps, app, client, headers, *_ = setup

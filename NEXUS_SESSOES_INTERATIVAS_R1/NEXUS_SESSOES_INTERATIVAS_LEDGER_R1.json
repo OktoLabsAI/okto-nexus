@@ -437,7 +437,9 @@
         "execution/si006-exact-input-boundaries.md",
         "execution/si006-exact-input-boundaries.json",
         "execution/si008-lost-enqueue-response.md",
-        "execution/si008-lost-enqueue-response.json"
+        "execution/si008-lost-enqueue-response.json",
+        "execution/si006-stale-session-generation.md",
+        "execution/si006-stale-session-generation.json"
       ]
     },
     {
@@ -1031,7 +1033,9 @@
         "execution/si018-embedded-presentation-owner.md",
         "execution/si018-codex-thread-and-adapter-identity.md",
         "execution/si006-exact-input-boundaries.md",
-        "execution/si006-exact-input-boundaries.json"
+        "execution/si006-exact-input-boundaries.json",
+        "execution/si006-stale-session-generation.md",
+        "execution/si006-stale-session-generation.json"
       ]
     },
     {
@@ -2379,8 +2383,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-stale-session-generation.md",
+        "execution/si006-stale-session-generation.json"
+      ]
     },
     {
       "id": "SI-T-A06",
