@@ -1659,6 +1659,8 @@
       ],
       "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json",
         "execution/si028-connect-presentation.md",
         "execution/si028-interactive-json-refusal.md",
         "execution/si028-interactive-json-refusal.json",
@@ -1698,6 +1700,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json",
         "execution/si028-connect-presentation.md",
         "execution/si032-exact-reattach-command.json"
       ]
@@ -4079,8 +4083,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json"
+      ]
     },
     {
       "id": "SI-T-F03",
@@ -4097,8 +4104,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json"
+      ]
     },
     {
       "id": "SI-T-F04",
@@ -4115,8 +4125,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json"
+      ]
     },
     {
       "id": "SI-T-F05",
@@ -4175,8 +4188,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json"
+      ]
     },
     {
       "id": "SI-T-F08",
@@ -4214,8 +4230,12 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": ["execution/si032-exact-reattach-command.json"]
+      "status": "PASS",
+      "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json",
+        "execution/si032-exact-reattach-command.json"
+      ]
     },
     {
       "id": "SI-T-F10",
@@ -4289,8 +4309,11 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si029-installed-connect-modes.md",
+        "execution/si029-installed-connect-modes.json"
+      ]
     },
     {
       "id": "SI-T-F14",

@@ -1,0 +1,187 @@
+{
+  "tasks": [
+    "SI-028",
+    "SI-029"
+  ],
+  "status": "INSTALLED_CONNECT_SCENARIOS_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "732f9123b250a74a70f9a36d07263ceafc2eb08a",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 518
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "6af0ac634db551fbb3dd73d68271734bc06772d4ba38b69ba816cd1c1e85e37e",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "terminal": "Windows ConPTY",
+    "invocation": "Installed okto-nexus.exe, in a separate process for each command",
+    "server": "Installed Nexus app with canonical ServeLock, HTTP loopback and SQLite",
+    "fixture_boundaries": "Inert Codex candidate, synthetic version probe and connection test; no harness process",
+    "personal_environment": "Disposable operating system home, provider home, projects and Nexus home"
+  },
+  "scenarios": {
+    "SI-T-F07": {
+      "planned_review_checkpoint": true,
+      "http_mutations": 0,
+      "connection_tests": 0,
+      "version_probes": 0,
+      "runtime_changes": 0
+    },
+    "SI-T-F02": {
+      "exit_code": 0,
+      "terminal_input_writes": 0,
+      "presentation_requests": 0,
+      "approved_fixture_connection_tests": 1,
+      "database_delta": {
+        "connection_setup_commits": 1,
+        "execution_bindings": 1,
+        "agent_endpoints": 1,
+        "runtime_execution_grants": 1,
+        "execution_operations": 0,
+        "execution_sessions": 0,
+        "session_attachments": 0,
+        "session_interaction_inputs": 0
+      }
+    },
+    "SI-T-F03": {
+      "exit_code": 0,
+      "prompt_default": "[y/N]",
+      "terminal_input": "Enter",
+      "offer_after_configured": true,
+      "presentation_requests": 0,
+      "database_delta": {
+        "connection_setup_commits": 1,
+        "execution_bindings": 1,
+        "agent_endpoints": 1,
+        "runtime_execution_grants": 1,
+        "execution_operations": 0,
+        "execution_sessions": 0,
+        "session_attachments": 0,
+        "session_interaction_inputs": 0
+      }
+    },
+    "SI-T-F04": {
+      "exit_code": 0,
+      "terminal_input_writes": 0,
+      "structured_setup": "configured",
+      "structured_presentation": "not_requested",
+      "attach_argument_vector_fenced": true,
+      "presentation_requests": 0,
+      "database_delta": {
+        "connection_setup_commits": 1,
+        "execution_bindings": 1,
+        "agent_endpoints": 1,
+        "runtime_execution_grants": 1,
+        "execution_operations": 0,
+        "execution_sessions": 0,
+        "session_attachments": 0,
+        "session_interaction_inputs": 0
+      }
+    },
+    "SI-T-F09": {
+      "exit_codes": [
+        0,
+        0
+      ],
+      "legacy_profile_preserved": true,
+      "terminal_input_writes": 0,
+      "presentation_requests": 0,
+      "json_setup": "configured",
+      "repeated_setup_tests": 0
+    },
+    "SI-T-F13": {
+      "exit_codes": [
+        0,
+        0
+      ],
+      "configured_precedes_unavailable": true,
+      "setup_read_without_replay": true,
+      "database_delta": {
+        "connection_setup_commits": 1,
+        "execution_bindings": 1,
+        "agent_endpoints": 1,
+        "runtime_execution_grants": 1,
+        "execution_operations": 0,
+        "execution_sessions": 0,
+        "session_attachments": 0,
+        "session_interaction_inputs": 0
+      }
+    }
+  },
+  "same_service_generation": true,
+  "total_fixture_setup_tests": 4,
+  "fixture_version_checks": 1,
+  "external_provider_calls": 0,
+  "sqlite_integrity": "ok",
+  "sqlite_foreign_key_violations": 0,
+  "durable_state_verified_separately": {
+    "connection_setup_commits": 4,
+    "execution_bindings": 4,
+    "runtime_execution_grants": 4,
+    "agent_endpoints": 4,
+    "configured_profiles": 4,
+    "review_only_profiles": 1,
+    "execution_operations": 0,
+    "execution_sessions": 0,
+    "session_attachments": 0,
+    "session_interaction_inputs": 0,
+    "work_checkpoints": 0
+  },
+  "verification": {
+    "conpty_fixture": "test_connect_modes_with_installed_cli_and_console",
+    "successful_installed_integration_tests": 1,
+    "installed_imports_verified": true,
+    "installed_regressions_passed": 108,
+    "regressions_junit_sha256": "257a815d594f038c6e04f5b124deea195ca6300f506c0fcdab395f9a3ec7e49e",
+    "regression_modules": [
+      "tests/quick_connect/test_connect_arguments.py",
+      "tests/execution_r4/test_terminal_connect.py",
+      "tests/quick_connect/test_quick_connect_cli.py"
+    ]
+  },
+  "cleanup": {
+    "remaining_listener_count": 0,
+    "remaining_fixture_process_count": 0
+  },
+  "fixture_directory": "D:/nxs-connect-mode-audit-a240a774",
+  "artifact_sha256": {
+    "test_connect.py": "3db3e374f48e84e769180c9b1ff75a3334b271b3ccd5933f5c3e9cff4653abf1",
+    "pty_probe.py": "cac1f70fc3d341cd4f977730ad5d54efe5942cd16c32d4434adb7bc5ded131cc",
+    "run.ps1": "119f3fe2578587f30cc46a12330a28323a36c75a23f8c52ec0197e88dc443d9a",
+    "focus.xml": "f349263f553ead1704024c91bec76583fa53bf8ed8baa82fbb9f2a79ace767ec",
+    "proof.json": "605acbddde1013680c62bd47472efabd3945a9ed0d3bd84268decf24db081859",
+    "F02-no-interactive.txt": "bdf70ca5faa627646adf855e587edff0456737d1d8ac9ebcc5509aa8d348799e",
+    "F03-default-no.txt": "4b448eb7e3e6805caaba6fb6718959976c7b624c4264476d545b65a0f733430c",
+    "F04-json-only.txt": "5b4259eac0d41bc95b47089517964e50acdbe1dc41426c127fee36b7ab2edb95",
+    "F07-plan-interactive.txt": "f998c302f56fb6274f55dee30452d02900056fde1ef2416463f665696c0146e8",
+    "F09-no-chat.txt": "bdf70ca5faa627646adf855e587edff0456737d1d8ac9ebcc5509aa8d348799e",
+    "F09-no-chat-json.txt": "08fff292756d2c6e7046ea979708fc5e0bac86417f91eff42fd8ac6fc8bfdc37",
+    "F13-viewer-unavailable.txt": "30c9608322a4030824a335ec9a4ae48c7d1dc58055c5dbc8183d10f0d51b4715",
+    "F13-retained-no-replay.txt": "4f7ec2acd60b15192d782e554a665dd202b8a64dbbe8a437b3e3e5297c0563ce"
+  },
+  "limitations": [
+    "The installed CLI and server were real; the connection test used a deterministic result with no harness process and zero external provider calls.",
+    "The failure boundary was no available live session. Successful native presentation and insufficient runtime-open grants were outside this run."
+  ],
+  "migration": "none"
+}
