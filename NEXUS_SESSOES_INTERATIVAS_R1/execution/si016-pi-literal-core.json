@@ -1,0 +1,157 @@
+{
+  "task": "SI-016",
+  "scenario": {
+    "id": "SI-T-D06",
+    "status": "NOT_RUN",
+    "limited_evidence": "Installed native Core path only"
+  },
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "259384eaf44c76cce75e9120ad1b817d1fd7e772",
+      "ahead_of_main": 545,
+      "main": "8d77b50c00b417c86818d027aed7497fababac34"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "186a3dae4818edf1330395959d2efda6de885b36",
+      "ahead_of_main": 90,
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "26a157abcc4d8fc79ac92cfb6a456747f19f36d1",
+      "ahead_of_main": 69,
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8"
+    },
+    "clean_worktrees": true,
+    "behind_main": 0
+  },
+  "core_source_commit": "af7e9d3193a1e6c39fa1b5b636325d406817eedb",
+  "intermediate_core_commit": "a3069ec2772a0493e5ae735badee642c44496147",
+  "context_transform_before_fix": [
+    {
+      "intercepting_hook": "context",
+      "literal_requests_observed": 1,
+      "previous_guard_allowed_context_transform": true,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    }
+  ],
+  "connector_pin_commit": "2682ab6c482f2a380ae5e0d7625d5255354f07c5",
+  "artifact_sha256": {
+    "previous_core_wheel": "f88f0e24036df292164e8b9168e2097b0e47ec575611b476e1fbb6a080353441",
+    "core_wheel": "f90386e467cc6291012d34d490c23d8561573fff765653d8eb746562d1a8b0dd",
+    "core_sdist": "0e771d416d073ecb4d64f882b650d46c4f27131327b0b1c2b6e68b809404c724",
+    "nexus_wheel": "179f522cbaaae567c8780438ec53db6a98fce8f92c599d5e83e1185c6589f7ab",
+    "connector_wheel": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "python": "3.13.1",
+    "node": "24.15.0",
+    "pi": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+  },
+  "regressions": {
+    "source_core": {
+      "tests": 145,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "7d3882e5a0a4b7027fec80fb9b3972fc149441a79e3a75c60df042d78d20db9a"
+    },
+    "installed_core": {
+      "tests": 145,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "222d8ff07a7b9ea3ece2093b4b04eae62232eb83fe27dca8230b11190a258e92"
+    },
+    "installed_nexus": {
+      "tests": 26,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "663cac5fa53a4872fa677cfbd2a05f1a5ee789bd81bb09f93c04ebcea956fefb"
+    },
+    "installed_connector": {
+      "tests": 47,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "ce0549fbcc6ef986da9da5d794867ba55747aecd0c3760756c58576643a76b23"
+    }
+  },
+  "checked_generated_contracts": [
+    "NXL v1",
+    "NXL R4"
+  ],
+  "strict_archive_metadata": "PASS",
+  "native_cases": [
+    {
+      "intercepting_hook": null,
+      "literal_requests_observed": 3,
+      "guard_refusal": false,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    },
+    {
+      "intercepting_hook": "input",
+      "literal_requests_observed": 0,
+      "guard_refusal": true,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    },
+    {
+      "intercepting_hook": "context",
+      "literal_requests_observed": 0,
+      "guard_refusal": true,
+      "same_process_all_turns": true,
+      "canonical_close_and_exit": true,
+      "ordinary_prompt": true,
+      "repeated_intent_used_receipt": true,
+      "external_provider_calls": 0
+    }
+  ],
+  "reproduction": {
+    "command": "<venv-python> -B execution/fixtures/pi_literal_core_probe.py <empty-report-dir> <node> <pi-0.87.1-release>",
+    "fixture_sha256": "336eb0242ff4dd69ede87d444360cff7431b4973ed4f809c951ec9452c724835",
+    "installed_report_sha256": "ebd6406848afd0d5ef7a23d5f644267727a3052c6b4e87c7df091a80739c6b8e",
+    "core_pytest": [
+      "test_pi_extracted.py",
+      "test_pi_hosted_literal.py",
+      "test_pi_hosted_steer.py",
+      "test_pi_hosted_chat.py",
+      "test_pi_renderer.py",
+      "test_runtime.py",
+      "test_native_runtime_bridge.py"
+    ],
+    "nexus_pytest": [
+      "test_contract.py",
+      "test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo",
+      "test_remote_pi_presentation.py"
+    ],
+    "connector_pytest": [
+      "test_launch_configuration.py",
+      "test_r4_execution.py"
+    ]
+  },
+  "initial_fixture_left_no_native_process": "Incorrect SQLiteJournal import failed before launch",
+  "remaining_scope": "Nexus intent and queue, Connector wire, dashboard UI and combined test",
+  "real_provider_calls": 0,
+  "paid_tokens": 0,
+  "migration_required": false,
+  "personal_installation_changed": false,
+  "local_evidence_directory": "D:\\nxs-si016-core-26a157a"
+}

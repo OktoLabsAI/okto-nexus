@@ -1,5 +1,11 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `af7e9d3193a1e6c39fa1b5b636325d406817eedb`.
+The unpublished wheel SHA-256 is `f90386e467cc6291012d34d490c23d8561573fff765653d8eb746562d1a8b0dd`.
+The reviewed Pi RPC owner accepts explicit literal turns and refuses them before starting a turn when request-rewriting hooks are active.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `26a157abcc4d8fc79ac92cfb6a456747f19f36d1`.
 The unpublished wheel SHA-256 is `f88f0e24036df292164e8b9168e2097b0e47ec575611b476e1fbb6a080353441`.
 Codex launches with a project MCP preset honor the global MCP inheritance setting even when no Nexus tools are injected.
