@@ -1,0 +1,113 @@
+{
+  "tasks": [
+    "SI-030",
+    "SI-033",
+    "SI-040"
+  ],
+  "passed_scenarios": [
+    "SI-T-F14"
+  ],
+  "status": "INSTALLED_WORK_RESUME_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "3546b8d35080b17fc00581aa2dbef0516bb32eb3",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 521
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "6899291fe034b25833429f3cf0a7a0a30154dc6ae4267f77acbd40b7257034cc",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "matching_product_files": 810,
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "terminal": "Installed okto-nexus.exe, Windows ConPTY and redirected JSON subprocesses",
+    "harness": "Two distinct installed Pi 0.87.1 processes on one disposable embedded binding and workspace",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "provider": "Deterministic fixture with external networking and provider credentials absent",
+    "transport_fault": "Withheld one positive HTTP response body after canonical admission"
+  },
+  "observations": {
+    "initial_response": "RESPONSE_UNCONFIRMED",
+    "http_status_before_body_loss": 202,
+    "lost_positive_responses": 1,
+    "exact_operation_from_checkpoint_and_both_recoveries": true,
+    "older_session_selected": true,
+    "sibling_newer_and_live": true,
+    "same_native_owners": true,
+    "conpty_recovery": true,
+    "redirected_json_recovery": true,
+    "resume_productive_requests": 0,
+    "resume_session_or_attachment_reads": 0,
+    "prior_checkpoint_contains_prompt": false,
+    "native_prompt_writes": 1,
+    "external_provider_calls": 0,
+    "terminal_receipt": "SUCCEEDED",
+    "canonical_closes": 2
+  },
+  "independent_read_only_audit": {
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "operations_by_session": {
+      "selected": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 1
+      },
+      "sibling": {
+        "runtime.close": 1,
+        "runtime.open": 1
+      }
+    },
+    "opened_sessions": 2,
+    "closed_sessions": 2,
+    "attachments": 0,
+    "session_inputs": 0,
+    "setup_commits": 0,
+    "canonical_results": 1,
+    "preserved_intent_checkpoint_format": 1,
+    "exact_receipt_in_conpty_and_sqlite": true
+  },
+  "tests": {
+    "installed_integration": 1,
+    "installed_regressions": 8,
+    "installed_imports_verified": true
+  },
+  "fixture_directory": "D:/nxs-installed-work-resume-13e39362",
+  "artifact_sha256": {
+    "test_connect_pi.py": "3ebea7dd266d987a723e468290edf0ab4740561ef06b72d8d8ad4d8d696dfdb0",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "run.ps1": "e4f39c7611e8af690d632631b4309bf9b4577c005db9649462337ac6e7da44d9",
+    "focus.xml": "ec1f4b04bf4ddd5b3e045b42d8ee14579f53a94b36c7f3e3b8abdef247be7ad9",
+    "regressions.xml": "7a9071c5dcecf337e4ace4ee280c65b1c34f7a5158d4135a4b557a32810da973",
+    "resume-conpty.txt": "2f35c72e973454d06c93b0cef6c7f3644d6bc6cb45e64603b873de866dcfe2b4",
+    "proof.json": "7db340e02d9b5b08e2cd430332c124ad7e92f536b7bf29a9dbd3cbd9bf2d9466",
+    "audit.json": "e54df41d041d69c4d7362169b2e62ed797ce67e431031fc3644b7590788d6e03"
+  },
+  "cleanup": {
+    "listeners": 0,
+    "fixture_processes": 0
+  },
+  "limits": [
+    "The installed journey covers post-admission HTTP response loss, with the existing format 1 checkpoint in Nexus 0.3.8.",
+    "Lost resolution and absence of a durable intent were covered by focused regressions."
+  ],
+  "migration": "none"
+}

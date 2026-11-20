@@ -1746,6 +1746,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si030-installed-work-resume.md",
+        "execution/si030-installed-work-resume.json",
         "execution/si029-empty-session-opening.md",
         "execution/si029-empty-session-opening.json",
         "execution/si030-installed-pi-session-selection.md",
@@ -1894,6 +1896,8 @@
       ],
       "status": "TODO",
       "evidence": [
+        "execution/si030-installed-work-resume.md",
+        "execution/si030-installed-work-resume.json",
         "execution/si032-exact-reattach-command.json",
         "execution/si036-home-states-native-detach.md",
         "execution/si036-home-states-native-detach.json"
@@ -2274,6 +2278,8 @@
       ],
       "status": "TODO",
       "evidence": [
+        "execution/si030-installed-work-resume.md",
+        "execution/si030-installed-work-resume.json",
         "execution/si032-exact-reattach-command.md",
         "execution/si032-exact-reattach-command.json",
         "execution/si040-session-action-guide.md",
@@ -4347,8 +4353,12 @@
         "SI-R14",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": ["execution/si032-exact-reattach-command.json"]
+      "status": "PASS",
+      "evidence": [
+        "execution/si030-installed-work-resume.md",
+        "execution/si030-installed-work-resume.json",
+        "execution/si032-exact-reattach-command.json"
+      ]
     },
     {
       "id": "SI-T-F15",
