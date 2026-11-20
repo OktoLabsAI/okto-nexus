@@ -4,6 +4,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
+import sqlite3
 from threading import Barrier
 
 import pytest
@@ -83,10 +84,48 @@ def database(tmp_path):
     return factory, scopes
 
 
-def enqueue(uow, scope, *, intent="request", author=ALICE, text="Unmodified synthetic message.", now=NOW):
+def enqueue(uow, scope, *, intent="request", author=ALICE, text="Unmodified synthetic message.", now=NOW, literal=False):
     return accept_input(uow, scope=scope, author=author, client_intent_id=intent,
                         capability_revision="capability-v1", text=text, now=now,
-                        verify_new_authority=lambda: None)
+                        verify_new_authority=lambda: None, literal=literal)
+
+
+def test_literal_queue_retains_exact_text_and_separate_intent(database):
+    factory, (scope, _) = database
+    text = '  /skill:fixture café  '
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_sessions SET lease_state='ACTIVE' WHERE executor_id=?",
+                               (scope.session.executor_id,))
+        first = enqueue(uow, scope, text=text, literal=True)
+    with factory.unit_of_work() as uow:
+        assert enqueue(uow, scope, text=text, literal=True) == first
+        with pytest.raises(OktoNexusError, match='different intent'):
+            enqueue(uow, scope, text=text)
+        head = prepare_dispatch_head(uow, scope=scope, now=NOW)
+        assert head is not None and head.literal and head.text == text and head.input_id == first.input_id
+        assert not uow.connection.execute('SELECT 1 FROM execution_operations').fetchall()
+        with pytest.raises(sqlite3.IntegrityError, match="requires a literal turn"):
+            uow.connection.execute(
+                "UPDATE session_interaction_inputs SET operation_id='plain-operation' WHERE input_id=?",
+                (first.input_id,),
+            )
+        assert enqueue(uow, scope, text=text, literal=True) == first
+
+
+def test_literal_migration_retains_old_message_fingerprint_and_receipt(database):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        old = enqueue(uow, scope)
+        fingerprint = uow.connection.execute('SELECT fingerprint FROM session_interaction_inputs').fetchone()[0]
+        uow.connection.execute('DROP TRIGGER session_interaction_literal_operation')
+        uow.connection.execute('ALTER TABLE session_interaction_inputs DROP COLUMN literal')
+        uow.connection.execute('DELETE FROM schema_migrations WHERE version=188')
+    assert MigrationRunner(factory).apply() == [188]
+    assert MigrationRunner(factory).apply() == []
+    with factory.unit_of_work() as uow:
+        assert enqueue(uow, scope) == old
+        row = uow.connection.execute('SELECT literal,fingerprint FROM session_interaction_inputs').fetchone()
+        assert tuple(row) == (0, fingerprint)
 
 
 def test_atomic_storage_and_retry_do_not_create_r4_operations(database):

@@ -32,6 +32,7 @@ from .execution_domain_delivery import DeliveryTransactionFactory
 from .execution_intents import resolve_execution_intent
 from .execution_native_facts import stamp
 from .session_interaction_authority import require_session_input_authority
+from .session_interaction_capability import literal_input_available
 
 
 def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capability_revision, scope, host):
@@ -57,6 +58,8 @@ def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capab
                                            author=head.author, resolve_human=resolve_human)
     if grant != head.source_grant or current_capability_revision(uow, scope) != head.capability_revision:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The input authority or capability changed.', {})
+    if head.literal and not literal_input_available(uow, scope, host):
+        return None
     key = asdict(scope.session)
     lease = leases.effective(uow, key)
     channel = host.channel
@@ -78,7 +81,7 @@ def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capab
 
 
 def admit_held_input(uow, *, factory, access, resolve_human, current_capability_revision,
-                     scope, reservation, fresh_publications, remote_ready) -> CapacityConsumption:
+                     scope, reservation, fresh_publications, remote_ready, host=None) -> CapacityConsumption:
     """Admit exactly the FIFO head without performing a native write.
 
     The caller holds the human authority fence and one execution writer and
@@ -99,6 +102,8 @@ def admit_held_input(uow, *, factory, access, resolve_human, current_capability_
                                            author=head.author, resolve_human=resolve_human)
     if grant != head.source_grant or current_capability_revision(uow, scope) != head.capability_revision:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The input authority or capability changed.', {})
+    if head.literal and not literal_input_available(uow, scope, host):
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The session no longer supports literal input.', {})
 
     borrowed = DeliveryTransactionFactory(uow)
     context = RuntimeRequestContext('operator', 'operator_session', trusted_local_operator=True)
@@ -108,7 +113,7 @@ def admit_held_input(uow, *, factory, access, resolve_human, current_capability_
         'client_intent_id': 'session-input-' + head.input_id, 'intent': 'turn.submit',
         'agent_id': scope.agent_id, 'binding_id': scope.binding_id, 'workspace_binding_id': scope.workspace_binding_id,
         'session_id': scope.session.session_id, 'text': head.text,
-    }, **common)
+    }, literal_session_input=head.literal, **common)
     if not resolved['can_submit']:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The session input cannot be admitted.', {'blockers': resolved['blockers']})
     _, reused = submit_execution_operation(borrowed, request={key: resolved[key] for key in (

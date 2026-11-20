@@ -143,7 +143,7 @@ def review_exact_interrupt(uow, scope, target_for):
 
 
 async def enqueue_input_response(session_id: str, body: EnqueueInput, request: Request, *, verify_command=None,
-                                 surface='web'):
+                                 surface='web', literal=False):
     if not getattr(request.state, 'operator_session', False):
         return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to send a message.')
     if body.scope.session_id != session_id or request.query_params:
@@ -162,7 +162,8 @@ async def enqueue_input_response(session_id: str, body: EnqueueInput, request: R
             access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
             current_capability_revision=options['session_input_capability_revision'], scope=body.input_scope(),
             author=InputAuthor(reference, surface), client_intent_id=body.client_intent_id,
-            capability_revision=body.capability_revision, text=body.content[0].text, verify_command=verify_command)
+            capability_revision=body.capability_revision, text=body.content[0].text, verify_command=verify_command,
+            literal=literal)
         return _receipt_document(body.scope, body.expected_session_generation, receipt)
 
     try:
@@ -359,7 +360,8 @@ def build_router():
                     input_id=item.input_id, enqueue_sequence=item.sequence, input_revision=item.input_revision,
                     queue_revision=page.queue_revision, status=item.status, operation_id=item.operation_id,
                     possible_effect=item.possible_effect, can_cancel=bool(dispatch) and item.can_cancel,
-                    can_promote=bool(dispatch) and not page.paused and item.can_cancel and item.status == 'QUEUED',
+                    can_promote=bool(dispatch) and not page.paused and item.can_cancel
+                    and item.status == 'QUEUED' and not item.literal,
                 ) for item in page.items],
                 next_cursor=f'{scope_digest}.{page.next_cursor.after_sequence}' if page.next_cursor else None,
             ).model_dump(mode='json')

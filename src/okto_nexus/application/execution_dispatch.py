@@ -635,7 +635,10 @@ def begin_execution_send(
                 operator_containment=operator_containment)
         linked_control = conn.execute("SELECT * FROM session_interaction_controls WHERE server_id=? AND executor_id=? "
                                       "AND operation_id=?", key).fetchone()
-        if semantic['payload'].get('literal') is True:
+        literal = semantic['payload'].get('literal') is True
+        if linked_input is not None and bool(linked_input['literal']) != literal:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The staged message and operation have different input intents.', {})
+        if literal:
             if row['action'] != 'turn.submit' or binding['adapter_id'] != 'pi_rpc' or linked_input is None or promoted_input:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'Literal input requires a queued message for the exact Pi session.', {})
             if (binding['kind'] == 'remote' and (channel is None or

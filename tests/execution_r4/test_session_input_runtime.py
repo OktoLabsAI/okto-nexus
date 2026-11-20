@@ -955,6 +955,11 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
     assert client.post(path + '/inputs', json=body | {'capability_revision': 'stale'}, headers=ui).status_code == 409
     catalog = client.get(path + '/commands', params=query).json()
     command = body | {'command': 'send', 'catalog_revision': catalog['capability_revision'], 'confirmed': True}
+    assert not catalog['literal_text_supported']
+    assert all(item['command_id'] != 'send_literal' for item in catalog['items'])
+    literal = command | {'command': 'send_literal', 'content': [{'type': 'text', 'text': '/skill:fixture'}]}
+    refused = client.post(path + '/commands:execute', json=literal, headers=ui)
+    assert refused.status_code == 409 and 'The session command is unavailable.' in refused.text
     shell_text = '! fixture punctuation < > | & ; ( )'
     rejected = client.post(path + '/commands:execute',
                            json=command | {'content': [{'type': 'text', 'text': shell_text}]}, headers=ui)

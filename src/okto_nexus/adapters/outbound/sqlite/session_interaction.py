@@ -42,6 +42,7 @@ class PendingInput:
     capability_revision: str
     text: str
     source_grant: tuple[str, int] | None
+    literal: bool = False
 
 
 def _conflict(reason: str, message: str) -> OktoNexusError:
@@ -84,6 +85,7 @@ def accept_input(
     now: datetime,
     verify_new_authority: Callable[[], tuple[str, int] | None],
     steer: tuple[str, ...] | None = None,
+    literal: bool = False,
 ) -> QueuedReceipt:
     """Allocate a FIFO sequence and persist one input in the caller's transaction.
 
@@ -91,13 +93,16 @@ def accept_input(
     Exact-scope validation here is additional to the caller's authorization.
     """
     validate_input_text(text)
-    if len(canonical_json({"text": text})) > MAX_OPERATION_PAYLOAD_BYTES:
+    if type(literal) is not bool or (literal and (steer is not None or not text.lstrip().startswith('/'))):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Literal input requires an explicit slash message.', {})
+    payload = {"text": text, **({"literal": True} if literal else {})}
+    if len(canonical_json(payload)) > MAX_OPERATION_PAYLOAD_BYTES:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "The encoded message exceeds the runtime limit.",
                              {"reason": "INPUT_PAYLOAD_TOO_LARGE"})
     if now.utcoffset() is None:
         raise ValueError("Server time must be timezone-aware.")
     now = now.astimezone(UTC)
-    intent = {"scope": asdict(scope), "mode": "next_turn", "text": text}
+    intent = {"scope": asdict(scope), "mode": "next_turn", **payload}
     if steer is not None:
         intent.update(mode="steer", target_and_revisions=steer)
     fingerprint = digest(intent)
@@ -148,17 +153,17 @@ def accept_input(
         INSERT INTO session_interaction_inputs (
             server_id, executor_id, session_id, owner_generation, binding_id, workspace_id, workspace_binding_id,
             agent_id, input_id, authority_ref, surface, client_intent_id, fingerprint, enqueue_sequence,
-            capability_revision, content, status, created_at, expires_at, source_grant_id, source_grant_revision
+            capability_revision, content, status, created_at, expires_at, source_grant_id, source_grant_revision, literal
         ) VALUES (
             :server_id, :executor_id, :session_id, :owner_generation, :binding_id, :workspace_id, :workspace_binding_id,
             :agent_id, :input_id, :authority_ref, :surface, :client_intent_id, :fingerprint, :sequence,
-            :capability_revision, :text, 'QUEUED', :created_at, :expires_at, :grant_id, :grant_revision
+            :capability_revision, :text, 'QUEUED', :created_at, :expires_at, :grant_id, :grant_revision, :literal
         )
     """, {
         **params, "input_id": input_id, "surface": author.surface, "fingerprint": fingerprint,
         "sequence": sequence, "capability_revision": capability_revision, "text": text,
         "created_at": now.isoformat(), "expires_at": (now + PENDING_LIFETIME).isoformat(),
-        "grant_id": grant_id, "grant_revision": grant_revision,
+        "grant_id": grant_id, "grant_revision": grant_revision, "literal": literal,
     })
     return QueuedReceipt(input_id, sequence, 0, revision, InputDeliveryState.QUEUED, None, False)
 
@@ -202,7 +207,7 @@ def prepare_dispatch_head(uow: SqliteUnitOfWork, *, scope: InputScope, now: date
         return None
     source_grant = (head['source_grant_id'], head['source_grant_revision']) if head['source_grant_id'] else None
     return PendingInput(head["input_id"], head["input_revision"], InputAuthor(head["authority_ref"], head["surface"]),
-                        head["capability_revision"], head["content"], source_grant)
+                        head["capability_revision"], head["content"], source_grant, bool(head["literal"]))
 
 
 def stage_dispatch(uow: SqliteUnitOfWork, *, scope: InputScope, head: PendingInput,
@@ -244,10 +249,11 @@ def stage_dispatch(uow: SqliteUnitOfWork, *, scope: InputScope, head: PendingInp
         raise _conflict('INPUT_EARLIER_WORK_PENDING', 'The session already has admitted work.')
     operation_scope = json.loads(operation['expected_revisions_json'])
     held_scope = reservation.request.scope.to_dict()
+    payload = {'text': head.text, **({'literal': True} if head.literal else {})}
     if (operation_scope != {key: value for key, value in held_scope.items() if key not in {'boot_id', 'connection_generation'}}
             or held_scope['session_owner_generation'] != scope.generation.value
             or held_scope['connection_generation'] != operation['generation']
-            or json.loads(operation['semantic_payload']).get('payload') != {'text': head.text}):
+            or json.loads(operation['semantic_payload']).get('payload') != payload):
         raise _conflict('INPUT_OPERATION_CHANGED', 'The R4 operation differs from the reserved session or input.')
     consumption = CapacityConsumption(operation_id, operation['intent_hash'], None, None)
     changed = conn.execute("""

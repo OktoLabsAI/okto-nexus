@@ -30,9 +30,11 @@ from .runtime_policy import effective
 
 def enqueue_human_input(*, factory, access, authority_fence, current_capability_revision,
                         scope, author, client_intent_id, capability_revision, text, verify_command=None,
-                        verify_presenter=None):
+                        verify_presenter=None, literal=False):
     """Commit one input for an already identified human and exact session."""
-    if isinstance(text, str) and text.lstrip().startswith(('/', '!')):
+    if literal and (verify_command is None or author.surface != 'web'):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Review the dashboard command to send literal text.', {})
+    if not literal and isinstance(text, str) and text.lstrip().startswith(('/', '!')):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Commands are unavailable in this message input.', {})
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         if not resolve_human(author.authority_ref):
@@ -51,7 +53,7 @@ def enqueue_human_input(*, factory, access, authority_fence, current_capability_
 
         return accept_input(uow, scope=scope, author=author, client_intent_id=client_intent_id,
             capability_revision=capability_revision, text=text, now=stamp(access.clock.now_iso()),
-            verify_new_authority=verify_new_authority)
+            verify_new_authority=verify_new_authority, literal=literal)
 
 
 def cancel_human_input(*, factory, access, authority_fence, current_cancel_revision,

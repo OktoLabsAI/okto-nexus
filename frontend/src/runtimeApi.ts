@@ -209,7 +209,7 @@ export interface SessionCommandCatalog {
   session_owner_generation: number;
   capability_revision: string;
   native_launch_version?: string | null;
-  literal_text_supported: false;
+  literal_text_supported: boolean;
   items: SessionCommandDescriptor[];
 }
 
@@ -418,7 +418,7 @@ function steerConfirmation(scope: InteractionScope, reviewed: SessionSteerTarget
   };
 }
 
-function commandMutation(path: string, actionPath: string, command: 'send' | 'steer' | 'interrupt', revision?: string) {
+function commandMutation(path: string, actionPath: string, command: 'send' | 'send_literal' | 'steer' | 'interrupt', revision?: string) {
   return revision
     ? {url: path + '/commands:execute', confirmation: {command, catalog_revision: revision, confirmed: true}}
     : {url: path + actionPath, confirmation: {}};
@@ -531,9 +531,10 @@ export const runtimeApi = {
     return managementUrl(`${target.path}/conversation/stream?${target.query}`);
   },
   enqueueSessionInput: (scope: InteractionScope, intent: string, text: string, capability: string, signal: AbortSignal,
-    catalogRevision?: string) => {
+    catalogRevision?: string, literal = false) => {
     const target = interactionTarget(scope);
-    const command = commandMutation(target.path, '/inputs', 'send', catalogRevision);
+    if (literal && !catalogRevision) throw new Error('Review the current session before sending as text.');
+    const command = commandMutation(target.path, '/inputs', literal ? 'send_literal' : 'send', catalogRevision);
     return read<SessionInputReceipt>(command.url, signal, {
       ...command.confirmation,
       scope: target.scope, expected_session_generation: scope.session_owner_generation,

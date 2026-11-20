@@ -327,7 +327,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
     else if (prior.latest?.receipt.input_id === receipt.input_id) save({...prior, latest: null});
   }
 
-  async function send(recover: boolean, selected?: {message: string; revision: string}) {
+  async function send(recover: boolean, selected?: {message: string; revision: string; literal?: boolean}) {
     if (mutation.current || recover && (!draft.uncertain || capability?.human_login_required !== false)) return;
     if (!recover && (!canSend || draftHeld || draft.uncertain || (!selected && (!draft.text.trim() || command || tooLong)))) return;
     const intent = recover ? draft.uncertain! : 'ui_' + crypto.randomUUID();
@@ -348,7 +348,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       const receipt = recover
         ? await runtimeApi.sessionInputReceipt(scope, intent, controller.signal)
         : await runtimeApi.enqueueSessionInput(scope, intent, selected?.message ?? draft.text,
-          capability!.capability_revision!, controller.signal, selected?.revision);
+          capability!.capability_revision!, controller.signal, selected?.revision, selected?.literal);
       if (!controller.signal.aborted) installReceipt(intent, receipt);
     } catch (error) {
       if (controller.signal.aborted) return;
@@ -456,6 +456,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
         setMessageError('');
         editor.current?.focus();
       }} onSend={(message, revision) => void send(false, {message, revision})}
+      onSendLiteral={revision => void send(false, {message: draft.text, revision, literal: true})}
       onSteer={(text, catalogRevision, trigger) => reviewSteer({kind: 'draft', text, catalogRevision}, trigger)}
       onInterrupt={revision => setInterruptCommand({revision})} onAccessLost={loseAccess}/>}
     {(draft.latest || draft.uncertain) && <p role="status" className="text-sm">

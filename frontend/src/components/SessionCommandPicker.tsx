@@ -18,7 +18,7 @@ function sessionStatus(value: SessionCommandStatus) {
 }
 
 export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, canInterrupt,
-  onSelect, onSend, onSteer, onInterrupt, onAccessLost}: {
+  onSelect, onSend, onSendLiteral, onSteer, onInterrupt, onAccessLost}: {
   scope: InteractionScope;
   draft: string;
   locked: boolean;
@@ -27,6 +27,7 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
   canInterrupt: boolean;
   onSelect: (id: string, needsMessage: boolean) => void;
   onSend: (message: string, revision: string) => void;
+  onSendLiteral: (revision: string) => void;
   onSteer: (message: string, revision: string, trigger: HTMLButtonElement) => void;
   onInterrupt: (revision: string) => void;
   onAccessLost: () => void;
@@ -39,7 +40,7 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
   const match = /^\/([^\s]*)(?:\s+([\s\S]*))?$/.exec(text);
   const query = match?.[1].toLowerCase() ?? '';
   const message = match?.[2] ?? '';
-  const selected = catalog?.items.find(item => item.command_id === query);
+  const selected = catalog?.items.find(item => item.command_id === query && item.command_id !== 'send_literal');
   const showList = showAll || query === '' || !selected;
   const statusRequest = useRef<AbortController | null>(null);
   const [checkingStatus, setCheckingStatus] = useState(false);
@@ -128,11 +129,15 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
       </>}
     </div>}
     {catalog && query && !selected && <p role="status" className="text-sm">
-      This command is unavailable. Your draft is kept. Literal slash text is unavailable for this session.
+      {catalog.literal_text_supported ? 'This command is unavailable. Your draft is kept.'
+        : 'This command is unavailable. Your draft is kept. Literal slash text is unavailable for this session.'}
     </p>}
+    {catalog?.literal_text_supported && <button type="button" className="btn btn-secondary"
+      disabled={locked || !canSend || new TextEncoder().encode(draft).length > 64 * 1024}
+      onClick={() => onSendLiteral(catalog.capability_revision)}>Send as text</button>}
     {showList && catalog && <ul className="max-h-52 space-y-1 overflow-auto text-sm">
-      {catalog.items.filter(item => showAll || item.command_id.startsWith(query) ||
-        item.label.toLowerCase().includes(query)).map(item =>
+      {catalog.items.filter(item => item.command_id !== 'send_literal' && (showAll || item.command_id.startsWith(query) ||
+        item.label.toLowerCase().includes(query))).map(item =>
         <li key={item.command_id}>
           <button type="button" className="btn btn-secondary" disabled={locked || checkingStatus} onClick={() => {
             setShowAll(false);

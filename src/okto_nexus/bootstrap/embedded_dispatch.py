@@ -31,7 +31,7 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.native.adapter_types import NativeAdapterError
 from nexus_connector_core.protocol import canonical_json
-from nexus_connector_core.turn_operation import r4_turn_operation
+from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION, r4_turn_operation
 from pydantic import ValidationError
 
 from ..adapters.outbound.execution.core_inventory import protocol_info
@@ -128,7 +128,8 @@ class EmbeddedDispatchOwner:
         self.deps = inventory.deps
         self.factory = self.deps.connection_factory
         self.channel = ExecutionChannel(inventory.key.server_id, inventory.key.executor_id,
-                                        inventory.dispatcher.owner_id, inventory.generation)
+                                        inventory.dispatcher.owner_id, inventory.generation,
+                                        (PI_LITERAL_INPUT_REVISION,) if host.pi_presentation_enabled else ())
         self.access = build_execution_access(self.deps)
         self.session_input_dispatch_options = session_input_dispatch_options or {}
         self.leases = ExecutionLeaseService(factory=self.factory, access=self.access,

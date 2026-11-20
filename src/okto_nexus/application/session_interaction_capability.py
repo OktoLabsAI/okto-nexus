@@ -4,6 +4,7 @@ import json
 from dataclasses import asdict
 
 from nexus_connector_core import CAPACITY_CONTRACT_REVISION
+from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from ..adapters.outbound.sqlite.session_interaction import (
@@ -17,7 +18,19 @@ from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
 from .execution_inventory_freshness import inventory_is_fresh
 from .execution_inventory_revalidation import accepts_binding, selection
+from .execution_native_session_mapping import (
+    read_managed_native_session,
+    reviewed_pi_context,
+)
 from .executor_inventory import load_current_executor_inventory
+
+
+def literal_input_available(uow, scope: InputScope, host) -> bool:
+    if host is None or PI_LITERAL_INPUT_REVISION not in host.channel.control_capabilities:
+        return False
+    mapping = read_managed_native_session(uow, scope)
+    return (mapping is not None and reviewed_pi_context(mapping)
+            and mapping.launch_build.qualification == 'qualified')
 
 
 def queue_pause_revision(uow, scope: InputScope, paused: bool, *, current_next_turn_revision) -> str | None:

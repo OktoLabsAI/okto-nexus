@@ -187,7 +187,7 @@ async def advance_input_capacity(*, factory, access, availability, scope, author
                 retire_prepared_capacity_attempt(uow, scope=scope, observed=observed, now=stamp(access.clock.now_iso()))
                 return None
             consumption = admit_held_input(uow, reservation=observed, resolve_human=resolve,
-                fresh_publications=fresh_publications, remote_ready=remote_ready, **common)
+                fresh_publications=fresh_publications, remote_ready=remote_ready, host=host, **common)
             return consumption.turn_operation_id
 
     operation_id = await anyio.to_thread.run_sync(stage_or_recover)

@@ -32,6 +32,7 @@ class InputQueueItem:
     operation_id: str | None
     possible_effect: bool
     can_cancel: bool
+    literal: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,7 +114,7 @@ def read_session_input_queue(
 
         table = 'session_interaction_pending_inputs' if pending_only else 'session_interaction_inputs'
         rows = uow.connection.execute(f"""
-            SELECT input_id, enqueue_sequence, input_revision, status, operation_id, possible_effect,
+            SELECT input_id, enqueue_sequence, input_revision, status, operation_id, possible_effect, literal,
                 (authority_ref=:authority_ref AND surface=:surface) AS own_input
             FROM {table}
             WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
@@ -133,6 +134,6 @@ def read_session_input_queue(
             can_cancel = (bool(row["own_input"]) and may_cancel(status) and row["operation_id"] is None
                           and not possible_effect and MAX_SQLITE_INTEGER not in (revision, row["input_revision"]))
             items.append(InputQueueItem(row["input_id"], row["enqueue_sequence"], row["input_revision"],
-                                        status, row["operation_id"], possible_effect, can_cancel))
+                                        status, row["operation_id"], possible_effect, can_cancel, bool(row['literal'])))
         following = InputQueueCursor(scope, items[-1].sequence) if len(rows) > limit else None
         return InputQueuePage(revision, paused, tuple(items), following, pause_revision)

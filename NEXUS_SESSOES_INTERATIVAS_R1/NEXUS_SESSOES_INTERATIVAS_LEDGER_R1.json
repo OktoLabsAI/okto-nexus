@@ -952,7 +952,7 @@
         "SI-T-D10",
         "SI-T-D13"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si016-home-session-commands.md",
         "execution/si016-browser-terminal-only.md",
@@ -972,7 +972,9 @@
         "execution/si016-pi-literal-core.md",
         "execution/si016-pi-literal-core.json",
         "execution/si016-pi-literal-r4.md",
-        "execution/si016-pi-literal-r4.json"
+        "execution/si016-pi-literal-r4.json",
+        "execution/si016-pi-literal-ui.md",
+        "execution/si016-pi-literal-ui.json"
       ]
     },
     {
@@ -3706,7 +3708,7 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si016-codex-literal-input.md",
         "execution/si016-codex-literal-input.json",
@@ -3715,7 +3717,9 @@
         "execution/si016-pi-literal-core.md",
         "execution/si016-pi-literal-core.json",
         "execution/si016-pi-literal-r4.md",
-        "execution/si016-pi-literal-r4.json"
+        "execution/si016-pi-literal-r4.json",
+        "execution/si016-pi-literal-ui.md",
+        "execution/si016-pi-literal-ui.json"
       ]
     },
     {

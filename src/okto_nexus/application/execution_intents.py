@@ -32,6 +32,7 @@ def resolve_execution_intent(
     fresh_publications: Mapping | None = None, access=None, context=None,
     session_metadata: Mapping | None = None, one_shot_slot_id: str | None = None,
     reserved_session_id: str | None = None, saved_resume_enabled: bool = False,
+    literal_session_input: bool = False,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -92,6 +93,11 @@ def resolve_execution_intent(
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=subject_agent_id)
     hash_body = dict(request)
+    if literal_session_input:
+        if (request['intent'] != 'turn.submit' or actor_agent_id != 'operator'
+                or context is None or context.authentication_source != 'operator_session'):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Literal text requires an interactive session input.', {})
+        hash_body['_literal_session_input'] = True
     if reserved_session_id is not None:
         # Internal capacity composition only; never accepted in the public
         # request grammar. The immutable intent hash includes this selection.
@@ -289,6 +295,10 @@ def resolve_execution_intent(
             {"reason": request.get("text", "Interrupt requested by the authorized agent.")}
             if action == "turn.interrupt" else {"text": request["text"]}
         )
+        if literal_session_input:
+            if binding['adapter_id'] != 'pi_rpc':
+                raise OktoNexusError(ErrorCode.CONFLICT, 'Literal input is unavailable for this harness.', {})
+            payload['literal'] = True
         if action == 'runtime.open':
             from .runtime_mcp_presets import snapshot
             preset = snapshot(conn, binding['endpoint_id'])

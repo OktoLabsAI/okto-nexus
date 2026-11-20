@@ -247,7 +247,7 @@ class PrepareAttachment(ScopedInteraction):
 
 
 CommandId = Literal[
-    "help", "status", "send", "steer", "interrupt", "compact", "model",
+    "help", "status", "send", "send_literal", "steer", "interrupt", "compact", "model",
     "effort", "export", "fork", "clear", "resume",
 ]
 CommandState = Literal["supported", "disabled_for_state", "denied_by_policy", "native_only", "unsupported", "unqualified"]
@@ -275,7 +275,7 @@ class SessionCommandCatalog(_Document):
     capability_revision: Identifier
     adapter_id: Identifier | None
     native_launch_version: Annotated[str, Field(max_length=64)] | None = None
-    literal_text_supported: Literal[False] = False
+    literal_text_supported: bool = False
     items: Annotated[tuple[CommandDescriptor, ...], Field(max_length=100)]
 
 
@@ -292,7 +292,7 @@ class CompactSessionCommand(ScopedSession):
 
 
 class EnqueueSessionCommand(EnqueueInput):
-    command: Literal["send"]
+    command: Literal["send", "send_literal"]
     catalog_revision: Identifier
     confirmed: Literal[True]
 

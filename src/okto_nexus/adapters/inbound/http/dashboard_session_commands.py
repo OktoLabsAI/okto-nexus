@@ -18,7 +18,7 @@ from ....application.execution_native_session_mapping import read_managed_native
 from ....application.execution_operator_authority import require_operator_request
 from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import require_session_input_grant
-from ....application.session_interaction_capability import next_turn_state
+from ....application.session_interaction_capability import literal_input_available, next_turn_state
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_targets import (
     active_claude_operation,
@@ -194,7 +194,11 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
                           'Use a compatible Codex terminal. Check whether your terminal supports resume.'
                           if adapter == 'codex_app_server' else 'Resuming saved sessions has no qualified dashboard handler.')
     compact = _compact_command(uow, scope, adapter=adapter, input_revision=revision)
-    items = (*_READ_ACTIONS, send, steer, interrupt, compact, *_UNQUALIFIED, resume)
+    literal = (state == 'supported' and adapter == 'pi_rpc' and remote_control_host is not None
+        and literal_input_available(uow, scope, remote_control_host(scope.session.server_id, scope.session.executor_id)))
+    literal_actions = (_action('send_literal', 'Send as text', 'Queue the original text without interpreting it as a command.',
+                               'enqueue'),) if literal else ()
+    items = (*_READ_ACTIONS, send, *literal_actions, steer, interrupt, compact, *_UNQUALIFIED, resume)
     _, agent_revisions, _ = current_agent_revisions(
         factory, agent_id=scope.agent_id, uow=uow, persist=False, require_active=False)
     catalog_facts = {'version': 1, 'scope': exact, 'adapter': adapter, 'input': revision,
@@ -204,7 +208,8 @@ def read_command_catalog(uow, *, factory, access, scope, document, context, opti
         catalog_facts['native_launch_version'] = launch_version
     catalog_revision = 'sha256:' + digest(catalog_facts)
     return SessionCommandCatalog(scope=document, session_owner_generation=scope.generation.value,
-        capability_revision=catalog_revision, adapter_id=adapter, native_launch_version=launch_version, items=items)
+        capability_revision=catalog_revision, adapter_id=adapter, native_launch_version=launch_version,
+        literal_text_supported=literal, items=items)
 
 
 def build_router():
@@ -252,7 +257,9 @@ def build_router():
                 context=context, options=options, remote_control_host=state.deps.runtime_availability.current_host)
             if catalog.capability_revision != body.catalog_revision:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'Session commands changed. Review the current action again.', {})
-            action = next(item for item in catalog.items if item.command_id == body.command)
+            action = next((item for item in catalog.items if item.command_id == body.command), None)
+            if action is None:
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The session command is unavailable.', {})
             if isinstance(body, CompactSessionCommand) and action.state != 'disabled_for_state':
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Context compaction has no qualified dashboard handler.', {})
             if action.state != 'supported':
@@ -262,7 +269,7 @@ def build_router():
 
         if isinstance(body, EnqueueSessionCommand):
             return await enqueue_input_response(session_id, body, request, verify_command=verify_command,
-                                                surface=surface)
+                                                surface=surface, literal=body.command == 'send_literal')
         if isinstance(body, InterruptSessionCommand):
             return await interrupt_response(session_id, body, request, verify_command=verify_command,
                                             surface=surface)

@@ -1,0 +1,124 @@
+{
+  "task": "SI-016",
+  "scenario": {
+    "id": "SI-T-D06",
+    "status": "PASS",
+    "scope": "Unit, typed API, and real-browser/adapter integration with simulated model"
+  },
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "604cc068af75acb47757efecb4376eae97b65ac9",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 547,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "3970610523eb4bd85bf4605771b06b1b83c7a678",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 92,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "f07c643451c59f54f80298110de1e0c81bbfb48d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 72,
+      "behind_main": 0
+    },
+    "clean_worktrees": true,
+    "upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "environment": {
+    "host": "Windows x64",
+    "python": "3.13.1",
+    "node": "24.15.0",
+    "edge": "157.0.4341.60",
+    "pi": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "native_provider": "Pi synthetic provider, temporary profile and project, network denied in native process"
+  },
+  "artifacts": {
+    "build_tree": "7b1eeb8db493a00d2c36f639331ccd592061b6ce",
+    "nexus_wheel_sha256": "e2ce42521bbc4db6e0605a10073ffb793c13c964b0633740a36139a936cfcf80",
+    "core_wheel_sha256": "76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1",
+    "connector_wheel_sha256": "3dac4417a143414e0b237dcea63a8f8879e8fb6c303e8ee78c35c7fe32facb45",
+    "served_asset_sha256": {
+      "index-BLqy11xf.js": "2c503e278a37946f3ae3ffa00f23b7a99f19bf84d54f46b581a9e0cb1be4cbb0",
+      "index-DWAYZd2O.css": "4b5c52c3efaeaa246f6f7f30ecf1d928505dce63b0e8111520b867047f022b31"
+    },
+    "browser_assets_equal_installed_wheel": true,
+    "strict_wheel_metadata_and_offline_dependency_check": "PASS"
+  },
+  "browser_native": {
+    "browser_received_202": true,
+    "queue_at_click": "QUEUED",
+    "queue_after_dispatch": "ACCEPTED_NATIVE",
+    "same_persisted_input_and_sequence": true,
+    "same_connector_generation": true,
+    "same_native_process": true,
+    "session_count": 1,
+    "turns": 2,
+    "native_user_messages": 2,
+    "canonical_results": 2,
+    "input_post_count": 1,
+    "browser_showed_both_results": true,
+    "native_model_boundary_text_exact": true,
+    "literal_r4_payload": true,
+    "canonical_close": true,
+    "external_provider_requests": 0,
+    "explicit_typed_post": "send_literal",
+    "draft": "/skill:nexus-literal-ui café  ",
+    "plain_enter_runtime_posts": 0,
+    "registered_skill_body_reached_model": false,
+    "exact_original_message_observations": 1,
+    "r4_literal_capability": "nexus-pi-literal-input-v1"
+  },
+  "regressions": {
+    "source_python": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "1b2a0bd8f751ac40c6afaa5d30bb74c02e4ea6101a2eead6b193a6e002082db0"
+    },
+    "source_storage_with_migration_and_downgrade": {
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "724637b39fc8e7f1384967282365c5f9d32ec3fe8fa77bde81e32894ee6f0806"
+    },
+    "installed_python": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "22644d745e2a044969f56162099c04c974c28e6151497d61754670a127d09435"
+    },
+    "installed_browser_and_native_pi": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "fd599cfb94d26ea6020c7079ad0befaab480cb7d1118bfd55c9506e531d72f0d"
+    },
+    "node_frontend": 422,
+    "frontend_production_build": "PASS",
+    "new_ruff_diagnostics_on_changed_files": 0,
+    "unqualified_literal_api_status": 409
+  },
+  "discarded_fixture_attempts": [
+    "Installed import setup omitted the repository test namespace and then named the capability module incorrectly. Fixed in the fixture.",
+    "A line-ending escape in the test provider source was invalid JavaScript. Fixed using a raw Python template.",
+    "The first turn remained ACCEPTED after the model callback fired. The final run uses the actual model callback as the active-turn barrier."
+  ],
+  "qualification_limits": [
+    "Windows and the exact reviewed Pi build with simulated model output.",
+    "Other builds, external-provider campaigns and platform-wide gates have separate ledger entries."
+  ]
+}
