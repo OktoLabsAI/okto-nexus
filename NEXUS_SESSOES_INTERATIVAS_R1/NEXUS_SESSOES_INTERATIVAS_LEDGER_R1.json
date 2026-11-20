@@ -427,7 +427,9 @@
         "execution/si006-queue-commit-refusal.md",
         "execution/si006-queue-commit-refusal.json",
         "execution/si006-pi-human-input-authority.md",
-        "execution/si006-pi-human-input-authority.json"
+        "execution/si006-pi-human-input-authority.json",
+        "execution/si006-exact-input-boundaries.md",
+        "execution/si006-exact-input-boundaries.json"
       ]
     },
     {
@@ -991,7 +993,9 @@
         "execution/si018-consumer-owner-proof.md",
         "execution/si018-native-launch-build.md",
         "execution/si018-embedded-presentation-owner.md",
-        "execution/si018-codex-thread-and-adapter-identity.md"
+        "execution/si018-codex-thread-and-adapter-identity.md",
+        "execution/si006-exact-input-boundaries.md",
+        "execution/si006-exact-input-boundaries.json"
       ]
     },
     {
@@ -2304,8 +2308,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-exact-input-boundaries.md",
+        "execution/si006-exact-input-boundaries.json"
+      ]
     },
     {
       "id": "SI-T-A05",
@@ -2358,8 +2365,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-exact-input-boundaries.md",
+        "execution/si006-exact-input-boundaries.json"
+      ]
     },
     {
       "id": "SI-T-A08",
@@ -2394,8 +2404,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-exact-input-boundaries.md",
+        "execution/si006-exact-input-boundaries.json"
+      ]
     },
     {
       "id": "SI-T-A10",
@@ -2412,8 +2425,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si006-exact-input-boundaries.md",
+        "execution/si006-exact-input-boundaries.json"
+      ]
     },
     {
       "id": "SI-T-A11",

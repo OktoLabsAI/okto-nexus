@@ -1,0 +1,91 @@
+{
+  "scenarios": [
+    "SI-T-A04",
+    "SI-T-A07",
+    "SI-T-A09",
+    "SI-T-A10"
+  ],
+  "status": "PASS",
+  "installed_wheels": {
+    "nexus": "489dfb0ee4c718026f0f0d1e2fa185eb5f406698652592e6c21a80146fd01031",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "engine": "Pi 0.87.1",
+    "engine_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "owner": "Installed embedded Nexus execution host on loopback",
+    "provider": "Deterministic Pi fixture with native-process external networking disabled"
+  },
+  "on_exact_session": {
+    "pure_reads": 8,
+    "wrong_scope": {
+      "executor_id": {
+        "conversation_http": 404,
+        "input_http": 409
+      },
+      "binding_id": {
+        "conversation_http": 404,
+        "input_http": 409
+      }
+    },
+    "invalid_text": {
+      "empty": 422,
+      "whitespace": 422,
+      "utf8_over_64k": 422
+    },
+    "closed_history_http": 200,
+    "closed_input_http": 409,
+    "closed_sessions_retained": 1,
+    "closed_input_rows_retained": 1,
+    "observed_native_human_messages": 1
+  },
+  "durable_audit": {
+    "physical_integrity": "ok",
+    "foreign_key_violations": 0,
+    "exact_session_closed": true,
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "results": 2,
+    "coordination_rows": {
+      "messages": 0,
+      "message_deliveries": 0,
+      "handoffs": 0,
+      "runtime_message_causality": 0,
+      "execution_message_origins": 0,
+      "runtime_handoff_notifications": 0,
+      "execution_decisions": 0
+    },
+    "accepted_web_receipt_linked_to_exact_native_user_turn": true,
+    "native_history_files": 1
+  },
+  "verification": {
+    "real_pi_http_cases": 1,
+    "installed_unit_cases": 8,
+    "fixture_directory": "D:/nxs-exact-scope-87224848",
+    "artifact_sha256": {
+      "run.ps1": "402b4bee1ea83880051c2452e853f91ddbb4ec1798d70fc316f2e67336310e0d",
+      "test_author.py": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc",
+      "local_author_probe.py": "29a9158632d90f9102e5432ecc52c8ac9ad9cb86f763f9a7aa9bba4b04303ae8",
+      "audit_durable.py": "52f903cc6c175dbf70baa6f55aca87cd4661f06d4c3e08ca827adb9f0eda5476",
+      "proof.json": "ac15f0877975c44e5ada7edf34bb706624983523190163ded43b19d96293a469",
+      "durable-audit.json": "eb6188355617ac43572fa6e6add44a337f61bb65c0ef200a12afa2bd60b14eb8",
+      "focus.xml": "5a583c36dadeb58db6a5219cdc1a1120c9cf54302f82259a69035436500dca7e",
+      "unit.xml": "c2b07decd38e4d3abeabb13eca192b51200689e6fc575bc8b1813a2b33e98aaa"
+    },
+    "initial_scope_shape_assertion_junit_sha256": "b6ecc572df4119385df7993debcbe9bed745860d8d620b0132f87f1a0fc5ee68",
+    "commands": [
+      "pwsh -NoProfile -File run.ps1 -Root <isolated-root>",
+      "<candidate-venv>/Scripts/python.exe <isolated-root>/audit_durable.py",
+      "python -m pytest -o pythonpath= -p assert_wheel_imports <eight scope/storage cases>"
+    ]
+  },
+  "limits": [
+    "The fixture supplies one measured Pi installation to embedded discovery. The synthetic provider has network access disabled.",
+    "The wrong executor and binding identifiers were synthetic and absent from the exact session. This evidence covers refusal without choosing a different session, not the separate homonym scenario."
+  ]
+}
