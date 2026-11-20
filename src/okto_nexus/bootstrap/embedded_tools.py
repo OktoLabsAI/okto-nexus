@@ -119,7 +119,7 @@ class EmbeddedToolsOwner:
                 and launch.record['provider_home'] and not always_allow and not inherit_mcps
                 and not frame['payload'].get('mcp_preset')
                 and frame['payload'].get('harness_settings', {}).get('permission_mode') == 'plan'):
-            from ..application.execution_claude_resume_profile import observe_claude_resume_profile
+            from nexus_connector_core.native.claude_terminal_profile import observe_claude_resume_profile
             home_path = Path(launch.record['provider_home']['path'])
             if (home_path / '.claude').is_dir():
                 home_path = home_path / '.claude'

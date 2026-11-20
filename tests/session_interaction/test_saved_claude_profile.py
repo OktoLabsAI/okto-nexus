@@ -11,7 +11,7 @@ from nexus_connector_core.native.claude_saved_history import (
     claude_history_path,
     observe_claude_saved_history,
 )
-from okto_nexus.application import execution_claude_resume_profile as config
+from nexus_connector_core.native import claude_terminal_profile as config
 from okto_nexus.application.execution_saved_resume import saved_opening_profile
 from okto_nexus.bootstrap import embedded_claude_resume
 

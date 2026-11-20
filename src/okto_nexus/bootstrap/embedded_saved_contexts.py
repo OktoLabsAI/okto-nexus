@@ -120,7 +120,7 @@ class EmbeddedSavedContexts:
                     profile = dict(opening_profile)
                     claude_profile = profile.get('claude_resume_profile')
                     if claude_profile is not None:
-                        from ..application.execution_claude_resume_profile import observe_claude_resume_profile
+                        from nexus_connector_core.native.claude_terminal_profile import observe_claude_resume_profile
                         current = await asyncio.to_thread(observe_claude_resume_profile, saved.state_home, root)
                         if current != claude_profile:
                             profile.pop('claude_resume_profile')

@@ -201,22 +201,23 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
     remote = selected.get('executor_kind') == 'remote'
-    if remote and binding.get('adapter_id') not in ('codex_app_server', 'pi_rpc'):
+    if remote and binding.get('adapter_id') not in ('codex_app_server', 'pi_rpc', 'claude_stream'):
         raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE',
                               'Remote terminal attachment is unavailable for this harness.')
     if binding.get('adapter_id') == 'claude_stream':
         if write or viewer_executable is not None:
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The managed Claude terminal is read-only.')
         revision = review_local_presentation(call, scope=scope, expected_session_generation=generation,
-                                             presentation='claude')
+                                             presentation='claude_remote' if remote else 'claude')
         print('Watching the Claude terminal. Ctrl+C detaches this viewer.', flush=True)
         with open_local_presentation(call, scope=scope, expected_session_generation=generation,
                                      capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
-                                     claude=True) as link:
+                                     **({'remote': True} if remote else {}), claude=True) as link:
             _show_claude_transcript(link)
         _display({'state': 'detached'}, False)
         return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
-                'attach_strategy': 'claude_local_read', 'capability_revision': revision}
+                'attach_strategy': 'claude_remote_read' if remote else 'claude_local_read',
+                'capability_revision': revision}
     if binding.get('adapter_id') == 'pi_rpc':
         if viewer_executable is not None or write and sys.platform != 'win32':
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')

@@ -38,6 +38,8 @@ from ....domain.presentation_protocol import (
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
     PI_PRESENTATION_SUBPROTOCOL,
+    REMOTE_CLAUDE_AUDIENCE,
+    REMOTE_CLAUDE_SUBPROTOCOL,
     REMOTE_PI_AUDIENCE,
     REMOTE_PI_SUBPROTOCOL,
     REMOTE_CODEX_AUDIENCE,
@@ -74,10 +76,12 @@ _PRESENTERS = {
     'claude': ('local_claude_presentations', LOCAL_CLAUDE_AUDIENCE, CLAUDE_PRESENTATION_SUBPROTOCOL),
     'codex_remote': ('remote_codex_presentations', REMOTE_CODEX_AUDIENCE, REMOTE_CODEX_SUBPROTOCOL),
     'pi_remote': ('remote_pi_presentations', REMOTE_PI_AUDIENCE, REMOTE_PI_SUBPROTOCOL),
+    'claude_remote': ('remote_claude_presentations', REMOTE_CLAUDE_AUDIENCE, REMOTE_CLAUDE_SUBPROTOCOL),
 }
-_REMOTE = frozenset({'codex_remote', 'pi_remote'})
+_REMOTE = frozenset({'codex_remote', 'pi_remote', 'claude_remote'})
 _PI = frozenset({'pi', 'pi_remote'})
-_TERMINAL = _PI | {'claude'}
+_CLAUDE = frozenset({'claude', 'claude_remote'})
+_TERMINAL = _PI | _CLAUDE
 _RENEW_SECONDS = 15
 _SEND_SECONDS = 5
 _CLOSE_SECONDS = 2
@@ -271,12 +275,12 @@ _REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesReq
 
 class _Review(ScopedSession):
     access: Literal['read', 'write'] = 'read'
-    presentation: Literal['codex', 'pi', 'claude', 'codex_remote', 'pi_remote'] = 'codex'
+    presentation: Literal['codex', 'pi', 'claude', 'codex_remote', 'pi_remote', 'claude_remote'] = 'codex'
 
 
 class _Detach(ScopedSession):
     channel_id: Identifier
-    presentation: Literal['codex', 'pi', 'claude', 'codex_remote', 'pi_remote'] = 'codex'
+    presentation: Literal['codex', 'pi', 'claude', 'codex_remote', 'pi_remote', 'claude_remote'] = 'codex'
 
 
 def _local_transport(request) -> bool:
@@ -303,7 +307,7 @@ def _presentation_post(request, presentation):
 
 
 def _upgrade_allowed(ws: WebSocket, protocol=PRESENTATION_SUBPROTOCOL) -> bool:
-    remote = protocol in (REMOTE_CODEX_SUBPROTOCOL, REMOTE_PI_SUBPROTOCOL)
+    remote = any(_PRESENTERS[name][2] == protocol for name in _REMOTE)
     if (not _transport(ws, remote=remote) or ws.query_params or ws.headers.get('sec-fetch-site') == 'cross-site'
             or len(ws.headers.getlist('origin')) > 1
             or remote and not ws.headers.get('origin')
@@ -362,7 +366,7 @@ def _author_callback(callback, author, presentation):
 
 
 def _matching_presenter(mapping, presentation) -> bool:
-    if presentation == 'claude':
+    if presentation in _CLAUDE:
         return mapping.adapter_id == 'claude_stream'
     return mapping.adapter_id == 'pi_rpc' if presentation in _PI else mapping.codex_thread_id is not None
 
@@ -704,21 +708,23 @@ async def _present_pi(ws, services, active, hello, *, presentation):
     return 4409
 
 
-async def _present_claude(ws, services, active):
+async def _present_claude(ws, services, active, *, presentation):
     if active['attachment'].access != 'read':
         raise ValueError('Claude terminal attachment is read-only')
+    remote = presentation == 'claude_remote'
 
     async def verify(renew=False):
-        if _services(ws.app.state, 'claude') is not services:
+        if _services(ws.app.state, presentation) is not services:
             raise ValueError('Presentation owner changed')
         await _worker(services.broker.refresh if renew else services.broker.require_active, **active)
-        if _services(ws.app.state, 'claude') is not services:
+        if _services(ws.app.state, presentation) is not services:
             raise ValueError('Presentation owner changed')
 
     async with AsyncExitStack() as stack:
         with anyio.fail_after(10):
             await verify()
-            frames = await stack.enter_async_context(services.open_reader(active['scope']))
+            open_reader = _author_callback(services.open_reader, active['author'], presentation)
+            frames = await stack.enter_async_context(open_reader(active['scope']))
             await verify()
             await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': 'read'})
         inbound = asyncio.create_task(ws.receive())
@@ -727,14 +733,22 @@ async def _present_claude(ws, services, active):
         try:
             while True:
                 done, _ = await asyncio.wait((inbound, output),
-                    timeout=max(0, renew_at - anyio.current_time()), return_when=asyncio.FIRST_COMPLETED)
+                    timeout=1 if remote else max(0, renew_at - anyio.current_time()),
+                    return_when=asyncio.FIRST_COMPLETED)
+                keepalive = False
                 if inbound in done:
-                    if inbound.result()['type'] == 'websocket.disconnect':
+                    message = inbound.result()
+                    if message['type'] == 'websocket.disconnect':
                         return
-                    raise ValueError('Claude terminal attachment does not accept input')
+                    if not remote or _decode(message) != {'kind': 'keepalive'}:
+                        raise ValueError('Claude terminal attachment does not accept input')
+                    keepalive = True
+                    inbound = asyncio.create_task(ws.receive())
                 if anyio.current_time() >= renew_at:
-                    await verify(renew=True)
-                    renew_at = anyio.current_time() + _RENEW_SECONDS
+                    renew = not remote or keepalive
+                    await verify(renew=renew)
+                    if renew:
+                        renew_at = anyio.current_time() + _RENEW_SECONDS
                 if output in done:
                     frame = output.result()
                     if frame is None:
@@ -785,8 +799,8 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
                     raise ValueError('Presentation owner changed')
             if presentation not in _TERMINAL:
                 await _send(ws, {'kind': 'attached', 'attachment_id': attachment_id, 'access': attachment.access})
-        if presentation == 'claude':
-            close_code = await _present_claude(ws, services, active)
+        if presentation in _CLAUDE:
+            close_code = await _present_claude(ws, services, active, presentation=presentation)
             return
         if pi:
             close_code = await _present_pi(ws, services, active, hello, presentation=presentation)
@@ -954,6 +968,8 @@ def build_router():
         except CoreError:
             return _error(409, 'CONFLICT', 'This presentation is currently unavailable.')
         features = {'pi_keepalive': True} if body.presentation == 'pi_remote' else {}
+        if body.presentation == 'claude_remote':
+            features = {'claude_keepalive': True}
         return JSONResponse({'version': 1, 'attachment_id': offer.attachment_id, 'state': offer.state,
                              'ticket': offer.ticket, 'live_updates': True if terminal else services.live_updates,
                              **features},

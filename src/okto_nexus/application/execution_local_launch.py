@@ -145,7 +145,7 @@ class ApprovedLocalLaunch:
 
     async def fresh_claude_grant(self, prepared, session_id, context, environment):
         from nexus_connector_core import ClaudeTerminalFreshGrant
-        from .execution_claude_resume_profile import observe_claude_resume_profile
+        from nexus_connector_core.native.claude_terminal_profile import observe_claude_resume_profile
 
         profile = self.claude_resume_profile
         if profile is None:
@@ -208,7 +208,7 @@ class ApprovedLocalLaunch:
         await asyncio.to_thread(self.check)
         await asyncio.to_thread(tools_current)
         if prepared.intent.adapter_id == 'claude_stream' and self.owner.deps.config.runtime_session_interaction_enabled:
-            from .execution_claude_resume_profile import capture_claude_resume_profile
+            from nexus_connector_core.native.claude_terminal_profile import capture_claude_resume_profile
             self.claude_resume_profile = await asyncio.to_thread(capture_claude_resume_profile, prepared, value)
             question_only = bool(self.claude_resume_profile and self.claude_resume_profile.get('question_only'))
             read_approval = bool(self.claude_resume_profile and self.claude_resume_profile.get('read_approval'))

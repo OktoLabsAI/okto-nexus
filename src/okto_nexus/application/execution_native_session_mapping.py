@@ -93,8 +93,12 @@ _CLAUDE_SAVED_ENGINE = (
 
 
 def reviewed_claude_saved_context(mapping: ManagedNativeSession) -> bool:
+    return mapping.claude_history is not None and reviewed_claude_terminal_context(mapping)
+
+
+def reviewed_claude_terminal_context(mapping: ManagedNativeSession) -> bool:
     build = mapping.launch_build
-    return (mapping.adapter_id == 'claude_stream' and mapping.claude_history is not None
+    return (mapping.adapter_id == 'claude_stream'
             and build is not None
             and (build.version, build.platform, build.architecture, build.content_fingerprint) == _CLAUDE_SAVED_ENGINE)
 

@@ -57,7 +57,7 @@ class RemotePresentationOwner:
         if server != scope.session.server_id or lease_scope != params:
             raise CoreError('STALE_GENERATION', 'remote_presentation')
         require_execution_lane(uow, scope=lease_scope, channel=channel, now=now)
-        mapping = read_managed_native_session(uow, scope)
+        mapping = read_managed_native_session(uow, scope, include_claude_history=False)
         if (mapping is None or not mapping.stream_epoch or not self._supports(mapping, link)
                 or (mapping.receipt_connection_id, mapping.receipt_connection_generation) != connection):
             raise CoreError('CAPABILITY_UNSUPPORTED', 'remote_presentation')

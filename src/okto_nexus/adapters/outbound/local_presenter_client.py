@@ -32,6 +32,7 @@ from ...application.codex_viewer_protocol import (
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
     CLAUDE_PRESENTATION_SUBPROTOCOL,
+    REMOTE_CLAUDE_SUBPROTOCOL,
     MAX_PI_PRESENTATION_BYTES,
     MAX_PRESENTATION_NOTIFICATIONS,
     MAX_PRESENTATION_REQUEST_BYTES,
@@ -467,7 +468,7 @@ def _revision(value):
 
 def review_local_presentation(api, *, scope, expected_session_generation, write=False, presentation='codex'):
     """Read an exact viewer capability without issuing an attachment ticket."""
-    remote = presentation in ('codex_remote', 'pi_remote')
+    remote = presentation in ('codex_remote', 'pi_remote', 'claude_remote')
     _presentation_origin(api, scope, remote=remote)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
     if presentation != 'codex':
@@ -508,7 +509,7 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     origin = _presentation_origin(api, scope, remote=remote)
     if pi_editor and (pi_viewport is None or writer is None):
         raise _unavailable()
-    if claude and (remote or writer is not None or pi_viewport is not None):
+    if claude and (writer is not None or pi_viewport is not None):
         raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
@@ -516,8 +517,8 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     access = 'write' if writer is not None else 'read'
     writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
     if claude:
-        presentation = {'presentation': 'claude'}
-        protocol = CLAUDE_PRESENTATION_SUBPROTOCOL
+        presentation = {'presentation': 'claude_remote' if remote else 'claude'}
+        protocol = REMOTE_CLAUDE_SUBPROTOCOL if remote else CLAUDE_PRESENTATION_SUBPROTOCOL
     elif pi_viewport is not None:
         presentation = {'presentation': 'pi_remote' if remote else 'pi'}
         protocol = REMOTE_PI_SUBPROTOCOL if remote else PI_PRESENTATION_SUBPROTOCOL
@@ -530,11 +531,14 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     attachment_id, ticket = offer.get('attachment_id'), offer.get('ticket')
     live_updates = offer.get('live_updates', False)
     pi_keepalive = offer.get('pi_keepalive', False)
+    claude_keepalive = offer.get('claude_keepalive', False)
     if (type(offer.get('version')) is not int or offer['version'] != 1 or offer.get('state') != 'PREPARED'
             or not isinstance(attachment_id, str) or not re.fullmatch(r'att_[0-9a-f]{32}', attachment_id)
             or not isinstance(ticket, str) or not re.fullmatch(r'[A-Za-z0-9_-]{43}', ticket)
             or type(live_updates) is not bool or type(pi_keepalive) is not bool
-            or pi_keepalive and protocol != REMOTE_PI_SUBPROTOCOL):
+            or type(claude_keepalive) is not bool
+            or pi_keepalive and protocol != REMOTE_PI_SUBPROTOCOL
+            or claude_keepalive != (protocol == REMOTE_CLAUDE_SUBPROTOCOL)):
         raise _unavailable()
     with ExitStack() as stack:
         try:
@@ -559,7 +563,7 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
             result = link.exchange({'kind': 'prove', 'challenge': nonce})
             if result != {'kind': 'attached', 'attachment_id': attachment_id, 'access': access}:
                 raise ValueError('Invalid presentation receipt')
-            if pi_keepalive:
+            if pi_keepalive or claude_keepalive:
                 link.start_pi_keepalive()
         except (OSError, TypeError, ValueError, ProtocolError, RecursionError):
             raise _unavailable() from None

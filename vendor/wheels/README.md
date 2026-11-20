@@ -1,5 +1,12 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `a7b22737bc86485d45dd5ad0a1a49e18d46ddd5d`.
+The unpublished wheel SHA-256 is `6efd71674e39964f866778abb9ddc4a714bb38c85f7c454cec8686e2519a18cb`.
+The Core validates negotiated read-only Claude terminal frames and shares the reviewed Claude profile checks.
+The Nexus CI manifest identifies the matching Connector wheel.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `bf783fe7ab9ed88214ac6dcc444302bf520d895a`.
 The unpublished wheel SHA-256 is `4b72410c11b8921eb13bb81faec09607f8962815f187d6d0f84f99ba01bec843`.
 The reviewed Claude terminal can open an empty session and verify its saved dialogue on canonical close.

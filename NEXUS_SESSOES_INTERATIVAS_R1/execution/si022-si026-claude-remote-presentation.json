@@ -1,0 +1,81 @@
+{
+  "tasks": ["SI-022", "SI-026", "SI-031"],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "79b3a30eb4598fc6cc592099a3c28e805287aa3f",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 558,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "e1500a01b2432e01915c1faa31cf0223f74e45a1",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 96,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "bf783fe7ab9ed88214ac6dcc444302bf520d895a",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 78,
+      "behind_main": 0
+    },
+    "worktrees_clean": true,
+    "upstream_drift": [0, 0]
+  },
+  "artifacts": {
+    "core_commit": "a7b22737bc86485d45dd5ad0a1a49e18d46ddd5d",
+    "core_build_tree": "9d1dc76d3ba109d497687f4e56d664c63ac17080",
+    "connector_initial_commit": "951aefa62ab2302d042877f79605ebf3e185fb4a",
+    "connector_negotiated_launch_commit": "328fd989a2e0520e7a56e26c693048a7b29a6ffa",
+    "connector_commit": "857d833e2b70be9c782b37fbe70ea0f857255b2e",
+    "connector_build_tree": "8b793c1a9de5096d7db9c9c3ece419959653da30",
+    "nexus_build_tree": "89361176cc092f2ee48ae2303ebec82cba1cbe63",
+    "prior_core_wheel_sha256": "4b72410c11b8921eb13bb81faec09607f8962815f187d6d0f84f99ba01bec843",
+    "prior_connector_wheel_sha256": "1c9c072ca30756b140cd17ef6cae006997e4db34e766b625b8195075d7e2595e",
+    "core_wheel_sha256": "6efd71674e39964f866778abb9ddc4a714bb38c85f7c454cec8686e2519a18cb",
+    "connector_wheel_sha256": "70b4bae75062e87229f903624a82208408867ad0a41a097fcc9f08c4498a0ab4",
+    "nexus_wheel_sha256": "9d67e0080ddd473b36ca16c0868740a1d9b87d0fe79ab28b205ded527866ce27"
+  },
+  "verification": {
+    "core_installed_tests_passed": 49,
+    "connector_installed_tests_passed": 206,
+    "nexus_installed_tests_passed": 92,
+    "installed_import_paths_verified": true,
+    "strict_wheel_validation": "PASS",
+    "offline_nexus_lock_check": "PASS",
+    "installed_dependency_check": "PASS",
+    "generated_core_contracts_check": "PASS",
+    "nexus_ruff_syntax_and_undefined_names": "PASS"
+  },
+  "controlled_r4_integration": {
+    "topology": "one Windows host, real Nexus HTTP and WebSocket, Connector daemon and R4, fixture Claude terminal",
+    "extension": "nexus-claude-presentation-v1",
+    "write_role_denied": true,
+    "external_origin_denied": true,
+    "agent_credentials_denied": true,
+    "wrong_generation_denied": true,
+    "silent_reader_expired": true,
+    "same_scope_after_reattach": true,
+    "extra_work_operations": 0
+  },
+  "controlled_native_probe": {
+    "topology": "one Windows host, real Nexus CLI and HTTP/WebSocket, Connector daemon and R4, Claude on ConPTY",
+    "claude_version": "2.1.328",
+    "claude_executable_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "disposable_project_and_provider_profile": true,
+    "setup": "fixture reopened its temporary control socket and waited for the current authorization revision before admission",
+    "model_requests_on_empty_open": 0,
+    "loopback_model_requests": 1,
+    "external_provider_requests": 0,
+    "exact_owned_claude_startup": true,
+    "first_reader_detached_during_turn": true,
+    "reattached_to_same_scope_and_process": true,
+    "second_reader_displayed_turn_result": true,
+    "canonical_close_stopped_process": true,
+    "sqlite_quick_check": "ok"
+  },
+  "pending_qualification": ["SI-T-H01 on separate machines", "authorized real-provider campaign", "remote Claude native commands beyond read-only presentation"]
+}

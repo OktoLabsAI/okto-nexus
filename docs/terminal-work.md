@@ -247,14 +247,22 @@ and displays the retained output.
 okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
 
-After canonical closure, a managed session with verified saved history can
+The same command follows a managed Claude terminal on a Connector that
+negotiated Claude presentation with the Server. Sign in as a Nexus operator
+and select the exact session. The reviewed remote setup uses Claude 2.1.328
+on Windows, an approved provider directory and credential reference, and
+the `plan` permission mode. The Connector uses its existing outbound
+connection. Ctrl+C detaches the read-only viewer and leaves work with the
+Connector.
+
+After canonical closure, a local managed session with verified saved history can
 be selected by `session resume`. Confirm the successor before sending more
 work. The saved conversation retains its native identity across that opening.
 
 From an interactive terminal, review a reorientation for the selected session.
 Claude needs a confirmed active turn. The command asks you to confirm interrupting
-that turn before it submits the replacement. The same flow works on a Connector
-that negotiated reviewed Claude controls.
+that turn before it submits the replacement. On a Connector, reorientation
+requires the separate reviewed Claude control capability.
 
 ```sh
 okto-nexus session steer --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR

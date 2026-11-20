@@ -873,10 +873,14 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     from .operator_auth import OperatorAuth, router as operator_auth_router
     app.state.operator_auth = OperatorAuth(deps.config.home_dir)
     from ....application.remote_codex_presentation import RemoteCodexPresentation
+    from ....application.remote_claude_presentation import RemoteClaudePresentation
     from ....application.remote_pi_presentation import RemotePiPresentation
     app.state.remote_codex_presentation = RemoteCodexPresentation(
         deps.connection_factory, authority_fence=app.state.operator_auth.authority_fence, clock=deps.clock)
     app.state.remote_pi_presentation = RemotePiPresentation(
+        deps.connection_factory, authority_fence=app.state.operator_auth.authority_fence, clock=deps.clock,
+        links=app.state.remote_codex_presentation.links)
+    app.state.remote_claude_presentation = RemoteClaudePresentation(
         deps.connection_factory, authority_fence=app.state.operator_auth.authority_fence, clock=deps.clock,
         links=app.state.remote_codex_presentation.links)
     app.include_router(operator_auth_router())

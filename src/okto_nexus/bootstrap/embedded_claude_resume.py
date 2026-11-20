@@ -7,7 +7,7 @@ from pathlib import Path
 from nexus_connector_core import ClaudeTerminalResumeGrant, CoreError
 from nexus_connector_core.native.claude_saved_history import ClaudeSavedHistory, observe_claude_saved_history
 
-from ..application.execution_claude_resume_profile import observe_claude_resume_profile
+from nexus_connector_core.native.claude_terminal_profile import observe_claude_resume_profile
 from ..application.execution_saved_resume import saved_opening_profile
 from .embedded_codex_resume import read_retired_source
 
