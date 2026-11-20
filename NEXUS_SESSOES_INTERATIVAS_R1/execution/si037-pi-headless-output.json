@@ -1,0 +1,142 @@
+{
+  "scenario": "SI-T-H14",
+  "scope": "Installed Windows embedded Pi process, one headless session, two HTTP-admitted turns and a later WSS observer",
+  "environment": {
+    "windows_build": 26300,
+    "provider": "isolated deterministic Pi provider",
+    "fixture": "D:\\nxs-pi-headless-output-585b8481-final",
+    "actual_native_process_and_os_pipes": true,
+    "paid_provider_calls": 0
+  },
+  "repositories_before_change": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "462b34e429997299c0c13f0e8ed74f09ad4449da",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead_main": [
+        0,
+        529
+      ],
+      "wheel_sha256": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead_main": [
+        0,
+        88
+      ],
+      "wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead_main": [
+        0,
+        67
+      ],
+      "wheel_sha256": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+    }
+  },
+  "before_working_trees_clean": true,
+  "nexus_wheel_product_head": "ba6a8d4602e68ee439067b1c8123bc33a74f5491",
+  "proof": {
+    "pi_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "native_reply_bytes": 1090040,
+    "canonical_output_bytes": 1048576,
+    "explicit_output_truncation": true,
+    "minimum_stderr_body_bytes": 20971520,
+    "retained_stderr_tail_characters": 811231,
+    "stderr_pipe_and_stdout_deltas_overlapped": true,
+    "stats": {
+      "stderr_chunks": 5124,
+      "stderr_characters": 20971689,
+      "largest_stderr_chunk": 4096,
+      "stdout_frames": 124,
+      "stdout_frame_bytes": 5565305,
+      "largest_stdout_frame": 1111610
+    },
+    "transient_event_history": {
+      "bytes": 5613800,
+      "events": 118,
+      "byte_limit": 33554432,
+      "event_limit": 2048,
+      "expired": false
+    },
+    "native_history_complete": true,
+    "turns_succeeded_without_any_viewer": 2,
+    "native_launch_count": 1,
+    "reattached_via_wss_to_same_session": true,
+    "external_provider_requests": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "sqlite": {
+    "session_closed": true,
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "results": 2,
+    "retired_observers": 1,
+    "new_inputs": 0,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "cleanup": {
+    "tls_listener_closed": true,
+    "private_key_removed": true
+  },
+  "tests": {
+    "installed_native_integration": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "b1de4922126383ce7de668d22634ed53673a48463cc8299858605cd44b74195f"
+    },
+    "installed_nexus_pi_framing_and_results": {
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "1deb8a9cb3e6280ef45f65c122af942ab51bf7bfcc0c8af5417a1696655b313e"
+    },
+    "installed_core_pi_output_and_renderer": {
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "925cf8e51d77684819a4680c7000ad3e9914360108b8a05f84707e19c165c1f1"
+    },
+    "installed_core_native_framing_and_buffer_limits": {
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "a893b97d571415789f62dfc4caedf414adfcdaa99f25c9b9667d9ae51d85c551"
+    }
+  },
+  "mixed_regression_supplemental": {
+    "outcome": "An assertion failed and the isolated pytest runner then hung in Starlette TestClient fixture shutdown.",
+    "stack_sha256": "c2d52bbdeef577216fbd394f3e113e2e295791c21d36b73158dc5a6c15fe32f2",
+    "scoped_runner_stopped": true
+  },
+  "fixture_corrections": [
+    {
+      "issue": "The REST response uses SQLite-compatible 0 or 1 for output_truncated.",
+      "junit_sha256": "4132e7490b3c7d406d38a760930179a21ad27f9a7068cde159f58e9480f11b43"
+    },
+    {
+      "issue": "The intentionally oversized answer exceeded the synthetic model context; auto-compaction consumed a fixture response. The final model context covers the full generated conversation.",
+      "junit_sha256": "82d35803fde2b83824c5900745c3d5950d9b483337a7ac747cc7adbd56298c5e"
+    }
+  ],
+  "artifact_sha256": {
+    "test_headless.py": "56b0f9a1ca81d92183a942936b9d43b0c86ee2967dfb064185119961becce41b",
+    "test_headless_setup.py": "3fc482d92893f88d1c64e58d3be5257832910eda66fbcf8d9d3924b4cc2765cc",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "reader.py": "d7eef14ef7f8768f8d3f7b16d25a689c363d2bc022d16d25c8aed21667694421",
+    "run.ps1": "efa8b64a2e345648e369ceeff2406283d75aa8d24ba66f0c6f3c8a4faa244855",
+    "proof.json": "4bed56e2ff11672d421fa8ae232cec5d2c6c60c9572f45502556b3da4aba276a"
+  }
+}

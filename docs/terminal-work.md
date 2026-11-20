@@ -190,6 +190,12 @@ presentation while the session keeps running. Reattach to the same session
 for a fresh viewport. Check the conversation for output you missed and the
 original receipt for any unconfirmed input.
 
+The hosted Pi runtime keeps draining stdout and stderr with no viewer
+attached. It keeps up to 200 diagnostic chunks of 4,096 characters each
+from stderr. Nexus keeps up to 1 MiB of UTF-8 text per canonical result
+and sets `output_truncated` for longer output. Reattach to the live Pi
+session for a recent viewport of its native transcript.
+
 For a remote Pi session, use a Nexus CLI build that supports idle presentation
 renewal. The reader and editor renew their presentation while waiting for output
 or input. When the client stops exchanging messages with Nexus, its presentation
