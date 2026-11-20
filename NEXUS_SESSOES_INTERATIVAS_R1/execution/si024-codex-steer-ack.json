@@ -1,0 +1,144 @@
+{
+  "tasks": [
+    "SI-010",
+    "SI-024",
+    "SI-038"
+  ],
+  "baseline_nexus": {
+    "branch": "feature/v0.3.8",
+    "sha": "cb4fba2b50e5d5a04b20c42d4f54ff093f0687da",
+    "fetched_main": "8d77b50c00b417c86818d027aed7497fababac34"
+  },
+  "core": {
+    "branch": "feature/v0.0.16",
+    "prior": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+    "fixed": "2c034665508a9bca61d2b59b74964cef862fcf60",
+    "wheel_sha256": "04bfa3bbef7ff3c9083453c37b1a3837ff5d3460714c59c4318b9474e29b1d97",
+    "previous_wheel_sha256": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "connector": {
+    "branch": "feature/v0.0.15",
+    "prior": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+    "consumer_pin": "3a0f46a89ce808fc152d43b05014a7e0d1f7c743",
+    "code_wheel_sha256": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58"
+  },
+  "installed_nexus_wheel_sha256": "528459e8d7854e54147bf26d6ea1535aedaaadf7d380e8666380fc3526e5802a",
+  "platform": "Windows x64, Edge and ConPTY",
+  "native_owner": {
+    "version": "0.157.0",
+    "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+  },
+  "viewer": {
+    "version": "0.170.0",
+    "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "ack": {
+    "exact_turn": true,
+    "same_app_server": true
+  },
+  "native_journey": {
+    "connect_i_restored_read_only_view": true,
+    "explicit_writer_started_native_turn": true,
+    "browser_default_queue_receipt": true,
+    "one_reviewed_native_steer": true,
+    "browser_queue_started_separate_turn": true,
+    "native_thread_count": 1,
+    "native_turn_starts": 3,
+    "native_steers": 1,
+    "native_pid_preserved": true,
+    "loopback_response_requests": 4,
+    "external_provider_requests": 0,
+    "both_viewers_detached": true,
+    "canonical_close": true
+  },
+  "server_receipts_and_work": {
+    "operations": {
+      "runtime.open": 1,
+      "turn.submit": 3,
+      "turn.steer": 1,
+      "runtime.close": 1
+    },
+    "one_closed_session": true,
+    "attachments": {
+      "read": "DETACHED",
+      "write": "DETACHED"
+    },
+    "canonical_inputs": [
+      {
+        "surface": "native_terminal",
+        "status": "ACCEPTED_NATIVE",
+        "action": "turn.submit"
+      },
+      {
+        "surface": "web",
+        "status": "ACCEPTED_NATIVE",
+        "action": "turn.submit"
+      },
+      {
+        "surface": "nexus_cli",
+        "status": "ACCEPTED_NATIVE",
+        "action": "turn.steer"
+      }
+    ],
+    "result_rows": 3,
+    "integrity_check": "ok",
+    "foreign_key_violations": 0,
+    "connector_native_launches": 1
+  },
+  "tests": {
+    "installed_native_browser_journey": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "d3104e14f1523d630ecdb77ea865085aa098a060592b8fd6f2fdf7a6e1c6c960"
+    },
+    "installed_core": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "99be16a96d51eab3bd94e75682c0720011ad1b0f85a0c855a6f3dfce86a78104"
+    },
+    "installed_connector": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "9e337a6fa2014e4d840ce20afd93afb3b603aa56fb3ee2a53923dea443da26d0"
+    },
+    "installed_nexus": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "8af34586f97423351a81d1d1c3c776d3276e0290a7ffb1cbbbf6b8680f758ae9"
+    },
+    "core_source_full_with_one_fixture_timeout": {
+      "tests": 112,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 1,
+      "junit_sha256": "6d64a34753a35fad0cff16453942efd4454fa43722540a7e76cf503a00d06b4d"
+    },
+    "core_source_timing_case_rerun": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "567be65ad9ec01eef79455d52ed02a462566d3ad8e11788dc803f425301749ae"
+    },
+    "core_previous_wheel_timing_case": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "a4d54d434b5a75ab6498fe6f22d602d77a3b061617e17990eb754be67b96228a"
+    },
+    "lock_check": true,
+    "core_wheel_strict_twine": true,
+    "changed_core_module_bytes_match_wheel": true
+  },
+  "scope": "Real app-server and native viewer against deterministic loopback provider. No paid or external inference. Duplicated exact control, mismatch, timeout, and unqualified callback covered by Core protocol fixtures.",
+  "rollback": "Revert matching consumer pins and keep durable receipts. No migration or retrospective receipt promotion."
+}

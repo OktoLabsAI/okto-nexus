@@ -1,5 +1,11 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `2c034665508a9bca61d2b59b74964cef862fcf60`.
+The unpublished wheel SHA-256 is `04bfa3bbef7ff3c9083453c37b1a3837ff5d3460714c59c4318b9474e29b1d97`.
+For the qualified Codex 0.157.0 build, the Core records acceptance when the native acknowledgement names the reviewed turn.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `43a663efad7e0c4ca91970dc9b6a6e1432df88ae`.
 The unpublished wheel SHA-256 is `8468cd7c1778ce34d6b42841d5ec054dbe110ca0aba63bf16d382a59cd72c0ad`.
 Reviewed Claude reorientation checks the original operation before writing and waits for its confirmed interruption before sending the replacement.
