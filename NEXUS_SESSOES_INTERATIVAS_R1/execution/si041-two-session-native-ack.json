@@ -1,0 +1,179 @@
+{
+  "gate": "Two-session local demonstration with a lost acknowledgement at the Pi RPC boundary",
+  "tasks": [
+    "SI-038",
+    "SI-041"
+  ],
+  "status": "LOCAL_DEMONSTRATION_PASS",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "cb0b8379d5b0e99cdcc230d9cff6286e4e06deed",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 517
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "76c5be8c4f47f81f5fc2c78044ddbd9a19a32487",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 87
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a10e4d665f00d8a8c97f0d386b30f964c97602ff",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 66
+    },
+    "working_trees": "clean",
+    "upstream_drift": "0 ahead and 0 behind in all three repositories"
+  },
+  "baseline_observation": {
+    "nexus_wheel_sha256": "9a370143b05471ad62e096cd3d3b947d36215df02cca66f37d5678b3ed8f1e71",
+    "junit_sha256": "207dadf6dff0fe4c54f5c0c10cd81412611db985d804dcec4630d58160457d7f",
+    "native_receipt": "OUTCOME_UNKNOWN",
+    "presentation_after_containment": "SESSION_UNKNOWN"
+  },
+  "candidate_source": "Baseline product source plus the embedded dispatch change included with this evidence",
+  "installed_wheel_sha256": {
+    "nexus": "6af0ac634db551fbb3dd73d68271734bc06772d4ba38b69ba816cd1c1e85e37e",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9fbcd67ff0555e16b9bf0f8b6aef5603615351e372d15c062ea24039a6c0c74e"
+  },
+  "wheel_audit": {
+    "product_files": 809,
+    "checkout_match": true,
+    "line_endings_normalized_files": 354,
+    "changed_from_previous_wheel": {
+      "okto_nexus/adapters/outbound/sqlite/execution_receipts.py": "087e5aaba2948b256e47a9f9d434e11c49078c7ba8bc688ab5ecb1081728fd83",
+      "okto_nexus/bootstrap/embedded_dispatch.py": "b51d962a4c65accafd9c006081824b84559576ea25a087707f797ddb0b5e47da",
+      "okto_nexus/domain/home_operational_status.py": "9c5840c00e24adbd0a2efefcaa90f3d260c73facd9cdba89ee280a78b2ce0e7e"
+    },
+    "other_python_differences_ast_identical": true,
+    "wheel_sha256": "6af0ac634db551fbb3dd73d68271734bc06772d4ba38b69ba816cd1c1e85e37e"
+  },
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "pi": "0.87.1",
+    "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "browser": "Microsoft Edge 157.0.4341.60",
+    "driver": "Playwright CLI",
+    "terminal": "Windows ConPTY with installed Nexus read-only presentation handler",
+    "transport": "Local embedded Core owner, HTTP browser and presentation on loopback",
+    "provider": "Deterministic in-process Pi extension with external networking disabled"
+  },
+  "injection": "Observed and discarded one positive Pi RPC reply to Alpha prompt after native receipt; continued receiving native events",
+  "runtime": {
+    "same_agent_binding_workspace": true,
+    "distinct_process_owners": true,
+    "alpha_continued_through_beta_controls": true,
+    "exact_read_only_terminal_detaches": 2,
+    "beta_queue_retained_without_operation": true,
+    "beta_steer_boundary": "applied",
+    "beta_expired_operator_login_http_status": 401,
+    "beta_ordinary_queue_after_expiry": "BLOCKED_AUTH",
+    "beta_http_confirmation_loss_recovered_by_lookup": true,
+    "beta_original_turn": "CANCELLED",
+    "alpha_original_turn": "SUCCEEDED",
+    "alpha_native_ack_confirmed_then_discarded": 1,
+    "alpha_native_receipt_before_result": "OUTCOME_UNKNOWN",
+    "alpha_input_receipt_before_result": "DELIVERY_UNKNOWN",
+    "alpha_input_receipt_after_result": "ACCEPTED_NATIVE",
+    "alpha_explicit_recovery_kept_same_operation": true,
+    "alpha_unknown_retry_safe": false,
+    "beta_unsupported_command_http_status": 422,
+    "native_writes_before_canonical_close": [
+      "prompt",
+      "prompt",
+      "steer"
+    ],
+    "edge_requested": true,
+    "external_provider_calls": 0,
+    "canonical_closes": 2
+  },
+  "browser": {
+    "while_working": {
+      "checkpoint": "ALPHA_STILL_WORKING_AFTER_TERMINAL_DETACH",
+      "twoChoices": true,
+      "explicitSelection": true,
+      "productivePosts": 0
+    },
+    "after_result": {
+      "checkpoint": "ALPHA_RESULT_AND_EXACT_RETURN",
+      "alphaResultVisibleOnce": true,
+      "betaTranscriptIsolated": true,
+      "betaUnsupportedCommandExplained": true,
+      "sameSessionReturned": true,
+      "productivePosts": 0
+    }
+  },
+  "sqlite": {
+    "per_session_operations": {
+      "alpha": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 1
+      },
+      "beta": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.interrupt": 1,
+        "turn.steer": 1,
+        "turn.submit": 1
+      }
+    },
+    "alpha_only_detachments": 2,
+    "beta_queue_has_no_operation": true,
+    "alpha_result_in_original_session": true,
+    "alpha_operation_receipts": [
+      [
+        "OUTCOME_UNKNOWN",
+        1,
+        0
+      ],
+      [
+        "SUCCEEDED",
+        1,
+        0
+      ]
+    ],
+    "alpha_correlated_events": [
+      "agent_start",
+      "agent_settled"
+    ],
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "tests": {
+    "failed_baseline": 1,
+    "passed_installed_integration": 1,
+    "passed_installed_regressions": 12,
+    "regressions_junit_sha256": "eeb7848e03783fa86c4948e66c52b7a93bcb2c0a265d3c87f53b07e5d6350fea",
+    "installed_imports_verified": true,
+    "ruff_f_e9": "PASS",
+    "twine_strict": "PASS"
+  },
+  "cleanup": {
+    "canonical_session_closes": 2,
+    "remaining_listener_count": 0,
+    "remaining_fixture_process_count": 0
+  },
+  "fixture_directory": "D:/nxs-pi-ack-preserved-a324b1c9",
+  "artifact_sha256": {
+    "local_author_probe.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd",
+    "drive-demo.ps1": "d1bb6b242591a866de48a084820ed9198519af5650455797b5235910bd2d6df7",
+    "home-working.js": "6d1af3e50a2771996d74b168c092e9b2ece9fc7f7fce7dcdb05531de37ae5363",
+    "home-result.js": "00f7554861deb49949fdc488d274327be0e7bd785f6d2d638de4e079644b2230",
+    "focus.xml": "2815787597164c9fa2cc8cf264c6114a479aa102b6ee19a0829e6b00f33d9401",
+    "proof.json": "3beff401795286e12cdf5d96c8b9ac900b4027373dd964989548734e67424af6",
+    "browser-working.json": "4091c9cb00326188dc9259c47b1f41565a4ba6401013aeb35379d51ee94182af",
+    "browser-returned.json": "8dd91c25c1aeea3f3ea84b0ad034fa313f2fd2b8004af80a45cdbf67c39f843e",
+    "audit.py": "64b9566442b988c562e99abc4af348695f023e0ad273af88f359d7fc9c5a0303",
+    "audit.json": "596d4987aaf7d888f288616d74cef60fbbbab6117d7a4974f04826c169734562"
+  },
+  "limitations": [
+    "The acknowledgement fault was injected after the installed Pi emitted its reply.",
+    "The installed harness used deterministic responses with external networking disabled.",
+    "Consent-based provider campaigns and distinct-host qualification remain open."
+  ],
+  "migration": "none"
+}

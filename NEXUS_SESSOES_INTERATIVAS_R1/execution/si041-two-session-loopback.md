@@ -8,4 +8,4 @@ No Edge, o seletor da Home exigiu uma escolha entre as duas sessões. A primeira
 
 Passaram a integração com Edge, Windows ConPTY e Pi 0.87.1 e 18 regressões de autorização, fila, recibos e anexação com os wheels instalados. A fixture usou respostas determinísticas, um relógio controlado só para a expiração do login e zero chamadas a provedores externos. As rodadas de preparação corrigiram a espera pela projeção do recibo, o tratamento do cancelamento pelo provedor simulado e a captura do status HTTP.
 
-Este marco documenta a demonstração em loopback. A matriz ainda exige qualificação de campanhas consentidas, hosts distintos e recuperação de uma escrita nativa de resultado incerto. O registro dispensa migração e pode ser revertido pelo commit.
+Este marco documenta a demonstração em loopback, com perda da confirmação HTTP. Um ensaio posterior verificou também a perda da confirmação nativa do Pi após a escrita. A matriz ainda exige qualificação de campanhas consentidas e hosts distintos. O registro dispensa migração e pode ser revertido pelo commit. [Ensaio da confirmação nativa](si041-two-session-native-ack.md)

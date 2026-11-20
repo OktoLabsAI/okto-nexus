@@ -906,7 +906,8 @@ class EmbeddedDispatchOwner:
                         raise
             elif action == "turn.submit":
                 receipt = await self._command_receipt(frame, lambda: runtime.submit(
-                    TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context))
+                    TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context),
+                    reviewed_pi_prompt=self.host.has_hosted_pi_renderer(frame['server_id'], frame['executor_id'], key))
             elif action in ("turn.steer","turn.interrupt"):
                 receipt = await self._command_receipt(frame, lambda: runtime.control(control, context),
                     reviewed_claude=control.expected_claude_operation_id is not None)
@@ -945,7 +946,7 @@ class EmbeddedDispatchOwner:
                 self.sessions.pop(key, None)
                 await self.saved_contexts.reconcile(frame['operation_id'])
 
-    async def _command_receipt(self, frame, invoke, *, reviewed_claude=False):
+    async def _command_receipt(self, frame, invoke, *, reviewed_claude=False, reviewed_pi_prompt=False):
         try:
             return await invoke()
         except OperationCapacityDeferred:
@@ -959,9 +960,10 @@ class EmbeddedDispatchOwner:
             refused = isinstance(error, CoreError) and error.retry_safe and not error.possible_effect
             terminal_prompt = (frame['action'] == 'turn.submit' and isinstance(error, CoreError)
                                and error.stage == 'claude_terminal_submission')
+            reviewed_write = reviewed_claude or reviewed_pi_prompt
             uncertain = ((isinstance(error, CoreError) and error.code == 'OUTCOME_UNKNOWN'
-                          and error.possible_effect and (reviewed_claude or terminal_prompt))
-                         or (reviewed_claude and isinstance(error, NativeAdapterError)
+                          and error.possible_effect and (reviewed_write or terminal_prompt))
+                         or (reviewed_write and isinstance(error, NativeAdapterError)
                              and error.details.get('not_sent') is not True))
             if not (refused or uncertain):
                 raise
@@ -973,8 +975,8 @@ class EmbeddedDispatchOwner:
             if (refused and receipt.stage == 'FAILED' and not receipt.possible_effect
                     and receipt.retry_safe and receipt.error_code == error.code):
                 return receipt
-            # Retain the exact receipt and reader when Claude may have seen the
-            # prompt or interruption. Uncertainty does not authorize another send.
+            # Keep the native owner and its exact receipt so that a later
+            # terminal event can resolve delivery without another send.
             if (uncertain and receipt.possible_effect and not receipt.retry_safe
                     and receipt.stage in {'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED', 'CANCELLED'}):
                 return receipt

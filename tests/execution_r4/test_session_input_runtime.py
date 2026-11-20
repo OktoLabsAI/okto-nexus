@@ -68,6 +68,42 @@ def interactive_runtime(monkeypatch, request):
     return connect_local(request.getfixturevalue('local_setup'))
 
 
+@pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
+def test_embedded_pi_recovers_exact_turn_after_lost_native_reply(interactive_runtime, local_setup, monkeypatch):
+    from nexus_connector_core.native.adapter_types import ErrorCode, NativeAdapterError
+    from test_canonical_result_publication import emit
+
+    setup, binding, peer = interactive_runtime
+    _, app, client, headers, *_ = setup
+    opened = admit(setup, binding, 'opened-pi', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    exact = (scope['server_id'], scope['executor_id'], scope['session_id'])
+    owner = app.state.embedded_dispatch_owner
+    monkeypatch.setattr(owner.host, 'has_hosted_pi_renderer', lambda *key: key == exact)
+    native = peer.native
+    send = native.send
+
+    async def lost_reply(*args, **kwargs):
+        await send(*args, **kwargs)
+        raise NativeAdapterError(ErrorCode.INTERNAL_ERROR, 'Fixture lost the native prompt reply.', {'verb': 'prompt'})
+
+    monkeypatch.setattr(native, 'send', lost_reply)
+    turn = admit(setup, binding, 'pi-lost-reply', 'turn.submit', session_id=exact[-1], text='One native prompt.')
+    uncertain = wait_receipt(setup, turn, stages=('OUTCOME_UNKNOWN',))
+    assert uncertain['possible_effect'] and not uncertain['retry_safe']
+    assert not native.stopped
+    assert not owner.sessions[exact[-1]].get('recovering')
+    submission = {key: turn[key] for key in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')}
+    replay = client.post('/v1/runtime/operations', headers=headers['subject'], json=submission)
+    assert replay.status_code == 200 and replay.json()['operation_id'] == turn['operation_id'], replay.text
+    emit(setup, peer, turn, 'The original Pi result.')
+    assert native.sent == [('send_turn', turn['operation_id'])]
+    assert not native.stopped
+    closed = admit(setup, binding, 'closed-pi', 'runtime.close', session_id=exact[-1])
+    wait_receipt(setup, closed, stages=('SUCCEEDED',))
+
+
 @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
 def test_embedded_dispatch_publishes_the_exact_uncertain_claude_terminal_receipt(
         interactive_runtime, local_setup, monkeypatch):
