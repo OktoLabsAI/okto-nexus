@@ -1168,7 +1168,9 @@
         "execution/si037-codex-viewer-process-expiry.md",
         "execution/si037-codex-viewer-process-expiry.json",
         "execution/si037-posix-pty-hangup.md",
-        "execution/si037-posix-pty-hangup.json"
+        "execution/si037-posix-pty-hangup.json",
+        "execution/si037-codex-transport-expiry.md",
+        "execution/si037-codex-transport-expiry.json"
       ]
     },
     {
@@ -1294,7 +1296,9 @@
         "execution/si034-native-attachment-ticket-replay.md",
         "execution/si034-native-attachment-ticket-replay.json",
         "execution/si037-codex-viewer-process-expiry.md",
-        "execution/si037-codex-viewer-process-expiry.json"
+        "execution/si037-codex-viewer-process-expiry.json",
+        "execution/si037-codex-transport-expiry.md",
+        "execution/si037-codex-transport-expiry.json"
       ]
     },
     {
@@ -1900,7 +1904,9 @@
         "execution/si037-codex-viewer-process-expiry.md",
         "execution/si037-codex-viewer-process-expiry.json",
         "execution/si037-posix-pty-hangup.md",
-        "execution/si037-posix-pty-hangup.json"
+        "execution/si037-posix-pty-hangup.json",
+        "execution/si037-codex-transport-expiry.md",
+        "execution/si037-codex-transport-expiry.json"
       ]
     },
     {
@@ -2207,7 +2213,9 @@
         "execution/si037-codex-viewer-process-expiry.md",
         "execution/si037-codex-viewer-process-expiry.json",
         "execution/si037-posix-pty-hangup.md",
-        "execution/si037-posix-pty-hangup.json"
+        "execution/si037-posix-pty-hangup.json",
+        "execution/si037-codex-transport-expiry.md",
+        "execution/si037-codex-transport-expiry.json"
       ]
     },
     {
@@ -4673,7 +4681,9 @@
         "execution/si022-codex-silent-presenter.md",
         "execution/si022-codex-silent-presenter.json",
         "execution/si022-pi-silent-presenter.md",
-        "execution/si022-pi-silent-presenter.json"
+        "execution/si022-pi-silent-presenter.json",
+        "execution/si037-codex-transport-expiry.md",
+        "execution/si037-codex-transport-expiry.json"
       ]
     },
     {
@@ -5140,7 +5150,7 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si032-codex-abrupt-viewer-exit.md",
         "execution/si032-codex-abrupt-viewer-exit.json",
@@ -5149,7 +5159,9 @@
         "execution/si022-pi-silent-presenter.md",
         "execution/si022-pi-silent-presenter.json",
         "execution/si037-codex-viewer-process-expiry.md",
-        "execution/si037-codex-viewer-process-expiry.json"
+        "execution/si037-codex-viewer-process-expiry.json",
+        "execution/si037-codex-transport-expiry.md",
+        "execution/si037-codex-transport-expiry.json"
       ]
     },
     {

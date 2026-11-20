@@ -1,0 +1,120 @@
+{
+  "scenario": "SI-T-H09",
+  "qualification_scope": "Real Windows ConPTY with Codex 0.170.0, real Connector-hosted Codex 0.157.0 engine, WSS terminal leg and independent broker WebSocket on loopback",
+  "repositories_before_change": {
+    "Nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "2ed1c169f501abcbc067838046718d42c028f306",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "behind_ahead": [
+        0,
+        535
+      ]
+    },
+    "Connector": {
+      "branch": "feature/v0.0.15",
+      "head": "6f8e8a24f3b86191b1ffd1ed3555bf1e73335449",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "behind_ahead": [
+        0,
+        88
+      ]
+    },
+    "Core": {
+      "branch": "feature/v0.0.16",
+      "head": "020a20cda7023ba996f45d84eb8867ee620f79a5",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "behind_ahead": [
+        0,
+        67
+      ]
+    }
+  },
+  "working_trees_clean": true,
+  "wheel_sha256": {
+    "nexus": "6d5e418148549506e8e4e6a6025d880c0c1e5381da53a7f253fee950fd7fa290",
+    "connector": "42edbbb83ef3de8eb49c139c0b8b60704799e4f9d609364389d45138d8a63b58",
+    "core": "9a76277d681b394f56980492002bda5f95b35dd24c325c446c4442872140de0f"
+  },
+  "fixture": "D:\\nxs-h09-two-sockets-5cb2903e-final",
+  "transport": {
+    "terminal_leg": "WSS with disposable TLS CA",
+    "broker_leg": "WS inside the same loopback host",
+    "clock_controlled": "Only presentation broker time advances after a successful ping on the surviving socket"
+  },
+  "proof": {
+    "first_presenter_exit_code": 222,
+    "frontend_disconnect_code": 1005,
+    "upstream_expiry_close_code": 4409,
+    "upstream_ping_after_frontend_death": true,
+    "application_frames_after_death": 0,
+    "writer_expired_with_upstream_transport_open": true,
+    "native_engine_birth_identity_preserved": true,
+    "productive_authority_preserved": true,
+    "queued_input_delivered_once": true,
+    "replacement_writer_without_takeover": true,
+    "canonical_results_on_same_native_thread_without_viewers": true,
+    "tls_transport_for_both_presenters": true,
+    "native_viewer_scoped_to_disposable_fixture": true,
+    "durable_attachments_retired": 2,
+    "canonical_close": "SUCCEEDED",
+    "controlled_broker_clock": true,
+    "external_provider_requests": 0,
+    "transient_presentation_rechecks": 0,
+    "read_only_preflight_rechecks": 0,
+    "presentation_start_attempts": 1
+  },
+  "sqlite": {
+    "observations_detached": 2,
+    "canonical_operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 2
+    },
+    "new_session_inputs": 1,
+    "new_session_controls": 0,
+    "successful_results": 2,
+    "foreign_key_violations": 0,
+    "integrity": "ok"
+  },
+  "cleanup": {
+    "listener_closed": true,
+    "tls_private_key_removed": true,
+    "engine_process_gone_after_canonical_close": true
+  },
+  "tests": {
+    "installed_native_integration": {
+      "passed": 1,
+      "sha256": "3e71b14cb1ecb2c68fd0e143f9e873fcf13e1ed2be7b7285b601df58764346a5"
+    },
+    "installed_silent_presenter_and_queue_regressions": {
+      "passed": 14,
+      "sha256": "af6752839c5dacce1792dda94f60daac94d335dd4d6cfce8aaa009c643f198f5"
+    }
+  },
+  "fixture_revisions": [
+    {
+      "issue": "Windows architecture discovery in the isolated child failed to fall back without PROCESSOR_ARCHITECTURE.",
+      "junit_sha256": "4adfc2c13d809707b01d59f42c1294fd4eff41a273d43aa845b484c69ffb3856"
+    },
+    {
+      "issue": "The first exact writer review refused current presentation readiness. Added a bounded read-only preflight.",
+      "junit_sha256": "cc38ceeb63bd0e0124136caacaaa184e4591a9f2cd179551687e599772e2de7f"
+    },
+    {
+      "issue": "The disconnected viewer leg reported reserved status 1005 without a close reason. The fixture incorrectly expected only 1006.",
+      "junit_sha256": "ad3ff2bfecfb38bfaed424e35ecc819bef412eafbcf9e2764c972081b64205a8"
+    }
+  ],
+  "artifacts_sha256": {
+    "test_viewer_lease.py": "467c67d36f7c5669c3df7f94d0eba6a188700866d1324ba8ead5e99b52ad5f20",
+    "presenter_transport.py": "b53e2561b9773387f81083a596bfb07e9ea07217c6ab13ae9267910f4536e8e4",
+    "test_silent_remote_codex.py": "b6fd600073b23d7af9dbad51523acffa0839b22b628a8aeda29e81fe6fda4a15",
+    "remote_native_project.py": "52c1ff8d2a09de6793110fd306e2443376090ef2deb227b7bfdd783397da2719",
+    "tls_probe.py": "40096f1c54ae91972650b65ee5ef0b8d3754a8cfa770644d174ab1aae43f1a14"
+  },
+  "observations_sha256": {
+    "proof.json": "7c405a8552a25fe73e53b9c1cad5e85cc5d0ee6d98f7937069c16551fac601e0",
+    "attach_writer.py": "5df4dad6aaed23ada34c393992cc4e36f744ccb444d61cdd3839a972ed2f7e8e"
+  }
+}

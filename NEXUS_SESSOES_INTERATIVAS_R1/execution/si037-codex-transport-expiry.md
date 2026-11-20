@@ -1,0 +1,9 @@
+# SI-T-H09 — Expiração da apresentação após encerrar o cliente
+
+Os wheels instalados abriram o app-server Codex 0.157.0 no Connector e o visualizador 0.170.0 em Windows ConPTY. O teste conectou o terminal por WSS a um relay descartável. Um segundo WebSocket manteve a comunicação do relay com o broker em loopback. A resposta do modelo veio de um simulador local e ficou retida durante a observação. [Resultados, versões e hashes](si037-codex-transport-expiry.json)
+
+1. A fixture encerrou o processo de apresentação pelo handle aberto ao criá-lo. Após a perda desse cliente, o segundo socket recebeu um pong do broker. A escrita permaneceu ocupada até o prazo de apresentação, sem tráfego de aplicação nesse intervalo.
+2. Ao avançar apenas o relógio do broker para além do prazo, o Nexus encerrou o socket sobrevivente com código 4409 e liberou a escrita. O Connector, o processo da engine, a thread, a concessão produtiva e o recibo da fila permaneceram os mesmos.
+3. Outro visualizador abriu a escrita sem transferência e desanexou. Com os dois visualizadores fora, o Nexus registrou os dois resultados e o recibo original em `ACCEPTED_NATIVE`. Houve uma única entrega para cada turno. O fechamento canônico encerrou o app-server, e a auditoria SQLite confirmou dois anexos desanexados e nenhum controle de interrupção ou de reorientação.
+
+Passaram a integração instalada e 14 regressões de expiração e fila. As primeiras rodadas ajustaram o metadado de arquitetura do processo descartável, acrescentaram uma checagem inicial de disponibilidade e aceitaram o código 1005 observado no encerramento do cliente. O ensaio final verificou a expiração em tempo controlado na mesma máquina. O cenário G08 usa essa evidência controlada e segue pendente de campanha real. A reversão deste commit dispensa migração.
