@@ -18,7 +18,8 @@
     "capacity_and_queue_cases": 25,
     "passed": 29,
     "failed": 0,
-    "junit_sha256": "9db775453a641c7be32c6ee5890e37a52f348f03fb875148d73614dc7dc06857"
+    "junit_sha256": "4abf54db08c90a18ad0e0860fd7e0611b7fb78e3a3c4420b115b2088dfb9fcc4",
+    "import_scope": "Verified isolated site-packages imports for Nexus, Connector and Core. Pytest checkout pythonpath override disabled."
   },
   "lint": {
     "new_diagnostics": 0,

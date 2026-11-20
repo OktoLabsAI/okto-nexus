@@ -1,0 +1,62 @@
+{
+  "pytest_checkout_pythonpath_disabled": true,
+  "loaded_packages_verified_in_isolated_site_packages": [
+    "okto_nexus",
+    "okto_nexus_connector",
+    "nexus_connector_core"
+  ],
+  "pytest_case_coverage_shared_between_reports": {
+    "SI-T-I03 rollback": 29,
+    "SI-T-I01 migration": 20,
+    "SI-T-I05 installed journey regressions": 61,
+    "SI-T-I06 exact build qualification": 16,
+    "SI-040 terminal guide": 69,
+    "SI-T-G15 dispatch and saved context": 48
+  },
+  "unique_tests_executed": 170,
+  "junit_reports": {
+    "rollback-regressions-from-wheels.xml": {
+      "passed_cases": 29,
+      "by_module": {
+        "test_capacity_attempts": 12,
+        "test_queue_storage": 13,
+        "test_session_input_runtime": 4
+      },
+      "sha256": "4abf54db08c90a18ad0e0860fd7e0611b7fb78e3a3c4420b115b2088dfb9fcc4"
+    },
+    "earlier-wheel-regressions.xml": {
+      "passed_cases": 100,
+      "by_module": {
+        "test_ci_installed_partitions": 2,
+        "test_contract": 18,
+        "test_runtime_contracts": 11,
+        "test_session_cli": 30,
+        "test_terminal_connect": 39
+      },
+      "sha256": "03ad8ec4cfd480a3821b56d39b44931078b248528335eb594d1b6466c5066b93"
+    },
+    "migration-transfer-wheels.xml": {
+      "passed_cases": 25,
+      "by_module": {
+        "test_dispatch_pump": 12,
+        "test_migrations": 7,
+        "test_session_input_runtime": 6
+      },
+      "sha256": "047fc31ef0303daedbb917f73ff91867c701f273c471d2ef70b812ade5925484"
+    },
+    "qualification-wheels.xml": {
+      "passed_cases": 16,
+      "by_module": {
+        "test_codex_0159_qualification": 14,
+        "test_codex_alpha_qualification": 2
+      },
+      "sha256": "9595db97fc0061ccb61fdac801ff45c41f0c6d8a4b58ee0254e014ddbd343db9"
+    }
+  },
+  "native_browser_fixture_collections_also_loaded_wheels": [
+    "SI-T-I05",
+    "SI-T-I03"
+  ],
+  "package_evidence": "si039-installed-journey.json",
+  "external_provider_campaign": "not_run"
+}

@@ -14,10 +14,11 @@ opened no successor and neither input was replayed.
 
 All 29 installed tests passed, including four restart cases and 25 queue
 and capacity cases. In the isolated environment, run the regression with
-the installed wheels and the tests from the worktree.
+the installed wheels and the tests from the worktree. Clear the pytest
+checkout path so Nexus loads from the wheel.
 
 ```sh
-python -m pytest -q tests/execution_r4/test_session_input_runtime.py::test_restart_reconciles_queued_input_receipts_without_resending tests/session_interaction/test_capacity_attempts.py tests/session_interaction/test_queue_storage.py
+python -m pytest -o pythonpath= -q tests/execution_r4/test_session_input_runtime.py::test_restart_reconciles_queued_input_receipts_without_resending tests/session_interaction/test_capacity_attempts.py tests/session_interaction/test_queue_storage.py
 ```
 
 The document package validator passed. Ruff reported
