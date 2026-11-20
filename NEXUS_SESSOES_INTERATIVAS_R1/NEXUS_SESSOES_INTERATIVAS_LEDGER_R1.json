@@ -2015,7 +2015,9 @@
       "status": "TODO",
       "evidence": [
         "execution/si038-home-terminal-home-loopback.md",
-        "execution/si038-home-terminal-home-loopback.json"
+        "execution/si038-home-terminal-home-loopback.json",
+        "execution/si038-terminal-home-queue-steer-loopback.md",
+        "execution/si038-terminal-home-queue-steer-loopback.json"
       ]
     },
     {
@@ -2156,7 +2158,9 @@
         "execution/si039-wheel-regression-audit.md",
         "execution/si039-wheel-regression-audit.json",
         "execution/si038-home-terminal-home-loopback.md",
-        "execution/si038-home-terminal-home-loopback.json"
+        "execution/si038-home-terminal-home-loopback.json",
+        "execution/si038-terminal-home-queue-steer-loopback.md",
+        "execution/si038-terminal-home-queue-steer-loopback.json"
       ]
     }
   ],
@@ -5122,7 +5126,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si030-terminal-session-controls.md",
-        "execution/si030-terminal-session-controls.json"
+        "execution/si030-terminal-session-controls.json",
+        "execution/si038-terminal-home-queue-steer-loopback.md",
+        "execution/si038-terminal-home-queue-steer-loopback.json"
       ]
     },
     {

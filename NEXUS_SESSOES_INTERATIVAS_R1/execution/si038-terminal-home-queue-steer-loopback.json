@@ -1,0 +1,111 @@
+{
+  "scenario": "SI-T-I08",
+  "scope": {
+    "installed_windows_integration": "PASS",
+    "real_provider_campaign": "not_run",
+    "steer_consumption_in_product_receipt": "unconfirmed"
+  },
+  "source": {
+    "nexus": "3185466148fe7d5510989e48d7bf897f7e2a2e76",
+    "connector": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+    "core": "454c9700e0def181c81fe633857a25b48e125512"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "transport": "R4 over loopback",
+    "platform": "Windows x64 with ConPTY and Edge",
+    "app_server_version": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer_version": "Codex 0.170.0",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "provider": "deterministic Responses SSE on loopback, no provider credentials",
+    "fixture_reasoning_effort": "medium"
+  },
+  "native_observations": {
+    "connect_i_restored_read_only_view": true,
+    "explicit_writer_started_native_turn": true,
+    "browser_default_queue_receipt": true,
+    "one_reviewed_native_steer": true,
+    "browser_queue_started_separate_turn": true,
+    "native_thread_count": 1,
+    "native_turn_starts": 3,
+    "native_steers": 1,
+    "native_pid_preserved": true,
+    "loopback_response_requests": 4,
+    "external_provider_requests": 0,
+    "both_viewers_detached": true,
+    "canonical_close": true
+  },
+  "durable_observations": {
+    "operations": {
+      "runtime.open": 1,
+      "turn.submit": 3,
+      "turn.steer": 1,
+      "runtime.close": 1
+    },
+    "one_closed_session": true,
+    "attachments": {
+      "read": "DETACHED",
+      "write": "DETACHED"
+    },
+    "canonical_inputs": [
+      {
+        "surface": "native_terminal",
+        "status": "ACCEPTED_NATIVE",
+        "action": "turn.submit"
+      },
+      {
+        "surface": "web",
+        "status": "ACCEPTED_NATIVE",
+        "action": "turn.submit"
+      },
+      {
+        "surface": "nexus_cli",
+        "status": "DISPATCHING",
+        "action": "turn.steer"
+      }
+    ],
+    "result_rows": 3,
+    "integrity_check": "ok",
+    "foreign_key_violations": 0,
+    "connector_native_launches": 1
+  },
+  "browser_checkpoints": {
+    "queue": {
+      "checkpoint": "HOME_QUEUED_NEXT_TURN",
+      "log_sha256": "989454c24610d1c2ddfc3e8fa770d0c7b9a59af763b6f6f441c3edd6b502b179"
+    },
+    "after-detach": {
+      "checkpoint": "SAME_CONVERSATION_AND_UNSENT_QUEUE_AFTER_DETACH",
+      "log_sha256": "2555ae6ec6dc75ba38bdd3de02dc04949c9c873bebdbcd78f0f9ac743a451996"
+    },
+    "result": {
+      "checkpoint": "TERMINAL_AND_QUEUED_WORK_PRESENT_ONCE",
+      "log_sha256": "c829e3ceb97d2380e11e8dbefc5c302f635c210e46358236a0a225ad16e8f46d"
+    }
+  },
+  "verification": {
+    "wheel_imports_verified": true,
+    "served_assets_matched_installed_wheel": true,
+    "installed_native_browser_cases": 1,
+    "installed_native_junit_sha256": "ee92910453cc8bf0c58011d531787b38d5051f492911761038aa8628323da582",
+    "installed_cli_and_remote_regressions": 88,
+    "installed_regression_junit_sha256": "b5f8f057a2368993425a017cc16dc5f7c13af20ff400094907b47ea9357b0600",
+    "fixture_directory": "D:/nxs-termhome-37944291/confirmed",
+    "fixture_sha256": {
+      "run.ps1": "2f36218b8185bfe942991f7e134189a49dd6f47f233e61478840345505d8c9f2",
+      "drive.ps1": "7d51078b086f6f5457369200e81f66d9d3568d8fc497699bc274b9c6faa5905f",
+      "test_terminal_home.py": "4e9887ad62a82d8bdbe3423db7b118f71898d6099be8025841f5401fd18976bf",
+      "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+      "sitecustomize.py": "c8d7cc2f883f1e68c5127ec9783afcd73a5c6985ac37434fc76e9c4f999600cf",
+      "queue.js": "57a836116463a5e4f5090bc45fbbd316606f15c752812543a78cb77f11c54ad7",
+      "after-detach.js": "e476cfe4b4bf1001c989c8e48cdd3f1f879f507fcbdc685c88be940bf56044c6",
+      "result.js": "0e3b673bbf2abdad71ab1a6c2e8686f81ed9c0a2ad084d787d5213d49c404df8",
+      "prove_durability.py": "047e2d0f2feaea71919e11d86a016b985a7322cd976c26761a73e3d54557cb62"
+    }
+  }
+}
