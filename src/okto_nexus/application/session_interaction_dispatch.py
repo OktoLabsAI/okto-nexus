@@ -46,12 +46,19 @@ def prepare_input_capacity(uow, *, factory, access, resolve_human, current_capab
     if prior is None and not resolve_human(head.author.authority_ref):
         block_unstaged_input_authority(uow, scope=scope, input_id=head.input_id, input_revision=head.input_revision)
         return None
+    leases = SqliteExecutionLeaseRepository()
+    source = leases.source_grant(uow, head.source_grant[0]) if head.source_grant is not None else None
+    # The recorded grant can expire with its lease. A stale lease alone is
+    # retryable; expiration of the grant recorded on this input is definitive.
+    if source is not None and not source['no_expiry'] and stamp(source['expires_at']) <= now:
+        block_unstaged_input_authority(uow, scope=scope, input_id=head.input_id, input_revision=head.input_revision)
+        return None
     grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                            author=head.author, resolve_human=resolve_human)
     if grant != head.source_grant or current_capability_revision(uow, scope) != head.capability_revision:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The input authority or capability changed.', {})
     key = asdict(scope.session)
-    lease = SqliteExecutionLeaseRepository().effective(uow, key)
+    lease = leases.effective(uow, key)
     channel = host.channel
     if ((channel.server_id, channel.executor_id) != (scope.session.server_id, scope.session.executor_id)
             or not host.boot_id or channel.connection_id != lease['connection_id']

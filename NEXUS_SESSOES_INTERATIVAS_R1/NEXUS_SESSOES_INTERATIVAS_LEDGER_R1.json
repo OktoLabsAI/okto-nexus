@@ -524,7 +524,9 @@
         "execution/si023-retired-session-queue.md",
         "execution/si023-retired-session-queue.json",
         "execution/si035-input-restart-receipts.md",
-        "execution/si035-input-restart-receipts.json"
+        "execution/si035-input-restart-receipts.json",
+        "execution/si008-recorded-grant-expiration.md",
+        "execution/si008-recorded-grant-expiration.json"
       ]
     },
     {
@@ -2390,8 +2392,11 @@
         "SI-R16",
         "SI-R19"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si008-recorded-grant-expiration.md",
+        "execution/si008-recorded-grant-expiration.json"
+      ]
     },
     {
       "id": "SI-T-A09",

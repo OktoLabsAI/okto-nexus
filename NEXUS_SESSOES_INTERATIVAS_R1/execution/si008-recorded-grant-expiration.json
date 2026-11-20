@@ -1,0 +1,75 @@
+{
+  "scenario": "SI-T-A08",
+  "status": "PASS",
+  "source_baseline": "757391e3ee5c67e8a12a987c759d1a7b24a6eeef",
+  "installed_wheels": {
+    "before_nexus": "489dfb0ee4c718026f0f0d1e2fa185eb5f406698652592e6c21a80146fd01031",
+    "nexus": "834bca4b77373b72fe1ede5788a8ec721d44976315624a74a53ddd97ad549dfb",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "source_archive_sha256": "fc95b2224b82c8cce6bddd624b2e95b9a0414a25be558890e3666f0f6f099368",
+  "environment": {
+    "platform": "Windows x64",
+    "engine": "Pi 0.87.1",
+    "engine_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "owner": "Installed embedded Nexus execution host on loopback",
+    "provider": "Deterministic fixture with external networking disabled in the Pi process"
+  },
+  "integration": {
+    "engine": "Pi 0.87.1",
+    "initial_http": 202,
+    "initial_status": "QUEUED",
+    "blocked_receipt_http": 200,
+    "final_status": "BLOCKED_AUTH",
+    "same_receipt": true,
+    "prior_capacity_attempts": 0,
+    "new_capacity_attempts": 0,
+    "new_native_turns": 0,
+    "original_native_turns": 1,
+    "original_result_preserved": true,
+    "sessions": 1,
+    "system_grant_or_lease_changes_during_fault": 0,
+    "external_provider_calls": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "durable_audit": {
+    "exact_session_closed": true,
+    "operations": {
+      "runtime.close": 1,
+      "runtime.open": 1,
+      "turn.submit": 1
+    },
+    "original_results": 1,
+    "input_status": "BLOCKED_AUTH",
+    "input_revision": 1,
+    "input_still_references_original_grant": true,
+    "new_capacity_attempts": 0,
+    "physical_integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "verification": {
+    "installed_regression_cases": 9,
+    "real_pi_http_cases": 1,
+    "ruff": "PASS",
+    "pip_check": "PASS",
+    "strict_twine": "PASS",
+    "artifact_directory": "D:/nxs-grant-expiry-55069576",
+    "baseline_regression_junit_sha256": "64771920325afddcb9859a390fb20574f538df240758763baf17b14831e08fe6",
+    "fixed_regressions_junit_sha256": "e433ecfecd94f0f22211c82690df7912ee0159d1c3c68c0ba30f65f9bbccfef7",
+    "native_fixture_directory": "D:/nxs-local-grant-expiry-35531944",
+    "native_artifact_sha256": {
+      "run.ps1": "f2d0a0909c2cec4cf72e903e692f62fced2898fb94470b25d052e7d851da688f",
+      "test_author.py": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc",
+      "local_author_probe.py": "02649f945ac4dad824b39bc577d6d2a8b83a60f1daf07544b0e8ef61b9d748aa",
+      "audit_durable.py": "1fa8081c9506a36c8c6ad703a3fc56a5f96991ca97ad535c1e20fb29b46346b6",
+      "focus.xml": "15c435750f27be48b9ea605fca145d58f66fa8e104365bdd4e041693584bffb5",
+      "proof.json": "d25c0557aadb347035c9b69dcfd7a9e42ca67a2c53c639a2364ae1b5d87d6ec6",
+      "audit.json": "698403c8fdc11498583854065e8e04562d9e012ac481956c2c69396caf636807"
+    }
+  },
+  "limits": [
+    "The test backdated the stored exact grant and lease in disposable SQLite rather than advancing the host clock. The fixture restored these timestamps only after the refusal was observed, to close canonically.",
+    "Discovery in this local fixture supplies the single measured Pi candidate. This proof does not qualify remote or other harnesses."
+  ]
+}

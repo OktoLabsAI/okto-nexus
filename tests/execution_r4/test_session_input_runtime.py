@@ -1041,6 +1041,69 @@ def test_queue_limit_preserves_accepted_inputs_and_expiration_frees_capacity(int
     client.cookies.clear()
 
 
+def test_unstaged_input_blocks_when_its_recorded_grant_expires(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'grant-expiry-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    original = opened['scope']
+    generation = original['session_owner_generation']
+    exact = {key: original[key] for key in ('server_id', 'executor_id', 'session_id', 'binding_id',
+                                            'workspace_id', 'workspace_binding_id', 'agent_id')}
+    session = exact['session_id']
+    scope = InputScope(SessionKey(exact['server_id'], exact['executor_id'], session),
+        SessionOwnerGeneration(generation), exact['binding_id'], exact['workspace_id'],
+        exact['workspace_binding_id'], exact['agent_id'])
+    active = admit(setup, binding, 'grant-expiry-original', 'turn.submit', session_id=session, text='Original turn')
+    wait_receipt(setup, active)
+    assert native.native.sent == [('send_turn', active['operation_id'])]
+    route = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('grant-expiry', 'synthetic-grant-expiry-password', local=True)
+    client.cookies.set('nexus_operator_session', auth.login('grant-expiry', 'synthetic-grant-expiry-password'))
+    cap = client.get(route + '/interaction', params=query).json()['next_turn']
+    assert cap['supported']
+    queued = client.post(route + '/inputs', headers=ui, json={
+        'scope': exact, 'expected_session_generation': generation, 'capability_revision': cap['capability_revision'],
+        'client_intent_id': 'grant-expires-before-dispatch', 'content': [{'type': 'text', 'text': 'Keep this receipt'}],
+    })
+    assert queued.status_code == 202
+    receipt = queued.json()
+    factory = deps.connection_factory
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        grant, = conn.execute('SELECT source_grant_id FROM session_interaction_inputs WHERE input_id=?',
+                              (receipt['input_id'],)).fetchone()
+        assert not conn.execute('SELECT 1 FROM session_interaction_capacity_attempts').fetchone()
+        cutoff = '2000-01-01T00:00:00+00:00'
+        conn.execute('UPDATE runtime_execution_grants SET expires_at=? WHERE grant_id=?', (cutoff, grant))
+        conn.execute('UPDATE execution_leases SET valid_until_server=? WHERE session_id=?', (cutoff, session))
+        leases = conn.execute('SELECT lease_id, lease_serial, valid_until_server FROM execution_leases').fetchall()
+        grants = conn.execute('SELECT grant_id, revision, used_executions FROM runtime_execution_grants').fetchall()
+
+    scheduler, = app.state.handoff_runtime_service._schedulers
+    client.portal.call(partial(advance_input_capacity, scope=scope, remote_ready=scheduler.execution_ready,
+                               **scheduler.options))
+    completed = client.get(route + '/inputs/receipt',
+                           params=query | {'client_intent_id': 'grant-expires-before-dispatch'})
+    assert completed.status_code == 200
+    blocked = completed.json()
+    assert blocked['input_id'] == receipt['input_id'] and blocked['scope'] == exact
+    assert blocked['status'] == 'BLOCKED_AUTH' and blocked['input_revision'] == 1
+    assert blocked['operation_id'] is None and not blocked['possible_effect']
+    with factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        assert conn.execute('SELECT lease_id, lease_serial, valid_until_server FROM execution_leases').fetchall() == leases
+        assert conn.execute('SELECT grant_id, revision, used_executions FROM runtime_execution_grants').fetchall() == grants
+        assert conn.execute('SELECT COUNT(*) FROM execution_sessions').fetchone()[0] == 1
+        assert conn.execute('SELECT COUNT(*) FROM session_interaction_capacity_attempts').fetchone()[0] == 0
+    assert native.native.sent == [('send_turn', active['operation_id'])]
+    client.cookies.clear()
+
+
 def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interactive_runtime):
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup
