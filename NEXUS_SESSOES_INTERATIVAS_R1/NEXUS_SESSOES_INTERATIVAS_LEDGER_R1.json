@@ -1984,7 +1984,9 @@
         "execution/si034-browser-websocket-origin.md",
         "execution/si034-browser-websocket-origin.json",
         "execution/si034-native-attachment-ticket-replay.md",
-        "execution/si034-native-attachment-ticket-replay.json"
+        "execution/si034-native-attachment-ticket-replay.json",
+        "execution/si034-inert-terminal-output.md",
+        "execution/si034-inert-terminal-output.json"
       ]
     },
     {
@@ -5257,8 +5259,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si034-inert-terminal-output.md",
+        "execution/si034-inert-terminal-output.json"
+      ]
     },
     {
       "id": "SI-T-H16",
