@@ -1107,7 +1107,9 @@
         "execution/si034-browser-websocket-origin.md",
         "execution/si034-browser-websocket-origin.json",
         "execution/si034-native-attachment-ticket-replay.md",
-        "execution/si034-native-attachment-ticket-replay.json"
+        "execution/si034-native-attachment-ticket-replay.json",
+        "execution/si034-codex-thread-and-credential-scope.md",
+        "execution/si034-codex-thread-and-credential-scope.json"
       ]
     },
     {
@@ -1224,7 +1226,9 @@
         "execution/si007-shared-turn-arbitration.md",
         "execution/si007-shared-turn-arbitration.json",
         "execution/si034-terminal-command-authority.md",
-        "execution/si034-terminal-command-authority.json"
+        "execution/si034-terminal-command-authority.json",
+        "execution/si034-codex-thread-and-credential-scope.md",
+        "execution/si034-codex-thread-and-credential-scope.json"
       ]
     },
     {
@@ -1994,7 +1998,9 @@
         "execution/si034-terminal-command-authority.md",
         "execution/si034-terminal-command-authority.json",
         "execution/si034-transcript-privacy.md",
-        "execution/si034-transcript-privacy.json"
+        "execution/si034-transcript-privacy.json",
+        "execution/si034-codex-thread-and-credential-scope.md",
+        "execution/si034-codex-thread-and-credential-scope.json"
       ]
     },
     {
@@ -4699,7 +4705,10 @@
         "SI-R23"
       ],
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "execution/si034-codex-thread-and-credential-scope.md",
+        "execution/si034-codex-thread-and-credential-scope.json"
+      ]
     },
     {
       "id": "SI-T-G11",
