@@ -105,6 +105,61 @@ def test_empty_open_requires_confirmation_and_recovers_the_same_receipt(tmp_path
     assert retained_work.read_bytes() == b'{ "work": "retained" }'
 
 
+@pytest.mark.parametrize(('stage', 'lifecycle', 'lease', 'generation', 'code'), [
+    ('SUBMITTED', 'CLOSED', 'CLOSED', 1, 'OPENING_CLOSED'),
+    ('SUCCEEDED', 'FAILED', 'CLOSED', 1, 'OPENING_CLOSED'),
+    ('SUBMITTED', 'READY', 'ACTIVE', 1, 'OPENING_PENDING'),
+    ('SUBMITTED', 'CLOSED', 'REVOKED', 1, 'OPENING_PENDING'),
+    ('SUBMITTED', 'CLOSED', 'CLOSED', 2, 'OPENING_PENDING'),
+    ('OUTCOME_UNKNOWN', 'CLOSED', 'CLOSED', 1, 'OPENING_PENDING'),
+])
+def test_recovered_opening_settles_only_the_exact_confirmed_retirement(
+        tmp_path, monkeypatch, stage, lifecycle, lease, generation, code):
+    from okto_nexus.adapters.inbound.cli import session_open
+
+    binding = BINDING | {'binding_revision': 1}
+    binding_scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'}
+    scope = binding_scope | {'binding_revision': 1, 'session_id': 'original', 'session_owner_generation': 1}
+    intent = 'empty_open_' + 'e' * 32
+    opening_path = tmp_path / 'terminal/session-openings' / (document_revision(binding_scope) + '.json')
+    opening_path.parent.mkdir(parents=True)
+    checkpoint = {'format': 2, 'state': 'pending', 'scope': binding_scope, 'binding_revision': 1,
+                  'intent': intent, 'actor': {'origin': 'http://127.0.0.1:8202', 'username': 'operator'}}
+    opening_path.write_text(json.dumps(checkpoint), encoding='utf-8')
+    resolution = {'scope': scope, 'session_id': 'original', 'client_intent_id': intent, 'can_submit': True,
+                  'operation_id': 'opening', 'intent_hash': 'hash', 'semantic_intent': {'action': 'runtime.open'}}
+    operation = {'scope': scope, 'operation_id': 'opening', 'intent_hash': 'hash', 'action': 'runtime.open',
+                 'executor_stage': stage, 'possible_effect': True}
+    reads = []
+
+    class Human:
+        base, username, token = 'http://127.0.0.1:8202', 'operator', 'test'
+
+        def __call__(self, method, path):
+            assert method == 'GET'
+            reads.append(path)
+            if path.endswith('/runtime/intents/' + intent):
+                return {'resolution': resolution, 'operation': operation, 'initial_turn_operation_id': None}
+            assert path.endswith('/runtime/sessions/original?executor_id=executor')
+            return {'scope': scope | {'session_owner_generation': generation},
+                    'lifecycle_state': lifecycle, 'lease_state': lease, 'control_available': False}
+
+    clock = iter((0, 31))
+    monkeypatch.setattr(session_open, 'time', SimpleNamespace(monotonic=lambda: next(clock)))
+    monkeypatch.setattr('builtins.input', lambda _: pytest.fail('Recovery must not ask for another opening'))
+    service = SimpleNamespace(adapter=SimpleNamespace(home=tmp_path))
+    with pytest.raises(ConnectionError) as error:
+        session_open.empty_session(service, Human(), binding, allow_new=True)
+    assert error.value.code == code and error.value.possible_effect
+    saved = json.loads(opening_path.read_text(encoding='utf-8'))
+    if code == 'OPENING_CLOSED':
+        assert saved == checkpoint | {'state': 'settled', 'session_id': 'original', 'operation_id': 'opening'}
+        assert 'original' in error.value.message and 'opening' in error.value.message
+    else:
+        assert saved == checkpoint
+    assert len(reads) == (1 if stage == 'OUTCOME_UNKNOWN' else 2)
+
+
 class Catalog:
     def __init__(self, *, base='http://127.0.0.1:4000', drift=False, two_live=False):
         self.base = base

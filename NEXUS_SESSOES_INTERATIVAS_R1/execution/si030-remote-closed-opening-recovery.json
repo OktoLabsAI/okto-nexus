@@ -1,0 +1,135 @@
+{
+  "tasks": [
+    "SI-022",
+    "SI-023",
+    "SI-030"
+  ],
+  "scenario_evidence_partial": [
+    "SI-T-G20"
+  ],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "4f7f488e2807c7f31fcd5fd7cf342fb951638b85",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 550,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "3970610523eb4bd85bf4605771b06b1b83c7a678",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 92,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "24ba3cba04266bc1e854c83842d1ea72546d3d1e",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 73,
+      "behind_main": 0
+    },
+    "worktrees_clean": true,
+    "upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "artifacts": {
+    "nexus_build_tree": "1052469f34a4dee6ffec0a6f090a6fe26e34d9f3",
+    "prior_nexus_wheel_sha256": "0a41f0acae85037f03070efcadaf4f1d4db0c59bc33ae2fa906bddded6d4ec09",
+    "nexus_wheel_sha256": "ba584547dbd5c681644a8f62cb04dd860efd9baf719cccb3c8683bcb748bcba1",
+    "connector_wheel_sha256": "3dac4417a143414e0b237dcea63a8f8879e8fb6c303e8ee78c35c7fe32facb45",
+    "core_wheel_sha256": "76b203cf4a67857f791cba1c54f2a98396d37b6b5f4817b03afa1a6399b965b1",
+    "strict_wheel_validation": "PASS",
+    "offline_lock_check": "PASS"
+  },
+  "original_remote_snapshot": {
+    "receipt_stage": "SUBMITTED",
+    "session_lifecycle": "CLOSED",
+    "lease_state": "CLOSED",
+    "same_scope": true,
+    "separate_readonly_backup_per_test": true,
+    "prior_cli": "OPENING_PENDING",
+    "updated_cli": "OPENING_CLOSED",
+    "original_pending_checkpoint_untouched": true,
+    "durable_new_checkpoint": "settled",
+    "http_gets_per_recovery": 2
+  },
+  "fresh_native_reconnect": {
+    "real_pi_openings": 1,
+    "cli_resolution_posts": 1,
+    "cli_operation_posts": 1,
+    "native_open_durable_before_server_confirmation": true,
+    "full_r4_reconnect": true,
+    "same_operation_scope_and_intent_hash": true,
+    "recovered_receipt_stage": "SUBMITTED",
+    "lifecycle": "CLOSED",
+    "lease": "CLOSED",
+    "old_native_process_exited": true,
+    "checkpoint_settled_by_read_only_recovery": true,
+    "cli_reported_ended": true,
+    "sessions_attached": 0,
+    "provider_turns": 0,
+    "blocked_fixture_socket_attempts": 1,
+    "resume_window_observed": false
+  },
+  "environment": {
+    "host": "Windows x64; ConPTY",
+    "native_pi": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node": "24.15.0",
+    "connector_transport": "authenticated loopback",
+    "temporary_vault_and_pi_profile": true
+  },
+  "regressions": {
+    "source_cli": {
+      "tests": 45,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "8148d585a1379db23513234c4ec72f9b8604bfa834fdce9387049249a0a85a95"
+    },
+    "installed_cli_reconciliation_and_selection": {
+      "tests": 123,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "ce22fd4c308170884ee111735d7bd108ab06b76607dda57ff158fa75aa28d861"
+    },
+    "archived_remote_prior_wheel": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "e426615e33a55a3622fff1494a90bb53c55bc4166c4c78b7689cdf473f60e8b7"
+    },
+    "archived_remote_current_wheel": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "e2505de1462f599d308379b90450abc67af31409f038fdd9f57fd55fc712b022"
+    },
+    "native_installed": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "e0dc8037ffb712898eed92146f06d88ceb2535d04d6e02b48aad8c5243ea386e"
+    },
+    "new_ruff_diagnostics": 0,
+    "preexisting_import_diagnostics": 1
+  },
+  "fixture_directory": "D:\\nxs-si030-ended-4f7f488e",
+  "fixture_sha256": {
+    "test_remote_opening.py": "d5f5f65f8418492f9dad6574bbbcdeca77f8b279a842ee2b3b8c352dfd858f27",
+    "test_archived_recovery.py": "7aba4663ba2774ccd85c71e2e1f6b0ef7d931652761ba2a05b57f1fc5e4ae4b8",
+    "cli.py": "60f14e12c75176cdd449b53fe74cc15131fed33a0543ea9fbf2f22e658a74486"
+  },
+  "limits": [
+    "The fresh run destroyed only the temporary WebSocket and exercised a full generation replacement.",
+    "The test covered one fully recovered empty opening and an ended session; remote productive journeys and platform campaigns have separate gates.",
+    "Qualification for G20 remains open."
+  ]
+}

@@ -80,6 +80,9 @@ okto-nexus session resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-
 pending messages with their original session. It prints the new session ID
 after the Server confirms the opening. If the opening is unconfirmed, repeat the
 same command to recover its receipt before requesting another session.
+A recovered opening may refer to a session that has already ended. In that
+case the terminal reports the original session and receipt and settles the
+local checkpoint. A result whose effect remains uncertain stays pending.
 
 The saved-resume command requires a human operator session that the Server
 recognizes as local. Check the successor and receipt it returns before

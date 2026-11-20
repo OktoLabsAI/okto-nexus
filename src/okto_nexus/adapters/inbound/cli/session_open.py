@@ -2,6 +2,7 @@
 
 import re
 import time
+from typing import Literal
 from urllib.parse import quote
 from uuid import uuid4
 
@@ -79,7 +80,7 @@ def _admit_empty(call, binding, checkpoint, save, *, recovery):
     return scope, operation, resolution['operation_id'], resolution['intent_hash']
 
 
-def _wait_for_opening(call, binding, scope, operation, operation_id, intent_hash):
+def _wait_for_opening(call, binding, scope, operation, operation_id, intent_hash) -> Literal['ready', 'refused', 'ended']:
     path = PREFIX + '/runtime/operations/' + quote(operation_id, safe='')
     deadline = time.monotonic() + 30
     while True:
@@ -90,18 +91,21 @@ def _wait_for_opening(call, binding, scope, operation, operation_id, intent_hash
         if stage == 'OUTCOME_UNKNOWN':
             break
         if stage in ('FAILED', 'CANCELLED') and operation.get('possible_effect') is False:
-            return False
+            return 'refused'
         if stage in ('SUBMITTED', 'SUCCEEDED'):
             session = read_binding_session(call, binding, scope['session_id'])
             if session['scope'].get('session_owner_generation') != scope['session_owner_generation']:
                 break
+            if (session.get('lifecycle_state') in ('CLOSED', 'FAILED')
+                    and session.get('lease_state') == 'CLOSED' and session.get('control_available') is False):
+                return 'ended'
             if session.get('control_available') is True:
-                return True
+                return 'ready'
         if time.monotonic() >= deadline:
             break
         time.sleep(.25)
         operation = call('GET', path)
-    raise ConnectionError('OPENING_PENDING', f'Opening is unconfirmed. Inspect receipt {operation_id} or retry this presentation to recover it.', possible_effect=True)
+    raise ConnectionError('OPENING_PENDING', f'Opening is unconfirmed. Inspect receipt {operation_id} or run the same command to recover it.', possible_effect=True)
 
 
 def empty_session(service, call, binding, *, allow_new=False):
@@ -153,10 +157,14 @@ def empty_session(service, call, binding, *, allow_new=False):
 
         print('Opening request ' + checkpoint['intent'])
         admitted_scope, operation, operation_id, intent_hash = _admit_empty(call, binding, checkpoint, save, recovery=pending)
-        ready = _wait_for_opening(call, binding, admitted_scope, operation, operation_id, intent_hash)
-        save(checkpoint | {'state': 'settled', 'operation_id': operation_id, 'session_id': admitted_scope['session_id']})
-        if not ready:
+        state = _wait_for_opening(call, binding, admitted_scope, operation, operation_id, intent_hash)
+        session_id = admitted_scope['session_id']
+        save(checkpoint | {'state': 'settled', 'operation_id': operation_id, 'session_id': session_id})
+        if state == 'ended':
+            raise ConnectionError('OPENING_CLOSED', f'Opening receipt {operation_id} confirms session {session_id}. '
+                                  'The session has ended.', possible_effect=True)
+        if state == 'refused':
             raise ConnectionError('OPENING_FAILED', f'Opening {operation_id} was refused before launch. Review the project execution authorization and receipt.')
-        return admitted_scope['session_id']
+        return session_id
     finally:
         guard.release()

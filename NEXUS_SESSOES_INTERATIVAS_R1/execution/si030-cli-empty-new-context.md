@@ -11,3 +11,5 @@ O operador abriu e desanexou o visualizador da segunda sessão. O Ctrl+C devolve
 Passaram 134 testes no código-fonte e 134 no wheel instalado, além do ensaio embutido. O lock offline e a validação estrita do wheel passaram. O Ruff repetiu um aviso de ordenação de imports da referência.
 
 No ensaio com o Connector remoto, o Core registrou a segunda abertura e o Connector perdeu o canal R4 durante a publicação do recibo. O Nexus conservou a abertura como pendente e a fila permaneceu com a sessão de origem. A geração do canal mudou na reconexão e a confirmação ficou pendente na janela observada. SI-T-G20 recebe a evidência local da abertura canônica e continua aberto para a qualificação do caminho remoto, dos comandos internos do harness e da campanha. [Resultados e hashes](si030-cli-empty-new-context.json)
+
+O ensaio posterior confirmou que a reconexão recuperou o recibo e encerrou a sessão original. O CLI passou a resolver o checkpoint nesse estado. [Recuperação após reconexão R4](si030-remote-closed-opening-recovery.md)
