@@ -28,6 +28,11 @@ montados a partir de cópias limpas. Um ajuste final de
 formatação no Nexus foi comparado com o wheel verificado por
 igualdade da árvore sintática.
 
+A regressão foi reexecutada com os wheels finais depois de
+alinhar a expectativa do teste ao desligamento cooperativo.
+Os cenários cooperativo e de parada explícita passaram.
+[Relatório de desligamento](si037-retained-handoff-shutdown.md)
+
 O ensaio usou Pi instalado, perfil descartável e respostas
 simuladas. A integração entre máquinas e os gates de versões
 mistas seguem abertos. O marco dispensa migração. O rollback

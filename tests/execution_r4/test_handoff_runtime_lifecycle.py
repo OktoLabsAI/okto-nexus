@@ -1,6 +1,7 @@
 """Serve-owned automatic work and retained shutdown, with synthetic native peers."""
 import asyncio
 from contextlib import contextmanager, nullcontext
+from functools import partial
 import threading
 import time
 from types import SimpleNamespace
@@ -19,7 +20,7 @@ from test_canonical_delivery import connected_local
 from test_canonical_handoff_regressions import runtime, assert_unclaimed
 from test_handoff_automation_principal import prepare
 from test_handoff_runtime_candidates import enable_capacity, lease
-from test_canonical_result_publication import current_turn
+from test_canonical_result_publication import current_turn, emit
 from test_runtime_policy_defaults import save
 from test_embedded_inventory import app_for
 
@@ -98,33 +99,46 @@ def test_serve_requires_rollout_and_agent_opt_in_then_claims_without_manual_tick
                                       (hid,)).fetchone()[0] == 1
 
 
-def test_slow_scheduler_does_not_delay_native_stop_or_release_store_early(runtime, monkeypatch):
+@pytest.mark.parametrize('force', [False, True], ids=['cooperative', 'explicit-force'])
+def test_shutdown_retains_store_while_handoff_scheduler_is_busy(runtime, monkeypatch, force):
     setup, _, native = runtime
     deps, app, client, headers, *_ = setup
     _, hid, _ = prepare(runtime)
     eventually(lambda: state(deps, hid)[0] == 'CLAIMED')
-    wait_receipt(setup, current_turn(setup))
+    turn = current_turn(setup)
+    wait_receipt(setup, turn)
     service = app.state.handoff_runtime_service
+    shutdown = app.state.runtime_shutdown
     entered, release = threading.Event(), threading.Event()
     original = service.scheduler._reserve_page
     def held(*args):
         entered.set()
-        assert release.wait(20)
+        assert release.wait(60)
         return original(*args)
     monkeypatch.setattr(service.scheduler, '_reserve_page', held)
     try:
         assert entered.wait(5)
         response = client.post('/v1/runtime/shutdown', headers=headers['operator'], json={'timeout_seconds': .1})
         assert response.status_code == 202, response.text
-        assert any(r['owner'] == 'handoff-runtime' for r in response.json()['resources'])
-        eventually(lambda: native.native.stopped)
+        view = response.json()
+        assert view['phase'] == 'waiting' and view['force_available'] and not view['force_requested']
+        assert any(r['owner'] == 'handoff-runtime' for r in view['resources'])
+        assert not native.native.stopped
+        if force:
+            decision = client.portal.call(partial(shutdown.request, timeout_seconds=0, force=True))
+            assert decision['force_requested'] and decision['deadline_monotonic'] == view['deadline_monotonic']
+            eventually(lambda: native.native.stopped)
+        else:
+            emit(setup, native, turn, 'Original handoff finished during cooperative shutdown.')
+            assert shutdown.status()['phase'] == 'waiting' and not native.native.stopped
         assert not service.drained and not deps.runtime_dispatcher._shutdown_finished.is_set()
         assert client.get('/healthz').status_code == 200
     finally:
         release.set()
-        eventually(lambda: app.state.runtime_shutdown.status()['state'] == 'DRAINED')
+        eventually(lambda: shutdown.status()['state'] == 'DRAINED')
     assert service.drained and deps.runtime_dispatcher._shutdown_finished.is_set()
-    assert native.opens == 1
+    assert native.native.stopped and native.opens == 1
+    assert native.native.sent.count(('send_turn', turn['operation_id'])) == 1
 
 
 @pytest.mark.asyncio
