@@ -1099,7 +1099,9 @@
       "evidence": [
         "execution/si019-presenter-credential-and-writer-fence.md",
         "execution/si019-codex-presenter-reads.md",
-        "execution/si019-local-presentation-transport.md"
+        "execution/si019-local-presentation-transport.md",
+        "execution/si034-viewer-credential-channels.md",
+        "execution/si034-viewer-credential-channels.json"
       ]
     },
     {
@@ -1382,7 +1384,9 @@
         "execution/si027-codex-viewer-refusal.md",
         "execution/si027-codex-viewer-refusal.json",
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si034-viewer-credential-channels.md",
+        "execution/si034-viewer-credential-channels.json"
       ]
     },
     {
@@ -1960,7 +1964,9 @@
         "execution/si020-browser-exit-preserves-work.md",
         "execution/si020-browser-exit-preserves-work.json",
         "execution/si006-pi-human-input-authority.md",
-        "execution/si006-pi-human-input-authority.json"
+        "execution/si006-pi-human-input-authority.json",
+        "execution/si034-viewer-credential-channels.md",
+        "execution/si034-viewer-credential-channels.json"
       ]
     },
     {
@@ -4987,8 +4993,11 @@
         "SI-R18",
         "SI-R23"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si034-viewer-credential-channels.md",
+        "execution/si034-viewer-credential-channels.json"
+      ]
     },
     {
       "id": "SI-T-H06",

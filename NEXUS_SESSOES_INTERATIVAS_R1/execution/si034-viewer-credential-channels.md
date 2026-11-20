@@ -1,0 +1,11 @@
+# Credenciais do visualizador Codex em Windows
+
+O ensaio SI-T-H05 usou Nexus 0.3.8 instalado, o visualizador Codex 0.170.0 e o app-server 0.157.0. O visualizador e a engine rodaram em perfis isolados. O catálogo de conexões e a autoridade de anexação vieram da fixture. O cliente de terminal, o broker SQLite, os sockets e os dois processos nativos foram reais. Foram executados dois ensaios em loopback, um com HTTP/WS e outro com HTTPS/WSS usando uma CA temporária confiada apenas pelo cliente de teste. [Resultados e hashes](si034-viewer-credential-channels.json)
+
+O Nexus recebeu o cookie do operador e o ticket de anexação em cabeçalhos distintos. O visualizador recebeu somente seu bearer próprio no ambiente privado do processo, e enviou esse valor no cabeçalho `Authorization` ao relay. O relay recusou o cookie do operador quando apresentado como bearer. O ensaio WSS confirmou que a conexão foi recusada antes do envio de credenciais quando o cliente não confiava na CA de teste.
+
+A leitura das linhas de comando pelo Windows, enquanto o terminal e o visualizador estavam ativos, confirmou que a opção de autenticação continha o nome da variável de ambiente e que os três valores descartáveis estavam ausentes dos argumentos. Os três valores descartáveis também estavam ausentes das URLs, da saída do terminal e dos arquivos do perfil privado inspecionados. Os logs capturados do servidor não continham o cookie nem o ticket. O contador da área de transferência permaneceu igual e nenhuma sequência OSC 52 foi emitida. A verificação não precisou ler conteúdo da área de transferência.
+
+O detach encerrou o visualizador e deixou a mesma thread acessível no app-server original. A auditoria SQLite confirmou o estado `DETACHED`, a remoção dos hashes do ticket e do desafio e zero operações de trabalho. O encerramento dos processos temporários foi verificado. O ensaio não usou contas, prompts ou provedores externos.
+
+Passaram as duas integrações com processos nativos e 73 regressões instaladas de transporte, broker e CLI. A evidência qualifica o cenário SI-T-H05 no par revisado para Windows x64. As demais combinações de versão, plataforma e implantação seguem os respectivos gates. Este marco é de verificação, sem alteração de código ou migração. O rollback consiste em reverter o commit de evidências.
