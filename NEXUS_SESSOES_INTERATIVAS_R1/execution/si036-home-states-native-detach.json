@@ -1,0 +1,123 @@
+{
+  "scenario": "SI-T-I04",
+  "layers": {
+    "installed_integration": "PASS",
+    "external_provider_campaign": "not_run"
+  },
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "f9c50dec93cb4eb1e28a5a4c9488cd7ccbfdfcf2",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 477
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "09eafc3ee7ee7b64ccfef0eb2f46170a216aacba",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 86
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "454c9700e0def181c81fe633857a25b48e125512",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 65
+    },
+    "behind_main": 0,
+    "status": "three clean worktrees and zero upstream drift"
+  },
+  "wheels": {
+    "nexus": "d4352760724cb1a6ac5add2301442b4e3e59e4c1486cf9ccb8da22212188e473",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "browser": "Edge 157.0.4341.60 on Windows x64",
+    "connector": "real R4 WebSocket on loopback",
+    "terminal": "read-only Windows ConPTY",
+    "pi": "0.87.1",
+    "provider": "deterministic local extension, external network disabled"
+  },
+  "browser_checkpoints": {
+    "start-and-promote": {
+      "observed": "TWO_QUEUED_ONE_REVIEWED_STEER",
+      "sha256": "cc0dbd9ff763c56a9e495e369cb725cef0292dae3afe45f9847d16c2818b4e95"
+    },
+    "after-detach": {
+      "observed": "WORKING_AFTER_READ_ONLY_TERMINAL_DETACH",
+      "sha256": "8df44ab312bc1e50016edcfa3a7a3f5dd2505e92225eb75d20ab88cc304aeebe"
+    },
+    "applied": {
+      "observed": "STEER_APPLIED_AT_BOUNDARY_WITH_FOLLOWER_QUEUED",
+      "sha256": "3c75f33def9a3369eb7778b8bfa42ea85c00705fd68dadbb5bbb33d59e473df2"
+    },
+    "next": {
+      "observed": "ONE_RESULT_WHILE_SECOND_TURN_IS_ACTIVE",
+      "sha256": "ea3212cb73f74d49ce9b024925726ba058194e8203f6dbbe0223bc5804590fa4"
+    },
+    "results": {
+      "observed": "TWO_AVAILABLE_UNVERIFIED_CANONICAL_RESULTS",
+      "sha256": "f8caa24a548d535b9900ed5e689be89d5da626f41420c3d7d39bd674bb433ad9"
+    }
+  },
+  "backend_observations": {
+    "durable-home-states": {
+      "exact_session_closed": true,
+      "terminal_attachment": "DETACHED",
+      "terminal_access": "read",
+      "queued_entries": [
+        {
+          "sequence": 1,
+          "projected_status": "DISPATCHING",
+          "linked_action": "turn.steer"
+        },
+        {
+          "sequence": 2,
+          "projected_status": "ACCEPTED_NATIVE",
+          "linked_action": "turn.submit"
+        }
+      ],
+      "result_rows": 2,
+      "canonical_operations": {
+        "open": 1,
+        "steer": 1,
+        "turn": 2,
+        "close": 1
+      },
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "confirmed-proof": {
+      "same_queued_input_promoted": true,
+      "original_operation_preserved": true,
+      "one_turn_before_boundary": true,
+      "ordinary_input_still_queued": true
+    },
+    "backend-result": {
+      "real_pi": "0.87.1",
+      "same_pid_and_session": true,
+      "one_steer": true,
+      "two_turn_submissions": true,
+      "original_input_ids_reconciled": true,
+      "six_retained_chat_entries": true,
+      "two_results": true,
+      "original_and_next_turn_succeeded": true,
+      "external_provider_requests": 0
+    },
+    "completed": {
+      "canonical_close": "SUCCEEDED",
+      "three_expected_native_user_messages": true,
+      "no_replay_or_unreviewed_submission": true,
+      "external_provider_requests": 0
+    }
+  },
+  "tests": {
+    "wheel_imports_verified": true,
+    "native_browser_cases": 1,
+    "native_junit_sha256": "4045b24ef832b46eef75bedf659ec836aa80effbe4ef5b645f5f49933cd3a085",
+    "installed_regressions": 74,
+    "installed_junit_sha256": "1d09c98fd2634c3ca1fff4f5bd2c2f07d8e102558381de96e4854ad7a009ef20",
+    "node_frontend_regressions": 26,
+    "node_tap_sha256": "cba9a094d69147add8a1e7a6f6515c4ba9c57122ff630302c9db61cedc955401"
+  }
+}

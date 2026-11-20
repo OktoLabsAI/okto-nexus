@@ -1757,7 +1757,11 @@
         "SI-T-F17"
       ],
       "status": "TODO",
-      "evidence": ["execution/si032-exact-reattach-command.json"]
+      "evidence": [
+        "execution/si032-exact-reattach-command.json",
+        "execution/si036-home-states-native-detach.md",
+        "execution/si036-home-states-native-detach.json"
+      ]
     },
     {
       "id": "SI-034",
@@ -1932,7 +1936,9 @@
         "execution/si036-visual-pause.md",
         "execution/si036-visual-pause.json",
         "execution/si016-browser-terminal-only.md",
-        "execution/si016-browser-terminal-only.json"
+        "execution/si016-browser-terminal-only.json",
+        "execution/si036-home-states-native-detach.md",
+        "execution/si036-home-states-native-detach.json"
       ]
     },
     {
@@ -5016,7 +5022,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si032-exact-reattach-command.json",
-        "execution/si036-pi-browser-queue-transcript.json"
+        "execution/si036-pi-browser-queue-transcript.json",
+        "execution/si036-home-states-native-detach.md",
+        "execution/si036-home-states-native-detach.json"
       ]
     },
     {
