@@ -882,7 +882,9 @@
         "execution/si016-browser-terminal-only.md",
         "execution/si016-browser-terminal-only.json",
         "execution/si016-stale-catalog-settings.md",
-        "execution/si016-stale-catalog-settings.json"
+        "execution/si016-stale-catalog-settings.json",
+        "execution/si021-codex-viewer-switch.md",
+        "execution/si021-codex-viewer-switch.json"
       ]
     },
     {
@@ -1120,7 +1122,9 @@
         "execution/si026-claude-terminal-questions.md",
         "execution/si026-claude-terminal-questions.json",
         "execution/si026-claude-terminal-read.md",
-        "execution/si026-claude-terminal-read.json"
+        "execution/si026-claude-terminal-read.json",
+        "execution/si021-codex-viewer-switch.md",
+        "execution/si021-codex-viewer-switch.json"
       ]
     },
     {
@@ -3484,8 +3488,11 @@
         "SI-R18",
         "SI-R20"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si021-codex-viewer-switch.md",
+        "execution/si021-codex-viewer-switch.json"
+      ]
     },
     {
       "id": "SI-T-E01",

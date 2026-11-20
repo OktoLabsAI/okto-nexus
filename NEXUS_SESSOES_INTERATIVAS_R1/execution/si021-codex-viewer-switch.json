@@ -1,0 +1,68 @@
+{
+  "scenario": "SI-T-D13",
+  "status": "PASS",
+  "nexus_before_evidence": "39bee955",
+  "installed_wheels": {
+    "nexus": "338dba499f4f32b21a245132829e77629348a811ad95bf6b146b42a56d94fe37",
+    "connector": "b16a0b1439cd763796fd7159f1fe7b598853c01174cc61b1c61e91fa4ea1d26d",
+    "core": "bb9c8382014a916a71631642cdb625c7124c54c4c3978f03bdd45ba1bf99103b"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "viewer": "Codex 0.170.0 in disposable ConPTY and profile",
+    "server": "Installed Nexus HTTP, WebSocket presenter and loopback CLI relay",
+    "owner_context": "Synthetic exact native thread and two SQLite queues"
+  },
+  "native_frontend": {
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "fork_refused": true,
+    "same_viewer_still_running": true,
+    "queue_entries_unchanged": 2,
+    "new_operations": 0,
+    "provider_calls": 0,
+    "wire_method_counts": {
+      "thread/read": 5,
+      "thread/resume": 1,
+      "thread/fork": 1
+    }
+  },
+  "native_fork_reply": {
+    "method": "thread/fork",
+    "exact_thread": true,
+    "error_code": -32601
+  },
+  "protocol_integration": {
+    "original_resume": "Exact thread initialized",
+    "sibling_resume_rpc_error": -32602,
+    "exact_fork_rpc_error": -32601,
+    "original_thread_read_after_refusals": true,
+    "scopes_with_distinct_executors_and_same_short_id": 2,
+    "same_queued_receipts_and_generations": 2,
+    "new_operations": 0
+  },
+  "verification": {
+    "native_frontend_cases": 1,
+    "contract_and_transport_cases": 70,
+    "final_focused_rerun_cases": 3,
+    "ruff": "passed",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports <probe>/test_native_fork.py",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports tests/session_interaction/test_presentation_transport.py tests/session_interaction/test_codex_presenter_requests.py",
+      "ruff check tests/session_interaction/test_presentation_transport.py"
+    ],
+    "fixture_directory": "D:/nxs-switch-86399916",
+    "artifact_sha256": {
+      "test_native_fork.py": "4ed4129bfd2b3ca54a2f7117538c2aa865ab254cab04e231358e3525a6f5ae9e",
+      "focus.xml": "672e4d4660011166d64a6659ce0a73594acdd06ed8ad6bdf8af3325c3acd3361",
+      "network.xml": "4e45a8f6ba6c82be688a9cb7d2a63228fdcaa1a970039647d76b29f9b73876e2",
+      "native-frontend.txt": "415fde2d12643398e2cd57f4e0a43b491a61f2e893cf99ed7e95ffa7ee48e368",
+      "native-requests.json": "d4138f00bac8cedbebf4f7590786b4e33773a3f43ec476ff7233cd6d69d8ce58",
+      "result.json": "f723e6a0aa350f4e65bf6d0e669b50ac9734a2dd80c8b76be82357883aa30c2b",
+      "d13-transport.xml": "030c86b9065580feec0ebf6966bc5b69b4856472349dc945647f675201d63768"
+    }
+  },
+  "limits": [
+    "The real frontend exercised /fork; a test WebSocket peer exercised sibling thread/resume.",
+    "The test exercised the installed gateway with an exact fixture context and no live app-server or provider."
+  ]
+}

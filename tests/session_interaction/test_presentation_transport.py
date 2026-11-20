@@ -54,6 +54,7 @@ from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_present
 from okto_nexus.domain.presentation_protocol import CLAUDE_PRESENTATION_SUBPROTOCOL, PI_PRESENTATION_SUBPROTOCOL
 from okto_nexus.domain.session_interaction import InputAuthor
 from tests.session_interaction.test_queue_storage import database as queue_database
+from tests.session_interaction.test_queue_storage import enqueue
 
 database = queue_database
 THREAD = 'bdfe5b81-54cf-43cf-8001-5de670d3dd69'
@@ -847,6 +848,9 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
     terminal_status = []
     notice = {'method': 'turn/started', 'params': {'threadId': THREAD, 'turn': {
         'id': 'turn', 'items': [], 'status': 'inProgress', 'itemsView': 'notLoaded', 'error': None}}}
+    with transport.factory.unit_of_work() as uow:
+        original_input = enqueue(uow, transport.scope, text='Queued in the selected session')
+        sibling_input = enqueue(uow, transport.sibling, text='Queued in the sibling session')
     if quit_mode == 'follow':
         transport.app.state.local_codex_presentations = replace(
             transport.app.state.local_codex_presentations, live_updates=True)
@@ -903,6 +907,12 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
                             assert rpc(viewer, wire, method, method, threadId=THREAD)['result']['data'] == []
                         assert rpc(viewer, wire, 3, 'thread/items/list', threadId='sibling')['error']['code'] == -32602
                         assert rpc(viewer, wire, 4, 'turn/start', threadId=THREAD)['error']['code'] == -32601
+                        sibling_thread = '310872fd-606c-4467-91a0-c5d41a588712'
+                        assert rpc(viewer, wire, 'resume-sibling', 'thread/resume',
+                                   threadId=sibling_thread)['error']['code'] == -32602
+                        assert rpc(viewer, wire, 'fork-current', 'thread/fork', threadId=THREAD)['error']['code'] == -32601
+                        selected = rpc(viewer, wire, 'read-selected', 'thread/read', threadId=THREAD)
+                        assert selected['result']['thread']['id'] == THREAD
                         if quit_mode == 'follow':
                             assert not positions
                             assert rpc(viewer, wire, 5, 'thread/read', threadId=THREAD,
@@ -927,6 +937,16 @@ def test_loopback_network_carries_context_and_history_then_detaches(transport, q
             server.should_exit = True
             thread.join(10)
             assert not thread.is_alive()
+    with transport.factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute("""
+            SELECT executor_id, session_id, owner_generation, input_id, status, operation_id
+            FROM session_interaction_inputs ORDER BY executor_id
+        """).fetchall()
+        assert [tuple(row) for row in rows] == [
+            (scope.session.executor_id, scope.session.session_id, scope.generation.value, receipt.input_id, 'QUEUED', None)
+            for scope, receipt in ((transport.scope, original_input), (transport.sibling, sibling_input))
+        ]
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
 
 
 def test_client_refuses_foreign_server_before_sending_the_operator_cookie(transport):
