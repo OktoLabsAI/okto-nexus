@@ -314,9 +314,9 @@
         "native_live_attach": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
         "saved_context_resume": {
           "status": "blocked",
-          "reason": "A rota de retomada salva exige histórico verificado de um executor embutido.",
+          "reason": "O Connector já verifica a origem encerrada. A consulta autenticada e a abertura da sucessora do Claude ainda precisam ser integradas.",
           "evidence": [
-            "si030-terminal-session-selection.md"
+            "si026-claude-connector-retirement.md"
           ]
         },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },

@@ -1,0 +1,107 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-026"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "40db3434cce23d38536f5a79dff62cf30ce012f9",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 565
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "4e19e8182deda83257956efd09f1f57d3f69b5d2",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 104
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "a8444e2dec972535670dff8376a945e7201ff701",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 85
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true,
+    "core_pin": "4d7ae0178a143c9bca0b11dc456f19dfc1661d2a304b2e67fcdd9134c0daa52d",
+    "connector_pin": "18604489174b85e4360fe11fa19ddba9a0819bbb967d3936d4d7d41b2ca2ff33"
+  },
+  "artifacts": {
+    "core_commit": "da0676237759bf76381df56d85f3f7c722f74cbe",
+    "core_build_tree": "26236a008a0f0dc640e10f6a678a861a1155da64",
+    "core_wheel_sha256": "8bad4dcc44a4fe91d72fb61f5882b1de3a9d1a019cdfec4f0b0e9176689bbd88",
+    "connector_commit": "b6047a5a29be732c225238b155ec362b83a75627",
+    "connector_build_tree": "58265c18eedd02fc1d80daf6b2c98399bfa86861",
+    "connector_wheel_sha256": "b529b724c6fc5d53c22827a9a08d4c3943932a39574e4a966829b3d1bc523069",
+    "nexus_wheel_sha256": "76ea6ff0dbc3701b9de23077f21afe92e2062d9848156627ff0f5c0aac02db53"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "python": "3.13.1",
+    "claude_code": "2.1.328",
+    "claude_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "process": "Real Claude owner in ConPTY, installed Connector daemon and Nexus on loopback, temporary operator and provider profile",
+    "provider": "Deterministic loopback Claude model response",
+    "external_provider_requests": 0
+  },
+  "final_cases": {
+    "claude_intact": {
+      "passed": 1,
+      "canonical_close": "SUCCEEDED",
+      "exact_live_dialogue_and_process_proved": true,
+      "physical_exit_observed_before_write": true,
+      "private_record_stored": true,
+      "profile_and_file_rechecked_after_daemon_stop": true,
+      "sqlite_user_version": 6,
+      "sqlite_quick_check": "ok",
+      "private_profile_fields_absent_from_nexus": true,
+      "junit_sha256": "972d390b0b45f243a899bf889c9d2fa3a9454629ea6e0885ba550b661c3bf716"
+    },
+    "claude_changed": {
+      "passed": 1,
+      "canonical_close": "SUCCEEDED",
+      "exact_live_dialogue_observed": true,
+      "physical_exit_observed_before_write": true,
+      "changed_dialogue_refused": true,
+      "private_record_stored": false,
+      "junit_sha256": "050899de0d93099383ce2c9675fc7108a6240fd9f5de65f9ce0fa3ae4c0b2523"
+    },
+    "codex_regression": {
+      "passed": 1,
+      "exact_saved_thread_resumed_once": true,
+      "cancellation_had_no_effect": true,
+      "same_receipt_recovered": true,
+      "both_owned_processes_closed": true,
+      "junit_sha256": "f0cce0b14dab5be80734b6cb3e356678a856c48905cd7298654c085dafa400ab"
+    }
+  },
+  "installed_regressions": {
+    "core": {
+      "passed": 100,
+      "junit_sha256": "4f9e8c8b754b8e600edee0436501ef352d368f509ae9943ecdfb36c35562b980"
+    },
+    "connector": {
+      "passed": 128,
+      "junit_sha256": "362ccd6190edef51ff17bd9a2b406e82976d6550d15a4f69dde2a12b0f439f97"
+    },
+    "nexus": {
+      "passed": 83,
+      "junit_sha256": "0ba73694bd0b5278200ec8ecadecc17914b1bcb29ceeb283db9d6eed664ef149"
+    },
+    "strict_twine": "PASS",
+    "installed_imports_verified": true,
+    "core_contract_generation_checks": "PASS"
+  },
+  "observed_limits": [
+    "Both initial Claude cases observed the active-turn refusal and successful canonical close, but the optional capture produced no record. The exact cause was not established. Final retries used an immediate loopback response; the intact case passed and the altered file was rejected.",
+    "One instrumented retry got an unconfirmed Claude turn before reaching the close. It was not replayed in that project.",
+    "The earlier Codex regression reached exact resume and canonical close. The HTTP test server exceeded the 10 second teardown join. A separate run with a 30 second fixture join passed.",
+    "This component does not admit a Claude successor yet. Separate-machine, user and provider qualification remain pending."
+  ]
+}
