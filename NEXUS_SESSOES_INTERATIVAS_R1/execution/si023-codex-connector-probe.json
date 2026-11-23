@@ -1,0 +1,82 @@
+{
+  "tasks": [
+    "SI-022",
+    "SI-023"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "qualification": "The negotiated probe is an internal read-only observation. The user-facing review and exclusive launch of a remote successor remain pending.",
+  "source_checkpoint": {
+    "nexus": "1a545ed880c47222c03ec8d568d2a6e7061d3809",
+    "connector": "f5f701d22866f8fb1752eb5ee0c4b1b773b94d52",
+    "core": "e10fb4c0189930ec0686d8d71105e13d72b2724d"
+  },
+  "artifacts": {
+    "core_commit": "eedaa814d6d43ef553c6369e63c2e87c2eaed796",
+    "core_archive_tree": "31d0fabcebe8090b4e4514711185b673f0c43117",
+    "core_wheel_sha256": "5788d81c09b97592a2c1066561cb5c66ff56acf9db13313bf9f11ec358716424",
+    "connector_commit": "ffefad0b22418bd5e0f4a2a70947c4397684b5e9",
+    "connector_archive_tree": "45a8e3b5ae91593bd2ec9beabb34f841525a5aee",
+    "connector_wheel_sha256": "34fe5d8e489e18ec38110c41aa98fb893ad935d94acd3c9a1baf39be6807e1ea",
+    "nexus_archive_tree": "a4d6637c16b5ec17db39376942d6d380af633d70",
+    "nexus_wheel_sha256": "254c2e05c0c6563bf436a50a21a8812466846a85b59f4379c462bc66590ec7d4"
+  },
+  "negotiated_extension": "nexus-saved-codex-v1",
+  "native_environment": {
+    "os": "Windows x64",
+    "python": "3.13.1",
+    "codex_app_server": "0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "temporary_project_and_profiles": true,
+    "external_provider_requests": 0,
+    "loopback_model_responses": 1
+  },
+  "native_probe": {
+    "authenticated_nexus_websocket_and_connector_daemon": true,
+    "canonical_close": "SUCCEEDED",
+    "process_exited_before_probe": true,
+    "source_built_from_nexus_session_and_canonical_receipts": true,
+    "exact_source_available": true,
+    "other_close_declined": true,
+    "rollout_changed_after_first_probe_declined": true,
+    "native_history_and_path_kept_on_connector": true,
+    "native_resume_attempts": 0
+  },
+  "controlled_transport": {
+    "no_current_lane_refusal_before_file_read": true,
+    "historical_source_identified_on_a_later_connection": true,
+    "response_bound_to_exact_request_and_channel": true,
+    "private_binding_digests_rejected_on_wire": true,
+    "source_or_file_drift_refused": true
+  },
+  "final_installed_tests": {
+    "core": {
+      "passed": 27,
+      "junit_sha256": "8ad71c0c9352765104ca85d03ed4f65747f6cdecbd7811d395aed0b96eaae3c2"
+    },
+    "connector": {
+      "passed": 100,
+      "junit_sha256": "c1cf3387d92f67a228a024aecab18cc9d80b6e80db7f537bdcfe3aec61ae6941"
+    },
+    "nexus": {
+      "passed": 38,
+      "junit_sha256": "a254877deed40a72fc66d09eb37f30bf3b7fc69e3908885038e8fafe04a9bc9a"
+    },
+    "native": {
+      "passed": 1,
+      "junit_sha256": "67e4f7db72f5c03aa50ba13129425c68a25bf230de56d5ca51e6e34fe6eb16a1"
+    },
+    "twine_strict": "PASS",
+    "verified_wheel_imports": true
+  },
+  "earlier_candidate": {
+    "nexus_extended_regressions": {
+      "passed": 42,
+      "junit_sha256": "52d8d891e7039e334299a2dc4dd83467da672bda37d5382aa0dfabf5c405c153"
+    },
+    "change_before_record_and_probe_cases": {
+      "passed": 2,
+      "junit_sha256": "c215239ef937b989ec8086e2ab16829cf566e7d04b3db2e1b6d7ac4fd24c27a3"
+    },
+    "correction": "Removed the two Connector-only receipt-binding digests from the query so the Nexus can construct it from its accepted facts. These digests remain in the private local record."
+  }
+}

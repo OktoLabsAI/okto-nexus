@@ -1,5 +1,12 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `eedaa814d6d43ef553c6369e63c2e87c2eaed796`.
+The unpublished wheel SHA-256 is `5788d81c09b97592a2c1066561cb5c66ff56acf9db13313bf9f11ec358716424`.
+Core validates retired Codex availability probes built from canonical public facts.
+The Nexus CI manifest identifies the matching Connector wheel.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `e10fb4c0189930ec0686d8d71105e13d72b2724d`.
 The unpublished wheel SHA-256 is `94d292ce1296762376666c8ab7d7bfee6e9096bdb8587918678e6062892244c1`.
 Core reads the exact Codex rollout under live ownership and keeps rollout paths out of events.

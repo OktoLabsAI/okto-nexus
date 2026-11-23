@@ -30,15 +30,21 @@ from nexus_connector_core.presentation_link import (
     encode_presentation_frame,
     presentation_request_hash,
 )
+from nexus_connector_core.saved_context_link import (
+    SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OBSERVED, SAVED_CODEX_PROBE, encode_saved_codex_frame,
+)
 
 
 class PresentationLink:
-    def __init__(self, channel, send, *, timeout=5, codex_enabled=True, pi_enabled=False, claude_enabled=False):
+    def __init__(self, channel, send, *, timeout=5, codex_enabled=True, pi_enabled=False, claude_enabled=False,
+                 saved_codex_enabled=False):
         self.channel, self._send, self._timeout = channel, send, timeout
         self.instance = secrets.token_hex(16)
         self.codex_enabled, self.pi_enabled = codex_enabled, pi_enabled
         self.claude_enabled = claude_enabled
-        self._pending = {PRESENTATION_RESULT: {}, PI_PRESENTATION_RESULT: {}, CLAUDE_PRESENTATION_RESULT: {}}
+        self.saved_codex_enabled = saved_codex_enabled
+        self._pending = {kind: {} for kind in (
+            PRESENTATION_RESULT, PI_PRESENTATION_RESULT, CLAUDE_PRESENTATION_RESULT, SAVED_CODEX_OBSERVED)}
         self.closed = False
 
     async def read_codex(self, *, scope, target, thread_id):
@@ -51,6 +57,14 @@ class PresentationLink:
         if context is None or context['thread_id'] != thread_id:
             raise CoreError('SESSION_UNKNOWN', 'presentation_link')
         return context
+
+    async def probe_saved_codex(self, *, scope, source):
+        if not self.saved_codex_enabled:
+            raise CoreError('CAPABILITY_UNSUPPORTED', 'saved_codex_link')
+        frame = dict(contract_revision=SAVED_CODEX_LINK_REVISION, type=SAVED_CODEX_PROBE, **self.channel.identity(),
+                     request_id='saved_codex_' + secrets.token_hex(16), scope=scope, source=source)
+        available = await self._exchange(frame, encode_saved_codex_frame(frame), SAVED_CODEX_OBSERVED, self._timeout)
+        return available is True
 
     async def _pi_request(self, action, stream, *, timeout=None, **payload):
         if not self.pi_enabled:
@@ -150,7 +164,7 @@ class PresentationLink:
 
     async def _exchange(self, frame, raw, result_type, timeout):
         pending = self._pending[result_type]
-        if self.closed or len(pending) >= (4 if result_type == PRESENTATION_RESULT else 8):
+        if self.closed or len(pending) >= (4 if result_type in (PRESENTATION_RESULT, SAVED_CODEX_OBSERVED) else 8):
             raise CoreError('SESSION_UNKNOWN', 'presentation_link')
         request_id = frame['request_id']
         future = asyncio.get_running_loop().create_future()
@@ -180,7 +194,8 @@ class PresentationLink:
         if frame['request_hash'] != expected_hash or frame.get('stream_id') != stream:
             raise CoreError('SCOPE_MISMATCH', 'presentation_reply')
         if not future.done():
-            future.set_result(frame['context'] if frame['type'] == PRESENTATION_RESULT else frame['result'])
+            field = {PRESENTATION_RESULT: 'context', SAVED_CODEX_OBSERVED: 'available'}.get(frame['type'], 'result')
+            future.set_result(frame[field])
 
     def disconnect(self):
         self.closed = True
