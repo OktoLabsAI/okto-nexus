@@ -1,0 +1,151 @@
+{
+  "tasks": [
+    "SI-027",
+    "SI-037"
+  ],
+  "scope": "installed_linux_wsl2_process_and_package_evidence",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "f8252a212af8d52e3e4068ac227fdd1b9ab66f04",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 584,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    }
+  },
+  "wheel_sha256": {
+    "nexus_wheel_sha256": "abbb861ce6e093c3c4137f37aec157f9c944ef6906f819ce8f704940ae6bc4d7",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876"
+  },
+  "setup": {
+    "distribution": "Ubuntu 24.04.5 LTS",
+    "ubuntu_rootfs_sha256": "e77b6f10c2590cef872b33ee9f635a0e3fd1f57fb074c0e52b5c7f56147a0c86",
+    "node_linux_archive_sha256": "472655581fb851559730c48763e0c9d3bc25975c59d518003fc0849d3e4ba0f6",
+    "ubuntu_manifest": "https://cdimage.ubuntu.com/ubuntu-base/releases/noble/release/SHA256SUMS",
+    "node_release": "https://nodejs.org/en/blog/release/v24.15.0",
+    "pi_lock_sha256": "af912bfedb09412706cb8aaf77cc07154829939d431f1389ce95b4f204ea6fe6",
+    "nexus_exported_requirements_sha256": "267981126e2234e3fae2113b7e6417a9b6dc112756606f494d06de4381f66921",
+    "pip_check": "PASS"
+  },
+  "linux_containment_preflight": {
+    "pidfd": "ok",
+    "proc_children": "ok",
+    "procfs": "ok",
+    "subreaper": "ok"
+  },
+  "native_probe": {
+    "kernel": "5.15.146.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "packages": {
+      "okto-nexus": "0.3.8",
+      "okto-nexus-connector": "0.0.15",
+      "okto-nexus-connector-core": "0.0.16",
+      "websockets": "17.4"
+    },
+    "pi_version": "0.87.1",
+    "node_sha256": "d1de76d8edf2fededf6f8b30d244e2c0529ac607923a018283b77e9c74bd932c",
+    "installation_build_identity": "sha256:80f7f9c0350b08ad8ed9c2ef368c17309b69a9bbcb07fff199b4267a9e27e132",
+    "required_hosted_qualification": "CAPABILITY_UNSUPPORTED",
+    "isolated_network_interfaces": [
+      "lo"
+    ],
+    "native_adapter": "plain Pi RPC",
+    "process_owner": "OwnedLinuxPopen",
+    "subscription_closed_before_result": true,
+    "same_native_process_completed_without_subscribers": true,
+    "native_history_preserved_one_prompt_and_result": true,
+    "close_result": "forced",
+    "durable_stop_receipt": "STOPPED",
+    "external_provider_calls": 0
+  },
+  "installed_hosted_asset_gate": {
+    "platform": "linux",
+    "node": "v24.15.0",
+    "hostedAssetPlatformGate": "REFUSED"
+  },
+  "regressions": {
+    "core": {
+      "passed": 34,
+      "junit_sha256": "323dd3a709b40111bc518e7c010cc0cd2c38ace0dbe6209eb9b43e0407dc5ce1",
+      "cases": [
+        "tests/test_linux_container_receipt.py",
+        "tests/test_posix_discovery_layouts.py",
+        "tests/test_owned_process.py::test_owned_process_handle_terminates_own_child",
+        "tests/test_owned_process.py::test_explicit_guardian_force_reaps_escaped_grandchild",
+        "tests/test_owned_process.py::test_linux_abrupt_owner_exit_reaps_native_tree",
+        "tests/test_owned_kernel_crash.py"
+      ]
+    },
+    "connector": {
+      "passed": 6,
+      "junit_sha256": "a81f0a640697a822a94183c7b6239cb1f6d61d8847b38a6a23ad13f7a7ae45ab",
+      "cases": [
+        "tests/integration/test_process_lifecycle.py",
+        "tests/integration/test_service_readiness_process.py",
+        "tests/unit/test_transport_shutdown.py"
+      ]
+    },
+    "nexus": {
+      "passed": 30,
+      "junit_sha256": "0f4bf03ddb430cda7a905db155614af7ceb181df627ea621f1980c57055d4646",
+      "cases": [
+        "tests/session_interaction/test_transcript.py",
+        "tests/session_interaction/test_presentation_transport.py::test_loopback_network_carries_context_and_history_then_detaches",
+        "tests/session_interaction/test_presentation_transport.py::test_pi_client_reads_binary_frames_over_loopback_and_detaches"
+      ]
+    }
+  },
+  "sha256": {
+    "native_probe": "306448e375cc569aa8557b8931e2b9d5b13df8e79c9f03b887aa6d219c072562",
+    "native_proof": "e99927ca334dafa217890e831e0e4946f8b4ee98ff03a2ecc249a22b9c8447c7",
+    "hosted_asset_gate_probe": "8212d0faeca10c4b840ffa63c7b23d82e30e0951ddae010daa46866d5e9910b2"
+  },
+  "rehearsal_adjustments": [
+    "The Pi CLI's ancestor skill discovery required read access to two specific paths inside the disposable distribution.",
+    "The direct adapter emits native agent_settled rather than the domain-enriched terminal delivery event.",
+    "The native JSONL contains a system entry in addition to the two conversation messages.",
+    "The Nexus regression runner added the repository root to resolve test-package imports."
+  ],
+  "qualification_limits": [
+    "The direct Pi probe does not route through the hosted renderer or an authenticated remote Connector.",
+    "The process stop used the Core's forced fallback and was proven by its Linux receipt.",
+    "The disposable WSL2 distribution is on the Windows test machine."
+  ],
+  "cleanup": {
+    "registered_path_verified": true,
+    "registration_removed": true,
+    "vhd_removed": true
+  }
+}
