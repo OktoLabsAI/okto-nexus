@@ -1,0 +1,273 @@
+{
+  "tasks": [
+    "SI-039",
+    "SI-041"
+  ],
+  "scenarios": [
+    "SI-T-I01",
+    "SI-T-I09"
+  ],
+  "decision": "ROLLOUT_PENDING",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "dacb64f26f5340ca13b37b2ba0c1ae639b949b79",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 580,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    }
+  },
+  "artifacts": {
+    "nexus_build_tree": "5bfbb487e6f92b975b010d9c8d759da76939e5aa",
+    "nexus_wheel_sha256": "279fa5c03ea95aef4c9d85a5d1ae9cc970814c425653f5aaf99a87635cdc3c5d",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876"
+  },
+  "qualification_level": "installed_package_and_controlled_integration",
+  "session_interaction_enabled_by_default": false,
+  "migration": {
+    "source_schema": 168,
+    "target_schema": 190,
+    "migrations_applied": [
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190
+    ],
+    "second_apply": [],
+    "legacy_table_count": 161,
+    "legacy_row_count": 90,
+    "legacy_columns_equal": true,
+    "legacy_receipts_validated_by_current_core": 4,
+    "receipt_histories": 3,
+    "legacy_result_count": 1,
+    "selected_table_hashes": {
+      "execution_receipts": {
+        "rows": 4,
+        "sha256": "982b70f10baf662de6c23b450ca75de22a6e011a81198a19c2dc7530d106b5a7"
+      },
+      "execution_operations": {
+        "rows": 3,
+        "sha256": "9fce89d8b8b92e40554a9638d850336833c52620a645704271698058f17b9dc1"
+      },
+      "execution_results": {
+        "rows": 1,
+        "sha256": "83406dc51a0e19f117b236baf9b0fb1dd32de75f2e3604d7c3ff39ae029a5e95"
+      },
+      "execution_sessions": {
+        "rows": 1,
+        "sha256": "93c28bc500ceec367d0a0c7d8c407479b1640e03aa292030a3b8be2f8fcf1486"
+      },
+      "execution_event_ingress": {
+        "rows": 4,
+        "sha256": "a65d57bea77811832259638351c12e461110337a100bb898f2cbf9b1e24864ad"
+      }
+    },
+    "nullable_absent_fields": [
+      "native_launch_build_json",
+      "saved_resume_json"
+    ],
+    "new_tables_empty": [
+      "session_interaction_inputs",
+      "session_interaction_controls",
+      "session_attachments",
+      "embedded_saved_contexts"
+    ],
+    "http_projection": {
+      "matched": true,
+      "views": 3,
+      "unauthenticated_status": 401,
+      "sha256": "62560f0e54704a122917d7d3cfd902c36e1943cfb2b9914fa7d0f570577df4e0"
+    },
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "new_defaults": {
+      "session_input_admissions_paused": 0,
+      "literal": 0
+    },
+    "saved_pi_allowed": true,
+    "immutable_input_backup_sha256": "c5c5a980ec8df0786dcdcb8fb822c1e349c9f028be170d59605f4f046ea9cf0b",
+    "original_unchanged": true,
+    "backup_unchanged": true,
+    "pre_migration_backup_sha256": "c5c5a980ec8df0786dcdcb8fb822c1e349c9f028be170d59605f4f046ea9cf0b",
+    "restore": {
+      "schema": 168,
+      "legacy_columns_equal": true,
+      "legacy_http_projection_equal": true
+    },
+    "tool_sha256": {
+      "audit_upgrade.py": "7ee198a5762e97e59f776a10d9439f8bbcc31761a5aad5aac8b7e1bde8813edb",
+      "read_history.py": "ab03f19e75585055ad4459a3f315e27caf5f0e19d6a0282eb1283b28390e8c85"
+    }
+  },
+  "saved_proof_upgrade": {
+    "source_schema": 188,
+    "target_schema": 190,
+    "new_migrations": [
+      189,
+      190
+    ],
+    "second_apply": [],
+    "saved_records": 2,
+    "saved_proofs_with_original_rowids_sha256": "080083a7019830ab94251252e68e65bd1d24ffc4f054f5735048de0de7bc0675",
+    "retained_receipts": 8,
+    "retained_receipts_sha256": "bc4f2442875568fe74b4194ab7d69f93bcc192f8148eb93bac110a66bd386f08",
+    "exact_rows_and_receipts_preserved": true,
+    "source_and_backup_unchanged": true,
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "fixture_driver_sha256": "ea209029f9b012d73f417eee53f84f428f3bffdfc9aac25e56eeb4a482552da1"
+  },
+  "tests": {
+    "installed_regressions": {
+      "tests": 65,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "junit_sha256": "b3b1fec6c3b1c914825440c4d6eff3983b0992159fca26921c74057d0af82c1a"
+    },
+    "offline_plan_package_validator": "PASS",
+    "uv_lock_check_offline": "PASS",
+    "ledger_checker_disposable_negative_cases_passed": 6
+  },
+  "status_updates_to_in_progress": {
+    "SI-033": "Compatibility controls, legacy commands and native detach evidence were recorded.",
+    "SI-034": "Scoped authority, transcript protections and withdrawal effects were tested in controlled environments.",
+    "SI-035": "Queue races, receipt loss and restart experiments were recorded.",
+    "SI-036": "The installed browser and native writer roundtrip ran in Edge. Participant approval is open.",
+    "SI-039": "The installed candidate upgraded the historical schema to 190 and restored a read-equivalent baseline copy.",
+    "SI-040": "The terminal action guide and installed command checks were recorded.",
+    "SI-041": "The live rollback scenarios and this qualification checkpoint are recorded. Rollout remains pending."
+  },
+  "disposition": {
+    "provider_campaign": {
+      "status": "NOT_RUN",
+      "scope": "SI-T-G01 through SI-T-G20 and SI-T-I01 through SI-T-I09",
+      "missing": [
+        "reviewed build, account and model",
+        "specific authorization and cost limit"
+      ]
+    },
+    "distinct_connector_host": {
+      "status": "NOT_RUN",
+      "scenario": "SI-T-H01",
+      "missing": [
+        "authorized separate machine",
+        "authenticated outbound attach observation"
+      ]
+    },
+    "participant": {
+      "status": "PENDING",
+      "task": "SI-036"
+    },
+    "native_platform_matrix": {
+      "status": "PARTIAL",
+      "task": "SI-037",
+      "evidence": "execution/si027-session-capability-matrix.json"
+    }
+  },
+  "fixture": "D:\\nxs-si039-schema190-dacb64f2",
+  "checker_sha256": "8a60b0319f26b6dd47247a6637a7ae9bf04c4439cfe765b7ffb3d053b6ca85b4",
+  "ledger_check": {
+    "status": "PASS",
+    "scope": "specification_and_evidence_references",
+    "counts": {
+      "tasks": 41,
+      "tests": 148,
+      "requirements": 24,
+      "phases": 8
+    },
+    "states": {
+      "tasks": {
+        "IMPLEMENTED": 7,
+        "IN_PROGRESS": 33,
+        "VERIFIED": 1
+      },
+      "tests": {
+        "NOT_RUN": 30,
+        "PASS": 118
+      },
+      "phases": {
+        "IN_PROGRESS": 8
+      }
+    },
+    "evidence_references": 1329,
+    "distinct_evidence_files": 449,
+    "outstanding_scenarios": [
+      "SI-T-G01",
+      "SI-T-G02",
+      "SI-T-G03",
+      "SI-T-G04",
+      "SI-T-G05",
+      "SI-T-G06",
+      "SI-T-G07",
+      "SI-T-G08",
+      "SI-T-G09",
+      "SI-T-G10",
+      "SI-T-G11",
+      "SI-T-G12",
+      "SI-T-G13",
+      "SI-T-G14",
+      "SI-T-G15",
+      "SI-T-G16",
+      "SI-T-G17",
+      "SI-T-G18",
+      "SI-T-G19",
+      "SI-T-G20",
+      "SI-T-H01",
+      "SI-T-I01",
+      "SI-T-I02",
+      "SI-T-I03",
+      "SI-T-I04",
+      "SI-T-I05",
+      "SI-T-I06",
+      "SI-T-I07",
+      "SI-T-I08",
+      "SI-T-I09"
+    ]
+  }
+}

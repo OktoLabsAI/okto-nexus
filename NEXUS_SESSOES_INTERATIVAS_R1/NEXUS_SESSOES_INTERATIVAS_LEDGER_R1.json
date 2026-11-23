@@ -2103,7 +2103,7 @@
         "SI-T-F14",
         "SI-T-F17"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si028-installed-quick-connect-modes.md",
         "execution/si028-installed-quick-connect-modes.json",
@@ -2152,7 +2152,7 @@
         "SI-T-H19",
         "SI-T-H20"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si036-browser-session-isolation.json",
         "execution/si036-browser-session-isolation.md",
@@ -2220,7 +2220,7 @@
         "SI-T-G15",
         "SI-T-H12"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si035-queue-dispatch-races.md",
         "execution/si035-queue-dispatch-races.json",
@@ -2278,7 +2278,7 @@
         "SI-T-E16",
         "SI-T-D04"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si025-pi-native-questions.md",
         "execution/si025-pi-native-questions.json",
@@ -2479,7 +2479,7 @@
         "SI-T-I05",
         "SI-T-I06"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si024-capability-downgrade.md",
         "execution/si024-capability-downgrade.json",
@@ -2496,7 +2496,9 @@
         "execution/si016-pi-literal-input.md",
         "execution/si016-pi-literal-input.json",
         "execution/si041-live-admission-pause.md",
-        "execution/si041-live-admission-pause.json"
+        "execution/si041-live-admission-pause.json",
+        "execution/si041-qualification-checkpoint.md",
+        "execution/si041-qualification-checkpoint.json"
       ]
     },
     {
@@ -2539,7 +2541,7 @@
         "SI-T-H10",
         "SI-T-I09"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si030-installed-work-resume.md",
         "execution/si030-installed-work-resume.json",
@@ -2585,7 +2587,7 @@
         "SI-T-I08",
         "SI-T-I09"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": [
         "execution/si041-two-session-native-ack.md",
         "execution/si041-two-session-native-ack.json",
@@ -2604,7 +2606,9 @@
         "execution/si041-live-admission-pause.md",
         "execution/si041-live-admission-pause.json",
         "execution/si041-native-admission-rollback.md",
-        "execution/si041-native-admission-rollback.json"
+        "execution/si041-native-admission-rollback.json",
+        "execution/si041-qualification-checkpoint.md",
+        "execution/si041-qualification-checkpoint.json"
       ]
     }
   ],
@@ -5725,7 +5729,9 @@
         "execution/si039-pre-interaction-upgrade.md",
         "execution/si039-pre-interaction-upgrade.json",
         "execution/si041-live-admission-pause.md",
-        "execution/si041-live-admission-pause.json"
+        "execution/si041-live-admission-pause.json",
+        "execution/si041-qualification-checkpoint.md",
+        "execution/si041-qualification-checkpoint.json"
       ]
     },
     {
@@ -5936,7 +5942,9 @@
       ],
       "status": "NOT_RUN",
       "evidence": [
-        "execution/si027-session-capability-matrix.json"
+        "execution/si027-session-capability-matrix.json",
+        "execution/si041-qualification-checkpoint.md",
+        "execution/si041-qualification-checkpoint.json"
       ]
     }
   ],
@@ -5990,7 +5998,7 @@
     },
     {
       "id": "SI-04",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-024",
         "SI-025",
@@ -6012,7 +6020,7 @@
     },
     {
       "id": "SI-06",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-034",
         "SI-035",
@@ -6023,7 +6031,7 @@
     },
     {
       "id": "SI-07",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-039",
         "SI-040",
