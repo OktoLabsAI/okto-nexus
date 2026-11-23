@@ -1,0 +1,101 @@
+{
+  "tasks": [
+    "SI-041"
+  ],
+  "scenarios": [
+    "SI-T-I03"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "ce8d79d2f4ea0535290fe88804fd3c4537937b9e",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 575
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "ab6d0935b479a6427f5b29212880a067585ea20f",
+    "nexus_wheel_sha256": "7461cd30c14ccf1f0b97dbf1ff26d25452b9c58b168b11fc91e11baa364e766b",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "browser": "Microsoft Edge 158.0.4370.33 via Playwright CLI",
+    "harness": "Pi 0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "transport": "Authenticated Connector WSS over loopback; installed HTTP and dashboard",
+    "model": "In-process synthetic provider; Pi network blocked; disposable credentials only"
+  },
+  "browser": {
+    "queued_from_conversation": true,
+    "global_control_saved_while_original_turn_active": true,
+    "composer_unavailable_during_retained_turn": true,
+    "second_result_displayed_before_reopen": true,
+    "admissions_reopened_in_settings": true,
+    "snapshot_hashes": {
+      "queued": "f1000d20842d0bae6f4f2fbd75a62f6bd02697936d8f7d7b3edf9ad394f1497b",
+      "runtime_paused": "0b70dbfb59c33519ca6a2aa13e20c399d02d8a78812b236d49d2073a71fc22e5",
+      "held_native_turn": "974d30a3e864194e2d86925e985becb000b05f34f6d7d82eec82ddac11448703",
+      "second_result_under_pause": "c4ff43da16d6766964002628c7800f0358049c61cf1f2b67967a1a934da99bd7",
+      "admissions_reopened": "7acf1aecc739ff5fd9e5b7e83dcf25da8aa555d124be901c6e811d937b9c8d2d"
+    }
+  },
+  "runtime": {
+    "native_pi_version": "0.87.1",
+    "real_connector_link": true,
+    "original_turn_completed_while_paused": true,
+    "retained_turn_completed_while_paused": true,
+    "refused_new_input_http": 409,
+    "intact_receipt_recovered": true,
+    "browser_admitted_original_queued_input": true,
+    "same_native_process": true,
+    "same_native_session": true,
+    "connector_generation_unchanged": true,
+    "grant_revisions_unchanged": true,
+    "exact_transcript_once": true,
+    "external_provider_calls": 0,
+    "fixture_model_calls": 2,
+    "confirmed_close": "SUCCEEDED",
+    "pi_stopped": true
+  },
+  "test": {
+    "fixture_lab": "D:\\nxs-si041-native-ce8d-exact",
+    "command": "pytest -o pythonpath= -o asyncio_default_fixture_loop_scope=function -p assert_wheel_imports test_live_pause.py",
+    "native_driver_sha256": "7ccf565a7c4839b73291bdf4457b1f6ded2411987727d2e7be15d0d667493923",
+    "browser_driver_sha256": "4fd5766193ece1c7c6162e9093cde11c165f241f6ce7d57b2ae462e7f31e4317",
+    "junit_sha256": "6b84763c2c68fcb5e48ebc2d5ffb3b55ab2ade99d840eabc1997e8c2dbd88d10",
+    "passed": 1,
+    "exit_code": 0,
+    "package_imports_verified": [
+      "Nexus",
+      "Connector",
+      "Core"
+    ]
+  },
+  "qualification_limits": [
+    "The integration used a real Pi process and a synthetic model, without a provider campaign.",
+    "The real Connector and Nexus Server ran on the same Windows machine.",
+    "The evidence closes the controlled composition of the browser control with native retained work. SI-T-I03 remains open for campaign qualification."
+  ]
+}
