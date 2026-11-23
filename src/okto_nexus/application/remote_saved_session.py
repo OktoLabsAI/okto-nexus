@@ -5,8 +5,9 @@ from datetime import datetime, timezone
 import json
 
 from nexus_connector_core import CoreError, r4_resource_release_digest
+from nexus_connector_core.native.pi_saved_history import is_pi_saved_session_id
 from nexus_connector_core.saved_context_link import (
-    CLAUDE_SAVED_CONTEXT, CODEX_SAVED_CONTEXT, saved_native_session_digest,
+    CLAUDE_SAVED_CONTEXT, CODEX_SAVED_CONTEXT, PI_SAVED_CONTEXT, saved_native_session_digest,
 )
 
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
@@ -16,7 +17,7 @@ from ..domain.session_interaction import InputScope
 from ..errors import ErrorCode, OktoNexusError
 from .execution_leases import require_execution_lane
 from .execution_native_session_mapping import (
-    read_managed_native_session, reviewed_claude_saved_context, reviewed_codex_context,
+    read_managed_native_session, reviewed_claude_saved_context, reviewed_codex_context, reviewed_pi_context,
 )
 from .execution_reconciliation import _receipt
 from .execution_saved_resume import (
@@ -27,6 +28,7 @@ from .execution_saved_resume import (
 REMOTE_SAVED_CONTEXTS = {
     CODEX_SAVED_CONTEXT.adapter_id: CODEX_SAVED_CONTEXT,
     CLAUDE_SAVED_CONTEXT.adapter_id: CLAUDE_SAVED_CONTEXT,
+    PI_SAVED_CONTEXT.adapter_id: PI_SAVED_CONTEXT,
 }
 SAVED_RESUME_MARKERS = frozenset(f'saved_{codec.name}_resume' for codec in REMOTE_SAVED_CONTEXTS.values())
 
@@ -59,8 +61,11 @@ def read_retired_remote_session(uow, scope, *, session_id, generation, adapter_i
     if mapping is None or (adapter_id is not None and mapping.adapter_id != adapter_id):
         raise _unavailable()
     codec = REMOTE_SAVED_CONTEXTS.get(mapping.adapter_id)
-    if codec is None or not ({CODEX_SAVED_CONTEXT: reviewed_codex_context,
-                              CLAUDE_SAVED_CONTEXT: reviewed_claude_saved_context}[codec](mapping)):
+    reviewers = {CODEX_SAVED_CONTEXT: reviewed_codex_context, CLAUDE_SAVED_CONTEXT: reviewed_claude_saved_context,
+                 PI_SAVED_CONTEXT: reviewed_pi_context}
+    if codec is None or not reviewers[codec](mapping):
+        raise _unavailable()
+    if codec is PI_SAVED_CONTEXT and not is_pi_saved_session_id(mapping.native_session_id):
         raise _unavailable()
     facts = conn.execute("""
         SELECT r.*,o.action,o.expected_revisions_json,o.intent_hash AS operation_intent
@@ -93,6 +98,8 @@ def read_retired_remote_session(uow, scope, *, session_id, generation, adapter_i
             owner_generation=generation))
     if codec is CLAUDE_SAVED_CONTEXT:
         source['native_session_digest'] = saved_native_session_digest(mapping.claude_history.session_uuid)
+    elif codec is PI_SAVED_CONTEXT:
+        source['native_session_digest'] = saved_native_session_digest(mapping.native_session_id)
     lineage = dict(source_session_id=session_id, source_session_generation=generation,
         source_close_operation_id=closing['operation_id'], source_release_digest=source['resource_release_digest'],
         connector_source=source)

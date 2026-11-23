@@ -20,7 +20,9 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
 from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
-from nexus_connector_core.saved_context_link import CLAUDE_SAVED_CONTEXT, SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OPEN_REVISION
+from nexus_connector_core.saved_context_link import (
+    CLAUDE_SAVED_CONTEXT, PI_SAVED_CONTEXT, SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OPEN_REVISION,
+)
 from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_INTERRUPT_CODEC, CLAUDE_OPERATION_STEER_CODEC
 from nexus_connector_core.presentation_link import (
@@ -440,6 +442,9 @@ def build_router() -> APIRouter:
                     and ws.app.state.deps.config.feature_harness_integrations
                     and PI_PRESENTATION_LINK_REVISION in hello['control_capabilities']):
                 welcome['control_capabilities'].append(PI_PRESENTATION_LINK_REVISION)
+                saved_pi = (PI_SAVED_CONTEXT.link_revision, PI_SAVED_CONTEXT.open_revision)
+                if set(saved_pi).issubset(hello['control_capabilities']):
+                    welcome['control_capabilities'].extend(saved_pi)
                 if (CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']
                         and PI_RUN_CONTROL_REVISION in hello['control_capabilities']):
                     welcome['control_capabilities'].append(PI_RUN_CONTROL_REVISION)

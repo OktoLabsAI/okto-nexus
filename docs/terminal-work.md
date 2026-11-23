@@ -92,8 +92,9 @@ Check the successor and receipt before continuing. An unavailable saved
 context does not open a fresh conversation.
 
 For a session on a Connector, select the original Harness ID and workspace.
-The reviewed Windows x64 Codex 0.157.0 and Claude Code 2.1.328 builds can
-reopen saved history on that same Connector after an acknowledged close.
+The reviewed Windows x64 builds of Codex 0.157.0, Pi 0.87.1 and Claude Code
+2.1.328 can reopen saved history on that same Connector after an acknowledged
+close.
 Keep the approved workspace and launch configuration in place. Claude also
 requires the same reviewed `plan` profile and native history. The Connector
 checks the saved history on its own host and refuses a changed or unavailable

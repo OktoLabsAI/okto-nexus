@@ -1,0 +1,116 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-025"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "755152728ef63026bdde169537721564e9188f55",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 569
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "80af7bfdbf2c81237ed7f17ae0d9655201f94a1e",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 108
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "184a821fcb2bcd9fe3fa716a2109dcf7fc293447",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 90
+    },
+    "clean_worktrees": true,
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "core_pin": "e0041fbfcb0ef230d6b5d31754c7e91e6977778caf43d6c0228ee338e52047f0",
+    "connector_pin": "2a363f8f8a76b46a817bdae778acc6594ac3235382f9b3d1e97bd9e2c192151b"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "pi": "0.87.1",
+    "node": "24.15.0",
+    "pi_installation": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "provider": "Synthetic in-process Pi provider. Native Node process denied outbound network."
+  },
+  "artifacts": {
+    "core": {
+      "commit": "db402559ea571365dbe83833fe41d837618c177d",
+      "wheel_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+      "build_tree": "d9c0f39abad66e1ce111ef1b8e487d404e4909d7",
+      "previous_candidate": {
+        "wheel_sha256": "e2897a1c07cbe602cb82591b711c3ac65169073d7584227b2591082a50e58fe0",
+        "build_tree": "fe4dc93fcf4bdf2cfd43d1463b39feed50d98ba4",
+        "commit": "32b5eab43a49e0040b5dfe472a0a93cd45a030f4"
+      }
+    },
+    "connector": {
+      "wheel_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "build_tree": "13c2d3317b6d157268e54da2dfc3c5b9b10f0636",
+      "commit": "558cecf345a74074e34421cf81464006eedbd9ab"
+    },
+    "nexus": {
+      "wheel_sha256": "3c89699f15297642778325ad4ed78438be74b50a8918b1f82a6b47940677b597",
+      "build_tree": "3918b63c027dfa57b43ba849998f4b70d80d294a"
+    }
+  },
+  "regressions": {
+    "core_source_passed": 112,
+    "connector_source_passed": 110,
+    "core_installed_passed": 52,
+    "connector_installed_passed": 87,
+    "generated_core_contracts_unchanged": true,
+    "strict_wheel_metadata_passed": true,
+    "nexus_installed_passed": 65,
+    "core_final_installed_focused_passed": 19,
+    "connector_final_installed_focused_passed": 18,
+    "offline_nexus_lock_check": true
+  },
+  "limitations": [
+    "The covered infrastructure is same-machine authenticated loopback.",
+    "Embedded Pi successor and separate-machine qualification remain open.",
+    "The broad scenario ledger is unchanged by this component evidence."
+  ],
+  "migration": "Additive private saved_pi_successors table in Connector SQLite revision 6.",
+  "rollback": "Revert the Nexus, Connector and Core commits with their corresponding wheel pins.",
+  "intermediate_run": {
+    "intact_source": "Connector resolved PROFILE_DRIFT before recording a successor claim because the prior comparison included a per-session native-cap reference.",
+    "fix": "Exclude Pi session-scoped native capability refs while still comparing approved credential refs and the remaining launch profile."
+  },
+  "cases": {
+    "final_intact_source": {
+      "canonical_close": "SUCCEEDED",
+      "process_exited_before_record": true,
+      "live_busy_refusal": true,
+      "profile_paths_absent_from_server_events_and_receipts": true,
+      "native_pi_version": "0.87.1",
+      "external_provider_requests": 0,
+      "cancel_had_no_effect": true,
+      "successor_admitted": true,
+      "native_history_preserved": true,
+      "new_process": true,
+      "second_successor_denied": true,
+      "original_receipt_recovered": true,
+      "no_model_call_on_open": true,
+      "new_turn_extended_original_file_once": true,
+      "canonical_successor_close": "SUCCEEDED"
+    },
+    "changed_source_before_policy_fix": {
+      "canonical_close": "SUCCEEDED",
+      "process_exited_before_record": true,
+      "live_busy_refusal": true,
+      "profile_paths_absent_from_server_events_and_receipts": true,
+      "native_pi_version": "0.87.1",
+      "external_provider_requests": 0,
+      "cancel_had_no_effect": true,
+      "changed_source_refused": true,
+      "successor_admitted": false
+    }
+  }
+}
