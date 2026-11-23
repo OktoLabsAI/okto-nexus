@@ -303,6 +303,10 @@
         ],
         "interrupt_queue_barrier": [
           "nexus-claude-operation-interrupt-v1"
+        ],
+        "saved_context_resume": [
+          "nexus-saved-claude-v1",
+          "nexus-saved-claude-open-v1"
         ]
       },
       "capabilities": {
@@ -313,10 +317,10 @@
         "command_subset": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md", "si011-si026-claude-remote-interrupt.md"] },
         "native_live_attach": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
         "saved_context_resume": {
-          "status": "blocked",
-          "reason": "O Connector já verifica a origem encerrada. A consulta autenticada e a abertura da sucessora do Claude ainda precisam ser integradas.",
+          "status": "qualified",
           "evidence": [
-            "si026-claude-connector-retirement.md"
+            "si026-claude-connector-retirement.md",
+            "si026-claude-connector-successor.md"
           ]
         },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },

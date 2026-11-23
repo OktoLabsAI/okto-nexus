@@ -1,0 +1,152 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-026"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "09513ccf1895d1a805bb6e915c545c834e9a47c4",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 566
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "b6047a5a29be732c225238b155ec362b83a75627",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 105
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "da0676237759bf76381df56d85f3f7c722f74cbe",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 86
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "core_commit": "9b2e4a4d53ffe40fe2c331ab5fcfedab7351d757",
+    "core_wheel_sha256": "fb9e03da85b19d3b9d9484eabb338e45806b67378a608ae93b368facc2bcdd8f",
+    "core_build_tree": "a9a506f4db3df37a464e51e8ed461c0f52e1169d",
+    "connector_commit": "5ad9f36ae3d6162a22d096ea75c24aa944c83a2b",
+    "connector_wheel_sha256": "a7c6284a3678363f67211fca99ec682de2d213d3cfd91f8861ac101e78909faf",
+    "connector_build_tree": "6b65de5cd9721d6467815352fd2011af1d1df01c",
+    "nexus_commit": "827154a8b0b1764582068ef7d5a444b6da7a9a0c",
+    "nexus_wheel_sha256": "cfdeb934da8e0a27bd66d06060dc553b26317288d5dd84cbd83ca63ab24fa720",
+    "nexus_build_tree": "6a96cffda6dfe9ca6043ddfc1c0d1bc6422a467e"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "python": "3.13.1",
+    "claude_code": "2.1.328",
+    "claude_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "provider": "Deterministic loopback response with temporary owner, profile and project.",
+    "external_provider_requests": 0
+  },
+  "tests_before_tool_policy_fix": {
+    "installed_core_passed": 103,
+    "installed_connector_passed": 140,
+    "installed_nexus_passed": 83,
+    "codex_native": {
+      "assertions_completed": true,
+      "fixture_teardown": "Server thread still alive after 30-second join",
+      "pytest_case_passed": false,
+      "reference": "si023-codex-remote-successor.md"
+    }
+  },
+  "tool_policy_regression_cases_passed_in_source": 2,
+  "checks": {
+    "core_generated_contracts_unchanged": true,
+    "nexus_lock_consistent": true,
+    "wheel_metadata_validated": true
+  },
+  "intermediate_claude_attempts": [
+    {
+      "case": "first installed run",
+      "canonical_close": "SUCCEEDED",
+      "history_capture": false
+    },
+    {
+      "case": "stored history drift denied at review",
+      "canonical_close": "SUCCEEDED",
+      "history_capture": true,
+      "cancel_without_admission": true,
+      "http_status_after_history_drift": 409,
+      "fixture_failure": "A third confirmation exhausted two scripted answers."
+    },
+    {
+      "case": "successor with deny-all profile under approval-capable lease",
+      "history_capture": true,
+      "claim_persisted": true,
+      "opening": "FAILED",
+      "possible_effect": false,
+      "error": "CAPABILITY_UNSUPPORTED",
+      "fix": "Retain the narrower Claude terminal profile while checking authority for actual approval modes."
+    },
+    {
+      "case": "corrected Core, first installed run",
+      "canonical_close": "SUCCEEDED",
+      "history_capture": false
+    }
+  ],
+  "limits": [
+    "Only the reviewed Windows builds and same-machine authenticated loopback were exercised.",
+    "Separate-machine qualification, provider accounts, end-user and cross-platform gates remain open.",
+    "No broad gate is marked PASS by this component evidence."
+  ],
+  "final_cases": {
+    "claude": {
+      "canonical_close": "SUCCEEDED",
+      "original_process_exited": true,
+      "dialogue_unchanged_until_record": true,
+      "cancel_preserved_operation_count": true,
+      "drift_refused": true,
+      "successor_admitted": true,
+      "exact_native_resume": true,
+      "new_process": true,
+      "zero_loopback_model_turns_on_open": true,
+      "second_successor_denied": true,
+      "original_receipt_recovered": true,
+      "subsequent_turn_has_original_dialogue": true,
+      "successor_process_exited": true,
+      "native_version": "2.1.328",
+      "took_exact_snapshot": true,
+      "real_process_exited": true,
+      "exact_scope_and_dialogue": true,
+      "durable_local_witness": true,
+      "private_profile_fields_absent": true,
+      "model_requests": 2,
+      "external_provider_requests": 0,
+      "pytest_case_passed": true,
+      "mutation_in_temporary_profile_denied_before_restore": true,
+      "test_waited_for_sufficient_current_lease_before_canonical_close": true,
+      "policy": "plan with all tools denied, retained under an approval-capable lease"
+    },
+    "codex": {
+      "build": "Codex app-server 0.157.0",
+      "canonical_close": "SUCCEEDED",
+      "local_private_snapshot_observed": true,
+      "owned_app_server_exited": true,
+      "exact_thread_and_source_verified": true,
+      "file_drift_injected": false,
+      "private_record_persisted": true,
+      "rollout_path_absent_from_server": true,
+      "loopback_fixture_requests": 1,
+      "external_provider_requests": 0,
+      "successor_admitted": true,
+      "native_thread_resume_count": 1,
+      "human_cancel_had_no_effect": true,
+      "same_command_recovered_original_receipt": true,
+      "pytest_case_passed": true,
+      "fixture_join_allowance_seconds": 90,
+      "core_sha256": "fb9e03da85b19d3b9d9484eabb338e45806b67378a608ae93b368facc2bcdd8f"
+    }
+  },
+  "final_core_wheel_focused_passed": 7
+}

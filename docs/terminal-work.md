@@ -91,11 +91,13 @@ same command with `--json` to read its receipt without opening another session.
 Check the successor and receipt before continuing. An unavailable saved
 context does not open a fresh conversation.
 
-For a Codex session on a Connector, select the original Harness ID and
-workspace. The reviewed Windows x64 Codex 0.157.0 build can reopen saved
-history on that same Connector after an acknowledged close. Keep the approved
-workspace and launch configuration in place. The Connector checks the saved
-history on its own host and refuses a changed or unavailable source.
+For a session on a Connector, select the original Harness ID and workspace.
+The reviewed Windows x64 Codex 0.157.0 and Claude Code 2.1.328 builds can
+reopen saved history on that same Connector after an acknowledged close.
+Keep the approved workspace and launch configuration in place. Claude also
+requires the same reviewed `plan` profile and native history. The Connector
+checks the saved history on its own host and refuses a changed or unavailable
+source.
 Follow the detach key shown by the attached viewer. Ctrl+C in a harness
 started outside Nexus follows that harness's terminal behavior.
 
