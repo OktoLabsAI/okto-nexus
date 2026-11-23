@@ -78,11 +78,16 @@ def display_reattach_command(attached, binding, *, service, operator_profile=Non
     """After detach, render only the confirmed binding and session for the human login."""
     if not attached or attached['status'] != 'detached':
         return
+    display_session_attach_command('Reattach to this session: ', attached['scope'], binding, service=service,
+                                   operator_profile=operator_profile, write=write, viewer_executable=viewer_executable)
+
+
+def display_session_attach_command(label, scope, binding, *, service, operator_profile=None, write=False,
+                                   viewer_executable=None):
     login = getattr(service, 'operator_profile', operator_profile)
     revision = binding.get('binding_revision')
     if not login or type(revision) is not int or not 0 < revision < 2**63:
         return
-    scope = attached['scope']
     fields = ('binding_id', 'server_id', 'executor_id', 'workspace_id')
     if any(scope.get(key) != binding.get(key) for key in fields):
         return
@@ -96,7 +101,7 @@ def display_reattach_command(attached, binding, *, service, operator_profile=Non
     argv = ['okto-nexus', 'session', 'attach', *(f'--{key}={value}' for key, value in selectors.items())]
     if write:
         argv.append('--write')
-    _display_command('Reattach to this session: ', argv)
+    _display_command(label, argv)
 
 
 def _local_viewer_login(service, call, server_id):

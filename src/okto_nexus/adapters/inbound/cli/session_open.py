@@ -27,7 +27,7 @@ def _checkpoint(path):
         raise
 
 
-def _admit_empty(call, binding, checkpoint, save, *, recovery):
+def _admit_empty(call, binding, checkpoint, save, *, recovery, confirmed_in_viewer):
     intent = checkpoint['intent']
     route = PREFIX + '/runtime/intents/' + intent
     recovered = None
@@ -41,6 +41,9 @@ def _admit_empty(call, binding, checkpoint, save, *, recovery):
     operation = recovered['operation'] if recovered is not None else None
     if operation is None and recovery:
         print(f'Opening receipt {intent} has no recorded admission.')
+        if confirmed_in_viewer:
+            raise ConnectionError('OPENING_PENDING', 'Use session open to review the pending opening before requesting '
+                                  'another session.', possible_effect=True)
         if input('Continue this same empty-session request? [y/N] ').strip().lower() != 'y':
             raise ConnectionError('OPENING_PENDING', 'The original opening remains available for recovery.', possible_effect=True)
 
@@ -108,7 +111,7 @@ def _wait_for_opening(call, binding, scope, operation, operation_id, intent_hash
     raise ConnectionError('OPENING_PENDING', f'Opening is unconfirmed. Inspect receipt {operation_id} or run the same command to recover it.', possible_effect=True)
 
 
-def empty_session(service, call, binding, *, allow_new=False):
+def empty_session(service, call, binding, *, allow_new=False, confirmed_in_viewer=False):
     """Recover an exact pending opening or separately confirm a first empty one."""
     if not getattr(call, 'token', None):
         return None
@@ -146,7 +149,7 @@ def empty_session(service, call, binding, *, allow_new=False):
             if policy['session_policy'] == 'one_shot':
                 raise ConnectionError('OPENING_POLICY_REFUSED', 'This connection opens a session per message or handoff.')
             print(f"An empty session will use the existing execution authorization and policy ({display_text(policy['session_policy'])}). No prompt will be sent.")
-            if input('Open an empty session? [y/N] ').strip().lower() != 'y':
+            if not confirmed_in_viewer and input('Open an empty session? [y/N] ').strip().lower() != 'y':
                 return None
             checkpoint = {'format': 2, 'state': 'pending', 'scope': scope, 'actor': actor,
                           'intent': 'empty_open_' + uuid4().hex, 'binding_revision': binding['binding_revision']}
@@ -156,7 +159,8 @@ def empty_session(service, call, binding, *, allow_new=False):
             atomic_json(path, value)
 
         print('Opening request ' + checkpoint['intent'])
-        admitted_scope, operation, operation_id, intent_hash = _admit_empty(call, binding, checkpoint, save, recovery=pending)
+        admitted_scope, operation, operation_id, intent_hash = _admit_empty(
+            call, binding, checkpoint, save, recovery=pending, confirmed_in_viewer=confirmed_in_viewer)
         state = _wait_for_opening(call, binding, admitted_scope, operation, operation_id, intent_hash)
         session_id = admitted_scope['session_id']
         save(checkpoint | {'state': 'settled', 'operation_id': operation_id, 'session_id': session_id})

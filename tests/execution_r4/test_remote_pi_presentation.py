@@ -170,7 +170,8 @@ def test_remote_pi_viewer_and_editor_keep_the_connector_owner_and_queue(tmp_path
 
                 intent = 'pi_input_' + 'd' * 32
 
-                def write(link, recover):
+                def write(link, recover, *, allow_empty_open):
+                    assert not allow_empty_open
                     with ExitStack() as stack:
                         if silent is None:
                             target = {'scope': exact, 'expected_session_generation': generation}

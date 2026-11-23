@@ -209,9 +209,17 @@ okto-nexus session attach --write --id HARNESS_ID --session-id SESSION_ID --oper
 ```
 
 Enter records the text in the Nexus session queue and shows its receipt. If Pi
-is working, the message waits for the next turn. Ctrl+C closes the viewer and
+is working, the message waits for the next turn. Ctrl+] closes the editor and
 leaves the admitted work running. Taking over from another terminal writer
 requires explicit confirmation.
+
+In an interactive `session attach --write`, Ctrl+O starts the Nexus review
+for a separate empty session. Finish any draft or pending control first.
+Ctrl+Y confirms the opening and returns to the shell with a command to attach
+to the exact new session. Ctrl+N cancels and stays in the original viewer.
+The original session keeps its queue and has its own reattach command.
+If the opening is unconfirmed, use `session open` on the same connection to
+recover the recorded request and get its exact session ID.
 
 If an Enter request has an unconfirmed receipt, use the original intent and
 session generation printed by the viewer.

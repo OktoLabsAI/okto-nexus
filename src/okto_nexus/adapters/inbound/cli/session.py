@@ -31,7 +31,7 @@ from ...outbound.service_manager.context import atomic_json
 from ...outbound.terminal_http import LocalOperatorHTTP
 from .codex_viewer_process import present_codex, select_viewer
 from .connect import project_profile
-from .connect_presentation import display_reattach_command
+from .connect_presentation import display_reattach_command, display_session_attach_command
 from .native_input import display_text
 from .pi_viewer_terminal import show_pi_editor
 from .quick_connect_ids import binding_reference, public_ids
@@ -185,7 +185,8 @@ def _show_claude_transcript(link):
         raise ConnectionError('PRESENTATION_UNAVAILABLE', 'The Claude terminal returned invalid text.') from None
 
 
-def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False):
+def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False,
+                   allow_empty_open=False):
     """Open a viewer for the exact existing session and return the detach receipt."""
     selected = _select_session(call, binding, session_id, interactive=interactive)
     if selected is None:
@@ -240,7 +241,9 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
             print('Ctrl+R reviews reorientation at the next available boundary.')
             print('Ctrl+X reviews interruption and pauses the queue after confirmation.')
             print(f'Receipt recovery uses session generation {generation}.')
-        print('Ctrl+C detaches this viewer.', flush=True)
+            if allow_empty_open:
+                print('Ctrl+O reviews opening a separate session in Nexus.')
+        print('Ctrl+] detaches this editor.' if writer else 'Ctrl+C detaches this viewer.', flush=True)
 
         def recover(intent):
             try:
@@ -249,17 +252,19 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
             except ConnectionError:
                 return None
 
+        action = None
         with open_local_presentation(call, scope=scope, expected_session_generation=generation,
                                      capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
                                      pi_viewport=viewport, **({'remote': True} if remote else {}),
                                      **({'writer': writer, 'pi_editor': True} if writer else {})) as link:
             if writer:
-                show_pi_editor(link, recover)
+                action = show_pi_editor(link, recover, allow_empty_open=allow_empty_open)
             else:
                 _show_pi_transcript(link)
         _display({'state': 'detached'}, False)
         print('Session ' + display_text(scope['session_id']))
         return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
+                **({'next_action': action} if action == 'open_empty_session' else {}),
                 'attach_strategy': f"pi_{'remote' if remote else 'local'}_{'write' if writer else 'read'}",
                 'capability_revision': revision}
     reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
@@ -513,12 +518,28 @@ def run_session(argv):
                 print(f'Opened empty session {display_text(opened)}. Use session attach with this exact --session-id.')
             return 0
         if args.action == 'attach':
+            can_open_separately = (args.write and binding.get('adapter_id') == 'pi_rpc'
+                                   and args.attachment_receipt is None)
             attached = attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
-                                      interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(), write=args.write)
+                                      interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(),
+                                      write=args.write, **({'allow_empty_open': True} if can_open_separately else {}))
             if args.attachment_receipt is not None:
                 atomic_json(args.attachment_receipt, attached or {'status': 'declined'})
             display_reattach_command(attached, binding, service=service, operator_profile=args.operator_profile,
                                      write=args.write, viewer_executable=args.viewer_executable)
+            if can_open_separately and attached and attached.get('next_action') == 'open_empty_session':
+                source_session = attached['scope']['session_id']
+                print(f'Nexus will keep the original session {display_text(source_session)} and its queue.')
+                opened = empty_session(service, call, binding, allow_new=True, confirmed_in_viewer=True)
+                if opened is None:
+                    print('Opening cancelled.')
+                elif opened == source_session:
+                    print(f'Recovered the opening for the original session {display_text(opened)}.')
+                else:
+                    print(f'Opened separate empty session {display_text(opened)}.')
+                    display_session_attach_command('Attach to the new session: ', binding | {'session_id': opened},
+                                                   binding, service=service, operator_profile=args.operator_profile,
+                                                   write=True)
             return 0
         if args.action == 'resume':
             result = resume_saved_session(call, binding, args.session_id,

@@ -81,6 +81,11 @@ def test_empty_open_requires_confirmation_and_recovers_the_same_receipt(tmp_path
             'format': 1, 'state': 'pending', 'scope': old_scope, 'intent': legacy_intent, 'binding_revision': 1,
             'actor': {'origin': call.base, 'username': call.username},
         }), encoding='utf-8')
+        monkeypatch.setattr('builtins.input', lambda _: pytest.fail('Use the explicit recovery command'))
+        with pytest.raises(ConnectionError) as pending:
+            empty_session(service, call, binding, allow_new=True, confirmed_in_viewer=True)
+        assert pending.value.code == 'OPENING_PENDING' and pending.value.possible_effect and writes == []
+        monkeypatch.setattr('builtins.input', lambda _: 'y')
         assert empty_session(service, call, binding) == 'exact-session'
         assert writes[0]['client_intent_id'] == legacy_intent
     else:
@@ -483,7 +488,7 @@ def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch):
     monkeypatch.setattr(session, 'sys', SimpleNamespace(platform='win32'))
     monkeypatch.setattr(session, 'review_local_presentation', review)
     monkeypatch.setattr(session, 'open_local_presentation', attach)
-    monkeypatch.setattr(session, 'show_pi_editor', lambda link, recover: calls.append(link.attachment_id))
+    monkeypatch.setattr(session, 'show_pi_editor', lambda link, recover, **_: calls.append(link.attachment_id))
     monkeypatch.setattr('builtins.input', lambda _: 'n')
     assert session.attach_session(call, binding, session_id='session-a', interactive=True, write=True) is None
     assert calls == []
@@ -507,6 +512,86 @@ def test_pi_console_decodes_split_paste_and_keeps_detach_local():
     assert keys.feed('\x1b[82;19;18;1;8;1_\x1b[88;45;24;1;8;1_\x1b[89;21;25;1;8;1_\x0e') == [
         ('steer_review', None), ('interrupt_review', None), ('control_confirm', None), ('control_cancel', None),
     ]
+    assert keys.feed('\x0f\x1b[79;24;15;1;8;1_') == [('open_empty_session', None), ('open_empty_session', None)]
+    assert keys.feed('\x1b[200~\x0f\x1b[201~') == []
+
+
+@pytest.mark.parametrize(('initial_keys', 'confirmation', 'allowed', 'result'), [
+    ([], '\x19', True, 'open_empty_session'),
+    ([], '\x0e', True, None),
+    ([], '', True, None),
+    ([], '', False, None),
+    (['Draft to preserve'], '', True, None),
+])
+def test_pi_separate_open_stays_local_and_leaves_a_draft_attached(
+        monkeypatch, capsys, initial_keys, confirmation, allowed, result):
+    from contextlib import nullcontext
+
+    from okto_nexus.adapters.inbound.cli import windows_viewer_terminal
+    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import show_pi_editor
+
+    keys = iter([*initial_keys, '\x0f', *([confirmation] if confirmation else []), None])
+    monkeypatch.setattr(windows_viewer_terminal, 'viewer_console_input', lambda _: nullcontext(lambda: next(keys)))
+    monkeypatch.setattr(windows_viewer_terminal, 'ansi_viewer_output', lambda _: nullcontext())
+    forwarded = []
+
+    def edit(*, key, text, **_):
+        forwarded.append((key, text))
+        return False, None
+
+    link = SimpleNamespace(poll_pi_output=lambda _: None, edit_pi_input=edit)
+    assert show_pi_editor(link, lambda _: None, allow_empty_open=allowed) == result
+    assert forwarded == [('insert', text) for text in initial_keys]
+    if initial_keys:
+        assert 'Finish the draft' in capsys.readouterr().out
+
+
+@pytest.mark.parametrize('opened', [None, 'session-a', 'session-next'])
+def test_pi_separate_open_reviews_after_detach_and_prints_exact_successor_command(monkeypatch, capsys, tmp_path, opened):
+    class PiCatalog(Catalog):
+        token = 'operator-fixture'
+
+        def __call__(self, method, url, body=None):
+            result = super().__call__(method, url, body)
+            return result | {'adapter_id': 'pi_rpc'} if url.endswith('/connections/bindings/binding') else result
+
+    api = PiCatalog()
+    service = SimpleNamespace(operator_http=api, operator_profile='terminal-user',
+                              adapter=SimpleNamespace(home=tmp_path),
+                              inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    terminal = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=terminal, stdout=terminal))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *_: service)
+    events = []
+
+    def attach(call, binding, *, session_id, interactive, write, allow_empty_open, **_):
+        assert call is api and binding['adapter_id'] == 'pi_rpc'
+        assert interactive and write and allow_empty_open
+        events.append(('viewer', session_id))
+        detached = {'status': 'detached', 'scope': binding | {'session_id': session_id}}
+        return detached | {'next_action': 'open_empty_session'} if session_id == 'session-a' else detached
+
+    def open_empty(selected_service, call, binding, *, allow_new, confirmed_in_viewer):
+        assert selected_service is service and call is api
+        assert allow_new and confirmed_in_viewer and binding['binding_revision'] == 4
+        assert events == [('viewer', 'session-a'), ('detach', 'session-a')]
+        events.append(('review_open', opened))
+        return opened
+
+    monkeypatch.setattr(session, 'attach_session', attach)
+    monkeypatch.setattr(session, 'empty_session', open_empty)
+    monkeypatch.setattr(session, 'display_reattach_command',
+                        lambda attached, *_args, **_kwargs: events.append(('detach', attached['scope']['session_id'])))
+    assert main(['session', 'attach', '--write', '--id', 'reviewer', '--workspace-id', 'workspace',
+                 '--session-id', 'session-a']) == 0
+    assert events == [('viewer', 'session-a'), ('detach', 'session-a'), ('review_open', opened)]
+    output = capsys.readouterr().out
+    assert 'keep the original session session-a and its queue' in output
+    command = [line for line in output.splitlines() if line.startswith('Attach to the new session: ')]
+    if opened == 'session-next':
+        assert len(command) == 1 and '--session-id=session-next' in command[0] and '--write' in command[0]
+    else:
+        assert not command
 
 
 @pytest.mark.parametrize('steer', [False, True])

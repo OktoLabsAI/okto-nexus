@@ -1,0 +1,103 @@
+{
+  "tasks": [
+    "SI-018",
+    "SI-030"
+  ],
+  "scenarios": [
+    "SI-T-G20"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "856f6020068ff319069605142235a87d31f8c445",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 576
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "5bfbb487e6f92b975b010d9c8d759da76939e5aa",
+    "nexus_wheel_sha256": "279fa5c03ea95aef4c9d85a5d1ae9cc970814c425653f5aaf99a87635cdc3c5d",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "twine_strict_exit_code": 0,
+    "uv_lock_check_exit_code": 0
+  },
+  "environment": {
+    "os": "Windows x64 with real ConPTY",
+    "pi": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "transport": "Authenticated HTTP and WebSocket on loopback; installed Nexus CLI and Core",
+    "provider": "Deterministic in-process fixture; remote networking disabled in the Pi process",
+    "terminal_service_discovery": "Test fixture supplies the authenticated loopback service location"
+  },
+  "native": {
+    "real_pi_version": "0.87.1",
+    "windows_conpty": true,
+    "native_starts": 2,
+    "draft_guard_preserved_original_text": true,
+    "cancel_kept_source_viewer_and_did_not_open": true,
+    "existing_opening_recovered_after_cli_deadline": true,
+    "second_editor_detach_exit": 0,
+    "explicit_attach_command_used": true,
+    "canonical_confirmation_before_open": true,
+    "second_viewer_exact_new_scope": true,
+    "no_model_call_on_open": true,
+    "source_queue_delivered_on_original_only": true,
+    "exact_source_messages_once": true,
+    "canonical_closes": 2,
+    "native_processes_exited": true,
+    "external_provider_requests": 0,
+    "local_fixture_model_requests": 2,
+    "distinct_native_ids_in_canonical_receipts": true
+  },
+  "earlier_runs": [
+    "The first lab omitted the server identity pin on its authenticated terminal client. Local presentation refused before showing the editor.",
+    "A ConPTY run established the source editor and queue but the line-mode answer after detach did not complete. The product now confirms inside the editor before detaching.",
+    "The second Pi exceeded the CLI observation window. The authenticated receipt later resolved and repeating the viewer request recovered the same opening without a new operation.",
+    "An isolated ConPTY reproduction confirmed the first detach key could be lost after reacquiring input mode. The opening now exits with a separately invoked exact attach command, and the editor advertises Ctrl+]."
+  ],
+  "tests": {
+    "source_cli_passed": 60,
+    "native_test": {
+      "passed": 1,
+      "exit_code": 0,
+      "junit_sha256": "81ff383e151fbb068b109c07a091e2e1d958e73a13ceecb6ca9ba631de539938"
+    },
+    "installed_cli_and_connector_regressions": {
+      "passed": 63,
+      "exit_code": 0,
+      "junit_sha256": "daa6a1ee8e7a92d61a53162cabe7a87d7d1ee93f8cbb9ec54b357f8de482f4a3"
+    },
+    "fixture_lab": "D:\\nxs-si030-pi-open-856f-explicit",
+    "native_driver_sha256": "89c0820ae31ee1322371440a8eba7aae78eee0b9fc86462f51477137009639c7",
+    "package_imports_verified": [
+      "Nexus",
+      "Connector",
+      "Core"
+    ]
+  },
+  "qualification_limits": [
+    "The ConPTY exercise used a real local Pi and a synthetic model. Connector presentation regressions used a fixture renderer.",
+    "Native remote Pi, other harnesses and provider campaigns have separate qualification gates."
+  ]
+}

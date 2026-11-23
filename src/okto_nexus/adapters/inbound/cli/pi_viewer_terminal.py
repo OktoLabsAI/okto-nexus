@@ -18,7 +18,8 @@ _VT_KEYS = {
 }
 _WIN_KEYS = {35: 'end', 36: 'home', 37: 'left', 38: 'up', 39: 'right', 40: 'down', 46: 'delete'}
 _CONTROLS = {'\x03': 'detach', '\x1d': 'detach', '\r': 'enter', '\x08': 'backspace', '\x7f': 'backspace',
-             '\x12': 'steer_review', '\x18': 'interrupt_review', '\x19': 'control_confirm', '\x0e': 'control_cancel'}
+             '\x12': 'steer_review', '\x18': 'interrupt_review', '\x19': 'control_confirm', '\x0e': 'control_cancel',
+             '\x0f': 'open_empty_session'}
 _CONTROL_KEYS = {'steer_review', 'interrupt_review', 'control_confirm', 'control_cancel'}
 _CONTROL_NAMES = {'steer': 'Reorientation', 'interrupt': 'Interruption'}
 _STEER_STATUS = {
@@ -61,8 +62,9 @@ def _key_from_csi(sequence):
         return 'newline', None
     if modifiers & 0x0c and not modifiers & 0x13 and key in (0x43, 0xdd):
         return 'detach', None
-    if modifiers & 0x0c and not modifiers & 0x13 and key in (0x52, 0x58, 0x59, 0x4e):
-        return {0x52: 'steer_review', 0x58: 'interrupt_review', 0x59: 'control_confirm', 0x4e: 'control_cancel'}[key], None
+    if modifiers & 0x0c and not modifiers & 0x13 and key in (0x52, 0x58, 0x59, 0x4e, 0x4f):
+        return {0x52: 'steer_review', 0x58: 'interrupt_review', 0x59: 'control_confirm', 0x4e: 'control_cancel',
+                0x4f: 'open_empty_session'}[key], None
     if 0 < code <= 0x10ffff and not 0xd800 <= code <= 0xdfff:
         return _bare_key(chr(code))
     return None, None
@@ -264,8 +266,8 @@ class _PiControls:
                 del self.receipts[action]
 
 
-def show_pi_editor(link, recover):
-    """Display Pi's editor and report durable receipt identities after Enter."""
+def show_pi_editor(link, recover, *, allow_empty_open=False):
+    """Display Pi's editor, keeping separate-session requests local to the CLI."""
     from .windows_viewer_terminal import ansi_viewer_output, viewer_console_input
 
     decode = codecs.getincrementaldecoder('utf-8')().decode
@@ -285,6 +287,8 @@ def show_pi_editor(link, recover):
 
     keys = _PiKeys()
     controls = _PiControls(link, recover, render, status)
+    draft_may_contain_text = False
+    opening_review = False
     with ansi_viewer_output(sys.stdout), viewer_console_input(sys.stdin) as next_input:
         sys.stdout.write('\x1b[?2004h')
         sys.stdout.flush()
@@ -308,6 +312,23 @@ def show_pi_editor(link, recover):
                         for action, receipt in controls.receipts.items():
                             status(f'{_CONTROL_NAMES[action]} receipt intent {receipt.intent}.')
                         return
+                    if opening_review:
+                        if key == 'control_confirm':
+                            return 'open_empty_session'
+                        if key == 'control_cancel':
+                            opening_review = False
+                            status('Opening cancelled.')
+                        break
+                    if key == 'open_empty_session':
+                        if not allow_empty_open:
+                            continue
+                        if draft_may_contain_text or controls.holds_draft or controls.receipts:
+                            status('Finish the draft or pending control before opening a separate session.')
+                            break
+                        opening_review = True
+                        status('Open a separate empty session in Nexus? Ctrl+Y confirms, Ctrl+N cancels. '
+                               'The original session keeps its queue.')
+                        break
                     if key in _CONTROL_KEYS:
                         if controls.key(key):
                             return
@@ -331,6 +352,10 @@ def show_pi_editor(link, recover):
                         return
                     if limited:
                         status('The text exceeds the Pi editor limit.')
+                    elif key in ('insert', 'newline'):
+                        draft_may_contain_text = True
+                    elif key == 'enter':
+                        draft_may_contain_text = False
                     if queued is not None:
                         status('Message recorded as ' + queued['input_id'] + '.')
         finally:
