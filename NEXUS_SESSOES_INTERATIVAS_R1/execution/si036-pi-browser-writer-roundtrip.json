@@ -1,0 +1,118 @@
+{
+  "tasks": [
+    "SI-021",
+    "SI-031",
+    "SI-036"
+  ],
+  "scenarios": [
+    "SI-T-G09",
+    "SI-T-I07"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "b7d9773a09a7c699ea6ec0adb4f973fd7f679cd2",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 579,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "worktrees_clean": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "5bfbb487e6f92b975b010d9c8d759da76939e5aa",
+    "nexus_wheel_sha256": "279fa5c03ea95aef4c9d85a5d1ae9cc970814c425653f5aaf99a87635cdc3c5d",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876"
+  },
+  "environment": {
+    "os": "Windows x64; real ConPTY",
+    "topology": "Independent remote executor with authenticated Connector R4 over loopback",
+    "browser": "Microsoft Edge 158.0.4370.33, Playwright CLI 0.1.25",
+    "harness": "Pi 0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "provider": "In-process synthetic model using isolated credentials; Pi networking disabled"
+  },
+  "native": {
+    "native_pi": "0.87.1",
+    "real_connector_r4": true,
+    "windows_conpty": true,
+    "connect_without_viewer": true,
+    "no_session_before_home_chat": true,
+    "one_canonical_home_chat": true,
+    "browser_chat_correlated_with_native_turn": true,
+    "terminal_wrote_one_queued_message": true,
+    "exact_writer_detached_with_native_turn_active": true,
+    "browser_reloaded_same_session": true,
+    "browser_observed_followup_before_reply": true,
+    "browser_observed_both_results": true,
+    "one_native_process_and_session": true,
+    "exact_native_history_once": true,
+    "native_turns": 2,
+    "connector_generation_unchanged": true,
+    "native_exit_after_canonical_close": true,
+    "synthetic_model_calls": 2,
+    "external_provider_calls": 0
+  },
+  "tests": {
+    "native_browser": {
+      "passed": 1,
+      "junit_sha256": "9474f336394de857f715c317138cda8611ae1875502025bd78e9643eeb8f11a6"
+    },
+    "browser_snapshot_sha256": {
+      "chat-recorded": "08875ef5c66a28b5a02b6b2ec8b77053ca9956db78013ec4c4223cd23b0444ed",
+      "source-conversation": "b2da5a124773b6a9b660f47e6168fff8162e64f83fece3c7ecefdcca7e8f3c46",
+      "browser-returned": "410370c827df13b3797f97e22d2d9c15742f3fea5392492dcb83840e535b917f",
+      "browser-saw-followup": "957f638a6ab0f3652a47cb491633ee4fb20f97c82ec2f34823888cd4537c646b",
+      "browser-saw-results": "fa1c0cfa5e4025b7fab25848f6f363fd396678086f6c28e092e636ca1a843231"
+    },
+    "frontend_node": {
+      "passed": 67,
+      "tap_sha256": "a9696d8a5c061a1fea1e23b4900e2f20430717b01abc63859d3fc7007a6944f8"
+    },
+    "wheel_import_guard": [
+      "Nexus",
+      "Connector",
+      "Core"
+    ]
+  },
+  "fixture": {
+    "lab": "D:\\nxs-si-i07-browser-writer-b7d9773a-final-pass",
+    "driver_sha256": "50433a4fa6a2523d32d83e89cb73dbe4d1a62774371e44c009a7b461af0c2ebe",
+    "terminal_sha256": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20",
+    "browser_script_sha256": "fd090a07ea9bcb8c67b0b6690a0cc0b5b7449f4429de3322b538319789693b8f",
+    "terminal_start_sha256": "72559882435c66071e7e3c81f752aa807e139d9e0e3cc3f9a40a56b6f9ddc35b"
+  },
+  "qualification_limits": [
+    "Nexus and Connector used the same Windows machine with separate homes and a loopback R4 connection.",
+    "The browser was automated with disposable operator authentication. Human acceptance has a separate gate.",
+    "The native Pi used a synthetic model. Real-provider and cross-machine qualification remain open."
+  ]
+}
