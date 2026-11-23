@@ -25,7 +25,12 @@ from .execution_operator_authority import (
     require_operator_request,
     require_subject_dispatch_grant,
 )
-from .runtime_policy import effective
+from .runtime_policy import defaults, effective
+
+
+def require_new_input_admission(uow):
+    if defaults(uow.connection)['session_input_admissions_paused']:
+        raise OktoNexusError(ErrorCode.CONFLICT, 'New session messages are paused by the operator.', {})
 
 
 def enqueue_human_input(*, factory, access, authority_fence, current_capability_revision,
@@ -47,6 +52,7 @@ def enqueue_human_input(*, factory, access, authority_fence, current_capability_
                 verify_command(uow)
             grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                                    author=author, resolve_human=resolve_human)
+            require_new_input_admission(uow)
             if not capability_revision or current_capability_revision(uow, scope) != capability_revision:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'The session input capability changed.', {})
             return grant

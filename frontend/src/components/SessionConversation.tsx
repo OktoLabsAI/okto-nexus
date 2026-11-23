@@ -294,7 +294,8 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
   }, [history, visible]);
 
   const capability = interaction?.next_turn;
-  const canSend = active && !!capability?.supported && !capability.human_login_required;
+  const admissionsPaused = capability?.admissions_paused === true;
+  const canSend = active && !!capability?.supported && !capability.human_login_required && !admissionsPaused;
   const sendLabel = capability?.turn_state === 'busy' ? 'Add to next turn'
     : capability?.turn_state === 'idle' ? 'Send' : 'Send for next turn';
   const firstCharacter = draft.text.trimStart()[0];
@@ -303,11 +304,12 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
   const tooLong = new TextEncoder().encode(draft.text).length > 64 * 1024;
   const steerAvailable = active && interaction?.steer_review_supported === true && !capability?.human_login_required;
   const canReviewSteer = steerAvailable && !steerSource && !steerPending && !draft.uncertain && !busy;
+  const canReviewDraftSteer = canReviewSteer && !admissionsPaused;
   const draftHeld = steerSource?.kind === 'draft' || steerPending?.kind === 'draft';
   const canReviewInterrupt = active && interaction?.interrupt_review_supported === true;
 
   function reviewSteer(source: SteerSource, trigger: HTMLButtonElement) {
-    if (!canReviewSteer || mutation.current) return;
+    if (!canReviewSteer || (source.kind === 'draft' && admissionsPaused) || mutation.current) return;
     steerTrigger.current = trigger;
     setSteerSource(source);
   }
@@ -420,6 +422,9 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
     {capability?.supported && capability.human_login_required && <OperatorSignIn />}
     {!canSend && capability && !capability.supported &&
       <p className="text-xs text-surface-500">Sending is unavailable for this session.</p>}
+    {capability?.supported && admissionsPaused && <p className="text-xs text-surface-500" role="status">
+      New session messages are paused. Accepted messages can still finish.
+    </p>}
     {(canSend || !!draft.text || !!draft.uncertain) && <form className="space-y-2" onSubmit={event => {
       event.preventDefault();
       void send(false);
@@ -443,14 +448,14 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
         <button type="submit" className="btn btn-primary"
           disabled={!canSend || busy || draftHeld || !!draft.uncertain || !draft.text.trim() || command || tooLong}>{sendLabel}</button>
         {steerAvailable && <button type="button" className="btn btn-secondary"
-          disabled={!canReviewSteer || !draft.text.trim() || command || tooLong}
+          disabled={!canReviewDraftSteer || !draft.text.trim() || command || tooLong}
           onClick={event => reviewSteer({kind: 'draft', text: draft.text}, event.currentTarget)}>Reorient current turn</button>}
         {draft.uncertain && <button type="button" disabled={busy || capability?.human_login_required !== false} className="btn btn-secondary"
           onClick={() => void send(true)}>Check message receipt</button>}
       </div>
     </form>}
     {slashCommand && <SessionCommandPicker scope={scope} draft={draft.text}
-      locked={busy || !!draft.uncertain || draftHeld} canSend={canSend} canSteer={canReviewSteer}
+      locked={busy || !!draft.uncertain || draftHeld} canSend={canSend} canSteer={canReviewDraftSteer}
       canInterrupt={canReviewInterrupt} onSelect={(id, needsMessage) => {
         save({...draft, text: '/' + id + (needsMessage ? ' ' : '')});
         setMessageError('');

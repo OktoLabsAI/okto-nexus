@@ -1195,6 +1195,7 @@ export type OneShotState = {slots: Record<string, number>; occupied: number; que
     error: {code: string; message: string; possible_effect: boolean; retry_safe: boolean} | null}>};
 export type RuntimePolicy = {
   automatic_recovery?: boolean; inherit_global_mcps?: boolean | null;
+  session_input_admissions_paused?: boolean;
   broadcast_handoff_auto_claim: boolean | null;
   handoff_auto_claim_rollout_enabled: boolean;
   revision: number;
@@ -1269,7 +1270,7 @@ export const api = {
   saveRuntimeUpdatePolicy: (endpoint: string, body: {expected_revision: number; policy: "review" | "follow" | null}) =>
     call<RuntimeUpdatePolicy>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/update-policy`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
-  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null; broadcast_handoff_auto_claim?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
+  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; session_input_admissions_paused?: boolean; inherit_global_mcps?: boolean | null; broadcast_handoff_auto_claim?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
   oneShotPolicy: (agentId?: string) => call<OneShotPolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-policy` : '/api/v1/one-shot-policy'),
   oneShotState: (agentId: string) => call<OneShotState>(`/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-state`),
   cancelOneShot: (agentId: string, callId: string) => call<OneShotState>(`/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-calls/${encodeURIComponent(callId)}/cancel`, {method: 'POST'}),

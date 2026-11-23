@@ -31,6 +31,7 @@ from .execution_intents import resolve_execution_intent
 from .execution_native_facts import stamp
 from .session_interaction_authority import (
     require_human_queue_control,
+    require_new_input_admission,
     require_session_input_authority,
 )
 from .session_interaction_targets import (
@@ -77,8 +78,10 @@ def steer_human_input(*, factory, access, authority_fence, current_steer_revisio
             """, asdict(scope.session)).fetchone()
             if expected_queue_revision != (row['revision'] if row else 0):
                 raise OktoNexusError(ErrorCode.CONFLICT, 'The session queue changed before reorientation.', {})
-            return require_session_input_authority(uow, factory=factory, access=access, scope=scope,
+            grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                                     author=author, resolve_human=resolve_human)
+            require_new_input_admission(uow)
+            return grant
 
         fingerprint_target = (native_turn_id, *revisions)
         if observed_run:

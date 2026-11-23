@@ -1,0 +1,134 @@
+{
+  "tasks": [
+    "SI-039",
+    "SI-041"
+  ],
+  "scenarios": [
+    "SI-T-I01",
+    "SI-T-I03"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "0198953d21d37275da089a52793dce51a7984f5d",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 574
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "ab6d0935b479a6427f5b29212880a067585ea20f",
+    "nexus_wheel_sha256": "7461cd30c14ccf1f0b97dbf1ff26d25452b9c58b168b11fc91e11baa364e766b",
+    "schema_189_nexus_wheel_sha256": "54337f3246583e28aabb809727477179999499d37b0c90a20eceb98939f495bc",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "twine_strict_exit_code": 0,
+    "uv_lock_check_exit_code": 0
+  },
+  "migration": {
+    "source_schema": 189,
+    "new_schema": 190,
+    "single_additive_migration_applied": true,
+    "idempotent": true,
+    "tables_with_original_columns_preserved": 171,
+    "rows_preserved": 98,
+    "queue_statuses": [
+      {
+        "status": "DELIVERY_UNKNOWN",
+        "possible_effect": true,
+        "has_operation": true
+      },
+      {
+        "status": "BLOCKED_SESSION",
+        "possible_effect": false,
+        "has_operation": false
+      }
+    ],
+    "queue_rows_sha256": "40a82c0d319557e8e761bc6736919ddaeac3735fc0200779d04808000634aeda",
+    "canonical_receipts_validated": 4,
+    "original_receipts_preserved": true,
+    "gate_defaults_to_open": true,
+    "old_wheel_refuses_upgraded_copy": true,
+    "old_wheel_reads_unmodified_copy": true,
+    "source_unchanged": true,
+    "sqlite_integrity_and_foreign_keys_passed": true
+  },
+  "browser": {
+    "engine": "Microsoft Edge on Windows x64; isolated Playwright CLI session",
+    "bundle": "Installed Nexus wheel using real HTTP, operator session and SQLite",
+    "operator_control": "Settings / Runtime / Global runtime defaults / Pause new session messages",
+    "paused_record": [
+      1,
+      2
+    ],
+    "reopened_record": [
+      0,
+      3
+    ],
+    "saved_pause_snapshot_sha256": "338cc90488f474ebfe9d983259b7d5cf86eb26b1c185c48b8fb601432947003b",
+    "saved_reopen_snapshot_sha256": "a295c8aca08b1bc441dcc10bec685d8529dd7d2b61754524617fbf14f94f72be",
+    "covers_global_control_only": true
+  },
+  "queue_assertions": {
+    "new_input_refused_http": 409,
+    "duplicate_recovered_original_input": true,
+    "stale_global_revision_refused_http": 409,
+    "capability_revision_unchanged": true,
+    "retained_inputs_dispatched_once_and_in_order": true,
+    "native_owner_count": 1,
+    "grant_revisions_unchanged": true,
+    "new_intake_accepted_after_reopen_http": 202
+  },
+  "regressions": {
+    "wheel_imports_verified": true,
+    "frontend_node_contracts_passed": 422,
+    "frontend_installed_bundle_built": true,
+    "junit": {
+      "installed.xml": {
+        "passed": 29,
+        "exit_code": 0,
+        "junit_sha256": "005878253181c27a89029ec0081908f027d4fa7612f296dae2f4284d50353b98"
+      },
+      "legacy.xml": {
+        "passed": 1,
+        "exit_code": 0,
+        "junit_sha256": "bf64c3cdb13b4bf9a0ae025631525b9c15140bfcf352f6de38f8134ca8610468"
+      },
+      "reopen.xml": {
+        "passed": 1,
+        "exit_code": 0,
+        "junit_sha256": "83484b2f19b4bdd880dc610aa512bffdd66bd05f602d0dc200e0777f42725839"
+      }
+    },
+    "fixture_lab": "D:\\nxs-si041-admission-0198",
+    "commands": [
+      "npm run build",
+      "npm test",
+      "pytest -o pythonpath= -p assert_wheel_imports tests/execution_r4/test_session_input_runtime.py::test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order tests/execution_r4/test_session_input_runtime.py::test_restart_reconciles_queued_input_receipts_without_resending tests/session_interaction/test_queue_storage.py tests/execution_r4/test_runtime_policy_defaults.py",
+      "python -B migrate.py"
+    ]
+  },
+  "qualification_limits": [
+    "The installed browser exercise covered settings on a disposable Server.",
+    "Queue tests ran through production HTTP, scheduler and Core/R4 with a synthetic native peer.",
+    "A combined exercise with a native harness and a consented provider campaign remains open."
+  ]
+}

@@ -18,6 +18,7 @@ from ....application.execution_native_session_mapping import (
     reviewed_pi_context,
 )
 from ....application.execution_session_views import read_execution_session
+from ....application.runtime_policy import defaults
 from ....application.session_interaction_authority import (
     cancel_human_input,
     change_human_queue_pause,
@@ -263,7 +264,8 @@ def build_router():
                         'interrupt_review_supported': exact_control or claude_interrupt,
                         'steer_review_supported': exact_control or claude_steer,
                         'next_turn': {'supported': revision is not None, 'capability_revision': revision,
-                                      'human_login_required': not signed_in, 'turn_state': turn_state}}
+                                      'human_login_required': not signed_in, 'turn_state': turn_state,
+                                      'admissions_paused': defaults(uow.connection)['session_input_admissions_paused']}}
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)

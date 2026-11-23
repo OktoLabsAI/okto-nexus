@@ -14,6 +14,7 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
   const [mcps, setMcps] = useState<boolean | null>(null);
   const [autoClaim, setAutoClaim] = useState<boolean | null>(null);
   const [recovery,setRecovery] = useState(true);
+  const [admissionsPaused, setAdmissionsPaused] = useState(false);
   const [sessions, setSessions] = useState<SessionPolicy | null>(null);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState('');
@@ -22,6 +23,7 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
   const accept = (value: Policy) => {
     setMcps(value.inherit_global_mcps ?? (agentId ? null : false)); setPolicy(value); setEnabled(value.runtime_enabled); setSessions(value.session_policy);
     setRecovery(value.automatic_recovery ?? true);
+    setAdmissionsPaused(value.session_input_admissions_paused ?? false);
     setAutoClaim(value.broadcast_handoff_auto_claim ?? (agentId ? null : false));
     onUpdated?.(value.effective?.runtime_enabled ?? value.runtime_enabled ?? true);
   };
@@ -33,14 +35,17 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [agentId, revision]);
-  const changed = !!policy && (autoClaim !== policy.broadcast_handoff_auto_claim || mcps !== (policy.inherit_global_mcps ?? null) || enabled !== policy.runtime_enabled || sessions !== policy.session_policy || (!agentId && recovery !== policy.automatic_recovery));
+  const canPauseAdmissions = !agentId && typeof policy?.session_input_admissions_paused === 'boolean';
+  const changed = !!policy && (autoClaim !== policy.broadcast_handoff_auto_claim || mcps !== (policy.inherit_global_mcps ?? null) || enabled !== policy.runtime_enabled || sessions !== policy.session_policy || (!agentId && recovery !== policy.automatic_recovery)
+    || (canPauseAdmissions && admissionsPaused !== policy.session_input_admissions_paused));
   useEffect(() => {onPendingChange?.(busy || !policy || changed);}, [busy, policy, changed, onPendingChange]);
   const effectiveEnabled = enabled ?? policy?.defaults?.runtime_enabled ?? true;
   const effectiveSessions = sessions ?? policy?.defaults?.session_policy ?? 'shared';
   const save = async () => {
       if (!policy) return false;
       setBusy(true); setError(''); setNotice('');
-      try {accept(await api.saveRuntimePolicy({expected_revision: policy.revision, broadcast_handoff_auto_claim: autoClaim, inherit_global_mcps: mcps, runtime_enabled: enabled, session_policy: sessions,...(!agentId ? {automatic_recovery:recovery} : {})}, agentId)); setNotice('Runtime policy saved.'); return true;}
+      try {accept(await api.saveRuntimePolicy({expected_revision: policy.revision, broadcast_handoff_auto_claim: autoClaim, inherit_global_mcps: mcps, runtime_enabled: enabled, session_policy: sessions,...(!agentId ? {automatic_recovery:recovery} : {}),
+        ...(canPauseAdmissions ? {session_input_admissions_paused: admissionsPaused} : {})}, agentId)); setNotice('Runtime policy saved.'); return true;}
       catch (failure) {setError(String(failure)); return false;}
       finally {setBusy(false);}
     };
@@ -49,6 +54,12 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
     <h3 className="font-display font-semibold text-sm">{agentId ? 'Runtime policy for this agent' : 'Global runtime defaults'}</h3>
     <p className="text-xs text-surface-500">{agentId ? 'Inherit the global settings or override each option for this agent, across all connections and workspaces.' : 'Defaults for all agents. An explicit agent override takes precedence.'}</p>
     {!agentId && <label className="flex items-center gap-2 text-xs font-medium text-surface-700 dark:text-surface-200"><input className="h-4 w-4 accent-accent-500" type="checkbox" checked={recovery} disabled={busy || !policy} onChange={e=>setRecovery(e.target.checked)} /> Automatic runtime recovery<ConfigurationHelp label="Automatic runtime recovery">Recover retained runtime state after restart using Core ownership proofs. New messages wait during recovery. Previously submitted work is never replayed. Recoverable failures retry automatically without abandoning queued messages.</ConfigurationHelp></label>}
+    {canPauseAdmissions && <label className="flex items-center gap-2 text-xs font-medium text-surface-700 dark:text-surface-200">
+      <input className="h-4 w-4 accent-accent-500" type="checkbox" checked={admissionsPaused} disabled={busy}
+        onChange={event => {setAdmissionsPaused(event.target.checked); setNotice('');}} />
+      Pause new session messages
+      <ConfigurationHelp label="Pause new session messages">Messages already accepted can finish. Queue controls and receipt recovery stay available.</ConfigurationHelp>
+    </label>}
     <div className="grid min-w-0 grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
     <label className={labelClass}>Runtime connection <ConfigurationHelp label="Runtime connection">Runtime executes this harness through Nexus. MCP only keeps the existing MCP and inbox access. Disabling runtime blocks new work and closes existing sessions when their leases renew.</ConfigurationHelp>
       <select aria-label={agentId ? 'Agent runtime connection' : 'Global runtime connection'} className={fieldClass} value={enabled === null ? 'inherit' : enabled ? 'enabled' : 'disabled'} disabled={busy || !policy}

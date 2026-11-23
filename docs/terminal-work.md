@@ -131,10 +131,12 @@ back to its classic view. The Server continues to reconcile admitted work
 and process its queue. Return to operational Home or use the terminal to
 check the same session.
 
-For a Server rollback, stop admitting new inputs and keep the current
-executor and its reconciliation running until outstanding inputs are
-resolved or explicitly paused. Use **Pause queue** on the exact session
-when the control is available and pending messages need to wait.
+For a Server rollback, turn on **Pause new session messages** under
+**Settings → Runtime → Global runtime defaults** and save. This pauses new
+messages from the session composer and native viewers while the current
+executor continues processing and reconciling accepted messages. Use
+**Pause queue** on the exact session if its pending messages need to wait.
+Clear the global setting and save to accept new session messages again.
 
 The session interaction flag applies at Server startup. With the flag off,
 the Server refuses new queue submissions and can still reconcile retained
@@ -142,6 +144,12 @@ work. After a restart retires an
 embedded session, unsent inputs keep their original receipts on that
 session. Use the original intent and generation to check uncertain delivery
 before deciding whether to submit new work.
+
+The global pause works with the current package and database. Rolling back to
+a package that predates migration 190 requires a consistent backup from
+before the migration. Reconcile accepted work and stop the runtime before
+restoring a database copy. Keep the current database and use the interface
+rollback if the database contains work recorded after that backup.
 
 ## Follow a live Codex session
 

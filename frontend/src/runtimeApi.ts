@@ -187,6 +187,7 @@ export interface SessionInteraction {
   interrupt_review_supported?: boolean;
   steer_review_supported?: boolean;
   next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean;
+    admissions_paused?: boolean;
     turn_state?: 'idle' | 'busy' | 'unknown'};
 }
 

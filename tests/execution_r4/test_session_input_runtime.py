@@ -1642,6 +1642,29 @@ def test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order(in
         assert response.status_code == 202, response.text
         retained.append(response.json()['input_id'])
 
+    policy_path = '/api/v1/runtime-policy'
+    policy = client.get(policy_path).json()['data']
+    assert policy['session_input_admissions_paused'] is False
+    update = {'expected_revision': policy['revision'], 'runtime_enabled': policy['runtime_enabled'],
+              'session_policy': policy['session_policy'], 'session_input_admissions_paused': True}
+    rollout = client.put(policy_path, headers=ui, json=update)
+    assert rollout.status_code == 200, rollout.text
+    assert rollout.json()['data']['session_input_admissions_paused'] is True
+    assert client.put(policy_path, headers=ui, json=update).status_code == 409
+    capabilities = client.get(path + '/interaction', params=query).json()['next_turn']
+    assert capabilities['admissions_paused'] is True
+    assert capabilities['capability_revision'] == send_revision
+    refused = client.post(path + '/inputs', headers=ui, json=base | {
+        'capability_revision': send_revision, 'client_intent_id': 'new-during-rollback',
+        'content': [{'type': 'text', 'text': 'New message during rollback'}],
+    })
+    assert refused.status_code == 409 and 'paused by the operator' in refused.text
+    replay = client.post(path + '/inputs', headers=ui, json=base | {
+        'capability_revision': send_revision, 'client_intent_id': 'first-paused',
+        'content': [{'type': 'text', 'text': 'first-paused'}],
+    })
+    assert replay.status_code == 202 and replay.json()['input_id'] == retained[0]
+
     ready = queue()
     assert ready['paused'] and ready['queue_revision'] == 3
     assert [item['input_id'] for item in ready['items']] == retained
@@ -1671,6 +1694,15 @@ def test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order(in
         submitted = [tuple(row) for row in uow.connection.execute(
             'SELECT input_id,operation_id FROM session_interaction_inputs ORDER BY enqueue_sequence')]
     assert submitted == list(zip(retained, [operation for _action, operation in native.native.sent], strict=True))
+    assert native.opens == 1
+    reopened = client.put(policy_path, headers=ui, json=update | {
+        'expected_revision': rollout.json()['data']['revision'], 'session_input_admissions_paused': False})
+    assert reopened.status_code == 200 and reopened.json()['data']['session_input_admissions_paused'] is False
+    new_message = client.post(path + '/inputs', headers=ui, json=base | {
+        'capability_revision': send_revision, 'client_intent_id': 'after-rollback',
+        'content': [{'type': 'text', 'text': 'Message after rollback'}],
+    })
+    assert new_message.status_code == 202 and new_message.json()['input_id'] not in retained
     auth.logout(token)
     assert change(ready, True).status_code == 401
     client.cookies.clear()
