@@ -1,0 +1,74 @@
+{
+  "task": "SI-036",
+  "status": "PARTICIPANT_PENDING",
+  "level": "automated_rehearsal_with_installed_browser_and_pi",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "e286762fed2bb125b4ad17c959eacaf0512a2a2a",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 583,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0
+    }
+  },
+  "package_hashes": {
+    "nexus_wheel_sha256": "abbb861ce6e093c3c4137f37aec157f9c944ef6906f819ce8f704940ae6bc4d7",
+    "nexus_sdist_sha256": "2cf6c291d53964188fe323257ed1fa82f6b1079b4a97ccaf76983df145c2d499",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "dashboard_bundle_sha256": "9b4852c8620c0a61d4dc1f720a0654df7e9708d0c4b9ff620b3510c8ec7a66a6",
+    "transcript_source_sha256": "7acd89a463edfac4a0ebefb713e081c42ba343ea3e6c292d5dbdf3cfc34c108a"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "browser": "Microsoft Edge 158.0.4370.33",
+    "playwright_cli": "0.1.25",
+    "pi": "0.87.1",
+    "connector_transport": "R4 loopback"
+  },
+  "observations": {
+    "one_session": true,
+    "native_turns": 2,
+    "queued_input_status_observed": "QUEUED",
+    "queued_input_final_status": "ACCEPTED_NATIVE",
+    "seeded_before_opening_browser": true,
+    "browser_opened_via_home": true,
+    "browser_reopened_via_home": true,
+    "browser_showed_clean_incoming_message": true,
+    "browser_showed_both_results_once": true,
+    "external_provider_calls": 0,
+    "native_process_exited_after_canonical_close": true
+  },
+  "participant_observations": null,
+  "sha256": {
+    "rehearsal_driver": "835479ebf3ddf4ce51d7934d3f2441ef27fcf656d505e680ca13477b5fa0e5ef",
+    "rehearsal_native_driver": "b9f2d407e9ad0fb3d150467cd244ee6cf5653cfdeb6794b02c9b5daa58629a87",
+    "participant_setup_driver": "c0a16c7ed5d5578bade65cca4c8d31dbce3010249c32e3869d615b68ebe47401",
+    "participant_native_driver": "ef1e39e0b3e09b8e007d044758fa399cca267df914a9608e592afe6b26757900",
+    "junit": "e863444830a0367c10a893ccd4ad17e8208751c74fa21b92b3624f2ae138f4ba",
+    "project_selected": "3d3dc58003907b9892049e3f1c8dac638d9209a6d8b7ef669c8f7c061e4296f3",
+    "incoming_message": "3f5b3b22d79e20970ef2010739ccce633b60f39499ed9d21231d203169dca6e1",
+    "queue": "043e80181524d232feabe3b4c9ad7faab178c10063c5252e1d072f874ffa9c5a",
+    "return_to_session": "0687f4bb17dae4b43de5e16efd9663187a111d45b859ace19c7c1bb779878116",
+    "results": "b0fbbe11c4cf9e563c24335853126e5cb5ce0c62e5b8aec7eab50917f7f698ca"
+  },
+  "limits": [
+    "The rehearsal uses the canonical message endpoint for the seed and a real browser for the follow-up.",
+    "The isolated Pi uses fixed responses and has no access to external providers.",
+    "The participant-specific launcher was syntax checked. The outcome of the human review is still open."
+  ]
+}
