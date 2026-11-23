@@ -1,5 +1,7 @@
 """An additive target link preserves old controls, barriers and receipts."""
 
+import sqlite3
+
 import pytest
 
 from okto_nexus.adapters.outbound.sqlite import migrations
@@ -130,3 +132,28 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
         assert tuple(uow.connection.execute('SELECT * FROM embedded_saved_contexts').fetchone()) == (
             *old_witness, 'codex_app_server')
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+
+        old_row = tuple(uow.connection.execute('SELECT rowid,* FROM embedded_saved_contexts').fetchone())
+
+    before_pi = MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 188))
+    assert before_pi.apply() == [186, 187, 188]
+    pi_schema = MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 189))
+    assert pi_schema.apply() == [189]
+    assert pi_schema.apply() == []
+    assert retained()[0] == original[0] and retained()[1] == (*original[1], 0)
+    assert retained()[2] == original[2]
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        assert tuple(conn.execute('SELECT rowid,* FROM embedded_saved_contexts').fetchone()) == old_row
+        _store_operation(uow, scope, 'pi-close', 'runtime.close')
+        conn.execute("""
+            INSERT INTO embedded_saved_contexts (server_id, executor_id, session_id, owner_generation,
+                opening_operation_id, close_operation_id, stream_epoch, witness_json, captured_at, status, adapter_id)
+            VALUES (?, ?, ?, ?, 'pi-open', 'pi-close', 'pi-stream', '{}', 't', 'CAPTURED', 'pi_rpc')
+        """, (*key, scope.session.session_id, scope.generation.value))
+        with pytest.raises(sqlite3.IntegrityError):
+            conn.execute("UPDATE embedded_saved_contexts SET status='VERIFIED',release_digest='release',resolved_at='u' "
+                         "WHERE close_operation_id='pi-close'")
+        assert tuple(conn.execute('SELECT adapter_id,status FROM embedded_saved_contexts WHERE close_operation_id=?',
+                                  ('pi-close',)).fetchone()) == ('pi_rpc', 'CAPTURED')
+        assert not conn.execute('PRAGMA foreign_key_check').fetchall()

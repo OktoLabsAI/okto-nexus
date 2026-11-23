@@ -56,6 +56,9 @@ def native_opening_for_operation(owner, frame):
         if frame['payload']['adapter_id'] == 'claude_stream':
             from .embedded_claude_resume import SavedClaudeOpening
             return SavedClaudeOpening(owner, frame, lineage), False
+        if frame['payload']['adapter_id'] == 'pi_rpc':
+            from .embedded_pi_resume import SavedPiOpening
+            return SavedPiOpening(owner, frame, lineage), False
         return SavedCodexOpening(owner, frame, lineage), False
 
 

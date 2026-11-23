@@ -91,6 +91,11 @@ same command with `--json` to read its receipt without opening another session.
 Check the successor and receipt before continuing. An unavailable saved
 context does not open a fresh conversation.
 
+The reviewed Windows x64 Pi 0.87.1 build also supports saved resume on the
+local Nexus host. Use the approved workspace and Pi profile of the original
+session. After a verified close, the successor loads the same Pi branch.
+Repeat the command to recover its receipt if the result is unclear.
+
 For a session on a Connector, select the original Harness ID and workspace.
 The reviewed Windows x64 builds of Codex 0.157.0, Pi 0.87.1 and Claude Code
 2.1.328 can reopen saved history on that same Connector after an acknowledged

@@ -18,13 +18,15 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.native.codex_rollout import observe_rollout
 from nexus_connector_core.native.claude_saved_history import ClaudeSavedHistory, observe_claude_saved_history
+from nexus_connector_core.native.pi_saved_history import pi_saved_history_current
 
 from ..application.execution_native_session_mapping import (
     read_managed_native_session,
     reviewed_claude_saved_context,
     reviewed_codex_context,
+    reviewed_pi_context,
 )
-from ..application.execution_saved_resume import rollout_evidence
+from ..application.execution_saved_resume import pi_history_evidence, rollout_evidence
 from ..domain.execution.keys import SessionKey as DomainSessionKey
 from ..domain.execution.keys import SessionOwnerGeneration
 from ..domain.session_interaction import InputScope
@@ -95,6 +97,8 @@ class EmbeddedSavedContexts:
                         history = mapping.claude_history
                         observed = await runtime.read_live_claude_saved_history(
                             runtime_scope, target, history.session_uuid, history.operation_id, **connection)
+                    elif opening_profile is not None and reviewed_pi_context(mapping):
+                        observed = await runtime.read_live_current_pi_saved_history(runtime_scope, target, **connection)
                     else:
                         return
                 if observed is None:
@@ -112,6 +116,10 @@ class EmbeddedSavedContexts:
                     provider = {
                         'history': asdict(saved), 'terminal': asdict(mapping.claude_history),
                     }
+                elif mapping.adapter_id == 'pi_rpc':
+                    if Path(saved.workspace) != Path(root) or saved.session_id != mapping.native_session_id:
+                        return
+                    provider = {'history': asdict(saved)}
                 else:
                     if saved.thread_id != mapping.codex_thread_id:
                         return
@@ -232,7 +240,7 @@ class EmbeddedSavedContexts:
             slot = await ledger.owned_slot_state(key)
             opening_binding = json.loads(candidate['opening_binding'])
             observed_digest = witness.get('opening_binding_digest')
-            if ((candidate['adapter_id'] == 'claude_stream' and (
+            if ((candidate['adapter_id'] in {'claude_stream', 'pi_rpc'} and (
                     type(witness.get('opening_profile')) is not dict or observed_digest is None))
                     or (observed_digest is not None and opening_binding['digest'] != observed_digest)):
                 raise CoreError('SCOPE_MISMATCH', 'saved_context')
@@ -248,6 +256,9 @@ class EmbeddedSavedContexts:
             digest = fact['proof_digest'] if checked is not None else None
             if checked is not None:
                 witness['history'] = asdict(checked)
+        elif candidate['adapter_id'] == 'pi_rpc':
+            prior = pi_history_evidence(witness['history'])
+            digest = fact['proof_digest'] if await asyncio.to_thread(pi_saved_history_current, prior) else None
         else:
             prior = rollout_evidence(witness['rollout'])
             path = Path(prior.state_home).joinpath(*prior.relative_path)
@@ -262,16 +273,22 @@ class EmbeddedSavedContexts:
             owner.verify(uow=uow)
             if self._ready(uow, candidate['close_operation_id']) != candidate:
                 return
-            if release_digest and candidate['adapter_id'] == 'claude_stream':
+            adapter = candidate['adapter_id']
+            if release_digest and adapter in {'claude_stream', 'pi_rpc'}:
                 source = witness['scope']
                 scope = InputScope(
                     DomainSessionKey(candidate['server_id'], candidate['executor_id'], candidate['session_id']),
                     SessionOwnerGeneration(candidate['owner_generation']), source['binding_id'],
                     source['workspace_id'], source['workspace_binding_id'], source['agent_id'])
                 mapping = read_managed_native_session(uow, scope)
-                if (mapping is None or not reviewed_claude_saved_context(mapping)
-                        or asdict(mapping.launch_build) != witness['launch_build']
+                if (mapping is None or mapping.launch_build is None
+                        or asdict(mapping.launch_build) != witness['launch_build']):
+                    release_digest = None
+                elif adapter == 'claude_stream' and (not reviewed_claude_saved_context(mapping)
                         or asdict(mapping.claude_history) != witness['terminal']):
+                    release_digest = None
+                elif adapter == 'pi_rpc' and (not reviewed_pi_context(mapping)
+                        or mapping.native_session_id != witness['history']['session_id']):
                     release_digest = None
             uow.connection.execute("""
                 UPDATE embedded_saved_contexts SET status=?, resolved_at=?, release_digest=?, witness_json=?

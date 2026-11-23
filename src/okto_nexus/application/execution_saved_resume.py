@@ -4,6 +4,7 @@ import json
 
 from nexus_connector_core import CodexRolloutEvidence
 from nexus_connector_core.native.codex_rollout import saved_launch_configuration as saved_opening_profile
+from nexus_connector_core.native.pi_saved_history import PiSavedHistory
 
 from ..errors import ErrorCode, OktoNexusError
 
@@ -17,6 +18,11 @@ def rollout_evidence(document):
     return CodexRolloutEvidence(**(document | {
         key: tuple(document[key]) for key in ('relative_path', 'home_identity', 'file_identity')
     }))
+
+
+def pi_history_evidence(document):
+    return PiSavedHistory(**(document | {key: tuple(document[key]) for key in (
+        'agent_dir_identity', 'workspace_identity', 'file_identity')}))
 
 
 def require_saved_resume_operator(*, actor, context, enabled):
@@ -49,6 +55,8 @@ def saved_source(conn, scope, source_session_id, source_generation, *, adapter_i
     witness = json.loads(row['witness_json'])
     if adapter_id == 'claude_stream' and not witness.get('opening_profile', {}).get('claude_resume_profile'):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The saved Claude profile has no reviewed launch evidence.', {})
+    if adapter_id == 'pi_rpc' and not witness.get('opening_profile'):
+        raise OktoNexusError(ErrorCode.CONFLICT, 'The saved Pi profile has no reviewed launch evidence.', {})
     if any(witness['scope'].get(key) != scope[key] for key in _SAME_SCOPE):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The authority or configuration of the saved session changed.', {})
     lineage = {'source_session_id': source_session_id, 'source_session_generation': source_generation,

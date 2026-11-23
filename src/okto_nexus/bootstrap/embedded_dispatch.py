@@ -868,7 +868,7 @@ class EmbeddedDispatchOwner:
                         payload['adapter_id'], payload.get('harness_settings', {}))),context)
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
-                if prepared.intent.adapter_id in {'claude_stream', 'codex_app_server'}:
+                if prepared.intent.adapter_id in {'claude_stream', 'codex_app_server', 'pi_rpc'}:
                     from ..application.execution_saved_resume import saved_opening_profile
                     session['opening_profile'] = saved_opening_profile(prepared)
                 if executor.saved_resume is not None:
@@ -902,7 +902,8 @@ class EmbeddedDispatchOwner:
                         connection_generation=self.channel.connection_generation)
                     receipt = await runtime.open(OpenOperation(frame["operation_id"], key, epoch, prepared,
                         resume_thread_id=options.get('resume_thread_id'),
-                        resume_claude_session_id=options.get('resume_claude_session_id')), context)
+                        resume_claude_session_id=options.get('resume_claude_session_id'),
+                        resume_pi_session_id=options.get('resume_pi_session_id')), context)
                 except OperationCapacityDeferred:
                     raise
                 except CoreError as error:

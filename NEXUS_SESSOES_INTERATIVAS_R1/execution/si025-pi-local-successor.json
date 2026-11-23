@@ -1,0 +1,178 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-025",
+    "SI-027"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "67d30887a4470e5a1d83fbfa0d2268080a315d50",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 570
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "ba553ef13484b27175b9e65dbb936c506933472b",
+    "nexus_sha256": "4f215850d3eb2f66337d99ee8e31fc9bd98fe492b6f712e50391a5d5b675f1cc",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "pi": "0.87.1",
+    "node": "24.15.0",
+    "pi_installation": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "provider": "Synthetic in-process provider in a disposable profile. Pi network denied by the fixture.",
+    "operator": "Authenticated local production HTTP endpoints using the installed CLI facade."
+  },
+  "regressions": {
+    "source_passed": 47,
+    "installed_migrations_passed": 8,
+    "strict_nexus_wheel_metadata_check": true,
+    "nexus_lock_consistent": true,
+    "native_installed_cases_passed": 2
+  },
+  "cases": {
+    "intact": {
+      "source_closed": true,
+      "private_history_verified": true,
+      "cancel_without_admission": true,
+      "exact_native_identity": true,
+      "new_process": true,
+      "no_model_call_on_open": true,
+      "next_turn_extends_same_branch_once": true,
+      "canonical_successor_close": "SUCCEEDED",
+      "second_successor_refused": true,
+      "original_receipt_recovered": true,
+      "native_pi_version": "0.87.1",
+      "external_provider_requests": 0,
+      "all_native_processes_exited": true
+    },
+    "changed_history": {
+      "source_closed": true,
+      "private_history_verified": true,
+      "cancel_without_admission": true,
+      "history_drift_failed_before_spawn": true,
+      "durable_refusal": true,
+      "no_model_call_on_refusal": true,
+      "second_successor_refused": true,
+      "original_receipt_recovered": true,
+      "native_pi_version": "0.87.1",
+      "external_provider_requests": 0,
+      "all_native_processes_exited": true
+    }
+  },
+  "legacy_migration_audit": {
+    "source_schema": 168,
+    "target_schema": 189,
+    "migrations_applied": [
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189
+    ],
+    "second_apply": [],
+    "legacy_table_count": 161,
+    "legacy_row_count": 90,
+    "legacy_columns_equal": true,
+    "legacy_receipts_validated_by_current_core": 4,
+    "receipt_histories": 3,
+    "legacy_result_count": 1,
+    "selected_table_hashes": {
+      "execution_receipts": {
+        "rows": 4,
+        "sha256": "982b70f10baf662de6c23b450ca75de22a6e011a81198a19c2dc7530d106b5a7"
+      },
+      "execution_operations": {
+        "rows": 3,
+        "sha256": "9fce89d8b8b92e40554a9638d850336833c52620a645704271698058f17b9dc1"
+      },
+      "execution_results": {
+        "rows": 1,
+        "sha256": "83406dc51a0e19f117b236baf9b0fb1dd32de75f2e3604d7c3ff39ae029a5e95"
+      },
+      "execution_sessions": {
+        "rows": 1,
+        "sha256": "93c28bc500ceec367d0a0c7d8c407479b1640e03aa292030a3b8be2f8fcf1486"
+      },
+      "execution_event_ingress": {
+        "rows": 4,
+        "sha256": "a65d57bea77811832259638351c12e461110337a100bb898f2cbf9b1e24864ad"
+      }
+    },
+    "nullable_absent_fields": [
+      "native_launch_build_json",
+      "saved_resume_json"
+    ],
+    "new_tables_empty": [
+      "session_interaction_inputs",
+      "session_interaction_controls",
+      "session_attachments",
+      "embedded_saved_contexts"
+    ],
+    "http_projection": {
+      "matched": true,
+      "views": 3,
+      "unauthenticated_status": 401,
+      "sha256": "62560f0e54704a122917d7d3cfd902c36e1943cfb2b9914fa7d0f570577df4e0"
+    },
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "original_unchanged": true,
+    "backup_unchanged": true,
+    "pre_migration_backup_sha256": "c5c5a980ec8df0786dcdcb8fb822c1e349c9f028be170d59605f4f046ea9cf0b",
+    "restore": {
+      "schema": 168,
+      "legacy_columns_equal": true,
+      "legacy_http_projection_equal": true
+    },
+    "tool_sha256": {
+      "audit_migration_189.py": "459a2dac8092b50f577e01294a379f5d3077a00ea8b0dbd33fe4e6c6f49fe5c1",
+      "read_history.py": "da58f09eadf155d7bf81b31e23dcd74e56841ce30c3d9bc64335955f093726d7"
+    }
+  },
+  "migration": "189 widens the private saved-context adapter constraint, copies existing rows and rowids, and restores the indexes in the migration transaction.",
+  "rollback": "Restore a verified pre-migration backup with the prior package. The prior migrator refuses newer schema histories.",
+  "qualification_limits": [
+    "The native proof is for the Windows embedded host with the exact reviewed Pi build.",
+    "The migration proof uses the existing pre-plan test fixture and installed packages.",
+    "The broader cross-machine and campaign gates are still pending."
+  ]
+}

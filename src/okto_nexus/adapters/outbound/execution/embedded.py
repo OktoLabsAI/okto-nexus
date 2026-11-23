@@ -58,9 +58,10 @@ class EmbeddedExecutor:
             environment = local_launch.environment
         resume_grant = {}
         if saved_resume is not None:
-            environment = partial(saved_resume.environment, environment, local_launch)
+            if saved_resume.callback_key != 'pi_saved_resume':
+                environment = partial(saved_resume.environment, environment, local_launch)
             resume_grant[saved_resume.callback_key] = saved_resume.grant
-            if saved_resume.callback_key == 'claude_resume':
+            if saved_resume.callback_key in {'claude_resume', 'pi_saved_resume'}:
                 saved_resume.local_launch = local_launch
         fresh_grant = local_launch.fresh_claude_grant if fresh_claude and local_launch is not None else None
         runtime = await host.acquire(

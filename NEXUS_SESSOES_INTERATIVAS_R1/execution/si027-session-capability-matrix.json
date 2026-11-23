@@ -155,10 +155,9 @@
         "command_subset": { "status": "qualified", "evidence": ["si025-pi-native-steer.md", "si025-pi-editor-interrupt.md"] },
         "native_live_attach": { "status": "qualified", "evidence": ["si025-pi-native-editor.md"] },
         "saved_context_resume": {
-          "status": "blocked",
-          "reason": "O fluxo de sucessora salva ainda não admite histórico do Pi.",
+          "status": "qualified",
           "evidence": [
-            "si030-terminal-session-selection.md"
+            "si025-pi-local-successor.md"
           ]
         },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si025-pi-native-editor.md", "si036-home-states-native-detach.md"] },

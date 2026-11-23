@@ -427,7 +427,7 @@ class EmbeddedRuntimeHost:
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
-        codex_resume=None, claude_resume=None, claude_fresh=None,
+        codex_resume=None, claude_resume=None, claude_fresh=None, pi_saved_resume=None,
     ) -> RuntimeCore:
         for value, label in ((server_id, "server"), (executor_id, "executor"), (session_id, "session")):
             if (not isinstance(value, str) or not value or len(value) > 160 or
@@ -455,8 +455,10 @@ class EmbeddedRuntimeHost:
         pi = candidates.get('pi_rpc')
         hosted_pi = (self.pi_presentation_enabled and native_factory is None and pi is not None
                      and bool(pi.launch_script) and reviewed_pi_build(pi.version, sys.platform, pi.architecture, pi.build_identity))
+        if pi_saved_resume is not None and (not hosted_pi or not callable(pi_saved_resume)):
+            raise CoreError("CAPABILITY_UNSUPPORTED", "saved_pi_resume", retry_safe=True)
         selection = (dict(candidates), dict(workspace_roots), native_action_factory,
-                     native_approvals_enabled, server_id, codex_resume, hosted_pi, claude_resume, claude_fresh)
+                     native_approvals_enabled, server_id, codex_resume, hosted_pi, claude_resume, claude_fresh, pi_saved_resume)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -500,6 +502,7 @@ class EmbeddedRuntimeHost:
                 **({'claude_resume': selection[7]} if selection[7] is not None else {}),
                 **({'claude_fresh': selection[8]} if selection[8] is not None else {}),
                 **({'pi_hosted_rpc': True} if selection[6] else {}),
+                **({'pi_saved_resume': selection[9]} if selection[9] is not None else {}),
             )
             if selection[2] is not None:
                 from nexus_connector_core.native_action_socket import PiNativeActionOwner
