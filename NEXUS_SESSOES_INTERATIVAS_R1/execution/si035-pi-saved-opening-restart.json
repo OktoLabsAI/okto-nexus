@@ -1,0 +1,168 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-035"
+  ],
+  "scenarios": [
+    "SI-T-G15"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "dd60cc2f9a172e7de34ded6f0154fc4c5e3bc153",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 571
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "ba553ef13484b27175b9e65dbb936c506933472b",
+    "nexus_sha256": "4f215850d3eb2f66337d99ee8e31fc9bd98fe492b6f712e50391a5d5b675f1cc",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "pi": "0.87.1",
+    "node": "24.15.0",
+    "pi_installation": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "provider": "Synthetic in-process provider in a disposable profile. Pi network denied by the fixture.",
+    "operator": "Authenticated local production HTTP endpoints using the installed CLI facade.",
+    "nexus_processes_per_case": 3,
+    "wheel_imports_checked_before_collection": [
+      "Nexus",
+      "Connector",
+      "Connector Core"
+    ],
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+  },
+  "procedure": {
+    "source": "Open Pi, deliver one deterministic turn, close canonically, and fsync the retained native history identity.",
+    "cut": "Apply the requested fence, fsync the phase proof, then terminate only the disposable Nexus fixture with os._exit(86).",
+    "recovered": "Run pytest in a fresh Nexus fixture process for the same home without the injected failure. Inspect the operation, exact persisted lineage and native process and model counts.",
+    "site_guard_argv": [
+      "-u",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-s",
+      "--tb=short",
+      "-o",
+      "pythonpath=",
+      "-o",
+      "asyncio_default_fixture_loop_scope=function",
+      "-p",
+      "assert_wheel_imports"
+    ],
+    "cut_log_limitation": "pytest stdout was buffered during both forced fixture exits. The phase proof was fsynced and exit code 86 was captured. Recovery ran separately with unbuffered output using the original lab databases.",
+    "fixture_lab": "D:\\nxs-pi-restart-dd60"
+  },
+  "controlled_cases": {
+    "before_sending_transition": {
+      "phase_exit_codes": {
+        "source": 0,
+        "cut": 86,
+        "recovered": 0
+      },
+      "source": {
+        "source_receipt": "SUCCEEDED",
+        "retired_process_exited": true,
+        "retained_exact_pi_history": true,
+        "provider_calls": 1,
+        "native_processes_exited": true,
+        "external_provider_calls": 0
+      },
+      "cut": {
+        "dispatch_state": "RESERVED",
+        "native_starts": 0,
+        "provider_calls": 1
+      },
+      "recovered": {
+        "same_durable_opening_operation": true,
+        "same_successor_session": true,
+        "new_owner_generations": true,
+        "retained_witness_unchanged": true,
+        "fenced_reservation_proved_unsent": true,
+        "duplicate_refused": true,
+        "source_remained_fenced": true,
+        "exact_native_session": true,
+        "provider_calls_during_open": 0,
+        "native_starts": 1,
+        "single_next_turn_on_same_branch": true,
+        "provider_calls_total": 2,
+        "successor_receipt": "SUCCEEDED",
+        "sqlite_checks_passed": true,
+        "distinct_nexus_processes": 3,
+        "native_processes_exited": true,
+        "external_provider_calls": 0
+      }
+    },
+    "after_sending_transition": {
+      "phase_exit_codes": {
+        "source": 0,
+        "cut": 86,
+        "recovered": 0
+      },
+      "source": {
+        "source_receipt": "SUCCEEDED",
+        "retired_process_exited": true,
+        "retained_exact_pi_history": true,
+        "provider_calls": 1,
+        "native_processes_exited": true,
+        "external_provider_calls": 0
+      },
+      "cut": {
+        "dispatch_state": "SENDING",
+        "native_starts": 0,
+        "provider_calls": 1
+      },
+      "recovered": {
+        "same_durable_opening_operation": true,
+        "same_successor_session": true,
+        "no_retry_or_native_start": true,
+        "no_unsent_proof_for_sending": true,
+        "terminal_preopen_absence_evidence": "fenced_owner_no_publication_no_core_claim_receipt_or_slot",
+        "terminal_code": "LOCAL_PREOPEN_FAILED",
+        "possible_effect_resolved_false": true,
+        "retained_history_unchanged": true,
+        "provider_calls_total": 1,
+        "sqlite_checks_passed": true,
+        "distinct_nexus_processes": 3,
+        "native_processes_exited": true,
+        "external_provider_calls": 0
+      }
+    }
+  },
+  "regressions": {
+    "command": "pytest tests/execution_r4/test_dispatch_pump.py tests/execution_r4/test_session_input_runtime.py -k 'fenced or saved or reconcile'",
+    "wheel_imports_verified": true,
+    "passed": 13,
+    "exit_code": 0,
+    "junit_xml": "D:\\nxs-pi-restart-dd60\\regression.xml"
+  },
+  "qualification_limits": [
+    "Same Windows host; actual Pi package using a synthetic model. No paid campaign, real user or cross-machine evidence.",
+    "The SENDING failure precedes transport invocation. The test does not prove recovery of a partially applied native opening.",
+    "Saved resume follows canonical close of the original owner. This does not qualify migration of a live engine or its background processes.",
+    "SI-T-G15 and the wider transfer qualification remain open."
+  ]
+}
