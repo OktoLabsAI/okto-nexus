@@ -264,10 +264,11 @@ def resolve_execution_intent(
         if saved_resume:
             from .execution_saved_resume import require_saved_source_exclusive, require_saved_source_settled, saved_source
             if binding['executor_kind'] == 'remote':
-                from .remote_saved_codex import read_retired_remote_codex
-                lineage, retired_scope, _ = read_retired_remote_codex(uow, scope,
-                    session_id=request['session_id'], generation=request['source_session_generation'])
-                if binding['adapter_id'] != 'codex_app_server' or lineage != remote_saved_review:
+                from .remote_saved_session import read_retired_remote_session
+                lineage, retired_scope, _, saved_codec = read_retired_remote_session(uow, scope,
+                    session_id=request['session_id'], generation=request['source_session_generation'],
+                    adapter_id=binding['adapter_id'])
+                if lineage != remote_saved_review:
                     raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed or is unavailable.', {})
             else:
                 lineage, _ = saved_source(conn, scope, request['session_id'], request['source_session_generation'],
@@ -350,10 +351,9 @@ def resolve_execution_intent(
                 scope, semantic, session_id = reuse["scope"], reuse["semantic_intent"], reuse["session_id"]
         operation_id = "op_" + secrets.token_hex(16)
         if retired_scope is not None:
-            from nexus_connector_core.saved_context_link import saved_codex_operation_id
-            semantic['saved_codex_resume'] = True
-            operation_id = saved_codex_operation_id(scope, execution_intent_hash(semantic),
-                                                   retired_scope, lineage['connector_source'])
+            semantic[f'saved_{saved_codec.name}_resume'] = True
+            operation_id = saved_codec.operation_id(scope, execution_intent_hash(semantic),
+                                                     retired_scope, lineage['connector_source'])
         if reuse is not None:
             operation_id = reuse["operation_id"]
         if actor_guard and actor_guard.startswith('delegated:'):

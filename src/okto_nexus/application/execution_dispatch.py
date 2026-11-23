@@ -705,30 +705,33 @@ def begin_execution_send(
             frame = decode_r4_frame(canonical_json(frame))
             wire_extension = None
             if binding['kind'] == 'remote' and frame['action'] == 'runtime.open':
-                from nexus_connector_core.saved_context_link import (
-                    SAVED_CODEX_OPEN_REVISION, SAVED_CODEX_OPERATION_PREFIX, encode_saved_codex_open,
+                from .remote_saved_session import (
+                    REMOTE_SAVED_CONTEXTS, SAVED_RESUME_MARKERS, read_retired_remote_session,
                 )
 
                 saved = json.loads(provenance[0]['resolved_json']).get('saved_resume')
-                if (saved is not None or reservation.operation_id.startswith(SAVED_CODEX_OPERATION_PREFIX)
-                        or semantic.get('saved_codex_resume') is not None):
+                if (saved is not None or SAVED_RESUME_MARKERS.intersection(semantic)
+                        or any(reservation.operation_id.startswith(codec.operation_prefix)
+                               for codec in REMOTE_SAVED_CONTEXTS.values())):
                     from .execution_saved_resume import require_saved_source_exclusive
-                    from .remote_saved_codex import read_retired_remote_codex
 
                     successor = conn.execute('SELECT saved_resume_json FROM execution_sessions WHERE server_id=? '
                         'AND executor_id=? AND session_id=? AND open_operation_id=?',
                         (server_id, reservation.executor_id, scope['session_id'], reservation.operation_id)).fetchone()
-                    if (semantic.get('saved_codex_resume') is not True or saved is None or successor is None
+                    if (saved is None or successor is None
                             or json.loads(successor['saved_resume_json'] or 'null') != saved
-                            or 'connector_source' not in saved or channel is None
-                            or SAVED_CODEX_OPEN_REVISION not in channel.control_capabilities):
+                            or 'connector_source' not in saved or channel is None):
                         raise OktoNexusError(ErrorCode.CONFLICT, 'The connected owner cannot open the reviewed saved session.', {})
-                    current, retired_scope, _ = read_retired_remote_codex(uow, scope,
-                        session_id=saved['source_session_id'], generation=saved['source_session_generation'])
+                    current, retired_scope, _, codec = read_retired_remote_session(uow, scope,
+                        session_id=saved['source_session_id'], generation=saved['source_session_generation'],
+                        adapter_id=frame['payload']['adapter_id'])
+                    if (semantic.get(f'saved_{codec.name}_resume') is not True
+                            or not {codec.link_revision, codec.open_revision}.issubset(channel.control_capabilities)):
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'The connected owner cannot open the reviewed saved session.', {})
                     if current != saved:
                         raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed.', {})
                     require_saved_source_exclusive(conn, scope, saved, successor=scope['session_id'])
-                    wire_extension = encode_saved_codex_open(frame, source_scope=retired_scope,
+                    wire_extension = codec.encode_open(frame, source_scope=retired_scope,
                                                              source=saved['connector_source'])
             if (binding['kind'] == 'remote' and linked_control is not None
                     and row['action'] in ('turn.steer', 'turn.interrupt')

@@ -20,7 +20,7 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
 from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
-from nexus_connector_core.saved_context_link import SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OBSERVED, SAVED_CODEX_OPEN_REVISION
+from nexus_connector_core.saved_context_link import CLAUDE_SAVED_CONTEXT, SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OPEN_REVISION
 from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_INTERRUPT_CODEC, CLAUDE_OPERATION_STEER_CODEC
 from nexus_connector_core.presentation_link import (
@@ -29,7 +29,7 @@ from nexus_connector_core.presentation_link import (
 )
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
-from ....adapters.outbound.execution.presentation_link import PresentationLink
+from ....adapters.outbound.execution.presentation_link import PresentationLink, SAVED_CONTEXT_RESULTS
 from ....adapters.outbound.sqlite.execution_identity import (
     ensure_execution_installation,
 )
@@ -433,6 +433,9 @@ def build_router() -> APIRouter:
                     and ws.app.state.deps.config.feature_harness_integrations
                     and CLAUDE_PRESENTATION_LINK_REVISION in hello['control_capabilities']):
                 welcome['control_capabilities'].append(CLAUDE_PRESENTATION_LINK_REVISION)
+                saved_claude = (CLAUDE_SAVED_CONTEXT.link_revision, CLAUDE_SAVED_CONTEXT.open_revision)
+                if set(saved_claude).issubset(hello['control_capabilities']):
+                    welcome['control_capabilities'].extend(saved_claude)
             if (ws.app.state.deps.config.runtime_session_interaction_enabled
                     and ws.app.state.deps.config.feature_harness_integrations
                     and PI_PRESENTATION_LINK_REVISION in hello['control_capabilities']):
@@ -452,7 +455,6 @@ def build_router() -> APIRouter:
             codex_presentation = PRESENTATION_LINK_REVISION in negotiated_capabilities
             pi_presentation = PI_PRESENTATION_LINK_REVISION in negotiated_capabilities
             claude_presentation = CLAUDE_PRESENTATION_LINK_REVISION in negotiated_capabilities
-            saved_codex = SAVED_CODEX_LINK_REVISION in negotiated_capabilities
             if codex_presentation or pi_presentation or claude_presentation:
                 async def send_presentation(raw):
                     await anyio.to_thread.run_sync(_verify)
@@ -460,7 +462,7 @@ def build_router() -> APIRouter:
 
                 presentation = PresentationLink(_channel(), send_presentation,
                                                 codex_enabled=codex_presentation, pi_enabled=pi_presentation,
-                                                claude_enabled=claude_presentation, saved_codex_enabled=saved_codex)
+                                                claude_enabled=claude_presentation)
                 prior = presentations.get(presentation_key)
                 if prior is not None:
                     prior.disconnect()
@@ -535,7 +537,7 @@ def build_router() -> APIRouter:
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
                 if frame['type'] in (PRESENTATION_RESULT, PI_PRESENTATION_RESULT, CLAUDE_PRESENTATION_RESULT,
-                                     SAVED_CODEX_OBSERVED):
+                                     *SAVED_CONTEXT_RESULTS):
                     if presentation is None or presentations.get(presentation_key) is not presentation:
                         raise CoreError('STALE_GENERATION', 'presentation_link')
                     try:

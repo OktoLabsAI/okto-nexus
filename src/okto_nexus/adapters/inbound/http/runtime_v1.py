@@ -667,13 +667,13 @@ def build_router(*, management=False) -> APIRouter:
             data = body.model_dump(exclude_none=True)
             remote_review = None
             if body.intent == 'runtime.resume_saved':
-                from ....application.remote_saved_codex import review_saved_codex_on_connector
+                from ....application.remote_saved_session import review_saved_session_on_connector
                 from .operator_auth import COOKIE
 
                 state = request.app.state
                 ref = await anyio.to_thread.run_sync(state.operator_auth.authority_reference,
                                                       request.cookies.get(COOKIE))
-                remote_review = await review_saved_codex_on_connector(factory, data,
+                remote_review = await review_saved_session_on_connector(factory, data,
                     context=runtime_request_context(), config=state.deps.config, auth=state.operator_auth,
                     human_ref=ref, links=state.remote_codex_presentation.links)
             def resolve():
@@ -738,8 +738,8 @@ def build_router(*, management=False) -> APIRouter:
                 )
 
             def submit_with_human_fence():
-                from nexus_connector_core.saved_context_link import SAVED_CODEX_OPERATION_PREFIX
-                if not body.operation_id.startswith(SAVED_CODEX_OPERATION_PREFIX):
+                from nexus_connector_core.saved_context_link import SAVED_CONTEXT_CODECS
+                if not any(body.operation_id.startswith(codec.operation_prefix) for codec in SAVED_CONTEXT_CODECS):
                     return submit()
                 from .operator_auth import COOKIE
                 auth = request.app.state.operator_auth

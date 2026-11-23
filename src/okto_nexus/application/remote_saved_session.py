@@ -1,11 +1,13 @@
-"""Read a closed Codex origin from canonical Nexus facts and the current Connector."""
+"""Read a closed native session from canonical Nexus facts and the current Connector."""
 
 import asyncio
 from datetime import datetime, timezone
 import json
 
 from nexus_connector_core import CoreError, r4_resource_release_digest
-from nexus_connector_core.saved_context_link import SAVED_CODEX_OPEN_REVISION
+from nexus_connector_core.saved_context_link import (
+    CLAUDE_SAVED_CONTEXT, CODEX_SAVED_CONTEXT, saved_native_session_digest,
+)
 
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
@@ -13,18 +15,27 @@ from ..domain.execution.keys import SessionKey, SessionOwnerGeneration
 from ..domain.session_interaction import InputScope
 from ..errors import ErrorCode, OktoNexusError
 from .execution_leases import require_execution_lane
-from .execution_native_session_mapping import read_managed_native_session, reviewed_codex_context
+from .execution_native_session_mapping import (
+    read_managed_native_session, reviewed_claude_saved_context, reviewed_codex_context,
+)
 from .execution_reconciliation import _receipt
 from .execution_saved_resume import (
     require_saved_resume_operator, require_saved_source_exclusive, require_saved_source_settled,
 )
 
 
+REMOTE_SAVED_CONTEXTS = {
+    CODEX_SAVED_CONTEXT.adapter_id: CODEX_SAVED_CONTEXT,
+    CLAUDE_SAVED_CONTEXT.adapter_id: CLAUDE_SAVED_CONTEXT,
+}
+SAVED_RESUME_MARKERS = frozenset(f'saved_{codec.name}_resume' for codec in REMOTE_SAVED_CONTEXTS.values())
+
+
 def _unavailable():
     return OktoNexusError(ErrorCode.CONFLICT, 'The exact session has no verified saved context on this Connector.', {})
 
 
-def read_retired_remote_codex(uow, scope, *, session_id, generation):
+def read_retired_remote_session(uow, scope, *, session_id, generation, adapter_id=None):
     """Derive the wire origin from one reviewed, closed opening and its exact close."""
     conn = uow.connection
     source_scope = dict(scope, session_id=session_id, session_owner_generation=generation)
@@ -44,8 +55,12 @@ def read_retired_remote_codex(uow, scope, *, session_id, generation):
         raise _unavailable()
     exact = InputScope(SessionKey(*key), SessionOwnerGeneration(generation), scope['binding_id'],
                        scope['workspace_id'], scope['workspace_binding_id'], scope['agent_id'])
-    mapping = read_managed_native_session(uow, exact, include_claude_history=False)
-    if mapping is None or not reviewed_codex_context(mapping):
+    mapping = read_managed_native_session(uow, exact, include_claude_history=adapter_id != 'codex_app_server')
+    if mapping is None or (adapter_id is not None and mapping.adapter_id != adapter_id):
+        raise _unavailable()
+    codec = REMOTE_SAVED_CONTEXTS.get(mapping.adapter_id)
+    if codec is None or not ({CODEX_SAVED_CONTEXT: reviewed_codex_context,
+                              CLAUDE_SAVED_CONTEXT: reviewed_claude_saved_context}[codec](mapping)):
         raise _unavailable()
     facts = conn.execute("""
         SELECT r.*,o.action,o.expected_revisions_json,o.intent_hash AS operation_intent
@@ -76,14 +91,16 @@ def read_retired_remote_codex(uow, scope, *, session_id, generation):
         resource_release_digest=r4_resource_release_digest(server_id=key[0], executor_id=key[1], session_id=key[2],
             opening_operation_id=opening['operation_id'], opening_intent_hash=opening['intent_hash'],
             owner_generation=generation))
+    if codec is CLAUDE_SAVED_CONTEXT:
+        source['native_session_digest'] = saved_native_session_digest(mapping.claude_history.session_uuid)
     lineage = dict(source_session_id=session_id, source_session_generation=generation,
         source_close_operation_id=closing['operation_id'], source_release_digest=source['resource_release_digest'],
         connector_source=source)
     require_saved_source_settled(conn, scope, session_id)
-    return lineage, source_scope, mapping.launch_build
+    return lineage, source_scope, mapping.launch_build, codec
 
 
-async def review_saved_codex_on_connector(factory, body, *, context, config, auth, human_ref, links):
+async def review_saved_session_on_connector(factory, body, *, context, config, auth, human_ref, links):
     """Consult the exact Connector outside the transaction, then repeat the authority checks."""
     require_saved_resume_operator(actor=context.actor_agent_id, context=context, enabled=config.runtime_session_interaction_enabled)
 
@@ -110,8 +127,7 @@ async def review_saved_codex_on_connector(factory, body, *, context, config, aut
             scope = json.loads(row['expected_revisions_json'])
             server, revisions, _ = current_agent_revisions(factory, agent_id=scope['agent_id'], uow=uow, persist=False)
             link = links.get((scope['server_id'], scope['executor_id']))
-            if (link is None or link.closed or SAVED_CODEX_OPEN_REVISION not in link.channel.control_capabilities
-                    or not link.saved_codex_enabled or row['control_state'] != 'CONTROL_READY'
+            if (link is None or link.closed or row['control_state'] != 'CONTROL_READY'
                     or row['revoked_at'] is not None or (row['owner_instance_id'], row['generation']) !=
                         (link.channel.connection_id, link.channel.connection_generation)
                     or server != scope['server_id'] or (revisions.authorization, revisions.configuration,
@@ -125,17 +141,19 @@ async def review_saved_codex_on_connector(factory, body, *, context, config, aut
                     or owner['realization_revision'] != owner['current_realization_revision']):
                 raise _unavailable()
             require_execution_lane(uow, scope=scope, channel=link.channel, now=datetime.now(timezone.utc))
-            lineage, source_scope, build = read_retired_remote_codex(uow, scope,
+            lineage, source_scope, build, codec = read_retired_remote_session(uow, scope,
                 session_id=body['session_id'], generation=body['source_session_generation'])
             require_saved_source_exclusive(conn, source_scope, lineage)
-            return lineage, source_scope, build, link
+            if not link.supports_saved_context(codec):
+                raise _unavailable()
+            return lineage, source_scope, build, link, codec
 
     review = await asyncio.to_thread(select)
     if review is None:
         return None
-    lineage, scope, _, link = review
+    lineage, scope, _, link, codec = review
     try:
-        available = await link.probe_saved_codex(scope=scope, source=lineage['connector_source'])
+        available = await link.probe_saved_context(codec, scope=scope, source=lineage['connector_source'])
     except CoreError:
         raise _unavailable() from None
     if not available or await asyncio.to_thread(select) != review:

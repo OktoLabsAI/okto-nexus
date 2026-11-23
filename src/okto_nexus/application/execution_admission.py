@@ -277,17 +277,18 @@ def submit_execution_operation(
                     from .execution_saved_resume import (
                         require_saved_source_exclusive, require_saved_source_settled, saved_source)
                     if 'connector_source' in saved_resume:
-                        from nexus_connector_core.saved_context_link import saved_codex_operation_id
                         from .execution_native_session_mapping import native_launch_build
-                        from .remote_saved_codex import read_retired_remote_codex
+                        from .remote_saved_session import read_retired_remote_session
 
-                        current, retired_scope, build = read_retired_remote_codex(uow, scope,
+                        semantic = resolved['semantic_intent']
+                        current, retired_scope, build, codec = read_retired_remote_session(uow, scope,
                             session_id=saved_resume['source_session_id'],
-                            generation=saved_resume['source_session_generation'])
-                        if (resolved['semantic_intent'].get('saved_codex_resume') is not True
-                                or operation_id != saved_codex_operation_id(scope, resolved['intent_hash'], retired_scope,
-                                current['connector_source']) or
-                                native_launch_build(snapshot, resolved['semantic_intent']['payload']) != asdict(build)):
+                            generation=saved_resume['source_session_generation'],
+                            adapter_id=semantic['payload']['adapter_id'])
+                        if (semantic.get(f'saved_{codec.name}_resume') is not True
+                                or operation_id != codec.operation_id(scope, resolved['intent_hash'],
+                                    retired_scope, current['connector_source'])
+                                or native_launch_build(snapshot, semantic['payload']) != asdict(build)):
                             raise OktoNexusError(ErrorCode.CONFLICT, 'The reviewed saved session build changed.', {})
                     else:
                         current, _ = saved_source(conn, scope, saved_resume['source_session_id'],
