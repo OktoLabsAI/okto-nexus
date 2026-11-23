@@ -65,7 +65,7 @@ supports. Queue acceptance and native delivery have separate receipt states.
 | --- | --- |
 | Follow an existing live session | Use `session attach` with its exact session ID. Detach to leave work and the queue with the current executor. |
 | Continue work in a live session | Select it in Home or use `work chat --session-id SESSION_ID` and submit the next request. |
-| Resume retained native history | Use `session resume` in a terminal for an eligible retired source on the embedded executor. Confirm the successor opening. Nexus checks verified history and exclusive ownership. The original queue stays with the source. |
+| Resume retained native history | Use `session resume` in a terminal for an eligible retired source on the embedded executor or a supported Codex Connector. Confirm the successor opening. Nexus checks verified history and exclusive ownership. The original queue stays with the source. |
 | Recover an interrupted submission | Use `work resume` for a Nexus work request, or `session receipt` with the original intent and owner generation for native input. If a saved resume lost its response, run the same `session resume` command to recover its receipt. |
 | Start a separate session | Use `session open` to confirm an empty session, or `work send --new-session` with a first request. Check an unconfirmed receipt before deciding whether to send again. |
 | Interrupt or close work | Use the explicit interrupt or close control. An interruption targets the current run. Closing retires the session and leaves its unsent queue receipts on the original session. |
@@ -90,6 +90,12 @@ confirming a successor. Press Enter to cancel. After an admission, repeat the
 same command with `--json` to read its receipt without opening another session.
 Check the successor and receipt before continuing. An unavailable saved
 context does not open a fresh conversation.
+
+For a Codex session on a Connector, select the original Harness ID and
+workspace. The reviewed Windows x64 Codex 0.157.0 build can reopen saved
+history on that same Connector after an acknowledged close. Keep the approved
+workspace and launch configuration in place. The Connector checks the saved
+history on its own host and refuses a changed or unavailable source.
 Follow the detach key shown by the attached viewer. Ctrl+C in a harness
 started outside Nexus follows that harness's terminal behavior.
 

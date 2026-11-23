@@ -664,15 +664,38 @@ def build_router(*, management=False) -> APIRouter:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         factory = request.app.state.deps.connection_factory
         try:
-            resolution = await anyio.to_thread.run_sync(
-                lambda: resolve_execution_intent(
+            data = body.model_dump(exclude_none=True)
+            remote_review = None
+            if body.intent == 'runtime.resume_saved':
+                from ....application.remote_saved_codex import review_saved_codex_on_connector
+                from .operator_auth import COOKIE
+
+                state = request.app.state
+                ref = await anyio.to_thread.run_sync(state.operator_auth.authority_reference,
+                                                      request.cookies.get(COOKIE))
+                remote_review = await review_saved_codex_on_connector(factory, data,
+                    context=runtime_request_context(), config=state.deps.config, auth=state.operator_auth,
+                    human_ref=ref, links=state.remote_codex_presentation.links)
+            def resolve():
+                return resolve_execution_intent(
                     factory, actor_agent_id=agent.agent_id,
-                    request=body.model_dump(exclude_none=True),
+                    request=data,
                     remote_ready=protocol_info()["remote_execution_ready"],
                     fresh_publications=request.app.state.inventory_fresh_publications,
                     access=build_execution_access(request.app.state.deps),
                     context=runtime_request_context(),
-                    saved_resume_enabled=request.app.state.deps.config.runtime_session_interaction_enabled))
+                    remote_saved_review=remote_review,
+                    saved_resume_enabled=request.app.state.deps.config.runtime_session_interaction_enabled)
+
+            def resolve_with_human_fence():
+                if body.intent != 'runtime.resume_saved':
+                    return resolve()
+                with state.operator_auth.authority_fence() as current:
+                    if not current(ref):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator session ended.', {})
+                    return resolve()
+
+            resolution = await anyio.to_thread.run_sync(resolve_with_human_fence)
         except OktoNexusError as error:
             return runtime_error(error, "intent.resolve")
         return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
@@ -703,8 +726,8 @@ def build_router(*, management=False) -> APIRouter:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         factory = request.app.state.deps.connection_factory
         try:
-            view, reused = await anyio.to_thread.run_sync(
-                lambda: submit_execution_operation(
+            def submit():
+                return submit_execution_operation(
                     factory, actor_agent_id=agent.agent_id,
                     request=body.model_dump(),
                     fresh_publications=request.app.state.inventory_fresh_publications,
@@ -712,7 +735,21 @@ def build_router(*, management=False) -> APIRouter:
                     access=build_execution_access(request.app.state.deps),
                     context=runtime_request_context(),
                     saved_resume_enabled=request.app.state.deps.config.runtime_session_interaction_enabled,
-                ))
+                )
+
+            def submit_with_human_fence():
+                from nexus_connector_core.saved_context_link import SAVED_CODEX_OPERATION_PREFIX
+                if not body.operation_id.startswith(SAVED_CODEX_OPERATION_PREFIX):
+                    return submit()
+                from .operator_auth import COOKIE
+                auth = request.app.state.operator_auth
+                reference = auth.authority_reference(request.cookies.get(COOKIE), create=False)
+                with auth.authority_fence() as current:
+                    if not current(reference):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator session ended.', {})
+                    return submit()
+
+            view, reused = await anyio.to_thread.run_sync(submit_with_human_fence)
         except OktoNexusError as error:
             return runtime_error(error, "operation.admit")
         return JSONResponse(view, status_code=200 if reused else 202,

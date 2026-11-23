@@ -1,11 +1,9 @@
 """Authorize a single exact successor for a verified, retired local source."""
 
-import hashlib
 import json
 
-from nexus_connector_core import CodexRolloutEvidence, PreparedLaunch
-from nexus_connector_core.harness_configuration import harness_settings_dict
-from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core import CodexRolloutEvidence
+from nexus_connector_core.native.codex_rollout import saved_launch_configuration as saved_opening_profile
 
 from ..errors import ErrorCode, OktoNexusError
 
@@ -13,25 +11,6 @@ _SAME_SCOPE = (
     'server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id', 'workspace_binding_id',
     'authorization_revision', 'configuration_revision', 'binding_revision', 'credential_epoch',
 )
-
-
-def saved_opening_profile(prepared: PreparedLaunch) -> dict[str, str]:
-    """Bind the approved launch without requiring a session-specific MCP capability to be reused."""
-    intent = prepared.intent
-    inputs = {
-        'adapter_id': intent.adapter_id,
-        'mode': intent.mode,
-        'model': intent.model,
-        'argv': list(prepared.argv),
-        'harness_settings': harness_settings_dict(intent.harness_settings),
-        'mcp_preset': list(intent.mcp_preset),
-        'credential_refs': sorted(ref for ref in prepared.secret_refs if not ref.startswith('mcp-cap:')),
-    }
-    return {
-        'profile_fingerprint': prepared.profile_fingerprint,
-        'root_fingerprint': prepared.root_fingerprint,
-        'resume_configuration_sha256': hashlib.sha256(canonical_json(inputs)).hexdigest(),
-    }
 
 
 def rollout_evidence(document):

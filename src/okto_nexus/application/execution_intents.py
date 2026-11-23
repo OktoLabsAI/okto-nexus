@@ -32,7 +32,7 @@ def resolve_execution_intent(
     fresh_publications: Mapping | None = None, access=None, context=None,
     session_metadata: Mapping | None = None, one_shot_slot_id: str | None = None,
     reserved_session_id: str | None = None, saved_resume_enabled: bool = False,
-    literal_session_input: bool = False,
+    literal_session_input: bool = False, remote_saved_review: Mapping | None = None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -133,7 +133,7 @@ def resolve_execution_intent(
             "w.workspace_id,w.status AS workspace_status,"
             "r.status AS realization_status,"
             "r.revision AS current_realization_revision,"
-            "e.control_state,e.revoked_at,e.registered_by_agent_id "
+            "e.control_state,e.revoked_at,e.registered_by_agent_id,e.kind AS executor_kind "
             "FROM execution_bindings b "
             "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
             "JOIN execution_workspace_bindings w ON w.server_id=b.server_id "
@@ -260,10 +260,18 @@ def resolve_execution_intent(
             "credential_epoch": revisions.credential_epoch,
         }
         lineage = None
+        retired_scope = None
         if saved_resume:
             from .execution_saved_resume import require_saved_source_exclusive, require_saved_source_settled, saved_source
-            lineage, _ = saved_source(conn, scope, request['session_id'], request['source_session_generation'],
-                                     adapter_id=binding['adapter_id'])
+            if binding['executor_kind'] == 'remote':
+                from .remote_saved_codex import read_retired_remote_codex
+                lineage, retired_scope, _ = read_retired_remote_codex(uow, scope,
+                    session_id=request['session_id'], generation=request['source_session_generation'])
+                if binding['adapter_id'] != 'codex_app_server' or lineage != remote_saved_review:
+                    raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed or is unavailable.', {})
+            else:
+                lineage, _ = saved_source(conn, scope, request['session_id'], request['source_session_generation'],
+                                         adapter_id=binding['adapter_id'])
             require_saved_source_exclusive(conn, scope, lineage)
             require_saved_source_settled(conn, scope, lineage['source_session_id'])
         if containment and actor_agent_id != subject_agent_id:
@@ -341,6 +349,11 @@ def resolve_execution_intent(
             if reuse is not None:
                 scope, semantic, session_id = reuse["scope"], reuse["semantic_intent"], reuse["session_id"]
         operation_id = "op_" + secrets.token_hex(16)
+        if retired_scope is not None:
+            from nexus_connector_core.saved_context_link import saved_codex_operation_id
+            semantic['saved_codex_resume'] = True
+            operation_id = saved_codex_operation_id(scope, execution_intent_hash(semantic),
+                                                   retired_scope, lineage['connector_source'])
         if reuse is not None:
             operation_id = reuse["operation_id"]
         if actor_guard and actor_guard.startswith('delegated:'):

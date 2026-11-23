@@ -1,0 +1,111 @@
+{
+  "tasks": [
+    "SI-022",
+    "SI-023",
+    "SI-030"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "44216671217cf52cf938889946991c9e1461c225",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 564
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "ffefad0b22418bd5e0f4a2a70947c4397684b5e9",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 103
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "eedaa814d6d43ef553c6369e63c2e87c2eaed796",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 84
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true,
+    "core_pin": "5788d81c09b97592a2c1066561cb5c66ff56acf9db13313bf9f11ec358716424",
+    "connector_pin": "34fe5d8e489e18ec38110c41aa98fb893ad935d94acd3c9a1baf39be6807e1ea"
+  },
+  "artifacts": {
+    "core_commit": "a8444e2dec972535670dff8376a945e7201ff701",
+    "core_archive_tree": "8a1fdd68e87a8567e68eb97fc8590d4fa1a4cfec",
+    "core_wheel_sha256": "4d7ae0178a143c9bca0b11dc456f19dfc1661d2a304b2e67fcdd9134c0daa52d",
+    "connector_commit": "4e19e8182deda83257956efd09f1f57d3f69b5d2",
+    "connector_archive_tree": "ea7ed5818e0f2a5f3827489ca1ba23457b527bbe",
+    "connector_wheel_sha256": "18604489174b85e4360fe11fa19ddba9a0819bbb967d3936d4d7d41b2ca2ff33",
+    "nexus_archive_tree": "bbb44fded97ca4bafd68babedaae60e50f84d03f",
+    "nexus_wheel_sha256": "76ea6ff0dbc3701b9de23077f21afe92e2062d9848156627ff0f5c0aac02db53"
+  },
+  "native_environment": {
+    "os": "Windows x64",
+    "python": "3.13.1",
+    "codex_app_server": "0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "execution": "Nexus CLI resume function, real HTTP and WebSocket daemon on loopback, temporary operator, project and profile",
+    "external_provider_requests": 0,
+    "loopback_model_responses_per_case": 1,
+    "resume_used_same_approved_provider_home": true
+  },
+  "native_cases": {
+    "intact": {
+      "cli_cancel_left_effect_count_unchanged": true,
+      "source_close": "SUCCEEDED",
+      "old_app_server_exited_before_resume": true,
+      "exact_thread_resumed_once": true,
+      "distinct_successor_process": true,
+      "second_review_for_same_source_rejected": true,
+      "recovered_same_receipt": true,
+      "native_open_fallback_or_new_prompt": false,
+      "successor_close": "SUCCEEDED",
+      "successor_app_server_exited": true,
+      "rollout_path_absent_from_nexus_events_and_receipts": true,
+      "junit_sha256": "948f4ae7160184c6c11aa7bdad37fdeda9f49ca9f795ccadf315f464b66892b5"
+    },
+    "changed": {
+      "source_close": "SUCCEEDED",
+      "history_changed_after_process_exit": true,
+      "stored_witness": false,
+      "successor_admitted": false,
+      "resumed_native_thread_count": 0,
+      "review_response": 409,
+      "junit_sha256": "67d75b98e564b29bbf33bbbf14cb15935dd45df3fe6122dbc9e7ac7f2c3073d9"
+    }
+  },
+  "installed_regressions": {
+    "core": {
+      "passed": 87,
+      "junit_sha256": "b31fa462dddc79f2d2c9761cfaf0392142ca876bb48386ec4a0845a535f54a6d"
+    },
+    "connector": {
+      "passed": 139,
+      "junit_sha256": "245c406c8809f9e3b83a1637ce71d29d5fd582673737a40eb171cab8146f47bf"
+    },
+    "nexus": {
+      "passed": 83,
+      "junit_sha256": "d47bb769dbf9df32cb666985896b0d3024a0961ee9cc3888237027384e5f3e42"
+    },
+    "verified_wheel_imports": true,
+    "twine_strict": "PASS",
+    "core_contract_generation_checks": "PASS",
+    "nexus_lock_check": "PASS"
+  },
+  "recovery": {
+    "concurrent_connector_successor_race": "One winner, durable idempotent lookup of the same reservation",
+    "private_copy_to_owned_home": "Controlled filesystem test including refusal and drift",
+    "prior_wheel_rejects_retained_opening_as_unwrapped_r4_operation": true,
+    "pre_fix": "Bootstrap lost its extension and the Connector refused the bare saved operation before reserving a successor. The attempted dispatch remained uncertain. The corrected test ran in a fresh isolated project.",
+    "first_installed_exact_fixture": "Reached native resume, receipt recovery and successful canonical close. Cleanup wrongly consulted the synthetic native factory; final rerun instead verified the real process and close receipt."
+  },
+  "limits": [
+    "No separate-machine, platform, campaign, or user qualification is claimed.",
+    "No changes to the user installation.",
+    "No new claims for native transfer/ownership outside the exact closed Codex source."
+  ]
+}

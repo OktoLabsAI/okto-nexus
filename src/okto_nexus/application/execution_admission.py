@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from .executor_inventory import load_current_executor_inventory
 
 from datetime import datetime, timezone
@@ -239,7 +240,8 @@ def submit_execution_operation(
                 require_identity_host(conn, server_id=server_id,
                                       agent_id=subject_agent_id, executor_id=executor_id)
                 if (context is not None and context.authentication_source == 'operator_session'
-                        and actor_agent_id != subject_agent_id and saved_resume is None
+                        and actor_agent_id != subject_agent_id
+                        and (saved_resume is None or 'connector_source' in saved_resume)
                         and intent['initial_turn_json'] is None):
                     # An empty opening requested by the human terminal must
                     # have a current grant before a session claim is written.
@@ -274,9 +276,23 @@ def submit_execution_operation(
                 if saved_resume is not None:
                     from .execution_saved_resume import (
                         require_saved_source_exclusive, require_saved_source_settled, saved_source)
-                    current, _ = saved_source(conn, scope, saved_resume['source_session_id'],
-                                              saved_resume['source_session_generation'],
-                                              adapter_id=resolved['semantic_intent']['payload']['adapter_id'])
+                    if 'connector_source' in saved_resume:
+                        from nexus_connector_core.saved_context_link import saved_codex_operation_id
+                        from .execution_native_session_mapping import native_launch_build
+                        from .remote_saved_codex import read_retired_remote_codex
+
+                        current, retired_scope, build = read_retired_remote_codex(uow, scope,
+                            session_id=saved_resume['source_session_id'],
+                            generation=saved_resume['source_session_generation'])
+                        if (resolved['semantic_intent'].get('saved_codex_resume') is not True
+                                or operation_id != saved_codex_operation_id(scope, resolved['intent_hash'], retired_scope,
+                                current['connector_source']) or
+                                native_launch_build(snapshot, resolved['semantic_intent']['payload']) != asdict(build)):
+                            raise OktoNexusError(ErrorCode.CONFLICT, 'The reviewed saved session build changed.', {})
+                    else:
+                        current, _ = saved_source(conn, scope, saved_resume['source_session_id'],
+                                                  saved_resume['source_session_generation'],
+                                                  adapter_id=resolved['semantic_intent']['payload']['adapter_id'])
                     if current != saved_resume:
                         raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed.', {})
                     require_saved_source_exclusive(conn, scope, saved_resume)

@@ -43,7 +43,10 @@ def execution_wire_intent(semantic: Mapping[str, Any]) -> dict[str, Any]:
     Target kinds are validated against Core before admission. A current-run
     control has no native ID; it is never converted to a made-up identifier.
     """
-    wire = {key: value for key, value in semantic.items() if key != "target"}
+    # The saved opening travels in its negotiated envelope. Retaining the
+    # marker in durable semantics makes an older dispatcher fail wire schema
+    # validation if it tries to send the operation as an ordinary opening.
+    wire = {key: value for key, value in semantic.items() if key not in ('target', 'saved_codex_resume')}
     target_id = semantic["target"]["expected_turn_id"]
     if target_id is not None:
         wire["expected_turn_id"] = target_id

@@ -1,16 +1,11 @@
 """Carry the verified source into one exact local Codex opening."""
 
 import asyncio
-import hashlib
 import json
-import os
-import shutil
-import tempfile
 from pathlib import Path
 
 from nexus_connector_core import CodexResumeGrant, CoreError
-from nexus_connector_core.native.codex_rollout import observe_rollout
-from nexus_connector_core.protocol import strict_json
+from nexus_connector_core.native.codex_rollout import observe_rollout, publish_rollout as _publish_rollout
 
 from ..application.execution_saved_resume import (
     require_saved_source_exclusive,
@@ -20,7 +15,6 @@ from ..application.execution_saved_resume import (
     saved_source,
 )
 from ..errors import OktoNexusError
-from .local_mcp_home import _plain
 
 
 def _refuse(code='PROFILE_DRIFT'):
@@ -158,48 +152,3 @@ class SavedCodexOpening:
                 raise _refuse() from None
         if self._read_source() != self.witness:
             raise _refuse()
-
-
-def _publish_rollout(source, destination, state_home, digest):
-    """Publish just the exact history in a newly approved per-session profile."""
-    # Only the source selected by the native engine may be copied. A fork or
-    # paginated history may resolve other files from its old state directory.
-    with source.open('rb') as input_file:
-        first = input_file.readline(1024 * 1024 + 1)
-        metadata = strict_json(first.decode())['payload']
-        if any(metadata.get(key) is not None for key in ('history_base', 'forked_from_id', 'parent_thread_id')):
-            raise _refuse('CAPABILITY_UNSUPPORTED')
-        parent = state_home
-        for part in destination.relative_to(state_home).parts[:-1]:
-            parent = parent / part
-            _plain(parent)
-            parent.mkdir(exist_ok=True)
-            _plain(parent)
-        _plain(destination)
-        if destination.exists():
-            return
-        with tempfile.NamedTemporaryFile(mode='w+b', dir=parent, prefix='.nexus-rollout-', delete=False) as output:
-            temporary = Path(output.name)
-            try:
-                output.write(first)
-                shutil.copyfileobj(input_file, output, length=1024 * 1024)
-                output.flush()
-                os.fsync(output.fileno())
-                output.seek(0)
-                if hashlib.file_digest(output, 'sha256').hexdigest() != digest:
-                    raise _refuse()
-            except BaseException:
-                output.close()
-                temporary.unlink(missing_ok=True)
-                raise
-        try:
-            if os.name == 'nt':
-                # Windows rename publishes atomically and refuses an existing
-                # destination, including on recovery of an interrupted copy.
-                temporary.rename(destination)
-            else:
-                os.link(temporary, destination)
-        except FileExistsError:
-            _plain(destination)
-        finally:
-            temporary.unlink(missing_ok=True)

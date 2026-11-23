@@ -20,7 +20,7 @@ from nexus_connector_core import (
 )
 from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
 from nexus_connector_core.pi_control_link import PI_RUN_CONTROL_REVISION
-from nexus_connector_core.saved_context_link import SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OBSERVED
+from nexus_connector_core.saved_context_link import SAVED_CODEX_LINK_REVISION, SAVED_CODEX_OBSERVED, SAVED_CODEX_OPEN_REVISION
 from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from nexus_connector_core.targeted_control_link import CLAUDE_OPERATION_INTERRUPT_CODEC, CLAUDE_OPERATION_STEER_CODEC
 from nexus_connector_core.presentation_link import (
@@ -427,6 +427,8 @@ def build_router() -> APIRouter:
                 welcome['control_capabilities'].append(PRESENTATION_LINK_REVISION)
                 if SAVED_CODEX_LINK_REVISION in hello['control_capabilities']:
                     welcome['control_capabilities'].append(SAVED_CODEX_LINK_REVISION)
+                    if SAVED_CODEX_OPEN_REVISION in hello['control_capabilities']:
+                        welcome['control_capabilities'].append(SAVED_CODEX_OPEN_REVISION)
             if (ws.app.state.deps.config.runtime_session_interaction_enabled
                     and ws.app.state.deps.config.feature_harness_integrations
                     and CLAUDE_PRESENTATION_LINK_REVISION in hello['control_capabilities']):

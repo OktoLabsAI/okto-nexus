@@ -85,6 +85,7 @@ class AuthorizedOpenBootstrap:
     grant_id: str
     scope: dict
     frame: dict
+    wire_extension: bytes | None = field(default=None, repr=False)
 
 
 def reserve_execution_dispatch(
@@ -429,7 +430,7 @@ def begin_execution_send(
         require_current_parent_readiness(conn, server_id=server_id,
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         provenance = conn.execute(
-            "SELECT source_guard_digest,actor_guard_digest FROM execution_client_intents "
+            "SELECT source_guard_digest,actor_guard_digest,resolved_json FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND operation_id=? "
             "AND intent_id GLOB ? AND session_selection<>\'reuse\'",
             (server_id, row["actor_agent_id"], reservation.operation_id,
@@ -703,6 +704,32 @@ def begin_execution_send(
         try:
             frame = decode_r4_frame(canonical_json(frame))
             wire_extension = None
+            if binding['kind'] == 'remote' and frame['action'] == 'runtime.open':
+                from nexus_connector_core.saved_context_link import (
+                    SAVED_CODEX_OPEN_REVISION, SAVED_CODEX_OPERATION_PREFIX, encode_saved_codex_open,
+                )
+
+                saved = json.loads(provenance[0]['resolved_json']).get('saved_resume')
+                if (saved is not None or reservation.operation_id.startswith(SAVED_CODEX_OPERATION_PREFIX)
+                        or semantic.get('saved_codex_resume') is not None):
+                    from .execution_saved_resume import require_saved_source_exclusive
+                    from .remote_saved_codex import read_retired_remote_codex
+
+                    successor = conn.execute('SELECT saved_resume_json FROM execution_sessions WHERE server_id=? '
+                        'AND executor_id=? AND session_id=? AND open_operation_id=?',
+                        (server_id, reservation.executor_id, scope['session_id'], reservation.operation_id)).fetchone()
+                    if (semantic.get('saved_codex_resume') is not True or saved is None or successor is None
+                            or json.loads(successor['saved_resume_json'] or 'null') != saved
+                            or 'connector_source' not in saved or channel is None
+                            or SAVED_CODEX_OPEN_REVISION not in channel.control_capabilities):
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'The connected owner cannot open the reviewed saved session.', {})
+                    current, retired_scope, _ = read_retired_remote_codex(uow, scope,
+                        session_id=saved['source_session_id'], generation=saved['source_session_generation'])
+                    if current != saved:
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed.', {})
+                    require_saved_source_exclusive(conn, scope, saved, successor=scope['session_id'])
+                    wire_extension = encode_saved_codex_open(frame, source_scope=retired_scope,
+                                                             source=saved['connector_source'])
             if (binding['kind'] == 'remote' and linked_control is not None
                     and row['action'] in ('turn.steer', 'turn.interrupt')
                     and semantic['target']['kind'] == 'current_run'):
@@ -742,7 +769,7 @@ def begin_execution_send(
         if bootstrap:
             return AuthorizedOpenBootstrap(
                 reservation, semantic, connection_generation, connection_id,
-                grant_id, scope, frame)
+                grant_id, scope, frame, wire_extension)
         return AuthorizedDispatch(
             reservation, semantic, lease["lease_id"],
             lease["lease_serial"], lease["connection_generation"],

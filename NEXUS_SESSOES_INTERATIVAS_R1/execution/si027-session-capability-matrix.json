@@ -113,6 +113,10 @@
       "negotiated_extensions": {
         "native_live_attach": [
           "nexus-presentation-read-v1"
+        ],
+        "saved_context_resume": [
+          "nexus-saved-codex-v1",
+          "nexus-saved-codex-open-v1"
         ]
       },
       "capabilities": {
@@ -123,10 +127,9 @@
         "command_subset": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
         "native_live_attach": { "status": "qualified", "evidence": ["si022-codex-remote-attach.md"] },
         "saved_context_resume": {
-          "status": "blocked",
-          "reason": "A rota de retomada salva exige histórico verificado de um executor embutido.",
+          "status": "qualified",
           "evidence": [
-            "si030-terminal-session-selection.md"
+            "si023-codex-remote-successor.md"
           ]
         },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si022-codex-silent-presenter.md"] },
