@@ -718,15 +718,16 @@ def test_claude_interrupt_cli_confirms_the_operation_and_recovers_the_only_recei
     assert result['receipt']['operation_id'] == 'original-control' and 'queue is paused' in result['message']
 
 
-@pytest.mark.parametrize(('stage', 'successor_state', 'exit_code'), [
-    ('SUBMITTED', None, 0),
-    ('SUBMISSION_STARTED', 'OPEN_PENDING', 0),
-    ('SUBMISSION_STARTED', 'CLOSED', 1),
-    ('OUTCOME_UNKNOWN', None, 1),
+@pytest.mark.parametrize(('stage', 'successor_state', 'result_state', 'exit_code'), [
+    ('SUBMITTED', 'READY', 'resume_requested', 0),
+    ('SUBMITTED', 'CLOSED', 'resume_closed', 1),
+    ('SUBMISSION_STARTED', 'OPEN_PENDING', 'resume_requested', 0),
+    ('SUBMISSION_STARTED', 'CLOSED', 'resume_unconfirmed', 1),
+    ('OUTCOME_UNKNOWN', None, 'resume_unconfirmed', 1),
 ])
 @pytest.mark.parametrize('existing_review', [False, True])
 def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
-        monkeypatch, capsys, stage, successor_state, exit_code, existing_review):
+        monkeypatch, capsys, stage, successor_state, result_state, exit_code, existing_review):
     class SavedCatalog(Catalog):
         token = 'synthetic-cookie'
         resolution = None
@@ -761,7 +762,7 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
                 raise session.ConnectionError('OUTCOME_UNKNOWN', 'Simulated lost response.', possible_effect=True)
             if path == session.PREFIX + '/runtime/sessions/successor':
                 assert method == 'GET' and parse_qs(urlsplit(url).query) == {'executor_id': ['executor']}
-                assert stage == 'SUBMISSION_STARTED' and successor_state is not None
+                assert stage in ('SUBMISSION_STARTED', 'SUBMITTED') and successor_state is not None
                 return {'scope': self.resolution['scope'], 'lifecycle_state': successor_state,
                         'lease_state': 'CLOSED' if successor_state == 'CLOSED' else 'ACTIVE'}
             return super().__call__(method, url, body)
@@ -806,10 +807,11 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
     result = json.loads(capsys.readouterr().out)
     assert result['session_id'] == 'successor' and result['source_session_id'] == 'session-b'
     assert result['operation_id'] == 'saved-open' and result['executor_stage'] == stage
-    if exit_code:
-        assert result['state'] == 'resume_unconfirmed' and 'outcome is unconfirmed' in result['message']
-    else:
-        assert result['state'] == 'resume_requested'
+    assert result['state'] == result_state
+    if result_state == 'resume_unconfirmed':
+        assert 'outcome is unconfirmed' in result['message']
+    elif result_state == 'resume_closed':
+        assert 'Saved resume completed' in result['message'] and 'The successor session is closed.' in result['message']
     assert catalog.submissions == 1 and '/runtime/sessions' not in catalog.routes
 
 

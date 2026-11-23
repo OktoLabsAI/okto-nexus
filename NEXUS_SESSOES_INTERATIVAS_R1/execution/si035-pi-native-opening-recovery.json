@@ -1,0 +1,194 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-025",
+    "SI-030",
+    "SI-035"
+  ],
+  "scenarios": [
+    "SI-T-G15"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "67a91c07da7def89ddc2e3e04be94afb84fc0401",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 572
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "8b42af1fd19d9f818c8e85640ff7090b27d5254f",
+    "nexus_sha256": "7043622d80ff8b81a0981c8964e54ffce182debb54644579105fa0bc60671446",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "wheel_includes_tracked_dashboard": true,
+    "twine_strict_exit_code": 0,
+    "uv_lock_check_exit_code": 0
+  },
+  "environment": {
+    "os": "Windows x64",
+    "pi": "0.87.1",
+    "node": "24.15.0",
+    "pi_installation": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "provider": "Synthetic in-process provider in a disposable profile. Pi network denied by the fixture.",
+    "operator": "Authenticated local production HTTP endpoints using the installed CLI facade.",
+    "nexus_processes_per_case": 3,
+    "wheel_imports_checked_before_collection": [
+      "Nexus",
+      "Connector",
+      "Connector Core"
+    ],
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+  },
+  "controlled_cases": {
+    "after_core_confirmed_before_server_receipt": {
+      "phases": {
+        "source": {
+          "source_receipt": "SUCCEEDED",
+          "retired_process_exited": true,
+          "retained_exact_pi_history": true,
+          "provider_calls": 1,
+          "native_processes_exited": true,
+          "external_provider_calls": 0,
+          "exit_code": 0
+        },
+        "cut": {
+          "dispatch_state": "SENDING",
+          "native_starts": 1,
+          "provider_calls": 1,
+          "durable_core_stage": "SUBMITTED",
+          "core_possible_effect": true,
+          "core_retry_safe": false,
+          "server_receipt_count": 0,
+          "native_owner_alive_before_cut": true,
+          "exact_native_identity": true,
+          "exit_code": 86,
+          "cut_native_already_exited": true
+        },
+        "recovered": {
+          "same_durable_opening_operation": true,
+          "same_successor_session": true,
+          "no_retry_or_native_start": true,
+          "no_unsent_proof_for_sending": true,
+          "retained_history_unchanged": true,
+          "exact_native_id_from_original_core_receipt": true,
+          "possible_effect_retained": true,
+          "retry_safe": false,
+          "session_closed_after_verified_containment": true,
+          "cli_state": "resume_closed",
+          "stop_proofs": [
+            "CONTAINER_STOPPED"
+          ],
+          "provider_calls_total": 1,
+          "sqlite_checks_passed": true,
+          "distinct_nexus_processes": 3,
+          "native_processes_exited": true,
+          "external_provider_calls": 0,
+          "exit_code": 0
+        }
+      },
+      "exact_native_process_handle_observed_exit": true,
+      "native_process_handle_acquired_before_cut": true
+    },
+    "after_native_open_before_core_confirmed": {
+      "phases": {
+        "source": {
+          "source_receipt": "SUCCEEDED",
+          "retired_process_exited": true,
+          "retained_exact_pi_history": true,
+          "provider_calls": 1,
+          "native_processes_exited": true,
+          "external_provider_calls": 0,
+          "exit_code": 0
+        },
+        "cut": {
+          "dispatch_state": "SENDING",
+          "native_starts": 1,
+          "provider_calls": 1,
+          "durable_core_stage": "SUBMISSION_STARTED",
+          "core_possible_effect": true,
+          "core_retry_safe": false,
+          "server_receipt_count": 0,
+          "native_owner_alive_before_cut": true,
+          "exact_native_identity": true,
+          "exit_code": 86,
+          "cut_native_already_exited": true
+        },
+        "recovered": {
+          "same_durable_opening_operation": true,
+          "same_successor_session": true,
+          "no_retry_or_native_start": true,
+          "no_unsent_proof_for_sending": true,
+          "retained_history_unchanged": true,
+          "no_final_core_receipt_fabricated": true,
+          "possible_effect_retained": true,
+          "retry_safe": false,
+          "session_closed_after_verified_containment": true,
+          "cli_state": "resume_unconfirmed",
+          "stop_proofs": [
+            "CONTAINER_STOPPED"
+          ],
+          "provider_calls_total": 1,
+          "sqlite_checks_passed": true,
+          "distinct_nexus_processes": 3,
+          "native_processes_exited": true,
+          "external_provider_calls": 0,
+          "exit_code": 0
+        }
+      },
+      "exact_native_process_handle_observed_exit": true,
+      "native_process_handle_acquired_before_cut": true
+    }
+  },
+  "earlier_attempt": "An initial hook also matched publication recovery for the retired source. Its fixture was stopped by its own timeout before it admitted a saved successor. The corrected candidate filters the retired source before injecting the fault and uses new disposable homes.",
+  "regressions": {
+    "wheel_suite": "tests/session_interaction/test_session_cli.py tests/execution_r4/test_terminal_work.py",
+    "wheel_imports_verified": true,
+    "source_cli_passed": 52,
+    "installed_passed": 86,
+    "source_exit_code": 0,
+    "installed_exit_code": 0
+  },
+  "procedure": {
+    "method": "Three Nexus pytest worker processes per case, authenticated loopback HTTP CLI facade, installed wheels and the real Pi Node process. The Windows supervisor retained a read-only wait handle to the exact native process before allowing the cut.",
+    "fixture_lab": "D:\\nxs-pi-after-open-67a9",
+    "launcher_scripts": [
+      "run_observed.py",
+      "run_uncertain.py"
+    ],
+    "worker_scripts": [
+      "test_pi_restart.py",
+      "test_pi_native_uncertain.py"
+    ],
+    "regressions_junit": [
+      "source-cli.xml",
+      "installed-cli.xml"
+    ],
+    "exit_action": "os._exit(86) in the isolated worker only",
+    "retained_db_integrity": "PRAGMA integrity_check, PRAGMA foreign_key_check"
+  },
+  "qualification_limits": [
+    "Native same-host Windows recovery with a synthetic model. No provider campaign or user environment.",
+    "Both tests follow explicit canonical retirement of the source. They do not qualify live engine migration or independent background jobs.",
+    "SI-T-G15 and the wider transfer qualification remain open."
+  ]
+}

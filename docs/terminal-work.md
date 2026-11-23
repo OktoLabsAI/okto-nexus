@@ -65,7 +65,7 @@ supports. Queue acceptance and native delivery have separate receipt states.
 | --- | --- |
 | Follow an existing live session | Use `session attach` with its exact session ID. Detach to leave work and the queue with the current executor. |
 | Continue work in a live session | Select it in Home or use `work chat --session-id SESSION_ID` and submit the next request. |
-| Resume retained native history | Use `session resume` in a terminal for an eligible retired source on the embedded executor or a supported Codex Connector. Confirm the successor opening. Nexus checks verified history and exclusive ownership. The original queue stays with the source. |
+| Resume retained native history | Use `session resume` in a terminal for an eligible retired source on the embedded executor or a Connector that supports saved resume for the selected adapter. Confirm the successor opening. Nexus checks verified history and exclusive ownership. The original queue stays with the source. |
 | Recover an interrupted submission | Use `work resume` for a Nexus work request, or `session receipt` with the original intent and owner generation for native input. If a saved resume lost its response, run the same `session resume` command to recover its receipt. |
 | Start a separate session | Use `session open` to confirm an empty session, or `work send --new-session` with a first request. Check an unconfirmed receipt before deciding whether to send again. |
 | Interrupt or close work | Use the explicit interrupt or close control. An interruption targets the current run. Closing retires the session and leaves its unsent queue receipts on the original session. |
@@ -88,8 +88,10 @@ The saved-resume command requires a human operator session that the Server
 recognizes as local. Review the source session, workspace and host before
 confirming a successor. Press Enter to cancel. After an admission, repeat the
 same command with `--json` to read its receipt without opening another session.
-Check the successor and receipt before continuing. An unavailable saved
-context does not open a fresh conversation.
+A confirmed opening whose successor has since closed returns `resume_closed`
+and exit code 1, with the original successor ID and receipt. If the outcome is
+still uncertain, `resume_unconfirmed` keeps the receipt available for recovery.
+An unavailable saved context does not open a fresh conversation.
 
 The reviewed Windows x64 Pi 0.87.1 build also supports saved resume on the
 local Nexus host. Use the approved workspace and Pi profile of the original

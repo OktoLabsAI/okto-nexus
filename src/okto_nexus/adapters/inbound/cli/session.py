@@ -378,18 +378,27 @@ def resume_saved_session(call, binding, session_id, *, interactive=False):
                 or operation.get('action') != 'runtime.open' or operation.get('intent_hash') != resolution['intent_hash']):
             raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The operation receipt does not match the selected successor.')
     stage = operation.get('executor_stage') if operation is not None else None
-    unconfirmed = operation is None or stage == 'OUTCOME_UNKNOWN'
-    if stage == 'SUBMISSION_STARTED':
+    successor_closed = False
+    if stage in ('SUBMISSION_STARTED', 'SUBMITTED'):
         # Recovery can retain only the opening fence after proving that the
-        # successor process exited. The receipt still describes a possible effect.
+        # successor process exited. Even a confirmed opening describes history.
         successor_view = read_binding_session(call, binding, successor)
         if successor_view['scope'].get('session_owner_generation') != scope.get('session_owner_generation'):
             raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The stored successor generation changed.')
-        unconfirmed = (successor_view.get('lifecycle_state') in ('CLOSED', 'FAILED')
-                       and successor_view.get('lease_state') == 'CLOSED')
-    status = 'outcome is unconfirmed' if unconfirmed else display_text(stage or 'pending')
-    recovery = ' Run the same command to recover this receipt.' if unconfirmed else ''
-    return {'state': 'resume_unconfirmed' if unconfirmed else 'resume_requested',
+        successor_closed = (successor_view.get('lifecycle_state') in ('CLOSED', 'FAILED')
+                            and successor_view.get('lease_state') == 'CLOSED')
+    state = 'resume_requested'
+    status = display_text(stage or 'pending')
+    recovery = ''
+    if operation is None or stage == 'OUTCOME_UNKNOWN' or (stage == 'SUBMISSION_STARTED' and successor_closed):
+        state = 'resume_unconfirmed'
+        status = 'outcome is unconfirmed'
+        recovery = ' Run the same command to recover this receipt.'
+    elif successor_closed:
+        state = 'resume_closed'
+        status = 'completed'
+        recovery = ' The successor session is closed.'
+    return {'state': state,
             'source_session_id': session_id, 'session_id': successor,
             'operation_id': resolution['operation_id'], 'executor_stage': stage,
             'message': f'Saved resume {status} for {display_text(session_id)}. '
@@ -518,7 +527,7 @@ def run_session(argv):
                 print('Saved resume cancelled.')
                 return 0
             _display(result, args.json)
-            return int(result['state'] == 'resume_unconfirmed' or result['executor_stage'] in ('FAILED', 'CANCELLED'))
+            return int(result['state'] != 'resume_requested' or result['executor_stage'] in ('FAILED', 'CANCELLED'))
         if args.action in COMMANDS:
             result = execute_session_command(call, binding, args.session_id, args.action,
                 interactive=sys.stdin.isatty() and sys.stdout.isatty(), message_file=args.message_file, read=input)
