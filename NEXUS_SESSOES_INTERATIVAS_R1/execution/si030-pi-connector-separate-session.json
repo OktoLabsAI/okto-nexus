@@ -1,0 +1,107 @@
+{
+  "tasks": [
+    "SI-022",
+    "SI-025",
+    "SI-030"
+  ],
+  "scenarios": [
+    "SI-T-G20"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "c0a7114e8d4986276e9ca2a066a48dfa7a8355ca",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 577,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "worktrees_clean": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "5bfbb487e6f92b975b010d9c8d759da76939e5aa",
+    "nexus_wheel_sha256": "279fa5c03ea95aef4c9d85a5d1ae9cc970814c425653f5aaf99a87635cdc3c5d",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876"
+  },
+  "environment": {
+    "os": "Windows x64; real ConPTY",
+    "topology": "Independent remote executor with authenticated Connector R4 over loopback",
+    "harness": "Pi 0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "provider": "In-process synthetic model using isolated credentials; Pi networking disabled"
+  },
+  "native": {
+    "native_pi": "0.87.1",
+    "loopback_r4": true,
+    "native_processes": 2,
+    "source_draft_preserved": true,
+    "cancel_kept_source_attached": true,
+    "effects_before_confirm": 0,
+    "opening_operation_posts": 1,
+    "native_turns_on_new_session": 0,
+    "same_checkpoint_after_response_loss": true,
+    "distinct_native_ids": true,
+    "recovered_exact_attach_command": true,
+    "input_retained_in_original_queue": true,
+    "original_input_delivered_once": true,
+    "connector_generation_unchanged": true,
+    "binding_revision_unchanged": true,
+    "grant_revisions_unchanged": true,
+    "canonical_closes": 2,
+    "pi_processes_exited": true,
+    "synthetic_model_calls": 2,
+    "external_provider_calls": 0
+  },
+  "tests": {
+    "native": {
+      "passed": 1,
+      "junit_sha256": "3c5d27a310089ad6ff78cb20fb81a971401508d46230e55cbd26fcabc8901dd6"
+    },
+    "installed_terminal_and_remote_regressions": {
+      "passed": 80,
+      "junit_sha256": "9f2ea4d2780eac85dfa2e6ba6dd92bbce53551289add55289b0e2c7214bf217a"
+    },
+    "wheel_import_guard": [
+      "Nexus",
+      "Connector",
+      "Core"
+    ]
+  },
+  "fixture": {
+    "lab": "D:\\nxs-si030-pi-open-remote-c0a7114e",
+    "driver_sha256": "908395f14e7bf4dba3888bdb464b2218aaaf2e9d00a908df27fb8ed30276a836",
+    "terminal_sha256": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20"
+  },
+  "qualification_limits": [
+    "Nexus and Connector used the same Windows machine with separate homes and a loopback R4 connection.",
+    "The test host used the reviewed Pi binary and a synthetic model. Multi-machine and provider campaigns are outstanding."
+  ]
+}
