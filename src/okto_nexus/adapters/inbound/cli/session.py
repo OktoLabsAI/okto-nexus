@@ -221,8 +221,10 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
                 'attach_strategy': 'claude_remote_read' if remote else 'claude_local_read',
                 'capability_revision': revision}
     if binding.get('adapter_id') == 'pi_rpc':
-        if viewer_executable is not None or write and sys.platform != 'win32':
-            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The native Pi editor requires a reviewed Windows terminal.')
+        if viewer_executable is not None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The Pi terminal uses its built-in renderer.')
+        if write and sys.platform not in ('win32', 'linux'):
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The Pi editor requires a Windows or Linux terminal.')
         reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
                                              presentation='pi_remote' if remote else 'pi',
                                              **({'write': True} if write else {}))

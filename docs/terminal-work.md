@@ -198,10 +198,14 @@ in a terminal and defaults to No. Use `connect --no-interactive` to skip the
 offer. The result includes an exact command for the confirmed binding so you
 can attach later without repeating setup.
 
-## Native Pi viewer on Windows
+<a id="native-pi-viewer-on-windows"></a>
 
-For a live hosted Pi session on the reviewed Windows build, open the transcript
-or open the native editor with the same operator login.
+## Native Pi viewer
+
+For a live hosted Pi session, open the transcript or the native editor with the
+same operator login. The commands work on Windows and Linux terminals. The
+runtime host needs a reviewed installation of Pi 0.87.1 and Node 24.15.0 on
+Windows x64 or Linux x64.
 
 ```sh
 okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
@@ -234,6 +238,9 @@ different machine. Enter queues text on the selected session. Ctrl+R reviews
 reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
+The reviewed Linux runtime currently supports the transcript and message queue.
+Reorientation, interruption and saved-history resume require the reviewed
+Windows Pi runtime.
 
 If a slow terminal can no longer receive updates, Nexus releases its
 presentation while the session keeps running. Reattach to the same session

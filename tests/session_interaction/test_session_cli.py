@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 from contextlib import contextmanager
 from io import StringIO
 from types import SimpleNamespace
@@ -426,7 +427,7 @@ def test_pi_attachment_selects_the_ticketed_transcript_and_detaches_locally(monk
     assert result['attach_strategy'] == 'pi_local_read' and result['status'] == 'detached'
     assert reviewed == ['pi-attachment', 'socket closed']
     assert 'Ctrl+C detaches' in capsys.readouterr().out
-    with pytest.raises(ConnectionError, match='reviewed Windows terminal'):
+    with pytest.raises(ConnectionError, match='built-in renderer'):
         session.attach_session(call, binding, session_id='session-a', interactive=True, viewer_executable='another-viewer')
 
 
@@ -468,7 +469,8 @@ def test_claude_attachment_reads_the_exact_session_and_detaches_locally(monkeypa
         session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
 
 
-def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch):
+@pytest.mark.parametrize('platform', ['win32', 'linux'])
+def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch, platform):
     call = Catalog()
     call.token = 'synthetic-cookie'
     binding = BINDING | {'adapter_id': 'pi_rpc'}
@@ -485,7 +487,7 @@ def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch):
         assert selection['writer'] is writer and selection['pi_editor'] is True
         yield SimpleNamespace(attachment_id='writer')
 
-    monkeypatch.setattr(session, 'sys', SimpleNamespace(platform='win32'))
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(platform=platform))
     monkeypatch.setattr(session, 'review_local_presentation', review)
     monkeypatch.setattr(session, 'open_local_presentation', attach)
     monkeypatch.setattr(session, 'show_pi_editor', lambda link, recover, **_: calls.append(link.attachment_id))
@@ -516,6 +518,33 @@ def test_pi_console_decodes_split_paste_and_keeps_detach_local():
     assert keys.feed('\x1b[200~\x0f\x1b[201~') == []
 
 
+@pytest.mark.skipif(sys.platform != 'linux', reason='requires a Linux pseudoterminal')
+def test_pi_linux_terminal_reads_raw_utf8_and_restores_after_an_error():
+    import pty
+    import termios
+
+    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import _PiKeys, _linux_editor_input
+
+    master, slave = pty.openpty()
+    try:
+        original = termios.tcgetattr(slave)
+        stream = SimpleNamespace(fileno=lambda: slave)
+        keys = _PiKeys()
+        with pytest.raises(RuntimeError, match='socket closed'):
+            with _linux_editor_input(stream) as read:
+                assert read() == ''
+                assert not termios.tcgetattr(slave)[3] & (termios.ECHO | termios.ICANON | termios.ISIG)
+                os.write(master, b'\xc3')
+                assert read() == ''
+                os.write(master, b'\xa9\r\x1d')
+                assert keys.feed(read()) == [('insert', 'é'), ('enter', None), ('detach', None)]
+                raise RuntimeError('socket closed')
+        assert termios.tcgetattr(slave) == original
+    finally:
+        os.close(master)
+        os.close(slave)
+
+
 @pytest.mark.parametrize(('initial_keys', 'confirmation', 'allowed', 'result'), [
     ([], '\x19', True, 'open_empty_session'),
     ([], '\x0e', True, None),
@@ -527,12 +556,10 @@ def test_pi_separate_open_stays_local_and_leaves_a_draft_attached(
         monkeypatch, capsys, initial_keys, confirmation, allowed, result):
     from contextlib import nullcontext
 
-    from okto_nexus.adapters.inbound.cli import windows_viewer_terminal
-    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import show_pi_editor
+    from okto_nexus.adapters.inbound.cli import pi_viewer_terminal
 
     keys = iter([*initial_keys, '\x0f', *([confirmation] if confirmation else []), None])
-    monkeypatch.setattr(windows_viewer_terminal, 'viewer_console_input', lambda _: nullcontext(lambda: next(keys)))
-    monkeypatch.setattr(windows_viewer_terminal, 'ansi_viewer_output', lambda _: nullcontext())
+    monkeypatch.setattr(pi_viewer_terminal, '_editor_terminal', lambda: nullcontext(lambda: next(keys)))
     forwarded = []
 
     def edit(*, key, text, **_):
@@ -540,7 +567,7 @@ def test_pi_separate_open_stays_local_and_leaves_a_draft_attached(
         return False, None
 
     link = SimpleNamespace(poll_pi_output=lambda _: None, edit_pi_input=edit)
-    assert show_pi_editor(link, lambda _: None, allow_empty_open=allowed) == result
+    assert pi_viewer_terminal.show_pi_editor(link, lambda _: None, allow_empty_open=allowed) == result
     assert forwarded == [('insert', text) for text in initial_keys]
     if initial_keys:
         assert 'Finish the draft' in capsys.readouterr().out

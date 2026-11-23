@@ -1,9 +1,12 @@
-"""Wire the Windows terminal to the reviewed Pi draft editor."""
+"""Wire the local terminal to the reviewed Pi draft editor."""
 
 import codecs
+import errno
+import os
 import re
 import sys
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass
 from uuid import uuid4
 
@@ -266,10 +269,55 @@ class _PiControls:
                 del self.receipts[action]
 
 
+@contextmanager
+def _linux_editor_input(stream):
+    import select
+    import termios
+    import tty
+
+    fd = stream.fileno()
+    try:
+        original = termios.tcgetattr(fd)
+        tty.setraw(fd, termios.TCSAFLUSH)
+    except termios.error:
+        raise ConnectionError('PRESENTATION_TTY_REQUIRED', 'The Pi editor needs a Linux terminal.') from None
+    decode = codecs.getincrementaldecoder('utf-8')(errors='replace').decode
+
+    def take():
+        if not select.select([fd], [], [], 0)[0]:
+            return ''
+        try:
+            raw = os.read(fd, _MAX_INSERT)
+        except OSError as error:
+            if error.errno == errno.EIO:  # The terminal can disappear on hangup.
+                return None
+            raise
+        return decode(raw) if raw else None
+
+    try:
+        yield take
+    finally:
+        try:
+            termios.tcsetattr(fd, termios.TCSAFLUSH, original)
+        except termios.error as error:
+            if error.args[0] not in (errno.EIO, errno.ENOTTY):
+                raise
+
+
+@contextmanager
+def _editor_terminal():
+    if sys.platform == 'win32':
+        from .windows_viewer_terminal import ansi_viewer_output, viewer_console_input
+
+        with ansi_viewer_output(sys.stdout), viewer_console_input(sys.stdin) as read:
+            yield read
+    else:
+        with _linux_editor_input(sys.stdin) as read:
+            yield read
+
+
 def show_pi_editor(link, recover, *, allow_empty_open=False):
     """Display Pi's editor, keeping separate-session requests local to the CLI."""
-    from .windows_viewer_terminal import ansi_viewer_output, viewer_console_input
-
     decode = codecs.getincrementaldecoder('utf-8')().decode
     notice = ''
 
@@ -289,7 +337,7 @@ def show_pi_editor(link, recover, *, allow_empty_open=False):
     controls = _PiControls(link, recover, render, status)
     draft_may_contain_text = False
     opening_review = False
-    with ansi_viewer_output(sys.stdout), viewer_console_input(sys.stdin) as next_input:
+    with _editor_terminal() as next_input:
         sys.stdout.write('\x1b[?2004h')
         sys.stdout.flush()
         try:
