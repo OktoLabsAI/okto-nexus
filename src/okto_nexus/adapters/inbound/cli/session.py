@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 from uuid import uuid4
 
+from ....application.execution_saved_resume import ACTIVE_SAVED_RESUME_MESSAGE
 from ....application.terminal_connection import (
     PREFIX,
     ConnectionError,
@@ -307,8 +308,7 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
 
 def _confirm_saved_resume(source_view, *, interactive):
     if source_view.get('lifecycle_state') == 'READY' and source_view.get('lease_state') == 'ACTIVE':
-        raise ConnectionError('CONFLICT', 'The source session is still active. Saved resume requires a verified '
-                              'close. Use live attachment when available.', http_status=409)
+        raise ConnectionError('CONFLICT', ACTIVE_SAVED_RESUME_MESSAGE, http_status=409)
     if not interactive:
         raise ConnectionError('SAVED_RESUME_CONFIRMATION_REQUIRED',
                               'Use an interactive terminal to confirm opening a successor from this saved session.')

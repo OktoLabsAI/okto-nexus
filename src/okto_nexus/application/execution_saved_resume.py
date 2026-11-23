@@ -8,6 +8,11 @@ from nexus_connector_core.native.pi_saved_history import PiSavedHistory
 
 from ..errors import ErrorCode, OktoNexusError
 
+ACTIVE_SAVED_RESUME_MESSAGE = (
+    'The source session is still active. Saved resume requires a verified close. '
+    'Use live attachment when available to leave work with the current executor.'
+)
+
 _SAME_SCOPE = (
     'server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id', 'workspace_binding_id',
     'authorization_revision', 'configuration_revision', 'binding_revision', 'credential_epoch',
@@ -48,8 +53,7 @@ def saved_source(conn, scope, source_session_id, source_generation, *, adapter_i
     """, (adapter_id, scope['server_id'], scope['executor_id'], source_session_id, source_generation, scope['binding_id'],
           scope['workspace_id'], scope['workspace_binding_id'])).fetchone()
     if row is not None and row['lifecycle_state'] == 'READY' and row['lease_state'] == 'ACTIVE':
-        raise OktoNexusError(ErrorCode.CONFLICT, 'The source session is still active. Saved resume requires a verified '
-                          'close. Use live attachment when available.', {})
+        raise OktoNexusError(ErrorCode.CONFLICT, ACTIVE_SAVED_RESUME_MESSAGE, {})
     if row is None or row['witness_json'] is None:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The exact session has no verified saved context on this host.', {})
     witness = json.loads(row['witness_json'])

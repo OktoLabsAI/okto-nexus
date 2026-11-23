@@ -93,6 +93,9 @@ and exit code 1, with the original successor ID and receipt. If the outcome is
 still uncertain, `resume_unconfirmed` keeps the receipt available for recovery.
 An unavailable saved context does not open a fresh conversation.
 
+For a live session, use `session attach` when the harness supports it. Work
+in the background stays with the current executor, even after a turn ends.
+
 The reviewed Windows x64 Pi 0.87.1 build also supports saved resume on the
 local Nexus host. Use the approved workspace and Pi profile of the original
 session. After a verified close, the successor loads the same Pi branch.

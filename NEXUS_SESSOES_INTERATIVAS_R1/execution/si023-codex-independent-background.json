@@ -1,0 +1,138 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-024",
+    "SI-030",
+    "SI-035"
+  ],
+  "scenarios": [
+    "SI-T-G13",
+    "SI-T-G14"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "5bf6e7fe3b7c1949771eca6646813427c539b792",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 573
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true
+  },
+  "artifacts": {
+    "nexus_build_tree": "1cec0443d681f1c0b204fab39120eb31a6736e51",
+    "nexus_sha256": "54337f3246583e28aabb809727477179999499d37b0c90a20eceb98939f495bc",
+    "baseline_nexus_sha256": "7043622d80ff8b81a0981c8964e54ffce182debb54644579105fa0bc60671446",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "twine_strict_exit_code": 0,
+    "uv_lock_check_exit_code": 0,
+    "gate_fixture_sha256": "b5ea0eff4bf9824008e25e52030cebe2c2d43b17c34de511929704b77e250114",
+    "tested_gate_fixture_sha256": "55ec04c0dfc0a267035a55c80d77ec38516349e1d5975ffe42506f348a0c8dc6"
+  },
+  "environment": {
+    "os": "Windows x64",
+    "engine": "Codex app-server 0.157.0",
+    "engine_file_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "model": "Isolated loopback Responses peer with no account credentials",
+    "local_transport": "Embedded host behind authenticated Nexus HTTP routes",
+    "connector_transport": "Real authenticated Connector outbound WebSocket and receipt API, same host"
+  },
+  "candidate_local": {
+    "turn_finished_before_resume_request": true,
+    "independent_background_process_alive": true,
+    "cli_http_status": 409,
+    "authenticated_api_http_status": 409,
+    "live_specific_diagnostic": true,
+    "no_new_operation_or_saved_context": true,
+    "same_background_process_completed_once": true,
+    "exact_windows_handle_observed": true,
+    "same_native_thread_and_process": true,
+    "native_launches": 1,
+    "native_turn_starts": 1,
+    "local_simulated_calls": 3,
+    "canonical_close_and_engine_exit": true,
+    "sqlite_integrity": "ok",
+    "external_model_calls": 0
+  },
+  "candidate_remote": {
+    "build": "Codex app-server 0.157.0",
+    "canonical_close": "SUCCEEDED",
+    "local_private_snapshot_observed": true,
+    "owned_app_server_exited": true,
+    "exact_thread_and_source_verified": true,
+    "file_drift_injected": false,
+    "private_record_persisted": true,
+    "rollout_path_absent_from_server": true,
+    "loopback_fixture_requests": 1,
+    "external_provider_requests": 0,
+    "successor_admitted": true,
+    "native_thread_resume_count": 1,
+    "human_cancel_had_no_effect": true,
+    "same_command_recovered_original_receipt": true,
+    "active_source_refused_http_status": 409,
+    "stale_generation_refused_http_status": 409,
+    "exact_live_source_received_guidance": true,
+    "stale_generation_did_not_disclose_live_status": true,
+    "active_refusal_had_no_effect": true
+  },
+  "tests": {
+    "local-exact.xml": {
+      "passed": 1,
+      "exit_code": 0,
+      "junit_sha256": "d2a6f2b87e2f2079a9b8cd18e2929d1b4eedcadda17b49ca3069fe71c72c50f9"
+    },
+    "candidate-local.xml": {
+      "passed": 1,
+      "exit_code": 0,
+      "junit_sha256": "752d40cdbe4dc0c3a3b8dfd8dfe8e208590b75e9e1511e74245b5ade46f57fae"
+    },
+    "candidate-remote.xml": {
+      "passed": 1,
+      "exit_code": 0,
+      "junit_sha256": "96849227495ab609e65a5c349a0bb855d1752b3be4885ce71a70efb288927beb"
+    },
+    "candidate-regression.xml": {
+      "passed": 58,
+      "exit_code": 0,
+      "junit_sha256": "99bc60097540b7e52b0992cb785cbf653a73af8b9302ce060aeae0bcd10d5559"
+    }
+  },
+  "procedure": {
+    "fixture_lab": "D:\\nxs-si-background-5bf6",
+    "local_test_script": "test_background.py",
+    "connector_test_script": "test_remote_active.py -k False",
+    "regression_command": "pytest tests/session_interaction/test_session_cli.py tests/execution_r4/test_session_input_runtime.py -k 'saved or not test_session_input_runtime'",
+    "installed_import_guard": [
+      "okto_nexus",
+      "nexus_connector_core",
+      "okto_nexus_connector"
+    ],
+    "fixture_adjustments": [
+      "Await the scoped MCP ready event before sending the synthetic turn.",
+      "Use the base Python executable for the child instead of the Windows virtual environment launcher so the child and OS process handle refer to the same process."
+    ]
+  },
+  "qualification_limits": [
+    "The independent background process was tested on the embedded host. The Connector check used a live session after an ordinary turn.",
+    "Both hosts ran on the same Windows computer. Other platforms, live engine transfer and a provider campaign remain outside this evidence.",
+    "The test requests saved resume against a still-live context. It does not qualify migration of arbitrary background tools."
+  ]
+}

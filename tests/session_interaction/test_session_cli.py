@@ -835,4 +835,6 @@ def test_saved_resume_reports_a_live_source_without_prompting_or_resolving(monke
     monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
     monkeypatch.setattr('builtins.input', lambda _: pytest.fail('A live source cannot open a saved successor'))
     assert main(['session', 'resume', '--id', 'reviewer', '--session-id', 'session-a']) == 3
-    assert 'The source session is still active.' in capsys.readouterr().out
+    message = capsys.readouterr().out
+    assert 'The source session is still active.' in message
+    assert 'Use live attachment when available to leave work with the current executor.' in message

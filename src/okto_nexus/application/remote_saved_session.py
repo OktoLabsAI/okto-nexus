@@ -21,6 +21,7 @@ from .execution_native_session_mapping import (
 )
 from .execution_reconciliation import _receipt
 from .execution_saved_resume import (
+    ACTIVE_SAVED_RESUME_MESSAGE,
     require_saved_resume_operator, require_saved_source_exclusive, require_saved_source_settled,
 )
 
@@ -51,9 +52,13 @@ def read_retired_remote_session(uow, scope, *, session_id, generation, adapter_i
           AND s.binding_id=? AND s.workspace_id=? AND s.workspace_binding_id=? AND o.subject_agent_id=?
     """, (*key, generation, scope['binding_id'], scope['workspace_id'], scope['workspace_binding_id'],
           scope['agent_id'])).fetchone()
-    if (selected is None or selected['kind'] != 'remote' or selected['lifecycle_state'] != 'CLOSED'
-            or selected['lease_state'] != 'CLOSED' or not selected['stream_epoch']
+    if (selected is None or selected['kind'] != 'remote'
             or json.loads(selected['expected_revisions_json']) != source_scope):
+        raise _unavailable()
+    if selected['lifecycle_state'] == 'READY' and selected['lease_state'] == 'ACTIVE':
+        raise OktoNexusError(ErrorCode.CONFLICT, ACTIVE_SAVED_RESUME_MESSAGE, {})
+    if (selected['lifecycle_state'] != 'CLOSED' or selected['lease_state'] != 'CLOSED'
+            or not selected['stream_epoch']):
         raise _unavailable()
     exact = InputScope(SessionKey(*key), SessionOwnerGeneration(generation), scope['binding_id'],
                        scope['workspace_id'], scope['workspace_binding_id'], scope['agent_id'])
