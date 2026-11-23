@@ -191,8 +191,9 @@
         "native_live_attach": { "status": "qualified", "evidence": ["si022-pi-remote-terminal.md"] },
         "saved_context_resume": {
           "status": "blocked",
-          "reason": "O fluxo de sucessora salva ainda não admite histórico do Pi.",
+          "reason": "O Connector comprova e retém o histórico salvo da sessão Pi encerrada. A abertura exclusiva pelo CLI ainda está pendente.",
           "evidence": [
+            "si025-pi-saved-retirement.md",
             "si030-terminal-session-selection.md"
           ]
         },

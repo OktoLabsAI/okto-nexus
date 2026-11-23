@@ -1,5 +1,12 @@
 # Current development dependency
 
+Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `184a821fcb2bcd9fe3fa716a2109dcf7fc293447`.
+The unpublished wheel SHA-256 is `e0041fbfcb0ef230d6b5d31754c7e91e6977778caf43d6c0228ee338e52047f0`.
+Core verifies one idle hosted Pi owner's saved file against its exact in-memory branch.
+The Nexus CI manifest identifies the Connector wheel from `80af7bfdbf2c81237ed7f17ae0d9655201f94a1e`.
+
+## Previous development dependency
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `9b2e4a4d53ffe40fe2c331ab5fcfedab7351d757`.
 The unpublished wheel SHA-256 is `fb9e03da85b19d3b9d9484eabb338e45806b67378a608ae93b368facc2bcdd8f`.
 Core validates the negotiated Claude history probe and requires a scoped envelope for a saved opening.

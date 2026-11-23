@@ -1,0 +1,107 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-025"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "ddfc2cd3c2b1d2d38fff4a3699ea5910a016e246",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 568
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "5ad9f36ae3d6162a22d096ea75c24aa944c83a2b",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 107
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "9b2e4a4d53ffe40fe2c331ab5fcfedab7351d757",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 88
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "clean_worktrees": true,
+    "core_pin": "fb9e03da85b19d3b9d9484eabb338e45806b67378a608ae93b368facc2bcdd8f",
+    "connector_pin": "a7c6284a3678363f67211fca99ec682de2d213d3cfd91f8861ac101e78909faf"
+  },
+  "environment": {
+    "system": "Windows x64",
+    "pi": "0.87.1",
+    "pi_installation": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node": "24.15.0",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "provider": "In-process synthetic responses in a network-isolated Node process with a disposable profile."
+  },
+  "native_probe": {
+    "real_hosted_pi_opened": true,
+    "empty_origin_refused": true,
+    "busy_origin_refused": true,
+    "settled_native_leaf_observed": true,
+    "live_owner_rejects_edited_file_with_same_leaf": true,
+    "exact_file_verified_after_real_owner_exit": true,
+    "transcript_content_change_refused": true,
+    "native_exact_path_reopened_same_dialogue": true,
+    "all_native_processes_exited": true,
+    "external_provider_calls": 0
+  },
+  "intermediate_failures": [
+    "The first native read refused a stable file because Windows reported creation times at different precision for the path and open descriptor. Regression and corrected native run passed.",
+    "The first two Connector runs waited for turn SUBMITTED while this native run exposed ACCEPTED. The synthetic provider reached its hold limit. The rerun waits for the accepted agent_start event before releasing the synthetic response."
+  ],
+  "limitations": [
+    "The native reopen probe invoked the exact file argument on a second process after the first one exited.",
+    "Opening a Pi successor from the Nexus CLI still requires a guarded launch, source admission and durable receipt handling.",
+    "Separate-machine and user qualification remain open."
+  ],
+  "artifacts": {
+    "core_commit": "184a821fcb2bcd9fe3fa716a2109dcf7fc293447",
+    "core_sha256": "e0041fbfcb0ef230d6b5d31754c7e91e6977778caf43d6c0228ee338e52047f0",
+    "core_tree": "791e05afde150caab0d90c072ef95cab8a2604ed",
+    "connector_commit": "80af7bfdbf2c81237ed7f17ae0d9655201f94a1e",
+    "connector_sha256": "2a363f8f8a76b46a817bdae778acc6594ac3235382f9b3d1e97bd9e2c192151b",
+    "connector_tree": "2bc4c11a862c268cf3731cc635d82a849cfa9ad5",
+    "nexus_base_commit": "ddfc2cd3c2b1d2d38fff4a3699ea5910a016e246",
+    "nexus_wheel_sha256": "cfdeb934da8e0a27bd66d06060dc553b26317288d5dd84cbd83ca63ab24fa720"
+  },
+  "regressions": {
+    "first_core_wheel_passed": 85,
+    "final_core_wheel_focused_passed": 25,
+    "installed_connector_passed": 93,
+    "generated_contracts_match": true,
+    "strict_wheel_metadata_checks_passed": true,
+    "late_reply_projection_regression": "Any late saved-history reply passed to the unmatched-event handler keeps only the response type, safe command and availability failure.",
+    "offline_nexus_lock_check": true
+  },
+  "connector_loopback": {
+    "intact": {
+      "canonical_close": "SUCCEEDED",
+      "process_exited_before_record": true,
+      "live_busy_refusal": true,
+      "verification_refused_changed_file": false,
+      "profile_paths_absent_from_server_events_and_receipts": true,
+      "native_pi_version": "0.87.1",
+      "external_provider_requests": 0,
+      "exact_proof_retained_after_daemon_exit": true,
+      "durable_witness": true
+    },
+    "drift": {
+      "canonical_close": "SUCCEEDED",
+      "process_exited_before_record": true,
+      "live_busy_refusal": true,
+      "verification_refused_changed_file": true,
+      "profile_paths_absent_from_server_events_and_receipts": true,
+      "native_pi_version": "0.87.1",
+      "external_provider_requests": 0,
+      "durable_witness": false
+    },
+    "installed_cases_passed": 2
+  }
+}
