@@ -425,7 +425,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         if delivery_stage == 'ACCEPTED' and operation['action'] == 'turn.submit' and scope:
             from ....application.execution_native_session_mapping import (
                 read_managed_native_session,
-                reviewed_pi_context,
+                reviewed_pi_presentation_context,
             )
             from ....domain.execution.keys import SessionKey, SessionOwnerGeneration
             from ....domain.session_interaction import InputScope
@@ -434,7 +434,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                                SessionOwnerGeneration(scope['session_owner_generation']), scope['binding_id'],
                                scope['workspace_id'], scope['workspace_binding_id'], scope['agent_id'])
             native = read_managed_native_session(uow, exact)
-            if native is not None and reviewed_pi_context(native):
+            if native is not None and reviewed_pi_presentation_context(native):
                 # Pi's correlated preflight acknowledgement previously arrived
                 # as SUBMITTED. Preserve that fact for the legacy delivery view.
                 delivery_stage = 'SUBMITTED'

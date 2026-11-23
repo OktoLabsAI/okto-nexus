@@ -47,7 +47,7 @@ from okto_nexus.application.codex_viewer_protocol import (
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.application.terminal_connection import ConnectionError
 from okto_nexus.application.execution_native_session_mapping import (
-    _PI_PRESENTATION_BUILD, ManagedNativeSession, NativeLaunchBuild,
+    ManagedNativeSession, NativeLaunchBuild, reviewed_pi_context, reviewed_pi_presentation_context,
 )
 from okto_nexus.bootstrap import local_pi_presentations
 from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_presentations
@@ -286,12 +286,17 @@ def test_disabled_and_unqualified_intents_are_refused(transport):
     assert prepare(transport).status_code == 409
 
 
-@pytest.fixture
-def pi_presentation(transport, monkeypatch):
-    version, platform, architecture, fingerprint = _PI_PRESENTATION_BUILD
-    build = NativeLaunchBuild(version, platform, architecture, 'sha256:' + 'a' * 64, fingerprint, 'qualified')
+@pytest.fixture(params=[
+    ('win32', 'sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b'),
+    ('linux', 'sha256:80f7f9c0350b08ad8ed9c2ef368c17309b69a9bbcb07fff199b4267a9e27e132'),
+], ids=['windows-build', 'linux-build'])
+def pi_presentation(transport, monkeypatch, request):
+    platform, build_identity = request.param
+    build = NativeLaunchBuild('0.87.1', platform, 'x86_64', 'sha256:' + 'a' * 64, build_identity, 'qualified')
     mapping = ManagedNativeSession(transport.scope, 'open-pi', 'pi_rpc', 'native-pi', 'epoch', 'candidate',
                                    'inventory', 1, build, 'connection', 1, None, None)
+    assert reviewed_pi_presentation_context(mapping)
+    assert reviewed_pi_context(mapping) is (platform == 'win32')
     views = []
     state = SimpleNamespace(available=True, mapping=mapping, frames=views, refuse_open=False)
 

@@ -1,0 +1,181 @@
+{
+  "tasks": [
+    "SI-027",
+    "SI-031",
+    "SI-037"
+  ],
+  "scope": "installed_linux_wsl2_hosted_pi_over_r4_loopback",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "733d214b38e8abbb0859991570fc0ea8abde0cfd",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 585,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    }
+  },
+  "published_dependencies": {
+    "core": "562eccb95076fd84b3a3c4b9c98bdc0ece124b70",
+    "connector": "4e8bca4c76acb66830801eb5678335b63517c783"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "6e6e645af0794f5a478a1d542525aba3039235c381e11f96c02a35177e8e8926",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "9bc6866110d9c90db8a4fed3f2f1c6c48a68b6613a42ff28a1c06f00ac6810ff"
+  },
+  "sdist_sha256": {
+    "nexus": "c2fa7f7df203ebcfb1c28fc09bc7f4ec9b5c89c47f036328733e54108c0bd861",
+    "core": "5187b306ea380bce553dee3cfc6b88703612d9fd5706d3c6192012e2b81c405c"
+  },
+  "setup": {
+    "distribution": "Ubuntu 24.04.5 LTS",
+    "ubuntu_rootfs_sha256": "e77b6f10c2590cef872b33ee9f635a0e3fd1f57fb074c0e52b5c7f56147a0c86",
+    "node_linux_archive_sha256": "472655581fb851559730c48763e0c9d3bc25975c59d518003fc0849d3e4ba0f6",
+    "pi_lock_sha256": "af912bfedb09412706cb8aaf77cc07154829939d431f1389ce95b4f204ea6fe6",
+    "node": "24.15.0",
+    "pi": "0.87.1",
+    "runtime_network_interfaces": [
+      "lo"
+    ],
+    "runtime_uid": 65534,
+    "twine_check": "PASS",
+    "pip_check": "PASS",
+    "temporary_wsl_registration_and_disk_removed": true
+  },
+  "prototype": {
+    "kernel": "5.15.146.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "packages": {
+      "okto_nexus": "0.3.8",
+      "okto_nexus_connector": "0.0.15",
+      "okto_nexus_connector_core": "0.0.16"
+    },
+    "installation_build_identity": "sha256:80f7f9c0350b08ad8ed9c2ef368c17309b69a9bbcb07fff199b4267a9e27e132",
+    "node_sha256": "d1de76d8edf2fededf6f8b30d244e2c0529ac607923a018283b77e9c74bd932c",
+    "prototype_hosted_rpc_sha256": "ac30d1bbbeb32f2588f27e122d052af0189bbfb181569bc342e259cd1e108c16",
+    "published_resolver": "CAPABILITY_UNSUPPORTED",
+    "owner_kind": "OwnedLinuxPopen",
+    "hosted_renderer_started": true,
+    "foreign_scope_and_key_refused": true,
+    "draft_enter_did_not_send": true,
+    "reader_detached_before_result": true,
+    "reopened_renderer_showed_same_session_result": true,
+    "native_history_preserved_one_prompt_and_result": true,
+    "close_result": "forced",
+    "stop_receipt": "STOPPED",
+    "external_provider_calls": 0
+  },
+  "installed_remote_renderer": {
+    "one_hosted_pi_process": true,
+    "real_connector_r4": true,
+    "scope_retained": true,
+    "writer_queued_one_input": true,
+    "writer_detached_before_completion": true,
+    "reader_saw_followup_and_result_in_same_session": true,
+    "canonical_close": true,
+    "native_turns": 2,
+    "external_provider_calls": 0
+  },
+  "regressions": [
+    {
+      "platform": "linux",
+      "package": "core",
+      "passed": 40,
+      "junit_sha256": "ad095ba66bacfb5c348915087fe7319f816177f1c1cd41be16f4d21bbfd53951",
+      "suites": [
+        "tests.test_linux_container_receipt",
+        "tests.test_pi_extracted",
+        "tests.test_posix_discovery_layouts"
+      ]
+    },
+    {
+      "platform": "linux",
+      "package": "connector",
+      "passed": 6,
+      "junit_sha256": "479c4079b8241b5cf284a5cc6b05bd144cfc30041d8196a6b88b2766004a8350",
+      "suites": [
+        "tests.integration.test_process_lifecycle",
+        "tests.integration.test_service_readiness_process",
+        "tests.unit.test_transport_shutdown"
+      ]
+    },
+    {
+      "platform": "linux",
+      "package": "nexus",
+      "passed": 6,
+      "junit_sha256": "c209974376803d12f40f05de051553d442b05ae9e28ee6de805d972b5a200cfd",
+      "suites": [
+        "tests.session_interaction.test_presentation_transport"
+      ]
+    },
+    {
+      "platform": "linux",
+      "package": "installed_r4",
+      "passed": 1,
+      "junit_sha256": "303571b1c315c264ab5291201800672df7f760827cd6e5cace9691eadf06593b",
+      "suites": [
+        "test_linux_r4"
+      ]
+    },
+    {
+      "platform": "win32",
+      "package": "core",
+      "passed": 14,
+      "junit_sha256": "9308ce0bbc2adb05049dcc4995683c7362c51534840dcef5bec3b41da8f845c5",
+      "suites": [
+        "tests.test_pi_extracted"
+      ]
+    },
+    {
+      "platform": "win32",
+      "package": "nexus",
+      "passed": 6,
+      "junit_sha256": "8f29059a14af01633d60aa98d24be16f30940209c815030dbec240879238a4fb",
+      "suites": [
+        "tests.session_interaction.test_presentation_transport"
+      ]
+    }
+  ],
+  "ledger_scenarios": {
+    "PASS": 118,
+    "NOT_RUN": 30
+  },
+  "unresolved": [
+    "physical_second_host_SI-T-H01",
+    "interactive_cli_editor_on_linux",
+    "reviewed_steer_and_interrupt_on_linux",
+    "saved_native_resume_on_linux",
+    "macos",
+    "provider_campaign",
+    "human_acceptance"
+  ]
+}

@@ -9,14 +9,14 @@ from nexus_connector_core import CoreError
 from ..domain.attention import digest
 from ..domain.presentation_protocol import REMOTE_PI_AUDIENCE
 from ..errors import OktoNexusError
-from .execution_native_session_mapping import reviewed_pi_context
+from .execution_native_session_mapping import reviewed_pi_presentation_context
 from .remote_presentation_owner import RemotePresentationOwner
 
 
 class RemotePiPresentation(RemotePresentationOwner):
     @staticmethod
     def _supports(mapping, link):
-        return link.pi_enabled and reviewed_pi_context(mapping)
+        return link.pi_enabled and reviewed_pi_presentation_context(mapping)
 
     def capability_revision(self, uow, scope, author, access, audience, *, next_turn_revision):
         if author.surface != 'native_terminal' or access not in ('read', 'write') or audience != REMOTE_PI_AUDIENCE:

@@ -1,0 +1,13 @@
+# SI-027 / SI-031 / SI-037 · Pi hospedado em Linux x64
+
+O Core habilita o renderer hospedado para a instalação revisada do Pi 0.87.1 com Node 24.15.0 em Linux x64. A admissão confere a identidade completa da instalação, o executável do Node e o comando. O Nexus aplica a mesma identidade ao apresentar a sessão. A habilitação dos controles nativos e da retomada de histórico salvo continua restrita às instalações já qualificadas. [Identidades e pacotes](si037-linux-hosted-pi.json)
+
+O ensaio ponta a ponta usou os wheels instalados em Ubuntu 24.04.5 no WSL2, com Nexus HTTP e SQLite, transporte R4 autenticado, Connector e um processo real do Pi. A sessão abriu pelo envio canônico do Nexus. Durante o primeiro turno, o editor remoto enfileirou um único pedido e saiu. Sem o editor, a fila entregou o pedido ao mesmo processo. Um leitor reaberto encontrou o pedido e a segunda resposta na sessão original. A geração da conexão permaneceu a mesma e o fechamento canônico encerrou o processo. O modelo era simulado em loopback em um namespace sem saída externa.
+
+O protótipo anterior à mudança no produto também exercitou um renderer extraído em uma cópia isolada. A ponte recusou escopo e chave incorretos. O Enter do editor retornou o rascunho à ponte sem iniciar trabalho por conta própria. Depois do detach, o Pi concluiu a única chamada do ensaio, preservou o histórico e permitiu a leitura posterior do recibo `STOPPED`.
+
+Passaram 73 testes e ensaios instalados. No Linux foram 40 do Core, seis do Connector, seis do Nexus e um fluxo integrado. No Windows passaram 14 do Core e seis do Nexus. A tentativa preliminar de rodar o módulo completo de transporte no Linux excedeu o tempo reservado. A seleção final passou nos dois ambientes. Os artefatos passaram por `twine check` e a instalação candidata passou por `pip check`. A distribuição de teste e seu disco foram removidos depois da coleta. [Resultados](si037-linux-hosted-pi.json)
+
+O ensaio apresenta o editor por meio do cliente de transporte do Nexus. O editor de linha interativo do CLI em Linux, os controles nativos de reorientação e interrupção no Linux, a retomada de histórico salvo e o macOS seguem sem essa qualificação. SI-T-H01 continua pendente e exige um Connector em outra máquina. Os cenários de campanha e de validação humana mantêm seus estados no ledger.
+
+O marco dispensa migração de dados e atualiza o wheel do Core nos dois consumidores. Para reverter, restaure o código e o pin anterior no Nexus e no Connector, e reverta o commit correspondente do Core. O próximo teste local de portabilidade é o editor interativo do CLI em Linux.

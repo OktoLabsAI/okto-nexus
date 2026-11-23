@@ -5,7 +5,7 @@ from dataclasses import asdict
 from nexus_connector_core import CoreError
 
 from ..adapters.inbound.http.dashboard_session_presentations import LocalPiPresentations
-from ..application.execution_native_session_mapping import reviewed_pi_context
+from ..application.execution_native_session_mapping import reviewed_pi_presentation_context
 from ..application.session_attachment_broker import SessionAttachmentBroker
 from ..domain.attention import digest
 from ..domain.presentation_protocol import LOCAL_PI_AUDIENCE
@@ -22,7 +22,7 @@ def publish_local_pi_presentations(app, dispatch):
 
     def available(mapping, scope):
         session = scope.session
-        return reviewed_pi_context(mapping) and dispatch.host.has_hosted_pi_renderer(
+        return reviewed_pi_presentation_context(mapping) and dispatch.host.has_hosted_pi_renderer(
             session.server_id, session.executor_id, session.session_id)
 
     def revision(uow, scope, author, access, audience):
