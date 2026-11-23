@@ -1,6 +1,7 @@
 """Exercise transcript projection through the read-only canonical event reader."""
 
 import hashlib
+import json
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import replace
@@ -19,6 +20,7 @@ from okto_nexus.application import execution_event_views
 from okto_nexus.application.codex_presenter_history import read_codex_history_snapshot, read_codex_history_updates
 from okto_nexus.application.codex_presenter_requests import codex_history_page
 from okto_nexus.application.execution_native_session_mapping import ManagedNativeSession
+from okto_nexus.application.runtime_bootstrap import delivery_prompt
 from okto_nexus.application.session_interaction_transcript import (
     MAX_PART_BYTES,
     MAX_SCAN_EVENTS,
@@ -52,6 +54,12 @@ def stream(monkeypatch):
             CREATE TABLE execution_results (
                 server_id, executor_id, session_id, stream_epoch, operation_id, terminal_sequence, delivery_outcome
             );
+            CREATE TABLE execution_operations (
+                server_id, executor_id, session_id, operation_id, binding_id, workspace_id,
+                workspace_binding_id, subject_agent_id, action, semantic_payload
+            );
+            CREATE TABLE execution_domain_deliveries (server_id, executor_id, operation_id, domain_operation_id);
+            CREATE TABLE delivery_outbox (operation_id PRIMARY KEY, workspace_id, recipient_agent_id);
             INSERT INTO execution_sessions VALUES ('server', 'executor', 'session', 'epoch');
         """)
 
@@ -100,6 +108,14 @@ def stream(monkeypatch):
             db.execute("INSERT INTO execution_results VALUES ('server','executor',?,?,?,?,?)",
                        (session, epoch, operation, sequence, outcome))
 
+        def delivery(operation, domain_operation, prompt, *, session="session"):
+            db.execute("INSERT INTO execution_operations VALUES ('server','executor',?,?,'binding',"
+                       "'workspace','workspace-binding','agent','turn.submit',?)",
+                       (session, operation, json.dumps({"payload": {"text": prompt}})))
+            db.execute("INSERT INTO execution_domain_deliveries VALUES ('server','executor',?,?)",
+                       (operation, domain_operation))
+            db.execute("INSERT OR IGNORE INTO delivery_outbox VALUES (?,'workspace','agent')", (domain_operation,))
+
         def read(**query):
             options = {"scope": scope, "context": context, "access": access, **query}
             return read_session_interaction_transcript(factory, **options)
@@ -119,7 +135,8 @@ def stream(monkeypatch):
                                                   after_sequence=sequence, active_turn=active_turn)
             return read_codex_history_snapshot(factory, mapping=mapping, context=context, access=access)
 
-        yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope, history=history, result=result)
+        yield SimpleNamespace(store=store, watermark=watermark, read=read, scope=scope, history=history,
+                              result=result, delivery=delivery)
     db.close()
 
 
@@ -274,6 +291,31 @@ def test_hosted_pi_transcript_requires_retained_ids_and_keeps_equal_messages_dis
     assert first["origin"] == {"kind": "native_session", "session_id": "native-pi-session"}
     assert [item["operation_id"] for item in (first, second)] == ["first-turn", "second-turn"]
     assert omitted["text"] is None and omitted["text_truncated"]
+
+
+def test_incoming_message_display_requires_an_exact_domain_turn_and_preserves_raw_echo(stream):
+    envelope = {"intent": "conversation", "operation_id": "domain", "workspace_id": "workspace",
+                "recipient_agent_id": "agent", "content": [{"type": "text", "text": "Check shipment"}]}
+    prompt = delivery_prompt(envelope)
+    fact = {"revision": 1, "native_session_id": "native-pi-session", "role": "user", "text": prompt}
+    stream.delivery("canonical-turn", "domain", prompt)
+    stream.delivery("sibling-turn", "domain", prompt, session="sibling-session")
+    for sequence, operation, patch in [
+        (1, "canonical-turn", {}),
+        (2, "unrelated-turn", {}),
+        (3, "sibling-turn", {}),
+        (4, "canonical-turn", {"text": prompt + "\nExtra native text"}),
+        (5, "canonical-turn", {"role": "assistant"}),
+    ]:
+        stream.store(sequence, PI_CHAT_EVENT, "tool_activity",
+                     fact | {"entry_id": f"{sequence:08x}"} | patch, operation_id=operation)
+    stream.watermark(5)
+
+    matched, *others = stream.read()["updates"]
+    assert matched["text"] == prompt
+    assert matched["delivery_message"] == {"text": "Check shipment", "text_truncated": False}
+    assert len(others) == 4 and all("delivery_message" not in update for update in others)
+    assert others[0]["text"] == others[1]["text"] == prompt
 
 
 def test_omitted_events_advance_canonical_cursor_without_hiding_a_gap(stream):

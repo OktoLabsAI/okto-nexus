@@ -50,6 +50,9 @@ export function assertConversationPage(page: SessionConversationPage, scope: Int
         (update.origin?.kind === 'subagent' && (update.role !== 'assistant' ||
           typeof update.origin.session_id !== 'string' || !update.origin.session_id ||
           typeof update.origin.parent_tool_use_id !== 'string' || !update.origin.parent_tool_use_id)) ||
+        (update.delivery_message !== undefined && (update.role !== 'user' || update.change !== 'replace' ||
+          update.origin?.kind !== 'native_session' || typeof update.delivery_message?.text !== 'string' ||
+          typeof update.delivery_message.text_truncated !== 'boolean')) ||
         !(update.text === null || typeof update.text === 'string'))) {
     throw new Error('The conversation page did not match its cursor.');
   }
@@ -83,6 +86,7 @@ export interface ConversationMessage {
   text: string;
   truncated: boolean;
   subagent?: true;
+  incoming?: true;
 }
 
 export function applyConversationUpdates(previous: ReadonlyMap<string, ConversationMessage>, updates: ConversationUpdate[]) {
@@ -95,10 +99,12 @@ export function applyConversationUpdates(previous: ReadonlyMap<string, Conversat
     // After an omitted suffix, a later fragment would splice unrelated text
     // into the visible prefix. A complete snapshot can restore the message.
     if (prior?.truncated) continue;
-    const text = (prior?.text ?? '') + (update.text ?? '');
+    const delivery = update.delivery_message;
+    const text = (prior?.text ?? '') + (delivery?.text ?? update.text ?? '');
     const limit = 16384;
     next.set(update.message_id, {role: update.role, text: text.slice(0, limit),
-      truncated: update.text_truncated || !!prior?.truncated || text.length > limit,
+      truncated: (delivery?.text_truncated ?? update.text_truncated) || !!prior?.truncated || text.length > limit,
+      ...(delivery ? {incoming: true} : {}),
       ...(update.origin?.kind === 'subagent' ? {subagent: true} : {})});
   }
   return next;

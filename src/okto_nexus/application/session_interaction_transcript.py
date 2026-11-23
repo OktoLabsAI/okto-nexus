@@ -1,6 +1,7 @@
 """Read a bounded transcript projection from committed R4 events."""
 
 import hashlib
+import json
 import re
 
 from nexus_connector_core.event_artifacts import REFERENCE_KEY
@@ -27,6 +28,7 @@ _TERMINAL_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
 _NATIVE_CHAT = {PI_CHAT_EVENT: ("pi", valid_pi_chat_fact),
                 CLAUDE_CHAT_EVENT: ("claude_code", valid_claude_chat_fact),
                 CLAUDE_STREAM_CHAT_EVENT: ("claude_stream", valid_claude_stream_chat_fact)}
+_DELIVERY_PREFIX = "NEXUS DELIVERY:"
 
 
 def _native_id(value: object) -> bool:
@@ -171,6 +173,60 @@ def _turn_outcomes(connection, *, scope, stream_epoch, events):
     ]
 
 
+def _delivery_messages(connection, *, scope, events):
+    """Present the message body only for an exact echo of an admitted domain turn."""
+    echoes = {}
+    for event in events:
+        if event.get("native_type") not in _NATIVE_CHAT:
+            continue
+        payload = event["payload"]
+        operation = event.get("operation_id")
+        body = payload.get("text")
+        if (payload.get("role") == "user" and _native_id(operation) and
+                isinstance(body, str) and body.startswith(_DELIVERY_PREFIX)):
+            echoes.setdefault(operation, []).append((event["sequence"], body))
+    if not echoes:
+        return {}
+
+    placeholders = ",".join("?" for _ in echoes)
+    rows = connection.execute(
+        "SELECT o.operation_id,x.domain_operation_id,o.semantic_payload FROM execution_operations o "
+        "JOIN execution_domain_deliveries x USING (server_id,executor_id,operation_id) "
+        "JOIN delivery_outbox d ON d.operation_id=x.domain_operation_id "
+        "AND d.workspace_id=o.workspace_id AND d.recipient_agent_id=o.subject_agent_id "
+        "WHERE o.server_id=? AND o.executor_id=? AND o.session_id=? AND o.binding_id=? "
+        "AND o.workspace_id=? AND o.workspace_binding_id=? AND o.subject_agent_id=? "
+        f"AND o.action='turn.submit' AND o.operation_id IN ({placeholders})",
+        (scope.session.server_id, scope.session.executor_id, scope.session.session_id,
+         scope.binding_id, scope.workspace_id, scope.workspace_binding_id, scope.agent_id, *echoes),
+    )
+    messages = {}
+    for operation, domain_operation, semantic in rows:
+        try:
+            prompt = json.loads(semantic)["payload"]["text"]
+            matched = [sequence for sequence, body in echoes[operation] if body == prompt]
+            if not matched:
+                continue
+            # The dispatched prompt stores the exact envelope as one JSON line.
+            _, envelope_line, *suffix = prompt.split("\n", 2)
+            if suffix and not suffix[0].startswith("NEXUS TRANSPORT BINDING:"):
+                continue
+            envelope = json.loads(envelope_line)
+            if (envelope["intent"] != "conversation" or envelope["operation_id"] != domain_operation or
+                    envelope["workspace_id"] != scope.workspace_id or
+                    envelope["recipient_agent_id"] != scope.agent_id):
+                continue
+            part, = envelope["content"]
+            if part["type"] != "text" or not isinstance(part["text"], str):
+                continue
+            text, truncated = _bounded_body(part["text"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if text is not None:
+            messages.update((sequence, {"text": text, "text_truncated": truncated}) for sequence in matched)
+    return messages
+
+
 def read_session_interaction_transcript(
     factory, *, scope: InputScope, context, access, stream_epoch=None,
     after_sequence=0, limit=MAX_SCAN_EVENTS,
@@ -207,11 +263,16 @@ def read_session_interaction_transcript(
         ):
             raise OktoNexusError(ErrorCode.NOT_FOUND, "The session was not found in this scope.", {})
         outcomes = _turn_outcomes(uow.connection, scope=scope, stream_epoch=page["stream_epoch"], events=page["events"])
+        deliveries = _delivery_messages(uow.connection, scope=scope, events=page["events"])
 
+    updates = [update for event in page["events"] for update in _updates(event)]
+    for update in updates:
+        if update["sequence"] in deliveries and update["origin"]["kind"] == "native_session":
+            update["delivery_message"] = deliveries[update["sequence"]]
     return {
         "scope": actual_scope,
         "stream_epoch": page["stream_epoch"],
-        "updates": [update for event in page["events"] for update in _updates(event)],
+        "updates": updates,
         "turn_outcomes": outcomes,
         "next_after_sequence": page["next_after_sequence"],
         "committed_contiguous": page["committed_contiguous"],

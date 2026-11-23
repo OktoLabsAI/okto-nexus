@@ -1,0 +1,103 @@
+{
+  "tasks": [
+    "SI-012",
+    "SI-036"
+  ],
+  "scope": "installed_browser_and_real_pi_with_controlled_model",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "90f8b99aa076ef2583b04865f547a8fb7cf86bee",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 582,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ]
+    }
+  },
+  "artifacts": {
+    "nexus_wheel_sha256": "abbb861ce6e093c3c4137f37aec157f9c944ef6906f819ce8f704940ae6bc4d7",
+    "nexus_sdist_sha256": "2cf6c291d53964188fe323257ed1fa82f6b1079b4a97ccaf76983df145c2d499",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876",
+    "dashboard_bundle_sha256": "9b4852c8620c0a61d4dc1f720a0654df7e9708d0c4b9ff620b3510c8ec7a66a6",
+    "transcript_source_sha256": "7acd89a463edfac4a0ebefb713e081c42ba343ea3e6c292d5dbdf3cfc34c108a"
+  },
+  "runtime": {
+    "platform": "Windows x64",
+    "browser": "Microsoft Edge 158.0.4370.33",
+    "playwright_cli": "0.1.25",
+    "pi": "0.87.1",
+    "connector_transport": "R4 loopback"
+  },
+  "tests": {
+    "source_transcript_passed": 25,
+    "installed_transcript": {
+      "passed": 25,
+      "junit_sha256": "a8f8f867817abd199a43a25e7b26e964039ea213ca3765c67090bbc63c697482"
+    },
+    "frontend_node_passed": 423,
+    "frontend_build": "PASS",
+    "twine_wheel_and_sdist": "PASS",
+    "ruff_syntax_and_pyflakes": "PASS",
+    "uv_lock_check_offline": "PASS",
+    "browser_integration": {
+      "passed": 1,
+      "junit_sha256": "d50de522167f991d2d354b732c68ed038da1497dcd8b2391477cff2f38aa9e06"
+    }
+  },
+  "integrated_assertions": {
+    "one_session": true,
+    "native_turns": 2,
+    "queued_input_status_observed": "QUEUED",
+    "queued_input_final_status": "ACCEPTED_NATIVE",
+    "browser_opened_via_home": true,
+    "browser_reopened_via_home": true,
+    "browser_showed_clean_incoming_message": true,
+    "browser_showed_both_results_once": true,
+    "external_provider_calls": 0,
+    "native_process_exited_after_canonical_close": true
+  },
+  "evidence_sha256": {
+    "browser_driver": "eebe5f34057c93b8e900f8e5055a196dc9676f5c8639939f5767759358d42449",
+    "native_fixture": "5ff29d02ab66f19d0db1a4ff25aa833444a8811761e723d0c745abef402fce64",
+    "opened_from_home": "f01d0852e38d3fa0329532dd8d4ca4e9b0f9a8939c3e1292bd6f85575d327cb6",
+    "queued": "4d56f85674328c3a4b307236928f02ec2b2624d8993471d651b1c7e1a34192de",
+    "reopened_from_home": "c72bea5b59bd9953296f5db160a860836ffb9c6290e323ca51359b822eb61bdf",
+    "results": "8c62bf5fe19ecc4c92eb3d39dee6f90e118597862d910797cf6f2a5000a4c742"
+  },
+  "rehearsal_adjustments": [
+    "Wait for the native session to be ready before opening its Home card.",
+    "Accept browser focus restoration when finding the card after closing the panel.",
+    "Observe the scoped receipt through the disposable store. The operator CLI correctly refused access to the automatic delivery operation."
+  ],
+  "limitations": [
+    "The first retained user message was an ordinary Nexus delivery echoed verbatim by reviewed Pi.",
+    "The new projection requires an exact, scoped domain turn and a single plain-text conversation part.",
+    "The run uses a synthetic model and a disposable project, with no human acceptance or provider campaign."
+  ]
+}

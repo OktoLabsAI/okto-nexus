@@ -220,6 +220,24 @@ test('conversation cursor pages cannot cross scope, owner generation or stream',
   assert.throws(()=>assertConversationPage(page,scope,0,'foreign-epoch'));
 });
 
+test('conversation uses verified incoming message text while preserving ordinary native input',()=>{
+  const scope={...context,session_owner_generation:1};
+  const nativeScope={kind:'native_session',session_id:'native'};
+  const text='NEXUS DELIVERY: internal context';
+  const incoming={update_id:'u1',message_id:'m1',sequence:1,role:'user',change:'replace',text,
+    text_truncated:true,origin:nativeScope,delivery_message:{text:'Check shipment',text_truncated:false}};
+  const literal={...incoming,update_id:'u2',message_id:'m2',sequence:2,delivery_message:undefined,
+    text_truncated:false};
+  const page={scope,stream_epoch:'epoch',next_after_sequence:2,committed_contiguous:2,updates:[incoming,literal]};
+  assert.doesNotThrow(()=>assertConversationPage(page,scope,0,'epoch'));
+  assert.throws(()=>assertConversationPage({...page,updates:[{...incoming,role:'assistant'}]},scope,0,'epoch'));
+  const messages=applyConversationUpdates(new Map(),page.updates);
+  assert.deepEqual([...messages.values()],[
+    {role:'user',text:'Check shipment',truncated:false,incoming:true},
+    {role:'user',text,truncated:false},
+  ]);
+});
+
 test('conversation cursor reports its next missing committed sequence without offering a later page',()=>{
   const scope=session().scope;
   const page={scope,stream_epoch:'epoch',next_after_sequence:7,committed_contiguous:20,

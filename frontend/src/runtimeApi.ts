@@ -312,6 +312,7 @@ export interface ConversationUpdate {
   change: 'append' | 'replace';
   text: string | null;
   text_truncated: boolean;
+  delivery_message?: {text: string; text_truncated: boolean};
   origin?: {kind: 'native_session'; session_id: string} |
     {kind: 'native_thread'; thread_id: string} |
     {kind: 'subagent'; session_id: string; parent_tool_use_id: string};
