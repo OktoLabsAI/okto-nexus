@@ -1,0 +1,335 @@
+{
+  "plan": "SESSION-INTERACTION-R1",
+  "baseline_document": "../input/MATRIZ_CAPACIDADES_SESSAO_R1.json",
+  "qualification": {
+    "layer": "controlled_installation",
+    "platform": "Windows x64",
+    "transport_scope": "embedded_or_connector_loopback",
+    "model": "deterministic_fixture",
+    "external_provider_campaign": "not_run",
+    "distinct_host_campaign": "not_run",
+    "global_rollout": "pending",
+    "configured_interaction_default": false
+  },
+  "intake": {
+    "nexus": {
+      "head": "a23db991f870759a29a158273316a99ccac567d6",
+      "branch": "feature/v0.3.8",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 561
+    },
+    "connector": {
+      "head": "ed6c7b631b6729569b54c625649edcd9bb792556",
+      "branch": "feature/v0.0.15",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 100
+    },
+    "core": {
+      "head": "8153311bf66a16f386ea73b8a8478fcac5bc8bd4",
+      "branch": "feature/v0.0.16",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 80
+    },
+    "behind_main": 0,
+    "upstream_drift": [
+      0,
+      0
+    ],
+    "worktrees_clean": true
+  },
+  "installations": {
+    "codex": {
+      "adapter_id": "codex_app_server",
+      "platform": "win32",
+      "architecture": "x86_64",
+      "engine_version": "0.157.0",
+      "content_fingerprint": "sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+      "viewer": {
+        "version": "0.170.0",
+        "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+      }
+    },
+    "pi": {
+      "adapter_id": "pi_rpc",
+      "platform": "win32",
+      "architecture": "x86_64",
+      "engine_version": "0.87.1",
+      "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+      "node": {"version": "24.15.0", "sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"}
+    },
+    "claude": {
+      "adapter_id": "claude_stream",
+      "platform": "win32",
+      "architecture": "x86_64",
+      "engine_version": "2.1.328",
+      "content_fingerprint": "sha256:551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839"
+    }
+  },
+  "upgrade_and_refusal_checks": {
+    "codex_viewer_is_not_an_engine": "si039-codex-build-capabilities.md",
+    "codex_engine_is_not_a_viewer": "si027-codex-viewer-refusal.md",
+    "pi_wrong_build_identity": "si027-pi-installation-gate.json",
+    "claude_distinct_presentation_and_control_negotiation": "si011-si026-claude-remote-interrupt.md",
+    "downgrade": "si024-capability-downgrade.md"
+  },
+  "verification": {
+    "package_sha256": {
+      "core": "809002514144def6c5894cbf4df5d1bd1b98e8992cc2cd9e4ac205d249b277dd",
+      "nexus": "8b19b949e6615c3769b8fa96f2a2eacdcccf021e7ef136340a5a5ef0bc609c39",
+      "connector": "ad704b1b3a625702e04cfeacdd98c0c175a0568cc32a5044146e1269cdb82cb5"
+    },
+    "installed_tests_passed": {"core": 35, "nexus": 79},
+    "exact_installation_scope_comparison": "PASS",
+    "viewer_and_engine_build_roles": "PASS",
+    "matrix_evidence_links_and_capability_coverage": "PASS",
+    "pinned_core_and_connector_artifacts": "PASS",
+    "default_opt_in_policy": "PASS"
+  },
+  "combinations": [
+    {
+      "installation": "codex",
+      "owner": "embedded",
+      "mode": "app_server",
+      "presentation": "scoped_codex_native_viewer",
+      "steer_effect": "same_turn",
+      "capabilities": {
+        "session_chat": { "status": "qualified", "evidence": ["si038-home-terminal-home-loopback.md"] },
+        "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si024-codex-native-input-windows.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si024-codex-native-steer-confirmation.md"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si024-codex-native-interrupt-confirmation.md"] },
+        "command_subset": { "status": "qualified", "evidence": ["si024-codex-native-steer-confirmation.md", "si024-codex-native-interrupt-confirmation.md"] },
+        "native_live_attach": { "status": "qualified", "evidence": ["si024-codex-busy-presentation.md"] },
+        "saved_context_resume": { "status": "qualified", "evidence": ["si023-codex-saved-resume.md"] },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si032-codex-abrupt-viewer-exit.md"] },
+        "joint_ui_native_arbitration": { "status": "qualified", "evidence": ["si024-codex-native-input-windows.md"] }
+      }
+    },
+    {
+      "installation": "codex",
+      "owner": "connector_loopback",
+      "mode": "app_server",
+      "presentation": "scoped_codex_native_viewer",
+      "steer_effect": "same_turn",
+      "negotiated_extensions": {
+        "native_live_attach": [
+          "nexus-presentation-read-v1"
+        ]
+      },
+      "capabilities": {
+        "session_chat": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si022-codex-remote-writer.md"] },
+        "exact_steer": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "interrupt_queue_barrier": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "command_subset": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "native_live_attach": { "status": "qualified", "evidence": ["si022-codex-remote-attach.md"] },
+        "saved_context_resume": {
+          "status": "blocked",
+          "reason": "A rota de retomada salva exige histórico verificado de um executor embutido.",
+          "evidence": [
+            "si030-terminal-session-selection.md"
+          ]
+        },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si022-codex-silent-presenter.md"] },
+        "joint_ui_native_arbitration": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "remote_attach": {
+          "status": "blocked",
+          "reason": "O transporte em loopback foi exercitado no mesmo Windows. Falta validar em máquinas distintas.",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "installation": "pi",
+      "owner": "embedded",
+      "mode": "hosted_rpc",
+      "presentation": "hosted_pi_rpc_renderer",
+      "steer_effect": "next_boundary",
+      "capabilities": {
+        "session_chat": { "status": "qualified", "evidence": ["si036-pi-browser-queue-transcript.md"] },
+        "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si025-pi-queue.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si025-pi-native-steer.md"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si025-pi-editor-interrupt.md"] },
+        "command_subset": { "status": "qualified", "evidence": ["si025-pi-native-steer.md", "si025-pi-editor-interrupt.md"] },
+        "native_live_attach": { "status": "qualified", "evidence": ["si025-pi-native-editor.md"] },
+        "saved_context_resume": {
+          "status": "blocked",
+          "reason": "O fluxo de sucessora salva ainda não admite histórico do Pi.",
+          "evidence": [
+            "si030-terminal-session-selection.md"
+          ]
+        },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si025-pi-native-editor.md", "si036-home-states-native-detach.md"] },
+        "joint_ui_native_arbitration": { "status": "qualified", "evidence": ["si036-pi-browser-queue-transcript.md"] }
+      }
+    },
+    {
+      "installation": "pi",
+      "owner": "connector_loopback",
+      "mode": "hosted_rpc",
+      "presentation": "hosted_pi_rpc_renderer",
+      "steer_effect": "next_boundary",
+      "negotiated_extensions": {
+        "native_live_attach": [
+          "nexus-pi-presentation-v1"
+        ],
+        "exact_steer": [
+          "nexus-pi-run-control-v1"
+        ],
+        "interrupt_queue_barrier": [
+          "nexus-pi-run-control-v1"
+        ]
+      },
+      "capabilities": {
+        "session_chat": { "status": "implemented", "evidence": ["si022-pi-remote-terminal.md"] },
+        "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si022-pi-remote-terminal.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si022-si025-pi-remote-controls.md"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si022-si025-pi-remote-controls.md"] },
+        "command_subset": { "status": "qualified", "evidence": ["si022-si025-pi-remote-controls.md"] },
+        "native_live_attach": { "status": "qualified", "evidence": ["si022-pi-remote-terminal.md"] },
+        "saved_context_resume": {
+          "status": "blocked",
+          "reason": "O fluxo de sucessora salva ainda não admite histórico do Pi.",
+          "evidence": [
+            "si030-terminal-session-selection.md"
+          ]
+        },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si022-r4-resume-lease.md"] },
+        "joint_ui_native_arbitration": { "status": "implemented", "evidence": ["si022-pi-remote-terminal.md"] },
+        "remote_attach": {
+          "status": "blocked",
+          "reason": "O transporte em loopback foi exercitado no mesmo Windows. Falta validar em máquinas distintas.",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "installation": "claude",
+      "owner": "embedded",
+      "mode": "stream_json",
+      "presentation": "unavailable",
+      "steer_effect": "interrupt_then_send",
+      "capabilities": {
+        "session_chat": { "status": "implemented", "evidence": ["si026-claude-nexus-resume.md"] },
+        "durable_next_turn_fifo": { "status": "implemented", "evidence": ["si014-home-queue.md"] },
+        "exact_steer": {
+          "status": "unsupported",
+          "reason": "Controles brutos dependem de qualificação independente do build stream-json.",
+          "evidence": [
+            "si026-claude-remote-steer.md"
+          ]
+        },
+        "interrupt_queue_barrier": {
+          "status": "unsupported",
+          "reason": "O controle independente exige o terminal revisado com turno observado.",
+          "evidence": [
+            "si026-claude-remote-steer.md"
+          ]
+        },
+        "command_subset": { "status": "implemented", "evidence": ["si030-terminal-session-selection.md"] },
+        "native_live_attach": {
+          "status": "unsupported",
+          "reason": "O visualizador recusou o UUID exato do worker stream-json ainda vivo.",
+          "evidence": [
+            "si026-claude-remote-steer.md"
+          ]
+        },
+        "saved_context_resume": { "status": "qualified", "evidence": ["si026-claude-nexus-resume.md"] },
+        "detach_keeps_running": {
+          "status": "blocked",
+          "reason": "Falta a ponte de apresentação para esta origem ainda viva.",
+          "evidence": [
+            "si026-claude-remote-steer.md"
+          ]
+        },
+        "joint_ui_native_arbitration": {
+          "status": "blocked",
+          "reason": "Falta qualificar escrita nativa para esta origem.",
+          "evidence": [
+            "si026-claude-remote-steer.md"
+          ]
+        }
+      }
+    },
+    {
+      "installation": "claude",
+      "owner": "embedded",
+      "mode": "managed_terminal",
+      "presentation": "read_only_managed_terminal_output",
+      "steer_effect": "interrupt_then_send",
+      "launch_conditions": [
+        "plan",
+        "perfil revisado",
+        "credencial aprovada"
+      ],
+      "capabilities": {
+        "session_chat": { "status": "qualified", "evidence": ["si036-claude-browser-roundtrip.md"] },
+        "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si026-claude-terminal-interrupt.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si026-claude-terminal-steer.md"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si026-claude-terminal-interrupt.md"] },
+        "command_subset": { "status": "implemented", "evidence": ["si030-terminal-session-selection.md"] },
+        "native_live_attach": { "status": "qualified", "evidence": ["si026-claude-terminal-retained-output.md"] },
+        "saved_context_resume": { "status": "qualified", "evidence": ["si026-claude-canonical-fresh-terminal.md"] },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si026-claude-terminal-retained-output.md"] },
+        "joint_ui_native_arbitration": {
+          "status": "blocked",
+          "reason": "A apresentação qualificada é de leitura. Escrita pelo frontend nativo permanece aberta.",
+          "evidence": [
+            "si026-claude-terminal-retained-output.md"
+          ]
+        }
+      }
+    },
+    {
+      "installation": "claude",
+      "owner": "connector_loopback",
+      "mode": "managed_terminal",
+      "presentation": "read_only_managed_terminal_output",
+      "steer_effect": "interrupt_then_send",
+      "launch_conditions": [
+        "plan",
+        "perfil revisado",
+        "credencial aprovada",
+        "TLS ou loopback"
+      ],
+      "negotiated_extensions": {
+        "native_live_attach": [
+          "nexus-claude-presentation-v1"
+        ],
+        "exact_steer": [
+          "nexus-claude-operation-steer-v1"
+        ],
+        "interrupt_queue_barrier": [
+          "nexus-claude-operation-interrupt-v1"
+        ]
+      },
+      "capabilities": {
+        "session_chat": { "status": "implemented", "evidence": ["si011-si026-claude-remote-interrupt.md"] },
+        "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si011-si026-claude-remote-interrupt.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si011-si026-claude-remote-interrupt.md"] },
+        "command_subset": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md", "si011-si026-claude-remote-interrupt.md"] },
+        "native_live_attach": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
+        "saved_context_resume": {
+          "status": "blocked",
+          "reason": "A rota de retomada salva exige histórico verificado de um executor embutido.",
+          "evidence": [
+            "si030-terminal-session-selection.md"
+          ]
+        },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
+        "joint_ui_native_arbitration": {
+          "status": "blocked",
+          "reason": "A apresentação remota é de leitura. Escrita pelo frontend nativo permanece aberta.",
+          "evidence": [
+            "si022-si026-claude-remote-presentation.md"
+          ]
+        },
+        "remote_attach": {
+          "status": "blocked",
+          "reason": "O transporte em loopback foi exercitado no mesmo Windows. Falta validar em máquinas distintas.",
+          "evidence": []
+        }
+      }
+    }
+  ]
+}

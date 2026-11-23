@@ -102,6 +102,9 @@ review each action there or in its terminal command. For scripts,
 `connect --json` reports setup and the receipt. Interactive viewers need a
 terminal.
 
+The tested builds, control timing and remaining qualification are recorded
+by session mode and executor. [Session capability matrix](../NEXUS_SESSOES_INTERATIVAS_R1/execution/si027-session-capability-matrix.md)
+
 ## Roll back the session interface
 
 Choose **Use classic Home** in **Settings** to switch the current browser

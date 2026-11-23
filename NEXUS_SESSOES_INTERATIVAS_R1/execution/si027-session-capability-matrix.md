@@ -2,6 +2,8 @@
 
 Os ensaios abaixo usaram Windows x64. A coluna de evidência identifica a superfície exercitada e a revisão do pacote usada em cada ensaio. Os testes de processo usaram respostas determinísticas. Os ensaios por Connector remoto usaram o transporte do produto em loopback na mesma máquina. A qualificação em máquinas distintas, em outros sistemas e com provedores reais segue no ledger. A referência upstream e a inspeção original estão na [matriz de entrada](../input/MATRIZ_CAPACIDADES_SESSAO_R1.md).
 
+A versão estruturada registra cada capacidade para sete combinações de instalação, modo e executor. O estado `qualified` vale para a combinação e o ensaio controlado citados. `implemented` identifica rotas com evidência parcial. Os estados `blocked` e `unsupported` registram os limites de cada combinação. A qualificação de produto continua condicionada aos gates do plano. [Matriz em JSON](si027-session-capability-matrix.json)
+
 | Instalação | Identidade usada no ensaio |
 | --- | --- |
 | Codex app-server 0.157.0 | SHA-256 `ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f` |
@@ -27,4 +29,6 @@ Com o novo wheel, o Core recusou uma identidade diferente para a mesma versão d
 
 No caso Codex local, a compilação do app-server foi recusada em leitura e escrita quando selecionada como visualizador. O visualizador revisado anexou à thread original e exibiu o resultado do turno, que continuou durante as recusas. [Recusa de visualizador incompatível](si027-codex-viewer-refusal.md)
 
-A matriz consolida a evidência existente enquanto SI-024, SI-025 e SI-026 permanecem em qualificação. As capacidades históricas e combinações fora da tabela conservam seus registros e seus gates de runtime. O ledger mantém os cenários com prova parcial e as limitações da campanha.
+Os wheels instalados passaram por 35 testes do Core e 79 do Nexus. As checagens da matriz compararam cada instalação com os seletores do produto e recusaram variações de versão, identidade, sistema e arquitetura. O app-server e o visualizador do Codex tiveram as identidades conferidas separadamente. O opt-in do Server e os hashes dos pins também foram conferidos. [Resultados e hashes](si027-session-capability-matrix.json)
+
+SI-027 tem a matriz implementada. O ledger mantém em aberto os gates que exigem campanha, inclusive SI-T-I09. A retomada salva via Connector e a sucessora do Pi têm lacunas próprias. Esta etapa atualiza documentação e evidências, dispensa migração e pode ser revertida pelo commit do Nexus.
