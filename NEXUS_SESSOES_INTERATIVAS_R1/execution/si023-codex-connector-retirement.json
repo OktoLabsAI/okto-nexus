@@ -1,0 +1,106 @@
+{
+  "tasks": [
+    "SI-022",
+    "SI-023"
+  ],
+  "status": "CONTROLLED_MILESTONE_PASS",
+  "qualification": "SI-023 remains IN_PROGRESS. The closed-source witness is private to the Connector; remote successor admission was not exercised.",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "3c331bda4ad60ed97b6c280a6b66dc3076137b71",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 562,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "ed6c7b631b6729569b54c625649edcd9bb792556",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 100,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "8153311bf66a16f386ea73b8a8478fcac5bc8bd4",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 80,
+      "behind_main": 0
+    },
+    "clean_worktrees": true,
+    "feature_branch_upstream_drift": [
+      0,
+      0
+    ],
+    "core_pin": "809002514144def6c5894cbf4df5d1bd1b98e8992cc2cd9e4ac205d249b277dd",
+    "connector_pin": "ad704b1b3a625702e04cfeacdd98c0c175a0568cc32a5044146e1269cdb82cb5"
+  },
+  "artifacts": {
+    "core_commit": "e10fb4c0189930ec0686d8d71105e13d72b2724d",
+    "core_wheel_sha256": "94d292ce1296762376666c8ab7d7bfee6e9096bdb8587918678e6062892244c1",
+    "core_build_tree": "564bdce9086c28ac5921ccdaea45107c53273743",
+    "connector_commit": "f5f701d22866f8fb1752eb5ee0c4b1b773b94d52",
+    "connector_wheel_sha256": "1e0dd95e9aaecb1ced6c0e7d46b26ae9c0d20eca197cd7f032675775955b3b72",
+    "connector_build_tree": "73c66538458a1f2e4774497d6db1a01ee91e8c26",
+    "nexus_wheel_sha256": "8b19b949e6615c3769b8fa96f2a2eacdcccf021e7ef136340a5a5ef0bc609c39"
+  },
+  "environment": {
+    "platform": "Windows x64",
+    "interpreter": "Python 3.13.1",
+    "native_app_server": "Codex 0.157.0",
+    "binary_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "nexus_and_connector": "Installed wheels with temporary projects and profiles, canonical daemon and authenticated loopback connection",
+    "model": "Deterministic local response fixture"
+  },
+  "native_cases": [
+    {
+      "rollout_changed_after_process_exit": false,
+      "exact_thread_and_source_observed_before_close": true,
+      "native_process_exit_observed": true,
+      "canonical_close": "SUCCEEDED",
+      "private_record_persisted": true,
+      "rollout_path_absent_in_nexus_receipt_and_ingress": true,
+      "loopback_fixture_requests": 1,
+      "external_provider_requests": 0,
+      "daemon_shutdown_exit": 0
+    },
+    {
+      "rollout_changed_after_process_exit": true,
+      "exact_thread_and_source_observed_before_close": true,
+      "native_process_exit_observed": true,
+      "canonical_close": "SUCCEEDED",
+      "private_record_persisted": false,
+      "rollout_path_absent_in_nexus_receipt_and_ingress": true,
+      "loopback_fixture_requests": 1,
+      "external_provider_requests": 0,
+      "daemon_shutdown_exit": 0
+    }
+  ],
+  "tests": {
+    "core": {
+      "passed": 138,
+      "junit_sha256": "9c309b6559322e4905daf4881bfc23e7d08b9cbc47f4f0c369657f08bc3ded24"
+    },
+    "connector": {
+      "passed": 132,
+      "junit_sha256": "a7990518082b054d5005e873994fa7b6aa2ad5a0a1991290473f5a42ff76eaa2"
+    },
+    "nexus": {
+      "passed": 31,
+      "junit_sha256": "137fe50ae15c77cf57b44dc44683bc375079125947b40c2dee2200bffd2cdb75"
+    },
+    "native": {
+      "passed": 2,
+      "junit_sha256": "f39a1790f945b2a814dbc734ebe15f26f6de0f018a80472d7cfbc99140f376c4"
+    },
+    "verified_wheel_imports": true,
+    "installed_dependency_check": "PASS",
+    "twine_strict": "PASS",
+    "nexus_manifest_hashes": "PASS"
+  },
+  "limits": [
+    "The accepted remote release plus successor flow is pending.",
+    "Earlier retained events are subject to the existing retention policy.",
+    "Paid/provider, browser and user scenarios were outside this milestone."
+  ]
+}
