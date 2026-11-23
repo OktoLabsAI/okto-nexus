@@ -1,0 +1,204 @@
+{
+  "task": "SI-033",
+  "related_passed_scenarios": [
+    "SI-T-F09",
+    "SI-T-F14",
+    "SI-T-F17"
+  ],
+  "qualification_level": "installed_package_with_controlled_fixtures",
+  "platform": "Windows",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "7696f453ef9b2955751e1c21aee234eeb36876e4",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 581,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "fixture_paths_changed": [
+        "tests/execution_r4/test_canonical_structured_work.py",
+        "tests/test_runtime_legacy_profile_review.py"
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "558cecf345a74074e34421cf81464006eedbd9ab",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 109,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "fixture_paths_changed": []
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "db402559ea571365dbe83833fe41d837618c177d",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 92,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "fixture_paths_changed": []
+    }
+  },
+  "artifacts": {
+    "nexus_build_tree": "5bfbb487e6f92b975b010d9c8d759da76939e5aa",
+    "nexus_wheel_sha256": "279fa5c03ea95aef4c9d85a5d1ae9cc970814c425653f5aaf99a87635cdc3c5d",
+    "connector_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core_sha256": "f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876"
+  },
+  "package_tree_diff_paths_checked": [
+    "src",
+    "frontend",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "installed_import_check": [
+    "okto_nexus",
+    "okto_nexus_connector",
+    "nexus_connector_core"
+  ],
+  "installed_import_assertion_sha256": "9c365631cd0e34cd5e7ca4d4317c5d6fd89b3cb0b42c4813240c52fbc55ea94c",
+  "tests": {
+    "cli-grammar": {
+      "tests": 107,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 107,
+      "suite_files": [
+        "tests/quick_connect/test_connect_arguments.py",
+        "tests/quick_connect/test_entry_compatibility.py",
+        "tests/test_runtime_legacy_profile_review.py",
+        "tests/test_runtime_profile_requirements.py"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "a9f0f51933d7b1f4d9e12949586ea8e5e24acd2f9cc9f9c601d4c754422eb3b5"
+    },
+    "cli-connect": {
+      "tests": 46,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 46,
+      "suite_files": [
+        "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_multi_harness.py",
+        "tests/execution_r4/test_terminal_scripted_recovery.py"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "63b4574f4c055d513990201b92d6241ec3d94051dc8194d05109e573782b61d7"
+    },
+    "cli-work": {
+      "tests": 34,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 34,
+      "suite_files": [
+        "tests/execution_r4/test_terminal_work.py"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "b36a4ec8aee8ad8056d396cb2deb508b4304cd15e3427dc6288fcd101ed5263c"
+    },
+    "operator-legacy": {
+      "tests": 40,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 40,
+      "suite_files": [
+        "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_binding_operator.py"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "8be3b86ccf8d7af316c5ec5e8c7d35e5da508b6cd81634e005f052f689add557"
+    },
+    "operator-handoff": {
+      "tests": 29,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 29,
+      "suite_files": [
+        "tests/execution_r4/test_canonical_handoff.py",
+        "tests/execution_r4/test_canonical_handoff_recovery.py",
+        "tests/test_attention_handoff_navigation.py"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "ad8524c22388e2913ebc9b56dfb2653de86625b5debb454a01a67ebb74b4e163"
+    },
+    "fixture-contract": {
+      "tests": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 4,
+      "suite_files": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_native_structured_work_preserves_explicit_completion_contract"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "503579e141c4cbdd2e42dd098c4eb5baca53a359f1d5b82ed27dfb0b60f0c632"
+    },
+    "participant": {
+      "tests": 124,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 124,
+      "suite_files": [
+        "tests/execution_r4/test_participant_init.py",
+        "tests/execution_r4/test_participant_launch.py",
+        "tests/execution_r4/test_participant_doctor.py",
+        "tests/execution_r4/test_participant_removal.py",
+        "tests/test_participant_coordination_mcp.py",
+        "tests/test_meta_harness_workspaces.py",
+        "tests/execution_r4/test_meta_harness_sessions.py"
+      ],
+      "skipped_reasons": [],
+      "junit_sha256": "77057f61e172fc0fb6d313bb18de6bd53439e2f677337e909b5ebb43be48c86a"
+    }
+  },
+  "plan_document_package_validation": "PASS",
+  "fixture_lint": {
+    "syntax": "PASS",
+    "preexisting_findings": 15,
+    "new_findings": 0
+  },
+  "initial_diagnostics": {
+    "cli": {
+      "passed": 186,
+      "failures": 1,
+      "fixture_issue": "The SQLite authority trigger rejected the attempted BLOB UPDATE before the diagnostic was called.",
+      "junit_sha256": "bc03ea565e94be62770b4bcab8cf2a97f42ca3fbde3adc682ead2ea3be43cf75"
+    },
+    "operator": {
+      "fixture_issue": "The synthetic Codex app-server peer did not implement account/read. Core refused the start, and the server teardown remained in reconciliation.",
+      "cleanup": "Stopped only the matching temporary pytest processes after confirming the fallback was stuck."
+    }
+  },
+  "changed_fixture_sha256": {
+    "tests/execution_r4/test_canonical_structured_work.py": "dbfc0be870d41b9860cade069587f14cf5499ad6facec8b7b6fe578bcd9cd594",
+    "tests/test_runtime_legacy_profile_review.py": "2d789f17e1cb3c2c2c007007e6d69b0e44d85f0e3df119884cfaa89ba8dc0d44"
+  },
+  "passed_total": 384,
+  "companion_evidence": [
+    "si028-installed-quick-connect-modes.json",
+    "si029-installed-connect-modes.json",
+    "si030-installed-work-resume.json",
+    "si036-pi-browser-writer-roundtrip.json"
+  ],
+  "limitations": [
+    "The grouped regressions use disposable profiles, data and controlled fixture responses.",
+    "The Windows credential-manager test uses a synthetic key in an isolated entry removed during teardown.",
+    "This evidence covers neither a renewed provider campaign nor participant acceptance or a new browser run.",
+    "SI-T-I01 and SI-T-I04 retain NOT_RUN at their prescribed qualification level."
+  ]
+}

@@ -60,17 +60,26 @@ def test_legacy_review_does_not_expose_profile_content_or_mark_preserved_fields_
     ("[", "invalid"), ('"private-value"', "invalid"), (b"invalid-blob", "invalid")])
 def test_legacy_review_classifies_unusable_fields_without_exposing_or_repairing_them(runtime, stored, state):
     deps, client, _, _, operator, _ = runtime
+    legacy_agent = "legacy-profile-agent"
     with deps.connection_factory.unit_of_work() as uow:
-        uow.connection.execute("UPDATE agents SET metadata=? WHERE agent_id='worker'", (stored,))
-        legacy_session(uow.connection, "worker", "old-invalid")
+        # Seed an existing profile directly. A current update runs the
+        # authority trigger, whose JSON comparison rejects BLOB fields.
+        uow.connection.execute(
+            "INSERT INTO agents(agent_id,capabilities,metadata,created_at) VALUES(?,'[]',?,'historical')",
+            (legacy_agent, stored),
+        )
+        legacy_session(uow.connection, legacy_agent, "old-invalid")
     response = client.get("/api/v1/harness/diagnostics", headers={"x-api-key": operator})
     assert response.status_code == 200, response.text
     review = response.json()["data"]["legacy_profile_review"]
+    assert review["agents"][0]["agent_id"] == legacy_agent
     assert review["agents"][0]["metadata"] == state
     assert review["agents"][0]["review_required"]
     assert "private-value" not in response.text and "invalid-blob" not in response.text
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT metadata FROM agents WHERE agent_id='worker'").fetchone()[0] == stored
+        assert uow.connection.execute(
+            "SELECT metadata FROM agents WHERE agent_id=?", (legacy_agent,)
+        ).fetchone()[0] == stored
 
 
 def test_legacy_review_is_bounded_and_reports_truncation(runtime):

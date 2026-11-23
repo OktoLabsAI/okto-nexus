@@ -12,7 +12,7 @@ from test_canonical_delivery import connected_local
 from test_canonical_handoff import prepare
 from test_canonical_result_publication import current_turn, wait_result, workspace
 from test_canonical_grant_regressions import mcp_helpers
-from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+from test_harness_codex_connector import _FAKE_SERVER_SOURCE, with_account_observation
 
 
 def native_work(connected, monkeypatch, *, action="complete", mutation=None, verify=False):
@@ -31,6 +31,7 @@ def native_work(connected, monkeypatch, *, action="complete", mutation=None, ver
         + change + '    text = json.dumps({"nexus_work_result": decision})\n')
     source = _FAKE_SERVER_SOURCE.replace('    item_id = "item_" + turn_id', transform + '    item_id = "item_" + turn_id')
     assert source != _FAKE_SERVER_SOURCE
+    source = with_account_observation(source)
     peers = []
     class Factory:
         async def open(self, prepared, session_id, context, *, stream_epoch):
