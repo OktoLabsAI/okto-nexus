@@ -70,3 +70,11 @@ O controlador barra uma admissão se a nova provisão elevar a cobrança a 450 m
 Os três casos de setup passaram com os wheels instalados e o app-server Codex 0.157.0 no Windows. No caso do limite, o journal registrou 375 mil tokens sintéticos em um teste de conexão bem-sucedido. A repetição recuperou o mesmo resultado. A provisão de 75 mil para o primeiro trabalho elevaria a cobrança a 450 mil e foi recusada antes de ser gravada. Houve uma única requisição ao simulador. A inspeção do banco confirmou zero vínculos, commits de setup e sessões, integridade do SQLite e zero violações de chave estrangeira. [Teste de setup](../../tests/execution_r4/test_si038_codex_setup_qualification.py) [Evidências](si038-codex-campaign-preflight.json)
 
 O ensaio usou um perfil descartável e respostas em loopback. A qualificação com a conta autenticada e o aceite do participante continuam pendentes. A mudança dispensa migração. O rollback reverte o commit do controlador e dos testes.
+
+## Validação do tipo de notificação de consumo
+
+O observador exige um objeto `tokenUsage.total` nas notificações `thread/tokenUsage/updated`. Relatórios ausentes, nulos ou armazenados como texto encerram a leitura com consumo não confirmado. Um contador em outra notificação também é recusado. A leitura conserva o journal original.
+
+Os journals de dois ensaios no Windows confirmaram 105 tokens sintéticos no setup e 105, 525 e 420 na sessão do Connector. Ao remover o total da segunda notificação do turno de 525 numa cópia, o leitor anterior devolveu 210 e o estado terminal de sucesso. O leitor corrigido recusou a cópia sem gravar no journal. Os seis casos novos falharam antes da mudança. Depois, passaram 32 testes de contabilização, orçamento e catálogo. [Comandos, versões e hashes](si038-codex-campaign-preflight.json)
+
+Passaram também os três testes canônicos de conexão do Nexus instalado, com o app-server 0.157.0 e respostas simuladas em loopback. A mudança atualiza o observador da campanha e dispensa migração. O rollback reverte o commit. A consulta autenticada e a campanha real continuam pendentes.

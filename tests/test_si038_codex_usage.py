@@ -8,6 +8,7 @@ from tools.si038_codex_usage import TurnUsage, UnconfirmedUsage, read_turn_usage
 
 
 SCOPE = ('server', 'executor', 'session', 'epoch')
+USAGE_NOTIFICATION = 'thread/tokenUsage/updated'
 
 
 def event(turn, *, operation=None, phase=None, outcome=None, tokens=None, thread='thread'):
@@ -15,7 +16,8 @@ def event(turn, *, operation=None, phase=None, outcome=None, tokens=None, thread
     if tokens is not None:
         payload['tokenUsage'] = {'total': dict(totalTokens=tokens, inputTokens=tokens, outputTokens=0,
                                              cachedInputTokens=0, reasoningOutputTokens=0)}
-    return json.dumps(dict(operation_id=operation, payload=payload))
+    return json.dumps(dict(operation_id=operation, payload=payload,
+                           native_type=USAGE_NOTIFICATION if tokens is not None else None))
 
 
 def journal(tmp_path, events, *, gap=False):
@@ -51,6 +53,36 @@ def test_old_usage_cannot_confirm_a_new_terminal_turn(tmp_path):
         event('two', operation='b', phase='terminal', outcome='success')])
     assert read_turn_usage(path, SCOPE, thread_id='thread', operation_id='b') is None
     assert read_turn_usage(path, (*SCOPE[:3], 'other'), thread_id='thread', operation_id='a') is None
+
+
+@pytest.mark.parametrize('payload', [
+    {},
+    {'tokenUsage': None},
+    {'tokenUsage': {}},
+    {'tokenUsage': {'total': None}},
+    {'tokenUsage': {'total': json.dumps(dict(totalTokens=152, inputTokens=150, outputTokens=2,
+                                            cachedInputTokens=0, reasoningOutputTokens=0))}},
+], ids=['missing-report', 'null-report', 'missing-total', 'null-total', 'string-total'])
+def test_malformed_late_notification_cannot_reuse_an_old_total(tmp_path, payload):
+    late = json.dumps(dict(native_type=USAGE_NOTIFICATION, payload=dict(thread_id='thread', turn_id='one', **payload)))
+    path = journal(tmp_path, [
+        event('one', operation='a', phase='started'),
+        event('one', tokens=105),
+        event('one', operation='a', phase='terminal', outcome='success'),
+        late,
+    ])
+    original = path.read_bytes()
+    with pytest.raises(UnconfirmedUsage, match='INVALID_USAGE_COUNTER'):
+        read_turn_usage(path, SCOPE, thread_id='thread', operation_id='a')
+    assert path.read_bytes() == original
+
+
+def test_counter_in_another_notification_cannot_be_attributed_to_the_turn(tmp_path):
+    bogus = json.loads(event('one', tokens=105))
+    bogus['native_type'] = 'turn/plan/updated'
+    path = journal(tmp_path, [event('one', operation='a', phase='started'), json.dumps(bogus)])
+    with pytest.raises(UnconfirmedUsage, match='UNEXPECTED_USAGE_NOTIFICATION'):
+        read_turn_usage(path, SCOPE, thread_id='thread', operation_id='a')
 
 
 @pytest.mark.parametrize('case', [dict(operation='other'), dict(thread='other')])

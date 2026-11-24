@@ -7,6 +7,9 @@ from pathlib import Path
 import sqlite3
 
 
+USAGE_NOTIFICATION = 'thread/tokenUsage/updated'
+
+
 class UnconfirmedUsage(ValueError):
     """The journal cannot justify accounting for the requested turn."""
 
@@ -50,8 +53,10 @@ def read_turn_usage(journal: Path, scope: tuple[str, str, str, str], *, thread_i
         if compacted != 0 or not 1 <= next_sequence <= 50_001:
             raise UnconfirmedUsage('JOURNAL_COVERAGE_GAP')
         rows = db.execute('''SELECT sequence,json_extract(body,'$.operation_id'),
+            json_extract(body,'$.native_type'),
             json_extract(body,'$.payload.delivery_phase'),json_extract(body,'$.payload.delivery_outcome'),
             json_extract(body,'$.payload.thread_id'),json_extract(body,'$.payload.turn_id'),
+            json_type(body,'$.payload.tokenUsage'),json_type(body,'$.payload.tokenUsage.total'),
             json_extract(body,'$.payload.tokenUsage.total')
             FROM events WHERE server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?
             ORDER BY sequence LIMIT 50001''', scope).fetchall()
@@ -59,7 +64,7 @@ def read_turn_usage(journal: Path, scope: tuple[str, str, str, str], *, thread_i
         raise UnconfirmedUsage('JOURNAL_COVERAGE_GAP')
     owners, turns, totals, terminal = {}, {}, {}, {}
     previous_total = 0
-    for _, owner, phase, outcome, thread, turn, usage in rows:
+    for _, owner, native_type, phase, outcome, thread, turn, usage_type, total_type, usage in rows:
         if phase == 'started':
             if (thread != thread_id or not isinstance(turn, str) or not turn
                     or not isinstance(owner, str) or not owner or owner in turns or turn in owners):
@@ -70,14 +75,19 @@ def read_turn_usage(journal: Path, scope: tuple[str, str, str, str], *, thread_i
                     or outcome not in ('success', 'failed', 'interrupted') or turn in terminal):
                 raise UnconfirmedUsage('TERMINAL_OUTCOME_UNCORRELATED')
             terminal[turn] = outcome
-        if usage is not None:
-            if thread != thread_id or turn not in owners or owner not in (None, owners[turn]):
-                raise UnconfirmedUsage('USAGE_TURN_UNCORRELATED')
-            total = _total(usage)
-            if total < previous_total:
-                raise UnconfirmedUsage('USAGE_COUNTER_REGRESSED')
-            totals[turn] = totals.get(turn, 0) + total - previous_total
-            previous_total = total
+        if native_type != USAGE_NOTIFICATION:
+            if usage_type is not None:
+                raise UnconfirmedUsage('UNEXPECTED_USAGE_NOTIFICATION')
+            continue
+        if total_type != 'object':
+            raise UnconfirmedUsage('INVALID_USAGE_COUNTER')
+        if thread != thread_id or turn not in owners or owner not in (None, owners[turn]):
+            raise UnconfirmedUsage('USAGE_TURN_UNCORRELATED')
+        total = _total(usage)
+        if total < previous_total:
+            raise UnconfirmedUsage('USAGE_COUNTER_REGRESSED')
+        totals[turn] = totals.get(turn, 0) + total - previous_total
+        previous_total = total
     target = turns.get(operation_id)
     if target not in totals:
         return None

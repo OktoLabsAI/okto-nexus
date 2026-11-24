@@ -590,5 +590,129 @@
     "external_provider_requests": 0,
     "actual_paid_campaign": "NOT_RUN",
     "participant_acceptance": "NOT_RUN"
+  },
+  "canonical_usage_notification_shape": {
+    "platform": "Windows x64",
+    "intake": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "7645201799bf478b657a42a3346ca1facdf6198e",
+        "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "head_main_drift": [
+          640,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "head_main_drift": [
+          113,
+          0
+        ]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "head_main_drift": [
+          95,
+          0
+        ]
+      },
+      "working_trees_clean": true
+    },
+    "method": "thread/tokenUsage/updated",
+    "required_json_total_type": "object",
+    "journal_replay": {
+      "setup": {
+        "tokens_by_turn": [
+          105
+        ],
+        "terminal_outcomes": [
+          "success"
+        ],
+        "original_unchanged_sha256": "9e5a44c47b23f2bd7c1285d5b2faf6fad0d1c74d2811ee12eea34de97557b67c"
+      },
+      "connector": {
+        "tokens_by_turn": [
+          105,
+          525,
+          420
+        ],
+        "terminal_outcomes": [
+          "success",
+          "success",
+          "success"
+        ],
+        "copy_with_removed_total": "INVALID_USAGE_COUNTER",
+        "original_unchanged_sha256": "beb5ebeacd6630940ca70f82e9914a5718509cddb1214d5a96cd551c162e8545"
+      }
+    },
+    "baseline_replay": {
+      "baseline_malformed_copy_tokens": 210,
+      "baseline_malformed_copy_terminal": "success"
+    },
+    "tests": {
+      "before": {
+        "tests": 11,
+        "failures": 6,
+        "errors": 0,
+        "skipped": 0
+      },
+      "after": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "native": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "installed_sha256": {
+      "nexus": "63f5c509f01accc15138867eb716b0dad78e5f4f373a4db35b0227869b14a6b0",
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "runtime": {
+      "engine_version": "0.157.0",
+      "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+      "loopback_simulator": true,
+      "native_cases": [
+        "successful-test",
+        "unexpected-result",
+        "preventive-boundary"
+      ],
+      "leftover_test_engine_processes": 0
+    },
+    "commands": [
+      "python -B -m pytest -q --tb=short tests/test_si038_codex_usage.py",
+      "python -B -m pytest -q --tb=short tests/test_si038_codex_usage.py tests/test_si038_codex_budget.py tests/test_si038_codex_catalog.py",
+      "python -B <evidence>/replay-journals.py <evidence> <loopback-setup-journal> <loopback-connector-journal>",
+      "python -B <evidence>/replay-baseline.py <evidence>/connector-malformed-copy.db",
+      "python -B -m pytest -o pythonpath= -p assert_setup_wheels -q --tb=short tests/execution_r4/test_si038_codex_setup_qualification.py"
+    ],
+    "evidence_directory": "C:/Users/jpamb/AppData/Local/Temp/nexus-si038-accounting-shape-76452017",
+    "evidence_sha256": {
+      "before.xml": "8b38877ed851856e39dccaabcf441c10be827edef0172d075dd630eebdbb2548",
+      "before.log": "0248c24f69f2c18a1dc939b0be23490a083068fd3313d7a24570326b78d7a8be",
+      "after.xml": "d155bc4643ce34a2e307a424ef885803864db838a3135a1e5228f53e1c59d1ab",
+      "after.log": "5a6d583eeb5ebbcaa4749913f5972e9223a56890cbdeaf8c51f4e9f664516525",
+      "native.xml": "494945ab952ce617948d13c1a32cde20659fa0d45f3b2d76733a082938d309e0",
+      "native.log": "a4c7dde1a36243e90542f0251bbd5fd157c67ab26f491981c809a801012900bc",
+      "baseline-replay.json": "353228aba966f8fe61bc41a1e8092469c52e0be31f71e68984dd34500de2749f",
+      "journal-replay.json": "e3aa3034bddcec8e96ce81a1c5d97db7264c73b701110c4c8d4f8a277c50b912",
+      "replay-journals.py": "99a3f7b2bad1fe635e173df7c9a65adb542cb83ddd81febf8a4fcd33a06fbc03",
+      "replay-baseline.py": "34f4665d30e911201d700afef0a07462b09b7e088c2c2daa6895ecd02add1113"
+    },
+    "external_provider_requests": 0,
+    "authenticated_catalog": "NOT_RUN",
+    "actual_paid_campaign": "NOT_RUN",
+    "migration": "none"
   }
 }
