@@ -938,6 +938,37 @@ def test_cli_submission_resume_watch_and_project_mismatch(work, tmp_path, monkey
     assert t.native.opens == 1 and len(t.native.native.sent) == 1
 
 
+@pytest.mark.parametrize('selector', ['--request-id', '--session-id'])
+def test_cli_resume_refuses_mismatched_selector_before_admission(drain_cli, selector):
+    d, t = drain_cli, drain_cli.work
+    intent = 'scoped-terminal-recovery'
+    t.fault.after = '/runtime/intents:resolve'
+    code, uncertain = d.run('send', '--request-id', intent, '--message', 'Recover exactly this request')
+    assert code == 3 and uncertain['state'] == 'unconfirmed'
+    checkpoint = d.home / 'terminal/work/project.json'
+    saved = checkpoint.read_bytes()
+    slot = json.loads(saved)['work']
+    assert slot['state'] == 'resolve_submitted' and 'session_id' not in slot['request_context']
+    receipt = t.flow.api('GET', '/runtime/intents/' + intent)
+    assert receipt['operation'] is None
+    session_id = receipt['resolution']['session_id']
+    t.calls.clear()
+
+    code, refused = d.run('resume', selector, 'different-selection')
+    assert code == 3 and refused['code'] == 'WORK_REQUEST_CONFLICT'
+    assert checkpoint.read_bytes() == saved
+    assert not any(method == 'POST' for method, _ in t.calls)
+    assert t.native.opens == 0
+
+    code, admitted = d.run('resume', '--request-id', intent, '--session-id', session_id)
+    assert code == 0
+    assert admitted['operation_id'] == receipt['resolution']['operation_id']
+    assert admitted['scope']['session_id'] == session_id
+    complete(t, admitted)
+    assert sum(method == 'POST' and path.endswith('/runtime/operations') for method, path in t.calls) == 1
+    assert t.native.opens == 1 and [verb for verb, _ in t.native.native.sent] == ['send_turn']
+
+
 def test_scope_change_and_explicit_request_conflict_do_not_dispatch(work):
     t = work
     operation = t.flow.submit('Original', client_intent_id='stable-work')

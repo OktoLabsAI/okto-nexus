@@ -296,9 +296,9 @@ def run_work(argv):
     parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
     parser.add_argument('--project', type=Path)
     parser.add_argument('--message')
-    parser.add_argument('--session-id')
+    parser.add_argument('--session-id', help='exact session; resume verifies it against the original receipt')
     parser.add_argument('--new-session', action='store_true')
-    parser.add_argument('--request-id', help='stable client intent ID for an explicit submission/retry')
+    parser.add_argument('--request-id', help='stable client intent ID for an explicit submission or recovery')
     parser.add_argument('--target-turn-id')
     parser.add_argument('--approval-id')
     parser.add_argument('--decision', choices=('approve', 'deny'))
@@ -398,7 +398,7 @@ def run_work(argv):
             value = flow.submit(args.message, action=action, session_id=args.session_id,
                 new_session=args.new_session, client_intent_id=args.request_id, target_turn_id=args.target_turn_id)
         elif action == 'resume':
-            value = flow.resume(slot)
+            value = flow.resume(slot, session_id=args.session_id, client_intent_id=args.request_id)
         elif action == 'authorize':
             if args.review:
                 value = flow.authorize(approval=args.review)

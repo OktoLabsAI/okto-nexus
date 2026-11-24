@@ -31,3 +31,11 @@ Quando a abertura ou reutilização já foi admitida, o CLI mantém o checkpoint
 O checkpoint mantém o formato 1 e grava apenas IDs e estados adicionais de recuperação. A proteção usa a confirmação da operação ou do turno. Um checkpoint antigo que marcou a reutilização como admitida com base na abertura existente ainda pode recuperar a admissão pendente. A mudança dispensa migração e pode ser revertida pelo commit do Nexus. [Comandos e resultados](si030-installed-work-resume.json)
 
 Os dois casos principais falharam no wheel de referência. Na rodada final, passaram 12 testes no código-fonte e os mesmos 12 no wheel instalado. A suíte manteve uma única execução quando a consulta se perdeu após a admissão e recusou a troca para outro turno real da mesma sessão.
+
+## Verificação de IDs passados ao CLI
+
+`work resume` compara `--request-id` com o pedido salvo e `--session-id` com a sessão confirmada pelo recibo original. Uma divergência devolve `WORK_REQUEST_CONFLICT` antes de alterar o checkpoint ou admitir o pedido. Sem essas opções, a recuperação continua usando o checkpoint do perfil.
+
+Nos dois casos novos, a resposta da resolução se perdeu antes da admissão. O wheel anterior admitiu o pedido mesmo com o ID errado. Com a correção, a recusa preservou o checkpoint byte a byte e deixou o executor sem abrir processo ou receber turno. Com os dois IDs corretos, o CLI admitiu a operação original uma vez. A API e o SQLite trabalharam com um peer sintético no Windows. O formato do checkpoint permanece na versão 1. O marco dispensa migração, e o rollback reverte o commit e restaura o wheel anterior. [Comandos e resultados](si030-installed-work-resume.json)
+
+Passaram sete testes focados no código-fonte e 12 no wheel instalado, incluindo retomada sem seletores, recuperação durante a drenagem e perda da resposta antes e depois da admissão. O wheel e a distribuição de código-fonte passaram no `twine check --strict`. A comparação dos 817 arquivos do pacote identificou apenas os dois módulos da correção depois de normalizar as terminações de linha. [Resultados e hashes](si030-installed-work-resume.json)

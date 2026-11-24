@@ -92,6 +92,10 @@ If the opening is confirmed and the initial turn receipt is unavailable,
 `work resume` reads the original admission and correlates the turn before
 clearing the pending checkpoint.
 
+If you have the original request ID or session ID, pass `--request-id` or
+`--session-id` to `work resume` to verify the selected receipt. A mismatch
+preserves the checkpoint and stops recovery before any admission.
+
 When paging with `work events`, keep the same `--session-id` and
 `--stream-epoch` and use the previous page's `next_after_sequence` as
 `--after-sequence`. Each page belongs to one session and stream epoch.

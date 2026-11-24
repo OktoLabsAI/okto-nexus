@@ -324,5 +324,125 @@
     "checkpoint_version": 1,
     "external_provider_requests": 0,
     "migration": "none"
+  },
+  "explicit_resume_selectors": {
+    "platform": "Windows x64",
+    "intake": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "edafef0f0eded07a0946c57c0eab14d8696e339c",
+        "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "head_main_drift": [
+          637,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "head_main_drift": [
+          113,
+          0
+        ]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "head_main_drift": [
+          95,
+          0
+        ]
+      },
+      "working_trees_clean": true
+    },
+    "wheel_comparison": {
+      "before_sha256": "0814c210e6107bbd8666dc374c49a1d48295d56fcb5011b139447884daa95971",
+      "after_sha256": "a33dd81c6c5c59e05ae4011258f2003f922052fdd9dc3e64af029b4371495873",
+      "package_members": 817,
+      "changed_modules": [
+        "okto_nexus/adapters/inbound/cli/work.py",
+        "okto_nexus/application/terminal_work.py"
+      ],
+      "same_after_normalizing_eol": 350,
+      "frontend_assets_equal_after_eol_normalization": 2
+    },
+    "installed_dependency_hashes": {
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "sdist_sha256": "f491f1fab8309ae9772897e46187ca8b2e37f41dec1f29b448f9c61f24f9e83c",
+    "tests": {
+      "before": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0,
+        "new_regression_cases": [
+          "test_cli_resume_refuses_mismatched_selector_before_admission[--request-id]",
+          "test_cli_resume_refuses_mismatched_selector_before_admission[--session-id]"
+        ]
+      },
+      "source": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "new_regression_cases": [
+          "test_cli_resume_refuses_mismatched_selector_before_admission[--request-id]",
+          "test_cli_resume_refuses_mismatched_selector_before_admission[--session-id]"
+        ]
+      },
+      "installed": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "new_regression_cases": [
+          "test_cli_resume_refuses_mismatched_selector_before_admission[--request-id]",
+          "test_cli_resume_refuses_mismatched_selector_before_admission[--session-id]"
+        ]
+      }
+    },
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_setup_wheels -q --tb=short tests/execution_r4/test_terminal_work.py -k \"mismatched_selector_before_admission\"",
+      "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py -k \"mismatched_selector_before_admission or lost_submission_response or cli_submission_resume_watch or cli_drain_observes_and_recovers\"",
+      "uv build --offline --out-dir <evidence>/pkgs <source-export>",
+      "uv tool run --offline twine check --strict <wheel> <sdist>",
+      "uv pip install --offline --no-deps --no-index --target <evidence>/installed <wheel>",
+      "okto-nexus work --help",
+      "python -B -m pytest -o pythonpath= -p assert_setup_wheels -q --tb=short tests/execution_r4/test_terminal_work.py -k \"mismatched_selector_before_admission or lost_submission_response or cli_submission_resume_watch or cli_drain_observes_and_recovers or lost_initial_turn_lookup or recover_reused_opening\"",
+      "uv lock --offline --check"
+    ],
+    "checks": {
+      "ruff_F_E9": "PASS",
+      "strict_twine": "PASS",
+      "offline_lock": "PASS",
+      "installed_cli_help": "PASS"
+    },
+    "cases": [
+      "lost resolution response with an unresolved, unadmitted original intent",
+      "mismatched request ID or session ID refuses the original admission and preserves the checkpoint byte for byte",
+      "matching selectors recover and admit the original operation exactly once",
+      "unscoped recovery and canonical control recovery during drain remain covered"
+    ],
+    "checkpoint_version": 1,
+    "synthetic_harness_peer": true,
+    "external_provider_requests": 0,
+    "migration": "none",
+    "evidence_directory": "D:/nxs-si030-work-resume-scope-edafef0f",
+    "evidence_sha256": {
+      "before.xml": "51173e464231472cacceb8f723cb275ac1c722bdc9c30bfe4440d8aa936631b9",
+      "before.log": "b9ff33661b2747c51aac6d0bd5d6d1d48b1302824e54851fa2ef11a5505520d7",
+      "source.xml": "f9caded73cac35b39da77dbdcb0de23fc63315e4dd4cca5b3029b7a5c3a06dff",
+      "source.log": "62ad23eebb9ccfb753e95326f18460e3bf7d8df9a23db9ddfe963e909b7e942e",
+      "installed.xml": "1f3346d375507684353237d9cd90ebeec483f6e73abe1fae0fad55ef874a86ba",
+      "installed.log": "20243617c3f9174322ae541e970e55d56e4eb8e2d2975dffd17b77b0e74c22be",
+      "wheel-audit.json": "e8eb6861b6990e9c43f15363235ef28c673c77fa8cec104e7816c4450b566103",
+      "audit-wheel.py": "3b32e133e6aef64cfc5991a186ed308471c0573898b37dec98ff4d70501b28b8",
+      "help.log": "c379350287bd61bf868139244ee8b194a507d3b54c754d5d7f822e699394560f",
+      "build.log": "b427dcf1430bc6ebaf5dae4b3eeaa925a369e55529f6c2ccde7c3bc616fe60df"
+    }
   }
 }

@@ -180,8 +180,10 @@ class TerminalWork(TerminalAuthorization):
                 operation['scope']['session_id'] != session_id):
             raise ConnectionError('WORK_RECEIPT_MISMATCH', 'The admission belongs to another operation.', possible_effect=True)
 
-    def _resolved(self, slot, resolution, binding, operation=None):
+    def _resolved(self, slot, resolution, binding, operation=None, *, expected_session_id=None):
         session_id = self._resolution_session(slot, resolution, binding)
+        if expected_session_id is not None and session_id != expected_session_id:
+            raise ConnectionError('WORK_REQUEST_CONFLICT', 'The saved request belongs to a different session.')
         if operation is not None:
             self._check_operation_receipt(operation, resolution, binding, session_id)
         slot['submission'] = {key: resolution[key] for key in SUBMISSION}
@@ -246,9 +248,11 @@ class TerminalWork(TerminalAuthorization):
             return value
         return None
 
-    def resume(self, slot_name='work'):
-        binding = self.binding()
+    def resume(self, slot_name='work', *, session_id=None, client_intent_id=None):
         slot = self.document.get(slot_name)
+        if slot and client_intent_id is not None and client_intent_id != slot['client_intent_id']:
+            raise ConnectionError('WORK_REQUEST_CONFLICT', 'The request ID does not match the saved request.')
+        binding = self.binding()
         if not slot:
             raise ConnectionError('WORK_REQUIRED', 'There is no saved submission to resume.')
         confirmed = slot.get('admission_confirmed') is True or slot.get('initial_turn_operation_id') is not None
@@ -262,15 +266,12 @@ class TerminalWork(TerminalAuthorization):
                 raise ConnectionError('INTENT_NOT_FOUND', 'The saved intent was not found. Re-enter the exact original request to retry resolution.') from None
             raise
         operation = receipt['operation']
-        if operation is None:
-            if confirmed:
-                raise ConnectionError('WORK_CORRELATION_UNAVAILABLE', 'The confirmed admission could not be recovered.',
-                                      possible_effect=True)
-            self._resolved(slot, receipt['resolution'], binding)
-            return self._admit(slot, binding)
-        child = self._initial_turn(slot, receipt)
-        self._resolved(slot, receipt['resolution'], binding, operation)
-        return self._admitted(slot, operation, child)
+        if operation is None and confirmed:
+            raise ConnectionError('WORK_CORRELATION_UNAVAILABLE', 'The confirmed admission could not be recovered.',
+                                  possible_effect=True)
+        child = self._initial_turn(slot, receipt) if operation is not None else None
+        self._resolved(slot, receipt['resolution'], binding, operation, expected_session_id=session_id)
+        return self._admit(slot, binding) if operation is None else self._admitted(slot, operation, child)
 
     def operation(self, operation_id, binding):
         value = self.api('GET', '/runtime/operations/' + quote(operation_id, safe=''))
