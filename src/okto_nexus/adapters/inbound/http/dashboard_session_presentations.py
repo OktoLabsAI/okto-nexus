@@ -116,7 +116,8 @@ class LocalClaudePresentations:
     broker: SessionAttachmentBroker
     prove_owner: Callable[[InputScope], Awaitable[tuple[ManagedNativeSession, NativeSessionOwnerProof]]]
     open_reader: Callable[..., AbstractAsyncContextManager[AsyncIterator[bytes]]]
-    next_turn_revision = None
+    execution_access: object | None = None
+    next_turn_revision: Callable[[object, InputScope], str | None] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -169,7 +170,7 @@ class _UpdatesRequest(_Document):
     request_id: Revision
 
 
-class _PiEnqueueRequest(_Document):
+class _TerminalEnqueueRequest(_Document):
     kind: Literal['enqueue']
     request_id: Revision
     client_intent_id: Identifier
@@ -211,7 +212,7 @@ class _PiInterruptStatusRequest(_Document):
     client_intent_id: Identifier
 
 
-class _EnqueueRequest(_PiEnqueueRequest):
+class _EnqueueRequest(_TerminalEnqueueRequest):
     thread_id: Identifier
 
 
@@ -655,7 +656,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                         await edit(pending.key, text=pending.text)
                     else:
                         review = None
-                        request = _PiEnqueueRequest.model_validate(raw)
+                        request = _TerminalEnqueueRequest.model_validate(raw)
                         reply = await _record_presenter_input(state, services, active, request, presentation=presentation)
                         if _services(state, presentation) is not services:
                             break
@@ -685,7 +686,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                         if data.draft is not None:
                             if pending.key != 'enter' or data.limit_reached:
                                 raise ValueError('The draft editor response does not match the key')
-                            request = _PiEnqueueRequest(kind='enqueue', request_id=pending.request_id,
+                            request = _TerminalEnqueueRequest(kind='enqueue', request_id=pending.request_id,
                                 client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
                                 content=TextInput(type='text', text=data.draft))
                             queued = await _record_presenter_input(state, services, active, request, presentation=presentation)
@@ -709,8 +710,10 @@ async def _present_pi(ws, services, active, hello, *, presentation):
 
 
 async def _present_claude(ws, services, active, *, presentation):
-    if active['attachment'].access != 'read':
-        raise ValueError('Claude terminal attachment is read-only')
+    access = active['attachment'].access
+    if access == 'write' and services.next_turn_revision is None:
+        raise ValueError('Claude terminal input is unavailable')
+    state = ws.app.state
     remote = presentation == 'claude_remote'
 
     async def verify(renew=False):
@@ -726,7 +729,7 @@ async def _present_claude(ws, services, active, *, presentation):
             open_reader = _author_callback(services.open_reader, active['author'], presentation)
             frames = await stack.enter_async_context(open_reader(active['scope']))
             await verify()
-            await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': 'read'})
+            await _send(ws, {'kind': 'attached', 'attachment_id': active['attachment'].attachment_id, 'access': access})
         inbound = asyncio.create_task(ws.receive())
         output = asyncio.create_task(anext(frames, None))
         renew_at = anyio.current_time() + _RENEW_SECONDS
@@ -740,9 +743,16 @@ async def _present_claude(ws, services, active, *, presentation):
                     message = inbound.result()
                     if message['type'] == 'websocket.disconnect':
                         return
-                    if not remote or _decode(message) != {'kind': 'keepalive'}:
+                    raw = _decode(message)
+                    if remote and raw == {'kind': 'keepalive'}:
+                        keepalive = True
+                    elif access == 'write':
+                        request = _TerminalEnqueueRequest.model_validate(raw)
+                        result = await _record_presenter_input(state, services, active, request,
+                                                               presentation=presentation)
+                        await _send(ws, {'request_id': request.request_id, **result})
+                    else:
                         raise ValueError('Claude terminal attachment does not accept input')
-                    keepalive = True
                     inbound = asyncio.create_task(ws.receive())
                 if anyio.current_time() >= renew_at:
                     renew = not remote or keepalive

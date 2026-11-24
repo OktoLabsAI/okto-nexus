@@ -86,8 +86,10 @@ async def start_runtime_services(app, *, native_factory=None):
     remote_claude = app.state.remote_claude_presentation
     app.state.remote_claude_presentations = LocalClaudePresentations(
         SessionAttachmentBroker(deps.connection_factory, authority_fence=authority_fence,
-                                current_capability=remote_claude.capability_revision),
-        remote_claude.prove, remote_claude.open_reader) if input_enabled else None
+                                current_capability=partial(remote_claude.capability_revision,
+                                                           next_turn_revision=remote_next_turn)),
+        remote_claude.prove, remote_claude.open_reader, build_execution_access(deps), remote_next_turn
+    ) if input_enabled else None
     if deps.config.feature_harness_integrations or history:
         if not await anyio.to_thread.run_sync(build_dispatcher(deps).start):
             raise RuntimeError('Another runtime owner holds this store; serve startup refused.')

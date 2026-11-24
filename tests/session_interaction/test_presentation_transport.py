@@ -223,6 +223,93 @@ def test_claude_terminal_reader_detaches_and_refuses_input(transport):
     assert attachment_state(transport, second) == ('DETACHED', None, None)
 
 
+def test_claude_terminal_writer_uses_the_web_queue_and_fences_the_old_writer(transport, monkeypatch):
+    app, factory, scope = transport.app, transport.factory, transport.scope
+    reference = transport.auth.authority_reference(transport.token)
+    clock = SimpleNamespace(now_iso=lambda: '2026-01-01T00:00:00Z')
+    broker = app.state.local_codex_presentations.broker
+    readers = []
+
+    async def prove(selected):
+        assert selected == scope
+        return SimpleNamespace(adapter_id='claude_stream'), 'same-owned-terminal'
+
+    @asynccontextmanager
+    async def open_reader(selected):
+        assert selected == scope
+        readers.append('opened')
+
+        async def output():
+            yield b'Existing Claude terminal\r\n'
+            await anyio.sleep_forever()
+
+        try:
+            yield output()
+        finally:
+            readers.append('detached')
+
+    service = dashboard_session_presentations.LocalClaudePresentations(
+        broker, prove, open_reader, SimpleNamespace(clock=clock), lambda *_: 'input-revision')
+    app.state.local_claude_presentations = service
+
+    def grant(_uow, *, scope, author, resolve_human, **_):
+        assert scope == transport.scope and resolve_human(author.authority_ref)
+        return 'fixture-grant', 1
+
+    monkeypatch.setattr(session_interaction_authority, 'require_session_input_authority', grant)
+    web = session_interaction_authority.enqueue_human_input(factory=factory, access=service.execution_access,
+        authority_fence=transport.auth.authority_fence, current_capability_revision=service.next_turn_revision,
+        scope=scope, author=InputAuthor(reference, 'web'), client_intent_id='claude-web-intent',
+        capability_revision='input-revision', text='From Home')
+    path = PREFIX + f'/sessions/{scope.session.session_id}/attachments:review'
+
+    def review():
+        response = transport.client.post(path, headers={'x-nexus-ui': '1'},
+            json=document(scope) | {'access': 'write', 'presentation': 'claude'})
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    def offer(intent, epoch, *, takeover=False):
+        return prepare(transport, intent, presentation='claude', access='write',
+                       expected_writer_epoch=epoch, takeover=takeover)
+
+    payload = {'kind': 'enqueue', 'request_id': 1, 'client_intent_id': 'claude_input_' + 'a' * 32,
+               'capability_revision': 'input-revision', 'content': {'type': 'text', 'text': 'From the Claude terminal'}}
+    initial = review()
+    assert initial['attach_strategy'] == 'claude_local_write'
+    assert (initial['writer_epoch'], initial['writer_occupied']) == (0, False)
+    first = offer('first-claude-writer', initial['writer_epoch']).json()
+    with stream(transport, first, protocol=CLAUDE_PRESENTATION_SUBPROTOCOL) as writer:
+        attach(writer, scope)
+        assert writer.receive_bytes() == b'Existing Claude terminal\r\n'
+        writer.send_json(payload)
+        receipt = writer.receive_json()
+        assert receipt['kind'] == 'enqueue' and receipt['status'] == 'QUEUED'
+        assert receipt['enqueue_sequence'] == web.sequence + 1 and receipt['operation_id'] is None
+        current = review()
+        assert (current['writer_epoch'], current['writer_occupied']) == (1, True)
+        assert offer('claude-writer-no-takeover', 1).status_code == 409
+        replacement = offer('replacement-claude-writer', 1, takeover=True).json()
+        with stream(transport, replacement, protocol=CLAUDE_PRESENTATION_SUBPROTOCOL) as successor:
+            attach(successor, scope)
+            assert successor.receive_bytes() == b'Existing Claude terminal\r\n'
+            writer.send_json(payload | {'client_intent_id': 'stale-writer'})
+            with pytest.raises(WebSocketDisconnect):
+                writer.receive_json()
+            successor.send_json(payload | {'request_id': 2})
+            assert successor.receive_json() == receipt | {'request_id': 2}
+            successor.send_json(payload | {'request_id': 3, 'scope': document(transport.sibling)['scope']})
+            with pytest.raises(WebSocketDisconnect):
+                successor.receive_json()
+
+    assert attachment_state(transport, first)[0] == 'REPLACED'
+    assert attachment_state(transport, replacement)[0] == 'DETACHED'
+    assert readers.count('opened') == readers.count('detached') == 2
+    with factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute('SELECT surface,content FROM session_interaction_inputs ORDER BY enqueue_sequence')
+        assert [tuple(row) for row in rows] == [('web', 'From Home'), ('native_terminal', 'From the Claude terminal')]
+
+
 def test_authenticated_read_disconnect_and_replay_leave_work_untouched(transport):
     prepared = prepare(transport)
     assert prepared.status_code == 201 and prepared.headers['cache-control'] == 'no-store'

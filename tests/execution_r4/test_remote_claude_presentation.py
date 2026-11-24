@@ -1,9 +1,10 @@
-"""Remote Claude readers use the approved Connector channel and no work effects."""
+"""Remote Claude presentation shares the approved owner's canonical queue."""
 
 import asyncio
 import json
 import time
 from contextlib import asynccontextmanager
+from dataclasses import replace
 
 import httpx
 import pytest
@@ -15,7 +16,9 @@ from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
 
 from okto_nexus.adapters.inbound.cli import session as session_cli
+from okto_nexus.adapters.inbound.cli.session_commands import recover_session_command
 from okto_nexus.adapters.inbound.http import dashboard_session_presentations
+from okto_nexus.adapters.outbound.local_presenter_client import open_local_presentation, review_local_presentation
 from okto_nexus.application.terminal_connection import PREFIX
 from okto_nexus.domain.presentation_protocol import REMOTE_CLAUDE_SUBPROTOCOL
 
@@ -55,6 +58,7 @@ def test_remote_claude_reader_expires_and_can_reattach_to_same_owner(tmp_path, m
         fixture = tcp._runtime(tmp_path, request, fixture_patch)
         runtime = next(fixture)
         project = RemoteProject(runtime, tmp_path, monkeypatch, actions=8, adapter_id='claude_stream')
+        project.observed = replace(project.observed, architecture='x86_64')
 
         async def run():
             try:
@@ -79,9 +83,8 @@ def test_remote_claude_reader_expires_and_can_reattach_to_same_owner(tmp_path, m
                 path = PREFIX + f'/sessions/{session}/attachments:'
                 headers = project.http.request_headers()
                 async with httpx.AsyncClient(base_url=project.origin) as http:
-                    for changes, expected in (({'access': 'write'}, 409),
-                                              ({'expected_session_generation': generation + 1}, 409)):
-                        assert (await http.post(path + 'review', json=document | changes, headers=headers)).status_code == expected
+                    assert (await http.post(path + 'review', json=document | {
+                        'access': 'write', 'expected_session_generation': generation + 1}, headers=headers)).status_code == 409
                     assert (await http.post(path + 'review', json=document,
                         headers=headers | {'Origin': 'https://foreign.invalid'})).status_code == 403
                     assert (await http.post(path + 'review', json=document, headers={
@@ -127,6 +130,31 @@ def test_remote_claude_reader_expires_and_can_reattach_to_same_owner(tmp_path, m
                 assert control.online and not native.stopped and native.sent == [('send_turn', operation)]
                 assert len(project.rows('execution_operations')) == 2
                 assert not project.rows('session_interaction_inputs')
+
+                intent = 'claude_input_' + 'c' * 32
+
+                def enqueue():
+                    writer = review_local_presentation(project.http, scope=exact, expected_session_generation=generation,
+                        write=True, presentation='claude_remote')
+                    with open_local_presentation(project.http, scope=exact, expected_session_generation=generation,
+                            capability_revision=writer.capability_revision, client_intent_id='remote-claude-writer',
+                            writer=writer, claude=True, remote=True) as link:
+                        assert link.read_terminal_output() == b'One exact Claude terminal'
+                        return link.send_terminal_input(intent=intent, text='Queue this after the active turn',
+                                                        output=lambda _: None)
+
+                queued = await asyncio.to_thread(enqueue)
+                assert queued['status'] == 'QUEUED' and queued['operation_id'] is None
+                recovered = await asyncio.to_thread(recover_session_command, project.http, binding, session, generation, intent)
+                assert recovered['receipt']['input_id'] == queued['input_id']
+                assert recovered['receipt']['status'] == 'QUEUED'
+                await project.eventually(lambda: all(row['state'] == 'DETACHED'
+                                                     for row in project.rows('session_attachments')))
+                assert all(reader == 'detached' for reader in readers)
+                assert control.online and not native.stopped and native.sent == [('send_turn', operation)]
+                assert len(project.rows('execution_operations')) == 2
+                stored, = project.rows('session_interaction_inputs')
+                assert stored['surface'] == 'native_terminal' and stored['session_id'] == session
             finally:
                 await project.close()
 

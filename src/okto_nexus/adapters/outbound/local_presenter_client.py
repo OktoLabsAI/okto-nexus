@@ -187,16 +187,18 @@ class _LocalPresenter:
         except (OSError, ValueError, ProtocolError):
             raise _unavailable() from None
 
-    def send_pi_input(self, *, intent, text, output):
+    def send_terminal_input(self, *, intent, text, output):
         """Record plain text on the canonical queue while rendering concurrent output."""
         if self.input_revision is None:
-            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This Pi view is read-only.')
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This terminal view is read-only.')
         try:
             receipt = self._request('enqueue', flat=True, pi_output=output, client_intent_id=intent,
                                     capability_revision=self.input_revision, content={'type': 'text', 'text': text})
-            return _pi_queue_receipt(receipt)
+            return _queue_receipt(receipt)
         except (ConnectionError, KeyError, ValueError):
-            raise _pi_input_unknown() from None
+            raise _queue_input_unknown() from None
+
+    send_pi_input = send_terminal_input
 
     def edit_pi_input(self, *, intent, key, text, output):
         """Send editor gestures. Enter may record one draft in the Nexus queue."""
@@ -211,10 +213,10 @@ class _LocalPresenter:
             if queued is not None:
                 if key != 'enter' or reply['limit_reached'] or not isinstance(queued, dict):
                     raise ValueError
-                queued = _pi_queue_receipt(queued)
+                queued = _queue_receipt(queued)
             return reply['limit_reached'], queued
         except (ConnectionError, KeyError, ValueError):
-            raise (_pi_input_unknown() if key == 'enter' else _unavailable()) from None
+            raise (_queue_input_unknown() if key == 'enter' else _unavailable()) from None
 
     def review_pi_control(self, *, action, intent, output):
         if action not in ('steer', 'interrupt'):
@@ -427,7 +429,7 @@ def _pi_fragment(data, event):
     return None
 
 
-def _pi_queue_receipt(receipt):
+def _queue_receipt(receipt):
     input_id = receipt['input_id']
     status = InputDeliveryState(receipt['status'])
     sequence, operation_id = receipt['enqueue_sequence'], receipt['operation_id']
@@ -439,7 +441,7 @@ def _pi_queue_receipt(receipt):
             'operation_id': operation_id, 'possible_effect': receipt['possible_effect']}
 
 
-def _pi_input_unknown():
+def _queue_input_unknown():
     return ConnectionError('OUTCOME_UNKNOWN',
         'The queue receipt is unconfirmed. Recover the same message intent before sending again.',
         possible_effect=True)
@@ -509,7 +511,7 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
     origin = _presentation_origin(api, scope, remote=remote)
     if pi_editor and (pi_viewport is None or writer is None):
         raise _unavailable()
-    if claude and (writer is not None or pi_viewport is not None):
+    if claude and pi_viewport is not None:
         raise _unavailable()
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname

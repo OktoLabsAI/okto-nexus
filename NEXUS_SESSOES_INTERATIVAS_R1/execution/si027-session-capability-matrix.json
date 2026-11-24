@@ -286,9 +286,10 @@
         "detach_keeps_running": { "status": "qualified", "evidence": ["si026-claude-terminal-retained-output.md"] },
         "joint_ui_native_arbitration": {
           "status": "blocked",
-          "reason": "A apresentação qualificada é de leitura. Escrita pelo frontend nativo permanece aberta.",
+          "reason": "A apresentação do CLI é de leitura. A ponte de escrita compartilha a fila canônica e foi exercitada no transporte. Falta o compositor interativo do CLI.",
           "evidence": [
-            "si026-claude-terminal-retained-output.md"
+            "si026-claude-terminal-retained-output.md",
+            "si026-claude-presenter-queue.md"
           ]
         }
       }
@@ -337,9 +338,10 @@
         "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
         "joint_ui_native_arbitration": {
           "status": "blocked",
-          "reason": "A apresentação remota é de leitura. Escrita pelo frontend nativo permanece aberta.",
+          "reason": "A ponte remota enfileirou um envio no Claude gerenciado real neste Windows. A apresentação do CLI é de leitura e o compositor interativo segue pendente.",
           "evidence": [
-            "si022-si026-claude-remote-presentation.md"
+            "si022-si026-claude-remote-presentation.md",
+            "si026-claude-presenter-queue.md"
           ]
         },
         "remote_attach": {

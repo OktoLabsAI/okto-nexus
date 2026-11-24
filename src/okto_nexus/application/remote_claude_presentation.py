@@ -18,15 +18,19 @@ class RemoteClaudePresentation(RemotePresentationOwner):
     def _supports(mapping, link):
         return link.claude_enabled and reviewed_claude_terminal_context(mapping)
 
-    def capability_revision(self, uow, scope, author, access, audience):
-        if author.surface != 'native_terminal' or access != 'read' or audience != REMOTE_CLAUDE_AUDIENCE:
+    def capability_revision(self, uow, scope, author, access, audience, *, next_turn_revision=None):
+        if author.surface != 'native_terminal' or audience != REMOTE_CLAUDE_AUDIENCE:
             return None
         try:
             mapping, lease_scope, link = self._select(uow, scope)
         except (CoreError, OktoNexusError):
             return None
-        return 'sha256:' + digest({'mapping': asdict(mapping), 'lease_scope': lease_scope,
-                                  'link': link.instance, 'audience': audience})
+        context = {'mapping': asdict(mapping), 'lease_scope': lease_scope, 'link': link.instance, 'audience': audience}
+        if access == 'write':
+            if next_turn_revision is None or (input_revision := next_turn_revision(uow, scope)) is None:
+                return None
+            context.update(access=access, next_turn_revision=input_revision)
+        return 'sha256:' + digest(context)
 
     async def _require(self, selected, scope, author):
         if await asyncio.to_thread(self._authorize, scope, author) != selected:
