@@ -172,6 +172,22 @@ before the migration. Reconcile accepted work and stop the runtime before
 restoring a database copy. Keep the current database and use the interface
 rollback if the database contains work recorded after that backup.
 
+## Control the session queue
+
+Check the selected queue from the terminal. Changes require confirmation in
+an interactive terminal and apply to the reviewed session owner and queue
+revision.
+
+```sh
+okto-nexus session queue --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR --json
+okto-nexus session queue --pause --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session queue --resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+```
+
+Pausing holds pending messages. After an interrupt, resume the queue when
+eligible messages should continue in order. If a change is unconfirmed,
+inspect the same session with `session queue` before requesting a change.
+
 ## Follow a live Codex session
 
 Use a saved human operator login for the Nexus server and select the exact

@@ -42,6 +42,7 @@ from .session_commands import (
     COMMANDS,
     PI_INTERRUPT_INTENT,
     execute_session_command,
+    session_queue,
     recover_pi_input,
     recover_pi_interrupt,
     recover_session_command,
@@ -473,7 +474,7 @@ def _target(args, service_args, profile):
 
 def run_session(argv):
     parser = argparse.ArgumentParser(prog='okto-nexus session', description='Inspect or control an exact session.')
-    parser.add_argument('action', choices=('list', 'open', 'attach', 'resume', *COMMANDS, 'receipt'))
+    parser.add_argument('action', choices=('list', 'open', 'attach', 'resume', *COMMANDS, 'receipt', 'queue'))
     connection = parser.add_mutually_exclusive_group()
     connection.add_argument('--id', dest='connect_id', help='public Harness ID in the selected workspace')
     connection.add_argument('--profile', help='existing project profile')
@@ -492,6 +493,9 @@ def run_session(argv):
     parser.add_argument('--owner-generation', type=int, help='original session owner generation for receipt recovery')
     parser.add_argument('--viewer-executable', type=Path, help='absolute path to the reviewed local viewer')
     parser.add_argument('--write', action='store_true', help='enable plain-text input for a supported viewer')
+    queue = parser.add_mutually_exclusive_group()
+    queue.add_argument('--pause', dest='queue_paused', action='store_const', const=True, help='pause the selected session queue')
+    queue.add_argument('--resume', dest='queue_paused', action='store_const', const=False, help='resume the selected session queue')
     parser.add_argument('--json', action='store_true')
     args, service_args = parser.parse_known_args(argv)
     if args.binding_id is not None:
@@ -528,6 +532,11 @@ def run_session(argv):
         parser.error('--message-file requires send or steer')
     if args.action in COMMANDS and args.json:
         parser.error('write actions require terminal confirmation')
+    if args.queue_paused is not None:
+        if args.action != 'queue':
+            parser.error('--pause and --resume require the queue action')
+        if args.json or not sys.stdin.isatty() or not sys.stdout.isatty():
+            parser.error('queue changes require an interactive terminal for confirmation')
     if args.action == 'receipt':
         if (not valid_receipt_intent(args.intent)
                 or not 0 < (args.owner_generation or 0) < 2**63):
@@ -548,7 +557,8 @@ def run_session(argv):
             project, profile = project_profile(args.project, args.profile)
             service = _target(args, service_args, profile)
         status = service.inspect()
-        drain_read = args.action in ('list', 'receipt') and status['state'] == 'stopping' and status.get('ready_for_queries')
+        read_only = args.action in ('list', 'receipt') or args.action == 'queue' and args.queue_paused is None
+        drain_read = read_only and status['state'] == 'stopping' and status.get('ready_for_queries')
         if status['state'] != 'ready' and not drain_read:
             raise ConnectionError('SERVICE_NOT_READY', 'The selected Server is unavailable for session reads.')
         if args.binding_id is not None:
@@ -614,6 +624,11 @@ def run_session(argv):
             result = recover_session_command(call, binding, args.session_id, args.owner_generation, args.intent)
             _display(result, args.json)
             return 0
+        if args.action == 'queue':
+            result = session_queue(call, binding, args.session_id, paused=args.queue_paused,
+                                   interactive=args.queue_paused is not None, read=input)
+            _display(result, args.json)
+            return int(result['state'] == 'unconfirmed')
         _display(_view(call, binding, after_session_id=args.after_session_id or ''), args.json)
         return 0
     except ConnectionError as error:

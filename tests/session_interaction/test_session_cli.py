@@ -912,6 +912,96 @@ def test_pi_interrupt_receipt_uses_the_native_presenter_scope(monkeypatch, capsy
     assert result['command'] == 'interrupt' and 'queue is paused' in result['message']
 
 
+@pytest.mark.parametrize(('case', 'flag', 'exit_code', 'message'), [
+    ('resume', '--resume', 0, 'Queue resumed.'),
+    ('pause', '--pause', 0, 'Queue paused.'),
+    ('already', '--resume', 0, 'The queue is unpaused.'),
+    ('cancel', '--resume', 0, 'Queue change cancelled.'),
+    ('unavailable', '--resume', 3, 'Queue changes are unavailable'),
+    ('other_owner', '--resume', 3, 'did not confirm the selected queue'),
+    ('stale_revision', '--resume', 3, 'The queue changed.'),
+    ('lost_reply', '--resume', 1, 'Queue change unconfirmed.'),
+    ('interrupted_reply', '--resume', 1, 'Queue change unconfirmed.'),
+    ('wrong_receipt', '--resume', 1, 'Queue change unconfirmed.'),
+])
+def test_session_queue_requires_the_current_exact_review(monkeypatch, capsys, case, flag, exit_code, message):
+    scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {'session_id': 'session-a'}
+    current = {'scope': scope, 'session_owner_generation': 7, 'queue_revision': 4,
+               'paused': case not in ('pause', 'already')}
+    writes, prompts, queue_reads = [], [], []
+
+    class QueueCatalog(Catalog):
+        token = 'fixture-cookie'
+
+        def __call__(self, method, url, body=None):
+            target = urlsplit(url)
+            if target.path.endswith('/inputs'):
+                assert method == 'GET' and body is None
+                assert target.path.endswith('/sessions/session-a/inputs')
+                query = parse_qs(target.query)
+                assert query == {key: [value] for key, value in scope.items() if key != 'session_id'} | {
+                    'expected_session_generation': ['7'], 'limit': ['1']}
+                queue_reads.append(query)
+                return current | {'pause_capability_revision': None if case == 'unavailable' else 'reviewed-queue',
+                                  'session_owner_generation': 8 if case == 'other_owner' else 7}
+            if target.path.endswith('/inputs/queue-state'):
+                assert method == 'POST' and not target.query and len(prompts) == 1
+                assert body == {'scope': scope, 'expected_session_generation': 7, 'expected_queue_revision': 4,
+                                'capability_revision': 'reviewed-queue', 'paused': flag == '--pause'}
+                writes.append(body)
+                if case == 'stale_revision':
+                    raise ConnectionError('CONFLICT', 'The queue changed.', http_status=409)
+                if case == 'lost_reply':
+                    raise ConnectionError('OUTCOME_UNKNOWN', 'Response lost', possible_effect=True)
+                if case == 'interrupted_reply':
+                    raise KeyboardInterrupt
+                return current | {'paused': body['paused'], 'queue_revision': 4 if case == 'wrong_receipt' else 5}
+            return super().__call__(method, url, body)
+
+    def confirm(prompt):
+        prompts.append(prompt)
+        return '' if case == 'cancel' else 'yes'
+
+    terminal = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=terminal, stdout=terminal))
+    service = SimpleNamespace(operator_http=QueueCatalog(), inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    monkeypatch.setattr('builtins.input', confirm)
+    assert main(['session', 'queue', '--id', 'reviewer', '--session-id', 'session-a', flag]) == exit_code
+    assert message in capsys.readouterr().out
+    assert len(queue_reads) == 1
+    expected_write = case in ('pause', 'resume', 'stale_revision', 'lost_reply', 'interrupted_reply', 'wrong_receipt')
+    assert len(writes) == int(expected_write)
+    assert len(prompts) == int(expected_write or case == 'cancel')
+
+
+def test_session_queue_json_observes_state_without_a_confirmation(monkeypatch, capsys):
+    class QueueCatalog(Catalog):
+        token = 'fixture-cookie'
+
+        def __call__(self, method, url, body=None):
+            if urlsplit(url).path.endswith('/inputs'):
+                assert method == 'GET' and body is None
+                scope = {key: value for key, value in BINDING.items() if key != 'endpoint_id'} | {'session_id': 'session-a'}
+                return {'scope': scope, 'session_owner_generation': 7, 'queue_revision': 4, 'paused': True}
+            return super().__call__(method, url, body)
+
+    terminal = SimpleNamespace(isatty=lambda: False)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=terminal, stdout=terminal))
+    service = SimpleNamespace(operator_http=QueueCatalog(), inspect=lambda: {
+        'state': 'stopping', 'server_id': 'server', 'ready_for_queries': True})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    args = ['session', 'queue', '--id', 'reviewer', '--session-id', 'session-a']
+    assert main(args + ['--json']) == 0
+    view = json.loads(capsys.readouterr().out)
+    assert view['paused'] is True and view['queue_revision'] == 4
+    assert view['state'] == 'observed' and view['scope']['session_id'] == 'session-a'
+    for flags in (['--resume'], ['--resume', '--json'], ['--resume', '--pause']):
+        with pytest.raises(SystemExit) as error:
+            main(args + flags)
+        assert error.value.code == 2
+
+
 def test_pi_terminal_keeps_split_utf8_and_recovers_style_after_ctrl_c(monkeypatch):
     output = StringIO()
     monkeypatch.setattr(session, 'sys', SimpleNamespace(platform='linux', stdout=output))

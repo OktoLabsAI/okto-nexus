@@ -1,0 +1,189 @@
+{
+  "date": "2026-11-24",
+  "tasks": [
+    "SI-011",
+    "SI-031",
+    "SI-040"
+  ],
+  "scenarios": [
+    "SI-T-C15"
+  ],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "48a37ee9137873826effe120faa1e6535d0c2291",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_drift": [
+        628,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_drift": [
+        113,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "main_drift": [
+        95,
+        0
+      ]
+    },
+    "nexus_worktree_clean": true,
+    "nexus_upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "scope": "Exact-session control of queue state through the public CLI using the canonical scoped queue API.",
+  "interface": {
+    "observe": "session queue",
+    "pause": "session queue --pause",
+    "resume": "session queue --resume",
+    "mutation": "explicit TTY confirmation and one POST of the reviewed scope, owner generation and queue revision",
+    "ambiguous_reply": "report unconfirmed, check current exact queue state before requesting a separate change"
+  },
+  "artifacts": {
+    "nexus_sdist_sha256": "d508f90e2d0b07b68180bf6dc9fe47ec622da18713479fe6fdbe7c0a77de8a56",
+    "base_nexus_wheel_sha256": "8fc33ab6305feef4941f1b37f7d3f686720e69a19ccea2214e30e93e82332fd9",
+    "package_files": 817,
+    "changed": [
+      "okto_nexus/adapters/inbound/cli/session.py",
+      "okto_nexus/adapters/inbound/cli/session_commands.py"
+    ],
+    "line_ending_only": [
+      "okto_nexus/adapters/inbound/cli/claude_viewer_terminal.py",
+      "okto_nexus/adapters/outbound/local_presenter_client.py"
+    ],
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "initial_nexus_wheel_sha256": "b6786f9f790c6da6d1fe8ad92b942f00b938aa8681b8a74016aa128af96ae7a2",
+    "nexus_wheel_sha256": "7e21dbc72219708faf086028cf45e7ffa9377d19c808734df6b8c65835296bec"
+  },
+  "checks": {
+    "source": {
+      "tests": 97,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "installed": {
+      "tests": 97,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "installed_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "initial_installed_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lock": "PASS",
+    "strict_twine": "PASS",
+    "dependency_check": "PASS (48 packages)"
+  },
+  "native_environment": {
+    "name": "Claude Code",
+    "version": "2.1.328",
+    "sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "windows_build": 26300,
+    "arch": "x64",
+    "profile": "reviewed plan profile, tool calls denied",
+    "model": "deterministic loopback fixture",
+    "external_model_requests": 0
+  },
+  "native_proof": {
+    "requesting_refused": true,
+    "older_steer_only_peer_refused_interrupt": true,
+    "stale_queue_and_wrong_turn_refused_before_escape": true,
+    "public_writer_confirmation_and_console_restore": true,
+    "original_cancelled": true,
+    "paused_before_one_escape_and_input_retained": true,
+    "presenter_receipt_recovered_once": true,
+    "public_queue_resume_required_tty_confirmation": true,
+    "reader_on_original_pty_and_result_in_native_history": true,
+    "native_terminal_surface": true,
+    "explicit_resume_delivered_same_pending_item_once": true,
+    "same_pty": true,
+    "control_receipt": {
+      "target_status": "interrupted",
+      "queue_paused": true,
+      "pending_count": 1
+    },
+    "canonical_close": true,
+    "sqlite_check": "ok"
+  },
+  "durability": {
+    "operation_counts": {
+      "runtime.open": 1,
+      "turn.submit": 2,
+      "turn.interrupt": 1,
+      "runtime.close": 1
+    },
+    "closed_sessions": 1,
+    "native_launches": 1,
+    "selected_original_turn_cancelled": true,
+    "input_final_state": "ACCEPTED_NATIVE",
+    "input_surface": "web",
+    "read_detaches": 1,
+    "write_detaches": 1,
+    "scope_grant_count": 1,
+    "foreign_key_violations": 0
+  },
+  "commands": [
+    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B -m pytest -q --tb=short tests/session_interaction/test_session_cli.py tests/session_interaction/test_queue_controls.py --basetemp D:/nxs-si011-queue-cli-48a37ee9/source-final --junitxml D:/nxs-si011-queue-cli-48a37ee9/source-final.xml",
+    "rtk proxy uv build --offline D:/nxs-si011-queue-cli-48a37ee9/final/worktree --out-dir D:/nxs-si011-queue-cli-48a37ee9/final/dist",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si011-queue-cli-48a37ee9/final/install.ps1",
+    "rtk proxy D:/nxs-si011-queue-cli-48a37ee9/final/venv/Scripts/python.exe -B -m pytest -p assert_wheel_imports -o pythonpath= -q --tb=short tests/session_interaction/test_session_cli.py tests/session_interaction/test_queue_controls.py --basetemp D:/nxs-si011-queue-cli-48a37ee9/final/installed --junitxml D:/nxs-si011-queue-cli-48a37ee9/final/installed.xml",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si011-queue-cli-48a37ee9/final/native/run.ps1 -Trial resume2",
+    "rtk proxy D:/nxs-si011-queue-cli-48a37ee9/final/venv/Scripts/python.exe -B D:/nxs-si011-queue-cli-48a37ee9/final/native/prove_durability.py resume2 interrupt"
+  ],
+  "limits": [
+    "The native trial covers one pending item admitted by the Home API, Windows ConPTY and Connector on the same host.",
+    "The public CLI resumes the queue in the native trial. Pause, status, stale review and lost-reply paths also have focused regression coverage.",
+    "The model used deterministic loopback responses. Real-provider and participant gates remain unchanged in the ledger."
+  ],
+  "migration": "none",
+  "artifact_directory": "D:/nxs-si011-queue-cli-48a37ee9",
+  "evidence_sha256": {
+    "source-final.log": "df28b3305a64046bcebd788442245848fb968f66ea72fe2832382a7b44f7f192",
+    "source-final.xml": "64d5f46b5ee8a770eb45a1fd21e8f3a256ca3329d2eaeccd45e9694cf304bdc4",
+    "final/build.log": "3bde3649502542861788408adb8d64f302cedcc5036780b655e4ead56cb67fa0",
+    "final/install.ps1": "7d7256867a539172d776bfe4ce88d4d34536441b8b688970d3822098a3efea3f",
+    "final/install.log": "c1538eb8166dc2c98d0014dff4b1375f991f1848365bf8a671bd73bb486595d8",
+    "final/installed-lock.txt": "2454855246fe768a8816b3beba28285186484b7443b0eef5564e91e233939069",
+    "final/wheel-audit.json": "784c8fc3058457e09731a87b7f039ba52cdf70b687b3539626a4bab6b0d14916",
+    "final/installed.log": "067d6095bb17f917949b421008a356bcbb7f96a5ec158b7d62fe1099165060eb",
+    "final/installed.xml": "9c1f96bca7d01417b409009a4fa6cdd793a42338d1266000c4657ba257e50a1f",
+    "final/native/run.ps1": "0738276f3c2c5f99be32710c949d4d2b3d44008df9df1f4b921b81e4cd8ee524",
+    "final/native/test_queue_resume.py": "908591ced72dce0f168340a1f8ae81b9e457e4ce9fee4c856d31f0ffa3e6ab9e",
+    "final/native/drive_writer.py": "03d2375c4461512041b837c0502a93d56850aeb2615b54ca3c1196fd821496ab",
+    "final/native/remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "final/native/isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "final/native/pty_probe.py": "d74b379ddaf1d100e6320048afb865a58ec95e71ba9565f718c5916afd362a57",
+    "final/native/prove_durability.py": "aca5c87bc6bb47788c7f86c9610f3e15e20beaa1443e22ef6e2a13e8eb2b3a4c",
+    "native/resume1/native.log": "a47cdf99686fff87608716e276379203726be80a404feecdf4edc3e05721d19c",
+    "native/resume1/native.xml": "ddffbe6efb5f6dfcc91d9aca2777ba71f58c228414bed89e0c703b9c9cb175b9",
+    "native/resume1/durability.json": "a1b8242f2debabd6b335183e49f9e583d45b2d53527e5d3a89da0f860cfa1fce",
+    "final/native/resume2/native.log": "cf10b0b33313e04b1fdff60d8c45dde6025d92d78b2b0521f9f77dccb0df45e3",
+    "final/native/resume2/native.xml": "fdb901a1a99b5327e4b7e79837f4e04c1a03ba4e65673701980903b6d501880a",
+    "final/native/resume2/result.json": "d51f48a5b1199d8b9480c44eb4b3c1c01602f5e7eafca8ab6b151c604827c203",
+    "final/native/resume2/durability.json": "dcc0541b76e0f7ca98d94e24cb7a963e0cded4909598232e1a09fc479723e180",
+    "final/native/resume2/terminal-redacted.txt": "7fa7e6b3f52bc35fdf364f2dd83c8c3eaef568bbb8aa536cf521d151dc3c7846",
+    "final/native/resume2/queue-cli-redacted.txt": "3486ff606c6db386306e5f4b736ab5cec2f5b992ff250f48dd849deff3cd4fd3"
+  }
+}

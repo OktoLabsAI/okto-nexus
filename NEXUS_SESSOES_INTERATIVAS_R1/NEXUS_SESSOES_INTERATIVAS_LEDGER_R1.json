@@ -724,7 +724,9 @@
         "execution/si011-interrupt-refusal-keeps-turn.md",
         "execution/si011-interrupt-refusal-keeps-turn.json",
         "execution/si011-concurrent-native-decision.md",
-        "execution/si011-concurrent-native-decision.json"
+        "execution/si011-concurrent-native-decision.json",
+        "execution/si011-terminal-queue.md",
+        "execution/si011-terminal-queue.json"
       ]
     },
     {
@@ -2084,7 +2086,9 @@
         "execution/si026-claude-viewer-controls.md",
         "execution/si026-claude-viewer-controls.json",
         "execution/si032-claude-abrupt-writer-exit.md",
-        "execution/si032-claude-abrupt-writer-exit.json"
+        "execution/si032-claude-abrupt-writer-exit.json",
+        "execution/si011-terminal-queue.md",
+        "execution/si011-terminal-queue.json"
       ]
     },
     {
@@ -2666,7 +2670,9 @@
         "execution/si039-wheel-regression-audit.md",
         "execution/si039-wheel-regression-audit.json",
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si011-terminal-queue.md",
+        "execution/si011-terminal-queue.json"
       ]
     },
     {
@@ -3787,7 +3793,8 @@
         "execution/si024-codex-native-interrupt-confirmation.md",
         "execution/si024-codex-native-interrupt-confirmation.json",
         "execution/si025-pi-editor-interrupt.json",
-        "execution/si022-codex-remote-writer.json"
+        "execution/si022-codex-remote-writer.json",
+        "execution/si011-terminal-queue.json"
       ]
     },
     {

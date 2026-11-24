@@ -70,6 +70,67 @@ def _unavailable():
     return ConnectionError('SESSION_COMMAND_UNAVAILABLE', 'This action has no current review for the selected session.')
 
 
+def _valid_queue_state(value, scope, generation):
+    return (isinstance(value, dict) and _matches(value, scope, generation)
+            and type(value.get('paused')) is bool
+            and type(value.get('queue_revision')) is int and value['queue_revision'] >= 0)
+
+
+def session_queue(call, binding, session_id, *, paused=None, interactive=False, read=input, write=print):
+    """Read the selected queue or confirm one change against its reviewed revision."""
+    if paused is not None and not interactive:
+        raise ConnectionError('SESSION_COMMAND_TTY_REQUIRED', 'Use an interactive terminal to confirm a queue change.')
+    url, scope, generation = _session(call, binding, session_id)
+    queue_url = url + '/inputs?' + _query(scope, generation, limit=1)
+    try:
+        snapshot = call('GET', queue_url)
+    except ConnectionError as error:
+        if error.http_status in (404, 405) and not error.possible_effect:
+            raise ConnectionError('SESSION_QUEUE_UNAVAILABLE', 'The queue is unavailable for the selected session.',
+                                  http_status=error.http_status) from None
+        raise
+    if not _valid_queue_state(snapshot, scope, generation):
+        raise ConnectionError('SESSION_QUEUE_UNAVAILABLE', 'The Server did not confirm the selected queue.')
+    revision = snapshot['queue_revision']
+    state = {'scope': scope, 'session_owner_generation': generation, 'queue_revision': revision,
+             'paused': snapshot['paused']}
+    if paused is None or paused == snapshot['paused']:
+        return {'state': 'observed', **state,
+                'message': 'The queue is paused.' if state['paused'] else 'The queue is unpaused.'}
+
+    capability = snapshot.get('pause_capability_revision')
+    if not _identifier(capability):
+        raise ConnectionError('SESSION_QUEUE_UNAVAILABLE', 'Queue changes are unavailable for the selected session.')
+    write('Session ' + display_text(session_id))
+    prompt = ('Pause delivery of pending messages? [y/N] ' if paused
+              else 'Resume delivery of eligible queued messages? [y/N] ')
+    try:
+        confirmed = read(prompt).strip().lower() in ('y', 'yes')
+    except EOFError:
+        confirmed = False
+    if not confirmed:
+        return {'state': 'cancelled', 'message': 'Queue change cancelled.'}
+
+    try:
+        receipt = call('POST', url + '/inputs/queue-state', {
+            'scope': scope, 'expected_session_generation': generation, 'expected_queue_revision': revision,
+            'capability_revision': capability, 'paused': paused,
+        })
+    except ConnectionError as error:
+        if not error.possible_effect and (error.http_status is None or error.http_status < 500):
+            raise
+        receipt = None
+    except KeyboardInterrupt:
+        receipt = None
+    if (_valid_queue_state(receipt, scope, generation) and receipt['paused'] is paused
+            and receipt['queue_revision'] > revision):
+        return {'state': 'recorded', **state, 'queue_revision': receipt['queue_revision'], 'paused': paused,
+                'message': 'Queue paused.' if paused else 'Queue resumed. Eligible messages can be delivered.'}
+    return {'state': 'unconfirmed', 'scope': scope, 'session_owner_generation': generation,
+            'reviewed_queue_revision': revision,
+            'message': 'Queue change unconfirmed. Check the same session with session queue before requesting another change.'}
+
+
 def _review(call, url, scope, generation, command):
     query = _query(scope, generation)
     try:
