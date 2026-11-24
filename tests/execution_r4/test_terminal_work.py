@@ -445,6 +445,76 @@ def test_terminal_event_continuation_names_the_session_epoch_and_sequence(termin
     assert '--after-sequence 13' in output
 
 
+@pytest.fixture
+def terminal_watch(monkeypatch):
+    from okto_nexus.adapters.inbound.cli import work as cli
+
+    reads, delays = [], []
+    monkeypatch.setattr(cli, 'time', SimpleNamespace(monotonic=lambda: 0, sleep=delays.append))
+
+    def page(state, *, cursor, sequences=(), has_more=False, session_id='chosen', requests=()):
+        scope = dict(server_id='server', executor_id='executor', binding_id='binding',
+                     workspace_binding_id='workspace-binding', session_id=session_id, session_owner_generation=3)
+        events = dict(scope=scope, stream_epoch='exact-epoch', events=[dict(sequence=seq) for seq in sequences],
+                      count=len(sequences), next_after_sequence=cursor, committed_contiguous=2,
+                      has_more=has_more, gap_pending=False)
+        return dict(state=state, events=events, requests=dict(items=list(requests)))
+
+    def watch(*observations, **options):
+        stream = iter(observations)
+
+        def observe(**query):
+            reads.append(query)
+            return next(stream)
+
+        return cli.watch(SimpleNamespace(observe=observe), as_json=True, **options)
+
+    return SimpleNamespace(cli=cli, page=page, watch=watch, reads=reads, delays=delays)
+
+
+def test_work_watch_drains_committed_pages_after_completion(terminal_watch, capsys):
+    t = terminal_watch
+    assert t.watch(t.page('completed', cursor=1, sequences=[1], has_more=True),
+                   t.page('completed', cursor=2, sequences=[2])) == 0
+    assert [(read['after_sequence'], read['stream_epoch']) for read in t.reads] == [(0, None), (1, 'exact-epoch')]
+    pages = [json.loads(line)['events'] for line in capsys.readouterr().out.splitlines()]
+    assert [event['sequence'] for page in pages for event in page['events']] == [1, 2]
+    assert t.delays == []
+
+
+def test_work_watch_keeps_the_epoch_and_suppresses_an_empty_poll(terminal_watch, capsys):
+    t = terminal_watch
+    assert t.watch(t.page('observing', cursor=1, sequences=[1]), t.page('observing', cursor=1),
+                   t.page('completed', cursor=2, sequences=[2])) == 0
+    assert [(read['after_sequence'], read['stream_epoch']) for read in t.reads] == [
+        (0, None), (1, 'exact-epoch'), (1, 'exact-epoch')]
+    assert len(capsys.readouterr().out.splitlines()) == 2
+    assert len(t.delays) == 2
+
+
+def test_work_watch_refuses_a_changed_session(terminal_watch, capsys):
+    t = terminal_watch
+    with pytest.raises(ConnectionError, match='The observed session changed'):
+        t.watch(t.page('observing', cursor=1, sequences=[1]),
+                t.page('completed', cursor=2, sequences=[2], session_id='sibling'))
+    assert 'sibling' not in capsys.readouterr().out
+
+
+def test_work_watch_addresses_pending_question_in_the_observed_session(terminal_watch, monkeypatch):
+    t = terminal_watch
+    answers = []
+
+    def decide(_flow, approval_id, *, session_id):
+        answers.append((approval_id, session_id, len(t.reads)))
+        return True
+
+    monkeypatch.setattr(t.cli, 'decide_interactively', decide)
+    assert t.watch(t.page('needs_input', cursor=1, sequences=[1], has_more=True,
+                          requests=[dict(approval_id='question')]),
+                   t.page('completed', cursor=2, sequences=[2]), interactive=True) == 0
+    assert answers == [('question', 'chosen', 1)]
+
+
 def test_unconfirmed_resolution_requires_exact_original_request(work):
     t = work
     t.fault.before = 'intents:resolve'

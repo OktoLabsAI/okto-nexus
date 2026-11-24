@@ -57,5 +57,60 @@
   ],
   "continuation_prints_full_cursor": true,
   "external_provider_requests": 0,
-  "migration": "none"
+  "migration": "none",
+  "watch_pagination": {
+    "baseline": "9dbdd60e81b612d0c2d687d40245f8db162aaa0d",
+    "scope": "Windows, installed CLI, deterministic pagination/observed-target cases and API/SQLite with synthetic peers",
+    "local_evidence_directory": "D:/nxs-si012-watch-9dbdd60e",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k test_work_watch --junitxml D:\\nxs-si012-watch-9dbdd60e/before.xml",
+      "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py -k 'test_work_watch or terminal_event or cli_submission_resume_watch_and_project_mismatch or test_cli_drain_observes' --junitxml D:\\nxs-si012-watch-9dbdd60e/source.xml",
+      "uv build --offline --wheel --out-dir D:\\nxs-si012-watch-9dbdd60e/dist",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'test_work_watch or terminal_event or cli_submission_resume_watch_and_project_mismatch or test_cli_drain_observes' --junitxml D:\\nxs-si012-watch-9dbdd60e/installed.xml"
+    ],
+    "before": {
+      "tests": 4,
+      "passed": 0,
+      "failed": 4,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "before.xml",
+      "junit_sha256": "2f96971a107ec9e4dd728c0ce80257da1bb4cd16f9f878d120bf069b06526513"
+    },
+    "source": {
+      "tests": 16,
+      "passed": 16,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "source.xml",
+      "junit_sha256": "acfc5bc4953dcd40d96b1dddedcb68a044f5f9ba0dad317b8e8f62a834d8225c"
+    },
+    "installed": {
+      "tests": 16,
+      "passed": 16,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "installed.xml",
+      "junit_sha256": "dfc5b14eafd50eb2fe1e4d7676b4979699fcd029a0fd06fe084751d0ec7d89d5"
+    },
+    "wheel_sha256": {
+      "nexus": "8d99524d5388eb3b67059c556b1c9b339e396dc02be46eba772db9a51ae8fd56",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "checked_sources": {
+      "src/okto_nexus/adapters/inbound/cli/work.py": "05b0d1f19d4f4a42e8e79c43cb9c591010c2bdcb1c01531aeefec6fedcd2371f",
+      "tests/execution_r4/test_terminal_work.py": "f0b33a68d1b6ec907869950a8f083cb755c097e255be2e02baaeae2e691429b7"
+    },
+    "cases": [
+      "successful completion drains subsequent pages with the first observed epoch",
+      "empty poll at the same cursor keeps the epoch and suppresses duplicate presentation",
+      "changed session rejected before presentation",
+      "pending question uses the observed session before fetching the next page"
+    ],
+    "external_provider_requests": 0,
+    "migration": "none"
+  }
 }

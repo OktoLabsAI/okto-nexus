@@ -107,12 +107,27 @@ def authorize_interactively(flow, *, minutes=60, max_executions=20):
 def watch(flow, *, timeout=300, as_json=False, interactive=False, session_id=None,
           slot_name='work', after_sequence=0, stream_epoch=None):
     deadline, previous = time.monotonic() + timeout, None
+    watched_scope = None
     while True:
         value = flow.observe(session_id=session_id, slot_name=slot_name,
                              after_sequence=after_sequence, stream_epoch=stream_epoch)
-        # Only suppress repeated presentation in this observer; no local event
-        # or conversation history is persisted, and observation never dispatches.
-        digest = document_revision(value)
+        page = value.get('events')
+        observation = value
+        if page is not None:
+            scope = tuple(page['scope'][key] for key in (
+                'server_id', 'executor_id', 'binding_id', 'workspace_binding_id',
+                'session_id', 'session_owner_generation'))
+            if watched_scope is not None and scope != watched_scope:
+                raise ConnectionError('WORK_EVENT_PAGE_MISMATCH', 'The observed session changed. Review the session before watching again.')
+            watched_scope = scope
+            if page['stream_epoch'] is not None:
+                stream_epoch = page['stream_epoch']
+                after_sequence = page['next_after_sequence']
+            # After advancing, an empty poll at the same cursor is not a
+            # second update. Keep lifecycle and gap changes in the comparison.
+            observation = value | {'events': {key: field for key, field in page.items() if key not in ('count', 'events')}}
+        more_events = page is not None and page['has_more']
+        digest = document_revision(observation)
         if digest != previous:
             display(value, as_json)
             previous = digest
@@ -121,17 +136,21 @@ def watch(flow, *, timeout=300, as_json=False, interactive=False, session_id=Non
                 return 3
             handled = False
             for detail in value['requests']['items']:
-                handled = decide_interactively(flow, detail['approval_id'], session_id=session_id) or handled
+                handled = decide_interactively(flow, detail['approval_id'], session_id=page['scope']['session_id']) or handled
             if not handled:
                 return 3
-        elif value['state'] in ('completed', 'idle'):
+        elif value['state'] == 'idle' or value['state'] == 'completed' and not more_events:
             return 0
         elif value['state'] in ('failed', 'blocked', 'submission_unconfirmed', 'decision_refused'):
             return 3
         if time.monotonic() >= deadline:
+            if value['state'] == 'completed':
+                return 0
             if not as_json:
                 print('Observation time ended. The service still owns the work; use work watch to return.')
             return 3
+        if more_events:
+            continue
         time.sleep(min(.5, max(0, deadline - time.monotonic())))
 
 

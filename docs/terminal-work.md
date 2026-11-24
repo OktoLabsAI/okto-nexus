@@ -398,7 +398,9 @@ reconnect, observation or service restart.
 
 `status` and `watch` distinguish admission, native stage, session readiness,
 pending questions and canonical results. `watch` in JSON mode prints changed
-observations as JSON lines. Observation timeout leaves the request running.
+observations as JSON lines. It advances through verified pages of the selected
+session and stream epoch. Each line carries only the events read on that poll.
+Observation timeout leaves the request running.
 `work events --json` reads the existing canonical event stream; use
 `--after-sequence` and `--stream-epoch` for later pages. Gaps and truncation are
 reported rather than filled from logs. `steer --message TEXT --target-turn-id ID`
