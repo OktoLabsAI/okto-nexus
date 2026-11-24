@@ -124,8 +124,8 @@
         "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si022-codex-remote-writer.md"] },
         "exact_steer": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
         "interrupt_queue_barrier": {
-          "status": "implemented",
-          "reason": "A interrupção e a retomada foram auditadas com os dois binários reais nesta máquina. A repetição do roteiro foi recusada após perda da autoridade do Connector.",
+          "status": "qualified",
+          "reason": "Visualizador e app-server reais no mesmo Windows. O ensaio com respostas em loopback comprovou a pausa antes da interrupção e a retomada na mesma thread.",
           "evidence": ["si022-codex-remote-writer.md", "si022-codex-remote-writer.json"]
         },
         "command_subset": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },

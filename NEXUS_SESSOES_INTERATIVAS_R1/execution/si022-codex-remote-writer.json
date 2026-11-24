@@ -147,6 +147,69 @@
       "cancel-run3-redacted.txt": "ac3c59b823bfedc1ac4ff0b685e2a9644692bad1fd783a434ec1e841aacabfbf"
     }
   },
+  "inventory_claim_recovery_with_native_interrupt": {
+    "local_evidence_directory": "D:/nxs-si022-refresh-596a",
+    "scope": "Windows ConPTY with Connector and Nexus on the same host and a simulated loopback model",
+    "source": {
+      "nexus_baseline": "596a61b336fdc8c01ef0795097a596cba67f5960",
+      "connector_baseline": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "connector_fix": "b73405777688e42e4f3f61f3e5a1d46e546af528",
+      "core": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main_refs_after_fetch": {
+        "nexus": "8d77b50c00b417c86818d027aed7497fababac34",
+        "connector": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "core": "19c99f15b17ae994653ad9e190964229a0e296e8"
+      },
+      "working_trees_clean": true,
+      "upstream_drift_at_baseline": false
+    },
+    "artifacts": {
+      "nexus_wheel_sha256": "9aa0aa591b46991359fe4deb041edda28c16c6a31d9de48506a7f94688d77a4e",
+      "connector_wheel_sha256": "ce6abefa3b17882e70742c3ab1d0a4b1b55d9294cf46382ce6923bac2e3e45b8",
+      "connector_sdist_sha256": "0d11786f0627f5411b4cbd88b88e947670817b01060bfe0b18a0bfd05f53f2ea",
+      "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+      "connector_tracked_package_files_checked": 133,
+      "connector_changed_module": "okto_nexus_connector/daemon/r4_inventory.py"
+    },
+    "results": {
+      "prior_connector_wheel": {"passed": 4, "failed": 1},
+      "source_connector": {"passed": 46, "failed": 0},
+      "installed_connector": {"passed": 59, "failed": 0},
+      "installed_nexus_http": {"passed": 3, "failed": 0},
+      "native_journey": {"passed": 1, "failed": 0},
+      "sqlite_audit": "PASS",
+      "pin_and_installed_file_check": "PASS",
+      "inventory_deliveries_on_original_generation": 1,
+      "native_turns": 2,
+      "native_interrupts": 1,
+      "writer_detaches": 2,
+      "canonical_close": true,
+      "external_provider_requests": 0
+    },
+    "commands": [
+      "rtk proxy python -B D:/nxs-si022-refresh-596a/audit_disconnect.py",
+      "rtk proxy uv build --offline --out-dir D:/nxs-si022-refresh-596a/dist (Connector checkout)",
+      "rtk proxy D:/nxs-si022-refresh-596a/venv/Scripts/python.exe -B -m pytest -p assert_wheel_imports -q --tb=short tests/unit/test_independent_inventory.py tests/unit/test_r4_daemon_control.py tests/unit/test_boundaries.py --basetemp D:/nxs-si022-refresh-596a/installed --junitxml D:/nxs-si022-refresh-596a/installed.xml (Connector checkout)",
+      "rtk proxy D:/nxs-si022-refresh-596a/venv/Scripts/python.exe -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_inventory_refresh_http.py --basetemp D:/nxs-si022-refresh-596a/http --junitxml D:/nxs-si022-refresh-596a/http.xml",
+      "rtk proxy pwsh -NoProfile -File D:/nxs-si022-refresh-596a/native/run.ps1 -Trial trial2",
+      "rtk proxy python -B D:/nxs-si022-refresh-596a/native/prove_durability.py trial2"
+    ],
+    "evidence_sha256": {
+      "before.xml": "d945b031f6cad751108614f04979e3cdef47d4f919d27510fdc68d8699cf770c",
+      "source.xml": "e7ceebc376c962bff3fedf4134ae97f56762801ee2293c113f5073d4a8268869",
+      "installed.xml": "7a1af3f98794aab91dd78128a3efb2a0c8476bc0a48c83df8bdafd2bd63b3ef2",
+      "http.xml": "e9f309c6c6880c6f2e93154e6b6c1357f0a7287e2a4c61b6c6309d8c15372836",
+      "connection-diagnosis.json": "6876369d3cecc6836581b4f3c25995281d09c80906726ad4c1cd64094d5a5092",
+      "artifact-proof.json": "bf751eb809ea6cdfb5051285233a98c7ae23e26986390b86abdc9501cdf6b474",
+      "pins/installed.json": "3f0239bdb803b8b5ebc332d2387df690d82478d64555185dd111bea1ec761ae8",
+      "native/interrupt-trial1.xml": "51a96b3adade2596bbd75f55ae9e0b42d4cc321b94bcac3d3cd575178eaed9cc",
+      "native/interrupt-trial2.xml": "fab5092a63b5f88896f178cc9f2571d3759376a7bf47ccab126f2b7efb074b04",
+      "native/test_remote_interrupt.py": "06a7582c0be6c01983e8318ec447aca746dd4b43dc7de6de542eddd5cb4a9d0d",
+      "native/proof.json": "d0ebe3bd5e739eb011f6429ab9a1170fd1787a0b873e86d7191f7e6132e59700",
+      "native/durability.json": "fdb94d087efccc3d293aeb012809e5d7ddb77c365d7dd6777834871271b8da44"
+    },
+    "migration": "none"
+  },
   "limitations": [
     "Loopback does not cover distinct hosts, TLS across hosts or loss of a physical network.",
     "Remote Pi and Claude presentation and the Connector-side connect offer stay open."
