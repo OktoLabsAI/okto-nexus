@@ -1,0 +1,155 @@
+{
+  "tasks": [
+    "SI-023",
+    "SI-025",
+    "SI-027",
+    "SI-030",
+    "SI-037"
+  ],
+  "scenario": "SI-T-F15",
+  "scope": "installed_linux_pi_saved_history_successor_embedded_nexus_protected_secret_service_cli_pty",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "15e4e95a56c3244000597be2c4cbb54239a9e0ff",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 590,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 111,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "1104b7722b2df77cf468c38b852fdcd30a57cbfc",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 94,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    }
+  },
+  "installation": {
+    "distribution": "Ubuntu 24.04.5 LTS",
+    "kernel": "5.15.146.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "pi_build": "sha256:80f7f9c0350b08ad8ed9c2ef368c17309b69a9bbcb07fff199b4267a9e27e132",
+    "node_sha256": "d1de76d8edf2fededf6f8b30d244e2c0529ac607923a018283b77e9c74bd932c"
+  },
+  "wheel_sha256": {
+    "nexus": "e66dc5919cc27765f10cf6997ac3623df3db8b3a488d35b0759f8e6b9e19ac39",
+    "connector_test_dependency": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": {
+    "runtime_uid": 65534,
+    "runtime_network_interfaces": [
+      "lo"
+    ],
+    "vault": "GNOME Secret Service on isolated D-Bus session",
+    "gnome_keyring_package": "46.1-2ubuntu0.2",
+    "vault_preflight": [
+      "set",
+      "get",
+      "remove",
+      "confirm absent"
+    ],
+    "authentic_cli_entry_point": "installed okto-nexus",
+    "connector_required_for_integrated_case": false,
+    "fixture_sha256": "0bccf859d540c7e331bc727fe057e0cf1885a05e4b7ba7a967e6a3cef2e36882",
+    "temporary_wsl_registration_and_disk_removed": true,
+    "pip_check": "PASS",
+    "twine_check": "PASS"
+  },
+  "tests": {
+    "embedded.xml": {
+      "passed": 2,
+      "skipped": [],
+      "junit_sha256": "e067a226e7ece2e1b376761de6bca9d9d46100ebcca697bfe4f00a09688dbe4f",
+      "suites": [
+        "test_linux_embedded_pi_secure"
+      ]
+    },
+    "windows-embedded.xml": {
+      "passed": 81,
+      "skipped": [
+        "test_pi_linux_terminal_reads_raw_utf8_and_restores_after_an_error"
+      ],
+      "junit_sha256": "c02bc6cbfbd3de233e9efedfff7900c743036c3bdfb00a682448190b71c977ce",
+      "suites": [
+        "",
+        "tests.execution_r4.test_session_input_runtime",
+        "tests.session_interaction.test_interrupt_target_migration",
+        "tests.session_interaction.test_session_cli"
+      ]
+    },
+    "linux-embedded.xml": {
+      "passed": 81,
+      "skipped": [
+        "test_detach_key_distinguishes_paste_and_other_win32_key_events"
+      ],
+      "junit_sha256": "d62607fb05943af2d2817529c4daedb11a61d416aa710970eede5ec2fe21465d",
+      "suites": [
+        "",
+        "tests.execution_r4.test_session_input_runtime",
+        "tests.session_interaction.test_interrupt_target_migration",
+        "tests.session_interaction.test_session_cli"
+      ]
+    }
+  },
+  "intact": {
+    "source_closed": true,
+    "private_history_verified": true,
+    "cancel_without_admission": true,
+    "live_resume_refused": true,
+    "exact_native_identity": true,
+    "new_process": true,
+    "no_model_call_on_open": true,
+    "next_turn_extends_same_branch_once": true,
+    "canonical_successor_close": "SUCCEEDED",
+    "second_successor_refused": true,
+    "original_receipt_recovered": true,
+    "native_pi_version": "0.87.1",
+    "external_provider_requests": 0,
+    "all_native_processes_exited": true
+  },
+  "changed_history": {
+    "source_closed": true,
+    "private_history_verified": true,
+    "cancel_without_admission": true,
+    "live_resume_refused": true,
+    "history_drift_failed_before_spawn": true,
+    "durable_refusal": true,
+    "no_model_call_on_refusal": true,
+    "second_successor_refused": true,
+    "original_receipt_recovered": true,
+    "native_pi_version": "0.87.1",
+    "external_provider_requests": 0,
+    "all_native_processes_exited": true
+  },
+  "preliminary_attempt": "The runtime refused preparation at local_tool_vault in the minimal Ubuntu image. The canonical app and CLI used the protected Linux backend on the final run.",
+  "limits": [
+    "linux_literal_input",
+    "distinct_physical_host",
+    "macos",
+    "provider_campaign",
+    "human_acceptance"
+  ]
+}

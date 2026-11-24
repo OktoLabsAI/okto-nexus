@@ -24,7 +24,7 @@ from ..application.execution_native_session_mapping import (
     read_managed_native_session,
     reviewed_claude_saved_context,
     reviewed_codex_context,
-    reviewed_pi_context,
+    reviewed_pi_presentation_context,
 )
 from ..application.execution_saved_resume import pi_history_evidence, rollout_evidence
 from ..domain.execution.keys import SessionKey as DomainSessionKey
@@ -97,7 +97,7 @@ class EmbeddedSavedContexts:
                         history = mapping.claude_history
                         observed = await runtime.read_live_claude_saved_history(
                             runtime_scope, target, history.session_uuid, history.operation_id, **connection)
-                    elif opening_profile is not None and reviewed_pi_context(mapping):
+                    elif opening_profile is not None and reviewed_pi_presentation_context(mapping):
                         observed = await runtime.read_live_current_pi_saved_history(runtime_scope, target, **connection)
                     else:
                         return
@@ -287,7 +287,7 @@ class EmbeddedSavedContexts:
                 elif adapter == 'claude_stream' and (not reviewed_claude_saved_context(mapping)
                         or asdict(mapping.claude_history) != witness['terminal']):
                     release_digest = None
-                elif adapter == 'pi_rpc' and (not reviewed_pi_context(mapping)
+                elif adapter == 'pi_rpc' and (not reviewed_pi_presentation_context(mapping)
                         or mapping.native_session_id != witness['history']['session_id']):
                     release_digest = None
             uow.connection.execute("""
