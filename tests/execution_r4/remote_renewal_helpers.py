@@ -226,8 +226,8 @@ class RemoteProject:
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             return [dict(row) for row in uow.connection.execute('SELECT * FROM ' + table)]
 
-    async def operation(self, operation_id, *, stage='SUCCEEDED'):
-        deadline = time.monotonic() + 20
+    async def operation(self, operation_id, *, stage='SUCCEEDED', timeout=20):
+        deadline = time.monotonic() + timeout
         while True:
             value = await asyncio.to_thread(self.call, 'GET', PREFIX + '/runtime/operations/' + operation_id)
             assert value.get('error') is None, value

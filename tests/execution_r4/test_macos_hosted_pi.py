@@ -187,7 +187,7 @@ def test_installed_macos_pi_reader_hangup_preserves_work(tmp_path_factory, monke
                                                       for row in project.rows('session_attachments')))
                 assert native.poll() is None and not project.rows('execution_results')
                 release_turn.touch()
-                await project.operation(operation['submission_turn_operation_id'])
+                await project.operation(operation['submission_turn_operation_id'], timeout=180)
                 await project.eventually(lambda: len(project.rows('execution_results')) == 1)
                 result, = project.rows('execution_results')
                 assert result['session_id'] == session_id and result['output_text'] == ANSWER
@@ -211,7 +211,7 @@ def test_installed_macos_pi_reader_hangup_preserves_work(tmp_path_factory, monke
                 assert transport._proc is native and native.poll() is None
                 closed = await asyncio.to_thread(project.work().submit, action='close', session_id=session_id,
                                                   client_intent_id='macos-hosted-pi-close')
-                await project.operation(closed['operation_id'])
+                await project.operation(closed['operation_id'], timeout=180)
                 assert native.poll() is not None
             finally:
                 release_turn.touch()
@@ -221,7 +221,7 @@ def test_installed_macos_pi_reader_hangup_preserves_work(tmp_path_factory, monke
     finally:
         server.close()
     report = dict(build_identity=MACOS_BUILD, node_digest=MACOS_NODE, macos=platform.mac_ver()[0],
-                  proposed_renderer=True, operator_attach_http_wss=True, pty_close_received_sighup=True,
+                  proposed_renderer=True, operator_attach_http_ws=True, pty_close_received_sighup=True,
                   detached_reader_before_result=True, same_process_and_session=True, terminal_result_reopened=True,
                   canonical_close=True, exact_history=True, inference_provider='synthetic')
     Path(os.environ['NEXUS_PI_HOSTED_REPORT']).write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')

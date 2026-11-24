@@ -1,0 +1,130 @@
+{
+  "task": "SI-030",
+  "original_scenario": "SI-T-G20",
+  "scope": "installed Nexus and installed Connector on this Windows machine with Pi in ConPTY and a network-blocked synthetic provider",
+  "nexus_build": "30b4608acbfc00be61e8a15ad555150a86e55365",
+  "local_scope_commit": "71b1da137e6f429ea45a59fca56f657f2678216c",
+  "connector_source": "24e000fb67a7c866ae05b3d68154694991b1095c",
+  "core_preserved_source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+  "wheel_sha256": {
+    "nexus": "76dbf82a58b821e15ea579f40dd6fc7240546765269f6684ab4e06bfda70ab5a",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "evidence_sha256": {
+    "test_remote_editor_open.py": "b389facbd950cfd751de1757e981dd82c023e988230d08628a09a32f28481c07",
+    "terminal.py": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20",
+    "proof.json": "bd3993e858d0f5e283dc3b62f78907121e16e57084c1c94d97d7a7ae01a9633c"
+  },
+  "isolated_native_proof": {
+    "native_pi": "0.87.1",
+    "loopback_r4": true,
+    "native_processes": 2,
+    "source_draft_preserved": true,
+    "cancel_kept_source_attached": true,
+    "effects_before_confirm": 0,
+    "opening_operation_posts": 1,
+    "native_turns_on_new_session": 0,
+    "same_checkpoint_after_response_loss": true,
+    "distinct_native_ids": true,
+    "recovered_exact_attach_command": true,
+    "input_retained_in_original_queue": true,
+    "original_input_delivered_once": true,
+    "connector_generation_unchanged": true,
+    "binding_revision_unchanged": true,
+    "grant_revisions_unchanged": true,
+    "canonical_closes": 2,
+    "pi_processes_exited": true,
+    "synthetic_model_calls": 2,
+    "external_provider_calls": 0
+  },
+  "tests": {
+    "initial_native": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "sha256": "84dc1ebae0bcfcd946af67b1ededb86216439cfb3b15706ace3eef7aa0015188"
+    },
+    "native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "sha256": "4ea68fecb40117de39dc6398053b1da3e9d0b7bea6995d3b8222eca050fe0bcf"
+    },
+    "regressions": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 14,
+      "sha256": "ee476788451892bae23b2d293d9134cb908209cd8ffc58d7ed3c8f8e9674c8a3"
+    }
+  },
+  "database_audit": {
+    "execution_sessions": 2,
+    "execution_receipts": 8,
+    "execution_results": 2,
+    "session_attachments": 4,
+    "operation_states": [
+      [
+        "runtime.close",
+        "RESOLVED_TERMINAL",
+        2
+      ],
+      [
+        "runtime.open",
+        "DISPATCHED",
+        2
+      ],
+      [
+        "turn.submit",
+        "RESOLVED_TERMINAL",
+        2
+      ]
+    ],
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "connected_remote_executors": 0
+  },
+  "first_observation": {
+    "database": {
+      "execution_sessions": 1,
+      "execution_receipts": 0,
+      "execution_results": 0,
+      "session_attachments": 0,
+      "operation_states": [
+        [
+          "runtime.open",
+          "RECONCILING",
+          1
+        ],
+        [
+          "turn.submit",
+          "ACCEPTED",
+          1
+        ]
+      ],
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "connected_remote_executors": 0
+    },
+    "fixture_wait_seconds": 20,
+    "original_operation_replayed": false
+  },
+  "confirmed_observation": {
+    "separate_disposable_project": true,
+    "fixture_wait_seconds": 180
+  },
+  "scope_decisions": {
+    "macos": "DEFERRED_BY_USER",
+    "between_machines": "DEFERRED_BY_USER",
+    "SI_T_H01": "NOT_RUN",
+    "cancelled_macos_workflow": 45391438377
+  },
+  "migration_required": false,
+  "personal_installation_modified": false
+}
