@@ -104,7 +104,8 @@ Repeat the command to recover its receipt if the result is unclear.
 For a session on a Connector, select the original Harness ID and workspace.
 The reviewed Windows x64 builds of Codex 0.157.0, Pi 0.87.1 and Claude Code
 2.1.328 can reopen saved history on that same Connector after an acknowledged
-close.
+close. The reviewed Linux x64 installation of Pi 0.87.1 with Node 24.15.0 can
+also reopen saved history on its original Connector.
 Keep the approved workspace and launch configuration in place. Claude also
 requires the same reviewed `plan` profile and native history. The Connector
 checks the saved history on its own host and refuses a changed or unavailable
@@ -239,8 +240,8 @@ reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
 The reviewed Linux runtime supports reorientation and interruption through the
-same exact-run review. Saved-history resume requires the reviewed Windows Pi
-runtime.
+same exact-run review. After a verified close, a Connector can reopen the saved
+history from that same Linux runtime.
 
 If a slow terminal can no longer receive updates, Nexus releases its
 presentation while the session keeps running. Reattach to the same session

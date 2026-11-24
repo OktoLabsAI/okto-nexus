@@ -17,7 +17,7 @@ from ..domain.session_interaction import InputScope
 from ..errors import ErrorCode, OktoNexusError
 from .execution_leases import require_execution_lane
 from .execution_native_session_mapping import (
-    read_managed_native_session, reviewed_claude_saved_context, reviewed_codex_context, reviewed_pi_context,
+    read_managed_native_session, reviewed_claude_saved_context, reviewed_codex_context, reviewed_pi_presentation_context,
 )
 from .execution_reconciliation import _receipt
 from .execution_saved_resume import (
@@ -67,7 +67,7 @@ def read_retired_remote_session(uow, scope, *, session_id, generation, adapter_i
         raise _unavailable()
     codec = REMOTE_SAVED_CONTEXTS.get(mapping.adapter_id)
     reviewers = {CODEX_SAVED_CONTEXT: reviewed_codex_context, CLAUDE_SAVED_CONTEXT: reviewed_claude_saved_context,
-                 PI_SAVED_CONTEXT: reviewed_pi_context}
+                 PI_SAVED_CONTEXT: reviewed_pi_presentation_context}
     if codec is None or not reviewers[codec](mapping):
         raise _unavailable()
     if codec is PI_SAVED_CONTEXT and not is_pi_saved_session_id(mapping.native_session_id):
