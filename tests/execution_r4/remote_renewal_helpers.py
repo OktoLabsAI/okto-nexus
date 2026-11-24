@@ -52,7 +52,8 @@ class NativeFactory:
 
 
 class RemoteProject:
-    def __init__(self, runtime, tmp_path, monkeypatch, *, actions=1, adapter_id='codex_app_server'):
+    def __init__(self, runtime, tmp_path, monkeypatch, *, actions=1, adapter_id='codex_app_server',
+                 candidate=None, provider_home=None):
         self.deps, self.client = runtime[:2]
         self.origin = str(self.client.base_url).rstrip('/')
         self.root = tmp_path / 'remote-host'
@@ -73,12 +74,19 @@ class RemoteProject:
         self.flow = RemoteProjectSetup(self.call, self.save_connection, origin=self.origin,
             material_sink=self.material.append, handoff_sink=lambda value: self.handoffs.append(deepcopy(value)))
 
-        binary = self.root / ('synthetic-' + adapter_id + '.exe')
-        binary.write_bytes(b'Synthetic qualification peer; never executed')
-        self.candidate = InstallationCandidate(adapter_id, str(binary), fingerprint(binary), 'explicit', 'selected')
-        self.observed = replace(self.candidate, version='fixture-v1')
+        self.native = None
+        if candidate is None:
+            binary = self.root / ('synthetic-' + adapter_id + '.exe')
+            binary.write_bytes(b'Synthetic qualification peer; never executed')
+            candidate = InstallationCandidate(adapter_id, str(binary), fingerprint(binary), 'explicit', 'selected')
+            self.observed = replace(candidate, version='fixture-v1')
+            self.native = NativeFactory()
+        else:
+            self.observed = candidate
+        self.candidate = candidate
         self.store = StateStore(state_file(self.root))
-        config = configuration(adapter_id=self.candidate.adapter_id, project=str(self.project), label='Remote renewal')
+        config = configuration(adapter_id=self.candidate.adapter_id, project=str(self.project),
+                               label='Remote renewal', provider_home=provider_home)
         config['execution_location'] = 'remote'
         config['authorization'] = dict(minutes=60, actions=actions)
         local = remote_setup.prepare(self.store, setup_run_id='renewal-root', server=self.origin,
@@ -120,7 +128,6 @@ class RemoteProject:
         monkeypatch.setattr(configure_local, 'observe_installation', observe)
         monkeypatch.setattr(configure_local, 'configured_candidates', candidates)
         monkeypatch.setattr(r4_control, 'R4DaemonControl', partial(r4_control.R4DaemonControl, discover=discover))
-        self.native = NativeFactory()
         monkeypatch.setattr(r4_execution, 'R4DaemonExecution', partial(r4_execution.R4DaemonExecution, native_factory=self.native))
         self.daemon = DaemonApp(self.root, ipc_transport='auto')
         self.daemon_task = None
@@ -192,7 +199,7 @@ class RemoteProject:
         self.binding = read_json(self.checkpoint)['result']['binding']
         await self.eventually(lambda: self.control and self.control.status()['execution_ready'])
         await self.inventory_ready()
-        assert not self.native.opened and len(self.probes) == 1
+        assert (self.native is None or not self.native.opened) and len(self.probes) == 1
         return self
 
     async def inventory_ready(self):

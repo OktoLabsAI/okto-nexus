@@ -9,6 +9,8 @@ on:
       - tools/probe_macos_pi.py
       - tests/fixtures/pi-release/package*.json
       - src/okto_nexus/adapters/inbound/cli/pi_viewer_terminal.py
+      - tests/execution_r4/remote_renewal_helpers.py
+      - tests/execution_r4/test_macos_hosted_pi.py
       - tests/execution_r4/test_remote_renewal.py
       - tests/session_interaction/test_session_cli.py
   workflow_dispatch:
@@ -63,6 +65,15 @@ jobs:
             --node "$RUNNER_TEMP/nexus-node/bin/node" \
             --release "$RUNNER_TEMP/nexus-pi" \
             --output build/ci/pi-macos.json
+      - name: Close a controlling terminal during a hosted Pi turn
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        env:
+          NEXUS_PI_NODE: ${{ runner.temp }}/nexus-node/bin/node
+          NEXUS_PI_RELEASE: ${{ runner.temp }}/nexus-pi
+          NEXUS_PI_HOSTED_REPORT: ${{ github.workspace }}/build/ci/hosted/pi-hosted-macos.json
+        run: |
+          python tools/ci_installed.py test --output build/ci/hosted --tests \
+            tests/execution_r4/test_macos_hosted_pi.py
       - name: Exercise installed Nexus terminal and presentation transport
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: |

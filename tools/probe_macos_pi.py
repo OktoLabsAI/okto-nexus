@@ -23,6 +23,8 @@ from nexus_connector_core.pi_extension_resource import reviewed_pi_renderer_buil
 SANDBOX = ("/usr/bin/sandbox-exec", "-p", "(version 1) (allow default) (deny network*)")
 PROMPT = "Review the fixture shipment"
 ANSWER = "The fixture shipment arrived"
+PI_ARGS = ("--no-context-files", "--provider", "nexus-fixture", "--model", "faux-1",
+           "--api-key", "isolated-fixture-key")
 
 
 def eventually(read):
@@ -53,8 +55,6 @@ def prepare_fixture(work, release):
     agent = work / "profile/agent"
     extensions = agent / "extensions"
     extensions.mkdir(parents=True)
-    project = work / "project"
-    project.mkdir()
     entered, signal = work / "provider-entered", work / "release-response"
     faux = release / "node_modules/@earendil-works/pi-ai/dist/providers/faux.js"
     source = f"""
@@ -82,7 +82,7 @@ export default pi => {{
     (extensions / "fixture.js").write_text(source, encoding="utf-8")
     env = dict(HOME=str(agent.parent), TMPDIR=str(work), PATH="/usr/bin:/bin",
                XDG_CONFIG_HOME=str(agent.parent), PI_CODING_AGENT_DIR=str(agent), PI_OFFLINE="1")
-    return project, agent, entered, signal, env
+    return agent, entered, signal, env
 
 
 def verify_history(agent):
@@ -103,13 +103,13 @@ def exercise(node, release, work):
     cli = release / "node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js"
     candidate = candidate_pi_node_cli(node, cli, explicit=True)
     assert (candidate.version, candidate.architecture) == ("0.87.1", "x86_64")
-    project, agent, entered, signal, env = prepare_fixture(work, release)
+    project = work / "project"
+    project.mkdir()
+    agent, entered, signal, env = prepare_fixture(work, release)
     verify_network_denied(node, env, project)
     executable = (*SANDBOX, candidate.executable, candidate.launch_script)
     connector = PiRpcConnector(command=(*executable, "--mode", "rpc"), version_command=(*executable, "--version"),
-                               cwd=str(project), env=env,
-                               extra_args=("--no-context-files", "--provider", "nexus-fixture", "--model", "faux-1",
-                                           "--api-key", "isolated-fixture-key"))
+                               cwd=str(project), env=env, extra_args=PI_ARGS)
     try:
         session = connector.start(owning_agent_id="fixture")
         owner = connector._transport._proc
