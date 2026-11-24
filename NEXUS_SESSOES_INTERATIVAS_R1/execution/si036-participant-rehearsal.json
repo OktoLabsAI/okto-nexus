@@ -120,5 +120,113 @@
       "database_integrity": "ok",
       "foreign_key_violations": 0
     }
+  },
+  "b4bb0031_recheck": {
+    "checkout": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "b4bb00315c0da82ac1d25ecfa5def063dc68d973",
+        "main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "main_drift": [
+          627,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2"
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "main": "19c99f15b17ae994653ad9e190964229a0e296e8"
+      },
+      "nexus_worktree_clean": true
+    },
+    "product_code_matches_wheel_candidate": "37547dfea5971b6b9604fa146d8a1dcb18f888ac",
+    "package_sha256": {
+      "nexus": "8fc33ab6305feef4941f1b37f7d3f686720e69a19ccea2214e30e93e82332fd9",
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "environment": {
+      "browser": "Microsoft Edge 158.0.4370.33, headless and isolated",
+      "driver": "Playwright CLI 0.1.25",
+      "topology": "Nexus + Connector on the current Windows machine (R4 loopback)",
+      "pi": "0.87.1",
+      "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+      "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+    },
+    "commands": [
+      "rtk proxy pwsh -NoProfile -File D:/nxs-si036-participant-b4bb0031/run.ps1 -Trial trial2",
+      "rtk proxy node C:/Users/jpamb/AppData/Local/npm-cache/_npx/31e32ef8478fbf80/node_modules/@playwright/cli/playwright-cli.js --session=nexus-si036-b4bb0031-trial2 open about:blank --browser msedge --idle-timeout 600000",
+      "rtk proxy pwsh -NoProfile -File D:/nxs-si036-participant-b4bb0031/rehearse.ps1 -Lab D:/nxs-si036-participant-b4bb0031/trial2",
+      "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si036-participant-b4bb0031/audit.py rehearsal trial2"
+    ],
+    "adjustments": [
+      "Participant fixture labels are Projeto Remessas and Assistente de remessas. The test project is selected before the first task.",
+      "In trial1 the browser opened about:blank and the driver waited on its launch subprocess. In trial2 the browser launch and interactions ran separately."
+    ],
+    "status": "AUTOMATED_REHEARSAL_PASS",
+    "human_acceptance": "PENDING",
+    "windows_screen_reader": "PENDING",
+    "artifact_directory": "D:/nxs-si036-participant-b4bb0031",
+    "sha256": {
+      "run.ps1": "16114dea6489e8725d767d7fdabae362f81a4c812730cd83cf07a4587ed5d265",
+      "rehearse.ps1": "ed6fba487dd4ef25132d7c276141fb963f2655bbbc551e59b6e5ae4643d0e923",
+      "prepare-home.ps1": "3848dd408d26d1e1d704adf00bf61053a9f7b9bc4d988c3337921001e01d9f3a",
+      "test_rehearsal.py": "0d5a08feab2edf9cd2bdc40e0758a51162c4f396c2febeb269f1a248c074ad1e",
+      "test_participant.py": "96d08620a5eab95fa2a07b1d7dd04c16d6d0135dacea4020dcc864410da4d548",
+      "remote_renewal_helpers.py": "eb997f4672d4c6bf73afe0725edab694dc31581b2f1ec266f17b11d7895d2b20",
+      "pi_fixture.py": "c0b8afdedfd50edc097885beb40b29e8475518be4e8e283ee4b9e89bc156d12a",
+      "audit.py": "20bd88b32e84c705f066cb1bd7f51c3f90256d6c870f66bcb35e34e9f8f9a234",
+      "trial1/native.xml": "7e53baf661456c5c0d795768ffe9573124883e9674c0966ff91377b33dd5bc01",
+      "trial1/native.log": "2e7b2d92328b34eadd14786fa1c83769f531a59c6372cb373962c08bfd3abfb8",
+      "trial2/native.xml": "1bb98c0777a71a13713131c9ac2eb61e8f8a2992e4c1aaec05b23440b8593f70",
+      "trial2/native.log": "7c159b365cdd673932a9e48a5e7be199ca801288f3e8f837bebe1c80e8a0c525",
+      "trial2/proof.json": "f7a73380bbad51ca13e27a486fbdb6f5e3d387aa8e91aae9f1fa73bc929ab37d",
+      "trial2/audit.json": "97a305877e4a04585a1e049f427c899dd2aa2fffa9b9fa077cab6acd4a3ef912",
+      "trial2/output/playwright/selected-project.log": "2fad9c4b7eef7fc1701851dba4263b5b826ac560f070ea595c8b0b137f1f212a",
+      "trial2/output/playwright/active-harness.log": "2fad9c4b7eef7fc1701851dba4263b5b826ac560f070ea595c8b0b137f1f212a",
+      "trial2/output/playwright/found-from-home.log": "0201af7bd17313070113bc2aa94e28378bfed10ad374865d400a02e256a36003",
+      "trial2/output/playwright/queue-confirmed.log": "c9e0611702d71ac41895b670b3d9fdf358a89bdf31e37c5587e0bebc92dc0323",
+      "trial2/output/playwright/reopened-from-home.log": "ff6562cc4450e6ef9ee78229974323ded7a11882bba27e3ef45145a353a16514",
+      "trial2/output/playwright/both-replies.log": "dda145326c4e8a1be989a795a99d989644e4e601ef0076f3d20c85893da91139"
+    },
+    "audit": {
+      "scope": "rehearsal",
+      "verified_at": "2026-11-24T15:56:02.854878-03:00",
+      "results": {
+        "one_session": true,
+        "native_turns": 2,
+        "queued_input_status_observed": "QUEUED",
+        "queued_input_final_status": "ACCEPTED_NATIVE",
+        "seeded_before_opening_browser": true,
+        "browser_opened_via_home": true,
+        "browser_reopened_via_home": true,
+        "browser_showed_clean_incoming_message": true,
+        "browser_showed_both_results_once": true,
+        "external_provider_calls": 0,
+        "native_process_exited_after_canonical_close": true
+      },
+      "nexus_wheel_sha256": "8fc33ab6305feef4941f1b37f7d3f686720e69a19ccea2214e30e93e82332fd9",
+      "bundled_dashboard_sha256": {
+        "okto_nexus/adapters/inbound/http/static/index.html": "853fd971f51eb3e1e768654fec79d63c74a69a8a2e75533b1d9cafafc19b6f00",
+        "okto_nexus/adapters/inbound/http/static/assets/index-gH0wlVRf.js": "bfa48849f1c17105aba0cf5bbf06cb3a2803c244c321d277b363a164911e78a8"
+      },
+      "operation_counts": {
+        "runtime.open": 1,
+        "turn.submit": 2,
+        "runtime.close": 1
+      },
+      "native_launches": 1,
+      "retained_results": 2,
+      "input_state": "ACCEPTED_NATIVE",
+      "sqlite_integrity": "ok",
+      "sqlite_foreign_key_violations": 0,
+      "listener_closed": true,
+      "browser_credential_file_removed": true
+    }
   }
 }
