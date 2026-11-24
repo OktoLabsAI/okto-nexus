@@ -119,26 +119,35 @@ def _select_session(call, binding, explicit, *, interactive):
     if explicit is not None:
         return read_binding_session(call, binding, explicit)
     page = list_binding_sessions(call, binding)
-    candidates = [row['scope']['session_id'] for row in page['sessions'] if row.get('control_available') is True]
+    candidates = [row for row in page['sessions'] if row.get('control_available') is True]
+    session_ids = [row['scope']['session_id'] for row in candidates]
     if not candidates and not page['has_more']:
         raise ConnectionError('NO_LIVE_SESSION', 'This connection has no available live session.')
     if page['has_more'] or len(candidates) > 1 and not interactive:
         raise ConnectionError('SESSION_SELECTION_REQUIRED', 'Select the exact live session with --session-id.',
-                              choices=candidates)
-    if len(candidates) == 1:
-        return read_binding_session(call, binding, candidates[0])
-    print('Choose a live session to inspect:')
-    for index, session_id in enumerate(candidates, 1):
-        print(f'{index}. {display_text(session_id)}')
-    try:
-        choice = input('Session number or Enter to cancel: ').strip()
-    except EOFError:
-        return None
-    if not choice:
-        return None
-    if not choice.isascii() or not choice.isdecimal() or len(choice) > 4 or not 1 <= int(choice) <= len(candidates):
-        raise ConnectionError('SESSION_SELECTION_REQUIRED', 'Select a displayed session.', choices=candidates)
-    return read_binding_session(call, binding, candidates[int(choice) - 1])
+                              choices=session_ids)
+    selected = 0
+    if len(candidates) > 1:
+        print('Choose a live session to inspect:')
+        for index, session_id in enumerate(session_ids, 1):
+            print(f'{index}. {display_text(session_id)}')
+        try:
+            choice = input('Session number or Enter to cancel: ').strip()
+        except EOFError:
+            return None
+        if not choice:
+            return None
+        if not choice.isascii() or not choice.isdecimal() or len(choice) > 4 or not 1 <= int(choice) <= len(candidates):
+            raise ConnectionError('SESSION_SELECTION_REQUIRED', 'Select a displayed session.', choices=session_ids)
+        selected = int(choice) - 1
+    reviewed = candidates[selected]
+    session_id = session_ids[selected]
+    current = read_binding_session(call, binding, session_id)
+    if (current['scope']['session_owner_generation'] != reviewed['scope']['session_owner_generation']
+            or current['connection_generation'] != reviewed['connection_generation']):
+        raise ConnectionError('SESSION_SELECTION_CHANGED', 'The selected session changed. List sessions and select it again.',
+                              choices=[session_id])
+    return current
 
 
 def _show_pi_transcript(link):

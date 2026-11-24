@@ -171,6 +171,8 @@ class Catalog:
         self.base = base
         self.drift = drift
         self.two_live = two_live
+        self.detail_owner_generation = 7
+        self.detail_connection_generation = 3
         self.routes = []
 
     def __call__(self, method, url, body=None):
@@ -202,17 +204,18 @@ class Catalog:
                 ['executor'], ['binding'], ['agent'])
             first = query['after_session_id'] == ['']
             ident = 'session-a' if first else 'session-b'
-            scope = BINDING | {'session_id': ident}
+            scope = BINDING | {'session_id': ident, 'session_owner_generation': 7}
             if not first and self.drift:
                 scope['workspace_binding_id'] = 'other-realization'
             live = first or self.two_live
             return {'has_more': first, 'next_after_session_id': ident,
-                    'sessions': [{'scope': scope, 'lifecycle_state': 'READY' if live else 'CLOSED',
+                    'sessions': [{'scope': scope, 'connection_generation': 3, 'lifecycle_state': 'READY' if live else 'CLOSED',
                                   'lease_state': 'ACTIVE' if live else 'CLOSED', 'control_available': live}]}
         if path in ('/runtime/sessions/session-a', '/runtime/sessions/session-b'):
             assert query['executor_id'] == ['executor']
             ident = path.split('/')[-1]
-            return {'scope': BINDING | {'session_id': ident, 'session_owner_generation': 7},
+            return {'scope': BINDING | {'session_id': ident, 'session_owner_generation': self.detail_owner_generation},
+                    'connection_generation': self.detail_connection_generation,
                     'control_available': ident == 'session-a'}
         pytest.fail(f'Unexpected route {path}')
 
@@ -237,8 +240,8 @@ class RetainedCatalog(Catalog):
         rows = []
         for session_id in remainder[:limit]:
             live = session_id == 'session-a'
-            rows.append({'scope': BINDING | {'session_id': session_id},
-                         'lifecycle_state': 'READY' if live else 'CLOSED',
+            rows.append({'scope': BINDING | {'session_id': session_id, 'session_owner_generation': 7},
+                         'connection_generation': 3, 'lifecycle_state': 'READY' if live else 'CLOSED',
                          'lease_state': 'ACTIVE' if live else 'CLOSED',
                          'control_available': live})
         more = len(remainder) > limit
@@ -410,6 +413,31 @@ def test_tty_picker_rechecks_selected_session_instead_of_switching_targets(monke
     assert main(['session', 'attach', '--id', 'reviewer']) == 3
     assert catalog.routes[-1] == '/runtime/sessions/session-b'
     assert 'This exact session is unavailable' in capsys.readouterr().out
+
+
+@pytest.mark.parametrize('changed', ['detail_owner_generation', 'detail_connection_generation'])
+@pytest.mark.parametrize('choose', [False, True])
+def test_attach_refuses_a_generation_change_since_the_catalog(changed, choose, monkeypatch, capsys):
+    catalog = Catalog(two_live=choose)
+    catalog.token = 'fixture-operator'
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    tty = SimpleNamespace(isatty=lambda: True)
+    monkeypatch.setattr(session, 'sys', SimpleNamespace(stdin=tty, stdout=tty))
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+
+    def select(_prompt):
+        assert choose
+        setattr(catalog, changed, getattr(catalog, changed) + 1)
+        return '1'
+
+    if not choose:
+        setattr(catalog, changed, getattr(catalog, changed) + 1)
+    monkeypatch.setattr('builtins.input', select)
+    monkeypatch.setattr(session, 'review_local_presentation',
+                        lambda *_args, **_kwargs: pytest.fail('A changed target reached presentation review'))
+    assert main(['session', 'attach', '--id', 'reviewer']) == 3
+    assert catalog.routes[-1] == '/runtime/sessions/session-a'
+    assert 'The selected session changed.' in capsys.readouterr().out
 
 
 def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(monkeypatch, capsys):

@@ -56,5 +56,60 @@
     "cursor_validation": "Empty, multiline and attach cursors refused before server lookup"
   },
   "external_provider_requests": 0,
-  "migration": "none"
+  "migration": "none",
+  "session_selection_revalidation": {
+    "baseline": "9c00406752f3c4dacf51f9f3e7c4a1bbf704f007",
+    "scope": "Windows installed CLI with catalog stubs for the generation changes; real session-view reads and attachment broker tests",
+    "local_evidence_directory": "D:/nxs-si030-generation-9c004067",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/session_interaction/test_session_cli.py -k attach_refuses_a_generation_change --junitxml D:\\nxs-si030-generation-9c004067/before.xml",
+      "python -B -m pytest -q --tb=short tests/session_interaction/test_session_cli.py tests/execution_r4/test_session_views.py tests/session_interaction/test_attachment_broker.py --junitxml D:\\nxs-si030-generation-9c004067/source.xml",
+      "uv build --offline --wheel --out-dir D:\\nxs-si030-generation-9c004067/dist",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/session_interaction/test_session_cli.py tests/execution_r4/test_session_views.py tests/session_interaction/test_attachment_broker.py --junitxml D:\\nxs-si030-generation-9c004067/installed.xml"
+    ],
+    "before": {
+      "tests": 4,
+      "passed": 0,
+      "failed": 4,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "before.xml",
+      "junit_sha256": "d29240ffaae4abea9cc3801c681c975d16f92a5fb540ae5574aed9e36781a7b3"
+    },
+    "source": {
+      "tests": 86,
+      "passed": 85,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "junit": "source.xml",
+      "junit_sha256": "d8dd1606774dd5e552826121936c0ce643db5156969eeb3f6aa5d633511c1787"
+    },
+    "installed": {
+      "tests": 86,
+      "passed": 85,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "junit": "installed.xml",
+      "junit_sha256": "23b4f44787ad2a4577efb7d83f3995371debe8537fbb5512b14022ed9050bd9b"
+    },
+    "skip_reason": "requires a POSIX pseudoterminal",
+    "wheel_sha256": {
+      "nexus": "22810f4e24c6fac5fcb579e8a11126719b42d13af6b97e24ac08edce65c780ba",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "cli_source_sha256": "d714213633e90bfa79c2f3c9f193fe273756599d04dca0611118e84adf28c4c8",
+    "test_source_sha256": "7c03a5be37febd463ec09a7f6136de4a87843ef9e1e191791895a5afb3ccce7b",
+    "cases": [
+      "single eligible session, owner generation changed",
+      "single eligible session, executor connection generation changed",
+      "TTY picker selection, owner generation changed",
+      "TTY picker selection, executor connection generation changed"
+    ],
+    "refused_before_presentation_review": true,
+    "external_provider_requests": 0,
+    "migration": "none"
+  }
 }

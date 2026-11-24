@@ -99,6 +99,9 @@ An unavailable saved context does not open a fresh conversation.
 
 For a live session, use `session attach` when the harness supports it. Work
 in the background stays with the current executor, even after a turn ends.
+If the session owner or executor connection changes between listing and
+confirmation of the session details, list the sessions again and review your
+choice.
 
 The reviewed Pi 0.87.1 installations with Node 24.15.0 on Windows x64 and
 Linux x64 support saved resume on the local Nexus host. Use the approved
