@@ -76,6 +76,10 @@ okto-nexus session open --id HARNESS_ID --workspace-id WORKSPACE_ID --operator-p
 okto-nexus session resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SOURCE_SESSION_ID --operator-profile OPERATOR
 ```
 
+Pass the workspace ID recorded for the connection when using a remote
+Server. On a local Server, the CLI can resolve it from the project folder
+when that folder maps to exactly one authorized workspace.
+
 If `session list` reports more sessions, repeat it with the same connection
 and pass the reported cursor as `--after-session-id`. In JSON output, use
 `next_after_session_id` while `has_more` is true.
@@ -174,6 +178,18 @@ rollback if the database contains work recorded after that backup.
 
 ## Control the session queue
 
+Use `session send` to queue a message as the harness user for the exact
+session from an interactive terminal. Review the session and message, then
+confirm with `y`. The command prompts for the message. To review text from
+a UTF-8 file, pass `--message-file MESSAGE_FILE`. Check an unconfirmed
+send with `session receipt` using the intent and owner generation from
+the terminal.
+
+```sh
+okto-nexus session send --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session receipt --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
+```
+
 Check the selected queue from the terminal. Changes require confirmation in
 an interactive terminal and apply to the reviewed session owner and queue
 revision.
@@ -245,8 +261,8 @@ runtime host needs a reviewed installation of Pi 0.87.1 and Node 24.15.0 on
 Windows x64 or Linux x64.
 
 ```sh
-okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
-okto-nexus session attach --write --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --write --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
 
 Enter records the text in the Nexus session queue and shows its receipt. If Pi
@@ -266,15 +282,14 @@ If an Enter request has an unconfirmed receipt, use the original intent and
 session generation printed by the viewer.
 
 ```sh
-okto-nexus session receipt --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
+okto-nexus session receipt --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR --owner-generation GENERATION --intent INTENT
 ```
 
 For Pi hosted by Connector, the same commands use the selected Nexus server.
-Pass the exact `--workspace-id` with the Harness ID and use HTTPS from a
-different machine. Enter queues text on the selected session. Ctrl+R reviews
-reorientation at the next boundary and Ctrl+X reviews interruption of the
-current run. The review requires a confirmed active run and a Connector that
-supports exact-run controls. Confirming interruption pauses the session queue.
+Use HTTPS from a different machine. Ctrl+R reviews reorientation at the next
+boundary and Ctrl+X reviews interruption of the current run. The review
+requires a confirmed active run and a Connector that supports exact-run
+controls. Confirming interruption pauses the session queue.
 The reviewed Linux runtime supports reorientation and interruption through the
 same exact-run review. After a verified close, a Connector can reopen the saved
 history from that same Linux runtime.
@@ -326,8 +341,8 @@ If older output has rolled out of the buffer, a new viewer shows a notice
 and displays the retained output.
 
 ```sh
-okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
-okto-nexus session attach --write --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --write --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
 
 From a Windows terminal, use `--write` to compose a message for the same

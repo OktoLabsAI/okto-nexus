@@ -22,5 +22,33 @@
     "junit_sha256": "b5410f4745aa517cfcd996e62d54a06193ca273f91ba52c51a629d22d3c02569"
   },
   "user_acceptance": "not_run",
-  "platform_qualification_from_this_evidence": "none"
+  "platform_qualification_from_this_evidence": "none",
+  "exact_session_command_examples": {
+    "inspected_nexus_head": "7cfad2d57849f12fc52f0529c71036e3c82224e4",
+    "nexus_wheel_source": "d34d5ffd",
+    "nexus_wheel_sha256": "0814c210e6107bbd8666dc374c49a1d48295d56fcb5011b139447884daa95971",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "platform": "Windows x64",
+    "nexus_examples_accepted": 42,
+    "examples_with_exact_scope": 10,
+    "connector_example_accepted": "okto-nexus-connector connect -i --operator-profile OPERATOR",
+    "remote_workspace_omission": "PROJECT_SELECTION_REQUIRED",
+    "checked_native_send_message_file": true,
+    "example_runtime_effects": 0,
+    "installed_cli_regressions": {
+      "file": "tests/session_interaction/test_session_cli.py",
+      "passed": 91,
+      "failed": 0,
+      "skipped": 1,
+      "skip_reason": "requires a POSIX pseudoterminal"
+    },
+    "evidence_directory": "D:/nxs-si017-nvda-27206336",
+    "evidence_sha256": {
+      "verify-terminal-guide.py": "638eb4bc5653d707dfd1c762a16915328e94f9a97aaac1ad75b78433dfbea376",
+      "terminal-guide-connector-verification.json": "bb33f0acf6c216219ad31e33739670452858a27fc686eeb7560c6c1e431dfe83",
+      "terminal-guide-focal.xml": "21f5648dee5bb67e57c3391f17dfd2e828717666801da3fdc803113db6beb4dc",
+      "terminal-guide-focal.log": "3c783e2fdf3b6233833d9a8b25992a4348500b462d59ba423a8108b8c0d5e9d2"
+    }
+  }
 }
