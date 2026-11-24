@@ -575,6 +575,72 @@ def test_terminal_decision_checks_the_exact_recorded_receipt(
     assert flow.document == checkpoint
 
 
+@pytest.mark.parametrize('legacy', [False, True])
+@pytest.mark.parametrize('second_failure', [None, 'VALIDATION_ERROR', 'OUTCOME_UNKNOWN'])
+def test_terminal_preserves_each_uncertain_decision_across_other_answers(monkeypatch, legacy, second_failure):
+    binding = dict(server_id='server', executor_id='executor', binding_id='binding',
+                   workspace_id='workspace', agent_id='subject')
+    proposals = {
+        approval: dict(approval_key=dict(binding, canonical_request_id=approval, session_id=session),
+                       expected_revision=1, request_hash='hash-' + approval, cas_token='cas-' + approval,
+                       recipient_agent_id='operator', expires_at='2099-01-01T00:00:00Z')
+        for approval, session in (('first', 'session-first'), ('second', 'session-second'))
+    }
+    errors = {'first': 'OUTCOME_UNKNOWN', 'second': second_failure}
+    posted, saved = [], []
+
+    def call(method, path, body=None):
+        if path.endswith('/connections/me'):
+            assert method == 'GET'
+            return {'agent_id': 'operator'}
+        if '/api/v1/approvals/' in path:
+            assert method == 'GET'
+            proposal = proposals[path.rsplit('/', 1)[-1]]
+            return {'data': {'request_payload': {'kwargs': proposal}, 'status': 'pending', 'executed_result': None}}
+        assert method == 'POST' and path.endswith('/runtime/approval-decisions')
+        approval = body['approval_key']['canonical_request_id']
+        posted.append((approval, body['client_intent_id'], body['decision']))
+        if error := errors.pop(approval, None):
+            raise ConnectionError(error, 'Injected decision response', possible_effect=error == 'OUTCOME_UNKNOWN')
+        return {key: body[key] for key in ('approval_key', 'client_intent_id', 'request_hash')}
+
+    def reopen(checkpoint=None):
+        flow = TerminalWork(call, lambda value: saved.append(deepcopy(value)), {}, checkpoint)
+        monkeypatch.setattr(flow, 'binding', lambda: binding)
+        return flow
+
+    def answer(flow, approval, decision='approve', response=None):
+        proposal = proposals[approval]
+        return flow.decide(approval, decision, response=response, reviewed_revision=document_revision(proposal),
+                           session_id=proposal['approval_key']['session_id'])
+
+    response = {'answers': {'question': {'answers': ['Private first response']}}}
+    flow = reopen()
+    with pytest.raises(ConnectionError, match='Injected decision response'):
+        answer(flow, 'first', response=response)
+    first_intent = posted[0][1]
+    checkpoint = deepcopy(saved[-1])
+    if legacy:
+        checkpoint.pop('pending_decisions', None)
+    flow = reopen(checkpoint)
+    if second_failure:
+        with pytest.raises(ConnectionError) as interrupted:
+            answer(flow, 'second')
+        assert interrupted.value.code == second_failure
+    else:
+        answer(flow, 'second')
+
+    flow = reopen(saved[-1])
+    with pytest.raises(ConnectionError) as changed:
+        answer(flow, 'first', decision='deny')
+    assert changed.value.code == 'DECISION_CONFLICT'
+    assert len(posted) == 2
+    assert answer(flow, 'first', response=response)['client_intent_id'] == first_intent
+    assert posted[-1] == ('first', first_intent, 'approve')
+    assert set(flow.document['pending_decisions']) == ({'second'} if second_failure == 'OUTCOME_UNKNOWN' else set())
+    assert 'Private first response' not in json.dumps(saved)
+
+
 @pytest.fixture
 def terminal_watch(monkeypatch):
     from okto_nexus.adapters.inbound.cli import work as cli
@@ -716,6 +782,7 @@ def test_native_decision_response_loss_recovers_canonical_result_and_keeps_answe
     decision = resumed.decide(detail['approval_id'], 'approve', response=response,
                               reviewed_revision=document_revision(proposal))
     assert decision['canonical_state'] == 'CONFIRMED'
+    assert resumed.document['pending_decisions'] == {}
     assert sum(path.endswith('/runtime/approval-decisions') for _, path in t.calls) == 1
     assert 'Private answer marker' not in json.dumps(t.saved)
     deadline = time.monotonic() + 15

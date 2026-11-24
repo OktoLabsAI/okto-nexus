@@ -51,5 +51,70 @@
   ],
   "checkpoint_preserved": true,
   "external_provider_requests": 0,
-  "migration": "none"
+  "migration": "none",
+  "pending_decisions": {
+    "baseline": "251f7ee4b8c62b7ac8feafbb677c0efc3262089e",
+    "scope": "Windows, installed terminal application, simulated lost responses and API/SQLite regressions with synthetic peers",
+    "local_evidence_directory": "D:/nxs-si034-pending-decisions-251f7ee4",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k terminal_preserves_each_uncertain_decision --junitxml D:\\nxs-si034-pending-decisions-251f7ee4/before.xml",
+      "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py -k 'terminal_preserves_each_uncertain_decision or terminal_decision_checks or native_decision_response_loss or dashboard_and_terminal_share' --junitxml D:\\nxs-si034-pending-decisions-251f7ee4/source.xml",
+      "uv build --offline --wheel --out-dir D:\\nxs-si034-pending-decisions-251f7ee4/dist",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'terminal_preserves_each_uncertain_decision or terminal_decision_checks or native_decision_response_loss or dashboard_and_terminal_share' --junitxml D:\\nxs-si034-pending-decisions-251f7ee4/installed.xml"
+    ],
+    "before": {
+      "tests": 6,
+      "passed": 0,
+      "failed": 6,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "before.xml",
+      "junit_sha256": "a9b700077d849c7954b9debea84c797f2a87d8191645ff64ccf7532668b1ca7f"
+    },
+    "source": {
+      "tests": 17,
+      "passed": 17,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "source.xml",
+      "junit_sha256": "f11bd92551cf5406f2cb520567b194905845bb25bc073a537febcd59c9553da8"
+    },
+    "installed": {
+      "tests": 17,
+      "passed": 17,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "installed.xml",
+      "junit_sha256": "2c0dfc970a7b5dc561690e5c46ae1c76f46299763ecadfa522a3fc18ecf2164e"
+    },
+    "wheel_sha256": {
+      "nexus": "e4e6698c2b4a2052e6db2fffc272835046b547c1f704d99dfd5191d2d621c8d9",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "checked_sources": {
+      "src/okto_nexus/application/terminal_work.py": "85553ef71048be8e856874e14d3e6c7985246db835a25f45c2a047bec5b16fa0",
+      "tests/execution_r4/test_terminal_work.py": "46282720046c6560044b67be30dd6310d3aad5f5f07cf91ec24649dc226e6a44"
+    },
+    "cases": {
+      "secondary_question_outcomes": [
+        "confirmed",
+        "validation refused",
+        "outcome unknown"
+      ],
+      "prior_formats": [
+        "current per-request map",
+        "legacy latest decision only"
+      ],
+      "original_intent_reused": true,
+      "different_response_refused_before_post": true,
+      "confirmed_receipt_clears_only_the_matching_pending_entry": true,
+      "raw_response_in_checkpoint": false
+    },
+    "checkpoint_version": 1,
+    "external_provider_requests": 0,
+    "migration": "none"
+  }
 }

@@ -384,22 +384,34 @@ class TerminalWork(TerminalAuthorization):
         me = self.api('GET', '/connections/me')
         if me['agent_id'] != (proposal.get('recipient_agent_id') or 'operator'):
             raise ConnectionError('APPROVAL_AUTHORITY_REQUIRED', 'This request is addressed to another recipient.')
+        last = self.document.get('decision')
+        pending = dict(self.document.get('pending_decisions', {}))
+        if 'pending_decisions' not in self.document and last:
+            pending[last['approval_key']['canonical_request_id']] = last
         existing = detail.get('executed_result')
         if existing and existing.get('decision_id'):
-            return self._decision_receipt(existing['decision_id'], proposal['approval_key'], proposal['request_hash'])
+            result = self._decision_receipt(existing['decision_id'], proposal['approval_key'], proposal['request_hash'])
+            if pending.pop(approval_id, None) is not None:
+                self.document['pending_decisions'] = pending
+                self._save()
+            return result
         if reviewed_revision != document_revision(proposal):
             raise ConnectionError('DECISION_REVIEW_REQUIRED', 'Review the current question and its scope before answering.')
         if datetime.fromisoformat(proposal['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc):
             raise ConnectionError('DECISION_EXPIRED', 'This request has expired.')
         metadata = {key: deepcopy(proposal[key]) for key in ('approval_key', 'expected_revision', 'request_hash', 'cas_token')}
         metadata.update(decision=decision, response_hash=document_revision(response))
-        previous = self.document.get('decision')
-        if previous and previous['approval_key']['canonical_request_id'] == approval_id:
+        previous = pending.get(approval_id)
+        if previous is None and last and last['approval_key']['canonical_request_id'] == approval_id:
+            previous = last
+        if previous is not None:
             if any(previous[key] != value for key, value in metadata.items()):
                 raise ConnectionError('DECISION_CONFLICT', 'Recover the original decision; its response cannot be changed.')
             metadata['client_intent_id'] = previous['client_intent_id']
         else:
             metadata['client_intent_id'] = 'terminal_decision_' + uuid.uuid4().hex
+        pending[approval_id] = metadata
+        self.document['pending_decisions'] = pending
         self.document['decision'] = metadata
         self._save()
         request = {key: value for key, value in metadata.items() if key != 'response_hash'}
@@ -414,10 +426,13 @@ class TerminalWork(TerminalAuthorization):
                     # A confirmed validation refusal did not record a decision.
                     # The user may correct that answer; uncertainty never clears
                     # its original metadata or permits a different response.
+                    pending.pop(approval_id)
                     self.document.pop('decision', None)
                     self._save()
             raise
         if (result['approval_key'] != metadata['approval_key'] or result['client_intent_id'] != metadata['client_intent_id'] or
                 result['request_hash'] != metadata['request_hash']):
             raise ConnectionError('DECISION_RECEIPT_MISMATCH', 'The decision result does not match this request.', possible_effect=True)
+        pending.pop(approval_id)
+        self._save()
         return result

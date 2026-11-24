@@ -432,7 +432,9 @@ a permission approval or denial. The returned `review_revision` is the value for
 `REVIEW_HASH`. The file is read only for that explicit submission. Only decision
 IDs, CAS metadata and a response digest enter the local checkpoint. An uncertain
 answer cannot be replaced by a different answer; inspect its durable result or
-re-enter the same response. A confirmed validation refusal allows correction.
+re-enter the same response. The checkpoint retains each uncertain answer by its
+request ID while you handle other questions. A confirmed validation refusal
+allows correction of that request.
 Recorded decisions and native delivery are shown separately, including refusal
 before an effect and uncertain delivery. The terminal verifies the recorded
 decision against the request. A native refusal is shown with the operation from
