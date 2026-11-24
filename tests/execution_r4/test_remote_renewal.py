@@ -29,8 +29,15 @@ def runtime(runtime_source):
     return RedactedRuntime(runtime_source)
 
 
-def test_remote_registration_replay_preserves_first_work_and_channel(runtime, tmp_path, monkeypatch):
-    project = RemoteProject(runtime, tmp_path, monkeypatch)
+@pytest.fixture
+def project_path(tmp_path_factory):
+    # The default tmp_path embeds the full test name. Keep the actual daemon
+    # socket within the platform's sockaddr_un path bound.
+    return tmp_path_factory.mktemp('remote')
+
+
+def test_remote_registration_replay_preserves_first_work_and_channel(runtime, project_path, monkeypatch):
+    project = RemoteProject(runtime, project_path, monkeypatch)
 
     def owner():
         row, = [row for row in project.rows('execution_executors') if row['kind'] == 'remote']
@@ -56,8 +63,8 @@ def test_remote_registration_replay_preserves_first_work_and_channel(runtime, tm
 
 
 @pytest.mark.parametrize('disabled_state', ['exhausted', 'expired'])
-def test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session(runtime, tmp_path, monkeypatch, disabled_state):
-    project = RemoteProject(runtime, tmp_path, monkeypatch, actions=1 if disabled_state == 'exhausted' else 4)
+def test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session(runtime, project_path, monkeypatch, disabled_state):
+    project = RemoteProject(runtime, project_path, monkeypatch, actions=1 if disabled_state == 'exhausted' else 4)
 
     async def run():
         try:
@@ -114,8 +121,8 @@ def test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session(
     asyncio.run(run())
 
 
-def test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets(runtime, tmp_path, monkeypatch):
-    project = RemoteProject(runtime, tmp_path, monkeypatch)
+def test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets(runtime, project_path, monkeypatch):
+    project = RemoteProject(runtime, project_path, monkeypatch)
 
     async def run():
         try:
@@ -177,8 +184,8 @@ def test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_a
     asyncio.run(run())
 
 
-def test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew(runtime, tmp_path, monkeypatch):
-    project = RemoteProject(runtime, tmp_path, monkeypatch)
+def test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew(runtime, project_path, monkeypatch):
+    project = RemoteProject(runtime, project_path, monkeypatch)
 
     async def run():
         try:

@@ -80,5 +80,21 @@
     "Integrated macOS session with native hosted renderer requires further qualification",
     "Other-machine, paid-provider and human acceptance gates remain open"
   ],
-  "migration_required": false
+  "migration_required": false,
+  "posix_terminal_run": {
+    "run_id": 45311897381,
+    "artifact_id": 14884645186,
+    "archive_sha256": "b928b18c48043cad8309c6368c2680f0f19acf0d2468e5adac6843bed5993899",
+    "nx_commit": "d14f8ef25805a8ea891113017a4c8eab955045d5",
+    "native_probe": "PASS",
+    "installed_passed": 116,
+    "tests": 122,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 1,
+    "real_posix_pty_utf8_and_termios_restoration": "PASS",
+    "failures_before_remote_daemon_start": "AF_UNIX path too long",
+    "junit_sha256": "eae6f69f3da6f163b90c1196b4e6e4abe0946dbf05a8b7941c8b9ffac4128989",
+    "proof_sha256": "1ad9080bc250077f6e886a9897c3cbacbf9227215a7a72a389196d21cafce4d5"
+  }
 }

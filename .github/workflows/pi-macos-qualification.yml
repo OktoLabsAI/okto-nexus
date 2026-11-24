@@ -9,6 +9,7 @@ on:
       - tools/probe_macos_pi.py
       - tests/fixtures/pi-release/package*.json
       - src/okto_nexus/adapters/inbound/cli/pi_viewer_terminal.py
+      - tests/execution_r4/test_remote_renewal.py
       - tests/session_interaction/test_session_cli.py
   workflow_dispatch:
 
