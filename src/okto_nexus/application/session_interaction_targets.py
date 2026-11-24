@@ -14,7 +14,7 @@ from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
 from .execution_native_session_mapping import (
     read_managed_native_session,
-    reviewed_pi_context,
+    reviewed_pi_control_context,
 )
 
 
@@ -83,7 +83,7 @@ def active_pi_run(uow, scope: InputScope, *, current_next_turn_revision,
                   remote_control_host=None) -> ExactPiRun | None:
     """Prove the observed run on the current, reviewed Pi owner."""
     mapping = read_managed_native_session(uow, scope)
-    if mapping is None or mapping.stream_epoch is None or not reviewed_pi_context(mapping):
+    if mapping is None or mapping.stream_epoch is None or not reviewed_pi_control_context(mapping):
         return None
     capability = current_next_turn_revision(uow, scope)
     if capability is None:

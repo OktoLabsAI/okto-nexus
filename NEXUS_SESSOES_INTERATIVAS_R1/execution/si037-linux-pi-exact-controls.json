@@ -1,0 +1,188 @@
+{
+  "tasks": [
+    "SI-025",
+    "SI-027",
+    "SI-031",
+    "SI-037"
+  ],
+  "scope": "installed_linux_exact_pi_run_controls_over_real_connector_r4_loopback",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "585d33cf185148519f71d0188f9d2c4c07bfe911",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 587,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "4e8bca4c76acb66830801eb5678335b63517c783",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 110,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "562eccb95076fd84b3a3c4b9c98bdc0ece124b70",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 93,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    }
+  },
+  "installation": {
+    "distribution": "Ubuntu 24.04.5 LTS",
+    "kernel": "5.15.146.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "pi_build": "sha256:80f7f9c0350b08ad8ed9c2ef368c17309b69a9bbcb07fff199b4267a9e27e132",
+    "node_sha256": "d1de76d8edf2fededf6f8b30d244e2c0529ac607923a018283b77e9c74bd932c"
+  },
+  "published": {
+    "nexus_remote_presentation_fixture": "aee9e3d5ff9cb45b1078a515ff4c57ecb5446449",
+    "connector": "24e000fb67a7c866ae05b3d68154694991b1095c",
+    "core": "1104b7722b2df77cf468c38b852fdcd30a57cbfc"
+  },
+  "wheel_sha256": {
+    "nexus": "82b785645ba28c6596663aff8be707f14480fa0526e530eb67b482901efac619",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "core_previous": "9bc6866110d9c90db8a4fed3f2f1c6c48a68b6613a42ff28a1c06f00ac6810ff"
+  },
+  "tests": {
+    "core-linux": {
+      "passed": 58,
+      "skipped": 1,
+      "junit_sha256": "4d5a88254200dacf397394a30903209a9c2303851c5853912466bab2407dce64",
+      "suites": [
+        "tests.test_control_targeting",
+        "tests.test_discovery_probe",
+        "tests.test_executor_inventory",
+        "tests.test_pi_control_link",
+        "tests.test_pi_extracted"
+      ]
+    },
+    "connector-linux": {
+      "passed": 45,
+      "skipped": 0,
+      "junit_sha256": "4ba2219c02c1d17160545a41191d2b53e2d21038a6ca9a99daa0cc93c293590d",
+      "suites": [
+        "tests.unit.test_executor_inventory_r4",
+        "tests.unit.test_r4_daemon_control"
+      ]
+    },
+    "nexus-linux": {
+      "passed": 67,
+      "skipped": 0,
+      "junit_sha256": "4d8a60b8164206ca8291b7ecc0a80209e93ad3311cc15a4f2593caa88d95907a",
+      "suites": [
+        "tests.execution_r4.test_session_capabilities",
+        "tests.session_interaction.test_contract",
+        "tests.session_interaction.test_queue_controls"
+      ]
+    },
+    "windows-controls": {
+      "passed": 141,
+      "skipped": 2,
+      "junit_sha256": "1cfcb1aaf8bc2b375687a7bb6e2ed76a73eb45d171088cc0bb13e4755aaa6af9",
+      "suites": [
+        "",
+        "tests.test_control_targeting",
+        "tests.test_discovery_probe"
+      ]
+    },
+    "pi-presentation-win": {
+      "passed": 3,
+      "skipped": 0,
+      "junit_sha256": "5cfa13ca972b700a9ea00e617ffd36e056d0b18fdd2a815cc4e7ef2508358474",
+      "suites": [
+        "tests.execution_r4.test_remote_pi_presentation"
+      ]
+    },
+    "steer": {
+      "passed": 1,
+      "skipped": 0,
+      "junit_sha256": "179e71036475a3ac5529cddd8fbc9e00c43f823d2def51a8a42db3362db95eeb",
+      "suites": [
+        "test_linux_exact_work_controls"
+      ]
+    },
+    "interrupt": {
+      "passed": 1,
+      "skipped": 0,
+      "junit_sha256": "6a455b42ba6c972ed3634e075afa7edaeb1db61134635812e9501c25a5723b90",
+      "suites": [
+        "test_linux_exact_work_controls"
+      ]
+    }
+  },
+  "setup": {
+    "native_operator_cli_uses_pty": true,
+    "temporary_vault_backend": "fixture_operator_session",
+    "provider": "synthetic_native_pi_model",
+    "interfaces": [
+      "lo"
+    ],
+    "uid": 65534,
+    "exact_open": "TerminalWork.submit new_session; native turn receipt ACCEPTED",
+    "fixture_sha256": "18eec1f1fb8c247b0a7cff84d7a7b10023a3663b661a311b3768e6c8feee872c",
+    "temporary_wsl_registration_and_disk_removed": true,
+    "twine_check": "PASS",
+    "pip_check": "PASS"
+  },
+  "steer": {
+    "action": "steer",
+    "same_native_pid_and_session_after_detach": true,
+    "action_targets_original_turn": true,
+    "cancel_has_no_side_effect": true,
+    "cli_pseudoterminal_raw_mode_restored": true,
+    "steer_consumed_at_boundary": true,
+    "interrupt_paused_pending_input": false,
+    "native_model_calls": 2,
+    "canonical_close": true,
+    "external_provider_calls": 0
+  },
+  "interrupt": {
+    "action": "interrupt",
+    "same_native_pid_and_session_after_detach": true,
+    "action_targets_original_turn": true,
+    "cancel_has_no_side_effect": true,
+    "cli_pseudoterminal_raw_mode_restored": true,
+    "steer_consumed_at_boundary": false,
+    "interrupt_paused_pending_input": true,
+    "native_model_calls": 1,
+    "canonical_close": true,
+    "external_provider_calls": 0
+  },
+  "preliminary_observations": [
+    "The remote presentation fixture initially failed before attach due to patching the obsolete selector. Three rerun cases passed.",
+    "Some preliminary automatic openings lost the initial R4 connection generation while the opening was pending.",
+    "The preliminary native-history assertion omitted the Nexus delivery envelope.",
+    "A preliminary explicit opening waited for SUBMITTED. The actual hosted Pi turn acknowledged ACCEPTED."
+  ],
+  "ledger_scenario_counts": {
+    "PASS": 118,
+    "NOT_RUN": 30
+  },
+  "limits": [
+    "linux_saved_native_resume",
+    "linux_literal_input",
+    "macos",
+    "distinct_physical_host_SI-T-H01",
+    "live_provider_campaign",
+    "human_acceptance"
+  ]
+}

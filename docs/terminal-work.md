@@ -238,9 +238,9 @@ different machine. Enter queues text on the selected session. Ctrl+R reviews
 reorientation at the next boundary and Ctrl+X reviews interruption of the
 current run. The review requires a confirmed active run and a Connector that
 supports exact-run controls. Confirming interruption pauses the session queue.
-The reviewed Linux runtime currently supports the transcript and message queue.
-Reorientation, interruption and saved-history resume require the reviewed
-Windows Pi runtime.
+The reviewed Linux runtime supports reorientation and interruption through the
+same exact-run review. Saved-history resume requires the reviewed Windows Pi
+runtime.
 
 If a slow terminal can no longer receive updates, Nexus releases its
 presentation while the session keeps running. Reattach to the same session

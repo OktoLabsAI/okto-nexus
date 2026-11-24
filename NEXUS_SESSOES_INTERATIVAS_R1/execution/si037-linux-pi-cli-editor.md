@@ -6,6 +6,6 @@ O ensaio executou o comando em um pseudoterminal no Ubuntu 24.04.5 em WSL2 com o
 
 Passaram 61 testes de CLI no Linux e 61 no Windows com o wheel instalado, além do ensaio integrado. Cada ambiente pulou um teste específico do outro sistema. O caso de pseudoterminal confirmou a restauração após uma falha durante a apresentação. `pip check` e `twine check` passaram. A distribuição descartável do WSL e seu disco foram removidos.
 
-O marco qualifica a digitação, a colagem, a fila e o detach no pseudoterminal exercitado. Continuam pendentes as provas em outro host físico, macOS, a campanha com provedores e a aceitação humana. O ensaio Linux também deixou em aberto a qualificação dos controles nativos de reorientação, interrupção e retomada salva.
+O marco qualifica a digitação, a colagem, a fila e o detach no pseudoterminal exercitado. Continuam pendentes as provas em outro host físico, macOS, a campanha com provedores e a aceitação humana. O ensaio seguinte exercita reorientação e interrupção. A retomada salva em Linux segue pendente. [Controles do turno](si037-linux-pi-exact-controls.md)
 
 O marco dispensa migração e pode ser revertido pelo commit do Nexus. A próxima etapa local é testar a reorientação e a interrupção no Pi Linux com revisão de execução e recibo canônico.

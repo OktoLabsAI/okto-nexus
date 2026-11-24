@@ -15,7 +15,7 @@ from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
 )
 from ....application.execution_native_session_mapping import (
     read_managed_native_session,
-    reviewed_pi_context,
+    reviewed_pi_control_context,
 )
 from ....application.execution_session_views import read_execution_session
 from ....application.runtime_policy import defaults
@@ -250,7 +250,7 @@ def build_router():
                 pi = revision is not None and adapter == 'pi_rpc' and supported_owner
                 mapping = read_managed_native_session(uow, scope) if pi else None
                 exact_control = revision is not None and (adapter == 'codex_app_server'
-                    or (mapping is not None and reviewed_pi_context(mapping)))
+                    or (mapping is not None and reviewed_pi_control_context(mapping)))
                 claude_steer = (revision is not None and adapter == 'claude_stream' and supported_owner
                     and read_managed_native_session(uow, scope) is not None)
                 claude_interrupt = (revision is not None and adapter == 'claude_stream' and isinstance(

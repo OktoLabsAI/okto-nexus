@@ -47,7 +47,8 @@ from okto_nexus.application.codex_viewer_protocol import (
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.application.terminal_connection import ConnectionError
 from okto_nexus.application.execution_native_session_mapping import (
-    ManagedNativeSession, NativeLaunchBuild, reviewed_pi_context, reviewed_pi_presentation_context,
+    ManagedNativeSession, NativeLaunchBuild, reviewed_pi_context, reviewed_pi_control_context,
+    reviewed_pi_presentation_context,
 )
 from okto_nexus.bootstrap import local_pi_presentations
 from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_presentations
@@ -296,6 +297,7 @@ def pi_presentation(transport, monkeypatch, request):
     mapping = ManagedNativeSession(transport.scope, 'open-pi', 'pi_rpc', 'native-pi', 'epoch', 'candidate',
                                    'inventory', 1, build, 'connection', 1, None, None)
     assert reviewed_pi_presentation_context(mapping)
+    assert reviewed_pi_control_context(mapping)
     assert reviewed_pi_context(mapping) is (platform == 'win32')
     views = []
     state = SimpleNamespace(available=True, mapping=mapping, frames=views, refuse_open=False)

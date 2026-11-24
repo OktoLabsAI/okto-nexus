@@ -5,6 +5,7 @@ from dataclasses import asdict, dataclass
 from hashlib import sha256
 from uuid import UUID
 
+from nexus_connector_core.native.adapters.compatibility import qualified_build
 from nexus_connector_core.native.claude_history_identity import (
     CLAUDE_HISTORY_IDENTITY,
     confirmed_claude_history,
@@ -111,8 +112,15 @@ def reviewed_pi_presentation_context(mapping: ManagedNativeSession) -> bool:
 
 
 def reviewed_pi_context(mapping: ManagedNativeSession) -> bool:
-    """Require the reviewed Windows host for controls and saved history."""
+    """Require the reviewed Windows host for literal input and saved history."""
     return reviewed_pi_presentation_context(mapping) and mapping.launch_build.platform == 'win32'
+
+
+def reviewed_pi_control_context(mapping: ManagedNativeSession) -> bool:
+    build = mapping.launch_build
+    return (build is not None and reviewed_pi_presentation_context(mapping)
+            and qualified_build('pi', build.version, build.platform, build.architecture,
+                                build.content_fingerprint, control=True, build_identity=build.build_identity))
 
 
 def _codex_opening_thread(conn, scope, stream_epoch):
