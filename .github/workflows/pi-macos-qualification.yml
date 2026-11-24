@@ -1,0 +1,72 @@
+name: Intel macOS session qualification
+
+on:
+  push:
+    branches: [feature/v0.3.8]
+    paths:
+      - .github/workflows/pi-macos-qualification.yml
+      - tools/probe_macos_pi.py
+      - tests/fixtures/pi-release/package*.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos-sessions:
+    runs-on: macos-26-intel
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - name: Prepare pinned Node and Pi
+        run: |
+          test "$(uname -m)" = x86_64
+          archive=node-v24.15.0-darwin-x64.tar.xz
+          cd "$RUNNER_TEMP"
+          curl --fail --silent --show-error --location --retry 3 --output "$archive" "https://nodejs.org/dist/v24.15.0/$archive"
+          echo "5d627245b9f53cb2512cc21b7aa6aad693106affadd91e0c8f42d600fb7ba444  $archive" | shasum -a 256 -c -
+          mkdir -p nexus-node nexus-pi
+          tar xf "$archive" -C nexus-node --strip-components=1
+          echo "$RUNNER_TEMP/nexus-node/bin" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/nexus-node/bin:$PATH"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/pi-release/"package*.json nexus-pi/
+          cd nexus-pi
+          npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build the packaged dashboard
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+      - name: Install the built Nexus wheel and pinned dependencies
+        id: install
+        run: |
+          python -m pip install build
+          python -m build --wheel
+          python tools/ci_installed.py install
+      - name: Observe the real Pi process with a synthetic provider
+        run: |
+          python -I tools/probe_macos_pi.py \
+            --node "$RUNNER_TEMP/nexus-node/bin/node" \
+            --release "$RUNNER_TEMP/nexus-pi" \
+            --output build/ci/pi-macos.json
+      - name: Exercise installed Nexus terminal and presentation transport
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: |
+          python tools/ci_installed.py test --tests \
+            tests/session_interaction/test_session_cli.py \
+            tests/session_interaction/test_presentation_transport.py \
+            tests/execution_r4/test_connection_continuity.py \
+            tests/execution_r4/test_remote_renewal.py
+      - name: Retain qualification evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: nexus-macos-session-qualification
+          path: build/ci/
+          if-no-files-found: warn
+          retention-days: 7
