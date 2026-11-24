@@ -1,0 +1,73 @@
+{
+  "task": "SI-002",
+  "verified_scenarios": [
+    "SI-T-A01",
+    "SI-T-A02",
+    "SI-T-B21"
+  ],
+  "revisions": {
+    "nexus": "bdb805b5ab2c7ee3c6d1c9ef2598b6ad7316fe5c",
+    "connector": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+  },
+  "nexus_wheel_sha256": "a3217d74a9e0ee7e47475b0e4c8463aa5d6a52c59ead6635e030faa838801b83",
+  "nexus_pi_journey_wheel_sha256": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+  "connector_pin_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+  "core_pin_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+  "web_input": {
+    "canonical_input_count": 1,
+    "submission_linked_to_one_result": true,
+    "author_reference_present": true,
+    "surface": "web",
+    "native_role": "user",
+    "exact_text_without_wrapper": true,
+    "seed_domain_delivery_count": 1,
+    "human_domain_delivery_count": 0,
+    "human_text_in_message_bus": false,
+    "handoffs_created": 0,
+    "archive_unchanged": true,
+    "sha256": {
+      "nexus_db": "e94f9505510e3841d48a0584a073f6c7afbef114aa7aaf3ce1b05a10706d7306",
+      "pi_native_history": "33b4f007da42767acb6b11fcc5d487bad7ef5159ddbeb49a593f773d24903f02"
+    }
+  },
+  "common_capacity_arbiter": {
+    "handoff": {
+      "winner": "handoff",
+      "both_requests_for_exact_session_and_generation": true,
+      "loser_held_back_by_host": "BUSY_AFFINITY",
+      "work_runs_sequentially": true,
+      "claims_committed": 1,
+      "human_messages_delivered": 1,
+      "native_turns": 2,
+      "canonical_close": "SUCCEEDED",
+      "result_rows_for_one_session": 2,
+      "active_core_slots_at_close": 0
+    },
+    "human": {
+      "winner": "human",
+      "both_requests_for_exact_session_and_generation": true,
+      "loser_held_back_by_host": "BUSY_AFFINITY",
+      "work_runs_sequentially": true,
+      "claims_committed": 1,
+      "human_messages_delivered": 1,
+      "native_turns": 2,
+      "canonical_close": "SUCCEEDED",
+      "result_rows_for_one_session": 2,
+      "active_core_slots_at_close": 0
+    }
+  },
+  "sha256": {
+    "test_handoff_input.py": "31c361950204724a7c4ba7eb202d583ec258079744f3839e2a890336c06ebdd9",
+    "tests.xml": "349c2e22156d0988202b4bc70819df0cb3c39277ce1fbf4c2e3ee9da6c6e4f20",
+    "audit_arbiter.py": "2fd96688f7c14c92161b38edcb25b45e122db601bd26ab640a59b17edcc0750e",
+    "audit.json": "ecaa38d8b13f5e3b65d880ecb010c51c7a61efdf26540566cb99321f7cc06f8d",
+    "audit_pi_author.py": "3ffe3cf0f20e3727e419a36c9aa928b5c9d9b81876aaad13797c33cb94a943dc",
+    "human-origin-proof.json": "eaa225fe54906a9544eba2af776a6adc23d0fd7b4ced89181fe2c44b43a16659"
+  },
+  "limits": [
+    "The native Pi journey was recorded from the prior wheel, whose backend files are byte-identical to the audited candidate.",
+    "The two current arbitration cases used the Windows embedded owner and a simulated Codex protocol peer.",
+    "The source map documents the three native adapter boundaries. The provider campaigns and cross-host qualification have separate scenarios."
+  ]
+}

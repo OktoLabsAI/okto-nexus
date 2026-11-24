@@ -217,7 +217,7 @@
         "SI-T-A02",
         "SI-T-B21"
       ],
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "evidence": [
         {
           "artifact_path": "execution/si002-write-path.md",
@@ -227,7 +227,8 @@
         "execution/si006-pi-human-input-authority.md",
         "execution/si006-pi-human-input-authority.json",
         "execution/si007-shared-turn-arbitration.md",
-        "execution/si007-shared-turn-arbitration.json"
+        "execution/si007-shared-turn-arbitration.json",
+        "execution/si002-current-write-path.json"
       ]
     },
     {

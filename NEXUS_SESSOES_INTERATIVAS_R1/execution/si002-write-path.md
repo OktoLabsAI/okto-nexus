@@ -41,3 +41,26 @@ Isso identifica caminhos estáticos, não afirma delivery efetivo para instalaç
 5. Separar entrega, andamento do turno e encerramento. Reconciliação compara a mesma operação e os fatos do Core antes de liberar o próximo. Impedir reabertura silenciosa, reatribuição de autor, renovação implícita e replay de histórico até quando o Server reinicia.
 
 Provas focais propostas: `tests/execution_r4/test_dispatch_pump.py`, `test_admission_capacity.py`, `test_capacity_dispatch_flow.py`, `test_canonical_dispatch_fairness.py`, `test_embedded_native_decisions.py`, `test_terminal_work.py` e peers existentes. Acrescentar SQLite + HTTP com duas autoridades e duas sessões, rollback antes de ACK, resposta perdida antes e após commit, cancel/dispatch concorrentes, terminal atrasado e vaga disputada com turno do barramento. Validar no peer papel nativo, ausência de message/handoff e exatamente um ID/efeito por intenção. Não promover os cenários do ledger a partir desta inspeção.
+
+## Caminhos verificados no candidato atual
+
+O mapa inicial registra o baseline de análise. A verificação abaixo usa Nexus `bdb805b5`, Connector `2b0000a1` e Core `94aeb596`.
+
+| Origem | Entrada e autoridade | Efeito observado ou fonte do recibo |
+| --- | --- | --- |
+| Composer da Home | `SessionConversation` chama `enqueueSessionInput` com a sessão exata. `dashboard_session_input.enqueue_input_response` obtém do login a referência humana e chama `enqueue_human_input` com escopo, geração e revisão. | A transação verifica a autoridade e grava o input antes do HTTP 202. A entrega nativa produz seu próprio recibo. |
+| CLI de sessão e escritor nativo | `session send` revisa o comando, pede confirmação e envia uma intenção com ID estável. O escritor anexado valida a sessão, o login e o epoch em `dashboard_session_presentations` antes de usar `enqueue_human_input`. | A recuperação consulta o recibo original. A fila conserva a superfície do autor e o envio passa pelo mesmo dispatcher. |
+| Trabalho e coordenação | `TerminalWork` usa as rotas de intenção e operação. `admit_domain_delivery` preserva a autorização e o outbox do barramento. | O scheduler de entradas e a coordenação disputam a mesma unidade `next_turn` da sessão. A reserva concedida precede novos efeitos. |
+| Perguntas e aprovações | `runtime_v1.native_decision` usa a decisão tipada da sessão e seu contexto autenticado. | O serviço de decisões confirma e recupera o recibo da decisão. |
+
+`SessionInputScheduler` seleciona a cabeça elegível e `session_interaction_capacity` reserva ou recupera a capacidade da geração exata. `ExecutionDispatchPump` cruza o portão de envio por `begin_execution_send`, que revalida a autoridade e a proveniência. O cancelamento e a promoção verificam a revisão antes da fronteira do efeito. A escrita e o recibo canônico seguem pelo owner embutido ou pelo Connector.
+
+| Adaptador | Fronteira e alvo |
+| --- | --- |
+| Codex | `turn/completed` precisa corresponder à thread e ao turno da operação. O steer carrega `expectedTurnId` do alvo revisado. |
+| Pi | A próxima admissão exige `agent_settled`. O controle usa a referência do run observado e a geração da sessão. |
+| Claude | `result:<subtype>` encerra a operação em curso. O efeito composto conserva os resultados separados da interrupção e da mensagem de reposição. |
+
+Na jornada da Home no Windows, a auditoria encontrou uma entrada web com referência humana e um único resultado ligado à sua operação. O Pi gravou exatamente o texto enviado, com papel `user`. O único envio pelo barramento foi o pedido inicial. A entrada humana não criou mensagem no barramento, entrega de domínio ou handoff. O backend do wheel dessa jornada é idêntico ao do candidato atual. [Jornada instalada](si036-participant-rehearsal.md#jornada-completa-no-wheel-com-a-inspeção-corrigida)
+
+As duas ordens de disputa entre handoff e input humano passaram no wheel atual. Em cada uma, o Core devolveu `BUSY_AFFINITY` ao segundo pedido. O SQLite confirmou dois resultados na mesma sessão e zero slots ativos após o fechamento. O Pi usou respostas simuladas, e a disputa usou um peer Codex simulado no owner local. A evidência verifica o mapa e os três cenários focais de SI-002. A qualificação com provedores e entre máquinas permanece nos respectivos cenários. O registro dispensa migração e pode ser revertido pelo commit. [Auditoria e hashes](si002-current-write-path.json)
