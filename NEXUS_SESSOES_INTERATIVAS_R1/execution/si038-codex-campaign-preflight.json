@@ -228,5 +228,68 @@
     },
     "live_campaign": "NOT_RUN",
     "requires_live_driver_integration": true
+  },
+  "si038_exact_admission_rehearsal": {
+    "baseline": "ace9cfe593629771bd2f866fcd70f9cc1ee41fec",
+    "scope": "Installed wheels, same Windows host, ConPTY and Edge with simulated loopback responses",
+    "local_evidence_directory": "D:/nxs-si038-driver-ace9cfe5/rehearsal-three",
+    "model_provider": "fixture",
+    "codex_app_server_version": "0.157.0",
+    "codex_viewer_version": "0.170.0",
+    "wheel_sha256": {
+      "nexus": "340a16114ee6b968f968ed624d08946834804e8a5fe454d6f130ba0ad67ae060",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "observer_sha256": "c5aa5162deb35365ce60d38096a22bdefd0211fe4ee333ca05ed57263e63958b",
+    "observer_tests_sha256": "1ed2cdc616d0c89b84658aafdb9e54a871c383c225e0b7e5504a963320ad1577",
+    "focused_tests_passed": 17,
+    "installed_journey_tests_passed": 1,
+    "artifact_sha256": {
+      "unit-final.xml": "95583c179181d70867fa7f5367506e597055373e2dd3cf61446a2aeed350906f",
+      "rehearsal-three/terminal-home.xml": "75835cb4902fc1fac5611115ecd49095c2db1a185346e5ed0d3e91232ac135fc",
+      "rehearsal-three/run.ps1": "7c41d28cab47e0c18a8ffed1b8be6b362868777c4100de73789b01de037eca09",
+      "rehearsal-three/drive.ps1": "ca4ffacf589ea8209ba7e93bcdbeef94d909f7a346185ac01b3f6f09dbe2a6bf",
+      "rehearsal-three/test_terminal_home.py": "9abaa9591d20373498d09e594040365636b769609cda4f32106f422883d1d33e",
+      "rehearsal-three/si038-budget.jsonl": "54b92bf490f8d6bbbae63b15025d56031f0716f8b78894d94d1827689508b614",
+      "rehearsal-three/proof.json": "bd6504abeb6c72a135780e2243aeeeb86ed328677707a644f790e77cda9b37e2",
+      "rehearsal-three/admission-bindings.json": "63960d2d080467af9b6fb05bfde3500d047aa2e47c8adbddfec051fc642271e4"
+    },
+    "early_failures": [
+      "Isolated venv did not load the PyWin32 bootstrap",
+      "Temporary CLI vault shim scope used the previous fixture directory"
+    ],
+    "journal_turn_token_deltas": [
+      105,
+      525,
+      420
+    ],
+    "prior_turn_usage_did_not_confirm_current_turn": true,
+    "permanent_provisions": 375000,
+    "simulated_setup_tokens": 123,
+    "observed_tokens": 1173,
+    "final_billing": false,
+    "actual_paid_campaign": "NOT_RUN",
+    "proof": {
+      "connect_i_restored_read_only_view": true,
+      "explicit_writer_started_native_turn": true,
+      "browser_default_queue_receipt": true,
+      "one_reviewed_native_steer": true,
+      "browser_queue_started_separate_turn": true,
+      "native_thread_count": 1,
+      "native_turn_starts": 3,
+      "native_steers": 1,
+      "native_pid_preserved": true,
+      "loopback_response_requests": 4,
+      "external_provider_requests": 0,
+      "both_viewers_detached": true,
+      "canonical_close": true
+    },
+    "commands": [
+      "rtk proxy uv run --no-sync python -B -m pytest -q tests/test_si038_codex_usage.py tests/test_si038_codex_budget.py --junitxml D:/nxs-si038-driver-ace9cfe5/unit-final.xml",
+      "pwsh -NoProfile -File D:/nxs-si038-driver-ace9cfe5/rehearsal-three/run.ps1 -Root D:/nxs-si038-driver-ace9cfe5/rehearsal-three",
+      "pwsh -NoProfile -File D:/nxs-si038-driver-ace9cfe5/rehearsal-three/drive.ps1 -Root D:/nxs-si038-driver-ace9cfe5/rehearsal-three",
+      "rtk proxy python -B D:/nxs-si038-driver-ace9cfe5/rehearsal-three/verify_rehearsal.py"
+    ]
   }
 }
