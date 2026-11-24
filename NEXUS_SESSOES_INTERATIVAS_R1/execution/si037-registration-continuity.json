@@ -131,5 +131,66 @@
       "same_connector_generation_after_registration": true,
       "external_provider_calls": 0
     }
+  },
+  "core_ci": {
+    "commit": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+    "source_tree_shared_with_pinned_wheel_base": "e0399f41b5e8af5ef1315717edd3b75797c688f4",
+    "workflow": 45306303618,
+    "result": "success",
+    "platform_jobs_passed": 7,
+    "sbom": "success",
+    "artifact_id": 14882276392,
+    "artifact_sha256": "0f4e1892c2d436187b180252dd8e9e616546650be84ef72a21f91966b0e34810",
+    "evidence_sha256": {
+      "macos-native-acceptance.json": "75dd86b92dd716cfd823c91240b638eb46b585f8b2453e1974f8494fdfca005e",
+      "macos-planned-crash.json": "42243c6747af75128f85887cc2fed561222048ae9e9300a121c8ce8e2b00692b"
+    },
+    "darwin": {
+      "macos": "26.6.1",
+      "machine": "x86_64",
+      "python": "3.13.15",
+      "process_backend": "installed_core_native",
+      "native_peer": "synthetic_python",
+      "native_scenarios": {
+        "double_fork_escape": "PASS",
+        "owner_sigkill": "PASS",
+        "cancel_escalation": "PASS",
+        "descriptor_hygiene": "PASS",
+        "shared_coalition_refusal": "PASS",
+        "census_overflow": "PASS",
+        "slot_retention": "PASS",
+        "pid_churn": "PASS",
+        "sigstop_race": "PASS",
+        "normal_exit": "PASS"
+      },
+      "planned_launch_crash_states": [
+        {
+          "boundary": "intent",
+          "state": "STOPPED",
+          "stop_proof": "NEVER_CLAIMED",
+          "birth_recorded": false
+        },
+        {
+          "boundary": "claim",
+          "state": "CONTAINER_UNCERTAIN",
+          "stop_proof": null,
+          "birth_recorded": false
+        },
+        {
+          "boundary": "spawn",
+          "state": "STOPPED",
+          "stop_proof": "CONTAINER_STOPPED",
+          "birth_recorded": false
+        },
+        {
+          "boundary": "birth",
+          "state": "STOPPED",
+          "stop_proof": "CONTAINER_STOPPED",
+          "birth_recorded": true
+        }
+      ],
+      "provider_execution": false,
+      "integrated_session_acceptance": "NOT_RUN"
+    }
   }
 }
