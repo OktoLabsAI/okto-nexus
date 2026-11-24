@@ -41,9 +41,13 @@ def reviewed_codex():
                                  build_identity=executable_build_identity(binary))
 
 
-@pytest.mark.parametrize("text, expected", [("NEXUS_CONNECTION_OK", "succeeded"),
-                                            ("Different response", "failed")])
-def test_setup_accounts_for_one_native_turn_before_finish(tmp_path, monkeypatch, reviewed_codex, text, expected):
+@pytest.mark.parametrize(("text", "expected", "tokens", "block_next"), [
+    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 105, False, id="successful-test"),
+    pytest.param("Different response", "failed", 105, False, id="unexpected-result"),
+    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 375_000, True, id="preventive-boundary"),
+])
+def test_setup_accounts_for_one_native_turn_before_finish(
+        tmp_path, monkeypatch, reviewed_codex, text, expected, tokens, block_next):
     provider_home, workspace = tmp_path / "codex-home", tmp_path / "workspace"
     provider_home.mkdir()
     workspace.mkdir()
@@ -77,8 +81,8 @@ def test_setup_accounts_for_one_native_turn_before_finish(tmp_path, monkeypatch,
             response = {"id": "resp_setup", "object": "response", "created_at": 0, "status": "in_progress",
                         "error": None, "incomplete_details": None, "output": []}
             completed = item | {"status": "completed", "content": [part]}
-            usage = {"input_tokens": 100, "input_tokens_details": {"cached_tokens": 0},
-                     "output_tokens": 5, "output_tokens_details": {"reasoning_tokens": 0}, "total_tokens": 105}
+            usage = {"input_tokens": tokens - 5, "input_tokens_details": {"cached_tokens": 0},
+                     "output_tokens": 5, "output_tokens_details": {"reasoning_tokens": 0}, "total_tokens": tokens}
             self.send_response(200)
             self.send_header("content-type", "text/event-stream")
             self.send_header("connection", "close")
@@ -119,13 +123,14 @@ stream_max_retries = 0
         thread = Thread(target=provider.serve_forever, daemon=True)
         thread.start()
         try:
-            _run_setup(tmp_path, monkeypatch, reviewed_codex, provider_home, workspace, requests, processes, expected)
+            _run_setup(tmp_path, monkeypatch, reviewed_codex, provider_home, workspace, requests, processes,
+                       expected, tokens, block_next)
         finally:
             provider.shutdown()
             thread.join()
 
 
-def _run_setup(root, monkeypatch, candidate, provider_home, workspace, requests, processes, expected):
+def _run_setup(root, monkeypatch, candidate, provider_home, workspace, requests, processes, expected, tokens, block_next):
     from tools.si038_codex_budget import BudgetStop, CampaignBudget
     from tools.si038_codex_usage import read_turn_usage
 
@@ -180,11 +185,22 @@ def _run_setup(root, monkeypatch, candidate, provider_home, workspace, requests,
                 AND json_extract(body,'$.payload.delivery_phase')='started'""").fetchone()
             assert db.execute("PRAGMA quick_check").fetchone() == ("ok",)
         observed = read_turn_usage(journal, SETUP_SCOPE, thread_id=thread_id, operation_id="turn")
-        assert observed.tokens == 105 and observed.terminal_outcome == "success"
+        assert observed.tokens == tokens and observed.terminal_outcome == "success"
         budget.observe("setup", observed.tokens, terminal=expected == "succeeded")
 
         replay = client.post(SETUP_ROOT + "/setup:test", headers=headers, json=request)
         assert replay.status_code == 200 and replay.json() == view
+        if block_next:
+            with pytest.raises(BudgetStop, match="PREVENTIVE_BUDGET_REACHED"):
+                budget.reserve("home", "first-work")
+            entries = [json.loads(line) for line in budget.path.read_text(encoding="utf-8").splitlines()]
+            assert [entry["event"] for entry in entries] == ["opened", "reserved", "observed", "stopped"]
+            assert entries[-2]["observed"] == tokens
+            assert len(requests) == len(processes) == 1
+            assert count(setup, "execution_bindings") == count(setup, "connection_setup_commits") == 0
+            assert count(setup, "execution_sessions") == 0
+            return
+
         finished = client.post(SETUP_ROOT + "/setup:finish", headers=headers, json=request)
         if expected == "succeeded":
             assert finished.status_code == 200, finished.text

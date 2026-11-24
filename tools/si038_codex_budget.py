@@ -87,7 +87,7 @@ class CampaignBudget:
             if step == 'steer' and 'queued' in self._observed:
                 self._stop('QUEUED_TURN_ALREADY_STARTED')
             charged = self._charge(extra=step)
-            if charged > PREVENTIVE:
+            if charged >= PREVENTIVE:
                 self._stop('PREVENTIVE_BUDGET_REACHED')
             self._record(dict(event='reserved', step=step, intent_id=intent_id, group=GROUPS[step],
                               provision=PROVISION, charged=charged))
@@ -118,7 +118,7 @@ class CampaignBudget:
                 raise BudgetStop('CAMPAIGN_STOPPED')
             if observed >= OBSERVED_LIMIT:
                 self._stop('OBSERVED_BUDGET_STOP')
-            if observed >= PREVENTIVE or charged > PREVENTIVE:
+            if charged >= PREVENTIVE:
                 self._stop('PREVENTIVE_BUDGET_REACHED')
 
     def stop_uncertain(self) -> None:

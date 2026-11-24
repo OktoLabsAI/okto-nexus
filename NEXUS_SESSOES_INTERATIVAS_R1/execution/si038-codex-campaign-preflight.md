@@ -62,3 +62,11 @@ O ensaio do navegador usou quatro respostas em loopback. O journal registrou 1.0
 O marco acrescenta evidência de pacote, navegador e durabilidade. Dispensa migração, e o rollback reverte este registro. A campanha com provedor e o aceite do participante seguem pendentes. [Ledger](../NEXUS_SESSOES_INTERATIVAS_LEDGER_R1.json)
 
 A auditoria seguinte encontrou 42 arquivos residuais de builds locais no wheel usado neste ensaio. O wheel reconstruído a partir da distribuição de código-fonte preserva, byte a byte, os 815 arquivos rastreados do pacote e exclui os resíduos. A jornada acima foi executada com o wheel anterior. [Artefato atual e auditoria](si039-installed-journey.md#reconstrução-da-distribuição-no-windows)
+
+## Limite preventivo inclusivo no Windows
+
+O controlador barra uma admissão se a nova provisão elevar a cobrança a 450 mil tokens ou mais. Uma leitura tardia que alcance esse valor também fecha a admissão, mesmo quando o total observado fica abaixo dele. A leitura fica gravada antes da parada. A cobrança de 449.999 continua permitida. Dois cenários falharam antes da correção e passaram depois, junto com os demais testes de orçamento, contabilização e catálogo, totalizando 26 aprovados. [Testes de orçamento](../../tests/test_si038_codex_budget.py)
+
+Os três casos de setup passaram com os wheels instalados e o app-server Codex 0.157.0 no Windows. No caso do limite, o journal registrou 375 mil tokens sintéticos em um teste de conexão bem-sucedido. A repetição recuperou o mesmo resultado. A provisão de 75 mil para o primeiro trabalho elevaria a cobrança a 450 mil e foi recusada antes de ser gravada. Houve uma única requisição ao simulador. A inspeção do banco confirmou zero vínculos, commits de setup e sessões, integridade do SQLite e zero violações de chave estrangeira. [Teste de setup](../../tests/execution_r4/test_si038_codex_setup_qualification.py) [Evidências](si038-codex-campaign-preflight.json)
+
+O ensaio usou um perfil descartável e respostas em loopback. A qualificação com a conta autenticada e o aceite do participante continuam pendentes. A mudança dispensa migração. O rollback reverte o commit do controlador e dos testes.

@@ -489,5 +489,106 @@
     "budget_and_usage_regressions_passed": 17,
     "authenticated_catalog": "PENDING_USER_AUTHORIZATION",
     "inference_campaign": "NOT_RUN"
+  },
+  "preventive_budget_boundary": {
+    "platform": "Windows",
+    "intake": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "fd61e97e59791e4eaab0b104b1ae91d3c524b7a0",
+        "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "head_main_drift": [
+          634,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "head_main_drift": [
+          113,
+          0
+        ]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "head_main_drift": [
+          95,
+          0
+        ]
+      },
+      "working_trees_clean": true
+    },
+    "installed_artifacts_sha256": {
+      "nexus": "0814c210e6107bbd8666dc374c49a1d48295d56fcb5011b139447884daa95971",
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "codex_engine_version": "0.157.0",
+    "codex_engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "artifact_imports_verified": true,
+    "tests": {
+      "before.xml": {
+        "tests": 4,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "after.xml": {
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "native.xml": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "rule": {
+      "maximum_charge_that_allows_admission": 449999,
+      "inclusive_preventive_stop": 450000,
+      "observed_limit": 500000,
+      "permanent_provision": 75000,
+      "tested_late_observed_below_limit": 225315
+    },
+    "native_boundary": {
+      "synthetic_setup_tokens_observed": 375000,
+      "reserved_steps": [
+        "setup"
+      ],
+      "prospective_charge_with_first_work": 450000,
+      "stop_reason": "PREVENTIVE_BUDGET_REACHED",
+      "loopback_model_requests": 1,
+      "setup_replay_started_another_test": false,
+      "rows": {
+        "execution_bindings": 0,
+        "connection_setup_commits": 0,
+        "execution_sessions": 0
+      },
+      "sqlite_integrity": "ok",
+      "sqlite_foreign_key_violations": 0
+    },
+    "evidence_sha256": {
+      "before.xml": "5ffdf3d50eb569f6ee1f82b455a084af71f7fc3170b68ecff16a25a0d26849ba",
+      "before.log": "90a580629333fa4e662fb1208ab6897c3ab21f6b754ff75ce534c588502c5efa",
+      "after.xml": "9a6e05dbe074e2c4a3cfcd92bf1892908b2624d9a446b42f677425316f5eb40d",
+      "after.log": "f412fd80f60f35c6d6d0561edcd07f8b5ee1b75c27e8ed682a6eeb243621f547",
+      "native.xml": "243dee584b71fd1509ac81ea1df2b8855b3896ad249c1d0a209f63f2698bcd2a",
+      "native.log": "4bd6a778aecc7f1b5cc2eacb34bcc9d2cb1cba13c7fdf1056e1e47158aeec5ba",
+      "audit-preventive.json": "2baa2fa7817b41ad4d2f0bdeda01a0cd81dd5bf17b875e08244a5efdc4d51453",
+      "successful-test/si038-budget.jsonl": "768d01bec91126b29a7b06224a8ceee7857978395b98184c87f4817d785444b4",
+      "unexpected-result/si038-budget.jsonl": "514147ddad0517c2869c4d1ae326c33f01f4008951635c4b1f15b05c9a4fd692",
+      "preventive-boundary/si038-budget.jsonl": "36405b5cd9f58d834a10f1da8ef5c1963fcae0f85a5d28baaa6dc9713550b2ae"
+    },
+    "evidence_directory": "D:/nxs-si038-inclusive-budget-fd61e97e",
+    "external_provider_requests": 0,
+    "actual_paid_campaign": "NOT_RUN",
+    "participant_acceptance": "NOT_RUN"
   }
 }

@@ -57,13 +57,36 @@ def test_accounting_cannot_be_assumed_from_reservation(tmp_path):
     assert [event['event'] for event in records(budget)] == ['opened', 'reserved', 'stopped']
 
 
-def test_reserve_is_refused_before_preventive_budget_would_be_crossed(tmp_path):
+@pytest.mark.parametrize('tokens', [225_000, 240_000])
+def test_reserve_is_refused_when_it_would_reach_the_preventive_budget(tmp_path, tokens):
     budget = CampaignBudget(tmp_path)
     begin_interactive(budget)
-    budget.observe('interactive', 240_000)
+    budget.observe('interactive', tokens)
     with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
         budget.reserve('queued', 'queued-intent')
     assert not any(event.get('step') == 'queued' for event in records(budget))
+
+
+def test_reservation_below_the_preventive_budget_is_recorded(tmp_path):
+    budget = CampaignBudget(tmp_path)
+    begin_interactive(budget)
+    budget.observe('interactive', 224_999)
+    budget.reserve('queued', 'queued-intent')
+    assert records(budget)[-1]['charged'] == 449_999
+
+
+def test_usage_plus_existing_provisions_stops_at_the_preventive_budget(tmp_path):
+    budget = CampaignBudget(tmp_path)
+    begin_interactive(budget)
+    budget.observe('interactive', 200_000)
+    budget.reserve('queued', 'queued-intent')
+    with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
+        budget.observe('interactive', 225_000)
+    observed, stopped = records(budget)[-2:]
+    assert observed['observed'] == 225_315 and observed['charged'] == 450_000
+    assert stopped == {'event': 'stopped', 'reason': 'PREVENTIVE_BUDGET_REACHED'}
+    with pytest.raises(BudgetStop, match='CAMPAIGN_STOPPED'):
+        budget.reserve('steer', 'steer-intent')
 
 
 @pytest.mark.parametrize(('tokens', 'reason'), [(450_000, 'PREVENTIVE_BUDGET_REACHED'), (500_000, 'OBSERVED_BUDGET_STOP')])
