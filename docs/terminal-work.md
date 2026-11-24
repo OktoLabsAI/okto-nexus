@@ -84,6 +84,9 @@ When a work response conflicts with the selected session or a saved receipt,
 the CLI preserves the checkpoint. Use `work resume` to recover the original
 request. With a reused session, recovery checks the current request's
 admission before treating its initial turn as submitted.
+If the opening is confirmed and the initial turn receipt is unavailable,
+`work resume` reads the original admission and correlates the turn before
+clearing the pending checkpoint.
 
 When paging with `work events`, keep the same `--session-id` and
 `--stream-epoch` and use the previous page's `next_after_sequence` as

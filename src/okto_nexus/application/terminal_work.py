@@ -188,7 +188,8 @@ class TerminalWork(TerminalAuthorization):
         slot['state'] = 'resolved' if resolution['can_submit'] else 'blocked'
         slot['blockers'] = resolution['blockers']
         self.document['session_id'] = session_id
-        self._save()
+        if operation is None:
+            self._save()
 
     def _admit(self, slot, binding):
         if slot['state'] == 'blocked':
@@ -204,19 +205,44 @@ class TerminalWork(TerminalAuthorization):
                 self._save()
             raise
         self._check_operation_receipt(operation, slot['submission'], binding, self.document['session_id'])
+        child = None
+        if slot['intent'] == 'runtime.start' and slot['has_text']:
+            # The opening was confirmed, but its requested turn still needs
+            # correlation. Retain the pending checkpoint if that read fails.
+            slot['admission_confirmed'] = True
+            self._save()
+            try:
+                receipt = self.api('GET', '/runtime/intents/' + quote(slot['client_intent_id'], safe=''))
+                session_id = self._resolution_session(slot, receipt['resolution'], binding)
+                self._check_operation_receipt(operation, receipt['resolution'], binding, session_id)
+                if receipt['operation'] is None:
+                    raise ConnectionError('WORK_CORRELATION_UNAVAILABLE', 'Recover the confirmed admission with work resume.')
+                self._check_operation_receipt(receipt['operation'], slot['submission'], binding, session_id)
+                child = self._initial_turn(slot, receipt)
+            except ConnectionError as error:
+                raise ConnectionError(error.code, error.message, possible_effect=True, stage=error.stage,
+                                      choices=error.choices, http_status=error.http_status) from None
+        return self._admitted(slot, operation, child)
+
+    def _admitted(self, slot, operation, child):
         slot['state'] = 'admitted'
+        slot.pop('admission_confirmed', None)
+        if child is not None:
+            slot['initial_turn_operation_id'] = child
         self._save()
-        receipt = self.api('GET', '/runtime/intents/' + quote(slot['client_intent_id'], safe=''))
-        return operation | {'submission_turn_operation_id': self._initial_turn(slot, receipt)}
+        return operation | {'submission_turn_operation_id': child}
 
     @staticmethod
     def _initial_turn(slot, receipt):
         if slot['intent'] == 'runtime.start' and slot['has_text']:
             value = receipt.get('initial_turn_operation_id')
-            if not isinstance(value, str) or not value:
+            if not isinstance(value, str) or not value or value == receipt['resolution']['operation_id']:
                 raise ConnectionError('WORK_CORRELATION_UNAVAILABLE',
                     'The initial turn could not be correlated. The request may be running; inspect it before another submission.',
                     possible_effect=True)
+            if slot.get('initial_turn_operation_id', value) != value:
+                raise ConnectionError('WORK_RECEIPT_MISMATCH', 'The initial turn is different from the confirmed request.',
+                                      possible_effect=True)
             return value
         return None
 
@@ -225,19 +251,26 @@ class TerminalWork(TerminalAuthorization):
         slot = self.document.get(slot_name)
         if not slot:
             raise ConnectionError('WORK_REQUIRED', 'There is no saved submission to resume.')
+        confirmed = slot.get('admission_confirmed') is True or slot.get('initial_turn_operation_id') is not None
         try:
             receipt = self.api('GET', '/runtime/intents/' + quote(slot['client_intent_id'], safe=''))
         except ConnectionError as error:
             if error.code == 'NOT_FOUND':
+                if confirmed:
+                    raise ConnectionError('WORK_CORRELATION_UNAVAILABLE', 'The confirmed admission could not be recovered.',
+                                          possible_effect=True) from None
                 raise ConnectionError('INTENT_NOT_FOUND', 'The saved intent was not found. Re-enter the exact original request to retry resolution.') from None
             raise
         operation = receipt['operation']
-        self._resolved(slot, receipt['resolution'], binding, operation)
         if operation is None:
+            if confirmed:
+                raise ConnectionError('WORK_CORRELATION_UNAVAILABLE', 'The confirmed admission could not be recovered.',
+                                      possible_effect=True)
+            self._resolved(slot, receipt['resolution'], binding)
             return self._admit(slot, binding)
-        slot['state'] = 'admitted'
-        self._save()
-        return operation | {'submission_turn_operation_id': self._initial_turn(slot, receipt)}
+        child = self._initial_turn(slot, receipt)
+        self._resolved(slot, receipt['resolution'], binding, operation)
+        return self._admitted(slot, operation, child)
 
     def operation(self, operation_id, binding):
         value = self.api('GET', '/runtime/operations/' + quote(operation_id, safe=''))

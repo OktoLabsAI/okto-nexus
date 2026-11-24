@@ -321,6 +321,83 @@ def test_lost_submission_response_recovers_same_work_without_duplicate_dispatch(
     assert [item[0] for item in t.native.native.sent] == ['send_turn']
 
 
+def test_lost_initial_turn_lookup_keeps_the_confirmed_admission_pending(work):
+    t = work
+    intent = 'initial-turn-lookup-cut'
+    path = '/runtime/intents/' + intent
+    t.fault.before = path
+    with pytest.raises(ConnectionError, match='Injected lost request') as lost:
+        t.flow.submit('Recover this initial turn', client_intent_id=intent)
+    assert lost.value.possible_effect is True
+    checkpoint = deepcopy(t.saved[-1])
+    assert checkpoint['work']['state'] == 'submit_submitted'
+    assert checkpoint['work']['admission_confirmed'] is True
+    assert 'initial_turn_operation_id' not in checkpoint['work']
+    restarted = TerminalWork(t.call, t.save, t.connection, checkpoint)
+
+    def missing_admission(_method, url, result):
+        if url.endswith(path):
+            result['operation'] = None
+        return result
+
+    t.fault.response = missing_admission
+    t.calls.clear()
+    with pytest.raises(ConnectionError) as missing:
+        restarted.resume()
+    assert missing.value.code == 'WORK_CORRELATION_UNAVAILABLE' and missing.value.possible_effect is True
+    assert restarted.document == t.saved[-1] == checkpoint
+    assert all(method == 'GET' for method, _ in t.calls)
+
+    def missing_receipt(_method, url, result):
+        if url.endswith(path):
+            raise ConnectionError('NOT_FOUND', 'Injected missing receipt')
+        return result
+
+    t.fault.response = missing_receipt
+    t.calls.clear()
+    with pytest.raises(ConnectionError) as missing:
+        restarted.submit('Recover this initial turn', client_intent_id=intent)
+    assert missing.value.code == 'WORK_CORRELATION_UNAVAILABLE' and missing.value.possible_effect is True
+    assert restarted.document == t.saved[-1] == checkpoint
+    assert all(method == 'GET' for method, _ in t.calls)
+
+    t.fault.response = None
+    t.calls.clear()
+    recovered = restarted.resume()
+    assert restarted.document['work']['state'] == 'admitted'
+    assert restarted.document['work']['initial_turn_operation_id'] == recovered['submission_turn_operation_id']
+    complete(t, recovered)
+    assert all(method == 'GET' for method, _ in t.calls)
+    assert t.native.opens == 1 and [verb for verb, _ in t.native.native.sent] == ['send_turn']
+
+
+def test_confirmed_initial_turn_cannot_switch_to_another_turn_in_the_same_session(work):
+    t = work
+    initial = t.flow.submit('First request', client_intent_id='first-turn-anchor')
+    complete(t, initial)
+    fresh = TerminalWork(t.call, t.save, t.connection)
+    other = fresh.submit('Second request in the same session', client_intent_id='second-turn-anchor')
+    complete(t, other)
+    assert other['scope']['session_id'] == initial['scope']['session_id']
+    assert other['submission_turn_operation_id'] != initial['submission_turn_operation_id']
+    checkpoint = deepcopy(t.flow.document)
+
+    def substitute(_method, path, value):
+        if path.endswith('/runtime/intents/first-turn-anchor'):
+            value['initial_turn_operation_id'] = other['submission_turn_operation_id']
+        return value
+
+    t.fault.response = substitute
+    for read in (t.flow.resume, t.flow.observe):
+        t.calls.clear()
+        with pytest.raises(ConnectionError) as refused:
+            read()
+        assert refused.value.code == 'WORK_RECEIPT_MISMATCH' and refused.value.possible_effect is True
+        assert t.flow.document == checkpoint
+        assert all(method == 'GET' and not path.endswith(other['submission_turn_operation_id']) for method, path in t.calls)
+    assert t.native.opens == 1 and [verb for verb, _ in t.native.native.sent] == ['send_turn', 'send_turn']
+
+
 @pytest.mark.parametrize('stage', ['submit', 'resume', 'observe'])
 def test_work_refuses_a_resolution_for_a_sibling_session(work, stage):
     t = work
@@ -730,12 +807,15 @@ def test_profile_without_work_checkpoint_reuses_session_but_observes_only_its_ow
     assert t.native.opens == 1
 
 
-@pytest.mark.parametrize(('fault', 'path', 'admitted'), [
-    ('after', '/runtime/intents:resolve', False),
-    ('before', '/runtime/operations', False),
-    ('after', '/runtime/operations', True),
+@pytest.mark.parametrize(('fault', 'path', 'admitted', 'legacy'), [
+    ('after', '/runtime/intents:resolve', False, False),
+    ('before', '/runtime/operations', False, False),
+    ('after', '/runtime/operations', True, False),
+    ('after', '/runtime/intents:resolve', False, True),
 ])
-def test_recover_reused_opening_admits_only_the_original_pending_turn(work, fault, path, admitted):
+def test_recover_reused_opening_admits_only_the_original_pending_turn(work, fault, path, admitted, legacy):
+    from okto_nexus.application.terminal_work import SUBMISSION
+
     t = work
     opening = test_embedded_dispatch.admit(t.setup, t.binding, 'existing-opening', 'runtime.start')
     wait_receipt(t.setup, opening)
@@ -747,6 +827,12 @@ def test_recover_reused_opening_admits_only_the_original_pending_turn(work, faul
     receipt = reopened.api('GET', '/runtime/intents/reuse-request')
     assert receipt['resolution']['reuse'] is True
     assert (receipt['operation'] is not None) is admitted
+    if legacy:
+        # Older CLI builds could record "admitted" from the reused opening
+        # before this request's admission or initial turn was confirmed.
+        reopened.document['work'].update(state='admitted',
+            submission={key: receipt['resolution'][key] for key in SUBMISSION})
+        reopened.document['session_id'] = opening['session_id']
     if not admitted:
         assert reopened.observe()['state'] == 'submission_unconfirmed'
         assert not t.native.native.sent

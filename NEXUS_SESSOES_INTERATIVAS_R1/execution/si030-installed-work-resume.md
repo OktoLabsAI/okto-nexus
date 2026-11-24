@@ -23,3 +23,11 @@ Na recuperação de um pedido que reutiliza uma sessão, a API consulta a admiss
 O ensaio isolado descarta a resposta da resolução, interrompe a requisição de admissão antes de chegar à API ou descarta sua resposta após a gravação. Cada caso conserva a sessão, o processo e a referência do turno original. A mudança usa as tabelas atuais e pode ser revertida pelo commit do Nexus. [Comandos e resultados](si030-installed-work-resume.json)
 
 Os dois casos anteriores à admissão falharam no wheel original. Com a correção, a recuperação fez uma única admissão em cada um desses casos. Quando a resposta se perdeu após a gravação, a recuperação fez só leituras. Passaram sete testes no código-fonte e os mesmos sete no wheel instalado, com um único envio ao peer sintético por caso de recuperação.
+
+## Correlação do primeiro turno após a admissão
+
+Quando a abertura ou reutilização já foi admitida, o CLI mantém o checkpoint pendente até confirmar o primeiro turno. Se essa consulta falhar, `work resume` reconcilia a admissão por leitura. Uma consulta que deixe de devolver a admissão confirmada mantém o checkpoint para nova leitura. A confirmação guarda o ID do turno e impede que a observação use a resposta de outro pedido da mesma sessão.
+
+O checkpoint mantém o formato 1 e grava apenas IDs e estados adicionais de recuperação. A proteção usa a confirmação da operação ou do turno. Um checkpoint antigo que marcou a reutilização como admitida com base na abertura existente ainda pode recuperar a admissão pendente. A mudança dispensa migração e pode ser revertida pelo commit do Nexus. [Comandos e resultados](si030-installed-work-resume.json)
+
+Os dois casos principais falharam no wheel de referência. Na rodada final, passaram 12 testes no código-fonte e os mesmos 12 no wheel instalado. A suíte manteve uma única execução quando a consulta se perdeu após a admissão e recusou a troca para outro turno real da mesma sessão.

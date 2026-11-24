@@ -267,5 +267,62 @@
     "same_opening_and_planned_turn_recovered": true,
     "external_provider_requests": 0,
     "migration": "none"
+  },
+  "initial_turn_receipt_recovery": {
+    "baseline": "19132c4ed692ce142109033cbdf03e42b6e948ef",
+    "scope": "Windows, installed terminal work application, operator API via ASGI, SQLite, injected replies and synthetic embedded peers",
+    "local_evidence_directory": "D:/nxs-si030-initial-receipt-19132c4e",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'lost_initial_turn_lookup or confirmed_initial_turn' --junitxml D:\\nxs-si030-initial-receipt-19132c4e/before.xml",
+      "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py -k 'lost_initial_turn_lookup or confirmed_initial_turn or recover_reused_opening or profile_without_work_checkpoint_reuses or lost_submission_response or last_confirmed_receipt or unconfirmed_resolution_requires' --junitxml D:\\nxs-si030-initial-receipt-19132c4e/source-candidate.xml",
+      "uv build --offline --wheel --out-dir D:\\nxs-si030-initial-receipt-19132c4e/candidate-dist",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'lost_initial_turn_lookup or confirmed_initial_turn or recover_reused_opening or profile_without_work_checkpoint_reuses or lost_submission_response or last_confirmed_receipt or unconfirmed_resolution_requires' --junitxml D:\\nxs-si030-initial-receipt-19132c4e/installed-candidate.xml"
+    ],
+    "before": {
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "before.xml",
+      "junit_sha256": "8f212caa8692000ef3d42962a3f8f17125e20afd23f14eac1dd5fd5099b4fc5c"
+    },
+    "source": {
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "source-candidate.xml",
+      "junit_sha256": "34f26f13fa55ae3af33ce378461e06b86e6a6bf948ff9a740a25eaba19a5e009"
+    },
+    "installed": {
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "installed-candidate.xml",
+      "junit_sha256": "07232fa3bb7c8358033e5a0b018c4109c4f560bbb38ee14b975f14d5e636d0c8"
+    },
+    "wheel_sha256": {
+      "nexus": "ffc527d61ea3952272b8bde91b014a95dc8a2dcb72d4bda9e38b79afa40129c8",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "checked_sources": {
+      "src/okto_nexus/application/terminal_work.py": "81e163706de64f1864d69e41d174800873d8943ae32698261050a23a2cab4178",
+      "tests/execution_r4/test_terminal_work.py": "56b654333d7ba636a5fa2200bf96b3508732a539e686b7c0b78414fa1df061e6"
+    },
+    "cases": [
+      "initial receipt read interrupted after confirmed opening, checkpoint stays pending",
+      "missing confirmed admission or receipt does not allow a second admission",
+      "read-only recovery confirms the original initial turn",
+      "a different real turn in the same session cannot replace the confirmed initial turn",
+      "legacy admitted label without a confirmed turn can still recover an unadmitted reuse"
+    ],
+    "checkpoint_version": 1,
+    "external_provider_requests": 0,
+    "migration": "none"
   }
 }
