@@ -20,7 +20,7 @@ from .execution_inventory_freshness import inventory_is_fresh
 from .execution_inventory_revalidation import accepts_binding, selection
 from .execution_native_session_mapping import (
     read_managed_native_session,
-    reviewed_pi_context,
+    reviewed_pi_presentation_context,
 )
 from .executor_inventory import load_current_executor_inventory
 
@@ -29,7 +29,7 @@ def literal_input_available(uow, scope: InputScope, host) -> bool:
     if host is None or PI_LITERAL_INPUT_REVISION not in host.channel.control_capabilities:
         return False
     mapping = read_managed_native_session(uow, scope)
-    return (mapping is not None and reviewed_pi_context(mapping)
+    return (mapping is not None and reviewed_pi_presentation_context(mapping)
             and mapping.launch_build.qualification == 'qualified')
 
 

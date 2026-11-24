@@ -14,7 +14,7 @@ from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
     has_unresolved_interrupt,
     is_input_queue_paused,
 )
-from ....application.execution_native_session_mapping import read_managed_native_session, reviewed_pi_context
+from ....application.execution_native_session_mapping import read_managed_native_session, reviewed_pi_presentation_context
 from ....application.execution_operator_authority import require_operator_request
 from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import require_session_input_grant
@@ -94,7 +94,7 @@ def _compact_command(uow, scope, *, adapter, input_revision):
     if adapter != 'pi_rpc' or input_revision is None:
         return _COMPACT
     mapping = read_managed_native_session(uow, scope)
-    if mapping is None or not reviewed_pi_context(mapping):
+    if mapping is None or not reviewed_pi_presentation_context(mapping):
         return _COMPACT
     if next_turn_state(uow, scope, stream_epoch=mapping.stream_epoch, connection_id=mapping.receipt_connection_id,
                        connection_generation=mapping.receipt_connection_generation) != 'busy':

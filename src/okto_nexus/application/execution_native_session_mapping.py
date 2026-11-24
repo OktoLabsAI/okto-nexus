@@ -111,11 +111,6 @@ def reviewed_pi_presentation_context(mapping: ManagedNativeSession) -> bool:
             and reviewed_pi_build(build.version, build.platform, build.architecture, build.build_identity))
 
 
-def reviewed_pi_context(mapping: ManagedNativeSession) -> bool:
-    """Require the reviewed Windows host for literal input and saved history."""
-    return reviewed_pi_presentation_context(mapping) and mapping.launch_build.platform == 'win32'
-
-
 def reviewed_pi_control_context(mapping: ManagedNativeSession) -> bool:
     build = mapping.launch_build
     return (build is not None and reviewed_pi_presentation_context(mapping)

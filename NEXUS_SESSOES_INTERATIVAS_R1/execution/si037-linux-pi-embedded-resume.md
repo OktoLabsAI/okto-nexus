@@ -9,4 +9,4 @@ O ensaio instalou os wheels no Ubuntu 24.04.5 em WSL2. O processo Pi era real e 
 
 Passaram os dois ensaios integrados e 162 regressões com os pacotes instalados. As regressões cobrem CLI, migração da tabela privada, verificação de histórico Pi e aposentadoria Codex. O WSL de teste e seu disco foram removidos depois da coleta.
 
-O marco dispensa migração e pode ser revertido pelo commit do Nexus. Permanecem abertas a prova em outro host, a qualificação em macOS, as campanhas com provedores e a aceitação humana. O próximo ensaio local é qualificar o envio literal no Pi em Linux.
+O marco dispensa migração e pode ser revertido pelo commit do Nexus. Permanecem abertas a prova em outro host, a qualificação em macOS, as campanhas com provedores e a aceitação humana. O ensaio seguinte exercita o envio literal. [Envio literal em Linux](si037-linux-pi-literal.md)

@@ -1,0 +1,156 @@
+{
+  "tasks": [
+    "SI-016",
+    "SI-027",
+    "SI-037"
+  ],
+  "scenario": "SI-T-D06",
+  "scope": "installed_linux_embedded_and_connector_pi_literal_input_authenticated_home_api_native_model_boundary",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "4fa68a80fc9ff03a74f41cb3baa343cda137f13d",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 591,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 111,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "1104b7722b2df77cf468c38b852fdcd30a57cbfc",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 94,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    }
+  },
+  "installation": {
+    "distribution": "Ubuntu 24.04.5 LTS",
+    "kernel": "5.15.146.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "pi_build": "sha256:80f7f9c0350b08ad8ed9c2ef368c17309b69a9bbcb07fff199b4267a9e27e132",
+    "node_sha256": "d1de76d8edf2fededf6f8b30d244e2c0529ac607923a018283b77e9c74bd932c"
+  },
+  "wheel_sha256": {
+    "nexus": "f4b736cd01423fe8468a2df93310337376b1bdb55b70d83d4481d20e86c6b6b8",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": {
+    "runtime_uid": 65534,
+    "runtime_network_interfaces": [
+      "lo"
+    ],
+    "embedded_vault": "GNOME Secret Service on isolated D-Bus session",
+    "connector_ready_before_admission": "existing setup accepted, temporary fixture daemon reconnected before any work",
+    "test_only_skill": "literal-fixture",
+    "literal_text": "/skill:literal-fixture café  ",
+    "fixtures_sha256": {
+      "assertions": "cb9058e976d092f91edbb057df9b89e37ab0d4132937ead745b3f7a7c5190a0d",
+      "embedded": "afdf2d7ba4fac590f423d6a93d26c07bda185e1e94343ddc5a9f5d86a0b9eec4",
+      "connector": "18d8f5b8d113d4e324c3c5cf3e58a95efb4a995a92e9c42ff07a8683938a7847"
+    },
+    "temporary_wsl_registration_and_disk_removed": true,
+    "pip_check": "PASS",
+    "twine_check": "PASS"
+  },
+  "tests": {
+    "embedded-final.xml": {
+      "passed": 1,
+      "skipped": [],
+      "junit_sha256": "000e1e826aaa48c5b42e72b4304c38c92eb83671c5e1ffad7e6098ffa64aab98",
+      "suites": [
+        "test_embedded_linux_literal"
+      ]
+    },
+    "windows-literal.xml": {
+      "passed": 41,
+      "skipped": [],
+      "junit_sha256": "babc59105bc5791d621abf392df993a0e3b721179655d42cc4b74079987ddc26",
+      "suites": [
+        "",
+        "tests.execution_r4.test_session_input_runtime",
+        "tests.session_interaction.test_contract",
+        "tests.session_interaction.test_presentation_transport",
+        "tests.session_interaction.test_queue_storage"
+      ]
+    },
+    "linux-literal.xml": {
+      "passed": 40,
+      "skipped": [
+        "test_literal_requests_cannot_reach_prompt_hooks_or_an_active_turn"
+      ],
+      "junit_sha256": "239bc7ca8a52254d43b696b7f765e756b54fc09ae96f621591a203eaeb1f7be2",
+      "suites": [
+        "",
+        "tests.execution_r4.test_session_input_runtime",
+        "tests.session_interaction.test_contract",
+        "tests.session_interaction.test_presentation_transport",
+        "tests.session_interaction.test_queue_storage"
+      ]
+    },
+    "connector_integrated": {
+      "passed": 1,
+      "testcase": "test_connector_linux_literal",
+      "originating_junit_sha256": "7fd4a46395ea7928cc0531be141eebbd5f410114a832cc65ae916d451f503350",
+      "originating_suite_had_embedded_fixture_failure": true
+    }
+  },
+  "embedded": {
+    "embedded_owner": true,
+    "protected_secret_service": true,
+    "fixture_skill_registered": true,
+    "literal_bytes_exact": true,
+    "same_input_and_sequence": true,
+    "duplicate_same_receipt": true,
+    "slash_plain_request_refused": true,
+    "stale_catalog_refused": true,
+    "busy_compaction_disabled": true,
+    "same_pi_process_and_session": true,
+    "canonical_close": true,
+    "external_provider_calls": 0,
+    "all_native_processes_exited": true
+  },
+  "connector": {
+    "connector_r4": true,
+    "fixture_skill_registered": true,
+    "literal_bytes_exact": true,
+    "same_input_and_sequence": true,
+    "duplicate_same_receipt": true,
+    "slash_plain_request_refused": true,
+    "stale_catalog_refused": true,
+    "busy_compaction_disabled": true,
+    "literal_preserved_in_r4_operation": true,
+    "same_pi_process_and_session": true,
+    "canonical_close": true,
+    "external_provider_calls": 0
+  },
+  "preliminary_attempt": "The embedded test read execution_results as soon as a final receipt appeared. The read saw one row at that point and both were present on a later read. The final test awaited the two published results and checked their text.",
+  "limits": [
+    "linux_browser_not_exercised_in_this_milestone",
+    "distinct_physical_host",
+    "macos",
+    "provider_campaign",
+    "human_acceptance"
+  ]
+}

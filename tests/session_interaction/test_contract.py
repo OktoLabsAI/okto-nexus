@@ -41,7 +41,7 @@ def test_reviewed_pi_compaction_describes_the_busy_refusal_without_a_handler(mon
     mapping = SimpleNamespace(stream_epoch='epoch', receipt_connection_id='connection',
                               receipt_connection_generation=3)
     monkeypatch.setattr(commands, 'read_managed_native_session', lambda *_: mapping)
-    monkeypatch.setattr(commands, 'reviewed_pi_context', lambda _: True)
+    monkeypatch.setattr(commands, 'reviewed_pi_presentation_context', lambda _: True)
 
     def observed(owner_uow, owner_scope, **reference):
         assert (owner_uow, owner_scope) == (uow, scope)

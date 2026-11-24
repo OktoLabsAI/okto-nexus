@@ -14,6 +14,7 @@ import pytest
 import uvicorn
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
 from starlette.websockets import WebSocketDisconnect
 from wsproto import ConnectionType, WSConnection
 from wsproto.events import AcceptConnection, RejectConnection, Request, TextMessage
@@ -36,6 +37,7 @@ from okto_nexus.adapters.outbound.operator_client import RemoteOperatorHTTP
 from okto_nexus.application import (
     codex_presenter_channel,
     session_interaction_authority,
+    session_interaction_capability,
 )
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
 from okto_nexus.application.codex_viewer_protocol import (
@@ -47,7 +49,7 @@ from okto_nexus.application.codex_viewer_protocol import (
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
 from okto_nexus.application.terminal_connection import ConnectionError
 from okto_nexus.application.execution_native_session_mapping import (
-    ManagedNativeSession, NativeLaunchBuild, reviewed_pi_context, reviewed_pi_control_context,
+    ManagedNativeSession, NativeLaunchBuild, reviewed_pi_control_context,
     reviewed_pi_presentation_context,
 )
 from okto_nexus.bootstrap import local_pi_presentations
@@ -298,7 +300,6 @@ def pi_presentation(transport, monkeypatch, request):
                                    'inventory', 1, build, 'connection', 1, None, None)
     assert reviewed_pi_presentation_context(mapping)
     assert reviewed_pi_control_context(mapping)
-    assert reviewed_pi_context(mapping) is (platform == 'win32')
     views = []
     state = SimpleNamespace(available=True, mapping=mapping, frames=views, refuse_open=False)
 
@@ -370,6 +371,21 @@ def _prove_pi_ticket(ws, scope, *, columns=100, rows=36, editor=False):
     assert challenge['kind'] == 'challenge'
     ws.send_json({'kind': 'prove', 'challenge': challenge['challenge']})
     return challenge['channel_id']
+
+
+def test_pi_literal_requires_the_current_channel_and_reviewed_build(transport, pi_presentation, monkeypatch):
+    mapping = pi_presentation.mapping
+    monkeypatch.setattr(session_interaction_capability, 'read_managed_native_session', lambda *_: mapping)
+    channel = SimpleNamespace(control_capabilities=(PI_LITERAL_INPUT_REVISION,))
+    host = SimpleNamespace(channel=channel)
+    available = session_interaction_capability.literal_input_available
+
+    assert available(None, transport.scope, host)
+    channel.control_capabilities = ()
+    assert not available(None, transport.scope, host)
+    channel.control_capabilities = (PI_LITERAL_INPUT_REVISION,)
+    mapping = replace(mapping, launch_build=replace(mapping.launch_build, build_identity='sha256:' + '0' * 64))
+    assert not available(None, transport.scope, host)
 
 
 def test_pi_ticket_is_read_only_one_use_and_scoped_to_its_protocol(transport, pi_presentation):
