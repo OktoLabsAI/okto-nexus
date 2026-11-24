@@ -278,9 +278,9 @@
       "capabilities": {
         "session_chat": { "status": "qualified", "evidence": ["si036-claude-browser-roundtrip.md"] },
         "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si026-claude-terminal-interrupt.md"] },
-        "exact_steer": { "status": "qualified", "evidence": ["si026-claude-terminal-steer.md"] },
-        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si026-claude-terminal-interrupt.md"] },
-        "command_subset": { "status": "implemented", "evidence": ["si030-terminal-session-selection.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si026-claude-terminal-steer.md", "si026-claude-viewer-controls.json"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si026-claude-terminal-interrupt.md", "si026-claude-viewer-controls.json"] },
+        "command_subset": { "status": "implemented", "evidence": ["si030-terminal-session-selection.md", "si026-claude-viewer-controls.json"] },
         "native_live_attach": { "status": "qualified", "evidence": ["si026-claude-terminal-retained-output.md"] },
         "saved_context_resume": { "status": "qualified", "evidence": ["si026-claude-canonical-fresh-terminal.md"] },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si026-claude-terminal-retained-output.md"] },

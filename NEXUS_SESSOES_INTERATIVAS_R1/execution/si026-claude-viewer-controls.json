@@ -35,7 +35,7 @@
       0
     ]
   },
-  "scope": "Public Windows CLI and ConPTY via Connector, with both services on the current Windows host.",
+  "scope": "Windows ConPTY for both a Connector-hosted session on this Windows machine and an embedded Nexus session.",
   "native_executable": {
     "name": "Claude Code",
     "version": "2.1.328",
@@ -90,7 +90,14 @@
     "strict_twine": "PASS",
     "dependency_check": "PASS (48 packages)",
     "ledger": "PASS",
-    "lock": "PASS"
+    "lock": "PASS",
+    "source_full": {
+      "tests": 290,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "embedded_native": "PASS"
   },
   "observations": {
     "steer": {
@@ -177,12 +184,63 @@
         "write_detaches": 1,
         "foreign_key_violations": 0
       }
+    },
+    "embedded": {
+      "candidate": "37547dfea5971b6b9604fa146d8a1dcb18f888ac",
+      "trial": "trial4",
+      "entry_point": "The packaged CLI attach handler with an isolated origin-bound operator and the exact API-resolved binding.",
+      "proof": {
+        "claude_executable": "claude.exe",
+        "scenario": "Core-owned Claude terminal and prompt gate with isolated SSE",
+        "used_personal_login": false,
+        "model_endpoint": "loopback fixture",
+        "fixture_workspace_trust_preseeded": true,
+        "hook_and_profile_observations": [
+          [
+            "hook",
+            "/start",
+            200,
+            false
+          ],
+          [
+            "hook",
+            "/prompt",
+            200,
+            false
+          ],
+          [
+            "hook",
+            "/prompt",
+            200,
+            false
+          ]
+        ],
+        "fresh_empty_opened_canonically_without_prompt": true,
+        "fresh_uuid_confirmed_by_native_start_hook": true,
+        "local_keyboard_reorientation_same_process": true,
+        "cancelled_replacement_queue": {
+          "target_status": "interrupted",
+          "queue_paused": true,
+          "pending_count": 1
+        },
+        "local_keyboard_interruption_and_barrier": true,
+        "one_canonical_operation_per_action": true,
+        "canonical_close": true,
+        "sqlite_integrity": "ok",
+        "fixture_requests": [
+          "original",
+          "replacement"
+        ]
+      },
+      "remaining_owned_processes": 0
     }
   },
   "fixture_adjustments": [
     "The first steer run recorded the control and recovered its receipt. The terminal split the receipt reference across output frames. The retry used a wider ConPTY.",
     "Steer2 and interrupt1 verified the intended operation, cancellation and persisted result. Both failed the contiguous result-text assertion after reattach. The final probe verifies frames from the original owner and checks the result in the unique native history of the isolated project independently.",
-    "Steer3 used an internal host ID as a native history filename. Interrupt2 attempted queue resume before a fresh capability revision was available. Both fixture assumptions were corrected."
+    "Steer3 used an internal host ID as a native history filename. Interrupt2 attempted queue resume before a fresh capability revision was available. Both fixture assumptions were corrected.",
+    "The first embedded attempt omitted the repository namespace needed by the disposable setup helpers. The second omitted the fixture Server ID in the operator client and was refused before attachment.",
+    "The third embedded attempt recorded both native controls. Its assertion expected an empty queue after the replacement turn was cancelled. The final probe checks the exact durable unresolved input count and binds outstanding input to the replacement operation."
   ],
   "commands": [
     "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/install.ps1",
@@ -190,7 +248,9 @@
     "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/native/run.ps1 -Action steer -Trial steer4",
     "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si026-controls-b8a6/native/prove_durability.py steer4 steer",
     "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/native/run.ps1 -Action interrupt -Trial interrupt3",
-    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si026-controls-b8a6/native/prove_durability.py interrupt3 interrupt"
+    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si026-controls-b8a6/native/prove_durability.py interrupt3 interrupt",
+    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B -m pytest -q --tb=short tests/session_interaction --basetemp D:/nxs-si026-controls-b8a6/source-full --junitxml D:/nxs-si026-controls-b8a6/source-full.xml",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/embedded/run.ps1 -Trial trial4"
   ],
   "artifact_directory": "D:/nxs-si026-controls-b8a6",
   "evidence_sha256": {
@@ -231,13 +291,27 @@
     "native/interrupt3/native.xml": "fc5f663ba1c00edd8d42c68621a76593a79ca3275613f96a4800c19dbab71712",
     "native/interrupt3/result.json": "b921b63b4bf3de45716347781fee36280967df4bc6f7c7bed7a2c9973f8a08de",
     "native/interrupt3/durability.json": "a1b8242f2debabd6b335183e49f9e583d45b2d53527e5d3a89da0f860cfa1fce",
-    "native/interrupt3/terminal-redacted.txt": "2cbd15147368c2d49fcfc02010bf607e1a9ca01c4e7b71787bfe5f8cb43289a2"
+    "native/interrupt3/terminal-redacted.txt": "2cbd15147368c2d49fcfc02010bf607e1a9ca01c4e7b71787bfe5f8cb43289a2",
+    "source-full.log": "90bb7bd7b9ce6a836bf0660cb00bf421128c8250ebe54c835ebc04af40bf4953",
+    "source-full.xml": "4d68c49693971f9d0be72ae7ac81b9f3009498373a5a7a58e0c41f9abf6faac7",
+    "embedded/run.ps1": "77c8f1312d12be5f07ffc7967d5e52662d746ffe6c198cb0cfe532e47f33c07a",
+    "embedded/probe.py": "7158b746406f6d99b04518d89f5eafe54d24ed512997053f56d54b3d9d117fdc",
+    "embedded/drive_embedded_writer.py": "4da829ff8613c49fe7cbfe1595259430d3c2ce49e6d9f33d08b6ea15f91fc053",
+    "embedded/isolated_attach.py": "4b9107c5c4059337927b701306838b2e825de5115910d9d07d12fb0b488b4464",
+    "embedded/trial1/embedded.log": "799677db1892df1c22157f32217f9028c44919686c54f3d98855c3b59d781b81",
+    "embedded/trial2/embedded.log": "56083b968e76f971e8f41f635302fc3a95e84467db355ec5cd6277c6a505f3ed",
+    "embedded/trial3/embedded.log": "541c423b6a94611b60068431178e506e957eb3c0f90bfd7ab21184a5b53fd102",
+    "embedded/trial3/result.json": "ac11af06ac59786ff5e00efbd2a2b590c10d7fd68fbef97778602779318fe75a",
+    "embedded/trial4/embedded.log": "1047c860036656da06ab03af204071dc6910df28f12f9b304da7d101721e5c91",
+    "embedded/trial4/result.json": "480cc63e7cc0f1109ed509af1232fabee709118805e95ff2f3f5afea45077f62",
+    "embedded/trial4/steer/terminal-redacted.txt": "1c6995ce14eda485258f5034b6c06eef232348df71e98d5dc7e4181e311c2951",
+    "embedded/trial4/interrupt/terminal-redacted.txt": "ca7fa48b92e5dab5c96ba4f664530fe17554a2d34b1c535659795d46cf194c5f"
   },
   "limits": [
-    "The native runs exercise Connector-hosted sessions on this Windows machine. Embedded writer control has source-level transport coverage.",
+    "Native trials used the recorded Windows binary. The embedded probe began at the CLI attach handler using a test binding already established through product APIs. The Connector trial used the public CLI command.",
     "The interruption run complements SI-T-C12 with one pending input.",
     "Model responses and both losses of confirmation were deliberate fixtures.",
-    "Independent-host, embedded ConPTY control, participant, and real-provider qualification are open. Additional macOS measurement is deferred."
+    "Independent-host, participant, and real-provider qualification are open. Additional macOS measurement is deferred."
   ],
   "migration": "none"
 }
