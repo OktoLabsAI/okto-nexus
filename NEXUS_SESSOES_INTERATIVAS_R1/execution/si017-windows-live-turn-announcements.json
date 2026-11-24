@@ -152,7 +152,34 @@
     "startup_observed": true,
     "browser_control_ready_on_isolated_desktop": false,
     "leftover_portable_reader_processes": 0,
-    "nexus_speech_qualified": false
+    "nexus_speech_qualified": false,
+    "alternate_chromium_desktop_probe": {
+      "scope": "Standalone loopback page and portable NVDA on an inactive Win32 desktop",
+      "installed_nexus_page_exercised": false,
+      "browser": "Chrome/158.0.8127.18",
+      "edge_pipe_ready": false,
+      "chromium_pipe_ready": true,
+      "windows_input_desktop_unchanged": true,
+      "browser_and_reader_windows_on_private_desktop": true,
+      "document_focus_preserved": true,
+      "completion_present_in_accessibility_tree": true,
+      "desktop_was_spoken": true,
+      "completion_was_spoken": false,
+      "control_focus_label_was_spoken": false,
+      "fragments_were_spoken": false,
+      "reader_observed_foreground_hwnd_zero": true,
+      "clean_controlled_exit": true,
+      "leftover_fixture_reader_or_browser_processes": 0,
+      "evidence_sha256": {
+        "nvda_pipe.py": "caaf1648868984e5f87b7358d2b19aec1dd719c443f062057d64951921b3ec5c",
+        "pipe-smoke.cjs": "fb54063ad04ed79223ad9f2a06bc5b928cb220eb01656bbf90d5f48b203943ce",
+        "pipe-smoke-browser.cjs": "698275949247c0a197ae4f42c6e1c021e5ff2c2ed08793b865572cfc9efc568b",
+        "pipe-smoke-01/error.json": "07b1b73c0d1a3ff555f767c8a47ceb9b6bd50a5aaafdfa5574418fd46b970da5",
+        "pipe-chromium-01/desktop-confirmed.json": "35dc9ef326016bd8847a9f26cbcc72bb39d59a838842b32477651df3c1198d0b",
+        "pipe-chromium-01/browser-result.json": "4e4f98aa3743a331f7341c18365c7c6110d13f0af2d1183575e7e71693382c2d",
+        "pipe-chromium-01/nvda.log": "e2331974f652aee34faedcc1b0da2032c726ab06bedc74c3b3babae51c193596"
+      }
+    }
   },
   "local_evidence": {
     "root": "D:/nxs-si017-nvda-27206336",
