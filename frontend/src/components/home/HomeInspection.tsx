@@ -97,7 +97,8 @@ export function HomeInspection({target, serverId, workspace, continuation, onClo
     {error ? <p role="alert">{error}</p> : !resolved && <p role="status">Revalidating the exact canonical record…</p>}
     {resolved && !continuation && (entrySelection?<HomeEntryInspection selection={entrySelection} target={target} serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged} onAttentionSelected={onAttentionSelected}
       renderRecord={(related,continuing)=><HomeInspection key={JSON.stringify([related,continuing])} target={related} continuation={continuing} suppressOutput serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged}/>}/>
-      :<CanonicalInspection target={homeInspectionTarget(resolved)} contextual suppressOutput={suppressOutput} onClose={onClose} onChanged={onChanged}/>)}
+      :<CanonicalInspection target={homeInspectionTarget(resolved)} contextual suppressOutput={suppressOutput}
+        showRetainedResult={resolved.target.kind === 'result'} onClose={onClose} onChanged={onChanged}/>)}
     {resolved && continuation && context && <RuntimeOperations agentId={context.session.scope.agent_id} binding={context.binding} canStart={false} continuationScope={context.session.scope}/>}
   </div>;
 }

@@ -22,11 +22,12 @@ export function AttentionInspection({item, action, onClose, onChanged, refreshKe
 }
 
 /** Shared canonical controls; containers never manufacture an Attention occurrence. */
-export function CanonicalInspection({target, item, action, onClose, onChanged, refreshKey, contextual=true, suppressOutput=false}: {
+export function CanonicalInspection({target, item, action, onClose, onChanged, refreshKey, contextual=true, suppressOutput=false, showRetainedResult}: {
   target: AttentionTarget; item?: AttentionOccurrence; action?: AttentionAction;
   onClose: () => void; onChanged: () => void; refreshKey?: string;
   contextual?: boolean;
   suppressOutput?: boolean;
+  showRetainedResult?: boolean;
 }) {
   const targetKey = JSON.stringify(target);
   const [message, setMessage] = useState<MessageRow | null>(null);
@@ -77,7 +78,8 @@ export function CanonicalInspection({target, item, action, onClose, onChanged, r
         allowDecision={target.decide && item?.freshness === 'current' && item.resolution === 'open'} onChanged={onChanged} refreshKey={refreshKey} />}
       {target.kind === 'handoff' && <HandoffInspection key={targetKey} handoffId={target.id} workspace={target.workspace}
         allowVerify={target.verify && item?.freshness === 'current' && item.resolution === 'open'} onChanged={onChanged} refreshKey={refreshKey} />}
-      {target.kind === 'execution' && <HomeExecutionInspection key={targetKey} target={target} refreshKey={refreshKey} suppressOutput={suppressOutput}/>}
+      {target.kind === 'execution' && <HomeExecutionInspection key={targetKey} target={target} refreshKey={refreshKey}
+        suppressOutput={suppressOutput} showRetainedResult={showRetainedResult}/>}
       {target.kind === 'message' && message?.message_id === target.id && <MessageDetail message={message} />}
       {target.kind === 'delivery' && delivery?.operation_id === target.operation && <section aria-label="Canonical delivery operation" className="space-y-2 text-sm">
         <h3 className="font-semibold">Delivery operation · {delivery.state}</h3>

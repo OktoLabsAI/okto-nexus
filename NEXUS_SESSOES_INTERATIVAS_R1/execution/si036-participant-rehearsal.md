@@ -29,3 +29,11 @@ O ensaio automatizado usou o dashboard empacotado do Nexus em `93e89777`, Edge 1
 Ao fechar o painel e atualizar a Home, as três colunas estavam visíveis. **Results** mostrou dois botões **View result** com horários em formato legível. A auditoria confirmou uma abertura nativa, dois turnos e um fechamento, com as duas respostas na mesma sessão e a entrada da fila em `ACCEPTED_NATIVE`. O SQLite passou nas checagens de integridade e de chaves estrangeiras. O processo do Pi, o listener e o perfil descartável do navegador foram encerrados.
 
 A abertura do Edge manteve o comando de lançamento ativo. A automação prosseguiu em outro processo, com uma única execução do roteiro sobre a sessão já aberta. O ensaio usou respostas simuladas e não substitui o aceite do participante. O registro dispensa migração e pode ser revertido pelo commit. [Comandos, versões e hashes](si036-participant-rehearsal.json)
+
+## Abrir cada resposta depois do encerramento da sessão
+
+No dashboard anterior, cada botão **View result** direcionava o Edge para uma operação diferente da mesma sessão encerrada. O painel mostrava a conversa, sem identificar a resposta do card selecionado. A primeira passagem reproduziu a falha em um card. A segunda verificou os dois após o roteiro passar a reconhecer o botão com foco.
+
+No novo wheel, **Selected result** apresenta a resposta retida da operação escolhida antes da conversa. O Edge 158 para Windows abriu os dois cards, conferiu o texto de cada resultado no próprio painel, encontrou uma região de conversa em cada abertura e devolveu o foco ao botão ao fechar. O mesmo teste de regressão do componente falhou antes da correção e passou junto com os 424 testes do frontend. O build do Vite e a validação do wheel e do sdist pelo Twine também passaram.
+
+O ensaio usou duas cópias descartáveis do banco deixado pelo Pi e pelo Connector já encerrados. A auditoria preservou o banco original e os registros de sessões, operações, fila e resultados. A rodada dispensou inicialização do harness e chamadas ao provedor. A mudança está no dashboard do Nexus, dispensa migração e pode ser revertida pelo commit que atualiza o componente e o bundle. O aceite do participante e a confirmação da fala por leitor de tela no Windows permanecem pendentes. [Evidências e hashes](si036-participant-rehearsal.json)

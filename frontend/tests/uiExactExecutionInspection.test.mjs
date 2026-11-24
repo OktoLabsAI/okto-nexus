@@ -154,6 +154,13 @@ test('actual exact inspector suppresses duplicate output for entry panels; legac
   assert.match(standalone,/retained-output-marker/);assert.doesNotMatch(standalone,/<dialog|Maximize terminal|Running instances|Last 10/);
 });
 
+test('a selected result remains visible alongside the shared conversation without another transcript',()=>{
+  const context={operation:operation(),session:session(),binding:binding()};
+  const markup=html(HomeExecutionDetails,{context,suppressOutput:true,showRetainedResult:true});
+  assert.match(markup,/aria-label="Retained execution result"[\s\S]*retained-output-marker/);
+  assert.doesNotMatch(markup,/Session execution output/);
+});
+
 test('uncertain original execution exposes no new actions, while Advanced retains its existing full selector',()=>{
   const markup=html(HomeExecutionDetails,{context:{operation:operation({executor_stage:'OUTCOME_UNKNOWN'}),session:session(),binding:binding()}});
   assert.match(markup,/recorded outcome is unknown/);assert.doesNotMatch(markup,/Review runtime action|Runtime action/);

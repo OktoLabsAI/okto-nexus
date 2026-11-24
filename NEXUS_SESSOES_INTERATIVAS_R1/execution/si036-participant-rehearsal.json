@@ -349,5 +349,106 @@
     "participant_acceptance": "NOT_RUN",
     "windows_screen_reader_speech": "NOT_RUN",
     "migration": "none"
+  },
+  "retained_result_after_session_close": {
+    "baseline_commit": "2ea82380e4188d68394d21a0745d6fb959750cc5",
+    "baseline_product_commit": "7645201799bf478b657a42a3346ca1facdf6198e",
+    "baseline_wheel_sha256": "63f5c509f01accc15138867eb716b0dad78e5f4f373a4db35b0227869b14a6b0",
+    "candidate": {
+      "wheel_sha256": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+      "sdist_sha256": "a2dc3886f3a738c5bf1efcef509ea11f663792ae3852db1ec83e868d3ac1585f",
+      "dashboard_bundle_sha256": "ab6f3f549fcd808e9ab0274ce7891bea6404c26fc74fc05000dd7003af1ff7db",
+      "dashboard_bundle": "index-BvpZUnpS.js"
+    },
+    "windows_edge": "158.0.4370.33",
+    "fixture": {
+      "archive_sha256": "ebee23c752199ced36d668a8e83dda3a0149a9820da181b96750637219d76b51",
+      "source": "The two results and single closed session from the Windows Pi and Connector rehearsal",
+      "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "before": {
+      "result_cards": [
+        {
+          "selected_result_visible": false,
+          "different_result_in_retained_panel": false,
+          "exact_session": true,
+          "one_conversation_region": true,
+          "separate_retained_panel_present": false
+        },
+        {
+          "selected_result_visible": false,
+          "different_result_in_retained_panel": false,
+          "exact_session": true,
+          "one_conversation_region": true,
+          "separate_retained_panel_present": false
+        }
+      ],
+      "two_distinct_operations": true,
+      "focus_returned_to_result_button": true,
+      "server": {
+        "fixture_read_only": true,
+        "connector_started": false,
+        "original_database_unchanged": true,
+        "result_count": 2,
+        "productive_counts_unchanged": true
+      },
+      "sha256": {
+        "browser_proof": "361fb8d2bde818ae74688e9ac1115b6f27b9d3c120229bccb1c8ece438370dac",
+        "server_proof": "87cedc689a56dea4dda35cdbb19609392907958d804e0fdddc253bfa6dd5969f",
+        "result_cards_snapshot": "3a7ba20b4766f86906652645e69f6c7c6809e9fa43b09308be9b40b59468863f",
+        "first_result_snapshot": "87baaedbcb4b82bd80b93f57eda135ee9eab8315b7220be489e93f861fdcb526",
+        "second_result_snapshot": "abc5c22bf1e6e65e7f9f852bf2a841b7d5315b74a51ea0c3144a60d28e528daf"
+      }
+    },
+    "after": {
+      "result_cards": [
+        {
+          "selected_result_visible": true,
+          "different_result_in_retained_panel": false,
+          "exact_session": true,
+          "result_before_session": true,
+          "one_conversation_region": true,
+          "separate_retained_panel_present": true
+        },
+        {
+          "selected_result_visible": true,
+          "different_result_in_retained_panel": false,
+          "exact_session": true,
+          "result_before_session": true,
+          "one_conversation_region": true,
+          "separate_retained_panel_present": true
+        }
+      ],
+      "two_distinct_operations": true,
+      "focus_returned_to_result_button": true,
+      "server": {
+        "fixture_read_only": true,
+        "connector_started": false,
+        "original_database_unchanged": true,
+        "result_count": 2,
+        "productive_counts_unchanged": true
+      },
+      "sha256": {
+        "browser_proof": "9aa21bb0effaf0919fa821ce484046626a07d71f3023072839f0931ca27305c6",
+        "server_proof": "87cedc689a56dea4dda35cdbb19609392907958d804e0fdddc253bfa6dd5969f",
+        "result_cards_snapshot": "6ec3b7e2037e12412584235fe9bcb271739ff41d7a57e634f368e539459be1c8",
+        "first_result_snapshot": "4094836c9cf33c4a95ffede8ca217c4338b91396c551caa68fb6c0ce57eb83c7",
+        "second_result_snapshot": "86f3d663bf3856fb1620c50184594ff82ea6390a9df4784cef1c46ae0f35f418"
+      }
+    },
+    "frontend_node_tests_passed": 424,
+    "vite_build_passed": true,
+    "twine_strict_passed": true,
+    "sha256": {
+      "server_driver": "a8c9695f8e5cddc385ae8b97d84de0d2aa7ac609a28b2da8b0ee5432fdd76a2d",
+      "browser_driver": "aaed1be89a36a4249c288b81f4376398c8d5fc9570a28a8e8e3fbe42def8c97f",
+      "frontend_tests": "a4ffd7f4b5a1db8939b822f74baf9caef10516e1f5c3d0707801672fa338583a"
+    },
+    "limits": [
+      "Each server used a disposable single-user SQLite copy and served a wheel dashboard on loopback.",
+      "The recorded native Pi session and its Connector had already exited. No harness was started or contacted.",
+      "The automated browser test does not establish participant acceptance or Windows screen reader speech."
+    ]
   }
 }

@@ -12,8 +12,8 @@ type Target=Extract<AttentionTarget,{kind:'execution'}>;
 type Context=Awaited<ReturnType<typeof readExactExecutionContext>>;
 
 /** An operation reference is never replaced by an agent's runtime inventory. */
-export function HomeExecutionInspection({target,refreshKey,suppressOutput=true}: {
-  target:Target;refreshKey?:string;suppressOutput?:boolean;
+export function HomeExecutionInspection({target,refreshKey,suppressOutput=true,showRetainedResult}: {
+  target:Target;refreshKey?:string;suppressOutput?:boolean;showRetainedResult?:boolean;
 }) {
   const key=JSON.stringify(target);
   const [read,setRead]=useState<{key:string;context:Context|null;error:string}>({key,context:null,error:''});
@@ -39,12 +39,14 @@ export function HomeExecutionInspection({target,refreshKey,suppressOutput=true}:
     <p role={read.key===key&&read.error?'alert':'status'}>{read.key===key&&read.error?read.error:'Loading the exact execution…'}</p>
     {read.key===key&&read.error&&<button type="button" className="btn btn-secondary" onClick={()=>setReload(value=>value+1)}>Refresh this exact execution</button>}
   </section>;
-  return <>{read.error&&<p role="status">{read.error}</p>}<HomeExecutionDetails context={read.context} suppressOutput={suppressOutput}
+  return <>{read.error&&<p role="status">{read.error}</p>}<HomeExecutionDetails context={read.context} suppressOutput={suppressOutput} showRetainedResult={showRetainedResult}
     onAccessLost={()=>setRead({key,context:null,error:'Operator access is required. Protected execution context has been cleared.'})}/></>;
 }
 
 /** Presentation receives only already verified operation/session/binding facts. */
-export function HomeExecutionDetails({context,suppressOutput=true,onAccessLost}: {context:Context;suppressOutput?:boolean;onAccessLost?:()=>void}) {
+export function HomeExecutionDetails({context,suppressOutput=true,showRetainedResult=false,onAccessLost}: {
+  context:Context;suppressOutput?:boolean;showRetainedResult?:boolean;onAccessLost?:()=>void;
+}) {
   const {operation,session,binding}=context;
   const uncertain=operation.executor_stage==='OUTCOME_UNKNOWN'||operation.admission_state==='RECONCILING';
   const controls = !uncertain ? <ExactSessionControls session={session} binding={binding} onAccessLost={onAccessLost}/> :
@@ -57,11 +59,11 @@ export function HomeExecutionDetails({context,suppressOutput=true,onAccessLost}:
     {(uncertain||operation.error)&&<details className="text-xs"><summary>Reference for troubleshooting</summary>
       <p className="break-all">Operation: {operation.operation_id}</p>
     </details>}
-    {!suppressOutput&&<><SessionExecutionPanel session={session} harness={binding.adapter_id} embedded interactive
-      technicalControls={controls}/>
-      {operation.result&&<section aria-label="Retained execution result"><h4 className="font-medium">Retained result</h4>
-        <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated?'\n[Output truncated]':''}</pre>
-      </section>}</>}
+    {!suppressOutput&&<SessionExecutionPanel session={session} harness={binding.adapter_id} embedded interactive
+      technicalControls={controls}/>}
+    {(!suppressOutput||showRetainedResult)&&operation.result&&<section aria-label="Retained execution result"><h4 className="font-medium">Retained result</h4>
+      <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated?'\n[Output truncated]':''}</pre>
+    </section>}
     {suppressOutput && <details><summary className="cursor-pointer">Session controls</summary>{controls}</details>}
   </section>;
 }

@@ -75,11 +75,17 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   };
   if(lost)return <p role="alert">Operator access is required. Protected context has been cleared.</p>;
   const sessionOptions=session&&!sessions.some(ref=>homeSessionRefKey(ref)===homeSessionRefKey(session))?[session,...sessions]:sessions;
+  const viewingResult = !record.continuation && record.target.kind === 'result';
+  const recordDetails = <section aria-label="Original record and canonical controls">
+    <h4 className="font-medium mb-2">{viewingResult?'Selected result':record.continuation?'Continue this session':'Work details'}</h4>
+    {renderRecord(record.target,record.continuation)}
+  </section>;
   return <section className="space-y-4" aria-label="Activity context">
     {notice&&<p role="status">{notice}</p>}
     <header><h3 className="font-semibold break-words">{isUntitledHomeWork(entry)?'Work activity':entry.title}</h3>
       {(entry.agent_label||entry.host_label)&&<p className="text-xs text-surface-500">{[entry.agent_label,entry.host_label].filter(Boolean).join(' · ')}</p>}</header>
     {error&&<p role="status">{error}</p>}
+    {!active && viewingResult && recordDetails}
     <section aria-label="Session in this activity" className="space-y-2">
       <h4 className="font-medium">Session</h4>
       {(sessions.length>1||entry.sessions_total===null||entry.has_more_sessions)&&<label className="block text-sm">Choose the exact session<select data-modal-passive className="block border rounded p-2 w-full bg-transparent" value={session?homeSessionRefKey(session):''}
@@ -104,8 +110,7 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
       {cursors.results&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('results')}>Load more related results</button>}
     </section>}
     {active?<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{selectAttention(null);setSession(initialEntrySession(entry,record.target));})}>Show work details</button>:
-      <section aria-label="Original record and canonical controls"><h4 className="font-medium mb-2">{record.continuation?'Continue this session':'Work details'}</h4>
-        {renderRecord(record.target,record.continuation)}</section>}
+      !viewingResult && recordDetails}
   </section>;
 }
 
