@@ -1,0 +1,84 @@
+{
+  "task": "SI-037",
+  "scope": "network-isolated native Pi RPC and installed Core on a true Intel macOS runner",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "49895713d263b7681386b7257ad8dfdabd44367d",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 594
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 111
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 95
+    }
+  },
+  "intake_working_trees_clean": true,
+  "intake_upstream_drift": [
+    0,
+    0
+  ],
+  "intake_behind_main": 0,
+  "initial_run": {
+    "run_id": 45310061691,
+    "state": "FAIL",
+    "cause": "ASGI startup rejected symlink in default macOS temp path"
+  },
+  "native_run": {
+    "run_id": 45311002828,
+    "artifact_id": 14882099668,
+    "archive_sha256": "d80f33a7cd77369a3385594376b65100719a803a13704257a8f398188a936591",
+    "nx_commit": "5394c162f3bf3407e5185201bfa5f66af7fc087e",
+    "native_probe": "PASS",
+    "installed_tests": "COLLECTION_ERROR",
+    "collection_error": "ModuleNotFoundError: tests",
+    "wheel_sha256": {
+      "okto_nexus": "0a1bf054ebd760acf4ebb4867e7425c15b1377787de2590854c20aa3c81dc7e2",
+      "nexus_connector_core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+      "okto_nexus_connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3"
+    },
+    "proof_sha256": "1ad9080bc250077f6e886a9897c3cbacbf9227215a7a72a389196d21cafce4d5",
+    "compatibility_proof": {
+      "macos": "26.6.1",
+      "architecture": "x86_64",
+      "python": "3.13.15",
+      "core_version": "0.0.16",
+      "node_digest": "sha256:2a249a6a7015b0555c3448a77d226c1f3c8f62bd133d89044a2e1518cd16c4b3",
+      "pi_version": "0.87.1",
+      "build_identity": "sha256:8f4451e71c3200fd1dcada6dbfae32963f43aa378ede063f30feec33ed94b721",
+      "hosted_renderer_reviewed": false,
+      "network_block_verified": true,
+      "process_owner": "OwnedDarwinPopen",
+      "provider": "synthetic",
+      "reader_detached_before_result": true,
+      "same_process_and_session": true,
+      "exact_history": true,
+      "close_result": "forced",
+      "stop_evidence": "STOPPED"
+    }
+  },
+  "node_archive_sha256": "5d627245b9f53cb2512cc21b7aa6aad693106affadd91e0c8f42d600fb7ba444",
+  "pi_lockfile_sha256": "0a0bf5a1a596b5ff3f1eb9b6d6ddf83c2dc3ed05bf3da14f565723b56d2534fd",
+  "windows": {
+    "baseline_terminal_and_presentation_passed": 106,
+    "baseline_skipped": 1,
+    "updated_terminal_passed": 4,
+    "updated_terminal_skipped": 1,
+    "installed_runner_partition_passed": 2,
+    "isolated_terminal_transport_collected": 45
+  },
+  "limits": [
+    "Direct Pi RPC on Intel macOS with deterministic model responses",
+    "Integrated macOS session with native hosted renderer requires further qualification",
+    "Other-machine, paid-provider and human acceptance gates remain open"
+  ],
+  "migration_required": false
+}

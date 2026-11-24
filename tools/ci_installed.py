@@ -14,7 +14,6 @@ import subprocess
 import sys
 import tempfile
 import tomllib
-import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -176,11 +175,12 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
             campaign_path = output / 'campaign.json'
             campaign_path.write_text(json.dumps(campaign, indent=2) + '\n', encoding='utf-8')
             config = Path(temp) / 'pytest.ini'
-            # Retain declared markers while deliberately excluding checkout
-            # pythonpath: installed tests must not import application source.
+            # Allow repository test helpers such as tests.session_interaction
+            # without adding src, where the application packages live.
             declared = tomllib.loads((ROOT / 'pyproject.toml').read_text(encoding='utf-8'))
             markers = declared['tool']['pytest']['ini_options'].get('markers', [])
             config.write_text('[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\n'
+                              + f'pythonpath="{ROOT.as_posix()}"\n'
                               + 'markers=\n' + ''.join('    ' + marker + '\n' for marker in markers), encoding='utf-8')
             command = [sys.executable, '-I', '-u', '-m', 'pytest', '-c', str(config),
                        '--rootdir=' + str(ROOT), '--confcutdir=' + str(ROOT / 'tests'),

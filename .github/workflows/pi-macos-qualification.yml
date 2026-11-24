@@ -5,6 +5,7 @@ on:
     branches: [feature/v0.3.8]
     paths:
       - .github/workflows/pi-macos-qualification.yml
+      - tools/ci_installed.py
       - tools/probe_macos_pi.py
       - tests/fixtures/pi-release/package*.json
       - src/okto_nexus/adapters/inbound/cli/pi_viewer_terminal.py

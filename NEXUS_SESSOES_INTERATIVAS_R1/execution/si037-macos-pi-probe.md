@@ -1,0 +1,7 @@
+# SI-037 · Pi instalado em Intel macOS
+
+No runner Intel macOS 26.6.1, o Core 0.0.16 instalado abriu o Pi 0.87.1 por RPC e manteve o mesmo processo e a mesma sessão depois que o leitor saiu. O provedor sintético liberou a resposta após a saída. O histórico registrou exatamente um pedido e uma resposta, e o Core confirmou `STOPPED`. O sandbox recusou uma conexão a um listener em loopback antes da abertura. O Node 24.15.0 e o Pi vieram de artefatos com integridade fixada. [Rodada nativa](https://github.com/OktoLabsAI/okto-nexus/actions/runs/45311002828) [Evidência estruturada](si037-macos-pi-probe.json)
+
+A primeira rodada parou na inicialização do Nexus porque o diretório temporário do macOS atravessava um link simbólico. O runner passou a criar o diretório por um caminho canônico, preservando a verificação do journal. Na rodada nativa, a suíte instalada parou na coleta ao importar uma fixture. O executor de testes agora inclui a raiz de testes do repositório e usa a aplicação do wheel instalado. Quarenta e cinco testes da suíte afetada foram coletados em processo isolado no Windows. As duas verificações de particionamento e quatro verificações locais do terminal passaram. [Primeira rodada](https://github.com/OktoLabsAI/okto-nexus/actions/runs/45310061691)
+
+O ensaio nativo exercita o processo Pi com RPC direto. A apresentação hospedada e a continuidade do trabalho pelo fluxo integrado do Nexus ainda aguardam prova no macOS. O marco dispensa migração. A reversão usa os commits do workflow e do terminal, com os dados de execução preservados.
