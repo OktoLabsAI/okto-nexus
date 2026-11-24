@@ -651,6 +651,56 @@ def test_claude_composer_submits_one_safe_draft_and_restores_the_terminal(monkey
     assert output.endswith('\x1b[?2004l\x1b[0m\x1b[?25h\r\n')
 
 
+@pytest.mark.parametrize(('action', 'settlement'), [
+    ('steer', 'recorded'), ('steer', 'refused'), ('steer', 'lost'),
+    ('interrupt', 'recorded'), ('interrupt', 'cancelled'),
+])
+def test_claude_viewer_confirms_one_review_and_recovers_only_its_intent(monkeypatch, capsys, action, settlement):
+    from contextlib import nullcontext
+    from okto_nexus.adapters.inbound.cli import claude_viewer_terminal
+
+    # The confirm in the review keystroke batch must be ignored.
+    start = ['\x05', 'Use a different plan', '\x12\x19'] if action == 'steer' else ['\x18\x19']
+    gestures = iter([*start, '\x0e' if settlement == 'cancelled' else '\x19', '\x1d'])
+    reviews, decisions, references, recoveries = [], [], [], []
+
+    def review(*, action, intent, output, text=None):
+        reviews.append((action, intent, text))
+        return 'review-nonce', 'op_' + 'a' * 32
+
+    def decide(*, action, review_id, confirm, output):
+        assert references == ([reviews[0][1]] if confirm else [])
+        decisions.append((action, review_id, confirm))
+        if settlement == 'lost':
+            raise ConnectionError('OUTCOME_UNKNOWN', 'The control reply was lost.', possible_effect=True)
+        return {'status': 'recorded'} if settlement == 'recorded' else None
+
+    def recover(intent):
+        recoveries.append(intent)
+        return {'message': 'Claude interruption confirmed. Replacement message is pending.'}
+
+    monkeypatch.setattr(claude_viewer_terminal, 'editor_terminal', lambda: nullcontext(lambda: next(gestures)))
+    link = SimpleNamespace(poll_terminal_output=lambda _: None, review_claude_control=review,
+                           decide_terminal_control=decide)
+    claude_viewer_terminal.show_claude_writer(link, recover, references.append)
+    assert decisions == [(action, 'review-nonce', settlement != 'cancelled')]
+    intent = reviews[0][1]
+    assert intent.startswith(f'claude_{action}_')
+    assert reviews == [(action, intent, 'Use a different plan' if action == 'steer' else None)]
+    assert recoveries == ([intent] if settlement == 'lost' else [])
+    output = capsys.readouterr().out
+    effect = 'send the replacement below' if action == 'steer' else 'pause the message queue'
+    assert 'Claude turn aaaaaaaa' in output and effect in output
+    if settlement == 'recorded':
+        assert 'recorded. Check the receipt for the outcome.' in output
+    elif settlement == 'refused':
+        assert 'The review changed.' in output
+    elif settlement == 'lost':
+        assert 'Claude interruption confirmed. Replacement message is pending.' in output
+    else:
+        assert 'recorded.' not in output
+
+
 @pytest.mark.parametrize('platform', ['win32', 'linux'])
 def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch, platform):
     call = Catalog()

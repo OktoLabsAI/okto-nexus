@@ -325,9 +325,9 @@
       "capabilities": {
         "session_chat": { "status": "implemented", "evidence": ["si011-si026-claude-remote-interrupt.md"] },
         "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si011-si026-claude-remote-interrupt.md"] },
-        "exact_steer": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md"] },
-        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si011-si026-claude-remote-interrupt.md"] },
-        "command_subset": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md", "si011-si026-claude-remote-interrupt.md"] },
+        "exact_steer": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md", "si026-claude-viewer-controls.json"] },
+        "interrupt_queue_barrier": { "status": "qualified", "evidence": ["si011-si026-claude-remote-interrupt.md", "si026-claude-viewer-controls.json"] },
+        "command_subset": { "status": "qualified", "evidence": ["si026-claude-remote-managed-steer.md", "si011-si026-claude-remote-interrupt.md", "si026-claude-viewer-controls.json"] },
         "native_live_attach": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
         "saved_context_resume": {
           "status": "qualified",

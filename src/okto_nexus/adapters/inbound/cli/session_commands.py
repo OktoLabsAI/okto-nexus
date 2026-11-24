@@ -17,6 +17,8 @@ COMMANDS = ('send', 'steer', 'interrupt')
 INTENT = re.compile(r'terminal_(send|steer|interrupt)_[0-9a-f]{32}')
 PI_INPUT_INTENT = re.compile(r'pi_input_[0-9a-f]{32}')
 CLAUDE_INPUT_INTENT = re.compile(r'claude_input_[0-9a-f]{32}')
+_CLAUDE_STEER_INTENT = re.compile(r'claude_steer_[0-9a-f]{32}')
+_CLAUDE_INTERRUPT_INTENT = re.compile(r'claude_interrupt_[0-9a-f]{32}')
 PI_STEER_INTENT = re.compile(r'pi_steer_[0-9a-f]{32}')
 PI_INTERRUPT_INTENT = re.compile(r'pi_interrupt_[0-9a-f]{32}')
 PI_RUN_REF = re.compile(r'prun_[0-9a-f]{32}')
@@ -253,9 +255,10 @@ def execute_session_command(call, binding, session_id, command, *, interactive, 
 
 
 def _presenter_command(intent):
-    if PI_INTERRUPT_INTENT.fullmatch(intent) or _CODEX_INTERRUPT_INTENT.fullmatch(intent):
+    if (PI_INTERRUPT_INTENT.fullmatch(intent) or _CODEX_INTERRUPT_INTENT.fullmatch(intent)
+            or _CLAUDE_INTERRUPT_INTENT.fullmatch(intent)):
         return 'interrupt'
-    if PI_STEER_INTENT.fullmatch(intent):
+    if PI_STEER_INTENT.fullmatch(intent) or _CLAUDE_STEER_INTENT.fullmatch(intent):
         return 'steer'
     if PI_INPUT_INTENT.fullmatch(intent) or CLAUDE_INPUT_INTENT.fullmatch(intent):
         return 'send'

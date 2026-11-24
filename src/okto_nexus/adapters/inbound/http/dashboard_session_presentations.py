@@ -58,6 +58,7 @@ from .dashboard_session_steer import review_exact_steer
 from .executor_link import _safe_transport
 from .operator_auth import COOKIE, same_origin_request
 from .session_interaction_contract import (
+    ClaudeOperationTarget,
     Identifier,
     InterruptTargetView,
     NativeTurnTarget,
@@ -187,14 +188,19 @@ class _PiKeyRequest(_Document):
     text: Annotated[str, Field(max_length=4096)] | None = None
 
 
-class _PiControlReviewRequest(_Document):
+class _TerminalControlReviewRequest(_Document):
     kind: Literal['steer_review', 'interrupt_review']
     request_id: Revision
     client_intent_id: Identifier
     capability_revision: Identifier
 
 
-class _PiControlDecisionRequest(_Document):
+class _ClaudeSteerReviewRequest(_TerminalControlReviewRequest):
+    kind: Literal['steer_review']
+    content: TextInput
+
+
+class _TerminalControlDecisionRequest(_Document):
     kind: Literal['steer_confirm', 'steer_cancel', 'interrupt_confirm', 'interrupt_cancel']
     request_id: Revision
     review_id: Identifier
@@ -260,10 +266,10 @@ class _ReviewedTurn:
 
 
 @dataclass(frozen=True, slots=True)
-class _ReviewedPiControl:
+class _ReviewedTerminalControl:
     id: str
     expires: float
-    request: _PiControlReviewRequest
+    request: _TerminalControlReviewRequest
     target: SteerTargetView | InterruptTargetView
     text: str | None = field(default=None, repr=False)
 
@@ -452,9 +458,11 @@ async def _record_presenter_input(state, services, active, request, *, presentat
             'status': receipt.status, 'operation_id': receipt.operation_id, 'possible_effect': receipt.possible_effect}
 
 
-def _review_pi_control(state, services, active, request, text=None):
+def _review_terminal_control(state, services, active, request, text=None, *, claude=False):
     steering = request.kind == 'steer_review'
     if steering and (not text or not text.strip() or text.lstrip().startswith(('/', '!'))):
+        return None
+    if steering and claude and any(char != '\n' and (char < ' ' or '\x7f' <= char <= '\x9f') for char in text):
         return None
     with services.broker.factory.unit_of_work(write=False) as uow:
         if services.next_turn_revision(uow, active['scope']) != request.capability_revision:
@@ -462,20 +470,27 @@ def _review_pi_control(state, services, active, request, text=None):
         if steering:
             target = review_exact_steer(uow, active['scope'], services.next_turn_revision,
                 remote_control_host=state.deps.runtime_availability.current_host)
-            if target is not None and target.effect != 'next_boundary':
+            effect = 'interrupt_then_send' if claude else 'next_boundary'
+            if target is not None and target.effect != effect:
                 return None
         else:
             target = review_exact_interrupt(uow, active['scope'], _interrupt_target_for(state))
-        if target is None or not isinstance(target.target, ObservedRunTarget):
+        target_type = ClaudeOperationTarget if claude else ObservedRunTarget
+        if target is None or not isinstance(target.target, target_type):
             return None
-        return _ReviewedPiControl(secrets.token_urlsafe(24), time.monotonic() + 45, request, target, text)
+        return _ReviewedTerminalControl(secrets.token_urlsafe(24), time.monotonic() + 45, request, target, text)
 
 
-def _pi_review_reply(review):
-    return {'status': 'reviewed', 'review_id': review.id} if review is not None else {'status': 'unavailable'}
+def _terminal_review_reply(review):
+    if review is None:
+        return {'status': 'unavailable'}
+    response = {'status': 'reviewed', 'review_id': review.id}
+    if isinstance(review.target.target, ClaudeOperationTarget):
+        response['operation_id'] = review.target.target.operation_id
+    return response
 
 
-async def _decide_pi_control(state, services, active, request, review, *, presentation):
+async def _decide_terminal_control(state, services, active, request, review, *, presentation):
     action, decision = request.kind.split('_')
     if review is None or request.review_id != review.id or review.request.kind != f'{action}_review':
         return {'status': 'refused'}
@@ -484,12 +499,15 @@ async def _decide_pi_control(state, services, active, request, review, *, presen
 
     def cut(uow, human):
         if time.monotonic() >= review.expires:
-            raise OktoNexusError(ErrorCode.CONFLICT, 'The Pi control review expired.', {})
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The terminal control review expired.', {})
         _verify_writer(state, services, active, uow, human, presentation=presentation)
 
+    target = review.target.target
+    selection = ({'native_turn_id': target.operation_id, 'claude_operation': True}
+                 if isinstance(target, ClaudeOperationTarget) else {'native_turn_id': target.run_ref, 'observed_run': True})
     common = dict(factory=services.broker.factory, access=services.execution_access,
         authority_fence=services.broker.authority_fence, scope=active['scope'], author=active['author'],
-        client_intent_id=review.request.client_intent_id, native_turn_id=review.target.target.run_ref, observed_run=True,
+        client_intent_id=review.request.client_intent_id, **selection,
         capability_revision=review.target.capability_revision, expected_queue_revision=review.target.queue_revision,
         fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
         verify_presenter=cut)
@@ -540,7 +558,7 @@ def _read_pi_interrupt_status(state, services, active, client_intent_id):
             'outcome_unknown': receipt.get('executor_stage') == 'OUTCOME_UNKNOWN'}
 
 
-async def _reply_pi(ws, request, value):
+async def _reply_terminal(ws, request, value):
     await _send(ws, {'kind': request.kind, 'request_id': request.request_id, request.kind: value})
 
 
@@ -617,7 +635,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                         else:
                             if status in ('discarded', 'refused'):
                                 admitted_steer = None
-                            await _reply_pi(ws, request, {'status': status})
+                            await _reply_terminal(ws, request, {'status': status})
                     elif hello.editor and kind == 'interrupt_status':
                         request = _PiInterruptStatusRequest.model_validate(raw)
                         if request.client_intent_id != admitted_interrupt:
@@ -626,28 +644,28 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                                                client_intent_id=admitted_interrupt)
                         if result['target_status'] in ('interrupted', 'finished') or result['refused']:
                             admitted_interrupt = None
-                        await _reply_pi(ws, request, result)
+                        await _reply_terminal(ws, request, result)
                     elif hello.editor and kind in ('steer_review', 'interrupt_review'):
                         review = None
-                        request = _PiControlReviewRequest.model_validate(raw)
+                        request = _TerminalControlReviewRequest.model_validate(raw)
                         if kind == 'steer_review' and admitted_steer is None:
                             pending = request
                             await edit('snapshot', text=None)
                         else:
                             if kind == 'interrupt_review' and admitted_interrupt is None:
-                                review = await _worker(_review_pi_control, state=state, services=services,
+                                review = await _worker(_review_terminal_control, state=state, services=services,
                                                        active=active, request=request)
-                            await _reply_pi(ws, request, _pi_review_reply(review))
+                            await _reply_terminal(ws, request, _terminal_review_reply(review))
                     elif hello.editor and kind in ('steer_confirm', 'steer_cancel', 'interrupt_confirm', 'interrupt_cancel'):
-                        request = _PiControlDecisionRequest.model_validate(raw)
+                        request = _TerminalControlDecisionRequest.model_validate(raw)
                         selected, review = review, None
-                        reply = await _decide_pi_control(state, services, active, request, selected, presentation=presentation)
+                        reply = await _decide_terminal_control(state, services, active, request, selected, presentation=presentation)
                         if reply['status'] == 'recorded':
                             if kind == 'interrupt_confirm':
                                 admitted_interrupt = selected.request.client_intent_id
                             else:
                                 admitted_steer = reply['input_id']
-                        await _reply_pi(ws, request, reply)
+                        await _reply_terminal(ws, request, reply)
                     elif hello.editor and admitted_steer is not None:
                         raise ValueError('A reorientation holds the draft until its receipt is known')
                     elif hello.editor and kind == 'key':
@@ -672,10 +690,10 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                 if hello.editor and isinstance(data, PiEditorUpdate):
                     if pending is None:
                         raise ValueError('The draft editor response is unsolicited')
-                    if isinstance(pending, _PiControlReviewRequest):
-                        review = await _worker(_review_pi_control, state=state, services=services, active=active,
+                    if isinstance(pending, _TerminalControlReviewRequest):
+                        review = await _worker(_review_terminal_control, state=state, services=services, active=active,
                                                request=pending, text=data.draft)
-                        reply = _pi_review_reply(review)
+                        reply = _terminal_review_reply(review)
                     elif isinstance(pending, _PiSteerStatusRequest):
                         if data.draft is not None or data.limit_reached:
                             raise ValueError('The renderer did not clear the applied draft')
@@ -693,7 +711,7 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                         reply = {'limit_reached': data.limit_reached, 'queued': queued}
                     if _services(state, presentation) is not services:
                         break
-                    await _reply_pi(ws, pending, reply)
+                    await _reply_terminal(ws, pending, reply)
                     pending = None
                 elif type(data) is not bytes or not 1 <= len(data) <= MAX_PI_PRESENTATION_BYTES:
                     raise ValueError('Invalid renderer frame')
@@ -733,6 +751,7 @@ async def _present_claude(ws, services, active, *, presentation):
         inbound = asyncio.create_task(ws.receive())
         output = asyncio.create_task(anext(frames, None))
         renew_at = anyio.current_time() + _RENEW_SECONDS
+        review = None
         try:
             while True:
                 done, _ = await asyncio.wait((inbound, output),
@@ -747,10 +766,30 @@ async def _present_claude(ws, services, active, *, presentation):
                     if remote and raw == {'kind': 'keepalive'}:
                         keepalive = True
                     elif access == 'write':
-                        request = _TerminalEnqueueRequest.model_validate(raw)
-                        result = await _record_presenter_input(state, services, active, request,
-                                                               presentation=presentation)
-                        await _send(ws, {'request_id': request.request_id, **result})
+                        kind = raw.get('kind') if isinstance(raw, dict) else None
+                        if kind in ('steer_review', 'interrupt_review'):
+                            await verify()
+                            if kind == 'steer_review':
+                                request = _ClaudeSteerReviewRequest.model_validate(raw)
+                                text = request.content.text
+                            else:
+                                request = _TerminalControlReviewRequest.model_validate(raw)
+                                text = None
+                            review = await _worker(_review_terminal_control, state=state, services=services,
+                                                   active=active, request=request, text=text, claude=True)
+                            await _reply_terminal(ws, request, _terminal_review_reply(review))
+                        elif kind in ('steer_confirm', 'steer_cancel', 'interrupt_confirm', 'interrupt_cancel'):
+                            request = _TerminalControlDecisionRequest.model_validate(raw)
+                            selected, review = review, None
+                            result = await _decide_terminal_control(state, services, active, request, selected,
+                                                                     presentation=presentation)
+                            await _reply_terminal(ws, request, result)
+                        else:
+                            review = None
+                            request = _TerminalEnqueueRequest.model_validate(raw)
+                            result = await _record_presenter_input(state, services, active, request,
+                                                                   presentation=presentation)
+                            await _send(ws, {'request_id': request.request_id, **result})
                     else:
                         raise ValueError('Claude terminal attachment does not accept input')
                     inbound = asyncio.create_task(ws.receive())

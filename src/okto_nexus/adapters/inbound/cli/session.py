@@ -210,7 +210,7 @@ def _attach_claude(call, binding, scope, generation, *, remote, write, viewer_ex
 
     if writer:
         print('Watching the managed Claude terminal. Ctrl+E composes a message for the Nexus queue.')
-        print('Press Ctrl+] to detach. Use Home or session steer and session interrupt for turn controls.', flush=True)
+        print('Ctrl+R reviews a replacement from the composer. Ctrl+X reviews interruption. Ctrl+] detaches.', flush=True)
     else:
         print('Watching the Claude terminal. Ctrl+C detaches this viewer.', flush=True)
     last_intent = None

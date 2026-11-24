@@ -320,6 +320,12 @@ Enter queues the message after the current turn. Ctrl+N discards the draft.
 Ctrl+] detaches the writer while the process and queue continue. When a writer
 is already attached, the CLI asks for confirmation before transferring input.
 
+In the composer, Ctrl+R reviews interrupting the active Claude turn and sending
+the draft as its replacement. Ctrl+X reviews interrupting the active turn and
+pausing the queue. Ctrl+Y confirms the displayed effect and target. Ctrl+N
+cancels the review. The terminal reports when the request has been recorded.
+Use its receipt to check the outcome of the interruption and replacement.
+
 If the send is unconfirmed, recover it with `session receipt` using the session,
 owner generation and intent printed by the composer.
 

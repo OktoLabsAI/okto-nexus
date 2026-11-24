@@ -235,9 +235,26 @@ class _LocalPresenter:
             raise _unavailable()
         return review_id
 
-    def decide_pi_control(self, *, action, review_id, confirm, output):
+    def review_claude_control(self, *, action, intent, text=None, output):
         if action not in ('steer', 'interrupt'):
-            raise ValueError('Unsupported Pi control')
+            raise ValueError('Unsupported Claude control')
+        if self.input_revision is None:
+            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'This terminal view is read-only.')
+        content = {'content': {'type': 'text', 'text': text}} if action == 'steer' else {}
+        review = self._request(f'{action}_review', pi_output=output, client_intent_id=intent,
+                               capability_revision=self.input_revision, **content)
+        if review == {'status': 'unavailable'}:
+            return None
+        review_id, operation_id = review.get('review_id'), review.get('operation_id')
+        if (review.keys() != {'status', 'review_id', 'operation_id'} or review['status'] != 'reviewed'
+                or not isinstance(review_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]{32}', review_id)
+                or not isinstance(operation_id, str) or not 1 <= len(operation_id) <= 160 or not operation_id.isprintable()):
+            raise _unavailable()
+        return review_id, operation_id
+
+    def decide_terminal_control(self, *, action, review_id, confirm, output):
+        if action not in ('steer', 'interrupt'):
+            raise ValueError('Unsupported terminal control')
         kind = f'{action}_confirm' if confirm else f'{action}_cancel'
         try:
             reply = self._request(kind, pi_output=output, review_id=review_id)
@@ -252,9 +269,11 @@ class _LocalPresenter:
             return reply
         except ConnectionError:
             if confirm:
-                raise ConnectionError('OUTCOME_UNKNOWN', 'The Pi control receipt is unconfirmed. Recover the original intent.',
+                raise ConnectionError('OUTCOME_UNKNOWN', 'The terminal control receipt is unconfirmed. Recover the original intent.',
                                       possible_effect=True) from None
             raise
+
+    decide_pi_control = decide_terminal_control
 
     def pi_steer_status(self, *, input_id, output):
         reply = self._request('steer_status', pi_output=output, input_id=input_id)

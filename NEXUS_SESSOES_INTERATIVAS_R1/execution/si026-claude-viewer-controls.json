@@ -1,0 +1,243 @@
+{
+  "date": "2026-11-24",
+  "tasks": [
+    "SI-026",
+    "SI-031"
+  ],
+  "scenarios": [
+    "SI-T-C05",
+    "SI-T-C07",
+    "SI-T-C12"
+  ],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "b8a6b26ffdbcdb672750de1e624824acf282a551",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_drift": [
+        624,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8"
+    },
+    "nexus_worktree_clean": true,
+    "nexus_upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "scope": "Public Windows CLI and ConPTY via Connector, with both services on the current Windows host.",
+  "native_executable": {
+    "name": "Claude Code",
+    "version": "2.1.328",
+    "sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "windows_build": 26300,
+    "arch": "x64",
+    "profile": "reviewed plan profile, tool calls denied",
+    "model": "deterministic loopback fixture",
+    "external_model_requests": 0
+  },
+  "artifacts": {
+    "nexus_wheel_sha256": "8fc33ab6305feef4941f1b37f7d3f686720e69a19ccea2214e30e93e82332fd9",
+    "nexus_sdist_sha256": "f0e830aa11ed8076837be15eef932c7b5493a92b0c7ae4a71e270d9b3d825a78",
+    "base_nexus_wheel_sha256": "12832037e4694c9d60b2e3fa0278a8768e16665db3072c36eeced00af7dcb609",
+    "package_files": 817,
+    "added": [],
+    "changed": [
+      "okto_nexus/adapters/inbound/cli/claude_viewer_terminal.py",
+      "okto_nexus/adapters/inbound/cli/session.py",
+      "okto_nexus/adapters/inbound/cli/session_commands.py",
+      "okto_nexus/adapters/inbound/http/dashboard_session_presentations.py",
+      "okto_nexus/adapters/outbound/local_presenter_client.py"
+    ],
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "checks": {
+    "source": {
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "installed": {
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "native_steer": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native_interrupt": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "strict_twine": "PASS",
+    "dependency_check": "PASS (48 packages)",
+    "ledger": "PASS",
+    "lock": "PASS"
+  },
+  "observations": {
+    "steer": {
+      "trial": "steer4",
+      "proof": {
+        "requesting_refused": true,
+        "stale_queue_rejected_before_write": true,
+        "public_writer_confirmation_and_console_restore": true,
+        "reader_on_original_pty_and_result_in_native_history": true,
+        "native_terminal_surface": true,
+        "presenter_confirmation_recovered": true,
+        "original_terminal_receipt": "CANCELLED",
+        "before_result": "DELIVERY_UNKNOWN",
+        "compound": {
+          "interruption": "confirmed",
+          "replacement": "write_unknown"
+        },
+        "after_result": "ACCEPTED_NATIVE",
+        "one_operation_no_replay": true,
+        "fixture_requests": [
+          "original",
+          "replacement"
+        ],
+        "terminal_writes": [
+          "escape",
+          "replacement"
+        ],
+        "replacement_on_same_pty": true,
+        "canonical_close": true,
+        "sqlite_check": "ok"
+      },
+      "durability": {
+        "operation_counts": {
+          "runtime.open": 1,
+          "turn.submit": 1,
+          "turn.steer": 1,
+          "runtime.close": 1
+        },
+        "closed_sessions": 1,
+        "native_launches": 1,
+        "selected_original_turn_cancelled": true,
+        "input_final_state": "ACCEPTED_NATIVE",
+        "input_surface": "native_terminal",
+        "read_detaches": 1,
+        "write_detaches": 1,
+        "foreign_key_violations": 0
+      }
+    },
+    "interrupt": {
+      "trial": "interrupt3",
+      "proof": {
+        "requesting_refused": true,
+        "older_steer_only_peer_refused_interrupt": true,
+        "stale_queue_and_wrong_turn_refused_before_escape": true,
+        "public_writer_confirmation_and_console_restore": true,
+        "original_cancelled": true,
+        "paused_before_one_escape_and_input_retained": true,
+        "presenter_receipt_recovered_once": true,
+        "reader_on_original_pty_and_result_in_native_history": true,
+        "native_terminal_surface": true,
+        "explicit_resume_delivered_same_pending_item_once": true,
+        "same_pty": true,
+        "control_receipt": {
+          "target_status": "interrupted",
+          "queue_paused": true,
+          "pending_count": 1
+        },
+        "canonical_close": true,
+        "sqlite_check": "ok"
+      },
+      "durability": {
+        "operation_counts": {
+          "runtime.open": 1,
+          "turn.submit": 2,
+          "turn.interrupt": 1,
+          "runtime.close": 1
+        },
+        "closed_sessions": 1,
+        "native_launches": 1,
+        "selected_original_turn_cancelled": true,
+        "input_final_state": "ACCEPTED_NATIVE",
+        "input_surface": "web",
+        "read_detaches": 1,
+        "write_detaches": 1,
+        "foreign_key_violations": 0
+      }
+    }
+  },
+  "fixture_adjustments": [
+    "The first steer run recorded the control and recovered its receipt. The terminal split the receipt reference across output frames. The retry used a wider ConPTY.",
+    "Steer2 and interrupt1 verified the intended operation, cancellation and persisted result. Both failed the contiguous result-text assertion after reattach. The final probe verifies frames from the original owner and checks the result in the unique native history of the isolated project independently.",
+    "Steer3 used an internal host ID as a native history filename. Interrupt2 attempted queue resume before a fresh capability revision was available. Both fixture assumptions were corrected."
+  ],
+  "commands": [
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/install.ps1",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/run-regression.ps1",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/native/run.ps1 -Action steer -Trial steer4",
+    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si026-controls-b8a6/native/prove_durability.py steer4 steer",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/native/run.ps1 -Action interrupt -Trial interrupt3",
+    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si026-controls-b8a6/native/prove_durability.py interrupt3 interrupt"
+  ],
+  "artifact_directory": "D:/nxs-si026-controls-b8a6",
+  "evidence_sha256": {
+    "build.log": "3c062300a90c28e896fe981c9e17e06aa3cb1ac977c6bd3c8a738e7ff742c2ec",
+    "audit_wheel.py": "5f1140483ae433c53a87fb6e84f6ea4b23346978044b0302bb279bd78d033987",
+    "wheel-audit.json": "a5424ae6eb0efd4e31330d51e863445250d9d41902fb7aa387596ed6d4dcdea3",
+    "install.ps1": "b35d21c3986f14c2ccbdfb7d5b100731d9c270bdf9c5fd776c9c669d33d14ee9",
+    "installed-lock.txt": "2454855246fe768a8816b3beba28285186484b7443b0eef5564e91e233939069",
+    "source.log": "f2fc64e2220ada18a570d92104730bc8430fe15d38a7a82beb9e398dea991f9a",
+    "source.xml": "ce891fee855056596d31ba715f1a1c96739e811d812f4cd9c38f080e6f15c1a3",
+    "run-regression.ps1": "3063047877f5a274b02f0b5fff28608110729bbff19375d28c5258fce8910025",
+    "installed.log": "ccbc615f44f921811418984c3c8f1e8f0185f18166396207bfcb0db86cc70f78",
+    "installed.xml": "7e7523ca07724f92b6c55f915bb5c3d4d63a4302894766d463e7e777b75376b1",
+    "native/run.ps1": "312d40ea30ff8f445ad318d5aacfe6a21bcfb032eef9b83d175b6cf557d1ee46",
+    "native/remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "native/drive_writer.py": "03d2375c4461512041b837c0502a93d56850aeb2615b54ca3c1196fd821496ab",
+    "native/isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "native/pty_probe.py": "d74b379ddaf1d100e6320048afb865a58ec95e71ba9565f718c5916afd362a57",
+    "native/prove_durability.py": "0ab8be252977c5761d8108b8bef7a9a8619531d545ea170166d26b091bede55d",
+    "native/test_steer.py": "7d09d90fb188335c665e582d15da7b5636e3bab463607e663ff613990ab05805",
+    "native/test_interrupt.py": "30edd5c0075b9c46d43a31e90ea3804af485ea4421b87b9878336bff320e0755",
+    "native/steer1/native.log": "44f5d7164c3387363f81f467769c0a51c5ad146e786de53221c74e771f287889",
+    "native/steer1/native.xml": "74367e8e46e58735468c4ba119272b889e40f7a1b24fedc15d65d7e9ea2c0aba",
+    "native/steer2/native.log": "230619c9fa3829b1fcea0e669230c6118a27b23d965e05da1e3a4b27c261a8b1",
+    "native/steer2/native.xml": "06074dba4059638e9b2d35b76ccbba8b145dceee501c50dd04471eb6ad56a6d1",
+    "native/interrupt1/native.log": "d635e733c66c12f0f8248019e7651f0962453853077f99d95664d99e4d799d01",
+    "native/interrupt1/native.xml": "d8954e173022e2f1c776469cdca2373cb7e29edf4a77ef6dc2f0a879976a2ee6",
+    "native/steer3/native.log": "e650f1a3096b3e582333dadce6e5ec57aafbb12227e0e99fc02b195b2fc43c04",
+    "native/steer3/native.xml": "04df54742182f540fbe291af64268b1e6ca6c45d3df9d7894b4de84ba31a00a2",
+    "native/interrupt2/native.log": "d24cd23bd8adc513b0377e85486109038ac1e33f724889c78bc947532f03b7e7",
+    "native/interrupt2/native.xml": "3f4cbda8c8cc1649ff0e31ab107edc10da44b7da87fc1a083dc4c745fcff1ce5",
+    "native/steer4/native.log": "9dd139c51b2232baf5ab64cb693188df50d589220cb884b18dc222e60d3c4e02",
+    "native/steer4/native.xml": "ffa547456dd3e52949e8454bfacea766e7eafbeb189f540a1f1480f2845c385b",
+    "native/steer4/result.json": "8982947f5fdb4c5a51ca081e2e603916300909cc79b8552785cc5c1bad680ba8",
+    "native/steer4/durability.json": "206a5bcb4fd59b53bd5c2d808f368b5e18681f9c9a642bfdf67efaed7e486329",
+    "native/steer4/terminal-redacted.txt": "2c62becaada35f70dff994535e95f6df7864e42bc6de143dd42902769a15ab05",
+    "native/interrupt3/native.log": "fc10ee50f0c8b7833a237bf5abeb40c922bbf6bc1c9ee6f8d543aab80a0b2b88",
+    "native/interrupt3/native.xml": "fc5f663ba1c00edd8d42c68621a76593a79ca3275613f96a4800c19dbab71712",
+    "native/interrupt3/result.json": "b921b63b4bf3de45716347781fee36280967df4bc6f7c7bed7a2c9973f8a08de",
+    "native/interrupt3/durability.json": "a1b8242f2debabd6b335183e49f9e583d45b2d53527e5d3a89da0f860cfa1fce",
+    "native/interrupt3/terminal-redacted.txt": "2cbd15147368c2d49fcfc02010bf607e1a9ca01c4e7b71787bfe5f8cb43289a2"
+  },
+  "limits": [
+    "The native runs exercise Connector-hosted sessions on this Windows machine. Embedded writer control has source-level transport coverage.",
+    "The interruption run complements SI-T-C12 with one pending input.",
+    "Model responses and both losses of confirmation were deliberate fixtures.",
+    "Independent-host, embedded ConPTY control, participant, and real-provider qualification are open. Additional macOS measurement is deferred."
+  ],
+  "migration": "none"
+}

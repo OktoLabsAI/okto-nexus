@@ -23,6 +23,7 @@ from okto_nexus.adapters.inbound.cli.codex_viewer_relay import local_codex_relay
 from okto_nexus.adapters.inbound.http import dashboard_session_presentations
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE, OperatorAuth
 from okto_nexus.adapters.inbound.http.session_interaction_contract import (
+    ClaudeOperationTarget,
     InterruptTargetView,
     NativeTurnTarget,
     ObservedRunTarget,
@@ -308,6 +309,103 @@ def test_claude_terminal_writer_uses_the_web_queue_and_fences_the_old_writer(tra
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute('SELECT surface,content FROM session_interaction_inputs ORDER BY enqueue_sequence')
         assert [tuple(row) for row in rows] == [('web', 'From Home'), ('native_terminal', 'From the Claude terminal')]
+
+
+def test_claude_controls_require_the_reviewed_action_and_current_writer(transport, monkeypatch):
+    app = transport.app
+    broker = app.state.local_codex_presentations.broker
+
+    async def prove(scope):
+        assert scope == transport.scope
+        return SimpleNamespace(adapter_id='claude_stream'), 'managed-owner'
+
+    @asynccontextmanager
+    async def terminal(scope):
+        assert scope == transport.scope
+
+        async def frames():
+            yield b'Claude transcript'
+            await anyio.sleep_forever()
+
+        yield frames()
+
+    app.state.local_claude_presentations = dashboard_session_presentations.LocalClaudePresentations(
+        broker, prove, terminal, object(), lambda *_: 'input-revision')
+    app.state.session_input_dispatch_options = {
+        'session_input_capability_revision': lambda *_: 'input-revision',
+        'session_steer_revisions': lambda *_: ('control-capability', 'confirmed-effect'),
+    }
+    app.state.inventory_fresh_publications = {}
+    operation = 'op_' + 'a' * 32
+    target = ClaudeOperationTarget(kind='claude_operation', operation_id=operation)
+    facts = dict(target=target, capability_revision='control-capability', queue_revision=7)
+    monkeypatch.setattr(dashboard_session_presentations, 'review_exact_interrupt',
+                        lambda *_: InterruptTargetView(**facts))
+    monkeypatch.setattr(dashboard_session_presentations, 'review_exact_steer',
+                        lambda *_, **__: SteerTargetView(**facts, effect='interrupt_then_send',
+                                                         effect_revision='confirmed-effect'))
+    effects = []
+
+    def verify(details):
+        assert details['native_turn_id'] == operation and details['claude_operation'] is True
+        assert details['scope'] == transport.scope and details['author'].surface == 'native_terminal'
+        assert details['capability_revision'] == 'control-capability' and details['expected_queue_revision'] == 7
+        with broker.authority_fence() as human, transport.factory.unit_of_work() as uow:
+            details['verify_presenter'](uow, human)
+
+    def steer(**details):
+        verify(details)
+        assert details['confirmed_effect_revision'] == 'confirmed-effect'
+        effects.append(('steer', details['text']))
+        return SimpleNamespace(input_id='fixture-input')
+
+    def interrupt(**details):
+        verify(details)
+        effects.append(('interrupt', None))
+
+    monkeypatch.setattr(dashboard_session_presentations, 'steer_human_input', steer)
+    monkeypatch.setattr(dashboard_session_presentations, 'request_exact_human_interrupt', interrupt)
+
+    def offer(intent, epoch=0):
+        result = prepare(transport, intent, presentation='claude', access='write',
+                         expected_writer_epoch=epoch, takeover=bool(epoch))
+        assert result.status_code == 201
+        return stream(transport, result.json(), protocol=CLAUDE_PRESENTATION_SUBPROTOCOL)
+
+    def exchange(ws, kind, **payload):
+        ws.send_json({'kind': kind, 'request_id': 1, **payload})
+        return ws.receive_json()[kind]
+
+    def review(ws, action, **payload):
+        result = exchange(ws, f'{action}_review', client_intent_id=f'claude-{action}',
+                          capability_revision='input-revision', **payload)
+        assert result['status'] == 'reviewed' and result['operation_id'] == operation
+        return result['review_id']
+
+    with offer('claude-controls') as first:
+        attach(first, transport.scope)
+        assert first.receive_bytes() == b'Claude transcript'
+        nonce = review(first, 'interrupt')
+        assert exchange(first, 'steer_confirm', review_id=nonce) == {'status': 'refused'}
+        assert exchange(first, 'interrupt_confirm', review_id=nonce) == {'status': 'refused'}
+        nonce = review(first, 'interrupt')
+        assert exchange(first, 'interrupt_cancel', review_id=nonce) == {'status': 'cancelled'}
+        assert exchange(first, 'interrupt_confirm', review_id=nonce) == {'status': 'refused'}
+        abandoned = review(first, 'interrupt')
+        with offer('claude-controls-takeover', epoch=1) as current:
+            attach(current, transport.scope)
+            assert current.receive_bytes() == b'Claude transcript'
+            assert exchange(first, 'interrupt_confirm', review_id=abandoned) == {'status': 'refused'}
+            assert exchange(current, 'interrupt_confirm', review_id=abandoned) == {'status': 'refused'}
+            assert not effects
+            replacement = {'content': {'type': 'text', 'text': 'Use the reviewed replacement'}}
+            nonce = review(current, 'steer', **replacement)
+            assert exchange(current, 'steer_confirm', review_id=nonce) == {
+                'status': 'recorded', 'input_id': 'fixture-input'}
+            assert exchange(current, 'steer_confirm', review_id=nonce) == {'status': 'refused'}
+            nonce = review(current, 'interrupt')
+            assert exchange(current, 'interrupt_confirm', review_id=nonce) == {'status': 'recorded'}
+    assert effects == [('steer', 'Use the reviewed replacement'), ('interrupt', None)]
 
 
 def test_authenticated_read_disconnect_and_replay_leave_work_untouched(transport):

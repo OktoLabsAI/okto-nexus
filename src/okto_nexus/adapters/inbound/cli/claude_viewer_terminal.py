@@ -2,6 +2,7 @@
 
 import codecs
 import sys
+from dataclasses import dataclass
 from uuid import uuid4
 
 from ....application.terminal_connection import ConnectionError
@@ -10,12 +11,24 @@ from .terminal_editor import TerminalKeys, editor_terminal
 
 _DRAFT_BYTES = 12 * 1024
 _BUFFER_CHARACTERS = 32 * 1024
+_CONTROL_NAMES = {'steer': 'Reorientation', 'interrupt': 'Interruption'}
+
+
+@dataclass(frozen=True, slots=True)
+class _Review:
+    action: str
+    intent: str
+    review_id: str
+    return_to_draft: bool
 
 
 class _Draft:
     def __init__(self):
         self.text = ''
         self.cursor = 0
+
+    def valid(self):
+        return bool(self.text.strip() and not self.text.lstrip().startswith(('/', '!')) and '\t' not in self.text)
 
     def edit(self, key, text):
         position = self.cursor
@@ -45,6 +58,7 @@ def show_claude_writer(link, recover, report_intent):
     keys = TerminalKeys(shortcuts={'\x05': 'compose'})
     draft = _Draft()
     composing = False
+    review = None
     buffered = []
     buffered_size = 0
 
@@ -57,7 +71,7 @@ def show_claude_writer(link, recover, report_intent):
         # The cursor marker is local. Only the original draft is submitted.
         visible = left + '\x1b[7m' + (right[:1] or ' ') + '\x1b[27m' + right[1:]
         write('\x1b[H\x1b[2JMessage to Claude\r\n'
-              'Enter queues · Ctrl+N discards · Ctrl+E returns to output\r\n\r\n'
+              'Enter queues · Ctrl+R reviews reorientation · Ctrl+N discards · Ctrl+E returns to output\r\n\r\n'
               + visible.replace('\n', '\r\n') + ('\r\n\r\n' + notice if notice else ''))
 
     def leave_composer():
@@ -68,7 +82,7 @@ def show_claude_writer(link, recover, report_intent):
         buffered_size = 0
 
     def render_output(chunk):
-        nonlocal buffered_size
+        nonlocal buffered_size, review
         text = decoder.decode(chunk)
         if not composing:
             write(text)
@@ -77,7 +91,43 @@ def show_claude_writer(link, recover, report_intent):
         buffered_size += len(text)
         if buffered_size >= _BUFFER_CHARACTERS:
             leave_composer()
+            review = None
             write('\r\nDraft kept. Press Ctrl+E to continue editing.\r\n')
+
+    def begin_review(action):
+        nonlocal composing
+        intent = f'claude_{action}_' + uuid4().hex
+        original_mode = composing
+        target = link.review_claude_control(action=action, intent=intent, output=render_output,
+                                           text=draft.text if action == 'steer' else None)
+        if target is None:
+            notice = _CONTROL_NAMES[action] + ' is unavailable for the active Claude turn.'
+            if composing:
+                render_draft(notice)
+            else:
+                write('\r\n' + notice + '\r\n')
+            return None
+        review_id, operation = target
+        if not composing:
+            composing = True
+            write('\x1b[?1049h')
+        effect = ('Interrupt this turn and send the replacement below?' if action == 'steer'
+                  else 'Interrupt this turn and pause the message queue?')
+        prompt = f'\x1b[H\x1b[2JClaude turn {operation[-8:]}\r\n{effect}\r\nCtrl+Y confirms · Ctrl+N cancels\r\n'
+        write(prompt + ('\r\n' + draft.text.replace('\n', '\r\n') if action == 'steer' else ''))
+        return _Review(action, intent, review_id, original_mode)
+
+    def commit(intent, submit, *, label='Message'):
+        report_intent(intent)
+        try:
+            return submit(), False
+        except ConnectionError as error:
+            if not error.possible_effect:
+                raise
+            recovered = recover(intent)
+            write('\r\n' + (recovered['message'] if recovered else
+                  label + ' delivery is unconfirmed. Check the receipt before trying again.') + '\r\n')
+            return None, True
 
     try:
         with editor_terminal() as next_input:
@@ -94,6 +144,34 @@ def show_claude_writer(link, recover, report_intent):
                         return
                     may_submit = composing
                     for key, text in actions:
+                        if review is not None:
+                            if key not in ('control_confirm', 'control_cancel'):
+                                continue
+                            selected, review = review, None
+                            if key == 'control_cancel':
+                                link.decide_terminal_control(action=selected.action, review_id=selected.review_id,
+                                                             confirm=False, output=render_output)
+                                if selected.return_to_draft and composing:
+                                    render_draft(_CONTROL_NAMES[selected.action] + ' cancelled.')
+                                elif composing:
+                                    leave_composer()
+                                break
+                            leave_composer()
+                            decision, uncertain = commit(selected.intent, lambda: link.decide_terminal_control(
+                                action=selected.action, review_id=selected.review_id, confirm=True, output=render_output),
+                                label=_CONTROL_NAMES[selected.action])
+                            if uncertain:
+                                return
+                            if decision is None:
+                                write('\r\nThe review changed. Press Ctrl+E to open your draft.\r\n')
+                            else:
+                                if selected.action == 'steer':
+                                    draft = _Draft()
+                                write('\r\n' + _CONTROL_NAMES[selected.action] + ' recorded. Check the receipt for the outcome.\r\n')
+                            break
+                        if key == 'interrupt_review':
+                            review = begin_review('interrupt')
+                            break
                         if key == 'compose':
                             may_submit = False
                             if composing:
@@ -110,6 +188,12 @@ def show_claude_writer(link, recover, report_intent):
                             draft = _Draft()
                             leave_composer()
                             break
+                        if key == 'steer_review':
+                            if may_submit and draft.valid():
+                                review = begin_review('steer')
+                            else:
+                                render_draft('Enter the replacement message before reviewing reorientation.')
+                            break
                         if key != 'enter':
                             if not draft.edit(key, text):
                                 render_draft('This message is too long.')
@@ -118,20 +202,14 @@ def show_claude_writer(link, recover, report_intent):
                             continue
                         if not may_submit:
                             break
-                        if not draft.text.strip() or draft.text.lstrip().startswith(('/', '!')) or '\t' in draft.text:
+                        if not draft.valid():
                             render_draft('Enter plain text without a terminal command or tab.')
                             break
                         intent = 'claude_input_' + uuid4().hex
                         leave_composer()
-                        report_intent(intent)
-                        try:
-                            receipt = link.send_terminal_input(intent=intent, text=draft.text, output=render_output)
-                        except ConnectionError as error:
-                            if not error.possible_effect:
-                                raise
-                            recovered = recover(intent)
-                            write('\r\n' + (recovered['message'] if recovered else
-                                  'Message delivery is unconfirmed. Check the receipt before sending again.') + '\r\n')
+                        receipt, uncertain = commit(intent, lambda: link.send_terminal_input(
+                            intent=intent, text=draft.text, output=render_output))
+                        if uncertain:
                             return
                         draft = _Draft()
                         write('\r\nMessage recorded as ' + receipt['input_id'] + '.\r\n')
