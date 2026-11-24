@@ -450,5 +450,84 @@
       "The recorded native Pi session and its Connector had already exited. No harness was started or contacted.",
       "The automated browser test does not establish participant acceptance or Windows screen reader speech."
     ]
+  },
+  "windows_native_journey_with_exact_result_cards": {
+    "nexus_product_commit": "f2bbb856a8728570639fac3b25d090f850f3c0f3",
+    "connector_pin_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_pin_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "platform": "Windows x64",
+    "browser": "Microsoft Edge 158.0.4370.33",
+    "pi": "0.87.1",
+    "connector_transport": "R4 loopback",
+    "home_board": {
+      "the_three_columns_are_visible": true,
+      "view_result_actions_in_results": 2,
+      "receipt_timestamp_visible_without_raw_iso": true,
+      "explicit_board_refresh_after_closing_conversation": true
+    },
+    "exact_retained_results": {
+      "same_session": true,
+      "distinct_exact_operations": true,
+      "matched_retained_texts": 2,
+      "response_before_conversation": true,
+      "focus_returned_after_each_close": true,
+      "sha256": {
+        "result-inspection-0.log": "79a721811def4c7e1f8d266e54473691b6f09cab489e7527c672cefd1dc572c7",
+        "result-inspection-1.log": "95e124b85eb698ffa63029e6b9deab6d64ae46b813bede58f56e212697e8e336",
+        "result-inspection-proof.json": "cbbbc4046d5eb60fcea2943610149f1f1ae7c48ce1d08c9825566ff35985674a"
+      }
+    },
+    "database_and_process_audit": {
+      "scope": "rehearsal",
+      "verified_at": "2026-11-24T20:29:49.473440-03:00",
+      "results": {
+        "one_session": true,
+        "native_turns": 2,
+        "queued_input_status_observed": "QUEUED",
+        "queued_input_final_status": "ACCEPTED_NATIVE",
+        "seeded_before_opening_browser": true,
+        "browser_opened_via_home": true,
+        "browser_reopened_via_home": true,
+        "browser_showed_clean_incoming_message": true,
+        "browser_showed_both_results_once": true,
+        "external_provider_calls": 0,
+        "native_process_exited_after_canonical_close": true
+      },
+      "nexus_wheel_sha256": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+      "bundled_dashboard_sha256": {
+        "okto_nexus/adapters/inbound/http/static/index.html": "f02bc367ac7d14b87a377648ccdbc7368d7a1eb9bfb94832d3defef8593bf10e",
+        "okto_nexus/adapters/inbound/http/static/assets/index-BvpZUnpS.js": "ab6f3f549fcd808e9ab0274ce7891bea6404c26fc74fc05000dd7003af1ff7db"
+      },
+      "operation_counts": {
+        "runtime.open": 1,
+        "turn.submit": 2,
+        "runtime.close": 1
+      },
+      "native_launches": 1,
+      "retained_results": 2,
+      "input_state": "ACCEPTED_NATIVE",
+      "sqlite_integrity": "ok",
+      "sqlite_foreign_key_violations": 0,
+      "listener_closed": true,
+      "browser_credential_file_removed": true
+    },
+    "sha256": {
+      "test_rehearsal.py": "221572e2bf2507f4b81c2830916b4f1e246550fcea48176013c06555eef05736",
+      "rehearse.ps1": "5b76f8cea0ac356025bd0dfe081f9cc5f54c1222cbb015eb8b4045680dcfd81d",
+      "audit-results.py": "f6f5f6bb3402e7ca832578a6d3979a37e9c04130698fea95892ed8233f4bb38c",
+      "assert_current_wheels.py": "0d2d9c624f1e6914f972c200e37b7fd1550c021b2bdbb9ff2e4230ea09541694",
+      "trial1/native.xml": "37b345cc8c02665a9fd32071c4c3840d94d33c64a277afa789624067386885a1",
+      "trial1/audit.json": "f7a58f454d275e6a2a910a3ca85da5964145d5097491b80a3e51b33ae856ec1f",
+      "trial1/result-cross-check.json": "ace8c21f12e04331e80624abd2026edd26eaad8c25cbeac18aa83ab3a9434dc3",
+      "trial1/browser-startup-timeout.log": "93b1319f69d2f4f9866baae615087bc2cd7bf25fa9ccfe6908a115e6d639857c",
+      "trial1/output/playwright/queue-confirmed.log": "ddbe80cfffb568dd06b0fdae7a0a27d74cb6b504e68929a0b18b8cee6393bb30",
+      "trial1/output/playwright/both-replies.log": "de56a01712cfd63295a600a7e9fb1e75b756875884b24a7ae908f97a56c014fe",
+      "trial1/output/playwright/results-on-board.log": "355fe9e22b8384409ce27e8445339f6a2ebc0c387137e36e3bf7eeebaffd88ac"
+    },
+    "limits": [
+      "The participant task was driven by Playwright with in-process Pi fixture responses.",
+      "The first browser driver reached its startup timeout before navigating. The second driver used the same live fixture, port and browser.",
+      "Human acceptance and Windows screen reader speech are pending."
+    ]
   }
 }

@@ -37,3 +37,11 @@ No dashboard anterior, cada botão **View result** direcionava o Edge para uma o
 No novo wheel, **Selected result** apresenta a resposta retida da operação escolhida antes da conversa. O Edge 158 para Windows abriu os dois cards, conferiu o texto de cada resultado no próprio painel, encontrou uma região de conversa em cada abertura e devolveu o foco ao botão ao fechar. O mesmo teste de regressão do componente falhou antes da correção e passou junto com os 424 testes do frontend. O build do Vite e a validação do wheel e do sdist pelo Twine também passaram.
 
 O ensaio usou duas cópias descartáveis do banco deixado pelo Pi e pelo Connector já encerrados. A auditoria preservou o banco original e os registros de sessões, operações, fila e resultados. A rodada dispensou inicialização do harness e chamadas ao provedor. A mudança está no dashboard do Nexus, dispensa migração e pode ser revertida pelo commit que atualiza o componente e o bundle. O aceite do participante e a confirmação da fala por leitor de tela no Windows permanecem pendentes. [Evidências e hashes](si036-participant-rehearsal.json)
+
+## Jornada completa no wheel com a inspeção corrigida
+
+No Windows, o Edge percorreu a jornada a partir do pedido inicial no Nexus `f2bbb856` instalado. A automação encontrou a atividade na Home, enfileirou a segunda mensagem enquanto o Pi atendia a primeira e reabriu a mesma conversa. Em Results, abriu cada card e conferiu a resposta antes da conversa. O foco voltou ao botão após cada fechamento. O registro do navegador foi conferido contra os dois resultados no SQLite, pelos IDs exatos da operação e da sessão.
+
+O Pi 0.87.1 usou o Connector R4 nesta máquina e respostas simuladas. A auditoria confirmou uma abertura nativa, dois envios e um fechamento. A entrada da fila atingiu `ACCEPTED_NATIVE`, o processo do Pi saiu e o listener fechou. O primeiro roteiro do navegador atingiu o limite de espera antes de navegar. A segunda execução aproveitou o ambiente nativo que ficou pronto logo depois, com a mesma sessão do navegador e sem repetir o trabalho inicial.
+
+O marco acrescenta evidência do fluxo completo, dispensa migração e pode ser revertido pelo commit de registro. O aceite do participante e a confirmação de fala no Windows seguem pendentes. [Resultados e hashes](si036-participant-rehearsal.json)
