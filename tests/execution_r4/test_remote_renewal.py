@@ -29,6 +29,32 @@ def runtime(runtime_source):
     return RedactedRuntime(runtime_source)
 
 
+def test_remote_registration_replay_preserves_first_work_and_channel(runtime, tmp_path, monkeypatch):
+    project = RemoteProject(runtime, tmp_path, monkeypatch)
+
+    def owner():
+        row, = [row for row in project.rows('execution_executors') if row['kind'] == 'remote']
+        return row['owner_instance_id'], row['generation']
+
+    async def run():
+        try:
+            await project.start()
+            original = owner()
+            assert original[0] is not None
+            replay = await project.control.registration.bootstrap(server_id=project.server_id)
+            assert replay.executor.executor_id == project.binding['executor_id']
+            work = await project.send_and_complete(request_id='first-after-registration-replay')
+            assert owner() == original
+            session = work['scope']['session_id']
+            assert list(project.native.opened) == [session]
+            await project.close_session(session)
+            project.assert_redacted()
+        finally:
+            await project.close()
+
+    asyncio.run(run())
+
+
 @pytest.mark.parametrize('disabled_state', ['exhausted', 'expired'])
 def test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session(runtime, tmp_path, monkeypatch, disabled_state):
     project = RemoteProject(runtime, tmp_path, monkeypatch, actions=1 if disabled_state == 'exhausted' else 4)
@@ -122,7 +148,8 @@ def test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_a
             assert changed.value.code == 'CONFLICT' and not changed.value.possible_effect
             assert project.rows('connection_authorization_receipts') == []
             assert len(project.rows('runtime_execution_grants')) == 1
-            args = build_parser().parse_args(['connect', '--project', str(project.project)])
+            args = build_parser().parse_args(['connect', '--project', str(project.project),
+                                            '--request-id', 'renewal-root'])
             reused = await connect.run_connect(args, project.output, project.root)
             assert reused['saved'], reused
             assert project.rows('execution_bindings') == original_binding

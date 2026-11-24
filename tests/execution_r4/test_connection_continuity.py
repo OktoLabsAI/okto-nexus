@@ -9,8 +9,78 @@ from starlette.websockets import WebSocketDisconnect
 
 from test_ns09 import admit, setup_authority, negotiate
 
+from okto_nexus.adapters.outbound.sqlite.execution_tickets import issue_execution_ticket, verify_execution_ticket
 from okto_nexus.application.execution_leases import ExecutionLeaseService
 from okto_nexus.errors import OktoNexusError
+
+
+@pytest.mark.parametrize('takeover_while_connected', [True, False])
+def test_registration_replay_rotates_pending_ticket_without_interrupting_owner(
+        tmp_path, monkeypatch, takeover_while_connected):
+    deps, app, _, _, _, _, info, revisions, ticket, lane_ticket, server, executor = setup_authority(
+        tmp_path, monkeypatch)
+    origin = '127.0.0.1:8202'
+    url = f'wss://{origin}/v1/runtime/executors/{executor}/link'
+    headers = {'Authorization': 'Bearer ' + app.state.test_agent_keys['registrar']}
+    payload = {'client_intent_id': 'register', 'connector_id': 'connector',
+               'label': '', 'control_capabilities': []}
+    capabilities = ('connection_renewal_v1', 'heartbeat_ack_v1')
+
+    def verify(proof):
+        return verify_execution_ticket(deps.connection_factory, ticket=proof,
+                                       server_id=server, executor_id=executor, scope='link:connect')
+
+    with TestClient(app, base_url=f'https://{origin}') as client:
+        def replay_registration():
+            response = client.post('/v1/connections/executors:register', json=payload, headers=headers)
+            assert response.status_code == 200
+            body = response.json()
+            assert body['executor_id'] == executor
+            return body['bootstrap_ticket']['ticket']
+
+        def take_over(proof, channel):
+            with client.websocket_connect(url, headers={'Authorization': 'Bearer ' + proof},
+                                          subprotocols=['nxl.v1']) as successor:
+                current = negotiate(successor, info, revisions, lane_ticket, server, executor,
+                                    control_capabilities=capabilities)
+                assert current.connection_generation == channel.connection_generation + 1
+                with pytest.raises(OktoNexusError, match='invalid for this target'):
+                    verify(ticket)
+
+        with client.websocket_connect(url, headers={'Authorization': 'Bearer ' + ticket},
+                                      subprotocols=['nxl.v1']) as ws:
+            channel = negotiate(ws, info, revisions, lane_ticket, server, executor,
+                                control_capabilities=capabilities)
+            pending = replay_registration()
+            successor = replay_registration()
+            with pytest.raises(OktoNexusError, match='invalid for this target'):
+                verify(pending)
+            base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
+                        server_id=server, executor_id=executor, connection_id=channel.connection_id,
+                        connection_generation=channel.connection_generation)
+            ws.send_text(encode_r4_frame(dict(base, type='connection.renew', request_id='renew')).decode())
+            assert ws.receive_json() == dict(base, type='connection.renewed', request_id='renew',
+                                             expires_in=600, binding_ids=['binding'])
+            if takeover_while_connected:
+                take_over(successor, channel)
+            else:
+                ws.close()
+                deadline = time.monotonic() + 5
+                while True:
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        owner = uow.connection.execute(
+                            'SELECT owner_instance_id FROM execution_executors WHERE executor_id=?',
+                            (executor,),
+                        ).fetchone()[0]
+                    if owner is None:
+                        break
+                    assert time.monotonic() < deadline
+                    time.sleep(0.01)
+
+        if not takeover_while_connected:
+            with pytest.raises(OktoNexusError, match='invalid for this target'):
+                verify(ticket)
+            take_over(successor, channel)
 
 
 @pytest.mark.parametrize('invalid', [None, 'revoked', 'expired'])
@@ -47,7 +117,7 @@ def test_live_connection_renews_proofs_without_changing_owner(tmp_path, monkeypa
                 assert ws.receive_json() == dict(base, type='heartbeat')
 
 
-@pytest.mark.parametrize('case', ['exact', 'stale-generation', 'expired-proof', 'revoked-grant'])
+@pytest.mark.parametrize('case', ['exact', 'pending-bootstrap', 'stale-generation', 'expired-proof', 'revoked-grant'])
 def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch, case):
     deps, app, access, operator, grant, _, info, revisions, ticket, lane_ticket, server, executor = setup_authority(
         tmp_path, monkeypatch)
@@ -74,6 +144,9 @@ def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch
     with TestClient(cancellable_app, base_url='https://127.0.0.1:8202') as client:
         with client.websocket_connect(url, headers=headers, subprotocols=['nxl.v1']) as ws:
             channel = negotiate(ws, info, revisions, lane_ticket, server, executor, control_capabilities=capabilities)
+            if case == 'pending-bootstrap':
+                issue_execution_ticket(deps.connection_factory, server_id=server, executor_id=executor,
+                                       agent_id='registrar')
             scope = admit(deps, app)['scope']
             service = ExecutionLeaseService(factory=deps.connection_factory, access=access,
                 fresh_publications=app.state.inventory_fresh_publications)

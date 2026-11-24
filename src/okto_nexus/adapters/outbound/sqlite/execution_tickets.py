@@ -116,7 +116,7 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
     with factory.unit_of_work() as uow:
         conn = uow.connection
         target = conn.execute(
-            "SELECT kind,registered_by_agent_id,revoked_at FROM execution_executors "
+            "SELECT kind,registered_by_agent_id,revoked_at,owner_instance_id FROM execution_executors "
             "WHERE server_id=? AND executor_id=?",
             (server_id, executor_id),
         ).fetchone()
@@ -218,21 +218,24 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
                     (instant.isoformat(), replaces_ticket_id),
                 )
         if binding_id is None:
+            owner = target["owner_instance_id"]
             # A fresh bootstrap explicitly abandons a disconnected transport's
             # short resume window. Its runtime cleanup remains Connector-owned.
-            if conn.execute('SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? '
-                    'AND owner_instance_id IS NULL', (server_id, executor_id)).fetchone():
+            if owner is None:
                 conn.execute('DELETE FROM execution_connection_resumes WHERE server_id=? AND executor_id=?', (server_id, executor_id))
                 conn.execute('UPDATE execution_link_tickets SET bound_connection_id=NULL WHERE server_id=? AND executor_id=?',
                     (server_id, executor_id))
-            # A lost registration response may be retried with the same
-            # intent. The successor replaces the old bootstrap credential;
-            # no second long-lived route to this executor is accumulated.
+            # A registration retry replaces the pending proof. Keep the live
+            # socket's proof until a successor claims ownership or the socket
+            # releases it, subject to the same authority revision and epoch.
             conn.execute(
                 "UPDATE execution_link_tickets SET revoked_at=? WHERE "
                 "server_id=? AND executor_id=? AND agent_id=? AND "
-                "binding_id IS NULL AND audience=? AND revoked_at IS NULL",
-                (instant.isoformat(), server_id, executor_id, agent_id, AUDIENCE),
+                "binding_id IS NULL AND audience=? AND revoked_at IS NULL AND "
+                "(bound_connection_id IS NULL OR bound_connection_id IS NOT ? OR "
+                "credential_epoch<>? OR authorization_revision<>?)",
+                (instant.isoformat(), server_id, executor_id, agent_id, AUDIENCE,
+                 owner, revisions.credential_epoch, revisions.authorization),
             )
         conn.execute(
             "INSERT INTO execution_link_tickets(ticket_id,secret_hash,server_id,"

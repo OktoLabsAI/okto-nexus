@@ -234,6 +234,23 @@
           "type": "string",
           "maxLength": 4096
         },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "remote_setup": {
+              "type": "object",
+              "properties": {
+                "revision": { "const": 1 },
+                "draft_version": { "const": 1 },
+                "handoff_version": { "const": 1 }
+              },
+              "required": ["revision", "draft_version", "handoff_version"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["remote_setup"],
+          "additionalProperties": false
+        },
         "permissions": {
           "type": "array",
           "items": {

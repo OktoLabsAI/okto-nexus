@@ -1,0 +1,11 @@
+# SI-037 · Continuidade do canal durante o registro
+
+Repetir o registro de um Connector já conectado revogava o ticket usado pelo WebSocket. Os dois testes de regressão reproduziram a desconexão na renovação do canal com o Nexus anterior. Uma abertura admite trabalho antes de receber seu primeiro recibo. Se o canal cair nesse intervalo, o resultado pode ficar em reconciliação e deve ser verificado pelo ID original.
+
+O registro repetido substitui o ticket ainda pendente. O ticket vinculado ao proprietário do canal permanece válido dentro do seu prazo e da autoridade corrente. Na troca de proprietário ou no encerramento sem retomada, o ticket substituído é revogado. Uma interrupção breve preserva a retomada exata na mesma geração quando o servidor tem a prova correspondente. A autenticação continua verificando a época da credencial, a revisão de autorização e as revogações explícitas.
+
+O teste com HTTP, WebSocket e IPC no Windows usou Connector e Core instalados e um executor sintético. O primeiro trabalho após repetir o registro abriu uma sessão, terminou e preservou o ID e a geração do canal. O teste de rotação de chave agora usa o identificador explícito do pedido para retomar a configuração existente. O esquema de `/v1/connections/me` passou a descrever a capacidade opcional de configuração remota que a resposta já inclui.
+
+No WSL, o Pi 0.87.1 concluiu o primeiro trabalho após a repetição deliberada do registro, usando a conexão original. Uma entrada literal permaneceu na mesma sessão, chegou uma vez ao modelo sintético e conservou os espaços finais. O fechamento canônico encerrou o processo. Passaram 34 testes com os wheels instalados no Windows e o ensaio integrado no Linux com a rede restrita a loopback. A distribuição temporária e seu disco foram removidos. [Evidência estruturada](si037-registration-continuity.json)
+
+A mudança usa as tabelas atuais. Após drenar o trabalho ativo, um `git revert` do commit restaura o comportamento anterior sem migração ou restauração do banco. O incidente anterior no primeiro `runtime.open` no WSL registrou `PERMISSION_DENIED` e `DISPATCH_CONNECTION_LOST`. O registro histórico deixa em aberto qual verificação encerrou aquele canal. A qualificação em outra máquina, macOS, campanhas com provedores e aceitação humana permanece pendente. [Ensaio anterior no Linux](si037-linux-pi-saved-resume.md)

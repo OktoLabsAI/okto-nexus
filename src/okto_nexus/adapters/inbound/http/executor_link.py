@@ -368,6 +368,15 @@ def build_router() -> APIRouter:
                         "connection_generation<>?",
                         (server_id, executor_id, next_generation),
                     )
+                    # Retire a different bootstrap proof from the previous
+                    # owner, including one retained during the resume window.
+                    uow.connection.execute(
+                        "UPDATE execution_link_tickets SET bound_connection_id=NULL, "
+                        "revoked_at=COALESCE(revoked_at,strftime('%Y-%m-%dT%H:%M:%fZ','now')) "
+                        "WHERE server_id=? AND executor_id=? AND binding_id IS NULL "
+                        "AND bound_connection_id IS NOT NULL AND ticket_id<>?",
+                        (server_id, executor_id, verified.ticket_id),
+                    )
                     if row["owner_instance_id"] is not None:
                         uow.connection.execute(
                             "UPDATE execution_link_tickets SET "
@@ -904,6 +913,20 @@ def build_router() -> APIRouter:
                         )
                         if retained:
                             return
+                        # Once a non-resumable owner leaves, a pending
+                        # bootstrap replaces its proof as it would offline.
+                        conn.execute(
+                            "UPDATE execution_link_tickets AS active SET "
+                            "revoked_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+                            "WHERE active.ticket_id=? AND active.bound_connection_id=? "
+                            "AND active.revoked_at IS NULL AND EXISTS ("
+                            "SELECT 1 FROM execution_link_tickets AS pending "
+                            "WHERE pending.server_id=active.server_id AND pending.executor_id=active.executor_id "
+                            "AND pending.agent_id=active.agent_id AND pending.audience=active.audience "
+                            "AND pending.binding_id IS NULL AND pending.bound_connection_id IS NULL "
+                            "AND pending.revoked_at IS NULL)",
+                            (bootstrap_ticket_id, connection_id),
+                        )
                         conn.execute(
                             "UPDATE execution_control_lanes SET state='DISCONNECTED' "
                             "WHERE server_id=? AND executor_id=? AND "

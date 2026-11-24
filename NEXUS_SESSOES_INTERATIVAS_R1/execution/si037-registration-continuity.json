@@ -1,0 +1,135 @@
+{
+  "task": "SI-037",
+  "scope": "remote_connector_registration_replay_and_exact_channel_generation",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "4a9f787860deade42ae4be520842c9fcb78305ce",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 592,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 111,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "1104b7722b2df77cf468c38b852fdcd30a57cbfc",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 94,
+      "behind_main": 0,
+      "upstream_drift": [
+        0,
+        0
+      ],
+      "working_tree": "clean"
+    }
+  },
+  "wheel_sha256": {
+    "nexus": "a3fe164a39a5aba7fb587c6891832e515c84b290f7923c0052af7272a3ff7007",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "baseline_nexus_sha256": "f4b736cd01423fe8468a2df93310337376b1bdb55b70d83d4481d20e86c6b6b8",
+  "windows": {
+    "dependencies": "installed from pinned wheels",
+    "baseline_registration": {
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "junit_sha256": "55973cc78f748fae24d90a95b17112883c1bbe9229cbb56de8ceb831e82e3494"
+    },
+    "baseline_me_schema": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "junit_sha256": "b05310913f9807b0f421db085ac12fb88bf88904224f4963099105ee75649285"
+    },
+    "channel_policy_dispatch_and_http_contracts": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 29,
+      "junit_sha256": "3e18a3a7621e4053beb84fb551ab11f804c722ad01571d7d70f36b8fe22d93cd"
+    },
+    "remote_transport_and_renewal": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 5,
+      "junit_sha256": "c16b609dd6ae4d4c3e7dc611bc6dba597903ac2538ecc0ad01ab0342026aa1a2"
+    },
+    "native_peer": "synthetic",
+    "provider_calls": 0,
+    "twine_check": "PASS"
+  },
+  "outcomes": [
+    "Same-authority registration replay preserves the live owner, generation and attached lane.",
+    "A second registration retires the older pending bootstrap credential.",
+    "Successor takeover and non-resumable close retire the outgoing bootstrap credential.",
+    "Exact short resume stays available with a pending replacement.",
+    "Rotation, expiry, grant revocation and unknown dispatch retention remain fenced."
+  ],
+  "limits": [
+    "Historical WSL PERMISSION_DENIED and DISPATCH_CONNECTION_LOST do not identify the failed predicate.",
+    "Other-machine, macOS, paid-provider and human acceptance gates remain open."
+  ],
+  "migration_required": false,
+  "rollback": "revert the Nexus commit after draining active work",
+  "linux": {
+    "test": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "junit_sha256": "c587a40cf17db4d945408ab856b6c0461c954f21e1cd722b6b260f48ada3f1a7"
+    },
+    "distribution": "Ubuntu 24.04.5 LTS on WSL2",
+    "kernel": "5.15.146.1-microsoft-standard-WSL2",
+    "pi_version": "0.87.1",
+    "node_version": "24.15.0",
+    "temporary_wsl_cleanup": true,
+    "pip_check": "PASS",
+    "effective_uid": 65534,
+    "network_interfaces": [
+      "lo"
+    ],
+    "fixture_sha256": "83ee3e239b9ec9b6ba7766f6803d101a8b436050d2ddd3c7defb85f8f80ef772",
+    "proof": {
+      "connector_r4": true,
+      "fixture_skill_registered": true,
+      "literal_bytes_exact": true,
+      "same_input_and_sequence": true,
+      "duplicate_same_receipt": true,
+      "slash_plain_request_refused": true,
+      "stale_catalog_refused": true,
+      "busy_compaction_disabled": true,
+      "literal_preserved_in_r4_operation": true,
+      "same_pi_process_and_session": true,
+      "canonical_close": true,
+      "same_connector_generation_after_registration": true,
+      "external_provider_calls": 0
+    }
+  }
+}
