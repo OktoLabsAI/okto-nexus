@@ -261,6 +261,32 @@ def test_interactive_session_choice_only_observes_exact_authorized_session(work,
     assert any('/runtime/sessions/' + chosen + '?' in path for _, path in t.calls)
 
 
+def test_interactive_resume_keeps_the_selected_sibling_session(work, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import work as cli
+
+    t = work
+    original = t.flow.submit('Synthetic earlier work', client_intent_id='earlier-chat-work')
+    complete(t, original)
+    sibling = test_embedded_dispatch.admit(t.setup, t.binding, 'prepare-sibling-chat', 'runtime.start', new_session=True)
+    wait_receipt(t.setup, sibling)
+    original_id, selected_id = (item['scope']['session_id'] for item in (original, sibling))
+    assert original_id != selected_id
+    checkpoint = deepcopy(t.flow.document)
+    save_count = len(t.saved)
+    t.calls.clear()
+    answers = iter(['/resume', '/status', '/quit'])
+    monkeypatch.setattr('builtins.input', lambda prompt: next(answers))
+
+    assert cli.chat(t.flow, session_id=selected_id) == 0
+    output = capsys.readouterr().out
+    assert 'WORK_REQUEST_CONFLICT' in output
+    assert output.count('Session: ' + selected_id) == 2
+    assert 'Session: ' + original_id not in output
+    assert t.flow.document == checkpoint and len(t.saved) == save_count
+    assert all(method == 'GET' for method, _ in t.calls)
+    assert t.native.opens == 2 and not t.native.native.sent
+
+
 def test_interactive_unknown_admission_recovers_original_before_session_choice(work, monkeypatch):
     from okto_nexus.adapters.inbound.cli import work as cli
     t = work

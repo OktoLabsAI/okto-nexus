@@ -444,5 +444,104 @@
       "help.log": "c379350287bd61bf868139244ee8b194a507d3b54c754d5d7f822e699394560f",
       "build.log": "b427dcf1430bc6ebaf5dae4b3eeaa925a369e55529f6c2ccde7c3bc616fe60df"
     }
+  },
+  "interactive_resume_selection": {
+    "intake": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "7808ce5db6cfb573beed7c3fad68db3842f5e21f",
+        "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "head_main_drift": [
+          639,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "head_main_drift": [
+          113,
+          0
+        ]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "head_main_drift": [
+          95,
+          0
+        ]
+      },
+      "working_trees_clean": true
+    },
+    "platform": "Windows x64, installed CLI logic and HTTP/SQLite fixtures with synthetic peers",
+    "before_behavior": "chat selected sibling, but /resume displayed the saved result and switched the prompt to its session",
+    "verified_behavior": [
+      "mismatch preserves the open sibling, saved work checkpoint and native process count",
+      "new draft refuses /resume without observing or recovering the sibling",
+      "matching /resume verifies the open session and watches the original receipt",
+      "profile-level recovery before session selection and unscoped JSON resume still work"
+    ],
+    "wheels": {
+      "members": 817,
+      "only_changed_module": "okto_nexus/adapters/inbound/cli/work.py",
+      "before_sha256": "a33dd81c6c5c59e05ae4011258f2003f922052fdd9dc3e64af029b4371495873",
+      "candidate_sha256": "63f5c509f01accc15138867eb716b0dad78e5f4f373a4db35b0227869b14a6b0"
+    },
+    "sdist_sha256": "be166a9efc8141c3285a7c3c41761fc3ad6802fda0f9a7127aae8c31de3ba75d",
+    "connector_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "tests": {
+      "sibling_scope_regression_before": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "old_test_double_signature": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "source": {
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "installed": {
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "commands": [
+      "uv build --offline --out-dir <evidence>/pkgs <staged previous sdist with the updated CLI module>",
+      "uv tool run --offline twine check --strict <wheel> <sdist>",
+      "uv pip install --offline --no-deps --no-index --target <evidence>/installed <wheel>",
+      "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_session_picker.py tests/execution_r4/test_terminal_work.py -k \"terminal_session_picker or interactive_session_choice or interactive_resume_keeps_the_selected_sibling_session or interactive_unknown_admission or mismatched_selector_before_admission\"",
+      "python -B -m pytest -o pythonpath= -p assert_setup_wheels -q --tb=short tests/execution_r4/test_terminal_session_picker.py tests/execution_r4/test_terminal_work.py -k \"terminal_session_picker or interactive_session_choice or interactive_resume_keeps_the_selected_sibling_session or interactive_unknown_admission or mismatched_selector_before_admission\""
+    ],
+    "evidence_directory": "C:/Users/jpamb/AppData/Local/Temp/nexus-si030-chat-selection-7808ce5d",
+    "evidence_sha256": {
+      "before.xml": "1169a7df9986d240bdfd70b25076c1149536117d82316ea33d6e22f0a8dee392",
+      "before.log": "4c9dbf2c7952bd9b57c93dc1b71afd7db002957c058ede762633859a89ebd404",
+      "legacy-picker.xml": "e85c084d0134da0a65f21bd2e84387c4012de8e41470827636329a4471c7418a",
+      "legacy-picker.log": "d12b497da6f235c4f69b0eca6f3181052f1f0e1d0d72bc858fb0c653f8b447c0",
+      "source.xml": "d3275a774945b3b149af255f7342b145480eda931e3ef6b2de7f1313595d491f",
+      "source.log": "a0979e38aab8ac0162fc7b0a8b9848c078899b3fbde2736dc8f43e0d0b92cf77",
+      "installed.xml": "6198c7a77f81438807cadc8a4cad873f207b40e6c71ea8b25cc7f549ae504368",
+      "installed.log": "cee4f8c2db089ac4bce6b3a42ff1cfe1ed3e3f29ec2da5a70905b3126068de59",
+      "audit-wheel.py": "f3343d3c7be9f8b2e3d9f1050c98b68d0a66997cdf604987bbb9745011ad3870",
+      "wheel-audit.json": "8b1102f56a102b2cd4900841cc1d67096e86d749c9cffd7fa9c8fbde063e1a89",
+      "build.log": "c6b72a2874011785421e16a7a6ad58db531e925d20d85a8c52f0746488982eff"
+    },
+    "external_provider_requests": 0,
+    "checkpoint_version": 1,
+    "migration": "none"
   }
 }

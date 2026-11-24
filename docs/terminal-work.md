@@ -22,7 +22,7 @@ message is submitted by this flow.
 The prompt supports ordinary conversation and these explicit controls:
 
 - `/status`, `/watch`: inspect or follow the current request.
-- `/resume`: recover the same interrupted submission and its canonical receipt.
+- `/resume`: recover the saved submission and its canonical receipt within the open session.
 - `/sessions`: list authorized session references for this connection.
 - `/answer ID`: review and answer one canonical native request.
 - `/authorize`: review a new bounded execution grant when the previous authorization is unavailable.
@@ -95,6 +95,8 @@ clearing the pending checkpoint.
 If you have the original request ID or session ID, pass `--request-id` or
 `--session-id` to `work resume` to verify the selected receipt. A mismatch
 preserves the checkpoint and stops recovery before any admission.
+Inside `work chat`, `/resume` checks the session already open in the prompt.
+To recover a request from another session, use `work resume` from the shell.
 
 When paging with `work events`, keep the same `--session-id` and
 `--stream-epoch` and use the previous page's `next_after_sequence` as

@@ -39,3 +39,11 @@ Os dois casos principais falharam no wheel de referência. Na rodada final, pass
 Nos dois casos novos, a resposta da resolução se perdeu antes da admissão. O wheel anterior admitiu o pedido mesmo com o ID errado. Com a correção, a recusa preservou o checkpoint byte a byte e deixou o executor sem abrir processo ou receber turno. Com os dois IDs corretos, o CLI admitiu a operação original uma vez. A API e o SQLite trabalharam com um peer sintético no Windows. O formato do checkpoint permanece na versão 1. O marco dispensa migração, e o rollback reverte o commit e restaura o wheel anterior. [Comandos e resultados](si030-installed-work-resume.json)
 
 Passaram sete testes focados no código-fonte e 12 no wheel instalado, incluindo retomada sem seletores, recuperação durante a drenagem e perda da resposta antes e depois da admissão. O wheel e a distribuição de código-fonte passaram no `twine check --strict`. A comparação dos 817 arquivos do pacote identificou apenas os dois módulos da correção depois de normalizar as terminações de linha. [Resultados e hashes](si030-installed-work-resume.json)
+
+## Recuperação dentro do chat
+
+No ensaio com duas sessões do mesmo vínculo, o wheel de referência recebeu `/resume` enquanto Beta estava selecionada e mudou o prompt para Alpha, a sessão do recibo salvo. Com a correção, o comando valida o recibo contra a sessão aberta. Beta continua selecionada, o checkpoint permanece intacto e o servidor recebe apenas leituras. Em uma conversa nova ainda sem sessão, o comando pede que o operador abra a sessão original ou use `work resume` no shell.
+
+A recuperação explícita antes da seleção de sessão e o uso de `work resume` sem seletores continuam cobertos. A suíte também atualizou o dublê que ainda esperava a assinatura anterior de `resume`. O ensaio usa a API e o SQLite com peers sintéticos no Windows. A mudança dispensa migração. O rollback reverte o commit do Nexus e restaura o wheel anterior.
+
+Os mesmos 25 testes passaram no código-fonte e no wheel instalado. A comparação dos 817 arquivos do pacote encontrou apenas a mudança em `work.py`. O wheel e a distribuição de código-fonte passaram no `twine check --strict`. [Comandos, versões e hashes](si030-installed-work-resume.json)

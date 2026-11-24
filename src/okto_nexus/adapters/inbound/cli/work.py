@@ -193,8 +193,9 @@ def chat(flow, *, timeout=300, session_id=None):
                 else:
                     display({'state': 'new_session_not_opened'})
             elif text == '/resume':
-                display(flow.resume())
-                selection = SessionSelection(flow.document.get('session_id'))
+                if not selection.session_id:
+                    raise ConnectionError('SESSION_REQUIRED', 'Open the original session or run work resume from the shell.')
+                display(flow.resume(session_id=selection.session_id))
                 watch(flow, timeout=timeout, interactive=True)
             elif text.startswith('/answer '):
                 if not selection.session_id:

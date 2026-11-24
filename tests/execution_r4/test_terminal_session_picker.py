@@ -36,8 +36,8 @@ class Flow:
     def observe(self, **kwargs):
         self.calls.append(('observe', kwargs))
         return dict(state='idle')
-    def resume(self, slot='work'):
-        self.calls.append(('resume', slot))
+    def resume(self, slot='work', *, session_id=None, client_intent_id=None):
+        self.calls.append(('resume', slot, session_id, client_intent_id))
         self.document[slot]['state'] = 'admitted'
         self.document['session_id'] = 'original-session'
         return dict(state='admitted')
@@ -103,7 +103,7 @@ def test_pending_recovery_uses_original_slot_before_explicit_selection(monkeypat
     flow = Flow([session('original-session'), session('other')],
         {'work': {'state': 'resolve_submitted', 'client_intent_id': 'original'}})
     assert drive(monkeypatch, flow, ['r', '1', '/quit']) == 0
-    assert flow.calls[0] == ('resume', 'work')
+    assert flow.calls[0] == ('resume', 'work', None, None)
     assert not submissions(flow)
     assert flow.document['work']['client_intent_id'] == 'original'
 
@@ -111,7 +111,7 @@ def test_pending_recovery_uses_original_slot_before_explicit_selection(monkeypat
 def test_control_pending_recovery_does_not_become_productive_work(monkeypatch):
     flow = Flow([], {'control': {'state': 'resolved', 'client_intent_id': 'control-original'}})
     assert drive(monkeypatch, flow, ['r', '/quit']) == 0
-    assert flow.calls[0] == ('resume', 'control') and not submissions(flow)
+    assert flow.calls[0] == ('resume', 'control', None, None) and not submissions(flow)
 
 
 def test_new_context_cannot_control_or_answer_remembered_sibling(monkeypatch):
@@ -119,6 +119,21 @@ def test_new_context_cannot_control_or_answer_remembered_sibling(monkeypatch):
     assert drive(monkeypatch, flow, ['n', '/interrupt', '/close', '/answer request', '/quit']) == 0
     assert not submissions(flow)
     assert not any(call[0] == 'session' for call in flow.calls)
+
+
+def test_new_context_cannot_resume_a_remembered_sibling(monkeypatch):
+    document = {'session_id': 'original-session', 'work': {'state': 'admitted', 'client_intent_id': 'original'}}
+    flow = Flow([session('original-session')], document)
+    assert drive(monkeypatch, flow, ['n', '/resume', '/status', '/quit']) == 0
+    assert flow.document == document
+    assert not any(call[0] in {'resume', 'observe', 'watch', 'submit'} for call in flow.calls)
+
+
+def test_resume_passes_the_selected_session_and_watches_its_receipt(monkeypatch):
+    flow = Flow([session('original-session')], {'work': {'state': 'admitted', 'client_intent_id': 'original'}})
+    assert drive(monkeypatch, flow, ['/resume', '/quit'], session_id='original-session') == 0
+    assert flow.calls[-2:] == [('resume', 'work', 'original-session', None),
+                              ('watch', {'timeout': 300, 'interactive': True})]
 
 
 def test_control_targets_selected_session(monkeypatch):
@@ -198,4 +213,4 @@ def test_json_resume_preserves_original_intent_without_session_picker(parser_bou
     flow.document['work'] = {'state': 'submit_submitted', 'client_intent_id': 'original'}
     assert run('resume') == 0
     assert flow.document['work']['client_intent_id'] == 'original'
-    assert flow.calls == [('resume', 'work')]
+    assert flow.calls == [('resume', 'work', None, None)]
