@@ -268,7 +268,7 @@
       "installation": "claude",
       "owner": "embedded",
       "mode": "managed_terminal",
-      "presentation": "read_only_managed_terminal_output",
+      "presentation": "managed_terminal_output_with_nexus_composer",
       "steer_effect": "interrupt_then_send",
       "launch_conditions": [
         "plan",
@@ -285,11 +285,12 @@
         "saved_context_resume": { "status": "qualified", "evidence": ["si026-claude-canonical-fresh-terminal.md"] },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si026-claude-terminal-retained-output.md"] },
         "joint_ui_native_arbitration": {
-          "status": "blocked",
-          "reason": "A apresentação do CLI é de leitura. A ponte de escrita compartilha a fila canônica e foi exercitada no transporte. Falta o compositor interativo do CLI.",
+          "status": "implemented",
+          "reason": "O compositor no Windows usa a fila canônica. A arbitragem local foi exercitada com terminal simulado. A prova com o processo real foi feita via Connector.",
           "evidence": [
             "si026-claude-terminal-retained-output.md",
-            "si026-claude-presenter-queue.md"
+            "si026-claude-presenter-queue.md",
+            "si026-claude-cli-writer.md"
           ]
         }
       }
@@ -298,7 +299,7 @@
       "installation": "claude",
       "owner": "connector_loopback",
       "mode": "managed_terminal",
-      "presentation": "read_only_managed_terminal_output",
+      "presentation": "managed_terminal_output_with_nexus_composer",
       "steer_effect": "interrupt_then_send",
       "launch_conditions": [
         "plan",
@@ -337,11 +338,13 @@
         },
         "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
         "joint_ui_native_arbitration": {
-          "status": "blocked",
-          "reason": "A ponte remota enfileirou um envio no Claude gerenciado real neste Windows. A apresentação do CLI é de leitura e o compositor interativo segue pendente.",
+          "status": "qualified",
+          "reason": "Home e compositor do CLI compartilharam a fila do Claude 2.1.328 neste Windows. O mesmo processo executou as entradas em ordem, com respostas simuladas em loopback.",
           "evidence": [
             "si022-si026-claude-remote-presentation.md",
-            "si026-claude-presenter-queue.md"
+            "si026-claude-presenter-queue.md",
+            "si026-claude-cli-writer.md",
+            "si026-claude-cli-writer.json"
           ]
         },
         "remote_attach": {

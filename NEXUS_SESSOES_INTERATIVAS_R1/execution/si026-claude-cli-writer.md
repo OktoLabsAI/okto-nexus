@@ -1,0 +1,9 @@
+# SI-026 e SI-031 · Escrita no terminal do Claude gerenciado
+
+No Windows, `session attach --write` acompanha a saída da sessão Claude selecionada. Ctrl+E abre o compositor Nexus. Enter registra o texto na fila da sessão e mostra seu recibo. Ctrl+N descarta o rascunho e Ctrl+] encerra o visualizador. Assumir a escrita de um visualizador já conectado exige confirmação. Se a resposta do envio se perder, o recibo usa a intenção, a sessão e a geração originais.
+
+O ensaio com o CLI e os wheels instalados executou o Claude Code 2.1.328 via Connector nesta máquina Windows. Enquanto o primeiro turno estava ativo, a API da Home registrou uma mensagem e o operador enviou outra por teclado em ConPTY. As duas aguardaram sem operação de envio. O terminal saiu com os modos do console restaurados, e a recuperação consultou a mesma intenção. Quando o turno terminou, o mesmo processo recebeu primeiro a mensagem da Home e depois a do terminal.
+
+A auditoria confirmou três resultados na sessão selecionada, uma única abertura nativa, o fechamento canônico e a integridade dos dois bancos. O modelo usou respostas simuladas em loopback. Passaram 75 testes de código-fonte, 83 testes com os wheels instalados e o ensaio nativo. Uma asserção da primeira rodada precisou considerar a troca de tela durante a recepção de um caractere UTF-8 fragmentado. [Cenários, comandos e hashes](si026-claude-cli-writer.json)
+
+O compositor foi integrado para Windows. Os controles de reorientação e de interrupção ficam acessíveis pela Home e pelos comandos explícitos de sessão. A integração desses controles dentro do visualizador e as validações com provedor e participante seguem pendentes. Este marco dispensa migração. O rollback reverte o commit do Nexus e preserva os recibos e a fila. [Como usar](../../docs/terminal-work.md#follow-or-reorient-a-managed-claude-session)

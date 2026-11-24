@@ -170,12 +170,12 @@ class _LocalPresenter:
     def read_terminal_output(self) -> bytes:
         """Read a bounded binary frame with idle waits interruptible by the terminal."""
         while True:
-            if output := self.poll_pi_output(1):
+            if output := self.poll_terminal_output(1):
                 return output
 
     read_pi_output = read_terminal_output
 
-    def poll_pi_output(self, timeout: float) -> bytes | None:
+    def poll_terminal_output(self, timeout: float) -> bytes | None:
         try:
             self._keep_pi_alive()
             for event in self._events(time.monotonic() + timeout):
@@ -186,6 +186,8 @@ class _LocalPresenter:
             return None
         except (OSError, ValueError, ProtocolError):
             raise _unavailable() from None
+
+    poll_pi_output = poll_terminal_output
 
     def send_terminal_input(self, *, intent, text, output):
         """Record plain text on the canonical queue while rendering concurrent output."""

@@ -311,7 +311,17 @@ and displays the retained output.
 
 ```sh
 okto-nexus session attach --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
+okto-nexus session attach --write --id HARNESS_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
+
+From a Windows terminal, use `--write` to compose a message for the same
+managed Claude session. Press Ctrl+E to open or leave the Nexus composer.
+Enter queues the message after the current turn. Ctrl+N discards the draft.
+Ctrl+] detaches the writer while the process and queue continue. When a writer
+is already attached, the CLI asks for confirmation before transferring input.
+
+If the send is unconfirmed, recover it with `session receipt` using the session,
+owner generation and intent printed by the composer.
 
 The same command follows a managed Claude terminal on a Connector that
 negotiated Claude presentation with the Server. Sign in as a Nexus operator

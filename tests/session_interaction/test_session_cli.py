@@ -562,8 +562,93 @@ def test_claude_attachment_reads_the_exact_session_and_detaches_locally(monkeypa
     assert closes == ['claude-reader']
     output = capsys.readouterr().out
     assert 'Ctrl+C detaches' in output and 'Working ✓' in output
-    with pytest.raises(ConnectionError, match='read-only'):
-        session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
+    with pytest.raises(ConnectionError, match='managed terminal'):
+        session.attach_session(call, binding, session_id='session-a', interactive=True, viewer_executable='another-viewer')
+
+
+def test_claude_writer_requires_a_live_review_and_explicit_transfer(monkeypatch, capsys):
+    call = Catalog()
+    call.token = 'synthetic-cookie'
+    binding = BINDING | {'adapter_id': 'claude_stream'}
+    writer = SimpleNamespace(capability_revision='claude-write-revision', occupied=True)
+    sends = []
+    intent = 'claude_input_' + 'a' * 32
+
+    def review(api, **selection):
+        assert api is call and selection['presentation'] == 'claude' and selection['write'] is True
+        assert selection['expected_session_generation'] == 7 and selection['scope']['session_id'] == 'session-a'
+        return writer
+
+    @contextmanager
+    def attach(api, **selection):
+        assert api is call and selection['writer'] is writer and selection['claude'] is True
+        assert selection['capability_revision'] == writer.capability_revision
+        yield SimpleNamespace(attachment_id='claude-writer')
+
+    def compose(link, recover, report):
+        report(intent)
+        sends.append(link.attachment_id)
+        assert recover(intent) == {'message': 'Message recorded'}
+
+    def recover(api, selected_binding, session_id, generation, requested_intent):
+        assert (api, selected_binding, session_id, generation, requested_intent) == (call, binding, 'session-a', 7, intent)
+        return {'message': 'Message recorded'}
+
+    monkeypatch.setattr(session.sys, 'platform', 'win32')
+    monkeypatch.setattr(session, 'review_local_presentation', review)
+    monkeypatch.setattr(session, 'open_local_presentation', attach)
+    monkeypatch.setattr(session, 'show_claude_writer', compose)
+    monkeypatch.setattr(session, 'recover_session_command', recover)
+    monkeypatch.setattr('builtins.input', lambda _: 'n')
+    assert session.attach_session(call, binding, session_id='session-a', interactive=True, write=True) is None
+    assert sends == []
+    monkeypatch.setattr('builtins.input', lambda _: 'y')
+    result = session.attach_session(call, binding, session_id='session-a', interactive=True, write=True)
+    assert result['attach_strategy'] == 'claude_local_write' and sends == ['claude-writer']
+    capture = capsys.readouterr()
+    assert 'Ctrl+E composes' in capture.out and capture.err.count('--owner-generation 7 --intent ' + intent) == 2
+
+
+@pytest.mark.parametrize('delivery', ['recorded', 'lost', 'unconfirmed'])
+def test_claude_composer_submits_one_safe_draft_and_restores_the_terminal(monkeypatch, capsys, delivery):
+    from contextlib import nullcontext
+    from okto_nexus.adapters.inbound.cli import claude_viewer_terminal
+
+    gestures = iter([
+        'ignored without composing\r', '\x1b[69;18;5;1;8;1_\r', '/exit\r', '\x0e',
+        '\x05', '\x1b[200~Uma revisão\r\nOutra linha\x03\x1b[201~',
+        '\x05', '\x05', '\r', '\x1d',
+    ])
+    reports, attempts, recoveries = [], [], []
+    frames = iter([b'Native out \xe2', None, b'\x9c\x93\r\n'])
+
+    def send(*, intent, text, output):
+        assert reports == [intent]
+        attempts.append(text)
+        output(b'Native update')
+        if delivery != 'recorded':
+            raise ConnectionError('OUTCOME_UNKNOWN', 'The reply was lost.', possible_effect=True)
+        return {'input_id': 'one-claude-input'}
+
+    def recover(intent):
+        recoveries.append(intent)
+        return {'message': 'Recovered original message.'} if delivery == 'lost' else None
+
+    monkeypatch.setattr(claude_viewer_terminal, 'editor_terminal', lambda: nullcontext(lambda: next(gestures)))
+    link = SimpleNamespace(poll_terminal_output=lambda _: next(frames, None), send_terminal_input=send)
+    claude_viewer_terminal.show_claude_writer(link, recover, reports.append)
+    assert attempts == ['Uma revisão\nOutra linha']
+    assert len(reports) == 1 and reports[0].startswith('claude_input_')
+    assert recoveries == ([] if delivery == 'recorded' else reports)
+    output = capsys.readouterr().out
+    # The partial UTF-8 character finishes on the original screen after the draft closes.
+    assert 'Native out ' in output and '\x1b[?1049l✓\r\n' in output
+    assert 'Native update' in output and 'Enter plain text' in output
+    feedback = {'recorded': 'Message recorded as one-claude-input.', 'lost': 'Recovered original message.',
+                'unconfirmed': 'Message delivery is unconfirmed.'}
+    assert feedback[delivery] in output
+    assert output.count('\x1b[?1049h') == output.count('\x1b[?1049l') == 3
+    assert output.endswith('\x1b[?2004l\x1b[0m\x1b[?25h\r\n')
 
 
 @pytest.mark.parametrize('platform', ['win32', 'linux'])
@@ -598,9 +683,9 @@ def test_pi_writer_confirms_transfer_and_opens_the_native_editor(monkeypatch, pl
 
 
 def test_pi_console_decodes_split_paste_and_keeps_detach_local():
-    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import _PiKeys
+    from okto_nexus.adapters.inbound.cli.terminal_editor import TerminalKeys
 
-    keys = _PiKeys()
+    keys = TerminalKeys()
     assert keys.feed('\x1b[20') == []
     assert keys.feed('0~Revisão\r\nsegunda\x03\x1b[20') == []
     assert keys.feed('1~\x1b[D\x7f\r\x03') == [
@@ -620,13 +705,13 @@ def test_pi_posix_terminal_reads_raw_utf8_and_restores_after_an_error():
     import pty
     import termios
 
-    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import _PiKeys, _posix_editor_input
+    from okto_nexus.adapters.inbound.cli.terminal_editor import TerminalKeys, _posix_editor_input
 
     master, slave = pty.openpty()
     try:
         original = termios.tcgetattr(slave)
         stream = SimpleNamespace(fileno=lambda: slave)
-        keys = _PiKeys()
+        keys = TerminalKeys()
         with pytest.raises(RuntimeError, match='socket closed'):
             with _posix_editor_input(stream) as read:
                 assert read() == ''
@@ -656,7 +741,7 @@ def test_pi_separate_open_stays_local_and_leaves_a_draft_attached(
     from okto_nexus.adapters.inbound.cli import pi_viewer_terminal
 
     keys = iter([*initial_keys, '\x0f', *([confirmation] if confirmation else []), None])
-    monkeypatch.setattr(pi_viewer_terminal, '_editor_terminal', lambda: nullcontext(lambda: next(keys)))
+    monkeypatch.setattr(pi_viewer_terminal, 'editor_terminal', lambda: nullcontext(lambda: next(keys)))
     forwarded = []
 
     def edit(*, key, text, **_):

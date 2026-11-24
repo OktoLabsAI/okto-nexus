@@ -1,0 +1,135 @@
+{
+  "date": "2026-11-24",
+  "tasks": [
+    "SI-026",
+    "SI-031"
+  ],
+  "intake": {
+    "nexus_branch": "feature/v0.3.8",
+    "nexus_head": "681cf7cb2c22719ecda5f5976f6f910f7ea8652e",
+    "nexus_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "nexus_ahead_of_main": 623,
+    "nexus_behind_main": 0,
+    "nexus_worktree_clean": true,
+    "connector_head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core_head": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+  },
+  "scope": "Windows public CLI and ConPTY with one Connector-hosted Claude session on the same host",
+  "claude_build": {
+    "version": "2.1.328",
+    "sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839"
+  },
+  "artifacts": {
+    "nexus_wheel_sha256": "12832037e4694c9d60b2e3fa0278a8768e16665db3072c36eeced00af7dcb609",
+    "nexus_sdist_sha256": "4bbb5d12bd1009be8c4dfe53349a0a707666e2c0d5dff2c1943e802c861404b6",
+    "base_nexus_wheel_sha256": "887b575a5c25a305a7f628e602097515fb1bbe67f0b3ce656378bee5acdc23e8",
+    "package_files": 817,
+    "added": [
+      "okto_nexus/adapters/inbound/cli/claude_viewer_terminal.py",
+      "okto_nexus/adapters/inbound/cli/terminal_editor.py"
+    ],
+    "changed": [
+      "okto_nexus/adapters/inbound/cli/pi_viewer_terminal.py",
+      "okto_nexus/adapters/inbound/cli/session.py",
+      "okto_nexus/adapters/outbound/local_presenter_client.py"
+    ],
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "checks": {
+    "source_initial": {
+      "tests": 76,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 1
+    },
+    "source_confirmed": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "installed_regression": {
+      "tests": 84,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "installed_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "strict_twine": "PASS",
+    "dependency_check": "PASS (48 packages)"
+  },
+  "first_fixture_adjustment": "The UTF-8 assertion now accounts for returning from the alternate screen between the two decoded fragments.",
+  "commands": [
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-cli-681c/install.ps1",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-cli-681c/run-regression.ps1",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-cli-681c/native/run.ps1 -Trial trial1",
+    "rtk proxy D:/nxs-si026-cli-681c/venv/Scripts/python.exe -B D:/nxs-si026-cli-681c/native/prove_durability.py trial1"
+  ],
+  "native_proof": {
+    "exact_owned_claude_startup": true,
+    "requests_without_turn": 0,
+    "loopback_fixture_turns": 3,
+    "first_reader_detached_during_turn": true,
+    "same_owner_read_after_reattach": true,
+    "session_closed": true,
+    "queued_on_live_writer": true,
+    "public_cli_keyboard_and_console_restore": true,
+    "web_and_terminal_fifo": true,
+    "recovered_after_detach_without_replay": true,
+    "same_native_process_for_both_turns": true,
+    "external_model_requests": 0,
+    "sqlite_quick_check": "ok"
+  },
+  "durability": {
+    "operation_counts": {
+      "runtime.open": 1,
+      "turn.submit": 3,
+      "runtime.close": 1
+    },
+    "native_launches": 1,
+    "durable_terminal_input": "ACCEPTED_NATIVE",
+    "input_source": "native_terminal",
+    "distinct_successful_results": 3,
+    "web_then_terminal_fifo": true,
+    "reader_detaches": 2,
+    "writer_detaches": 1,
+    "session_closed": true,
+    "foreign_key_violations": 0
+  },
+  "artifact_directory": "D:/nxs-si026-cli-681c",
+  "evidence_sha256": {
+    "build.log": "946b977bd8eb6999996d77f70bbcc36c63e19609807b1fc3f23ae08bbcf6c8e2",
+    "audit_wheel.py": "5bc7377cae14228a9ba390fbd283f9928aead34ddcafd2605423aca00b54fe45",
+    "wheel-audit.json": "05ee96f7e3502a95815773998fe6afe2d322d8bc5c8622830c071320dfb7c3ad",
+    "install.ps1": "d53fc6295bcb47ec081e523ec4087ae34242db5012d926207ecac446f2318fac",
+    "source.log": "f44fdf18b0866ffaf8272420a1aaa8e1d7870201522a625f964788ac152a889a",
+    "source.xml": "c3a06955a21b946924da9d8ba00ecba17bceda6b72c4aba5dc22b410765abbc6",
+    "source-confirmed.log": "087067e0b646ada9670d4e8165f823d4d32dd23c9d3c6cd8f4975f7176af58de",
+    "source-confirmed.xml": "cf826ae21da6a975417291a5111357b711c278f19d6569a19f8984fcda6d6145",
+    "run-regression.ps1": "700d12354ebb793c6a529a2d34a12dbfb3cd91fb068a1c1d3f3e2585c981b2d8",
+    "installed.log": "91caaa969202c2d79ccde1cb36c583036ea5738656f2dd6148d041dd19dc6724",
+    "installed.xml": "79d5c548fec86551cf7b365ab3a3d46dae9703fc4607425d81787e5e993123c7",
+    "native/run.ps1": "d4d8f3ba06547d2170bbd7f5ac87cd129306716e3b7c8e7981259f8d1dd58149",
+    "native/remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "native/isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "native/test_remote_native_claude_writer.py": "105b9c621a21240247066f71208c74d1c36242139ba6a767e6e35554847e5e8f",
+    "native/prove_durability.py": "422e57b42b9f3738779224b42dc7a4c8951db48e0fde6889c7f40c624d8846b7",
+    "native/trial1/native.log": "534099e700fa9dfe9fab17718567f0b8dfa6b7af04e721d2ade0a9e28fc56beb",
+    "native/trial1/native.xml": "7df73a7d3c8052577ec25d3fe9975a1da6456d0f0938c44abcb9d17d85a6148f",
+    "native/trial1/result.json": "0b1a4cf289e4525683d5fb54356ce04f884e0d3ea207a3645f58e66c9ffa48ae",
+    "native/trial1/durability.json": "c548c591571cd993607ff399a62512a44b90f0099650e155b7e1651702c099f4",
+    "native/trial1/terminal-redacted.txt": "4de6d23390d68976bbffcccda75e14d3a7f7451192b99246076c58b12812555f"
+  },
+  "limits": [
+    "Nexus composer in a Windows terminal. Human takeover and uncertainty were exercised in fixtures.",
+    "Queue admission via the Home API and the public CLI. Claude responses were simulated in loopback.",
+    "Steer and interrupt remain available via explicit canonical commands. Their in-viewer gestures remain open.",
+    "No provider, human acceptance, separate-host, embedded native writer or macOS qualification in this milestone."
+  ]
+}

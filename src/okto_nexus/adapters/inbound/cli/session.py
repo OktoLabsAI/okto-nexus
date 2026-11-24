@@ -29,6 +29,7 @@ from ...outbound.local_presenter_client import (
 )
 from ...outbound.service_manager.context import atomic_json
 from ...outbound.terminal_http import LocalOperatorHTTP
+from .claude_viewer_terminal import show_claude_writer
 from .codex_viewer_process import present_codex, select_viewer
 from .connect import project_profile
 from .connect_presentation import display_reattach_command, display_session_attach_command
@@ -195,6 +196,54 @@ def _show_claude_transcript(link):
         raise ConnectionError('PRESENTATION_UNAVAILABLE', 'The Claude terminal returned invalid text.') from None
 
 
+def _attach_claude(call, binding, scope, generation, *, remote, write, viewer_executable):
+    if viewer_executable is not None:
+        raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'Claude uses its managed terminal.')
+    if write and sys.platform != 'win32':
+        raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The managed Claude writer requires a Windows terminal.')
+    reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation,
+        presentation='claude_remote' if remote else 'claude', **({'write': True} if write else {}))
+    writer = reviewed if write else None
+    revision = writer.capability_revision if writer else reviewed
+    if not _approve_writer_transfer(writer):
+        return None
+
+    if writer:
+        print('Watching the managed Claude terminal. Ctrl+E composes a message for the Nexus queue.')
+        print('Press Ctrl+] to detach. Use Home or session steer and session interrupt for turn controls.', flush=True)
+    else:
+        print('Watching the Claude terminal. Ctrl+C detaches this viewer.', flush=True)
+    last_intent = None
+
+    def report_intent(intent):
+        nonlocal last_intent
+        last_intent = intent
+        print(f'Receipt reference: --session-id {display_text(scope["session_id"])} '
+              f'--owner-generation {generation} --intent {display_text(intent)}', file=sys.stderr, flush=True)
+
+    def recover(intent):
+        try:
+            return recover_session_command(call, binding, scope['session_id'], generation, intent)
+        except ConnectionError:
+            return None
+
+    try:
+        with open_local_presentation(call, scope=scope, expected_session_generation=generation,
+                capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
+                **({'remote': True} if remote else {}), **({'writer': writer} if writer else {}), claude=True) as link:
+            if writer:
+                show_claude_writer(link, recover, report_intent)
+            else:
+                _show_claude_transcript(link)
+    finally:
+        if last_intent:
+            report_intent(last_intent)
+    _display({'state': 'detached'}, False)
+    return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
+            'attach_strategy': f"claude_{'remote' if remote else 'local'}_{'write' if writer else 'read'}",
+            'capability_revision': revision}
+
+
 def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False,
                    allow_empty_open=False):
     """Open a viewer for the exact existing session and return the detach receipt."""
@@ -217,19 +266,8 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
         raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE',
                               'Remote terminal attachment is unavailable for this harness.')
     if binding.get('adapter_id') == 'claude_stream':
-        if write or viewer_executable is not None:
-            raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The managed Claude terminal is read-only.')
-        revision = review_local_presentation(call, scope=scope, expected_session_generation=generation,
-                                             presentation='claude_remote' if remote else 'claude')
-        print('Watching the Claude terminal. Ctrl+C detaches this viewer.', flush=True)
-        with open_local_presentation(call, scope=scope, expected_session_generation=generation,
-                                     capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
-                                     **({'remote': True} if remote else {}), claude=True) as link:
-            _show_claude_transcript(link)
-        _display({'state': 'detached'}, False)
-        return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
-                'attach_strategy': 'claude_remote_read' if remote else 'claude_local_read',
-                'capability_revision': revision}
+        return _attach_claude(call, binding, scope, generation, remote=remote, write=write,
+                              viewer_executable=viewer_executable)
     if binding.get('adapter_id') == 'pi_rpc':
         if viewer_executable is not None:
             raise ConnectionError('PRESENTATION_MODE_UNAVAILABLE', 'The Pi terminal uses its built-in renderer.')
