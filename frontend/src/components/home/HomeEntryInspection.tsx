@@ -92,8 +92,8 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
         onChange={event=>{const value=sessionOptions.find(ref=>homeSessionRefKey(ref)===event.target.value)??null;transition(()=>{setSession(value);selectAttention(null);setRecord({target:value?homeSessionTarget(value):target,continuation:false});});}}>
         <option value="">Choose a session</option>{sessionOptions.map((ref,index)=><option key={homeSessionRefKey(ref)} value={homeSessionRefKey(ref)}>{homeSessionOptionLabel(ref,index)}</option>)}</select></label>}
       {!session&&<p className="text-sm text-surface-500">{entry.sessions_total===0?'No canonical session is linked to this activity.':'Select a session to inspect its exact output. No recent session is selected automatically.'}</p>}
-      {session&&<ExactEntrySession key={homeSessionRefKey(session)} session={session} serverId={serverId} workspace={workspace}/>}
-      {session&&<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{selectAttention(null);setRecord({target:homeSessionTarget(session),continuation:true});})}>Continue this exact session</button>}
+      {session&&<ExactEntrySession key={homeSessionRefKey(session)} session={session} serverId={serverId} workspace={workspace}
+        onContinue={()=>transition(()=>{selectAttention(null);setRecord({target:homeSessionTarget(session),continuation:true});})}/>}
       {cursors.sessions&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('sessions')}>Load more linked sessions</button>}
     </section>
     {entry.external.length>0&&<p className="text-sm">External reports do not provide native terminal capture. Open the retained source below for its evidence and limitations.</p>}
@@ -114,9 +114,11 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   </section>;
 }
 
-function ExactEntrySession({session,serverId,workspace}: {session:HomeSessionRef;serverId:string;workspace:string|null}) {
+function ExactEntrySession({session,serverId,workspace,onContinue}: {
+  session:HomeSessionRef;serverId:string;workspace:string|null;onContinue:()=>void;
+}) {
   const [resolved,setResolved]=useState<Awaited<ReturnType<typeof resolveHomeTarget>>|null>(null),[error,setError]=useState('');
   useEffect(()=>{const abort=new AbortController();void resolveHomeTarget(homeApi,homeSessionTarget(session),{server_id:serverId,workspace_id:workspace},abort.signal)
     .then(value=>{if(!abort.signal.aborted)setResolved(value);}).catch(()=>{if(!abort.signal.aborted)setError('This exact session is unavailable. No replacement was selected.');});return()=>abort.abort();},[]);
-  return error?<p role="alert">{error}</p>:resolved?.session_context?<HomeSessionInspection context={resolved.session_context}/>:<p role="status">Revalidating the exact session…</p>;
+  return error?<p role="alert">{error}</p>:resolved?.session_context?<HomeSessionInspection context={resolved.session_context} onContinue={onContinue}/>:<p role="status">Revalidating the exact session…</p>;
 }

@@ -5,9 +5,13 @@ export function sameRuntimeScope(left: RuntimeScope, right: RuntimeScope): boole
   return (['server_id', 'agent_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'session_id'] as const)
     .every(key => left[key] === right[key]);
 }
+export function canContinueSession(session: RuntimeSession): boolean {
+  return session.control_available && !session.durable_release_pending &&
+    !['CLOSED', 'FAILED', 'CLOSING', 'DRAINING'].includes(session.lifecycle_state) && session.lease_state !== 'CLOSED';
+}
+
 export function assertContinuableSession(session: RuntimeSession, scope: RuntimeScope): void {
-  if (!sameRuntimeScope(session.scope, scope) || !session.control_available || session.durable_release_pending ||
-      ['CLOSED', 'FAILED', 'CLOSING', 'DRAINING'].includes(session.lifecycle_state) || session.lease_state === 'CLOSED')
+  if (!sameRuntimeScope(session.scope, scope) || !canContinueSession(session))
     throw new Error('This exact session cannot accept a continuation. Choose a new context explicitly; no replacement session was selected.');
 }
 export async function revalidateContinuation(client: Pick<Reads, 'session'>, scope: RuntimeScope): Promise<void> {

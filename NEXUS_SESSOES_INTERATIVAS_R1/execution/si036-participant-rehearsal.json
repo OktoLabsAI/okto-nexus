@@ -529,5 +529,79 @@
       "The first browser driver reached its startup timeout before navigating. The second driver used the same live fixture, port and browser.",
       "Human acceptance and Windows screen reader speech are pending."
     ]
+  },
+  "hide_continuation_after_session_close": {
+    "intake_commit": "4a19da46a44b28434a2a8875d6bde2f4e0f95e57",
+    "data_archive_sha256": "e94f9505510e3841d48a0584a073f6c7afbef114aa7aaf3ce1b05a10706d7306",
+    "client": "Microsoft Edge 158.0.4370.33 on Windows",
+    "artifact": {
+      "original_wheel_sha256": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+      "validated_wheel_sha256": "a3217d74a9e0ee7e47475b0e4c8463aa5d6a52c59ead6635e030faa838801b83",
+      "validated_sdist_sha256": "2e13b077789cf01e3140591ea956ff00559a9e5fdfe35cd174174fed5443d3b8",
+      "bundled_dashboard_sha256": "5af9bdfad1e6986d0badc341b09423d78099f639e8c3c934989614bf6a5d3742",
+      "package_files": 817,
+      "unchanged_non_dashboard_package_files": 815,
+      "one_current_dashboard_bundle": true,
+      "distribution_metadata_unchanged": true
+    },
+    "baseline_closed_results_offered_continuation": 2,
+    "corrected_browser": {
+      "two_distinct_operations": true,
+      "result_cards": [
+        {
+          "selected_result_visible": true,
+          "different_result_in_retained_panel": false,
+          "exact_session": true,
+          "continuation_absent": true,
+          "result_before_session": true,
+          "one_conversation_region": true,
+          "separate_retained_panel_present": true
+        },
+        {
+          "selected_result_visible": true,
+          "different_result_in_retained_panel": false,
+          "exact_session": true,
+          "continuation_absent": true,
+          "result_before_session": true,
+          "one_conversation_region": true,
+          "separate_retained_panel_present": true
+        }
+      ]
+    },
+    "focus_returned_after_each_close": true,
+    "server_audit": {
+      "fixture_read_only": true,
+      "connector_started": false,
+      "original_database_unchanged": true,
+      "result_count": 2,
+      "productive_counts_unchanged": true
+    },
+    "frontend_node_tests_passed": 425,
+    "vite_build": "PASS",
+    "twine_strict": "PASS",
+    "checked_states_in_renderer": [
+      "open and writable",
+      "closed",
+      "failed",
+      "closing",
+      "draining",
+      "closed lease",
+      "durable release pending",
+      "no control permission"
+    ],
+    "sha256": {
+      "frontend-test.log": "60c03dbfe24155315deb81e5c6e91bcf1dcbb25956d6933178e00e3a31613277",
+      "wheel_probe.py": "a8c9695f8e5cddc385ae8b97d84de0d2aa7ac609a28b2da8b0ee5432fdd76a2d",
+      "rehearse.ps1": "c576c1be3ef2253a59e75a9f69275e6d1234f6f35080ce8126e6cea898a695da",
+      "browser-proof.json": "2858eacdd54a3ac7a3780f06d5c09424e5a6b82b19cc3e5905b501585b5022b4",
+      "server-proof.json": "87cedc689a56dea4dda35cdbb19609392907958d804e0fdddc253bfa6dd5969f",
+      "inspected-0.log": "3cae6c737cdd7d994f4d727f3c096dbfb752424f8b38a1521ac278207799fac4",
+      "inspected-1.log": "ac672d2d78e272a7da97797de89742f2b75558cf33a4a3f25b62fa185f159adb"
+    },
+    "limits": [
+      "The browser used a separate copy of the historical database from the completed Windows Pi and Connector run.",
+      "The active-session UI condition was exercised by renderer tests. The browser probe scoped both result panels to the retained closed session.",
+      "This probe did not launch a Connector, harness, human study or real-provider campaign."
+    ]
   }
 }

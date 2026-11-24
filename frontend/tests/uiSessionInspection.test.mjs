@@ -184,6 +184,26 @@ test('an eligible embedded session offers an exact shell-safe terminal command o
   }
 });
 
+test('continuation is offered only for a session that can still accept it',()=>{
+  const onContinue=()=>{};
+  const live=session({lifecycle_state:'READY',lease_state:'ACTIVE',control_available:true});
+  assert.match(render({session:live,embedded:true,interactive:true,onContinue}),/button[^>]*>Continue this exact session/);
+  const unavailable=[
+    {lifecycle_state:'CLOSED'},
+    {lifecycle_state:'FAILED'},
+    {lifecycle_state:'CLOSING'},
+    {lifecycle_state:'DRAINING'},
+    {lease_state:'CLOSED'},
+    {durable_release_pending:true},
+    {control_available:false},
+  ];
+  for(const patch of unavailable){
+    const markup=render({session:{...live,...patch},embedded:true,interactive:true,onContinue});
+    assert.doesNotMatch(markup,/Continue this exact session/);
+    assert.match(markup,/Conversation/);
+  }
+});
+
 test('only the read-only session body excludes observation controls from captured draft edits',()=>{
   const markup=render({session:session(),embedded:true});
   assert.match(markup,/^<section aria-label="Session execution output" data-modal-passive="true"/);

@@ -5,10 +5,12 @@ import {assertHomeSessionContext} from '../homeSessionInspection';
 import {RuntimeEventStream} from './RuntimeEventStream';
 import {CopyMessageButton} from './CopyMessageButton';
 import {SessionConversation} from './SessionConversation';
+import {canContinueSession} from './home/continuation';
 
 export interface SessionExecutionPanelProps {
   session: RuntimeSession; harness?: string; host?: string; embedded?: boolean; interactive?: boolean;
   technicalControls?: ReactNode;
+  onContinue?: () => void;
 }
 
 /** Build a shell-safe invocation of the Nexus CLI's existing-session prompt. */
@@ -26,7 +28,7 @@ export function SessionExecutionPanel(props: SessionExecutionPanelProps) {
   return <ExecutionBody key={identity} {...props}/>;
 }
 
-function ExecutionBody({session,harness,host,embedded=false,interactive=false,technicalControls}: SessionExecutionPanelProps) {
+function ExecutionBody({session,harness,host,embedded=false,interactive=false,technicalControls,onContinue}: SessionExecutionPanelProps) {
   const [current,setCurrent] = useState<RuntimeSession|null>(session);
   const [tab,setTab] = useState<'tail'|'history'>(sessionReleased(session)?'history':'tail');
   const [presentation,setPresentation] = useState<'conversation'|'activity'>('conversation');
@@ -85,9 +87,12 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,te
       </div>
     </details>}
   </section>;
+  const continueButton = onContinue && interactive && !error && canContinueSession(current)
+    ? <button type="button" className="btn btn-secondary" onClick={onContinue}>Continue this exact session</button>
+    : null;
   const generation = current.scope.session_owner_generation;
   if (!interactive || generation === undefined || !Number.isSafeInteger(generation) || generation <= 0) {
-    return technicalControls ? <>{activity}{technicalControls}</> : activity;
+    return <>{activity}{technicalControls}{continueButton}</>;
   }
   const scope: InteractionScope = {...current.scope, session_owner_generation: generation};
   return <section aria-label="Session" className="space-y-3 min-w-0">
@@ -102,5 +107,6 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,te
         visible={presentation === 'conversation'} onAccessLost={clear}/>
     </div>
     {presentation === 'activity' && <>{activity}{technicalControls}</>}
+    {continueButton}
   </section>;
 }

@@ -45,3 +45,11 @@ No Windows, o Edge percorreu a jornada a partir do pedido inicial no Nexus `f2bb
 O Pi 0.87.1 usou o Connector R4 nesta máquina e respostas simuladas. A auditoria confirmou uma abertura nativa, dois envios e um fechamento. A entrada da fila atingiu `ACCEPTED_NATIVE`, o processo do Pi saiu e o listener fechou. O primeiro roteiro do navegador atingiu o limite de espera antes de navegar. A segunda execução aproveitou o ambiente nativo que ficou pronto logo depois, com a mesma sessão do navegador e sem repetir o trabalho inicial.
 
 O marco acrescenta evidência do fluxo completo, dispensa migração e pode ser revertido pelo commit de registro. O aceite do participante e a confirmação de fala no Windows seguem pendentes. [Resultados e hashes](si036-participant-rehearsal.json)
+
+## Disponibilidade de continuar a sessão
+
+O painel usa o estado atualizado da sessão para oferecer **Continue this exact session**. Sessões encerradas, em encerramento, sem controle ou com liberação pendente continuam disponíveis para leitura do histórico e dos resultados. Ao selecionar a ação, o fluxo existente revalida a mesma sessão.
+
+O Edge abriu os dois resultados no wheel atualizado e exibiu a resposta de cada operação acima da conversa, com retorno de foco ao fechar. O botão deixou de aparecer para a sessão encerrada. O ensaio usou uma cópia do banco produzido pela execução anterior com Pi e Connector. Passaram 425 testes do frontend, incluindo a renderização da ação para uma sessão disponível. O build e a validação estrita do Twine também passaram.
+
+O wheel conserva os 815 arquivos do pacote fora da troca do HTML e do JavaScript do dashboard. A alteração dispensa migração e pode ser revertida pelo commit. O aceite do participante e a validação de fala no Windows seguem pendentes. [Resultados e hashes](si036-participant-rehearsal.json)
