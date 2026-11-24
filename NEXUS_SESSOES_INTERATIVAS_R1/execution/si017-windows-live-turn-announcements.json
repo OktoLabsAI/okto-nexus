@@ -1,0 +1,175 @@
+{
+  "date": "2026-11-24",
+  "tasks": [
+    "SI-017",
+    "SI-036"
+  ],
+  "scenarios": [
+    "SI-T-E14"
+  ],
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "27206336594948d5931b6942206db934dbc8c94a",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_drift": [
+        629,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_drift": [
+        113,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "main_drift": [
+        95,
+        0
+      ]
+    },
+    "nexus_worktree_clean": true,
+    "nexus_upstream_drift": [
+      0,
+      0
+    ],
+    "connector_worktree_clean": true,
+    "core_worktree_clean": true
+  },
+  "packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "wheel_sha256": "7e21dbc72219708faf086028cf45e7ffa9377d19c808734df6b8c65835296bec"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "windows": {
+    "version": "26H2",
+    "build": "26300.10075"
+  },
+  "test": {
+    "method": "Fresh headless Edge, actual operator sign-in and exact Home session, accessibility tree via CDP and DOM mutations. Real loopback API against a disposable copy of a fixture DB.",
+    "result": "PASS_BROWSER_AND_API",
+    "process_exit_codes": {
+      "browser": 0,
+      "api": 0
+    },
+    "fixture_only": true,
+    "provider_calls": 0,
+    "native_harnesses_started": 0,
+    "api": {
+      "historic_terminal_count": 7,
+      "historic_pages": 2,
+      "fragments": 24,
+      "canonical_new_terminal_count": 6,
+      "duplicate_terminal_projected": false
+    },
+    "browser": {
+      "open": {
+        "historicNotices": 0,
+        "focusedRegion": "Conversation messages",
+        "historicBrowserPages": 2,
+        "accessibilityRole": "status",
+        "live": "polite",
+        "atomic": true,
+        "browser": "Edg/158.0.4370.33"
+      },
+      "fragments": {
+        "visibleFragments": 24,
+        "terminalNotices": 0,
+        "newMessageNotices": 0,
+        "focusPreserved": true
+      },
+      "first": {
+        "turnNotices": [
+          "Turn finished."
+        ],
+        "focusPreserved": true
+      },
+      "duplicate": {
+        "duplicateAnnouncements": 0,
+        "focusPreserved": true
+      },
+      "second": {
+        "turnNotices": [
+          "Turn finished.",
+          "Another turn finished."
+        ],
+        "newMessageNotices": 0,
+        "focusPreserved": true
+      },
+      "grouped": {
+        "turnNotices": [
+          "Turn finished.",
+          "Another turn finished.",
+          "2 turns ended."
+        ],
+        "focusPreserved": true
+      },
+      "grouped_repeat": {
+        "turnNotices": [
+          "Turn finished.",
+          "Another turn finished.",
+          "2 turns ended.",
+          "2 more turns ended."
+        ],
+        "focusPreserved": true
+      }
+    },
+    "cleanup": {
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0,
+      "fixture_entries_in_dispatch_outbox": 0,
+      "fixture_listener_closed": true,
+      "browser_closed": true
+    }
+  },
+  "windows_screen_reader": {
+    "name": "NVDA",
+    "version": "2026.3.1",
+    "source": "https://www.nvaccess.org/post/nvda-2026-3-1/",
+    "archive_signature": "Valid",
+    "archive_signer": "NV Access Limited",
+    "setup": "Portable unpack, empty profile, silence synthesizer, Win32 desktop separate from Windows input, test processes owned by a kill-on-close job.",
+    "desktop_containment": {
+      "expected_desktop": true,
+      "input_is_separate": true
+    },
+    "startup_observed": true,
+    "browser_control_ready_on_isolated_desktop": false,
+    "leftover_portable_reader_processes": 0,
+    "nexus_speech_qualified": false
+  },
+  "local_evidence": {
+    "root": "D:/nxs-si017-nvda-27206336",
+    "sha256": {
+      "app_probe.py": "8cad8a0b62bd93c90fc21f4a633bb197eb03a027e4a1a001d18f5bca9e6f8aee",
+      "run-edge.cjs": "b0a489ea6e3a26fc7a01b2963ded4b9b0aa1e51ee574b08fe427e1bba0fa1003",
+      "edge4.log": "ade994cc37fcffce0a2cbde2afb228ee61b68b2c2c12a5be57dc938bf6f2acd1",
+      "announcement4/result.json": "129312a93068b71d25f2fa3888d59e44bc91710bc2427517de1fa0be399ef6c7",
+      "containment.json": "33173aedeb17580c16a703a4e665091b71adad29adc7b3d4af9fadb87f03b2db",
+      "nvda_2026.3.1.exe": "6f80a5b0ca720a7d0d314b5be212f37388bbe81a1107ac3298c1821a1cd3f052",
+      "trial4/nvda.log": "a538409f62ac612ec7c54b02f811e6bf4ae03c483de15918d3d0a3ee82a688fb"
+    }
+  },
+  "eligibility": {
+    "previous_orca_chromium_speech_evidence_unchanged": true,
+    "human_acceptance_pending": true,
+    "provider_campaign_pending": true,
+    "additional_macos_measurement_deferred": true
+  }
+}
