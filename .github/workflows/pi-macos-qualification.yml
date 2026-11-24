@@ -1,18 +1,6 @@
 name: Intel macOS session qualification
 
 on:
-  push:
-    branches: [feature/v0.3.8]
-    paths:
-      - .github/workflows/pi-macos-qualification.yml
-      - tools/ci_installed.py
-      - tools/probe_macos_pi.py
-      - tests/fixtures/pi-release/package*.json
-      - src/okto_nexus/adapters/inbound/cli/pi_viewer_terminal.py
-      - tests/execution_r4/remote_renewal_helpers.py
-      - tests/execution_r4/test_macos_hosted_pi.py
-      - tests/execution_r4/test_remote_renewal.py
-      - tests/session_interaction/test_session_cli.py
   workflow_dispatch:
 
 permissions:
