@@ -39,7 +39,7 @@ def test_remote_pi_viewer_and_editor_keep_the_connector_owner_and_queue(tmp_path
         return built
 
     monkeypatch.setattr(tcp, 'build_app', app)
-    monkeypatch.setattr('okto_nexus.application.remote_pi_presentation.reviewed_pi_context',
+    monkeypatch.setattr('okto_nexus.application.remote_pi_presentation.reviewed_pi_presentation_context',
                         lambda mapping: mapping.adapter_id == 'pi_rpc')
     for module in ('availability', 'executor_inventory'):
         monkeypatch.setattr(f'nexus_connector_core.{module}.qualified_build', lambda *_args, **_kwargs: True)
