@@ -44,11 +44,12 @@ interface History {
   missingHistory: boolean;
   incomplete: boolean;
   announceAfter: number;
+  committed: number;
 }
 
 function emptyHistory(epoch: string | null = null): History {
   return {messages: new Map(), epoch, after: 0, ready: false, more: false, gap: false,
-    missingHistory: false, incomplete: false, announceAfter: 0};
+    missingHistory: false, incomplete: false, announceAfter: 0, committed: 0};
 }
 
 function errorStatus(error: unknown) {
@@ -71,6 +72,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
   const [messageError, setMessageError] = useState('');
   const [busy, setBusy] = useState(false);
   const [newMessages, setNewMessages] = useState(false);
+  const [pagedUpdates, setPagedUpdates] = useState(false);
   const [turnAnnouncement, setTurnAnnouncement] = useState<ReturnType<typeof liveTurnAnnouncement>>(null);
   const [queueRefresh, setQueueRefresh] = useState(0);
   const [steerSource, setSteerSource] = useState<SteerSource | null>(null);
@@ -133,6 +135,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
 
   useEffect(() => {
     if (!visible) setTurnAnnouncement(null);
+    setPagedUpdates(false);
     const controller = new AbortController();
     let timer: number | undefined;
     let inFlight = false;
@@ -144,6 +147,14 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
     function positionAdvanced(current: History) {
       return position !== null && (position.stream_epoch !== current.epoch ||
         position.committed_contiguous > current.after || position.gap_pending !== current.gap);
+    }
+
+    function updatePagedNotice(current: History) {
+      const streamedThrough = position && position.stream_epoch === current.epoch ? position.committed_contiguous : 0;
+      // The initial snapshot may already have unread history. Only signal
+      // activity newer than that snapshot and the pages subsequently loaded.
+      setPagedUpdates(active && current.more && !current.missingHistory &&
+        Math.max(current.committed, streamedThrough) > current.announceAfter);
     }
 
     function schedule(delay: number) {
@@ -163,6 +174,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       view.current = emptyHistory();
       setHistory(view.current);
       setTurnAnnouncement(null);
+      setPagedUpdates(false);
       setReading('The exact session is unavailable. Reopen its context.');
     }
 
@@ -199,9 +211,11 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
             epoch: page.stream_epoch,
             after: page.next_after_sequence, ready: true, more: page.has_more, gap: page.gap_pending,
             missingHistory: page.history_gap != null, incomplete: !page.history_complete,
+            committed: Math.max(current.committed, page.committed_contiguous),
             announceAfter: current.ready ? Math.max(current.announceAfter, page.next_after_sequence) : page.committed_contiguous};
           if (current.ready && !following.current && page.updates.length && !includeNext) setNewMessages(true);
           setHistory(view.current);
+          updatePagedNotice(view.current);
         }
         const latest = drafts.get(key)?.latest;
         if (latest && !latest.receipt.steer_submitted &&
@@ -248,6 +262,7 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
           stream?.close();
           return;
         }
+        updatePagedNotice(view.current);
         if (!inFlight && !view.current.more && positionAdvanced(view.current)) schedule(150);
       });
       stream.addEventListener('conversation-unavailable', event => {
@@ -404,8 +419,10 @@ export function SessionConversation({scope, active, visible, onAccessLost}: {
       : history.gap && <p className="text-xs" role="status">Some messages are still being recovered.</p>}
     {history.incomplete && !history.missingHistory &&
       <p className="text-xs text-surface-500">Earlier native history may be unavailable.</p>}
+    <p className={pagedUpdates ? 'text-xs text-surface-500' : 'sr-only'} role="status">
+      {pagedUpdates ? 'New activity is available.' : newMessages ? 'New messages available.' : ''}
+    </p>
     {history.more && <button className="btn btn-secondary" type="button" onClick={() => polling.current()}>Load more messages</button>}
-    <p className="sr-only" role="status">{newMessages ? 'New messages available.' : ''}</p>
     <p className="sr-only" role="status" aria-atomic="true">
       {visible && turnAnnouncement && <span key={turnAnnouncement.sequence}>{turnAnnouncement.text}</span>}
     </p>

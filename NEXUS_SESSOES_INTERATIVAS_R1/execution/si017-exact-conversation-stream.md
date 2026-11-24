@@ -13,3 +13,11 @@ The conversation keeps its rendered message identities and input state during co
 ## Delivery and rollback
 
 The new endpoint is read-only and adds no migration. Rollback restores bounded periodic transcript reads. The existing queue, receipts, transcript storage, and Core and Connector pins remain compatible. SI-017 remains in progress for cross-session navigation and the remaining keyboard, zoom, pause, and assistive technology checks.
+
+## Atualizações ao ler histórico paginado
+
+O painel agora mostra **New activity is available** quando o cursor validado avança além do histórico carregado e ainda há páginas a ler. Páginas que já existiam ao abrir a conversa ficam silenciosas. O aviso usa a região de status existente, preserva foco e rolagem e desaparece quando a leitura alcança os eventos novos.
+
+No Edge para Windows, o pacote anterior recebeu os eventos no stream sem mostrar o aviso. O novo wheel exibiu um aviso em cada cenário, com 24 e 54 fragmentos sintéticos. No caso maior, o aviso continuou visível depois do primeiro clique em **Load more messages** e desapareceu após o segundo. O navegador consultou o histórico seguinte somente após cada clique. A primeira tentativa do caso maior precisou ajustar a paginação da leitura de verificação da API.
+
+Passaram 423 testes do frontend, 29 de transcrição e stream, as checagens do wheel e do sdist e a verificação de integridade das cópias descartáveis do SQLite. O ensaio cobre a região de status e o foco no navegador. A validação de fala no Windows segue pendente. A alteração dispensa migração e pode ser revertida pelo commit que atualizou o componente e o bundle. [Resultados e hashes](si017-paged-live-updates.json)

@@ -1042,6 +1042,7 @@
       "evidence": [
         "execution/si017-next-turn-receipt-recovery.md",
         "execution/si017-exact-conversation-stream.md",
+        "execution/si017-paged-live-updates.json",
         "execution/si017-context-view-and-navigation.md",
         "execution/si036-browser-scroll-ime.md",
         "execution/si036-browser-scroll-ime.json",
@@ -4394,7 +4395,9 @@
       "status": "PASS",
       "evidence": [
         "execution/si036-browser-scroll-ime.json",
-        "execution/si012-codex-live-conversation.json"
+        "execution/si012-codex-live-conversation.json",
+        "execution/si017-exact-conversation-stream.md",
+        "execution/si017-paged-live-updates.json"
       ]
     },
     {

@@ -1,0 +1,247 @@
+{
+  "date": "2026-11-24",
+  "task": "SI-017",
+  "scenario": "SI-T-E11",
+  "intake": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "de9fd4faa89adb67f335bd471959dd077b16b61d",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_drift": [
+        632,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_drift": [
+        113,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "main_drift": [
+        95,
+        0
+      ]
+    },
+    "nexus_worktree_clean": true,
+    "nexus_upstream_drift": [
+      0,
+      0
+    ]
+  },
+  "platform": "Windows 26H2 x64 build 26300",
+  "stage": "Installed dashboard bundle, real Edge, real API and synthetic events in a disposable retained transcript",
+  "baseline_nexus_wheel_sha256": "7e21dbc72219708faf086028cf45e7ffa9377d19c808734df6b8c65835296bec",
+  "candidate_packages": {
+    "versions": {
+      "okto-nexus": "0.3.8",
+      "okto-nexus-connector": "0.0.15",
+      "okto-nexus-connector-core": "0.0.16"
+    },
+    "wheel_asset_paths": [
+      "index.html",
+      "assets/index-bx65Dsgp.js"
+    ],
+    "wheel_assets_match_checkout": true,
+    "nexus_wheel_sha256": "0814c210e6107bbd8666dc374c49a1d48295d56fcb5011b139447884daa95971",
+    "nexus_sdist_sha256": "f36067152a7ba759fc538041c4f8e4b616b5032a915ad76dc5e37f025400cd82",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "trials": {
+    "baseline": {
+      "fixture_only": true,
+      "provider_calls": 0,
+      "native_harnesses_started": 0,
+      "api": {
+        "historical_pages": 2,
+        "historical_committed": 73,
+        "first_page_cursor": 50,
+        "latest_committed": 97,
+        "historical_terminal_count": 7,
+        "live_fragments": 24
+      },
+      "browser": {
+        "first_page": {
+          "edge": "Edg/158.0.4370.33",
+          "offset": 12,
+          "historicalNotice": false,
+          "reads": [
+            0
+          ]
+        },
+        "live_and_catch_up": {
+          "hadNotice": false,
+          "announcements": 0,
+          "observedPositions": [
+            73,
+            85,
+            97
+          ],
+          "sameReadingPosition": true,
+          "reads": [
+            0,
+            50
+          ],
+          "latestVisible": true,
+          "noticeCleared": true
+        }
+      },
+      "cleanup": {
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0,
+        "fixture_dispatch_entries": 0,
+        "listener_closed": true
+      },
+      "api_and_browser_exit_codes": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "fixture_only": true,
+      "provider_calls": 0,
+      "native_harnesses_started": 0,
+      "api": {
+        "historical_pages": 2,
+        "historical_committed": 73,
+        "first_page_cursor": 50,
+        "latest_committed": 97,
+        "historical_terminal_count": 7,
+        "live_fragments": 24
+      },
+      "browser": {
+        "first_page": {
+          "edge": "Edg/158.0.4370.33",
+          "offset": 12,
+          "historicalNotice": false,
+          "reads": [
+            0
+          ]
+        },
+        "live_and_catch_up": {
+          "hadNotice": true,
+          "announcements": 1,
+          "observedPositions": [
+            73,
+            85,
+            91,
+            97
+          ],
+          "sameReadingPosition": true,
+          "reads": [
+            0,
+            50
+          ],
+          "latestVisible": true,
+          "noticeRemainedAcrossPartialPage": false,
+          "noticeCleared": true
+        }
+      },
+      "cleanup": {
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0,
+        "fixture_dispatch_entries": 0,
+        "listener_closed": true
+      },
+      "api_and_browser_exit_codes": [
+        0,
+        0
+      ]
+    },
+    "candidate-three-pages-final": {
+      "fixture_only": true,
+      "provider_calls": 0,
+      "native_harnesses_started": 0,
+      "api": {
+        "historical_pages": 2,
+        "historical_committed": 73,
+        "first_page_cursor": 50,
+        "latest_committed": 127,
+        "historical_terminal_count": 7,
+        "live_fragments": 50
+      },
+      "browser": {
+        "first_page": {
+          "edge": "Edg/158.0.4370.33",
+          "offset": 12,
+          "historicalNotice": false,
+          "reads": [
+            0
+          ]
+        },
+        "live_and_catch_up": {
+          "hadNotice": true,
+          "announcements": 1,
+          "observedPositions": [
+            73,
+            85,
+            115,
+            127
+          ],
+          "sameReadingPosition": true,
+          "reads": [
+            0,
+            50,
+            100
+          ],
+          "latestVisible": true,
+          "noticeRemainedAcrossPartialPage": true,
+          "noticeCleared": true
+        }
+      },
+      "cleanup": {
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0,
+        "fixture_dispatch_entries": 0,
+        "listener_closed": true
+      },
+      "api_and_browser_exit_codes": [
+        0,
+        0
+      ]
+    }
+  },
+  "first_three_page_attempt": {
+    "test_observation": "Checking one fixed page of API updates truncated the verification read at 50 fragments.",
+    "recovery": "Walk the exact API cursor before validating all 54 fragments.",
+    "frontend_and_artifacts_reused": true,
+    "api_and_browser_exit_codes": [
+      1,
+      1
+    ]
+  },
+  "regressions": {
+    "frontend_passed": 423,
+    "conversation_and_stream_passed": 29,
+    "tsc_vite": "PASS",
+    "strict_twine": "PASS",
+    "uv_lock_offline": "PASS"
+  },
+  "limits": "The browser checks visible status, transitions, cursor requests and focus. Windows speech and operator acceptance remain pending.",
+  "remaining_test_processes": 0,
+  "migration": "none",
+  "local_evidence_root": "D:/nxs-si017-paged-live-de9fd4fa",
+  "local_sha256": {
+    "app-baseline.py": "53298cef42b04410c5e5fa0fb2a470041b6cfbf1480a0e4aaf102cb25c62b369",
+    "check-baseline.cjs": "056837d22608116ce4ad5a4802efc4ea5c1d519979454e5670a512fad39758fe",
+    "app-candidate-one-page.py": "f4220d028a1aa72dfc989bb9f24c0bf8a0da1b11668ebf257f17df30081a7fdf",
+    "app.py": "50b2b1df92ec449fc79404753b7ec363ee64a283cdce13222aa37c4c899636b0",
+    "check.cjs": "14a6f23ba9e3ceeb8e86cf35339b6ee47f604b36b364924e18edf0c41111b503",
+    "baseline/result.json": "61b567267aa962dd224053608630833067ebc4fce249e130ebe9d8dc5772be95",
+    "candidate/result.json": "e4d03b2e619fcc40c6f7d9d401d28cb71b22b378b3356fc22315f344d1a429c7",
+    "candidate-three-pages-final/result.json": "d269cca8aa23e9c522cbda808692736c986fb8eb6d79202c66c688115bd410c8",
+    "candidate-three-pages-browser.log": "8847a46f1c3cf63a437880be7bf14dd11faaa942c1e18d70193c480d2f4a803c",
+    "candidate-three-pages-final-browser.log": "e8861d65addb0cf647c97a90369a09694786ec880f945a4064dc7732ee5e3686",
+    "api-tests.xml": "ae8167fbe34084375a8dc67d182ce5a72a311d313e242a447f56f4af9d035d9f",
+    "final-frontend-tests.log": "4483656f200c3386ba2116bea7d93cfd7868893230cab0ef3e34e439342a0515",
+    "cleanup-audit.json": "8dd725c0d976d4e5e55150034d221a45220fe4534713691017663379bc65f2bf"
+  }
+}
