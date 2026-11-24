@@ -454,5 +454,40 @@
     "external_provider_requests": 0,
     "actual_paid_campaign": "NOT_RUN",
     "participant_acceptance": "NOT_RUN"
+  },
+  "catalog_probe_readiness": {
+    "nexus_head": "6075d6d707933252469f6a3a60d014dbeb586a08",
+    "branch": "feature/v0.3.8",
+    "nexus_origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "nexus_main_drift": [630, 0],
+    "connector_head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core_head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+    "platform": "Windows 26H2",
+    "tool": "tools/si038_codex_catalog.py",
+    "contiguous_page_limit": 5,
+    "per_page_limit": 50,
+    "allowed_requests": ["initialize", "initialized", "account/read", "model/list"],
+    "account_refresh_requested": false,
+    "refresh_and_revoke_target": "reserved non-listening loopback port",
+    "native_offline": {
+      "version": "0.157.0",
+      "release": "https://github.com/openai/codex/releases/tag/rust-v0.157.0",
+      "archive_sha256": "5ade9d6176378e2e99d32b57123a6f6a0e0395fe261c327cceaef032e6528d77",
+      "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+      "report_sha256": "2317658850d6b6fc448693b0b2f61c4ee8fa8545fe480cb4a2038db473084270",
+      "proxy": "reserved non-listening loopback port",
+      "profile": "empty disposable profile",
+      "provider_session_present": false,
+      "models_reported": 7,
+      "default_reported": "gpt-6-astra",
+      "provider_access_verified": false,
+      "exit_code": 0,
+      "leftover_probe_processes": 0,
+      "leftover_probe_profiles": 0
+    },
+    "fixture_protocol_and_isolation_tests_passed": 6,
+    "budget_and_usage_regressions_passed": 17,
+    "authenticated_catalog": "PENDING_USER_AUTHORIZATION",
+    "inference_campaign": "NOT_RUN"
   }
 }
