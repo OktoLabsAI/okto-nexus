@@ -21,3 +21,11 @@ O Edge repetiu a jornada com o dashboard empacotado, Pi 0.87.1 e Connector na me
 A auditoria verificou uma abertura nativa, dois resultados da mesma sessão e um fechamento canônico. O servidor descartável saiu e o arquivo temporário de autenticação foi removido. A primeira rodada abriu o navegador, mas o processo de lançamento bloqueou o roteiro. Na rodada aprovada, a abertura do Edge e as interações ocorreram em processos separados.
 
 O cenário usa respostas simuladas em loopback. O aceite do participante e a validação com leitor de tela no Windows permanecem em aberto. A atualização de evidências dispensa migração. [Comandos, resultados e hashes](si036-participant-rehearsal.json)
+
+## Jornada até a coluna Results
+
+O ensaio automatizado usou o dashboard empacotado do Nexus em `93e89777`, Edge 158, Pi 0.87.1 e Connector nesta máquina Windows. Com **Projeto Remessas** selecionado, o navegador encontrou o pedido de revisão em andamento, enfileirou a mensagem seguinte e retornou à mesma conversa pelo card. Enquanto a primeira resposta estava retida, a entrada permaneceu na fila. Depois da liberação, as duas respostas apareceram uma vez e na ordem esperada.
+
+Ao fechar o painel e atualizar a Home, as três colunas estavam visíveis. **Results** mostrou dois botões **View result** com horários em formato legível. A auditoria confirmou uma abertura nativa, dois turnos e um fechamento, com as duas respostas na mesma sessão e a entrada da fila em `ACCEPTED_NATIVE`. O SQLite passou nas checagens de integridade e de chaves estrangeiras. O processo do Pi, o listener e o perfil descartável do navegador foram encerrados.
+
+A abertura do Edge manteve o comando de lançamento ativo. A automação prosseguiu em outro processo, com uma única execução do roteiro sobre a sessão já aberta. O ensaio usou respostas simuladas e não substitui o aceite do participante. O registro dispensa migração e pode ser revertido pelo commit. [Comandos, versões e hashes](si036-participant-rehearsal.json)
