@@ -82,7 +82,8 @@ and pass the reported cursor as `--after-session-id`. In JSON output, use
 
 When a work response conflicts with the selected session or a saved receipt,
 the CLI preserves the checkpoint. Use `work resume` to recover the original
-request.
+request. With a reused session, recovery checks the current request's
+admission before treating its initial turn as submitted.
 
 When paging with `work events`, keep the same `--session-id` and
 `--stream-epoch` and use the previous page's `next_after_sequence` as

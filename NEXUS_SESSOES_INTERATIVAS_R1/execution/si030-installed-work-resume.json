@@ -201,5 +201,71 @@
     "early_broad_round_issue": "Three cases stopped while seeding the second synthetic turn. The focused rerun used two empty sessions.",
     "external_provider_requests": 0,
     "migration": "none"
+  },
+  "reused_opening_recovery": {
+    "baseline": "90532381bbd263699d1315f445a97da88a0650f7",
+    "scope": "Windows, operator API through ASGI, SQLite, installed CLI application and synthetic embedded peers",
+    "local_evidence_directory": "D:/nxs-si030-reuse-90532381",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k recover_reused_opening --junitxml D:\\nxs-si030-reuse-90532381/before.xml",
+      "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py tests/execution_r4/test_ns05.py -k 'recover_reused_opening or profile_without_work_checkpoint_reuses or lost_submission_response or ns05_04' --junitxml D:\\nxs-si030-reuse-90532381/source.xml",
+      "uv build --offline --wheel --out-dir D:\\nxs-si030-reuse-90532381/dist",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py tests/execution_r4/test_ns05.py -k 'recover_reused_opening or profile_without_work_checkpoint_reuses or lost_submission_response or ns05_04' --junitxml D:\\nxs-si030-reuse-90532381/installed.xml"
+    ],
+    "before": {
+      "tests": 3,
+      "passed": 1,
+      "failed": 2,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "before.xml",
+      "junit_sha256": "06eb48c62b60948c18d1c52b482c51695bc0e4c17ea3b8f52f1922080620981b"
+    },
+    "source": {
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "source.xml",
+      "junit_sha256": "266b57217f0de08eba696d2605bf9d3ae5996652b8cbcc405fd6002f6c73ca47"
+    },
+    "installed": {
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "installed.xml",
+      "junit_sha256": "2399bca7edc8f1c6fc3ab49a0bf0760d89875bc35b14cdf70af02b18c6936c3e"
+    },
+    "wheel_sha256": {
+      "nexus": "7b3b22b9682a5cfb3f0b065b24d9e17327751a8c1452ec48439ada4f393789af",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "checked_sources": {
+      "src/okto_nexus/application/execution_intents.py": "d1303e093ac8c5fa8f72224ba651717929fe7586741a3279da48051bbf57bf2b",
+      "tests/execution_r4/test_terminal_work.py": "bbffd12b75d2a37db5f2b4293fb36f770bb05c0d6f8718ef6ab4338ed1c93019",
+      "tests/execution_r4/test_session_reuse.py": "514c2b7ae00e444776a60ebf9cf6700a67b3e5faa025882e128a92aba2afc17e"
+    },
+    "faults": [
+      {
+        "cut": "resolution response lost",
+        "admissions_during_resume": 1
+      },
+      {
+        "cut": "admission request did not arrive",
+        "admissions_during_resume": 1
+      },
+      {
+        "cut": "admission response lost",
+        "admissions_during_resume": 0
+      }
+    ],
+    "native_turns_per_case": 1,
+    "same_opening_and_planned_turn_recovered": true,
+    "external_provider_requests": 0,
+    "migration": "none"
   }
 }

@@ -15,3 +15,11 @@ A resolução precisa identificar a mesma sessão registrada na solicitação e 
 O ensaio isolado de API e SQLite abriu duas sessões do mesmo vínculo com peers sintéticos. A fixture alterou apenas a resposta recebida pelo CLI. As três variantes de troca de sessão foram recusadas antes de qualquer nova admissão. Duas variantes de troca do recibo confirmado preservaram o checkpoint e não dispararam outra requisição de escrita. O ajuste dispensa migração e o rollback reverte o commit do Nexus. [Comandos e resultados](si030-installed-work-resume.json)
 
 Os cinco casos reproduziram a falha no wheel anterior e passaram no código e no wheel corrigidos. Na primeira rodada ampla, 125 casos passaram por ambiente. Três casos pararam enquanto a fixture preparava o segundo resultado sintético. A rodada focada usou duas sessões vazias e completou a verificação. Somando as rodadas por caso, passaram 128 testes em cada ambiente. O teste de pseudoterminal POSIX foi pulado no Windows.
+
+## Admissão ao reutilizar uma sessão
+
+Na recuperação de um pedido que reutiliza uma sessão, a API consulta a admissão gravada para a intenção atual antes de incluir o recibo da abertura existente. Enquanto falta essa admissão, `work status` informa que o envio está sem confirmação. `work resume` pode então admitir a intenção original, que já contém a referência do primeiro turno planejado. Se a admissão já aconteceu, o CLI recupera o recibo por leitura.
+
+O ensaio isolado descarta a resposta da resolução, interrompe a requisição de admissão antes de chegar à API ou descarta sua resposta após a gravação. Cada caso conserva a sessão, o processo e a referência do turno original. A mudança usa as tabelas atuais e pode ser revertida pelo commit do Nexus. [Comandos e resultados](si030-installed-work-resume.json)
+
+Os dois casos anteriores à admissão falharam no wheel original. Com a correção, a recuperação fez uma única admissão em cada um desses casos. Quando a resposta se perdeu após a gravação, a recuperação fez só leituras. Passaram sete testes no código-fonte e os mesmos sete no wheel instalado, com um único envio ao peer sintético por caso de recuperação.

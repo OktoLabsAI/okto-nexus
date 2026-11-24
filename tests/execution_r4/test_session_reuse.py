@@ -47,7 +47,12 @@ def check_reuse_selection(reuse_connected):
     second = second.json()
     assert second["reuse"] and second["session_id"] == first["session_id"]
     assert second["operation_id"] == first["operation_id"] and second["intent_hash"] == first["intent_hash"]
+    client, headers = setup[2], setup[3]
+    receipt = client.get("/v1/runtime/intents/reuse", headers=headers["subject"])
+    assert receipt.status_code == 200 and receipt.json()["operation"] is None
     assert admit(setup, second, 200)["client_intent_id"] == "first"
+    receipt = client.get("/v1/runtime/intents/reuse", headers=headers["subject"])
+    assert receipt.status_code == 200 and receipt.json()["operation"]["operation_id"] == first["operation_id"]
     assert resolve(setup, binding, "reuse").json() == second
     admit(setup, second, 200)
     assert native.opens == 1

@@ -730,6 +730,44 @@ def test_profile_without_work_checkpoint_reuses_session_but_observes_only_its_ow
     assert t.native.opens == 1
 
 
+@pytest.mark.parametrize(('fault', 'path', 'admitted'), [
+    ('after', '/runtime/intents:resolve', False),
+    ('before', '/runtime/operations', False),
+    ('after', '/runtime/operations', True),
+])
+def test_recover_reused_opening_admits_only_the_original_pending_turn(work, fault, path, admitted):
+    t = work
+    opening = test_embedded_dispatch.admit(t.setup, t.binding, 'existing-opening', 'runtime.start')
+    wait_receipt(t.setup, opening)
+
+    setattr(t.fault, fault, path)
+    with pytest.raises(ConnectionError, match='Injected'):
+        t.flow.submit('One request for the existing session', client_intent_id='reuse-request')
+    reopened = TerminalWork(t.call, t.save, t.connection, t.saved[-1])
+    receipt = reopened.api('GET', '/runtime/intents/reuse-request')
+    assert receipt['resolution']['reuse'] is True
+    assert (receipt['operation'] is not None) is admitted
+    if not admitted:
+        assert reopened.observe()['state'] == 'submission_unconfirmed'
+        assert not t.native.native.sent
+
+    t.calls.clear()
+    recovered = reopened.resume()
+    assert recovered['operation_id'] == opening['operation_id']
+    assert recovered['scope']['session_id'] == opening['session_id']
+    assert recovered['submission_turn_operation_id'] == receipt['initial_turn_operation_id']
+    assert sum(method == 'POST' and url.endswith('/runtime/operations')
+               for method, url in t.calls) == (0 if admitted else 1)
+
+    complete(t, recovered)
+    t.calls.clear()
+    assert reopened.resume()['submission_turn_operation_id'] == recovered['submission_turn_operation_id']
+    assert reopened.observe()['state'] == 'completed'
+    assert all(method == 'GET' for method, _ in t.calls)
+    assert t.native.opens == 1
+    assert [verb for verb, _ in t.native.native.sent] == ['send_turn']
+
+
 @pytest.mark.parametrize('interruption', [KeyboardInterrupt, EOFError])
 def test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work(work, tmp_path, monkeypatch, capsys, interruption):
     from okto_nexus.adapters.inbound.cli import work as cli

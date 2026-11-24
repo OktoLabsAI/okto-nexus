@@ -410,7 +410,7 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
     server_id, _, _ = current_agent_revisions(factory, agent_id=actor_agent_id)
     with factory.unit_of_work(write=False) as uow:
         row = uow.connection.execute(
-            "SELECT resolved_json,initial_turn_json FROM execution_client_intents WHERE "
+            "SELECT resolved_json,initial_turn_json,reuse_admitted_at FROM execution_client_intents WHERE "
             "server_id=? AND actor_agent_id=? AND client_intent_id=? "
             "AND intent_id GLOB 'r4intent_*'",
             (server_id, actor_agent_id, client_intent_id),
@@ -443,17 +443,19 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
     from ..adapters.outbound.sqlite.execution_receipts import (
         read_execution_operation_history,
     )
-    try:
-        operation = read_execution_operation_history(
-            factory, server_id=server_id,
-            executor_id=resolution["scope"]["executor_id"],
-            operation_id=resolution["operation_id"],
-            subject_agent_id=subject, actor_agent_id=actor_agent_id,
-        ).public_view()
-    except OktoNexusError as exc:
-        if exc.code != ErrorCode.NOT_FOUND:
-            raise
-        operation = None
+    operation = None
+    # An existing opening is not proof of admission for a new reuse intent.
+    if not resolution.get("reuse") or row["reuse_admitted_at"] is not None:
+        try:
+            operation = read_execution_operation_history(
+                factory, server_id=server_id,
+                executor_id=resolution["scope"]["executor_id"],
+                operation_id=resolution["operation_id"],
+                subject_agent_id=subject, actor_agent_id=actor_agent_id,
+            ).public_view()
+        except OktoNexusError as exc:
+            if exc.code != ErrorCode.NOT_FOUND:
+                raise
     # A reused opening can have children from several different requests. This
     # reference correlates only the initial turn planned by this client intent.
     return {"resolution": resolution, "operation": operation,
