@@ -509,6 +509,49 @@ def test_terminal_events_refuse_a_mismatched_page(terminal_event_page, target, f
     assert refused.value.code == code
 
 
+@pytest.mark.parametrize(('field', 'value'), [
+    ('count', 1),
+    ('next_after_sequence', 13.0),
+    ('committed_contiguous', 12),
+    ('has_more', False),
+    ('has_more', 'true'),
+    ('gap_pending', None),
+])
+def test_terminal_events_reject_contradictory_page_metadata(terminal_event_page, field, value):
+    flow, page = terminal_event_page
+    page[field] = value
+    with pytest.raises(ConnectionError) as refused:
+        flow.observe(session_id='selected', after_sequence=11, stream_epoch='reviewed-epoch')
+    assert refused.value.code == 'WORK_EVENT_PAGE_MISMATCH'
+
+
+def test_terminal_watch_rejects_continuation_without_progress(terminal_event_page, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import work as cli
+
+    flow, page = terminal_event_page
+    page.update(events=[], count=0, next_after_sequence=11)
+    original_read = flow.call
+    reads = []
+
+    def read(method, path, body=None):
+        assert not reads, 'Work watch polled the same cursor again.'
+        reads.append(path)
+        return original_read(method, path, body)
+
+    monkeypatch.setattr(flow, 'call', read)
+    with pytest.raises(ConnectionError) as refused:
+        cli.watch(flow, session_id='selected', after_sequence=11, stream_epoch='reviewed-epoch', as_json=True)
+    assert refused.value.code == 'WORK_EVENT_PAGE_MISMATCH'
+    assert len(reads) == 1 and not capsys.readouterr().out
+
+
+@pytest.mark.parametrize('committed', [10, 11])
+def test_terminal_events_accept_an_empty_exhausted_page(terminal_event_page, committed):
+    flow, page = terminal_event_page
+    page.update(events=[], count=0, next_after_sequence=11, committed_contiguous=committed, has_more=False)
+    assert flow.observe(session_id='selected', after_sequence=11, stream_epoch='reviewed-epoch')['events'] == page
+
+
 def test_terminal_event_continuation_names_the_session_epoch_and_sequence(terminal_event_page, capsys):
     from okto_nexus.adapters.inbound.cli.work import display
 

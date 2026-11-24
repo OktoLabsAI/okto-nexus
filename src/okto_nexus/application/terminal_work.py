@@ -321,13 +321,20 @@ class TerminalWork(TerminalAuthorization):
             query['stream_epoch'] = stream_epoch
         events = self.api('GET', '/runtime/sessions/' + quote(selected_session, safe='') + '/events?' + urlencode(query))
         page_scope = _verify_session_binding(events, binding)
-        epoch, items = events['stream_epoch'], events['events']
+        epoch, items = events.get('stream_epoch'), events.get('events')
+        count, cursor = events.get('count'), events.get('next_after_sequence')
+        committed, has_more = events.get('committed_contiguous'), events.get('has_more')
         event_scope = binding['server_id'], binding['executor_id'], selected_session, epoch
-        if (page_scope['session_id'] != selected_session
-                or page_scope['session_owner_generation'] != session['scope']['session_owner_generation']
+        if (page_scope.get('session_id') != selected_session
+                or page_scope.get('session_owner_generation') != session['scope']['session_owner_generation']
+                or 'stream_epoch' not in events
                 or (stream_epoch is not None and epoch != stream_epoch)
-                or not isinstance(items, list) or (items and not epoch)
-                or events['next_after_sequence'] != after_sequence + len(items)
+                or not isinstance(items, list) or len(items) > query['limit'] or (items and not epoch)
+                or type(count) is not int or count != len(items)
+                or type(cursor) is not int or cursor != after_sequence + count
+                or type(committed) is not int or committed < 0 or (count and cursor > committed)
+                or type(has_more) is not bool or has_more != (cursor < committed) or (has_more and not count)
+                or type(events.get('gap_pending')) is not bool
                 or any(not isinstance(item, dict)
                        or tuple(item.get(key) for key in ('server_id', 'executor_id', 'session_id', 'stream_epoch'))
                        != event_scope or item.get('sequence') != sequence

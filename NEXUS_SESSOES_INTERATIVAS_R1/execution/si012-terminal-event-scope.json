@@ -112,5 +112,63 @@
     ],
     "external_provider_requests": 0,
     "migration": "none"
+  },
+  "page_metadata_validation": {
+    "baseline": {
+      "nexus_head": "9dcdb413b402a52700061e7abdcd06968b58cc18",
+      "connector_head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "core_head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main_refs_after_fetch": {
+        "nexus": "8d77b50c00b417c86818d027aed7497fababac34",
+        "connector": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "core": "19c99f15b17ae994653ad9e190964229a0e296e8"
+      },
+      "working_trees_clean": true,
+      "upstream_drift": false
+    },
+    "scope": "Windows, installed and source CLI, malformed event-page substitution, canonical API and SQLite regression with synthetic peers",
+    "local_evidence_directory": "D:/nxs-si012-page-949ca",
+    "commands": [
+      "rtk proxy D:/nxs-si039-source-dist-949ca8a9/venv/Scripts/python.exe -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'contradictory_page_metadata or continuation_without_progress or empty_exhausted_page' --basetemp D:/nxs-si012-page-949ca/old-tests --junitxml D:/nxs-si012-page-949ca/old.xml",
+      "rtk proxy D:/nxs-si039-source-dist-949ca8a9/venv/Scripts/python.exe -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py -k 'terminal_event or work_watch or cli_submission_resume_watch or continuation_without_progress or drain_watch' --basetemp D:/nxs-si012-page-949ca/source-tests --junitxml D:/nxs-si012-page-949ca/source.xml",
+      "rtk proxy uv build --offline --out-dir D:/nxs-si012-page-949ca/dist",
+      "rtk proxy python -B D:/nxs-si012-page-949ca/verify_package.py",
+      "rtk proxy D:/nxs-si012-page-949ca/venv/Scripts/python.exe -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'terminal_event or work_watch or cli_submission_resume_watch or continuation_without_progress or drain_watch' --basetemp D:/nxs-si012-page-949ca/installed-tests --junitxml D:/nxs-si012-page-949ca/installed.xml"
+    ],
+    "results": {
+      "prior_wheel": {"passed": 2, "failed": 7},
+      "source": {"passed": 23, "failed": 0},
+      "installed": {"passed": 23, "failed": 0},
+      "new_valid_empty_page_cases": 2,
+      "contradictory_metadata_cases": 6,
+      "work_watch_reads_before_rejection": 1,
+      "work_watch_displays_invalid_page": false,
+      "locked_dependencies": "PASS",
+      "installed_dependency_check": "PASS",
+      "ruff_f_e9": "PASS",
+      "strict_twine_check": "PASS"
+    },
+    "artifacts": {
+      "prior_nexus_wheel_sha256": "8c673d644612701dad509fbc392792294ee4fc04fd8b988013c90225f0414d4b",
+      "nexus_wheel_sha256": "9aa0aa591b46991359fe4deb041edda28c16c6a31d9de48506a7f94688d77a4e",
+      "nexus_sdist_sha256": "a92adf9afaf5ab3e2f25b77118a90b4cafaa4929295154587d87b93378cdd8c6",
+      "connector_wheel_sha256": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6d4094c64ecb7042f6b",
+      "package_files": 815,
+      "package_files_changed": ["okto_nexus/application/terminal_work.py"]
+    },
+    "evidence_sha256": {
+      "old.xml": "39713d0e9427530ce49dcf28fd81d1b656324dc74a3545d2ca0c7ec3e6783fd3",
+      "source.xml": "03589fc96a63d24fdd7405f7e68713abccc13c85a20576e351f4128046b7220b",
+      "installed.xml": "6ce1e5c5f050461c6fa90451a1fd3ac6a523f4c7b00c92f364acebae9cec547f",
+      "verify_package.py": "778c211a69ba1382fc6caaf02dd86a84f395313252da2326be51d597e250adc2",
+      "package.json": "306f42ddb62e4a16151c59b19ad8f925a5f9949ca3f427411fd39304259f4fff"
+    },
+    "checked_sources": {
+      "src/okto_nexus/application/terminal_work.py": "993b1cff344af5aab00752f252e1b8d99ffb524659666c658dc2c9bdbefac01d",
+      "tests/execution_r4/test_terminal_work.py": "d29556ac0027da1c22ee0e3cdc97b423502bdf1cd8f6b1744a19fc13ace0d3af"
+    },
+    "external_provider_requests": 0,
+    "migration": "none"
   }
 }

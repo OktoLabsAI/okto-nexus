@@ -11,3 +11,9 @@ O ensaio cobre troca de sessão, vínculo, geração e época antes ou dentro da
 `work watch` usa a época e o cursor da última página validada na consulta seguinte. Uma página adicional já confirmada pode ser lida sem aguardar outro intervalo de polling. O observador continua até o fim das páginas disponíveis quando o pedido termina com sucesso, dentro do prazo informado no CLI. A consulta vazia no mesmo cursor só gera saída se o estado ou outro dado da observação mudou. Se a sessão mudar, a leitura é recusada antes de exibir os dados. Perguntas pendentes são tratadas na sessão observada antes de avançar a página.
 
 Os quatro casos falharam no wheel anterior. Passaram 16 testes no código-fonte e os mesmos 16 no wheel corrigido. A suíte cobriu recuperação pelo CLI e observação durante a parada controlada do Nexus com peers sintéticos. O marco altera a observação e dispensa migração. A reversão usa o commit do Nexus. [Comandos e resultados](si012-terminal-event-scope.json)
+
+## Validação dos limites de cada página
+
+O leitor confere a contagem, o cursor, a sequência contígua confirmada e a indicação de continuação antes de apresentar os eventos. Uma página vazia que indica mais eventos é recusada antes da segunda consulta com o mesmo cursor. Uma página vazia no fim do intervalo continua válida.
+
+O wheel anterior aceitou seis combinações contraditórias de metadados. Em um sétimo caso, `work watch` exibiu a página vazia e voltou a consultar o mesmo cursor. Passaram os mesmos 23 testes no código-fonte e no wheel reconstruído. A suíte inclui envio, retomada e observação com a API canônica, SQLite e peers sintéticos. A inspeção do pacote confirmou que só mudou `terminal_work.py` entre os 815 arquivos do wheel. A alteração é restrita ao Nexus e dispensa migração. A reversão usa o commit do Nexus. [Comandos e resultados](si012-terminal-event-scope.json)
