@@ -46,3 +46,13 @@ O ensaio local executa as rotas de operador da aplicação instalada com um app-
 Passaram os dois casos nativos e 31 regressões com os wheels instalados. As primeiras rodadas precisaram corrigir a autorização da fixture para leitura do inventário e para Finish. O teste aceita o caminho do executável revisado em `SI038_REVIEWED_CODEX_ENGINE` e confere o SHA-256 antes de iniciar. O marco dispensa migração e o rollback reverte o commit de teste e evidências. [Comandos e resultados](si038-codex-campaign-preflight.json)
 
 A preparação mantém SI-T-I07, SI-T-I08, SI-T-I09 e os gates por harness pendentes. O Connector desta etapa é exercitado no mesmo Windows que hospeda o Nexus. A medição adicional no macOS fica adiada. [Estado da qualificação](si041-qualification-checkpoint.md)
+
+## Revalidação do wheel atual no Windows
+
+O Nexus `e5b497fb`, o Connector 0.0.15 e o Core 0.0.16 foram carregados dos wheels em um ambiente descartável. O conteúdo do wheel corresponde aos quatro módulos do produto que mudaram desde o último ensaio de pacote. O arquivo inicial da interface está empacotado. `uv lock --offline --check` e `twine check` passaram.
+
+Na jornada com Edge, ConPTY, Connector e Codex, `connect -i` retomou a sessão preparada em leitura, o escritor iniciou um turno e o CLI confirmou uma reorientação. Após os dois visores se desanexarem, a Home ainda mostrou a fila pendente na mesma conversa. O resultado apareceu uma vez por trabalho. A observação do pedido original trouxe a resposta do turno inicial mesmo após os dois turnos seguintes, com 44 eventos da sessão selecionada. A leitura das bases após o fechamento confirmou uma única abertura nativa, três envios, uma reorientação, um fechamento e três resultados. O SQLite confirmou a integridade e zero violações de chave estrangeira.
+
+O ensaio do navegador usou quatro respostas em loopback. O journal registrou 1.050 tokens sintéticos dos turnos e o controlador somou 123 do setup modelado. Os dois cenários separados de setup usaram um app-server real e respostas simuladas. Cada um executou um turno de 105 tokens sintéticos. A resposta esperada confirmou o recibo e salvou um vínculo. A resposta inesperada bloqueou o Finish e a admissão seguinte. [Comandos, hashes e resultados](si038-codex-campaign-preflight.json)
+
+O marco acrescenta evidência de pacote, navegador e durabilidade. Dispensa migração, e o rollback reverte este registro. A campanha com provedor e o aceite do participante seguem pendentes. [Ledger](../NEXUS_SESSOES_INTERATIVAS_LEDGER_R1.json)

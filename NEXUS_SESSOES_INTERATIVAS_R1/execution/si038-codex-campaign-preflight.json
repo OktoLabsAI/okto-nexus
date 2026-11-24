@@ -351,5 +351,108 @@
     ],
     "external_provider_requests": 0,
     "actual_paid_campaign": "NOT_RUN"
+  },
+  "si038_current_installed_rehearsal": {
+    "scope": "Windows, with Nexus and Connector on the same host. Real Edge, ConPTY and Codex with simulated Responses on loopback.",
+    "local_evidence_directory": "D:/nxs-si038-current-e5b497fb",
+    "source": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "e5b497fb820f9044c482a48f17a8db5e54cafed9",
+        "main_after_fetch": "8d77b50c00b417c86818d027aed7497fababac34",
+        "ahead_behind_main": [615, 0]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+        "main_after_fetch": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "ahead_behind_main": [111, 0]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "main_after_fetch": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "ahead_behind_main": [95, 0]
+      },
+      "working_trees_clean": true,
+      "upstream_drift": false
+    },
+    "nexus_wheel": "D:/nxs-si034-pending-decisions-251f7ee4/dist/okto_nexus-0.3.8-py3-none-any.whl",
+    "wheel_sha256": {
+      "nexus": "e4e6698c2b4a2052e6db2fffc272835046b547c1f704d99dfd5191d2d621c8d9",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "codex_app_server_version": "0.157.0",
+    "codex_app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "codex_viewer_version": "0.170.0",
+    "codex_viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "checks": {
+      "installed_artifact_imports": "PASS",
+      "current_source_files_matched_wheel": 4,
+      "static_index_packaged": true,
+      "offline_lock": "PASS",
+      "wheel_metadata": "PASS",
+      "browser_terminal_journey_tests_passed": 1,
+      "canonical_setup_tests_passed": 2
+    },
+    "browser_terminal_journey": {
+      "read_only_connect_i_restored_prepared_session": true,
+      "explicit_writer_started_native_turn": true,
+      "queue_pending_after_both_viewers_detached": true,
+      "one_reviewed_steer": true,
+      "queued_entry_started_separate_turn": true,
+      "same_native_thread_and_app_server": true,
+      "original_turn_result_preserved": true,
+      "events_from_selected_session": 44,
+      "canonical_close": true,
+      "result_rows": 3,
+      "connector_native_launches": 1,
+      "durable_operations": {
+        "runtime.open": 1,
+        "turn.submit": 3,
+        "turn.steer": 1,
+        "runtime.close": 1
+      },
+      "sqlite_integrity": "ok",
+      "sqlite_foreign_key_violations": 0,
+      "loopback_response_requests": 4,
+      "synthetic_usage_deltas": [105, 525, 420],
+      "modeled_setup_tokens": 123,
+      "synthetic_tokens_observed": 1173,
+      "permanent_provisions": 375000
+    },
+    "canonical_setup": {
+      "validated_finish_committed": true,
+      "unexpected_response_finish_rejected": true,
+      "unexpected_response_next_admission_blocked": true,
+      "synthetic_tokens_per_case": 105,
+      "loopback_response_requests_per_case": 1
+    },
+    "evidence_sha256": {
+      "candidate-integrity.json": "23e0c27f9e24d01e20fbfee435cf3991a2c47578b3b604574cc84ee6c1e17736",
+      "rehearsal/browser.log": "9f4ef825fb8984c5ebb317ddc6499848f1d7010c1dac57fd678d521f7410e5a2",
+      "rehearsal/drive.ps1": "981c182ad9584b8cbfced4584f3838be9e0f93265a2c8372e5d8b6bafc8196c9",
+      "rehearsal/durability.json": "b0373cacf8aac6290be9a6b15f645ea7db01a7d32dcfdc33370b7a29a033a64f",
+      "rehearsal/proof.json": "bd6504abeb6c72a135780e2243aeeeb86ed328677707a644f790e77cda9b37e2",
+      "rehearsal/prove_durability.py": "047e2d0f2feaea71919e11d86a016b985a7322cd976c26761a73e3d54557cb62",
+      "rehearsal/si038-budget.jsonl": "54b92bf490f8d6bbbae63b15025d56031f0716f8b78894d94d1827689508b614",
+      "rehearsal/terminal-home.xml": "e9069c6b4e2dbb14f8a25e1138002e9ef2890458173969680585b0a1f4267918",
+      "rehearsal/test_terminal_home.py": "5f12a6a7aecc08d9c5a904d391bd888e09f426e1749bd3bc64a1a182f2ae25d4",
+      "rehearsal/work-observation.json": "89d8b50ed10f705b06a9afe062f55d05cfbdb2e0235011017b1d22a16bace27a",
+      "setup.xml": "cde3eea32ed5a61941893edb3c8a877334f8a54755368b2c6aea42f2d274c490"
+    },
+    "commands": [
+      "rtk proxy uv lock --offline --check",
+      "rtk proxy uv tool run --offline twine check D:/nxs-si034-pending-decisions-251f7ee4/dist/okto_nexus-0.3.8-py3-none-any.whl",
+      "pwsh -NoProfile -File D:/nxs-si038-current-e5b497fb/rehearsal/run.ps1 -Root D:/nxs-si038-current-e5b497fb/rehearsal",
+      "playwright_cli.sh --session=nexus-terminal-home-e5b497fb open about:blank --browser=msedge --idle-timeout=600000",
+      "pwsh -NoProfile -File D:/nxs-si038-current-e5b497fb/rehearsal/drive.ps1 -Root D:/nxs-si038-current-e5b497fb/rehearsal",
+      "rtk proxy python -B D:/nxs-si038-current-e5b497fb/rehearsal/prove_durability.py",
+      "rtk proxy D:/nxs-si038-current-e5b497fb/venv/Scripts/python.exe -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_si038_codex_setup_qualification.py --basetemp D:/nxs-si038-current-e5b497fb/setup-pytest --junitxml D:/nxs-si038-current-e5b497fb/setup.xml"
+    ],
+    "external_provider_requests": 0,
+    "actual_paid_campaign": "NOT_RUN",
+    "participant_acceptance": "NOT_RUN"
   }
 }
