@@ -15,3 +15,11 @@ Passaram 63 testes de regressão instalados, incluindo os cenários remotos, e 1
 Os pins de Core e Connector seguem os do candidato anterior. A mudança usa tabelas e comandos existentes e dispensa migração. Para reverter, use um revert do commit no Nexus e mantenha o banco e os recibos da sessão.
 
 SI-022 e SI-031 permanecem em andamento. A validação em máquinas distintas, TLS entre hosts, perda física de rede, apresentações remotas de Pi e Claude e a oferta de abertura no próprio CLI do Connector continuam pendentes. [Dados do teste e artefatos](si022-codex-remote-writer.json)
+
+## Interrupção no visualizador nativo com Connector neste Windows
+
+Com o Nexus `7fb92db1`, o Connector 0.0.15 e o Core 0.0.16 instalados, o visualizador Codex 0.170.0 abriu a thread que o app-server 0.157.0 já executava. Cancelar a revisão no primeiro visor manteve o turno e a fila intactos. O segundo visor confirmou a interrupção do mesmo turno. A observação no envio ao app-server verificou que a pausa da fila já estava gravada e que a entrada retida ainda não tinha operação de envio.
+
+Os dois visores se desanexaram com os modos do console restaurados. O CLI recuperou o recibo da interrupção depois da saída do segundo visor. A retomada explícita despachou a entrada original em um turno separado. A auditoria, em modo somente leitura, ligou a interrupção ao primeiro turno, confirmou o resultado do segundo na mesma thread e encontrou uma abertura nativa, um fechamento canônico e zero violações de chave estrangeira. [Comandos e hashes](si022-codex-remote-writer.json)
+
+Passaram seis regressões com os wheels instalados. A rodada nativa chegou à retomada, e o roteiro falhou ao ler a resposta HTTP antes de o resultado aparecer. A auditoria posterior confirmou o resultado persistido. A repetição com a espera corrigida foi recusada na anexação após perda da autoridade do Connector. Em uma tentativa anterior, a segunda revisão não apareceu no mesmo visor durante a janela do ensaio. Esses casos mantêm em aberto a qualificação da jornada completa. O ensaio usou respostas de modelo simuladas em loopback. A etapa registra evidências, dispensa migração e pode ser revertida pelo commit. [Matriz de capacidades](si027-session-capability-matrix.md)

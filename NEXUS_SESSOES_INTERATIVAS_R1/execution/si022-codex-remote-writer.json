@@ -79,6 +79,74 @@
       }
     }
   },
+  "current_native_interrupt_windows_loopback": {
+    "source": {
+      "nexus_head": "7fb92db1075e12166d8ff9436c2554c1f784e004",
+      "connector_head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+      "core_head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main_refs_after_fetch": {
+        "nexus": "8d77b50c00b417c86818d027aed7497fababac34",
+        "connector": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "core": "19c99f15b17ae994653ad9e190964229a0e296e8"
+      },
+      "working_trees_clean": true,
+      "upstream_drift": false
+    },
+    "scope": "Installed wheels, real Windows ConPTY viewer and app-server, production Connector link on the same host, simulated model responses in loopback",
+    "local_evidence_directory": "D:/nxs-si022-int-7fb92db1",
+    "wheel_sha256": {
+      "nexus": "9aa0aa591b46991359fe4deb041edda28c16c6a31d9de48506a7f94688d77a4e",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "commands": [
+      "rtk proxy pwsh -NoProfile -File D:/nxs-si022-int-7fb92db1/run.ps1 -Trial run3",
+      "rtk proxy pwsh -NoProfile -File D:/nxs-si022-int-7fb92db1/run.ps1 -Trial run4",
+      "rtk proxy python -B D:/nxs-si022-int-7fb92db1/prove_durability.py run3",
+      "rtk proxy D:/nxs-si012-page-949ca/venv/Scripts/python.exe -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_remote_codex_presentation.py tests/session_interaction/test_presentation_transport.py -k 'remote_codex or native_interrupt_requires' --basetemp D:/nxs-si022-int-7fb92db1/regression --junitxml D:/nxs-si022-int-7fb92db1/regression.xml"
+    ],
+    "observations": {
+      "read_only_durability_audit": "PASS",
+      "installed_regressions_passed": 6,
+      "cancelled_review_left_held_turn_and_queue_intact": true,
+      "pause_observed_before_native_wire_call": true,
+      "durable_interrupts_from_native_terminal": 1,
+      "writer_detaches_with_console_modes_restored": 2,
+      "original_interrupt_receipt_recovered_after_detach": true,
+      "first_turn_cancelled": true,
+      "queued_input_released_by_explicit_resume": true,
+      "distinct_turns_in_same_native_thread": 2,
+      "queued_input_end_state": "ACCEPTED_NATIVE",
+      "exact_queued_result": true,
+      "single_native_process_launch": true,
+      "canonical_close": true,
+      "foreign_key_violations": 0,
+      "external_provider_requests": 0
+    },
+    "qualification": "PARTIAL",
+    "native_trials": {
+      "collection": "Browser fixture import required an unrelated environment variable before collection.",
+      "run2": "Cancellation had no effect. The second review did not render in the same viewer within the test window.",
+      "run3": "Native interruption, detaches, receipt recovery and explicit queue resume observed. The live pytest assertion read the operation before result projection. The scoped result and canonical close passed the subsequent read-only audit.",
+      "run4": "Attachment refused after Connector permission failure. The fixture close request was blocked. The retained Server session metadata remained READY after the test daemon exited."
+    },
+    "evidence_sha256": {
+      "run.ps1": "709a5e5469f302a75a9fe1f865a6d38ce813745fb41d2a87a81bc1a7317cfb9a",
+      "test_remote_interrupt.run3.py": "8b9e0d4f2f381963f31ebe63bafb7f9fe4860eedfb7063c6be9f74a7936f5f0e",
+      "test_remote_interrupt.py": "24fdbdcb939dfc39ca041c5f31aa9208b5f1bf406a87fc4ccf0979848f1f775c",
+      "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+      "prove_durability.py": "ccbcbafa1116d833cd1e431d5fe3e4c034cf7665a40ad73903eb562e6aa885c2",
+      "durability.json": "b63c5de7bd5b0b3d18f8074b843988368c853128bac6994ae695b7a17fc762c5",
+      "regression.xml": "b3add2ca71e4f447f8f7be751c0754d9ec073264ee1d9396df65749253b00a7a",
+      "interrupt.xml": "d14dbb9e9e93275d6ce9e406edfb0f94eff577e9420ef9dffae79b01661b3655",
+      "interrupt-run2.xml": "c3f6b02b4b1d5e288dcc9c39e05c255b8a6341a1adc21dfd6243f0c399c388f3",
+      "interrupt-run3.xml": "15ce24bee7636f28ce23c9af1a32a885cd0ac1caf4cbaf57ab1ba4f78c088168",
+      "interrupt-run4.xml": "53638184102d8e28236b0468d9146c4670f0314019e2e96c37bf4ead844248f2",
+      "native-run3.log": "809826ca0f09d89495cff09014883b378e1b9a3a10285533339d54c6209e4727",
+      "terminal-run3-redacted.txt": "bf76b229cd015b0f5bca449f1f11fa9d324ccc77b474b70ea8c0ea8b60bf2db1",
+      "cancel-run3-redacted.txt": "ac3c59b823bfedc1ac4ff0b685e2a9644692bad1fd783a434ec1e841aacabfbf"
+    }
+  },
   "limitations": [
     "Loopback does not cover distinct hosts, TLS across hosts or loss of a physical network.",
     "Remote Pi and Claude presentation and the Connector-side connect offer stay open."

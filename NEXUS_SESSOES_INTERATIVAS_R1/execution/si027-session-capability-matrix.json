@@ -123,7 +123,11 @@
         "session_chat": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
         "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si022-codex-remote-writer.md"] },
         "exact_steer": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
-        "interrupt_queue_barrier": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "interrupt_queue_barrier": {
+          "status": "implemented",
+          "reason": "A interrupção e a retomada foram auditadas com os dois binários reais nesta máquina. A repetição do roteiro foi recusada após perda da autoridade do Connector.",
+          "evidence": ["si022-codex-remote-writer.md", "si022-codex-remote-writer.json"]
+        },
         "command_subset": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
         "native_live_attach": { "status": "qualified", "evidence": ["si022-codex-remote-attach.md"] },
         "saved_context_resume": {
