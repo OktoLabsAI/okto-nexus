@@ -434,7 +434,9 @@ IDs, CAS metadata and a response digest enter the local checkpoint. An uncertain
 answer cannot be replaced by a different answer; inspect its durable result or
 re-enter the same response. A confirmed validation refusal allows correction.
 Recorded decisions and native delivery are shown separately, including refusal
-before an effect and uncertain delivery.
+before an effect and uncertain delivery. The terminal verifies the recorded
+decision against the request. A native refusal is shown with the operation from
+that session and owner generation.
 
 The local files under `terminal/work` contain bounded references/checkpoints,
 not prompts, answers, results or a parallel conversation history. The Server

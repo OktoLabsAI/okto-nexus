@@ -523,6 +523,59 @@ def test_terminal_event_continuation_names_the_session_epoch_and_sequence(termin
 
 
 @pytest.fixture
+def terminal_decision_receipt(terminal_event_page, monkeypatch):
+    flow, page = terminal_event_page
+    key = dict(page['scope'], canonical_request_id='approval-id', kind='native_approval')
+    proposal = dict(approval_key=key, request_hash='request-hash', recipient_agent_id='operator')
+    detail = dict(request_payload={'kwargs': proposal}, executed_result={'decision_id': 'decision-id'})
+    receipt = dict(decision_id='decision-id', approval_key=key, request_hash=proposal['request_hash'],
+                   native_stage='REFUSED_BEFORE_EFFECT', native_operation_id='native-operation')
+    operation = dict(operation_id='native-operation', scope=dict(page['scope']), action='approval.decide',
+                     error={'message': 'Canonical refusal'})
+    event_read = flow.call
+
+    def call(method, path, body=None):
+        assert method == 'GET' and body is None
+        if path.endswith('/approvals/approval-id'):
+            return {'data': detail}
+        if path.endswith('/connections/me'):
+            return {'agent_id': 'operator'}
+        if path.endswith('/runtime/approval-decisions/decision-id'):
+            return receipt
+        if path.endswith('/runtime/operations/native-operation'):
+            return operation
+        return event_read(method, path, body)
+
+    flow.document['decision'] = deepcopy(proposal)
+    flow.document['session_id'] = key['session_id']
+    monkeypatch.setattr(flow, 'call', call)
+    return flow, receipt, operation
+
+
+@pytest.mark.parametrize(('surface', 'target', 'field', 'value', 'code'), [
+    ('answer', 'receipt', 'decision_id', 'other-decision', 'DECISION_RECEIPT_MISMATCH'),
+    ('observe', 'receipt', 'decision_id', 'other-decision', 'DECISION_RECEIPT_MISMATCH'),
+    ('observe', 'receipt', 'request_hash', 'other-request-hash', 'DECISION_RECEIPT_MISMATCH'),
+    ('observe', 'scope', 'session_id', 'sibling', 'DECISION_RECEIPT_MISMATCH'),
+    ('observe', 'scope', 'session_owner_generation', 4, 'DECISION_RECEIPT_MISMATCH'),
+    ('observe', 'scope', 'workspace_binding_id', 'other-binding', 'WORK_SCOPE_CHANGED'),
+    ('observe', 'operation', 'action', 'turn.submit', 'DECISION_RECEIPT_MISMATCH'),
+])
+def test_terminal_decision_checks_the_exact_recorded_receipt(
+        terminal_decision_receipt, surface, target, field, value, code):
+    flow, receipt, operation = terminal_decision_receipt
+    {'receipt': receipt, 'operation': operation, 'scope': operation['scope']}[target][field] = value
+    checkpoint = deepcopy(flow.document)
+    with pytest.raises(ConnectionError) as refused:
+        if surface == 'answer':
+            flow.decide('approval-id', 'approve')
+        else:
+            flow.observe(session_id='selected', after_sequence=11, stream_epoch='reviewed-epoch')
+    assert refused.value.code == code
+    assert flow.document == checkpoint
+
+
+@pytest.fixture
 def terminal_watch(monkeypatch):
     from okto_nexus.adapters.inbound.cli import work as cli
 

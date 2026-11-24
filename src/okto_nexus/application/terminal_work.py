@@ -346,11 +346,17 @@ class TerminalWork(TerminalAuthorization):
                 saved_decision['approval_key']['canonical_request_id'], safe=''))['data']
             result = detail.get('executed_result')
             if result and result.get('decision_id'):
-                decision = self.api('GET', '/runtime/approval-decisions/' + quote(result['decision_id'], safe=''))
-                if decision['approval_key'] != saved_decision['approval_key']:
-                    raise ConnectionError('DECISION_RECEIPT_MISMATCH', 'The saved decision belongs to another request.')
+                key = saved_decision['approval_key']
+                decision = self._decision_receipt(result['decision_id'], key, saved_decision['request_hash'])
                 if decision['native_stage'] == 'REFUSED_BEFORE_EFFECT':
-                    decision['operation'] = self.operation(decision['native_operation_id'], binding)
+                    operation = self.operation(decision['native_operation_id'], binding)
+                    scope = _verify_session_binding(operation, binding)
+                    action = 'input.provide' if key['kind'] == 'native_input' else 'approval.decide'
+                    if (scope['session_id'] != selected_session
+                            or scope['session_owner_generation'] != key['session_owner_generation']
+                            or operation['action'] != action):
+                        raise ConnectionError('DECISION_RECEIPT_MISMATCH', 'The native operation belongs to another request.')
+                    decision['operation'] = operation
                     if not done:
                         state = 'decision_refused'
         return dict(state=state, session=session, operations=operations, requests=requests, events=events, decision=decision)
@@ -365,6 +371,13 @@ class TerminalWork(TerminalAuthorization):
             raise ConnectionError('DECISION_SCOPE_CHANGED', 'This request does not belong to the selected session.')
         return detail
 
+    def _decision_receipt(self, decision_id, approval_key, request_hash):
+        receipt = self.api('GET', '/runtime/approval-decisions/' + quote(decision_id, safe=''))
+        if (receipt['decision_id'] != decision_id or receipt['approval_key'] != approval_key
+                or receipt['request_hash'] != request_hash):
+            raise ConnectionError('DECISION_RECEIPT_MISMATCH', 'The recorded decision belongs to another native request.')
+        return receipt
+
     def decide(self, approval_id, decision, *, response=None, reviewed_revision=None, session_id=None):
         detail = self.decision_detail(approval_id, session_id=session_id)
         proposal = detail['request_payload']['kwargs']
@@ -373,11 +386,7 @@ class TerminalWork(TerminalAuthorization):
             raise ConnectionError('APPROVAL_AUTHORITY_REQUIRED', 'This request is addressed to another recipient.')
         existing = detail.get('executed_result')
         if existing and existing.get('decision_id'):
-            result = self.api('GET', '/runtime/approval-decisions/' + quote(existing['decision_id'], safe=''))
-            if (result['approval_key'] != proposal['approval_key'] or
-                    result['request_hash'] != proposal['request_hash']):
-                raise ConnectionError('DECISION_RECEIPT_MISMATCH', 'The recorded decision belongs to another native request.')
-            return result
+            return self._decision_receipt(existing['decision_id'], proposal['approval_key'], proposal['request_hash'])
         if reviewed_revision != document_revision(proposal):
             raise ConnectionError('DECISION_REVIEW_REQUIRED', 'Review the current question and its scope before answering.')
         if datetime.fromisoformat(proposal['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc):

@@ -1,0 +1,55 @@
+{
+  "baseline": "72df0801db1a597e9e9df3670ca0c9955af78157",
+  "scope": "Windows, installed terminal application, receipt substitutions, operator API and SQLite with synthetic runtime peers",
+  "local_evidence_directory": "D:/nxs-si034-terminal-decision-72df0801",
+  "commands": [
+    "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k terminal_decision_checks --junitxml D:\\nxs-si034-terminal-decision-72df0801/before.xml",
+    "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py -k 'terminal_decision_checks or native_decision_response_loss or dashboard_and_terminal_share or drain_keeps_reviewed_native_decision' --junitxml D:\\nxs-si034-terminal-decision-72df0801/source.xml",
+    "uv build --offline --wheel --out-dir D:\\nxs-si034-terminal-decision-72df0801/dist",
+    "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k 'terminal_decision_checks or native_decision_response_loss or dashboard_and_terminal_share or drain_keeps_reviewed_native_decision' --junitxml D:\\nxs-si034-terminal-decision-72df0801/installed.xml"
+  ],
+  "before": {
+    "tests": 7,
+    "passed": 0,
+    "failed": 7,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "before.xml",
+    "junit_sha256": "1f07681e8e157c6868dd54c16a09eb51aced4bcd460ec075e18f87a7c3de7815"
+  },
+  "source": {
+    "tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "source.xml",
+    "junit_sha256": "b5028855f69a9c60d31992ca6faa84e0a2f41afeebdcd057b913a9f781c39606"
+  },
+  "installed": {
+    "tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "installed.xml",
+    "junit_sha256": "fb175acb71a0b1027576aefeb64fac0516d00e8b7484becb475cf57837391e19"
+  },
+  "wheel_sha256": {
+    "nexus": "ed00276ce7b784d8cfd0015159e3506ee3796161e92df29d332e92f731734a0c",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "checked_sources": {
+    "src/okto_nexus/application/terminal_work.py": "8f8b1055a5f8c941af03834adfc2d4eee40a38fa2ba65379c370a7e0ee020428",
+    "tests/execution_r4/test_terminal_work.py": "07b00cc9c131408a3e33644a25b618b735d4831c1d73f09680cf112bddebc465"
+  },
+  "read_checks": [
+    "canonical decision identifier checked for answer and observe",
+    "request hash checked when observing the saved decision",
+    "refusal operation retains exact session, owner generation, binding and native action"
+  ],
+  "checkpoint_preserved": true,
+  "external_provider_requests": 0,
+  "migration": "none"
+}
