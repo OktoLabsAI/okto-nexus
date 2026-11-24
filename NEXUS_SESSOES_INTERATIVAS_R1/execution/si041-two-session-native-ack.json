@@ -175,5 +175,228 @@
     "The installed harness used deterministic responses with external networking disabled.",
     "Consent-based provider campaigns and distinct-host qualification remain open."
   ],
-  "migration": "none"
+  "migration": "none",
+  "terminal_queue_revalidation": {
+    "date": "2026-11-24",
+    "task": [
+      "SI-011",
+      "SI-041"
+    ],
+    "qualification": "LOCAL_DEMONSTRATION_PASS",
+    "intake": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "d525b40dddc365abd3bd222721407540ba36cda4",
+        "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "main_drift": [
+          631,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "main_drift": [
+          113,
+          0
+        ]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "main_drift": [
+          95,
+          0
+        ]
+      },
+      "upstream_drift_each": [
+        0,
+        0
+      ],
+      "worktrees_clean": true
+    },
+    "installed": {
+      "wheel_product_source": "27206336594948d5931b6942206db934dbc8c94a",
+      "product_source_diff_at_intake": "empty",
+      "versions_and_verified_record_members": {
+        "okto-nexus": {
+          "version": "0.3.8",
+          "record_digests_verified": 827
+        },
+        "okto-nexus-connector": {
+          "version": "0.0.15",
+          "record_digests_verified": 143
+        },
+        "okto-nexus-connector-core": {
+          "version": "0.0.16",
+          "record_digests_verified": 206
+        }
+      },
+      "sha256_from_package_audit": {
+        "nexus": "7e21dbc72219708faf086028cf45e7ffa9377d19c808734df6b8c65835296bec",
+        "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+        "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+      }
+    },
+    "runtime": {
+      "host": "Windows 26H2 x64 build 26300",
+      "viewers": [
+        "Edge 158.0.4370.33",
+        "Windows ConPTY"
+      ],
+      "pi": "0.87.1",
+      "pi_build_sha256": "caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+      "session_owner": "Embedded installed Core",
+      "provider": "Deterministic local fixture with external networking disabled",
+      "unsupported_browser_command": "export",
+      "provider_requests": 0
+    },
+    "integration": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "installed_regressions": {
+      "queue_cli_queue_controls_view_and_receipts": {
+        "tests": 105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      "contract": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "proof": {
+      "same_agent_binding_workspace": true,
+      "distinct_process_owners": true,
+      "alpha_continued_through_beta_controls": true,
+      "exact_read_only_terminal_detaches": 2,
+      "beta_queue_retained_without_operation": true,
+      "beta_steer_boundary": "applied",
+      "beta_expired_operator_login_http_status": 401,
+      "beta_ordinary_queue_after_expiry": "BLOCKED_AUTH",
+      "beta_resume_declined_before_effect": true,
+      "beta_queue_controls_confirmed_in_conpty": [
+        "resume",
+        "pause",
+        "resume"
+      ],
+      "alpha_cli_queue_scope_and_revision_preserved": true,
+      "beta_http_confirmation_loss_recovered_by_lookup": true,
+      "beta_original_turn": "CANCELLED",
+      "alpha_original_turn": "SUCCEEDED",
+      "alpha_native_ack_confirmed_then_discarded": 1,
+      "alpha_native_receipt_before_result": "OUTCOME_UNKNOWN",
+      "alpha_input_receipt_before_result": "DELIVERY_UNKNOWN",
+      "alpha_input_receipt_after_result": "ACCEPTED_NATIVE",
+      "alpha_explicit_recovery_kept_same_operation": true,
+      "alpha_unknown_retry_safe": false,
+      "beta_unsupported_command_http_status": 422,
+      "native_writes_before_canonical_close": [
+        "prompt",
+        "prompt",
+        "steer"
+      ],
+      "edge_requested": true,
+      "external_provider_calls": 0,
+      "canonical_closes": 2
+    },
+    "browser": {
+      "while_working": {
+        "browser": "Edg/158.0.4370.33",
+        "checkpoint": "ALPHA_STILL_WORKING_AFTER_TERMINAL_DETACH",
+        "twoChoices": true,
+        "explicitSelection": true,
+        "productivePosts": 0
+      },
+      "after_result": {
+        "checkpoint": "ALPHA_RESULT_AND_EXACT_RETURN",
+        "alphaResultVisibleOnce": true,
+        "betaTranscriptIsolated": true,
+        "betaUnsupportedCommandExplained": true,
+        "sameSessionReturned": true,
+        "productivePosts": 0
+      }
+    },
+    "sqlite": {
+      "per_session_operations": {
+        "alpha": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 1
+        },
+        "beta": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.interrupt": 1,
+          "turn.steer": 1,
+          "turn.submit": 1
+        }
+      },
+      "alpha_only_detachments": 2,
+      "beta_queue_has_no_operation": true,
+      "alpha_result_in_original_session": true,
+      "alpha_operation_receipts": [
+        [
+          "OUTCOME_UNKNOWN",
+          1,
+          0
+        ],
+        [
+          "SUCCEEDED",
+          1,
+          0
+        ]
+      ],
+      "alpha_correlated_events": [
+        "agent_start",
+        "agent_settled"
+      ],
+      "integrity": "ok",
+      "foreign_key_violations": 0
+    },
+    "cleanup": {
+      "canonical_closes": 2,
+      "listener_closed": true,
+      "remaining_fixture_processes": 0
+    },
+    "initial_attempt": {
+      "expectation": "Generic unqualified compact command",
+      "observed": "The qualified Pi catalog disabled compact during the active turn with a specific reason.",
+      "follow_up": "Use the explicitly unsupported export command for the browser and exact API refusal.",
+      "junit_sha256": "888be1c565468fe5f70104223eefcb0f486bdb00a4b09baeff2cf271753902a6"
+    },
+    "local_artifacts": {
+      "root": "D:/nxs-si041-terminal-siblings-d525b40d/run02",
+      "sha256": {
+        "local_author_probe.py": "9cbce9ef30c40825ab5279b6141a6f5a81844b33e2341d2120f2b731fe67f12c",
+        "drive-demo.ps1": "8f075244c42da8a3c136252246c73f1aaf44a07b33a99eb656b964a2019fed64",
+        "home-working.js": "36b82e59a16ad53b97c0a6d9ed8652286703b55c14507c6f6205a2427fe15876",
+        "home-result.js": "3dee3b04863ea1affda474030994b88cae17401c53eca00cd015e578fc122694",
+        "focus.xml": "bbc73e297ed9ded468764271dc9ae7dea2331a81a3513770763c7885cfeb6a8d",
+        "proof.json": "91d606b5428f1a7ccc502b91a3d6e9b3aa97fc6acc7fdb57b1cddd6475dd7199",
+        "browser-working.json": "910f1a231f84b27a999bd1f705db30a6134d6fd2c1c8e7231b3a30293eed9b52",
+        "browser-returned.json": "8dd91c25c1aeea3f3ea84b0ad034fa313f2fd2b8004af80a45cdbf67c39f843e",
+        "beta-resume-declined.txt": "3924f73f26cd0e5638e10da0341a766d93d478b6d07490393d9edbbdcff11829",
+        "beta-resume-confirmed.txt": "4955bac79e22d3a7355582295248aa6267b76b9175d7e1b5b26432d9ade66327",
+        "beta-pause-confirmed.txt": "44f112c56cd2f81f4e89e260d26fb06908266a5c82c3d4d3d96c6e7333652271",
+        "beta-second-resume.txt": "4955bac79e22d3a7355582295248aa6267b76b9175d7e1b5b26432d9ade66327",
+        "queue-observe.py": "e64b004eb6761e15887131d76925ea801d9627145efa3d766b888ae35e03ece0",
+        "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+        "installed.xml": "f8b90f86eeb48418271b327c094a8e30770cf87d6f14cbdb0cccf05cdae56c08",
+        "browser.log": "7e758ebe6e6be33bc49a1db7dc52fd1ef06e399fbf985730b99acbc0a2053b42",
+        "contract.xml": "471cd3f3bae52812479942a0acf416e3a9c7325f81e24bdc1f0a183a88b52799",
+        "terminal-siblings-audit.json": "ff0d3218a403d1ac4d66a1c762040db01e2a9ce79a3fdc1c842c34f4c07bfe5d",
+        "installed-records.json": "e52c13deed2efbf2cea26de4fe3262d4c8a6f9fbf0313814ff2f7f7585f40588"
+      }
+    },
+    "migration": "none"
+  }
 }
