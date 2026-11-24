@@ -518,12 +518,12 @@ def test_pi_console_decodes_split_paste_and_keeps_detach_local():
     assert keys.feed('\x1b[200~\x0f\x1b[201~') == []
 
 
-@pytest.mark.skipif(sys.platform != 'linux', reason='requires a Linux pseudoterminal')
-def test_pi_linux_terminal_reads_raw_utf8_and_restores_after_an_error():
+@pytest.mark.skipif(sys.platform not in ('linux', 'darwin'), reason='requires a POSIX pseudoterminal')
+def test_pi_posix_terminal_reads_raw_utf8_and_restores_after_an_error():
     import pty
     import termios
 
-    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import _PiKeys, _linux_editor_input
+    from okto_nexus.adapters.inbound.cli.pi_viewer_terminal import _PiKeys, _posix_editor_input
 
     master, slave = pty.openpty()
     try:
@@ -531,7 +531,7 @@ def test_pi_linux_terminal_reads_raw_utf8_and_restores_after_an_error():
         stream = SimpleNamespace(fileno=lambda: slave)
         keys = _PiKeys()
         with pytest.raises(RuntimeError, match='socket closed'):
-            with _linux_editor_input(stream) as read:
+            with _posix_editor_input(stream) as read:
                 assert read() == ''
                 assert not termios.tcgetattr(slave)[3] & (termios.ECHO | termios.ICANON | termios.ISIG)
                 os.write(master, b'\xc3')

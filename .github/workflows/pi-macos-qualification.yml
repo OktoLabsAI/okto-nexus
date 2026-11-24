@@ -7,6 +7,8 @@ on:
       - .github/workflows/pi-macos-qualification.yml
       - tools/probe_macos_pi.py
       - tests/fixtures/pi-release/package*.json
+      - src/okto_nexus/adapters/inbound/cli/pi_viewer_terminal.py
+      - tests/session_interaction/test_session_cli.py
   workflow_dispatch:
 
 permissions:
@@ -23,6 +25,11 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.13'
+      - name: Set a canonical temporary directory
+        run: |
+          # The event journal checks every path component for symbolic links.
+          temporary=$(mktemp -d /private/tmp/nxs-pi.XXXXXX)
+          echo "TMPDIR=$temporary/" >> "$GITHUB_ENV"
       - name: Prepare pinned Node and Pi
         run: |
           test "$(uname -m)" = x86_64

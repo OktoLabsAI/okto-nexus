@@ -270,7 +270,7 @@ class _PiControls:
 
 
 @contextmanager
-def _linux_editor_input(stream):
+def _posix_editor_input(stream):
     import select
     import termios
     import tty
@@ -280,7 +280,7 @@ def _linux_editor_input(stream):
         original = termios.tcgetattr(fd)
         tty.setraw(fd, termios.TCSAFLUSH)
     except termios.error:
-        raise ConnectionError('PRESENTATION_TTY_REQUIRED', 'The Pi editor needs a Linux terminal.') from None
+        raise ConnectionError('PRESENTATION_TTY_REQUIRED', 'The Pi editor needs an interactive terminal.') from None
     decode = codecs.getincrementaldecoder('utf-8')(errors='replace').decode
 
     def take():
@@ -312,7 +312,7 @@ def _editor_terminal():
         with ansi_viewer_output(sys.stdout), viewer_console_input(sys.stdin) as read:
             yield read
     else:
-        with _linux_editor_input(sys.stdin) as read:
+        with _posix_editor_input(sys.stdin) as read:
             yield read
 
 
