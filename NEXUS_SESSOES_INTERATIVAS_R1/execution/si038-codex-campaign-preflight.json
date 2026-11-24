@@ -192,5 +192,41 @@
     "errors": 0,
     "skipped": 0,
     "junit_sha256": "edfd5057d0ae0ad4a10a64d0da9ca36d3f64ec3d045cbe4f7ab44e11481f3ba6"
+  },
+  "si038_budget_guard": {
+    "baseline": "319cebf620f85253a30eb32511fa39e853439201",
+    "max_admissions": 5,
+    "provision_per_admission": 75000,
+    "preventive": 450000,
+    "observed_limit": 500000,
+    "stages": [
+      "setup",
+      "home",
+      "interactive",
+      "queued",
+      "steer"
+    ],
+    "grouped_counter": [
+      "interactive",
+      "steer"
+    ],
+    "scope": "admission accounting and journal-derived simulation",
+    "tests_passed": 12,
+    "junit_sha256": "2444404b6fd4b6253a9e4c1c66559a6f4bf444223a9189a942e79268b8e9344d",
+    "code_sha256": "ff82a186e984d2adbe2251a710cf6d80450b1aa7b5ad5c7fbc9ddee07c4f0f47",
+    "test_source_sha256": "614dc3b646eb1e2ab7b3b940d5cefe4618a265b5f46634b06466158078dd9686",
+    "isolated_replay": {
+      "synthetic_setup_tokens": 123,
+      "observed_journal_tokens": 1050,
+      "observed_with_simulated_setup": 1173,
+      "accounting_operations_correlated": 3,
+      "reorientation_counter_shared": true,
+      "permanently_charged": 375000,
+      "source_usage_sha256": "51092e8fedcc8d0436bdc446414f2623dbe65711c90eccc49b1848fd274b5dd2",
+      "ledger_sha256": "9f3f86a334e69f95e27739a8d4af1f772f96d29337cc2ba6fc4eeb02d6f392b9",
+      "external_provider_calls": 0
+    },
+    "live_campaign": "NOT_RUN",
+    "requires_live_driver_integration": true
   }
 }
