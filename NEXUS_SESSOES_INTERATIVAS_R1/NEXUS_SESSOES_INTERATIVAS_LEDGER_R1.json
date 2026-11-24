@@ -1372,7 +1372,9 @@
         "execution/si030-pi-connector-separate-session.md",
         "execution/si030-pi-connector-separate-session.json",
         "execution/si025-pi-connector-shared-queue-steer.md",
-        "execution/si025-pi-connector-shared-queue-steer.json"
+        "execution/si025-pi-connector-shared-queue-steer.json",
+        "execution/si032-claude-abrupt-writer-exit.md",
+        "execution/si032-claude-abrupt-writer-exit.json"
       ]
     },
     {
@@ -1781,7 +1783,9 @@
         "execution/si026-claude-home-compound-reorientation.md",
         "execution/si026-claude-home-compound-reorientation.json",
         "execution/si026-claude-viewer-controls.md",
-        "execution/si026-claude-viewer-controls.json"
+        "execution/si026-claude-viewer-controls.json",
+        "execution/si032-claude-abrupt-writer-exit.md",
+        "execution/si032-claude-abrupt-writer-exit.json"
       ]
     },
     {
@@ -2078,7 +2082,9 @@
         "execution/si037-linux-pi-saved-resume.md",
         "execution/si037-linux-pi-saved-resume.json",
         "execution/si026-claude-viewer-controls.md",
-        "execution/si026-claude-viewer-controls.json"
+        "execution/si026-claude-viewer-controls.json",
+        "execution/si032-claude-abrupt-writer-exit.md",
+        "execution/si032-claude-abrupt-writer-exit.json"
       ]
     },
     {
@@ -2145,7 +2151,9 @@
         "execution/si037-posix-pty-hangup.md",
         "execution/si037-posix-pty-hangup.json",
         "execution/si037-codex-transport-expiry.md",
-        "execution/si037-codex-transport-expiry.json"
+        "execution/si037-codex-transport-expiry.json",
+        "execution/si032-claude-abrupt-writer-exit.md",
+        "execution/si032-claude-abrupt-writer-exit.json"
       ]
     },
     {
@@ -4920,7 +4928,8 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si026-claude-terminal-retained-output.md",
-        "execution/si026-claude-terminal-retained-output.json"
+        "execution/si026-claude-terminal-retained-output.json",
+        "execution/si032-claude-abrupt-writer-exit.json"
       ]
     },
     {
@@ -5573,7 +5582,8 @@
         "execution/si037-codex-viewer-process-expiry.md",
         "execution/si037-codex-viewer-process-expiry.json",
         "execution/si037-codex-transport-expiry.md",
-        "execution/si037-codex-transport-expiry.json"
+        "execution/si037-codex-transport-expiry.json",
+        "execution/si032-claude-abrupt-writer-exit.json"
       ]
     },
     {

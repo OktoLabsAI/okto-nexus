@@ -336,7 +336,7 @@
             "si026-claude-connector-successor.md"
           ]
         },
-        "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md"] },
+        "detach_keeps_running": { "status": "qualified", "evidence": ["si022-si026-claude-remote-presentation.md", "si032-claude-abrupt-writer-exit.json"] },
         "joint_ui_native_arbitration": {
           "status": "qualified",
           "reason": "Home e compositor do CLI compartilharam a fila do Claude 2.1.328 neste Windows. O mesmo processo executou as entradas em ordem, com respostas simuladas em loopback.",

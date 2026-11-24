@@ -329,6 +329,11 @@ Use its receipt to check the outcome of the interruption and replacement.
 If the send is unconfirmed, recover it with `session receipt` using the session,
 owner generation and intent printed by the composer.
 
+If the reviewed Windows writer exits unexpectedly, attach to the same session
+again. When the previous writer lease is retired, the new viewer can take the
+writer slot. Use the original receipt reference to check an input that was
+pending when the viewer exited.
+
 The same command follows a managed Claude terminal on a Connector that
 negotiated Claude presentation with the Server. Sign in as a Nexus operator
 and select the exact session. The reviewed remote setup uses Claude 2.1.328

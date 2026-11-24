@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-24",
+  "tasks": [
+    "SI-022",
+    "SI-026",
+    "SI-031",
+    "SI-032"
+  ],
+  "scenarios": [
+    "SI-T-G03",
+    "SI-T-H09"
+  ],
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "60b3fde52dc83e1a7c3a0d5ecf8334b1ba43c6be",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_drift": [
+        626,
+        0
+      ]
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_drift": [
+        113,
+        0
+      ]
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "main_drift": [
+        95,
+        0
+      ]
+    },
+    "working_trees": "clean"
+  },
+  "scope": "Abrupt exit of just the public CLI writer on a Connector-managed Windows ConPTY session on the current Windows host.",
+  "artifacts": {
+    "nexus_wheel_sha256": "8fc33ab6305feef4941f1b37f7d3f686720e69a19ccea2214e30e93e82332fd9",
+    "nexus_sdist_sha256": "f0e830aa11ed8076837be15eef932c7b5493a92b0c7ae4a71e270d9b3d825a78",
+    "base_nexus_wheel_sha256": "12832037e4694c9d60b2e3fa0278a8768e16665db3072c36eeced00af7dcb609",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "engine": {
+    "name": "Claude Code",
+    "version": "2.1.328",
+    "sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "windows_build": 26300,
+    "arch": "x64",
+    "profile": "reviewed plan profile, tool calls denied",
+    "model": "deterministic loopback fixture",
+    "external_model_requests": 0
+  },
+  "proof": {
+    "exact_owned_claude_startup": true,
+    "requests_without_turn": 0,
+    "loopback_fixture_turns": 3,
+    "same_owner_read_after_reattach": true,
+    "original_completed_with_replacement_writer_attached": true,
+    "session_closed": true,
+    "queued_on_live_writer": true,
+    "abrupt_exit_code": 222,
+    "crashed_writer_lease_detached_without_takeover": true,
+    "replacement_writer_console_modes_restored": true,
+    "web_and_terminal_fifo": true,
+    "recovered_after_crash_without_replay": true,
+    "same_native_process_for_both_turns": true,
+    "external_model_requests": 0,
+    "sqlite_quick_check": "ok"
+  },
+  "durability": {
+    "operation_counts": {
+      "runtime.open": 1,
+      "turn.submit": 3,
+      "runtime.close": 1
+    },
+    "native_launches": 1,
+    "durable_terminal_input": "ACCEPTED_NATIVE",
+    "input_source": "native_terminal",
+    "distinct_successful_results": 3,
+    "web_then_terminal_fifo": true,
+    "reader_detaches": 1,
+    "writer_detaches": 2,
+    "session_closed": true,
+    "foreign_key_violations": 0
+  },
+  "earlier_attempts": [
+    {
+      "trial": "writer-crash1",
+      "observed": "Writer review succeeded and prepare was refused before any write attachment was recorded."
+    },
+    {
+      "trial": "writer-crash2",
+      "observed": "The canonical opening was accepted. The native receipt was absent at the fixture deadline."
+    },
+    {
+      "trial": "writer-crash3",
+      "observed": "The killed writer lease was detached. Both messages stayed queued. The replacement acquired its own writer epoch but did not reach console readiness."
+    },
+    {
+      "trial": "writer-crash4",
+      "observed": "The replacement reached console readiness and detached. All three results were durable. The retained terminal excerpt did not match the original result as contiguous text."
+    }
+  ],
+  "checks": {
+    "installed_native": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "source_full_at_same_code": {
+      "tests": 290,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    }
+  },
+  "commands": [
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si026-controls-b8a6/native/run-writer-crash.ps1 -Action writer_crash -Trial writer-crash5",
+    "rtk proxy D:/nxs-si026-controls-b8a6/venv/Scripts/python.exe -B D:/nxs-si026-controls-b8a6/native/prove_writer_crash_durability.py writer-crash5"
+  ],
+  "artifact_directory": "D:/nxs-si026-controls-b8a6",
+  "evidence_sha256": {
+    "native/run-writer-crash.ps1": "d08414132dfd4fa172d90b824ddfde7db8ecc6a6aa75047b1d43d2d0316a5a76",
+    "native/test_writer_crash.py": "bffbfacdd7dbf8082a305242fb740fef35e262bea16f545e4be2c3ee88c18c1f",
+    "native/remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "native/isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "native/pty_probe.py": "d74b379ddaf1d100e6320048afb865a58ec95e71ba9565f718c5916afd362a57",
+    "native/prove_writer_crash_durability.py": "82c4fb1283a45675a51956412f23458f80d5132ae08c722bf908157835174c86",
+    "native/writer-crash5/native.log": "0a92a280805e9b025dd944b891698a479ba1aebc0b245978c7be5f3719eec529",
+    "native/writer-crash5/native.xml": "e1f03cacea0d55114624f6e402f95d2637a0ceeef290e7f3a75116b9045ae56d",
+    "native/writer-crash5/result.json": "3f4d16ae0435f8c3e60f2eaf8d11b9c8c2970f02e54a80869dae0fd706f41d43",
+    "native/writer-crash5/durability.json": "7c86551b85e8a6d67422f694429e3e8fbcdb63220f6ee0f20e055b605fcc0ce2",
+    "native/writer-crash5/crashed-viewer-redacted.txt": "c67c608312a921681dbf817ba20f3a40bf40d28c70be9f32e30466b36a1e41a6",
+    "native/writer-crash5/reattached-viewer-redacted.txt": "edd97027f034b34a29b556750184941214e3f1d56a00696e54ce49a060cd7cbf",
+    "native/writer-crash5/retained-reader-redacted.txt": "6dc0dffdc53514a6660a80819c47888bf64473b4dda4f08edb1ea962f4fa4841",
+    "native/writer-crash1/native.log": "382c853a47c4a3e040ab37db8cb33118ac061db2d39a03b6d63bf147f7a52f95",
+    "native/writer-crash1/native.xml": "0be5d4afef00c0c5a0366b3d3f1fdf7f7ced95449f590b8caf7165302369189b",
+    "native/writer-crash2/native.log": "c2b2c87c6643128e1538489b2017f387407813fb50513889b16ece91790685be",
+    "native/writer-crash2/native.xml": "1994780145944fc0253c84eb064b363ae35f53d3675643485381795fa5da737a",
+    "native/writer-crash3/native.log": "56f0acfbbbf2625f08e1110081c53c96b61d8d861a3e11b29d96b3d88b8ca71b",
+    "native/writer-crash3/native.xml": "3d4bdd9628b5678341cee8514b495b9205ad14563b635d6ed89ca4245d505eb9",
+    "native/writer-crash4/native.log": "aa5479e70639d786db00b6ac7a012da7927275096cc5df4547c4b3ce1f08f18a",
+    "native/writer-crash4/native.xml": "6b0ac7bc2cd29a24171be61c0434663d098099abfc50f29e3031aee958bf5339"
+  },
+  "limits": [
+    "The setup bootstraps a disposable operator and explicitly selected Claude build. Model responses come from a loopback fixture.",
+    "The first viewer exits via TerminateProcess in its disposable ConPTY. The replacement viewer exercises graceful detach and mode restoration.",
+    "The final read proves delivery of retained terminal frames. The exact results are verified through canonical result receipts and separately in SQLite.",
+    "Coverage supplements the existing Windows evidence for SI-T-H09. SI-T-G03 retains its campaign gate."
+  ],
+  "migration": "none"
+}
