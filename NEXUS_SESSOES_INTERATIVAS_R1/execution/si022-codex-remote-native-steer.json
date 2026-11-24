@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-24",
+  "scope": "Windows, Nexus and Connector in the same machine, true native Codex binaries and simulated Responses",
+  "baseline": {
+    "nexus": {
+      "branch": "feature/v0.3.8",
+      "head": "834e846fbcb786dae5cffd163a69a9f1944ba595",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "ahead_of_main": 620,
+      "behind_main": 0
+    },
+    "connector": {
+      "branch": "feature/v0.0.15",
+      "head": "b73405777688e42e4f3f61f3e5a1d46e546af528",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "ahead_of_main": 112,
+      "behind_main": 0
+    },
+    "core": {
+      "branch": "feature/v0.0.16",
+      "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "ahead_of_main": 95,
+      "behind_main": 0
+    },
+    "working_trees_clean": true
+  },
+  "installed_wheels": {
+    "nexus_0.3.8": "9aa0aa591b46991359fe4deb041edda28c16c6a31d9de48506a7f94688d77a4e",
+    "connector_0.0.15": "ce6abefa3b17882e70742c3ab1d0a4b1b55d9294cf46382ce6923bac2e3e45b8",
+    "core_0.0.16": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "imports_verified": true
+  },
+  "native_binaries": {
+    "app_server_0.157.0": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer_0.170.0": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "commands": [
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si022-steer-834e/run.ps1 -Trial trial2",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si022-steer-834e/run-regression.ps1",
+    "rtk proxy D:/nxs-si022-refresh-596a/venv/Scripts/python.exe -B D:/nxs-si022-steer-834e/prove_durability.py trial2"
+  ],
+  "prior_attempt": {
+    "native_steer_exercised": false,
+    "connector_runtime_open_stage": "SUBMITTED",
+    "connector_runtime_open_receipt_acknowledged": false,
+    "nexus_session_state": "OPEN_PENDING",
+    "nexus_receipt_count": 0,
+    "cause_established": false,
+    "rerun_change": "Lower fixture polling frequency and longer startup observation window"
+  },
+  "native": {
+    "remote_native_exact_steer": true,
+    "review_did_not_send": true,
+    "exact_original_native_turn_acknowledged": true,
+    "steered_result_on_original_turn": true,
+    "queue_unchanged_until_original_turn_completed": true,
+    "receipt_recovers_after_detach": true,
+    "same_thread_and_app_server_until_close": true,
+    "exact_writer_detaches": 1,
+    "canonical_close": true,
+    "native_turn_starts": 2,
+    "native_steers": 1,
+    "loopback_response_requests": 3,
+    "external_provider_requests": 0
+  },
+  "durability": {
+    "nexus_integrity": "ok",
+    "connector_journal_integrity": "ok",
+    "foreign_key_violations": 0,
+    "operation_counts": {
+      "runtime.open": 1,
+      "turn.submit": 2,
+      "turn.steer": 1,
+      "runtime.close": 1
+    },
+    "closed_sessions": 1,
+    "native_launches": 1,
+    "writer_detaches": 1,
+    "steer_source": "native_terminal",
+    "steer_input_final_state": "ACCEPTED_NATIVE",
+    "target_matched_first_turn": true,
+    "web_input_final_state": "ACCEPTED_NATIVE",
+    "results_persisted_in_two_separate_turns": true,
+    "same_native_thread": true
+  },
+  "regressions": {
+    "passed": 8,
+    "failed": 0
+  },
+  "evidence_directory": "D:/nxs-si022-steer-834e",
+  "evidence_sha256": {
+    "run.ps1": "98f9711c84efbf483b9859f2bb10a6daf7a12959276c83d3031c717f2b55c571",
+    "test_remote_steer.py": "9e99054ef1d7d2843caf92e2800155d82400355a3c206af6325e567c8ee9fe71",
+    "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "run-regression.ps1": "5b2f606f499287b63a6ccd40c340765e2c109dbffd04935262f705666c661f56",
+    "prove_durability.py": "316e16461f1bb614928817a90f676d2be167db79f77f6ff3904f0b4b13363333",
+    "native-trial1.log": "9afa25e85593eb5b95ca87507f9cefe3ff0f0aaef9f0e95c47176da3088798f2",
+    "steer-trial1.xml": "7c7f9877fc4299c360d9da14f611bdc14e5cdb5f7f248d7b663ca820d4bc703f",
+    "native-trial2.log": "440fdee30217082be13e3f3fc4b7c99550677591a305707420f94ba231ac26b4",
+    "steer-trial2.xml": "2536de7414ce951cde6bd9b176078e329e89ca14d9cf37178b83dbbe2a65b54a",
+    "regression.log": "0b5930e0604d0a8eaf70c300add2b972d3bf11e8bd41d7fe1bc4895fe8e53d02",
+    "regression.xml": "0f114fce349ff8667fa8d6df5825799b0b6bd8802d7cfcaa520e92edc61d7683",
+    "proof.json": "007b9deb32d59c18bd97917d0193d82d931fa91be8c014e45a002a2290cba595",
+    "terminal-redacted.txt": "905ff68f5a1dc47dc58c39bbf97a75eccc97b2b41a0583d63d6aa38febd28c95",
+    "durability.json": "0103cc061cd5a8b3c77ec38224a01d87a0bd96cc1a48062100f0b8f16b74dc95"
+  },
+  "limits": [
+    "No qualification for separate hosts or a provider campaign",
+    "macOS measurement deferred",
+    "No change to scenario statuses or product behavior"
+  ]
+}

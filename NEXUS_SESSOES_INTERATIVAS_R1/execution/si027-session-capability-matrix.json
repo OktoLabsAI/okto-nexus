@@ -122,7 +122,11 @@
       "capabilities": {
         "session_chat": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
         "durable_next_turn_fifo": { "status": "qualified", "evidence": ["si022-codex-remote-writer.md"] },
-        "exact_steer": { "status": "implemented", "evidence": ["si022-codex-remote-writer.md"] },
+        "exact_steer": {
+          "status": "qualified",
+          "reason": "O visualizador e o app-server reais no mesmo Windows reorientaram o turno original com respostas simuladas em loopback. A entrada da web ficou na fila até o turno terminar.",
+          "evidence": ["si022-codex-remote-native-steer.md", "si022-codex-remote-native-steer.json"]
+        },
         "interrupt_queue_barrier": {
           "status": "qualified",
           "reason": "Visualizador e app-server reais no mesmo Windows. O ensaio com respostas em loopback comprovou a pausa antes da interrupção e a retomada na mesma thread.",
