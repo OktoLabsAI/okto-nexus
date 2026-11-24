@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-24",
+  "tasks": [
+    "SI-022",
+    "SI-032"
+  ],
+  "scenario": "SI-T-G08",
+  "scope": "Windows installed Nexus, Connector on the same host, real managed Claude with loopback model fixture",
+  "nexus": {
+    "branch": "feature/v0.3.8",
+    "head": "d34d5ffdf6cb34c1aaa86d027bc923e056a3425d",
+    "main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "main_drift": [
+      633,
+      0
+    ],
+    "installed_python_source": "27206336594948d5931b6942206db934dbc8c94a",
+    "git_diff_for_python_runtime_at_intake": "empty"
+  },
+  "connector": {
+    "branch": "feature/v0.0.15",
+    "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+    "main_drift": [
+      113,
+      0
+    ]
+  },
+  "core": {
+    "branch": "feature/v0.0.16",
+    "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+    "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+    "main_drift": [
+      95,
+      0
+    ]
+  },
+  "upstream_drift_each": [
+    0,
+    0
+  ],
+  "working_trees_at_intake": "clean",
+  "installed_wheel_sha256": {
+    "nexus": "7e21dbc72219708faf086028cf45e7ffa9377d19c808734df6b8c65835296bec",
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "native": {
+    "installation": "Claude Code 2.1.328",
+    "sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+    "platform": "Windows x64",
+    "replacement_viewer": "installed CLI via ConPTY",
+    "viewer_transport": "loopback WebSocket",
+    "controlled_clock": "attachment broker only",
+    "model": "deterministic loopback Anthropic Messages fixture"
+  },
+  "checks": {
+    "initial_source_lease_cases": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "installed_transport_regressions": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "installed_native_integration": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "focused_ruff_f_e9": "PASS"
+  },
+  "proof": {
+    "exact_owned_claude_startup": true,
+    "requests_without_turn": 0,
+    "loopback_fixture_turns": 3,
+    "same_owner_read_after_reattach": true,
+    "original_completed_with_replacement_writer_attached": true,
+    "session_closed": true,
+    "queued_on_live_writer": true,
+    "application_keepalive_renewed": true,
+    "websocket_ping_kept_socket_open_without_renewal": true,
+    "silent_writer_detached_without_takeover": true,
+    "same_connector_and_grants_after_expiry": true,
+    "replacement_writer_console_modes_restored": true,
+    "web_and_terminal_fifo": true,
+    "recovered_after_expiry_without_replay": true,
+    "same_native_process_for_both_turns": true,
+    "external_model_requests": 0,
+    "sqlite_quick_check": "ok"
+  },
+  "durability": {
+    "operation_counts": {
+      "runtime.open": 1,
+      "turn.submit": 3,
+      "runtime.close": 1
+    },
+    "native_launches": 1,
+    "durable_terminal_input": "ACCEPTED_NATIVE",
+    "input_source": "native_terminal",
+    "distinct_successful_results": 3,
+    "web_then_terminal_fifo": true,
+    "reader_detaches": 1,
+    "writer_detaches": 2,
+    "session_closed": true,
+    "foreign_key_violations": 0
+  },
+  "remaining_fixture_processes": 0,
+  "qualifications_pending": [
+    "provider campaign",
+    "distinct hosts"
+  ],
+  "migration": "none",
+  "local_evidence_root": "D:/nxs-si032-claude-lease-d34d5ffd",
+  "local_evidence_sha256": {
+    "test_silent_writer.py": "78f38edcb239901c5f52e415f7f47656d3d7228994190ca5edc55cd3db7ce23d",
+    "audit.py": "4597fe6dec0968ab81c1996d406f8b0aca48d5ff1ae2ab4aa616a4b538152e66",
+    "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "source.xml": "a4192f8a7f673c225c89725b9e38bb66cbf163ba529d6b6923ed347f4328bc82",
+    "installed.xml": "a73b10c6cbcce48a3607edb46557778ca659e9602e8a4f3e9a0ee0e4831569e8",
+    "native01/native.xml": "a04d996f2d1c0b21b7f09028590ac2ce228e31dc34c5d7d4ef18e0776e4bbe2f",
+    "native01/result.json": "7d4a4de34bb5cee2fdd71e2871180665823772c690245368df3055d7df9f2cd9",
+    "native01/durability.json": "7c86551b85e8a6d67422f694429e3e8fbcdb63220f6ee0f20e055b605fcc0ce2",
+    "native01/reattached-viewer-redacted.txt": "5e16820d945a2a42a74a562cf7277cf0ef45fbb7385919db1cedc12e6d3df16d",
+    "native01/retained-reader-redacted.txt": "2d9ce8b68826318f94659557460ce78bf7ebd4c2ac7fa956ac5d542557980b8d"
+  }
+}
