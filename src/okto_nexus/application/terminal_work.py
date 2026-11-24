@@ -287,7 +287,19 @@ class TerminalWork(TerminalAuthorization):
         if stream_epoch is not None:
             query['stream_epoch'] = stream_epoch
         events = self.api('GET', '/runtime/sessions/' + quote(selected_session, safe='') + '/events?' + urlencode(query))
-        self._check_scope(events['scope'], binding)
+        page_scope = _verify_session_binding(events, binding)
+        epoch, items = events['stream_epoch'], events['events']
+        event_scope = binding['server_id'], binding['executor_id'], selected_session, epoch
+        if (page_scope['session_id'] != selected_session
+                or page_scope['session_owner_generation'] != session['scope']['session_owner_generation']
+                or (stream_epoch is not None and epoch != stream_epoch)
+                or not isinstance(items, list) or (items and not epoch)
+                or events['next_after_sequence'] != after_sequence + len(items)
+                or any(not isinstance(item, dict)
+                       or tuple(item.get(key) for key in ('server_id', 'executor_id', 'session_id', 'stream_epoch'))
+                       != event_scope or item.get('sequence') != sequence
+                       for sequence, item in enumerate(items, after_sequence + 1))):
+            raise ConnectionError('WORK_EVENT_PAGE_MISMATCH', 'The event page does not match the selected session or cursor.')
         requests = self.pending(binding, selected_session)
         targets = operations[1:] if len(operations) > 1 else operations
         done = bool(targets and all(item['executor_stage'] in TERMINAL or

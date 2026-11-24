@@ -389,6 +389,62 @@ def test_resume_keeps_the_last_confirmed_receipt_when_the_resolution_changes(wor
     assert all(method == 'GET' for method, _ in t.calls)
 
 
+@pytest.fixture
+def terminal_event_page(monkeypatch):
+    session_scope = dict(server_id='server', executor_id='executor', binding_id='binding', agent_id='subject',
+                         workspace_id='workspace', workspace_binding_id='workspace-binding',
+                         session_id='selected', session_owner_generation=3)
+    epoch = 'reviewed-epoch'
+    event_scope = {key: session_scope[key] for key in ('server_id', 'executor_id', 'session_id')}
+    page = dict(scope=dict(session_scope), stream_epoch=epoch,
+                events=[dict(event_scope, stream_epoch=epoch, sequence=sequence) for sequence in (12, 13)],
+                count=2, next_after_sequence=13, committed_contiguous=16, gap_pending=False, has_more=True)
+
+    def call(method, path, body=None):
+        assert method == 'GET' and body is None
+        assert path.endswith('/runtime/sessions/selected/events?executor_id=executor&after_sequence=11'
+                             '&limit=200&stream_epoch=reviewed-epoch')
+        return page
+
+    flow = TerminalWork(call, lambda _document: pytest.fail('Observation changed the checkpoint'), {})
+    monkeypatch.setattr(flow, 'binding', lambda: session_scope)
+    monkeypatch.setattr(flow, 'session', lambda _binding, session_id:
+                        dict(scope=dict(session_scope, session_id=session_id), lifecycle_state='READY'))
+    monkeypatch.setattr(flow, 'pending', lambda _binding, _session_id: dict(items=[], has_more=False))
+    return flow, page
+
+
+@pytest.mark.parametrize(('target', 'field', 'value', 'code'), [
+    ('scope', 'workspace_binding_id', 'other-binding', 'WORK_SCOPE_CHANGED'),
+    ('scope', 'session_id', 'sibling', 'WORK_EVENT_PAGE_MISMATCH'),
+    ('scope', 'session_owner_generation', 4, 'WORK_EVENT_PAGE_MISMATCH'),
+    ('page', 'stream_epoch', 'old-epoch', 'WORK_EVENT_PAGE_MISMATCH'),
+    ('page', 'next_after_sequence', 15, 'WORK_EVENT_PAGE_MISMATCH'),
+    ('event', 'session_id', 'sibling', 'WORK_EVENT_PAGE_MISMATCH'),
+    ('event', 'stream_epoch', 'old-epoch', 'WORK_EVENT_PAGE_MISMATCH'),
+    ('event', 'sequence', 15, 'WORK_EVENT_PAGE_MISMATCH'),
+])
+def test_terminal_events_refuse_a_mismatched_page(terminal_event_page, target, field, value, code):
+    flow, page = terminal_event_page
+    {'page': page, 'scope': page['scope'], 'event': page['events'][-1]}[target][field] = value
+    with pytest.raises(ConnectionError) as refused:
+        flow.observe(session_id='selected', after_sequence=11, stream_epoch='reviewed-epoch')
+    assert refused.value.code == code
+
+
+def test_terminal_event_continuation_names_the_session_epoch_and_sequence(terminal_event_page, capsys):
+    from okto_nexus.adapters.inbound.cli.work import display
+
+    flow, page = terminal_event_page
+    result = flow.observe(session_id='selected', after_sequence=11, stream_epoch='reviewed-epoch')
+    assert result['events'] == page
+    display(result)
+    output = capsys.readouterr().out
+    assert '--session-id for selected' in output
+    assert '--stream-epoch for reviewed-epoch' in output
+    assert '--after-sequence 13' in output
+
+
 def test_unconfirmed_resolution_requires_exact_original_request(work):
     t = work
     t.fault.before = 'intents:resolve'

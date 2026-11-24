@@ -84,6 +84,10 @@ When a work response conflicts with the selected session or a saved receipt,
 the CLI preserves the checkpoint. Use `work resume` to recover the original
 request.
 
+When paging with `work events`, keep the same `--session-id` and
+`--stream-epoch` and use the previous page's `next_after_sequence` as
+`--after-sequence`. Each page belongs to one session and stream epoch.
+
 `session open` uses the connection's current authorization and leaves work and
 pending messages with their original session. It prints the new session ID
 after the Server confirms the opening. If the opening is unconfirmed, repeat the

@@ -1,0 +1,61 @@
+{
+  "baseline": "c2564482f79385f0c54f174be7f2cc1b90891eec",
+  "scope": "Windows, CLI event-page substitution tests, operator API and SQLite regression tests with synthetic native peers",
+  "local_evidence_directory": "D:/nxs-si012-cli-events-c2564482",
+  "commands": [
+    "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py -k terminal_event --junitxml D:\\nxs-si012-cli-events-c2564482/before.xml",
+    "python -B -m pytest -q --tb=short tests/execution_r4/test_terminal_work.py tests/execution_r4/test_session_views.py -k 'terminal_event or send_result_reopen or lost_submission_response or session_views' --junitxml D:\\nxs-si012-cli-events-c2564482/source.xml",
+    "uv build --offline --wheel --out-dir D:\\nxs-si012-cli-events-c2564482/dist",
+    "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_terminal_work.py tests/execution_r4/test_session_views.py -k 'terminal_event or send_result_reopen or lost_submission_response or session_views' --junitxml D:\\nxs-si012-cli-events-c2564482/installed.xml"
+  ],
+  "before": {
+    "tests": 9,
+    "passed": 0,
+    "failed": 9,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "before.xml",
+    "junit_sha256": "3b1f42cb0d7e80d41e2fea2257b2d2e5d21356fb5852bb1fab16d6dcebb640f5"
+  },
+  "source": {
+    "tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "source.xml",
+    "junit_sha256": "3db285701034e7db9a8c607c77a1cba67b47a6f1d51ad9ac71716afa06580236"
+  },
+  "installed": {
+    "tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "installed.xml",
+    "junit_sha256": "9cb9249def6ae56fc4dbee7014c2e1c2db43c4394fbd95c239a7ec2edf329589"
+  },
+  "wheel_sha256": {
+    "nexus": "0c39a7a52e5372fa67a898e285afa460c07653e623d71401a95f379ec8d75a82",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "checked_sources": {
+    "src/okto_nexus/adapters/inbound/cli/work.py": "8dab78fe6d417aa4e10b3281111f61ddc01b000fc339a70f1e7193d664b257c8",
+    "src/okto_nexus/application/terminal_work.py": "23f7b164e7d940abd446c058c3ff7c8f61eae6f6d1ff8dde697e5941b3acf7d2",
+    "tests/execution_r4/test_terminal_work.py": "034a0aa5a13d99491b36c4175877f68689acbc66c350afd8d4201665c554fcbd"
+  },
+  "event_scope_checks": [
+    "workspace binding",
+    "session",
+    "owner generation",
+    "explicit epoch",
+    "page continuation",
+    "frame session",
+    "frame epoch",
+    "frame sequence"
+  ],
+  "continuation_prints_full_cursor": true,
+  "external_provider_requests": 0,
+  "migration": "none"
+}

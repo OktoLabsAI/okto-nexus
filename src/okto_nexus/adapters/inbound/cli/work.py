@@ -63,7 +63,10 @@ def display(value, as_json=False):
         if value['events']['gap_pending']:
             print('Canonical event history has a pending gap.')
         if value['events']['has_more']:
-            print('More canonical events are available with work events --after-sequence ' + str(value['events']['next_after_sequence']))
+            print('To continue with work events, keep the same connection and use '
+                  f"--session-id for {display_text(session['scope']['session_id'])}, "
+                  f"--stream-epoch for {display_text(value['events']['stream_epoch'])}, "
+                  f"and --after-sequence {value['events']['next_after_sequence']}.")
         if value['requests']['has_more']:
             print('The workspace has more pending requests than this bounded page; select a canonical request ID with work answer.')
     elif 'canonical_state' in value:
