@@ -1,0 +1,60 @@
+{
+  "baseline": "ca7e8ea9b96708ee83bfca693504a1c17d0cefb8",
+  "scope": "Windows, CLI parser and catalog tests with synthetic page contents, real application session-view tests, and installed wheel",
+  "local_evidence_directory": "D:/nxs-si030-catalog-ca7e8ea9",
+  "commands": [
+    "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/session_interaction/test_session_cli.py -k noninteractive_attach_never_prompts_for_a_large_catalog --junitxml D:\\nxs-si030-catalog-ca7e8ea9/before.xml",
+    "python -B -m pytest -q --tb=short tests/session_interaction/test_session_cli.py tests/execution_r4/test_terminal_session_picker.py tests/execution_r4/test_session_views.py --junitxml D:\\nxs-si030-catalog-ca7e8ea9/source-pinned.xml",
+    "uv build --offline --wheel --out-dir D:\\nxs-si030-catalog-ca7e8ea9/dist",
+    "okto-nexus session --help",
+    "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/session_interaction/test_session_cli.py tests/execution_r4/test_terminal_session_picker.py tests/execution_r4/test_session_views.py --junitxml D:\\nxs-si030-catalog-ca7e8ea9/installed.xml",
+    "uv lock --offline --check"
+  ],
+  "baseline_regression": {
+    "tests": 2,
+    "passed": 1,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "before.xml",
+    "junit_sha256": "4dd1d457e7ec541d44dd170e71b4fec7d60634e4602ee258445aa43d320e7663"
+  },
+  "source": {
+    "tests": 94,
+    "passed": 93,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "junit": "source-pinned.xml",
+    "junit_sha256": "ab0ef35cece768bddb00d3cc1b40f9c864e0723d6e090ef6af7b1f15c8d22881"
+  },
+  "installed": {
+    "tests": 94,
+    "passed": 93,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "junit": "installed.xml",
+    "junit_sha256": "19aa84f64debd89673ea7f060a8cf2aa0e2226108a3d66295a0fc4d9d4061b34"
+  },
+  "skip_reason": "requires a POSIX pseudoterminal",
+  "workspace_env_collection_failure": "Development venv had an older Core than the vendored pin; pinned Windows venv used for qualification.",
+  "wheel_sha256": {
+    "nexus": "04c72a3d62107283b8c89dbfaba6c78e37ce789d7ea89423b31833b17f6331c8",
+    "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "checked_sources": {
+    "src/okto_nexus/adapters/inbound/cli/session.py": "22171cd905d54762a97830aab380b33d4ada39e225ff022ace1b816a8b5bb3db",
+    "src/okto_nexus/application/terminal_work.py": "42226be91fc9c1e57c48854df9adb481e16cf7a12c03bc9d79034a8b333119c0",
+    "tests/session_interaction/test_session_cli.py": "ddfcbbf38a5cf27ba79f2986255c15f2b0c5b8ff312eae1c436f7fa8b685473f"
+  },
+  "observed_cases": {
+    "101_retained_with_single_eligible": "Exact session revalidated, JSON returns PRESENTATION_TTY_REQUIRED",
+    "1001_retained_with_partial_first_scan": "Automatic attachment refused and listing continued at session 1001",
+    "selector_scope_drift": "Refused by the existing binding checks",
+    "cursor_validation": "Empty, multiline and attach cursors refused before server lookup"
+  },
+  "external_provider_requests": 0,
+  "migration": "none"
+}

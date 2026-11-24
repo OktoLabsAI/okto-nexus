@@ -24,9 +24,9 @@ def _verify_session_binding(value, binding):
     return scope
 
 
-def list_binding_sessions(call, binding):
+def list_binding_sessions(call, binding, *, after_session_id=''):
     """Read bounded pages for one authorized binding, reporting an incomplete inventory."""
-    items, cursor = [], ''
+    items, cursor = [], after_session_id
     for _ in range(10):
         page = call('GET', PREFIX + '/runtime/sessions?' + urlencode(dict(
             executor_id=binding['executor_id'], binding_id=binding['binding_id'],

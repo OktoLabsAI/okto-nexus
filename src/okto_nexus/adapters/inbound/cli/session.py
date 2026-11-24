@@ -86,8 +86,8 @@ def _host_binding(service, status, args):
     return call, current
 
 
-def _view(call, binding):
-    page = list_binding_sessions(call, binding)
+def _view(call, binding, *, after_session_id=''):
+    page = list_binding_sessions(call, binding, after_session_id=after_session_id)
     return {'state': 'listed', 'scope': {name: binding[name] for name in (
         'server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id', 'workspace_binding_id')},
         **page, 'complete': not page['has_more']}
@@ -103,7 +103,8 @@ def _display(value, as_json):
             print(display_text(item['scope']['session_id']) + ' · ' + display_text(item['lifecycle_state'])
                   + ' · lease ' + display_text(item['lease_state']))
         if value['has_more']:
-            print('The session list is incomplete. Use an exact session ID when attaching.')
+            print('More sessions are available. Repeat session list with --after-session-id '
+                  'set to ' + display_text(value['next_after_session_id']) + '.')
         elif not value['sessions']:
             print('No retained sessions for this connection.')
     elif value['state'] == 'detached':
@@ -124,7 +125,7 @@ def _select_session(call, binding, explicit, *, interactive):
     if page['has_more'] or len(candidates) > 1 and not interactive:
         raise ConnectionError('SESSION_SELECTION_REQUIRED', 'Select the exact live session with --session-id.',
                               choices=candidates)
-    if len(candidates) == 1 and len(page['sessions']) <= 100:
+    if len(candidates) == 1:
         return read_binding_session(call, binding, candidates[0])
     print('Choose a live session to inspect:')
     for index, session_id in enumerate(candidates, 1):
@@ -438,6 +439,7 @@ def run_session(argv):
     parser.add_argument('--workspace-id', help='exact workspace for a public Harness ID')
     parser.add_argument('--operator-profile', help='saved human operator login')
     parser.add_argument('--session-id', help='exact runtime session')
+    parser.add_argument('--after-session-id', help='continue session list after this session ID')
     parser.add_argument('--message-file', type=Path, help='UTF-8 text to review for send or steer')
     parser.add_argument('--intent', help='terminal request identifier for receipt recovery')
     parser.add_argument('--owner-generation', type=int, help='original session owner generation for receipt recovery')
@@ -466,6 +468,11 @@ def run_session(argv):
         parser.error('--write requires interactive attach')
     if args.action in ('list', 'open') and args.session_id is not None:
         parser.error('--session-id requires a specific session action')
+    if args.after_session_id is not None:
+        if args.action != 'list':
+            parser.error('--after-session-id requires list')
+        if not 1 <= len(args.after_session_id) <= 160 or not args.after_session_id.isprintable():
+            parser.error('invalid session list cursor')
     if args.action not in ('list', 'open', 'attach') and args.session_id is None:
         parser.error(f'{args.action} requires the exact --session-id')
     if args.action == 'open' and (args.json or not sys.stdin.isatty() or not sys.stdout.isatty()):
@@ -560,7 +567,7 @@ def run_session(argv):
             result = recover_session_command(call, binding, args.session_id, args.owner_generation, args.intent)
             _display(result, args.json)
             return 0
-        _display(_view(call, binding), args.json)
+        _display(_view(call, binding, after_session_id=args.after_session_id or ''), args.json)
         return 0
     except ConnectionError as error:
         result = {'state': 'refused', 'code': error.code, 'message': error.message}

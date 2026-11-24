@@ -217,6 +217,34 @@ class Catalog:
         pytest.fail(f'Unexpected route {path}')
 
 
+class RetainedCatalog(Catalog):
+    def __init__(self, count):
+        super().__init__()
+        self.ids = ['session-a', *(f'session-b{number:04d}' for number in range(count - 1))]
+
+    def __call__(self, method, url, body=None):
+        parsed = urlsplit(url)
+        if not parsed.path.endswith('/runtime/sessions'):
+            return super().__call__(method, url, body)
+        assert method == 'GET' and body is None
+        query = parse_qs(parsed.query, keep_blank_values=True)
+        assert (query['executor_id'], query['binding_id'], query['agent_id']) == (
+            ['executor'], ['binding'], ['agent'])
+        cursor, = query['after_session_id']
+        limit = int(query['limit'][0])
+        self.routes.append('/runtime/sessions')
+        remainder = [session_id for session_id in self.ids if session_id > cursor]
+        rows = []
+        for session_id in remainder[:limit]:
+            live = session_id == 'session-a'
+            rows.append({'scope': BINDING | {'session_id': session_id},
+                         'lifecycle_state': 'READY' if live else 'CLOSED',
+                         'lease_state': 'ACTIVE' if live else 'CLOSED',
+                         'control_available': live})
+        more = len(remainder) > limit
+        return {'sessions': rows, 'has_more': more, 'next_after_session_id': remainder[limit - 1] if more else None}
+
+
 def test_session_open_confirms_the_selected_connection_without_attaching(monkeypatch, capsys):
     catalog = Catalog(two_live=True)
     catalog.token = 'operator-fixture'
@@ -270,6 +298,47 @@ def test_list_fails_closed_on_later_scope_change(monkeypatch, capsys):
     result = json.loads(capsys.readouterr().out)
     assert result['code'] == 'WORK_SCOPE_CHANGED'
     assert 'sessions' not in result
+
+
+def test_bounded_catalog_can_continue_without_skipping_or_repeating_ids(monkeypatch, capsys):
+    catalog = RetainedCatalog(1001)
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    argv = ['session', 'list', '--id', 'reviewer']
+    assert main([*argv, '--json']) == 0
+    first = json.loads(capsys.readouterr().out)
+    assert first['has_more'] is True and first['complete'] is False
+    assert len(first['sessions']) == 1000
+    assert first['next_after_session_id'] == catalog.ids[-2]
+    assert main(argv) == 0
+    assert ('--after-session-id set to ' + first['next_after_session_id']) in capsys.readouterr().out
+    assert main([*argv, '--json', '--after-session-id', first['next_after_session_id']]) == 0
+    last = json.loads(capsys.readouterr().out)
+    assert last['has_more'] is False and last['complete'] is True
+    assert [row['scope']['session_id'] for row in first['sessions'] + last['sessions']] == catalog.ids
+
+
+@pytest.mark.parametrize(('action', 'cursor'), [('list', ''), ('list', 'bad\ncursor'), ('attach', 'session-a')])
+def test_catalog_cursor_rejected_before_connecting(action, cursor, monkeypatch):
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: pytest.fail('Invalid cursor accessed the Server'))
+    with pytest.raises(SystemExit) as refused:
+        main(['session', action, '--id', 'reviewer', '--after-session-id', cursor])
+    assert refused.value.code == 2
+
+
+@pytest.mark.parametrize(('size', 'code', 'exact_read'), [
+    (101, 'PRESENTATION_TTY_REQUIRED', True),
+    (1001, 'SESSION_SELECTION_REQUIRED', False),
+])
+def test_noninteractive_attach_never_prompts_for_a_large_catalog(size, code, exact_read, monkeypatch, capsys):
+    catalog = RetainedCatalog(size)
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    monkeypatch.setattr('builtins.input', lambda _prompt: pytest.fail('JSON attach opened a session picker'))
+    assert main(['session', 'attach', '--id', 'reviewer', '--json']) == 3
+    result = json.loads(capsys.readouterr().out)
+    assert result['code'] == code and result['choices'] == ['session-a']
+    assert ('/runtime/sessions/session-a' in catalog.routes) is exact_read
 
 
 @pytest.mark.parametrize(('server', 'executor', 'revision', 'code'), [

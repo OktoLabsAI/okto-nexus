@@ -76,6 +76,10 @@ okto-nexus session open --id HARNESS_ID --workspace-id WORKSPACE_ID --operator-p
 okto-nexus session resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SOURCE_SESSION_ID --operator-profile OPERATOR
 ```
 
+If `session list` reports more sessions, repeat it with the same connection
+and pass the reported cursor as `--after-session-id`. In JSON output, use
+`next_after_session_id` while `has_more` is true.
+
 `session open` uses the connection's current authorization and leaves work and
 pending messages with their original session. It prints the new session ID
 after the Server confirms the opening. If the opening is unconfirmed, repeat the
