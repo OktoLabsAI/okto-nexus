@@ -213,5 +213,121 @@
       "live-mcp.log": "274c18d8c5edec37287650b08e0db4c8c8994a4cc7107b784d4cd64666e9a839"
     },
     "external_provider_campaign": "NOT_RUN"
+  },
+  "current_windows_candidate_f2bbb856": {
+    "candidate": {
+      "nexus_head": "f2bbb856a8728570639fac3b25d090f850f3c0f3",
+      "source_archive_and_wheel_package_files": 817,
+      "comparison_to_git": {
+        "exact_git_bytes": 15,
+        "line_endings_only": 802
+      },
+      "dashboard_files": 7,
+      "referenced_assets": {
+        "assets/index-BvpZUnpS.js": "ab6f3f549fcd808e9ab0274ce7891bea6404c26fc74fc05000dd7003af1ff7db",
+        "assets/index-DWAYZd2O.css": "4b5c52c3efaeaa246f6f7f30ecf1d928505dce63b0e8111520b867047f022b31",
+        "logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06"
+      },
+      "sqlite_migrations": 190,
+      "stale_bundle_count": 0,
+      "wheel_sha256": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+      "sdist_sha256": "a2dc3886f3a738c5bf1efcef509ea11f663792ae3852db1ec83e868d3ac1585f"
+    },
+    "windows_python": "3.13.1",
+    "pinned_wheels": {
+      "okto-nexus-connector-core": {
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "version": "0.0.16",
+        "wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+        "tracked_package_paths": 198,
+        "packaged_paths": 198,
+        "comparison": {
+          "identical": 125,
+          "line_endings_only": 73
+        },
+        "not_in_wheel": [],
+        "only_in_wheel": [],
+        "different_paths": []
+      },
+      "okto-nexus-connector": {
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "version": "0.0.15",
+        "wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+        "tracked_package_paths": 133,
+        "packaged_paths": 133,
+        "comparison": {
+          "identical": 133
+        },
+        "not_in_wheel": [],
+        "only_in_wheel": [],
+        "different_paths": []
+      }
+    },
+    "installation": {
+      "offline_dependency_check": "PASS",
+      "offline_lock_check": "PASS",
+      "ci_verified_package_bytes": {
+        "okto_nexus": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+        "nexus_connector_core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+        "okto_nexus_connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+      },
+      "default": {
+        "base_boot_with_core": true,
+        "connector_installed": false,
+        "torch_installed": false
+      },
+      "serve_lite": {
+        "base_boot_with_core": true,
+        "connector_installed": false,
+        "torch_installed": false,
+        "http_protocol": 200,
+        "http_home": 200,
+        "installed_bundle_assets": {
+          "/assets/index-BvpZUnpS.js": "ab6f3f549fcd808e9ab0274ce7891bea6404c26fc74fc05000dd7003af1ff7db",
+          "/assets/index-DWAYZd2O.css": "4b5c52c3efaeaa246f6f7f30ecf1d928505dce63b0e8111520b867047f022b31"
+        }
+      }
+    },
+    "loopback_smoke": {
+      "transport": "HTTP /mcp/",
+      "authenticated_agents": 2,
+      "provider_calls": 0,
+      "real_harnesses_tested": false,
+      "tools_count": 54,
+      "message_observed_via_event_wait": true,
+      "handoff_completed": true,
+      "artifact_round_trip": true,
+      "shared_md_written": true,
+      "all_envelopes_ok": true,
+      "cleanup": {
+        "physical_exit": true,
+        "exit_code": 0,
+        "canonical_stop_exit_code": 0
+      }
+    },
+    "reproduction": [
+      "uv lock --offline --check",
+      "uv pip install --offline --python <disposable Python> <Nexus wheel>[serve-lite,dev] <Core pin> <Connector pin>[test]",
+      "uv pip check --offline --python <disposable Python>",
+      "python -I -B scripts/live_client.py",
+      "python -B tools/ci_installed.py test --wheel <Nexus wheel> --output <disposable reports> --tests <selected test paths>"
+    ],
+    "sha256": {
+      "check_candidate_files.py": "351e183be303f4f5bb37d2fdd0181bdca50d806d1901600f43e466f3ae683fbf",
+      "roundtrip-current.json": "974025470daeeff7b642b63c1c2421dcefd761000e324cc758d2fa7f41148bf5",
+      "verify_pinned_sources.py": "0cde3e715dbac7e07196cc02d3c819a1a9a2433345546caf7cd787c6ff44efe3",
+      "pin-source-check.json": "274200411ba9fa5a4101efc77b3ae31175cc5de097aec967c288fa1dbcf7e710",
+      "check_base_install.py": "8026a5c99f276b4e0534d2e3949730fe3e219858608232d6d6c08860b8e38d7d",
+      "base-boot.json": "f5277f4e86b04fe529735e471f4cf6829c367d37c81163e64b5bca538cb7ded4",
+      "serve-lite-boot.json": "0033108fd7e1753edc2790c32599a148a214cba10a7140249d14d47d906de8e0",
+      "ci/installed.json": "f4e3f9173d9450e1b39cd70934825e19156a93ffdc46be6f95cee4a5eecf2614",
+      "dependency-check.log": "7aab9232042414e0d4230eeb705de346b149c768a2e2b16845590b5d8752071e",
+      "live-mcp.log": "1244745b7c93a1bfa3f72f624a85b4c99dcb822e53ab11cc10e0feacaaeabf43"
+    },
+    "limits": [
+      "The wheel and sdist were created in the previous milestone. No additional distribution was built here.",
+      "The installed CI probe verified artifact bytes and import origin. The separate regression result is recorded only on completion.",
+      "The smoke ran with disposable identities over Windows loopback and did not execute a real harness or use a provider."
+    ]
   }
 }

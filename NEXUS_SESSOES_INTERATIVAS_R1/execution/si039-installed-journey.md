@@ -55,3 +55,11 @@ O `twine check --strict` passou para os dois artefatos e a instalação offline 
 A regressão executada pelo verificador da CI fora do checkout aprovou 407 casos, incluindo CLI, fila, anexação, retomada, recibos e Quick Connect. O único caso pulado exige um pseudoterminal POSIX. [Relatório estruturado](si039-installed-journey.json)
 
 O marco atualiza o artefato local e as evidências de instalação. Dispensa migração. A reversão do registro usa o commit. O gate de campanha de SI-T-I05 segue pendente.
+
+## Auditoria do candidato Windows em `f2bbb856`
+
+A distribuição de código-fonte e o wheel do dashboard atual contêm os mesmos 817 arquivos rastreados do pacote, incluindo 190 migrações e sete arquivos da Home. O conteúdo das duas distribuições é idêntico entre si. A comparação com o Git registrou 15 arquivos idênticos e 802 com diferença apenas na terminação de linha. O HTML aponta para o único bundle JavaScript empacotado. [Hashes e comparação](si039-installed-journey.json)
+
+O Connector 0.0.15 e o Core 0.0.16 fixados na CI correspondem aos checkouts `2b0000a1` e `94aeb596`. A instalação isolada em Python 3.13 validou o conteúdo dos três wheels carregados de `site-packages` e passou nas verificações offline de lock e dependências. A instalação base inicializou com o Core e com o Connector opcional ausente. Com `serve-lite`, a rota de protocolo e a Home retornaram HTTP 200, e os bytes servidos do JavaScript e do CSS corresponderam aos arquivos do wheel.
+
+O smoke HTTP/MCP em loopback confirmou 54 ferramentas, entrega de mensagem, conclusão de handoff, leitura do artefato criado, geração de `shared.md` e a saída do processo após a parada canônica. O ensaio usou identidades descartáveis. A suíte instalada ampliada roda em separado e terá seu resultado registrado após concluir. Este commit atualiza as evidências e dispensa migração. [Resultados e comandos](si039-installed-journey.json)
