@@ -7,3 +7,9 @@ A automação no Edge encontrou o texto do pedido pelo card, colocou o pedido de
 Na rodada humana, o facilitador abre a Home já preparada e apresenta uma tarefa por vez. A primeira pede que a pessoa explique o que o colaborador está atendendo. A segunda pede que envie **Confira também o endereço de entrega** e diga o que a tela indica sobre o momento da resposta. A terceira pede que volte à Home, encontre a conversa e identifique os dois resultados. A primeira resposta fica retida até a pessoa relatar o que entendeu da fila e retornar à conversa. O texto do pedido inicial só aparece no cenário, para que a pessoa o encontre na interface.
 
 O aceite humano continua pendente. Esta etapa atualiza evidências, dispensa migração e pode ser revertida pelo commit de registro.
+
+## Revalidação do candidato atual
+
+A revisão `579bdef6` passou no Edge com o dashboard do wheel e o Connector em loopback nesta máquina. A Home abriu com o projeto selecionado e mostrou **Revisão de remessa** em andamento. O ensaio colocou a mensagem seguinte na fila, saiu do painel e voltou pelo mesmo card. A conversa exibiu as duas respostas, cada uma uma vez. O banco confirmou uma sessão, dois resultados e nenhuma violação de chave estrangeira. O encerramento confirmou a saída do Pi, o fechamento do listener descartável e a remoção do arquivo temporário de autenticação do navegador. [Resultados e hashes](si036-participant-rehearsal.json)
+
+O roteiro humano foi sincronizado com os mesmos wheels e a mesma preparação do projeto. A revalidação acima é automatizada. O aceite do participante continua pendente.

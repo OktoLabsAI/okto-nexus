@@ -70,5 +70,55 @@
     "The rehearsal uses the canonical message endpoint for the seed and a real browser for the follow-up.",
     "The isolated Pi uses fixed responses and has no access to external providers.",
     "The participant-specific launcher was syntax checked. The outcome of the human review is still open."
-  ]
+  ],
+  "current_candidate_recheck": {
+    "nexus": "579bdef6d55c6e3b897809e9a471a68a1302b5ad",
+    "connector": "24e000fb67a7c866ae05b3d68154694991b1095c",
+    "core_docs_head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+    "topology": "Nexus and Connector on the current Windows machine, R4 loopback",
+    "wheel_sha256": {
+      "nexus": "340a16114ee6b968f968ed624d08946834804e8a5fe454d6f130ba0ad67ae060",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "frontend_bundle_sha256": "590d9ed7086854c4866663664cc56ab9bac97d4e6e97b8e915a44c5169af8560",
+    "junit_sha256": "bdec6bfc7462ab3692562ae08dfd57552cc59043852d080f3157f60f2f1c6489",
+    "observations": {
+      "one_session": true,
+      "native_turns": 2,
+      "queued_input_status_observed": "QUEUED",
+      "queued_input_final_status": "ACCEPTED_NATIVE",
+      "seeded_before_opening_browser": true,
+      "browser_opened_via_home": true,
+      "browser_reopened_via_home": true,
+      "browser_showed_clean_incoming_message": true,
+      "browser_showed_both_results_once": true,
+      "external_provider_calls": 0,
+      "native_process_exited_after_canonical_close": true
+    },
+    "passed": 1,
+    "participant_verified": false,
+    "participant_launcher_syntax_checked": true,
+    "evidence_sha256": {
+      "test_rehearsal.py": "0d5a08feab2edf9cd2bdc40e0758a51162c4f396c2febeb269f1a248c074ad1e",
+      "test_participant.py": "96d08620a5eab95fa2a07b1d7dd04c16d6d0135dacea4020dcc864410da4d548",
+      "prepare-home.ps1": "af15fccc43b31250ea44a8fe1e00f384675e115c55954a2c8c0e0950eddee5e2",
+      "rehearse.ps1": "7596d3389b5dc7c6ed9fdcc54837f34f5ddc9007859246728426db7260063cc0",
+      "proof.json": "f7a73380bbad51ca13e27a486fbdb6f5e3d387aa8e91aae9f1fa73bc929ab37d"
+    },
+    "browser_checkpoints_sha256": {
+      "active-harness.log": "fdc240e76e363c1d8d0d65678bb100924e1264d0a19a3a49d0b1e4fe85e24d05",
+      "found-from-home.log": "4490a956c49ee0a0c7c0b5763837348569d4fe14813a7ef078dde267ebde4687",
+      "queue-confirmed.log": "7103c7899c0d66a652f137ccc17708a02e9c3fbcfd1f75f64fe375463b1bf395",
+      "reopened-from-home.log": "92639e4604c2337d5717cfb11c0039359e2c487956a6711606a149f8562c6b3e",
+      "both-replies.log": "ee77463daf3b09f34455905aaf46bb9fc423d6234d57752ff338d9d63b6a5075"
+    },
+    "cleanup": {
+      "disposable_tcp_listener_active": false,
+      "disposable_browser_credential_file_present": false,
+      "connected_remote_owners": 0,
+      "database_integrity": "ok",
+      "foreign_key_violations": 0
+    }
+  }
 }
