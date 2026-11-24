@@ -1,0 +1,150 @@
+{
+  "date": "2026-11-24",
+  "scope": "Receipt acknowledgement loss with Nexus, Connector and Codex on the same Windows machine",
+  "source": {
+    "nexus_branch": "feature/v0.3.8",
+    "nexus_head_before_pin": "b99dd50a599f3929528bacb79183f0fc639f5079",
+    "nexus_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "connector_branch": "feature/v0.0.15",
+    "connector_base": "b73405777688e42e4f3f61f3e5a1d46e546af528",
+    "connector_change": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "connector_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+    "core_branch": "feature/v0.0.16",
+    "core_head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+    "core_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+    "initial_working_trees_clean": true
+  },
+  "artifact": {
+    "package_files": 133,
+    "changed": [
+      "okto_nexus_connector/daemon/r4_execution.py"
+    ],
+    "prior_wheel_sha256": "ce6abefa3b17882e70742c3ab1d0a4b1b55d9294cf46382ce6923bac2e3e45b8",
+    "wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "sdist_sha256": "6de439599f2be65e540f1f543b06b2dde6fa35a0a4038aeb960e2dcbacc19665"
+  },
+  "installed_wheels": {
+    "nexus_0.3.8": "9aa0aa591b46991359fe4deb041edda28c16c6a31d9de48506a7f94688d77a4e",
+    "connector_0.0.15": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_0.0.16": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "dependency_check": "PASS (48 packages)",
+    "twine_strict_wheel_and_sdist": "PASS"
+  },
+  "native_binaries": {
+    "codex_app_server_0.157.0": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "codex_viewer_0.170.0": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "commands": [
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si031-receipt-b99d/install.ps1",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si031-receipt-b99d/native/run.ps1 -Trial receipt4",
+    "rtk proxy D:/nxs-si031-receipt-b99d/venv/Scripts/python.exe -B D:/nxs-si031-receipt-b99d/native/prove_durability.py receipt4",
+    "rtk proxy pwsh -NoProfile -File D:/nxs-si031-receipt-b99d/run-nexus.ps1"
+  ],
+  "results": {
+    "before_fix_new_source_cases": {
+      "tests": 7,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0
+    },
+    "connector_source_regressions": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "nexus_installed_regressions": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native_installed_journey": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "native_proof": {
+    "opening_receipt_reply_lost_after_commit": true,
+    "exact_opening_receipt_reused_on_same_link": true,
+    "opening_receipt_posts": 2,
+    "remote_native_exact_steer": true,
+    "review_did_not_send": true,
+    "exact_original_native_turn_acknowledged": true,
+    "steered_result_on_original_turn": true,
+    "queue_unchanged_until_original_turn_completed": true,
+    "receipt_recovers_after_detach": true,
+    "same_thread_and_app_server_until_close": true,
+    "exact_writer_detaches": 1,
+    "canonical_close": true,
+    "native_turn_starts": 2,
+    "native_steers": 1,
+    "loopback_response_requests": 3,
+    "external_provider_requests": 0
+  },
+  "durability": {
+    "nexus_integrity": "ok",
+    "connector_journal_integrity": "ok",
+    "foreign_key_violations": 0,
+    "operation_counts": {
+      "runtime.open": 1,
+      "turn.submit": 2,
+      "turn.steer": 1,
+      "runtime.close": 1
+    },
+    "closed_sessions": 1,
+    "native_launches": 1,
+    "writer_detaches": 1,
+    "stored_opening_receipts": 1,
+    "steer_source": "native_terminal",
+    "steer_input_final_state": "ACCEPTED_NATIVE",
+    "target_matched_first_turn": true,
+    "web_input_final_state": "ACCEPTED_NATIVE",
+    "results_persisted_in_two_separate_turns": true,
+    "same_native_thread": true
+  },
+  "prior_attempt_limits": [
+    "Receipt recovered and both results were proven from the databases. The fixture queried before the second terminal sequence.",
+    "Receipt recovered again. The isolated viewer environment had discarded Windows processor metadata, so the frontend was refused before attaching.",
+    "Receipt recovered and the viewer attached. The trial script shadowed its keystroke helper with a variable name before sending the steering input."
+  ],
+  "artifact_directory": "D:/nxs-si031-receipt-b99d",
+  "evidence_sha256": {
+    "red2.log": "10accd5da93104cbf32db59006d3c66e8bbd38b2721853f511733586abf75600",
+    "red2.xml": "28b56fe69a97c697ac65d420ec41db8762a6b3b8aadaa9ac142b79dab76cf190",
+    "green.log": "73ea88a85c63d6ff6b853d13ce2cdb944997a95f52171a962cf4691f0f0418d7",
+    "green.xml": "3ec9ce5a015459d7365909f9ae0282ed95a5eba5f80e9c963ad9fe45cc151152",
+    "nexus.log": "2f6afb970759a5ed178bb460f7b818284bcd3651c83889d76036a44012987833",
+    "nexus.xml": "7c32dd40637e27c123e5275fbc2ed0e170e734b01f08ff34ec09c84995cd9c25",
+    "build.log": "5f9752a9de280a5045b2d6be2189a369bb3de8f003e3cb0a3e8e7fb418cb2598",
+    "install.ps1": "93098498e2c455893c84db72b207135be9ccb1e0861fcfc2e5325c7753a82062",
+    "audit_artifact.py": "2843ae2e375e1c0ae8232557236ece4aeaf085449a480c79e7b992259da80eaa",
+    "artifact-proof.json": "6fefa2f1502055bd6cee9654733eb21b07b2588f9424f11582bc9be4a26a7aff",
+    "run-nexus.ps1": "80a8fc97078e64492d335d3c2652257623371f2403ff4a7562acd050c5e4ec15",
+    "native/run.ps1": "75d718441cc43530bbb25b776bbd519d05ee19ea36a4aaadcbe37e9880b08715",
+    "native/test_remote_steer.py": "237aaad3796086c4f09f47663e3cc47d4e191a3cb7a0f60f28910bc94b62760c",
+    "native/isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "native/prove_durability.py": "8e87c73c5247962b51760197a58cfc3107f5516d11f0981e7385a0cb6722ad51",
+    "native/native-receipt1.log": "41af52812730a796f552e0b5fd8231b392a66c5b719718853bb4f0604dc092b3",
+    "native/steer-receipt1.xml": "6758e76caa494bdfacecc4e11d23f3d367244409d4e9f57b39b4a99bed5d470b",
+    "native/durability-receipt1.json": "237196d0c80e886b8db1edc1aff4d58fa6a8fd6bd3f9be5777c0db168bc049b3",
+    "native/native-receipt2.log": "791e6654662bb02f57d523e60b8bc7b66c27b551bcfabe24db593c6836685941",
+    "native/steer-receipt2.xml": "28efebbcaa2bb4efad0411d2c4793f59f5af804accaa7cb0691c2cb45f78c2d7",
+    "native/terminal-receipt2-redacted.txt": "1306c9e027dc0e5b302a7627bd2395aad015865d8e9be4bd120b163a95e6079c",
+    "native/native-receipt3.log": "3f6a1b561965942ff0a5c1d2a0df1793c8b9756bce7665e358eee78e0906c386",
+    "native/steer-receipt3.xml": "410661b3fef4981d075ea16f894a18505a955df2801a4c133dd31ef29b2b3779",
+    "native/terminal-receipt3-redacted.txt": "ce9ba66adc0467e26737aafbb8ef80de4ce5032c20c6e298eb5c6a39bf03ea7c",
+    "native/native-receipt4.log": "65b18e3de97fb0dc6702c6fb4f616a9073ff1b209e23c83b4265aa86668b755e",
+    "native/steer-receipt4.xml": "51733ffcdc2cc4161d5a4c6d62ca276402d08a82c5f9f4e1b5ed71ccc54d7516",
+    "native/proof.json": "939a1a1fd20a16d0f6b48416ef937e372301d12541e517a7f20de87dddf7d580",
+    "native/durability.json": "237196d0c80e886b8db1edc1aff4d58fa6a8fd6bd3f9be5777c0db168bc049b3",
+    "native/terminal-redacted.txt": "92dc8ccd4a29e0d17e16ab8f839e3b246bd79c0fe60cf73abd073c35ff411f51"
+  },
+  "scope_limits": [
+    "The earlier spontaneous transport incident remains unexplained.",
+    "No external inference requests, cross-machine run or macOS measurement.",
+    "No migration and no ledger status changes."
+  ]
+}
