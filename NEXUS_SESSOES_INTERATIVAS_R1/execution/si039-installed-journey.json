@@ -104,5 +104,114 @@
       "tools": 54,
       "canonical_process_exit": true
     }
+  },
+  "current_windows_source_distribution": {
+    "source_refs": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "949ca8a98982f642628a2fde0624623a63356385",
+        "main_after_fetch": "8d77b50c00b417c86818d027aed7497fababac34",
+        "ahead_behind_main": [616, 0]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "24e000fb67a7c866ae05b3d68154694991b1095c",
+        "main_after_fetch": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "ahead_behind_main": [111, 0]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "main_after_fetch": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "ahead_behind_main": [95, 0]
+      },
+      "working_trees_clean": true,
+      "upstream_drift": false
+    },
+    "local_evidence_directory": "D:/nxs-si039-source-dist-949ca8a9",
+    "python": "3.13.1",
+    "uv": "0.10.7",
+    "artifact_sha256": {
+      "dist/okto_nexus-0.3.8.tar.gz": "b2916fa16a62f056806d4d2905d7297c3b5bee50ed6c74aa9e04d4f3cf730164",
+      "dist/okto_nexus-0.3.8-py3-none-any.whl": "8c673d644612701dad509fbc392792294ee4fc04fd8b988013c90225f0414d4b",
+      "vendor/ci/okto_nexus_connector-0.0.15-py3-none-any.whl": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "vendor/wheels/okto_nexus_connector_core-0.0.16-py3-none-any.whl": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "comparison": {
+      "prior_browser_wheel_sha256": "e4e6698c2b4a2052e6db2fffc272835046b547c1f704d99dfd5191d2d621c8d9",
+      "nexus_exact_tracked_file_matches_across_checkout_sdist_and_both_wheels": 815,
+      "dashboard_file_matches": 7,
+      "migration_file_matches": 190,
+      "entry_points_and_metadata_match": true,
+      "prior_wheel_only_stale_build_files": 42,
+      "prior_wheel_only_stale_dashboard_bundles": 40,
+      "prior_wheel_only_stale_python_modules": [
+        "okto_nexus/application/execution_claude_resume_profile.py",
+        "okto_nexus/bootstrap/embedded_codex_saved_contexts.py"
+      ],
+      "wheel_bytes": 4323179,
+      "prior_wheel_bytes": 14555508,
+      "connector": {"exact_matches": 87, "line_endings_only": 46, "other_differences": 0},
+      "core": {"exact_matches": 125, "line_endings_only": 73, "other_differences": 0}
+    },
+    "checks": {
+      "offline_lock_check": "PASS",
+      "offline_install": "PASS",
+      "dependency_check": "PASS",
+      "strict_twine_check": "PASS",
+      "ci_installed_artifact_file_check": "PASS",
+      "base_and_serve_lite_boot_without_optional_connector": "PASS",
+      "packaged_http_routes": {
+        "protocol_status": 200,
+        "home_status": 200,
+        "byte_identical_assets": 2
+      },
+      "installed_regression": {
+        "status": "PASS",
+        "passed": 407,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 1,
+        "skip_reason": "The Pi raw terminal case requires a POSIX pseudoterminal.",
+        "inputs_changed_during_run": false
+      },
+      "live_mcp": {
+        "status": "PASS",
+        "authenticated_agents": 2,
+        "tools": 54,
+        "canonical_process_exit": true,
+        "external_provider_calls": 0
+      }
+    },
+    "commands": [
+      "rtk proxy uv lock --offline --check",
+      "rtk proxy uv build --offline --out-dir D:/nxs-si039-source-dist-949ca8a9/dist",
+      "rtk proxy uv tool run --offline twine check --strict D:/nxs-si039-source-dist-949ca8a9/dist/okto_nexus-0.3.8.tar.gz D:/nxs-si039-source-dist-949ca8a9/dist/okto_nexus-0.3.8-py3-none-any.whl",
+      "rtk proxy python -B D:/nxs-si039-source-dist-949ca8a9/verify_source_dist.py",
+      "rtk proxy python -B D:/nxs-si039-source-dist-949ca8a9/verify_pinned_sources.py",
+      "rtk proxy uv pip install --offline --python D:/nxs-si039-source-dist-949ca8a9/venv/Scripts/python.exe D:/nxs-si039-source-dist-949ca8a9/dist/okto_nexus-0.3.8-py3-none-any.whl[serve-lite,dev] vendor/wheels/okto_nexus_connector_core-0.0.16-py3-none-any.whl vendor/ci/okto_nexus_connector-0.0.15-py3-none-any.whl[test]",
+      "rtk proxy uv pip check --offline --python D:/nxs-si039-source-dist-949ca8a9/venv/Scripts/python.exe",
+      "rtk proxy D:/nxs-si039-source-dist-949ca8a9/base/Scripts/python.exe -I -B D:/nxs-si039-source-dist-949ca8a9/check_base_install.py base",
+      "rtk proxy D:/nxs-si039-source-dist-949ca8a9/base/Scripts/python.exe -I -B D:/nxs-si039-source-dist-949ca8a9/check_base_install.py serve-lite",
+      "rtk proxy D:/nxs-si039-source-dist-949ca8a9/venv/Scripts/python.exe -I -B scripts/live_client.py",
+      "rtk proxy D:/nxs-si039-source-dist-949ca8a9/venv/Scripts/python.exe -B tools/ci_installed.py test --wheel D:/nxs-si039-source-dist-949ca8a9/dist/okto_nexus-0.3.8-py3-none-any.whl --output D:/nxs-si039-source-dist-949ca8a9/ci --tests tests/session_interaction tests/execution_r4/test_terminal_work.py tests/execution_r4/test_terminal_session_picker.py tests/execution_r4/test_session_reuse.py tests/execution_r4/test_session_reuse_migration.py tests/execution_r4/test_canonical_receipt_persistence.py tests/quick_connect/test_quick_connect_cli.py tests/test_runtime_protocol_compatibility.py"
+    ],
+    "evidence_sha256": {
+      "build.log": "271ce6c8cb212e1145f47713b8fbb7f0c7add98c14b8eeb49b8c195781869565",
+      "twine.log": "5b59096b1aa9e8e1dbd05c811c219675df520c76f7209e9f3c9fe2c14a0b8099",
+      "install.log": "8130c6f4300ef87b763d1cefd5410f871611a0152c2bb752163ea89f4b47cecb",
+      "roundtrip.json": "fe338584428c82b8a492b47b710cb8b4a615c3b961d40611e02efbc8a79cb6ed",
+      "pin-source-check.json": "447c967445ead7d836619580fb5dc1698bfa0c036b5e630fb545a12b7fd97b21",
+      "verify_source_dist.py": "efc67c6a1f46d33795bd3f9c1cfb7f0dc0c87ea760dcb596eac963fbcbbf7feb",
+      "verify_pinned_sources.py": "0cde3e715dbac7e07196cc02d3c819a1a9a2433345546caf7cd787c6ff44efe3",
+      "ci/installed.json": "e074477e4ef782e7bf0543c9f35932bde0630b0aa3806e919c94ad3dc8957bcf",
+      "ci/campaign.json": "469ab360b5a929f5eb7a18a5ebd67c786b3f600cf7d4f34b611aa63c67f7b8eb",
+      "ci/tests.xml": "f6d093e4140960e429a34f5bba586abc98a57656d4077ab1ff1fd625be86606a",
+      "check_base_install.py": "8026a5c99f276b4e0534d2e3949730fe3e219858608232d6d6c08860b8e38d7d",
+      "base-boot.json": "f5277f4e86b04fe529735e471f4cf6829c367d37c81163e64b5bca538cb7ded4",
+      "serve-lite-boot.json": "4e8eb08a8acf85fe86a7e7ec7a94e5976c3aafe4fc889e6328187bddd04f774f",
+      "live-mcp.log": "274c18d8c5edec37287650b08e0db4c8c8994a4cc7107b784d4cd64666e9a839"
+    },
+    "external_provider_campaign": "NOT_RUN"
   }
 }
