@@ -6,10 +6,13 @@ after matching the exact operation, thread and turn in the journal. This module
 neither starts a campaign nor handles credentials.
 """
 
+from collections.abc import Callable
 import json
 import os
 from pathlib import Path
 from threading import Lock
+
+from .si038_codex_usage import TurnUsage
 
 
 STEPS = ('setup', 'home', 'interactive', 'queued', 'steer')
@@ -32,6 +35,7 @@ class CampaignBudget:
         self._reservations = {}
         self._observed = {}
         self._terminal = set()
+        self._completed_usage = {}
         self._stopped = False
         try:
             self._publish('x', dict(event='opened', steps=STEPS, provision=PROVISION,
@@ -80,6 +84,10 @@ class CampaignBudget:
             if (not isinstance(intent_id, str) or not intent_id.isprintable()
                     or not 1 <= len(intent_id) <= 160 or intent_id in self._reservations.values()):
                 self._stop('INTENT_INVALID_OR_ALREADY_RESERVED')
+            for group, (turn_id, read) in self._completed_usage.items():
+                current = self._read_completed_usage(read, turn_id)
+                if current.tokens != self._observed[group]:
+                    self._observe(group, current.tokens, terminal=True, turn_id=turn_id)
             if step in ('home', 'interactive') and STEPS[index - 1] not in self._terminal:
                 self._stop('PREVIOUS_ACCOUNTING_UNCONFIRMED')
             if step in ('queued', 'steer') and 'interactive' in self._terminal:
@@ -93,6 +101,33 @@ class CampaignBudget:
                               provision=PROVISION, charged=charged))
             self._reservations[step] = intent_id
 
+    def _read_completed_usage(self, read: Callable[[], TurnUsage | None], turn_id: str | None = None) -> TurnUsage:
+        try:
+            report = read()
+        except Exception:
+            self._stop('EFFECT_OR_USAGE_UNCERTAIN')
+        if (not isinstance(report, TurnUsage) or report.terminal_outcome != 'success'
+                or not isinstance(report.turn_id, str) or not report.turn_id
+                or type(report.tokens) is not int or report.tokens < 0
+                or turn_id is not None and report.turn_id != turn_id):
+            self._stop('EFFECT_OR_USAGE_UNCERTAIN')
+        return report
+
+    def bind_completed_usage(self, group: str, read: Callable[[], TurnUsage | None]) -> None:
+        """Read the exact successful turn again before each subsequent reservation.
+
+        The callback only reads its assigned operation. It runs with the budget
+        lock held so that competing reservations cannot bypass refreshed usage.
+        """
+        with self._lock:
+            if self._stopped:
+                raise BudgetStop('CAMPAIGN_STOPPED')
+            if group in self._completed_usage:
+                self._stop('USAGE_SOURCE_ALREADY_BOUND')
+            observed = self._read_completed_usage(read)
+            self._observe(group, observed.tokens, terminal=True, turn_id=observed.turn_id)
+            self._completed_usage[group] = (observed.turn_id, read)
+
     def observe(self, group: str, tokens: int, *, terminal: bool = False) -> None:
         """Record an exact group's observed delta, including late observations.
 
@@ -101,25 +136,31 @@ class CampaignBudget:
         A terminal execution and observed delta are lower bounds for billing.
         """
         with self._lock:
-            if group not in {GROUPS[step] for step in self._reservations}:
-                self._stop('NO_RESERVATION_FOR_USAGE')
-            if type(tokens) is not int or tokens < self._observed.get(group, 0):
-                self._stop('USAGE_COUNTER_UNKNOWN_OR_REGRESSED')
-            if type(terminal) is not bool:
-                self._stop('TERMINAL_FACT_UNKNOWN')
-            self._observed[group] = tokens
-            if terminal:
-                self._terminal.add(group)
-            observed = sum(self._observed.values())
-            charged = self._charge()
-            self._record(dict(event='observed', group=group, group_tokens=tokens, observed=observed,
-                              charged=charged, terminal=group in self._terminal, final_billing=False))
-            if self._stopped:
-                raise BudgetStop('CAMPAIGN_STOPPED')
-            if observed >= OBSERVED_LIMIT:
-                self._stop('OBSERVED_BUDGET_STOP')
-            if charged >= PREVENTIVE:
-                self._stop('PREVENTIVE_BUDGET_REACHED')
+            self._observe(group, tokens, terminal=terminal)
+
+    def _observe(self, group, tokens, *, terminal, turn_id=None):
+        if group not in {GROUPS[step] for step in self._reservations}:
+            self._stop('NO_RESERVATION_FOR_USAGE')
+        if type(tokens) is not int or tokens < self._observed.get(group, 0):
+            self._stop('USAGE_COUNTER_UNKNOWN_OR_REGRESSED')
+        if type(terminal) is not bool:
+            self._stop('TERMINAL_FACT_UNKNOWN')
+        self._observed[group] = tokens
+        if terminal:
+            self._terminal.add(group)
+        observed = sum(self._observed.values())
+        charged = self._charge()
+        record = dict(event='observed', group=group, group_tokens=tokens, observed=observed,
+                      charged=charged, terminal=group in self._terminal, final_billing=False)
+        if turn_id is not None:
+            record['turn_id'] = turn_id
+        self._record(record)
+        if self._stopped:
+            raise BudgetStop('CAMPAIGN_STOPPED')
+        if observed >= OBSERVED_LIMIT:
+            self._stop('OBSERVED_BUDGET_STOP')
+        if charged >= PREVENTIVE:
+            self._stop('PREVENTIVE_BUDGET_REACHED')
 
     def stop_uncertain(self) -> None:
         """Keep all provisions when a request, receipt or usage is uncertain."""

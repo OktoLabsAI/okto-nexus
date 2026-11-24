@@ -78,3 +78,11 @@ O observador exige um objeto `tokenUsage.total` nas notificações `thread/token
 Os journals de dois ensaios no Windows confirmaram 105 tokens sintéticos no setup e 105, 525 e 420 na sessão do Connector. Ao remover o total da segunda notificação do turno de 525 numa cópia, o leitor anterior devolveu 210 e o estado terminal de sucesso. O leitor corrigido recusou a cópia sem gravar no journal. Os seis casos novos falharam antes da mudança. Depois, passaram 32 testes de contabilização, orçamento e catálogo. [Comandos, versões e hashes](si038-codex-campaign-preflight.json)
 
 Passaram também os três testes canônicos de conexão do Nexus instalado, com o app-server 0.157.0 e respostas simuladas em loopback. A mudança atualiza o observador da campanha e dispensa migração. O rollback reverte o commit. A consulta autenticada e a campanha real continuam pendentes.
+
+## Releitura do consumo antes da reserva
+
+O controlador vincula um turno concluído ao leitor da operação exata. Antes de cada nova reserva, relê os turnos vinculados e registra aumentos de consumo. Se o journal estiver indisponível, se a conclusão deixar de ser verificável ou se o leitor devolver outro turno, interrompe novas admissões e conserva as provisões anteriores.
+
+Na reprodução com uma cópia do journal de setup, o controlador anterior reservou o primeiro trabalho com uma cobrança de 150 mil tokens depois que o consumo do setup subiu de 105 para 375 mil. A releitura registrou os 375 mil no mesmo turno. A nova provisão alcançaria 450 mil e foi recusada. A reserva já gravada para o setup permaneceu no registro. [Comandos e hashes](si038-codex-campaign-preflight.json)
+
+Passaram 39 testes focados e quatro testes com o Nexus instalado e o app-server Codex 0.157.0. No caso tardio, uma única requisição ao simulador completou o setup. Uma notificação acrescentada à cópia do journal reproduziu a revisão de consumo, e a próxima reserva foi recusada. O SQLite confirmou zero vínculos, commits de setup e sessões na tentativa bloqueada. O marco dispensa migração e pode ser revertido pelo commit. A campanha com provedor real continua pendente. [Resultados e hashes](si038-codex-campaign-preflight.json)

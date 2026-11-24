@@ -3,6 +3,7 @@ import json
 import pytest
 
 from tools.si038_codex_budget import BudgetStop, CampaignBudget
+from tools.si038_codex_usage import TurnUsage, UnconfirmedUsage
 
 
 def records(budget):
@@ -55,6 +56,70 @@ def test_accounting_cannot_be_assumed_from_reservation(tmp_path):
     with pytest.raises(BudgetStop, match='PREVIOUS_ACCOUNTING_UNCONFIRMED'):
         budget.reserve('home', 'home-intent')
     assert [event['event'] for event in records(budget)] == ['opened', 'reserved', 'stopped']
+
+
+@pytest.mark.parametrize('late_total', [374_999, 375_000])
+def test_completed_turn_is_read_again_before_admitting_first_work(tmp_path, late_total):
+    budget = CampaignBudget(tmp_path)
+    budget.reserve('setup', 'setup-intent')
+    reports = iter([TurnUsage('setup-turn', 105, 'success'), TurnUsage('setup-turn', late_total, 'success')])
+    budget.bind_completed_usage('setup', lambda: next(reports))
+    if late_total == 375_000:
+        with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
+            budget.reserve('home', 'home-intent')
+        assert records(budget)[-1]['event'] == 'stopped'
+        assert not any(item.get('step') == 'home' for item in records(budget))
+    else:
+        budget.reserve('home', 'home-intent')
+        assert records(budget)[-1]['charged'] == 449_999
+    late = records(budget)[-2]
+    assert late['event'] == 'observed' and late['group_tokens'] == late_total
+    assert late['turn_id'] == 'setup-turn'
+
+
+@pytest.mark.parametrize('new_report', [
+    None,
+    TurnUsage('different-turn', 105, 'success'),
+    TurnUsage('setup-turn', 105, None),
+    UnconfirmedUsage('JOURNAL_COVERAGE_GAP'),
+], ids=['missing', 'different-turn', 'terminal-unconfirmed', 'journal-unreadable'])
+def test_uncertain_refresh_stops_reservation_without_replacing_observation(tmp_path, new_report):
+    budget = CampaignBudget(tmp_path)
+    budget.reserve('setup', 'setup-intent')
+    reports = iter([TurnUsage('setup-turn', 105, 'success'), new_report])
+
+    def read():
+        report = next(reports)
+        if isinstance(report, Exception):
+            raise report
+        return report
+
+    budget.bind_completed_usage('setup', read)
+    with pytest.raises(BudgetStop, match='EFFECT_OR_USAGE_UNCERTAIN'):
+        budget.reserve('home', 'home-intent')
+    assert [item['event'] for item in records(budget)] == ['opened', 'reserved', 'observed', 'stopped']
+    assert records(budget)[-2]['group_tokens'] == 105
+
+
+def test_late_home_usage_blocks_steer_and_retains_the_queue_reservation(tmp_path):
+    budget = CampaignBudget(tmp_path)
+    budget.reserve('setup', 'setup-intent')
+    budget.bind_completed_usage('setup', lambda: TurnUsage('setup-turn', 105, 'success'))
+    budget.reserve('home', 'home-intent')
+    home_total = 210
+    budget.bind_completed_usage('home', lambda: TurnUsage('home-turn', home_total, 'success'))
+    budget.reserve('interactive', 'interactive-intent')
+    budget.reserve('queued', 'queued-intent')
+    home_total = 150_000
+
+    with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
+        budget.reserve('steer', 'steer-intent')
+
+    entries = records(budget)
+    assert entries[-2]['group'] == 'home' and entries[-2]['group_tokens'] == 150_000
+    assert entries[-2]['charged'] == 375_000
+    assert [entry['step'] for entry in entries if entry['event'] == 'reserved'] == [
+        'setup', 'home', 'interactive', 'queued']
 
 
 @pytest.mark.parametrize('tokens', [225_000, 240_000])

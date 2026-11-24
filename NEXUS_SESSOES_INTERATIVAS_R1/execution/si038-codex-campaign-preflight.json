@@ -714,5 +714,103 @@
     "authenticated_catalog": "NOT_RUN",
     "actual_paid_campaign": "NOT_RUN",
     "migration": "none"
+  },
+  "completed_usage_refresh": {
+    "platform": "Windows x64",
+    "intake": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "3bf87912e60bfa8feadb01800d36e49bb59a605d",
+        "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+        "head_main_drift": [
+          641,
+          0
+        ]
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+        "head_main_drift": [
+          113,
+          0
+        ]
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+        "head_main_drift": [
+          95,
+          0
+        ]
+      },
+      "working_trees_clean": true
+    },
+    "replay": {
+      "initial_tokens": 105,
+      "late_tokens": 375000,
+      "before_reservation_charged": 150000,
+      "prospective_charge_after_reread": 450000,
+      "after_decision": "PREVENTIVE_BUDGET_REACHED"
+    },
+    "tests": {
+      "utilities": {
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "native_setup": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "native_fixture": {
+      "observations": [
+        105,
+        375000
+      ],
+      "verified_same_turn": true,
+      "injected_on_journal_copy": true,
+      "reserved_steps": [
+        "setup"
+      ],
+      "one_model_request": true,
+      "database_rows": {
+        "execution_bindings": 0,
+        "connection_setup_commits": 0,
+        "execution_sessions": 0
+      },
+      "quick_check": "ok",
+      "foreign_key_violations": 0,
+      "budget_sha256": "e4d4100d3da204470af4c93a581616a693520984a972d20da85c4114cf28c435"
+    },
+    "installed_sha256": {
+      "nexus": "63f5c509f01accc15138867eb716b0dad78e5f4f373a4db35b0227869b14a6b0",
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+      "codex_app_server_0_157_0": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+    },
+    "commands": [
+      "python -B <evidence>/replay-late.py <run-dir> <closed-loopback-setup-journal> before|after",
+      "python -B -m pytest -q --tb=short tests/test_si038_codex_budget.py tests/test_si038_codex_usage.py tests/test_si038_codex_catalog.py",
+      "python -B -m pytest -o pythonpath= -p assert_setup_wheels -q --tb=short tests/execution_r4/test_si038_codex_setup_qualification.py"
+    ],
+    "evidence_directory": "C:/Users/jpamb/AppData/Local/Temp/nexus-si038-late-consumption-3bf87912",
+    "evidence_sha256": {
+      "before-replay.json": "b3aaed458a16887d327d46fdae32ab9d9a9dff0d5723afdb7344d72fe931a3a6",
+      "after-replay.json": "f2c0c0e0cdae9229b0c439869747c7a93ec80ca2f8156bdbaa0bc161ea5fea19",
+      "replay-late.py": "ed2cc922ae8c5f2df71aa31a69c00f35c663fb07821514c476cc38371fb4d984",
+      "final-unit.xml": "68d7edb6fc53e8cc2fba1ae76c05efcb9d75c496404feca8337a4b125a453f6f",
+      "final-unit.log": "6a9c5687f895547e42b8550d166af74d0e8edbd1154d521348c2dfd7cec0f593",
+      "native.xml": "8bcb2e020ef547288913feb43da73dc2ec53a3d5dd3f596510a01f3f51718466",
+      "native.log": "23c16edefa714370c9d3286a1dec9ae6abc37017a13cbf40a98b45b2457d157c"
+    },
+    "external_provider_requests": 0,
+    "actual_paid_campaign": "NOT_RUN",
+    "migration": "none"
   }
 }

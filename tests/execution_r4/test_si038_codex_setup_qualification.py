@@ -41,13 +41,14 @@ def reviewed_codex():
                                  build_identity=executable_build_identity(binary))
 
 
-@pytest.mark.parametrize(("text", "expected", "tokens", "block_next"), [
-    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 105, False, id="successful-test"),
-    pytest.param("Different response", "failed", 105, False, id="unexpected-result"),
-    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 375_000, True, id="preventive-boundary"),
+@pytest.mark.parametrize(("text", "expected", "tokens", "block_next", "late_tokens"), [
+    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 105, False, None, id="successful-test"),
+    pytest.param("Different response", "failed", 105, False, None, id="unexpected-result"),
+    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 375_000, True, None, id="preventive-boundary"),
+    pytest.param("NEXUS_CONNECTION_OK", "succeeded", 105, True, 375_000, id="late-preventive-boundary"),
 ])
 def test_setup_accounts_for_one_native_turn_before_finish(
-        tmp_path, monkeypatch, reviewed_codex, text, expected, tokens, block_next):
+        tmp_path, monkeypatch, reviewed_codex, text, expected, tokens, block_next, late_tokens):
     provider_home, workspace = tmp_path / "codex-home", tmp_path / "workspace"
     provider_home.mkdir()
     workspace.mkdir()
@@ -124,13 +125,30 @@ stream_max_retries = 0
         thread.start()
         try:
             _run_setup(tmp_path, monkeypatch, reviewed_codex, provider_home, workspace, requests, processes,
-                       expected, tokens, block_next)
+                       expected, tokens, block_next, late_tokens)
         finally:
             provider.shutdown()
             thread.join()
 
 
-def _run_setup(root, monkeypatch, candidate, provider_home, workspace, requests, processes, expected, tokens, block_next):
+def _append_late_usage(journal, tokens):
+    """Add a fixture-only usage notification to the copied, closed test journal."""
+    with closing(sqlite3.connect(journal)) as db:
+        raw, = db.execute("""SELECT body FROM events
+            WHERE json_extract(body,'$.native_type')='thread/tokenUsage/updated'""").fetchone()
+        sequence, = db.execute("SELECT next_sequence FROM event_streams").fetchone()
+        report = json.loads(raw)
+        report["sequence"] = sequence
+        total = report["payload"]["tokenUsage"]["total"]
+        total["inputTokens"] = tokens - total["outputTokens"]
+        total["totalTokens"] = tokens
+        db.execute("INSERT INTO events VALUES (?,?,?,?,?,?)", (*SETUP_SCOPE, sequence, json.dumps(report).encode()))
+        db.execute("UPDATE event_streams SET next_sequence=?", (sequence + 1,))
+        db.commit()
+
+
+def _run_setup(root, monkeypatch, candidate, provider_home, workspace, requests, processes,
+               expected, tokens, block_next, late_tokens):
     from tools.si038_codex_budget import BudgetStop, CampaignBudget
     from tools.si038_codex_usage import read_turn_usage
 
@@ -179,23 +197,39 @@ def _run_setup(root, monkeypatch, candidate, provider_home, workspace, requests,
         assert count(setup, "execution_bindings") == 0
 
         journal, = (root / "home" / "connection-tests").glob("*/journal.db")
+        tracked_journal = root / "late-usage-copy.db" if late_tokens is not None else journal
         with closing(sqlite3.connect(journal.as_uri() + "?mode=ro", uri=True)) as db:
             thread_id, = db.execute("""SELECT json_extract(body,'$.payload.thread_id') FROM events
                 WHERE json_extract(body,'$.operation_id')='turn'
                 AND json_extract(body,'$.payload.delivery_phase')='started'""").fetchone()
             assert db.execute("PRAGMA quick_check").fetchone() == ("ok",)
-        observed = read_turn_usage(journal, SETUP_SCOPE, thread_id=thread_id, operation_id="turn")
+            if late_tokens is not None:
+                with closing(sqlite3.connect(tracked_journal)) as copy:
+                    db.backup(copy)
+
+        def read_usage():
+            return read_turn_usage(tracked_journal, SETUP_SCOPE, thread_id=thread_id, operation_id="turn")
+
+        observed = read_usage()
         assert observed.tokens == tokens and observed.terminal_outcome == "success"
-        budget.observe("setup", observed.tokens, terminal=expected == "succeeded")
+        if expected == "succeeded":
+            budget.bind_completed_usage("setup", read_usage)
+        else:
+            budget.observe("setup", observed.tokens)
 
         replay = client.post(SETUP_ROOT + "/setup:test", headers=headers, json=request)
         assert replay.status_code == 200 and replay.json() == view
         if block_next:
+            if late_tokens is not None:
+                _append_late_usage(tracked_journal, late_tokens)
             with pytest.raises(BudgetStop, match="PREVENTIVE_BUDGET_REACHED"):
                 budget.reserve("home", "first-work")
             entries = [json.loads(line) for line in budget.path.read_text(encoding="utf-8").splitlines()]
-            assert [entry["event"] for entry in entries] == ["opened", "reserved", "observed", "stopped"]
-            assert entries[-2]["observed"] == tokens
+            assert [entry["event"] for entry in entries] == [
+                "opened", "reserved", *(["observed"] * (2 if late_tokens is not None else 1)), "stopped"]
+            assert entries[2]["group_tokens"] == tokens
+            assert entries[-2]["observed"] == (late_tokens if late_tokens is not None else tokens)
+            assert entries[2]["turn_id"] == entries[-2]["turn_id"] == observed.turn_id
             assert len(requests) == len(processes) == 1
             assert count(setup, "execution_bindings") == count(setup, "connection_setup_commits") == 0
             assert count(setup, "execution_sessions") == 0
