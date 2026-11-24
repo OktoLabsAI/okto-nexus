@@ -161,15 +161,33 @@ class TerminalWork(TerminalAuthorization):
         self._resolved(slot, resolution, binding)
         return self._admit(slot, binding)
 
-    def _resolved(self, slot, resolution, binding):
-        self._check_scope(resolution['scope'], binding)
+    def _resolution_session(self, slot, resolution, binding):
+        scope = _verify_session_binding(resolution, binding)
+        session_id = resolution['session_id']
+        requested = slot['request_context'].get('session_id')
+        confirmed = slot.get('submission')
         if (resolution['client_intent_id'] != slot['client_intent_id'] or
-                resolution['semantic_intent']['action'] != ('runtime.open' if slot['intent'] == 'runtime.start' else slot['intent'])):
+                resolution['semantic_intent']['action'] != ('runtime.open' if slot['intent'] == 'runtime.start' else slot['intent'])
+                or session_id != scope.get('session_id') or (requested is not None and session_id != requested)
+                or (confirmed is not None and any(resolution[key] != confirmed[key] for key in SUBMISSION))):
             raise ConnectionError('WORK_RECEIPT_MISMATCH', 'The recovered intent does not match this request.')
+        return session_id
+
+    def _check_operation_receipt(self, operation, submission, binding, session_id):
+        self._check_scope(operation['scope'], binding)
+        if (operation['operation_id'] != submission['operation_id'] or
+                operation['intent_hash'] != submission['intent_hash'] or
+                operation['scope']['session_id'] != session_id):
+            raise ConnectionError('WORK_RECEIPT_MISMATCH', 'The admission belongs to another operation.', possible_effect=True)
+
+    def _resolved(self, slot, resolution, binding, operation=None):
+        session_id = self._resolution_session(slot, resolution, binding)
+        if operation is not None:
+            self._check_operation_receipt(operation, resolution, binding, session_id)
         slot['submission'] = {key: resolution[key] for key in SUBMISSION}
         slot['state'] = 'resolved' if resolution['can_submit'] else 'blocked'
         slot['blockers'] = resolution['blockers']
-        self.document['session_id'] = resolution['session_id']
+        self.document['session_id'] = session_id
         self._save()
 
     def _admit(self, slot, binding):
@@ -185,11 +203,7 @@ class TerminalWork(TerminalAuthorization):
                 slot['blockers'] = [error.code]
                 self._save()
             raise
-        self._check_scope(operation['scope'], binding)
-        if (operation['operation_id'] != slot['submission']['operation_id'] or
-                operation['intent_hash'] != slot['submission']['intent_hash'] or
-                operation['scope']['session_id'] != self.document['session_id']):
-            raise ConnectionError('WORK_RECEIPT_MISMATCH', 'The admission belongs to another operation.', possible_effect=True)
+        self._check_operation_receipt(operation, slot['submission'], binding, self.document['session_id'])
         slot['state'] = 'admitted'
         self._save()
         receipt = self.api('GET', '/runtime/intents/' + quote(slot['client_intent_id'], safe=''))
@@ -217,15 +231,10 @@ class TerminalWork(TerminalAuthorization):
             if error.code == 'NOT_FOUND':
                 raise ConnectionError('INTENT_NOT_FOUND', 'The saved intent was not found. Re-enter the exact original request to retry resolution.') from None
             raise
-        self._resolved(slot, receipt['resolution'], binding)
         operation = receipt['operation']
+        self._resolved(slot, receipt['resolution'], binding, operation)
         if operation is None:
             return self._admit(slot, binding)
-        self._check_scope(operation['scope'], binding)
-        if (operation['operation_id'] != slot['submission']['operation_id'] or
-                operation['intent_hash'] != slot['submission']['intent_hash'] or
-                operation['scope']['session_id'] != self.document['session_id']):
-            raise ConnectionError('WORK_RECEIPT_MISMATCH', 'The recovered operation does not match the saved request.')
         slot['state'] = 'admitted'
         self._save()
         return operation | {'submission_turn_operation_id': self._initial_turn(slot, receipt)}
@@ -261,13 +270,12 @@ class TerminalWork(TerminalAuthorization):
         if slot and not session_id:
             receipt = self.api('GET', '/runtime/intents/' + quote(slot['client_intent_id'], safe=''))
             resolution = receipt['resolution']
-            self._check_scope(resolution['scope'], binding)
-            selected_session = resolution['session_id']
+            selected_session = self._resolution_session(slot, resolution, binding)
             operation = receipt['operation']
             if operation is None:
                 return dict(state='submission_unconfirmed' if resolution['can_submit'] else 'blocked',
                     client_intent_id=slot['client_intent_id'], blockers=resolution['blockers'], session_id=selected_session)
-            self._check_scope(operation['scope'], binding)
+            self._check_operation_receipt(operation, resolution, binding, selected_session)
             child = self._initial_turn(slot, receipt)
             operations = [operation] + ([self.operation(child, binding)] if child else [])
             if any(item['scope']['session_id'] != selected_session for item in operations):

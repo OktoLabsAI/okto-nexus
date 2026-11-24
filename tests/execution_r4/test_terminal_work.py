@@ -211,7 +211,7 @@ def work(connected_local):
     setup, binding, native = connected_local
     deps, app, client, *_ = setup
     saved, calls = [], []
-    fault = SimpleNamespace(after=None, before=None)
+    fault = SimpleNamespace(after=None, before=None, response=None)
     def call(method, path, body=None):
         calls.append((method, path))
         if fault.before and path.endswith(fault.before):
@@ -226,7 +226,7 @@ def work(connected_local):
         if fault.after and path.endswith(fault.after):
             fault.after = None
             raise ConnectionError('OUTCOME_UNKNOWN', 'Injected lost response', possible_effect=True)
-        return value
+        return fault.response(method, path, value) if fault.response else value
     connection = dict(state='done', server_id=binding['server_id'], selection=dict(agent='subject', client='codex',
         project=str(setup[6].resolve()), workspace_id=None, candidate_ref=None, provider_home=None), result={'binding': binding})
     def save(document):
@@ -319,6 +319,74 @@ def test_lost_submission_response_recovers_same_work_without_duplicate_dispatch(
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 2
     assert t.native.opens == 1
     assert [item[0] for item in t.native.native.sent] == ['send_turn']
+
+
+@pytest.mark.parametrize('stage', ['submit', 'resume', 'observe'])
+def test_work_refuses_a_resolution_for_a_sibling_session(work, stage):
+    t = work
+    selected = test_embedded_dispatch.admit(t.setup, t.binding, 'prepare-original', 'runtime.start', new_session=True)
+    wait_receipt(t.setup, selected)
+    selected_peer = t.native.native
+    sibling = test_embedded_dispatch.admit(t.setup, t.binding, 'prepare-sibling', 'runtime.start', new_session=True)
+    wait_receipt(t.setup, sibling)
+    sibling_peer = t.native.native
+    selected_id, sibling_id = (item['scope']['session_id'] for item in (selected, sibling))
+    assert selected_id != sibling_id
+    options = {'session_id': selected_id, 'client_intent_id': 'exact-session-work'}
+    receipt_path = '/runtime/intents/' + options['client_intent_id']
+
+    if stage != 'submit':
+        t.fault.after = '/runtime/intents:resolve'
+        with pytest.raises(ConnectionError, match='Injected lost response'):
+            t.flow.submit('Continue only the original', **options)
+
+    def substitute(_method, path, value):
+        if stage == 'submit' and path.endswith('/runtime/intents:resolve'):
+            resolution = value
+        elif stage != 'submit' and path.endswith(receipt_path):
+            resolution = value['resolution']
+        else:
+            return value
+        resolution['session_id'] = resolution['scope']['session_id'] = sibling_id
+        resolution['semantic_intent']['session_id'] = sibling_id
+        return value
+
+    t.fault.response = substitute
+    t.calls.clear()
+    saved = len(t.saved)
+    with pytest.raises(ConnectionError) as refused:
+        if stage == 'submit':
+            t.flow.submit('Continue only the original', **options)
+        else:
+            getattr(t.flow, stage)()
+    assert refused.value.code == 'WORK_RECEIPT_MISMATCH'
+    assert t.flow.document['work']['state'] == 'resolve_submitted'
+    assert t.flow.document['work']['request_context']['session_id'] == selected_id
+    assert len(t.saved) == saved + (stage == 'submit')
+    assert not any(method == 'POST' and path.endswith('/runtime/operations') for method, path in t.calls)
+    assert t.native.opens == 2 and selected_peer is not sibling_peer
+    assert not selected_peer.sent and not sibling_peer.sent
+
+
+@pytest.mark.parametrize('changed', ['operation_id', 'intent_hash'])
+def test_resume_keeps_the_last_confirmed_receipt_when_the_resolution_changes(work, changed):
+    t = work
+    operation = t.flow.submit('Keep the original receipt', client_intent_id='original-receipt')
+    complete(t, operation)
+    original = deepcopy(t.flow.document)
+
+    def substitute(_method, path, value):
+        if path.endswith('/runtime/intents/original-receipt'):
+            value['resolution'][changed] = 'different'
+        return value
+
+    t.fault.response = substitute
+    t.calls.clear()
+    with pytest.raises(ConnectionError) as refused:
+        t.flow.resume()
+    assert refused.value.code == 'WORK_RECEIPT_MISMATCH'
+    assert t.flow.document == t.saved[-1] == original
+    assert all(method == 'GET' for method, _ in t.calls)
 
 
 def test_unconfirmed_resolution_requires_exact_original_request(work):
