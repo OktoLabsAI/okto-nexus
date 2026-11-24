@@ -6,4 +6,6 @@ A primeira rodada parou na inicialização do Nexus porque o diretório temporá
 
 A rodada seguinte repetiu a prova nativa com o mesmo build. Passaram 116 testes do Nexus instalado, incluindo o teste de UTF-8 e restauração do terminal após erro em um PTY real do macOS. Cinco casos de renovação pararam antes de exercitar a sessão porque o caminho do socket Unix incluía o nome longo do teste. A fixture passou a reservar uma raiz curta para o daemon, com o mesmo transporte e a mesma verificação de autoridade. [Rodada do terminal](https://github.com/OktoLabsAI/okto-nexus/actions/runs/45311897381)
 
+Na rodada final, o Pi repetiu a prova nativa e passaram 121 testes com os três wheels instalados. O caso de eventos do console Windows foi pulado. As cinco verificações de renovação passaram no macOS e no Windows com a raiz curta. No macOS, elas usaram HTTP e WebSocket do Nexus, o socket Unix do Connector e um executor sintético. [Rodada final](https://github.com/OktoLabsAI/okto-nexus/actions/runs/45313593765)
+
 O ensaio nativo exercita o processo Pi com RPC direto. A apresentação hospedada e a continuidade do trabalho pelo fluxo integrado do Nexus ainda aguardam prova no macOS. O marco dispensa migração. A reversão usa os commits do workflow e do terminal, com os dados de execução preservados.

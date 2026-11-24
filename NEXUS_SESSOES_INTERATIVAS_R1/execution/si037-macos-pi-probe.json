@@ -73,7 +73,9 @@
     "updated_terminal_passed": 4,
     "updated_terminal_skipped": 1,
     "installed_runner_partition_passed": 2,
-    "isolated_terminal_transport_collected": 45
+    "isolated_terminal_transport_collected": 45,
+    "remote_renewal_short_path_passed": 5,
+    "remote_renewal_junit_sha256": "2ea67d34cfa197e65cbb737abf175a3ad2f6ae99be782da8a3d9cff145eaff1b"
   },
   "limits": [
     "Direct Pi RPC on Intel macOS with deterministic model responses",
@@ -96,5 +98,27 @@
     "failures_before_remote_daemon_start": "AF_UNIX path too long",
     "junit_sha256": "eae6f69f3da6f163b90c1196b4e6e4abe0946dbf05a8b7941c8b9ffac4128989",
     "proof_sha256": "1ad9080bc250077f6e886a9897c3cbacbf9227215a7a72a389196d21cafce4d5"
+  },
+  "final_run": {
+    "run_id": 45313593765,
+    "artifact_id": 14885232246,
+    "archive_sha256": "cadd9244d120cf1286de6fee8001ce3d8828a04053ccb7bdb86f52226e7f9c39",
+    "nx_commit": "f4871cc49d62d4a977ca0d908863a7ab79fa0ba3",
+    "native_probe": "PASS",
+    "installed_passed": 121,
+    "tests": 122,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "wheel_sha256": {
+      "okto_nexus": "689390fa4d879e280ff6c8d60e4baa5a9992aa2946f34852522ba595e3ab9222",
+      "nexus_connector_core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+      "okto_nexus_connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3"
+    },
+    "skipped_reason": "Windows console input",
+    "remote_renewal_fixture_passed": 5,
+    "junit_sha256": "e14d1e10d6ec31e883a7394b6a2bb587eb73c025fab83886e6cff9918f7bc962",
+    "native_proof_sha256": "1ad9080bc250077f6e886a9897c3cbacbf9227215a7a72a389196d21cafce4d5",
+    "installed_campaign_sha256": "4b16300286bef4f6a920b744b517b91cb1f9f4fd26dde5274688671ef8d6b7ef"
   }
 }
