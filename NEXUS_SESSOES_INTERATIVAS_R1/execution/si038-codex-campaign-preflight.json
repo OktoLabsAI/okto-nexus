@@ -291,5 +291,65 @@
       "pwsh -NoProfile -File D:/nxs-si038-driver-ace9cfe5/rehearsal-three/drive.ps1 -Root D:/nxs-si038-driver-ace9cfe5/rehearsal-three",
       "rtk proxy python -B D:/nxs-si038-driver-ace9cfe5/rehearsal-three/verify_rehearsal.py"
     ]
+  },
+  "si038_canonical_setup_rehearsal": {
+    "baseline": "ac002aba779f888cdd914f8484e58dff5be28301",
+    "installed_nexus_source": "579bdef6d55c6e3b897809e9a471a68a1302b5ad",
+    "scope": "Windows with installed wheels, in-process operator HTTP routes and real app-server with simulated loopback Responses",
+    "local_evidence_directory": "D:/nxs-si038-setup-ac002aba",
+    "source": "tests/execution_r4/test_si038_codex_setup_qualification.py",
+    "source_sha256": "fc3ae2868df9382b7a927ad5dd69e297ea76af8b6da711ffbcb4009e341f703e",
+    "wheel_sha256": {
+      "nexus": "340a16114ee6b968f968ed624d08946834804e8a5fe454d6f130ba0ad67ae060",
+      "connector": "5dbf3a86e770a4f0cdd0bd32ecb995ccd1f0129ea24ae1df4fecc0c70dcff5f3",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "codex_app_server_version": "0.157.0",
+    "codex_app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "opt_in_env": "SI038_REVIEWED_CODEX_ENGINE",
+    "commands": [
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -s -q --tb=short tests/execution_r4/test_si038_codex_setup_qualification.py --basetemp D:\\nxs-si038-setup-ac002aba/pytest-verified --junitxml D:\\nxs-si038-setup-ac002aba/setup-verified.xml",
+      "python -B -m pytest -o pythonpath= -p assert_wheel_imports -q --tb=short tests/execution_r4/test_connection_test.py tests/test_si038_codex_budget.py tests/test_si038_codex_usage.py --basetemp D:\\nxs-si038-setup-ac002aba/regression-pytest --junitxml D:\\nxs-si038-setup-ac002aba/regression.xml"
+    ],
+    "native": {
+      "tests_passed": 2,
+      "junit": "setup-verified.xml",
+      "junit_sha256": "ce4ea2f9f7e459f907051abf2d2e877ea8e6be70f17b04345fd7de9bf7891f07"
+    },
+    "regression": {
+      "tests_passed": 31,
+      "junit": "regression.xml",
+      "junit_sha256": "2def982c05f30b0bc6944895d4f07d9b5f52332d06c79e155bdeddffc484c507"
+    },
+    "cases": {
+      "validated": {
+        "native_turn_tokens": 105,
+        "loopback_response_requests": 1,
+        "process_exit_observed": true,
+        "finish": "committed",
+        "binding_count": 1,
+        "runtime_sessions": 0,
+        "setup_receipt_recovered": true,
+        "next_admission_blocked": false,
+        "budget_sha256": "768d01bec91126b29a7b06224a8ceee7857978395b98184c87f4817d785444b4"
+      },
+      "unexpected_response": {
+        "native_turn_tokens": 105,
+        "loopback_response_requests": 1,
+        "process_exit_observed": true,
+        "finish": "rejected",
+        "binding_count": 0,
+        "runtime_sessions": 0,
+        "setup_receipt_recovered": false,
+        "next_admission_blocked": true,
+        "budget_sha256": "514147ddad0517c2869c4d1ae326c33f01f4008951635c4b1f15b05c9a4fd692"
+      }
+    },
+    "early_failures": [
+      "The inventory route required the temporary operator key.",
+      "Test could complete, while Finish correctly required authorized operator and project identities."
+    ],
+    "external_provider_requests": 0,
+    "actual_paid_campaign": "NOT_RUN"
   }
 }
