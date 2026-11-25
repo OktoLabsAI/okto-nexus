@@ -1,0 +1,67 @@
+{
+  "tasks": ["SI-028", "SI-029"],
+  "revisions": {
+    "nexus": "8bcee9bd3e12901c448dc57cb3821c6dd295de9c",
+    "checked_nexus_head": "bd8c745620bd2486140fb3b4b31760e74407eec6",
+    "connector": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": "Windows, installed CLI executables, isolated ConPTY, SQLite, Git repositories and loopback Server",
+  "fixture_directory": "D:/nxs-si028-si029-current-wheel-bd8c7456",
+  "regressions": {
+    "grammar_and_connection_cases": 115,
+    "conpty_connect_modes_cases": 1,
+    "git_and_conpty_cases": 1,
+    "native_pi_selection_cases": 1,
+    "failures": 0,
+    "skipped": 0
+  },
+  "observations": {
+    "refusal_invocations": 8,
+    "refusal_loopback_connections": 0,
+    "refusal_state_files_created": 0,
+    "plan_mode_http_mutations": 0,
+    "default_confirmation": "[y/N]",
+    "json_configured_without_presentation": true,
+    "json_attach_argument_vector_scope_checked": true,
+    "legacy_profile_unchanged": true,
+    "unavailable_viewer_preserved_configured_connection": true,
+    "git_identity_collision_preserved_grant": true,
+    "git_mode_or_origin_change_preserved_reviewed_profile": true,
+    "noninteractive_setup_commits": 4,
+    "noninteractive_setup_sessions": 0,
+    "noninteractive_setup_execution_operations": 0
+  },
+  "native_pi": {
+    "version": "0.87.1",
+    "live_sessions_offered": 2,
+    "setup_receipt_printed_before_the_session_picker": true,
+    "explicitly_selected_older_session": true,
+    "script_without_session_id": "SESSION_SELECTION_REQUIRED",
+    "detaches_from_selected_session": 3,
+    "extra_execution_operations_during_attach": 0,
+    "canonical_closes": 2,
+    "result_count_in_sqlite": 1,
+    "external_provider_calls": 0
+  },
+  "sha256": {
+    "regression_junit": "58291e9189c135c21a1b6430a8a36f97ea6f4271dfc1b99fcce88013b6f4c37b",
+    "invalid_arguments": "00b03295b73b80c456e15b2d87d94153fbbe19fc1fe9c504961b62baa34bc082",
+    "modes_junit": "cf7b90d353176ab9e72bc3c707170d5b7662ec54de166ba6fa2646d72acf993f",
+    "modes_proof": "605acbddde1013680c62bd47472efabd3945a9ed0d3bd84268decf24db081859",
+    "git_junit": "38530bedab8554a534cdf0117f09cedbad86ea9520957b89ced3af9daf504698",
+    "git_proof": "03792c121af5bf4c8ac94980b1574678f961bda4839bf5b8cddce5e86a7a085c",
+    "pi_junit": "a34823f352b86bb0580cea8dc3b0774691b85825945d1b94b115b2b8942146c9",
+    "pi_proof": "8ea8b0a7eca59653647f4941fc3118fedf60f55a960cc6c40b63066b61ed20d1",
+    "sqlite_audit": "0c0ca50166d518bea2d58f7d3d9ddc0a2b3a8d1dca0fab5e2bb9d1374e166cb7"
+  },
+  "limitations": [
+    "Mode and Git setup cases used connection fixtures. The Pi case was a real native process with simulated replies on this Windows host.",
+    "The explicit empty opening and expired authorization scenario preserves its earlier installed proof in si029-empty-session-opening.json."
+  ]
+}

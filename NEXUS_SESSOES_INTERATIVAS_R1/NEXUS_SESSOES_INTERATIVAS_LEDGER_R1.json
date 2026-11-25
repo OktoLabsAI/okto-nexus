@@ -1913,7 +1913,7 @@
         "SI-T-F10",
         "SI-T-F17"
       ],
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si028-installed-quick-connect-modes.md",
         "execution/si028-installed-quick-connect-modes.json",
@@ -1923,7 +1923,8 @@
         "execution/si028-interactive-json-refusal.md",
         "execution/si028-interactive-json-refusal.json",
         "execution/si028-connect-invalid-presentation.md",
-        "execution/si028-connect-invalid-presentation.json"
+        "execution/si028-connect-invalid-presentation.json",
+        "execution/si028-si029-current-connect.json"
       ]
     },
     {
