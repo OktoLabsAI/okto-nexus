@@ -1,0 +1,162 @@
+{
+  "task": "SI-025",
+  "artifacts": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "installation": {
+    "pi_version": "0.87.1",
+    "pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+  },
+  "environment": "Windows x64, reviewed Pi installation, ConPTY with local Nexus and independent Connector over loopback, deterministic fake model",
+  "regressions": {
+    "passed": 72,
+    "skipped": [
+      "test_pi_posix_terminal_reads_raw_utf8_and_restores_after_an_error"
+    ],
+    "test_files": {
+      "tests.session_interaction.test_presentation_transport": 26,
+      "tests.session_interaction.test_session_cli": 20,
+      "tests.session_interaction.test_contract": 4,
+      "tests.session_interaction.test_queue_storage": 18,
+      "tests.session_interaction.test_transcript": 2,
+      "tests.execution_r4.test_session_input_runtime": 3
+    },
+    "junit_sha256": "9b8a875f9befb4e74595645cbae2e81ebc23859c979c511eeaf7aee152246300"
+  },
+  "remote_shared_queue": {
+    "junit": {
+      "passed": 1,
+      "skipped": [],
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "e39e01b767316a8f8c57988bcc90801d357100d56f2889a78ac1d3523276413c"
+    },
+    "fixture_sha256": {
+      "test_g18_remote.py": "25d00ae2ef0c39b65854a04799e623f158055a0e0f23f5cd120cc6768898e1c9",
+      "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+      "pi_fixture.py": "9cf2a5dbc2484001a33f3fb45f69be174c53c09048059f84bb0248b4dd5ea971",
+      "terminal.py": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20"
+    },
+    "proof": {
+      "native_pi": "0.87.1",
+      "real_connector_r4": true,
+      "windows_conpty": true,
+      "concurrent_web_and_editor_submission": true,
+      "shared_session_queue": true,
+      "web_replay_reused_input": true,
+      "same_native_process": true,
+      "native_turns": 3,
+      "steer_native_writes": 1,
+      "native_input_history_exact_once": true,
+      "ordinary_inputs_followed_fifo": true,
+      "queue_held_through_active_steer": true,
+      "steer_applied_to_original_turn": true,
+      "source_connector_generation_unchanged": true,
+      "exact_session_closed": true,
+      "renderer_detached_while_turn_active": true,
+      "native_write_sequence": [
+        "prompt",
+        "steer",
+        "prompt",
+        "prompt"
+      ],
+      "synthetic_model_calls": 4,
+      "external_provider_calls": 0
+    },
+    "sqlite": {
+      "nexus_and_connector_integrity": "ok",
+      "foreign_key_violations": 0,
+      "session_launches": 1,
+      "closed_sessions": 1,
+      "product_operations": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.steer": 1,
+        "turn.submit": 3
+      },
+      "ordinary_queue_surface_order": [
+        "web",
+        "native_terminal"
+      ],
+      "steer_targets_original_turn": true,
+      "steer_command_receipt": "SUBMITTED",
+      "steer_boundary_facts": [
+        "queued",
+        "consumed"
+      ],
+      "native_start_order_matches_fifo": true,
+      "successful_results": 3
+    }
+  },
+  "local_delayed_settlement": {
+    "junit": {
+      "passed": 1,
+      "skipped": [],
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "fc3a4e4ec283f2c6906e377aab28cc31ea8a2d3ebd55e46efd156cb471755289"
+    },
+    "fixture_sha256": {
+      "test_author.py": "166729a871656eb50e6b8f82d67cb412753d0de06026a4e2cd5c06dbac2924cc",
+      "local_author_probe.py": "ebf0ee4cbfd20b0ec575dfcbfd5e3ffaa194d486adc1ab5023035396ef9b0c8e",
+      "audit_durable.py": "76198319e7ffd0aad41c93173e74356ac82520e192df106015d2a75b32b23571"
+    },
+    "proof": {
+      "real_agent_end_projected": true,
+      "real_agent_settled_held": true,
+      "dispatcher_scans_while_held": 3,
+      "writes_before_settlement": [
+        "prompt",
+        "prompt"
+      ],
+      "all_native_writes": [
+        "prompt",
+        "prompt",
+        "prompt"
+      ],
+      "next_turn_succeeded_after_release": true,
+      "same_exact_session": true,
+      "external_provider_calls": 0,
+      "canonical_close": "SUCCEEDED"
+    },
+    "sqlite": {
+      "operations": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 3
+      },
+      "closed_session_results": 3,
+      "agent_end_sequence": 45,
+      "agent_settled_sequence": 46,
+      "next_start_sequence": 47,
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0
+    }
+  },
+  "raw_evidence_directories": [
+    "D:/nxs-si025-current-remote",
+    "D:/nxs-si025-settled-confirmed"
+  ],
+  "limits": [
+    "No live provider or account was used.",
+    "The Home API was exercised over authenticated HTTP, and the editor ran in a real terminal. This was not a browser or user test.",
+    "Campaign-level SI-T-G01, SI-T-G04 and SI-T-G18 remain pending."
+  ]
+}
