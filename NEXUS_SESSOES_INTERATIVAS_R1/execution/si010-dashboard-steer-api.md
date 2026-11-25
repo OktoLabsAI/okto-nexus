@@ -15,3 +15,18 @@ The receipt endpoint supports lookup by original client intent or owned input ID
 ## Delivery and rollback
 
 The reorientation endpoints use the existing opt-in interaction gate. This increment covers the Codex exact native target. Pi's observed run and boundary timing, Claude's compound effect, the conversation and queue controls in the browser, and native qualification remain open. Once schema 178 is applied, rollback needs compatible readers for the view and existing durable inputs.
+
+## Revalidação no pacote instalado
+
+O candidato `8bcee9bd` passou 19 casos de controles e fila no Windows.
+A reorientação do Codex e a promoção conservaram o alvo revisado e
+recuperaram a operação original quando a intenção foi repetida. Com a
+capacidade indisponível, o catálogo manteve os controles permitidos e
+a API recusou a reorientação sem gravar recibo. As quatro variantes do
+efeito composto do Claude cobriram envio, recusa antes da escrita,
+confirmação perdida e pergunta no turno de substituição.
+
+A bateria atual usou peers de protocolo. Os ensaios nativos registrados
+para Codex, Pi e Claude conservam seus hashes e respostas simuladas.
+A revalidação acrescenta evidência reversível pelo commit, sem migração.
+[Casos, hashes e relatórios anteriores](si010-si011-current-turn-controls.json)

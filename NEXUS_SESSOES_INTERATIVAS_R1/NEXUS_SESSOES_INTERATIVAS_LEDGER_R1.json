@@ -654,7 +654,7 @@
         "SI-T-C09",
         "SI-T-C10"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si010-exact-promotion.md",
         "execution/si010-dashboard-steer-api.md",
@@ -679,7 +679,8 @@
         "execution/si026-claude-home-compound-reorientation.md",
         "execution/si026-claude-home-compound-reorientation.json",
         "execution/si024-codex-steer-ack.md",
-        "execution/si024-codex-steer-ack.json"
+        "execution/si024-codex-steer-ack.json",
+        "execution/si010-si011-current-turn-controls.json"
       ]
     },
     {
