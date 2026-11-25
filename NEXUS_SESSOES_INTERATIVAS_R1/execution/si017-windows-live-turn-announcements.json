@@ -198,5 +198,54 @@
     "human_acceptance_pending": true,
     "provider_campaign_pending": true,
     "additional_macos_measurement_deferred": true
+  },
+  "win32_native_events": {
+    "inspected_nexus_head": "52ff04c6856f708bb9dc7c90ddbcee69b56588e3",
+    "nexus_wheel_sha256": "af370051ed57f3106acb3a6d1a4324d01a7b6aab22cf4f5ebb2616bdd1bc0887",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "browser": "Chromium 158.0.8127.18 (Playwright cache), Windows x64",
+    "windows_event": "EVENT_OBJECT_LIVEREGIONCHANGED (0x8019)",
+    "input_desktop_unchanged": true,
+    "native_events_per_phase": {
+      "fragments": 0,
+      "first": 1,
+      "duplicate": 0,
+      "second": 1,
+      "grouped": 1,
+      "grouped_repeat": 1
+    },
+    "positive_control_live_events": 1,
+    "turns_in_history": 7,
+    "fragments_in_burst": 24,
+    "canonical_new_terminals": 6,
+    "terminal_region_native_object_count": 1,
+    "native_focus_events_after_open": 0,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "dispatched_test_operations": 0,
+    "provider_calls": 0,
+    "native_harnesses_started": 0,
+    "qualification_level": "installed_dashboard_real_browser_win32_event_observer_synthetic_turns",
+    "windows_speech_verified": false,
+    "scripted_fixture_environment": {"SI017_ANNOUNCEMENT_ROOT": "D:/nxs-si036-native-events-confirmed-52ff04c6/api"},
+    "scripted_fixture_command": "D:/nxs-si039-current-30993ca7/venv/Scripts/python.exe -I -B D:/nxs-si017-nvda-27206336/app_probe.py",
+    "observer_command": "python -B D:/nxs-si036-native-events-confirmed-52ff04c6/probe.py",
+    "audit_command": "python -B D:/nxs-si036-native-events-confirmed-52ff04c6/audit.py",
+    "confirmed_exit_codes": {"api": 0, "observer_and_browser": 0, "audit": 0},
+    "listener_closed_after_run": true,
+    "evidence_directory": "D:/nxs-si036-native-events-confirmed-52ff04c6",
+    "sha256": {
+      "probe.py": "0e514985be028748c164de668699e43d34cacf71b03568acd73541df6fac28f7",
+      "browser.cjs": "e84a4cbd14d680c2feee31d6931c599d1f7b4e20072faf70bb524c037e21ef7b",
+      "native-events.json": "f17d9d4f8078c999dad8111b9f90e0e8f295df27c5879c5e3bfc3a2cfdb92b38",
+      "browser-result.json": "b37c168a32221545b2d081495ff55e57e5275dead751fe8509757b846422aeeb",
+      "api/result.json": "b64a31798fc4bebb282bc45e3ac55e4db556a326cfaf9e47573757aa380e49c6"
+    },
+    "positive_control": {
+      "evidence_directory": "D:/nxs-si036-native-events-chromium-52ff04c6",
+      "native_events_sha256": "1e44e79fea85cdbc2c641dab329b1ffb7f4a642a05cd199f1f4c342e52d6618f",
+      "browser_result_sha256": "fe28a5dfb2020514f029136e3deccb871881edd1cea161528b2d596383095c6e"
+    }
   }
 }

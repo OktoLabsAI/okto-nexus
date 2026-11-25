@@ -13,3 +13,13 @@ O NVDA 2026.3.1 portátil iniciou com perfil descartável em uma área de trabal
 Uma segunda montagem conseguiu controlar o Chromium 158.0.8127.18 por pipe com o NVDA na mesma área de trabalho privada. Uma página de controle exibiu o aviso na região acessível e preservou o foco do documento. O Windows manteve essa janela fora do primeiro plano, e o log de fala do NVDA registrou apenas a área de trabalho. O aviso positivo de controle ficou sem fala. A tentativa exercitou a montagem do teste e deixa a fala no Windows pendente. Os processos do teste foram encerrados e a área de entrada do usuário permaneceu a mesma. [Resultados e hashes](si017-windows-live-turn-announcements.json)
 
 Este marco altera o registro de evidências. Dispensa migração, e o rollback consiste em reverter o commit do Nexus. O aceite do participante e as campanhas de provedor seguem pendentes. A medição adicional no macOS fica adiada para outro corte.
+
+## Entrega à API de acessibilidade do Windows
+
+No Chromium 158.0.8127.18 com o Nexus 0.3.8 instalado, um observador Win32 registrou `EVENT_OBJECT_LIVEREGIONCHANGED` no processo do navegador. O controle positivo confirmou a captura do evento antes da prova do Nexus. O navegador rodou em uma área de trabalho privada, enquanto a área de entrada do usuário permaneceu a mesma. [Eventos Win32](https://learn.microsoft.com/en-us/windows/win32/winauto/event-constants#event_object_liveregionchanged)
+
+Os sete resultados anteriores abriram sem anúncio na região de término. A rajada de 24 fragmentos e a repetição de um final geraram zero eventos de região viva após a conversa abrir. Seis finais canônicos geraram quatro eventos no mesmo objeto acessível, um para cada final isolado e um para cada par agrupado. O texto mudou de **Turn finished.** para **Another turn finished.**, depois para **2 turns ended.** e **2 more turns ended.**. O observador registrou zero trocas de foco após a abertura da conversa.
+
+O Chrome instalado falhou ao abrir na área privada durante o controle. O Chromium do ambiente de testes passou no controle e nas duas execuções do Nexus. A primeira execução completou os checkpoints, mas o redirecionamento do PowerShell devolveu código 1 ao receber uma mensagem diagnóstica. Na confirmação, a API e o observador encerraram com código zero, e a porta local foi fechada. O SQLite manteve a integridade e não houve despacho de operações ou chamadas a um provedor. [Comandos e hashes](si017-windows-live-turn-announcements.json)
+
+A captura Win32 confirma a entrega dos eventos à camada de acessibilidade do Windows. A confirmação da fala pelo NVDA em primeiro plano continua pendente. Este marco registra evidências e pode ser revertido pelo commit.
