@@ -4,7 +4,8 @@ import sqlite3
 
 import pytest
 
-from tools.si038_codex_usage import TurnUsage, UnconfirmedUsage, read_turn_usage
+from tools.si038_codex_budget import BudgetStop, CampaignBudget
+from tools.si038_codex_usage import TurnUsage, UnconfirmedUsage, read_turn_state, read_turn_usage
 
 
 SCOPE = ('server', 'executor', 'session', 'epoch')
@@ -53,6 +54,43 @@ def test_old_usage_cannot_confirm_a_new_terminal_turn(tmp_path):
         event('two', operation='b', phase='terminal', outcome='success')])
     assert read_turn_usage(path, SCOPE, thread_id='thread', operation_id='b') is None
     assert read_turn_usage(path, (*SCOPE[:3], 'other'), thread_id='thread', operation_id='a') is None
+
+
+def test_turn_state_distinguishes_no_usage_from_no_started_turn(tmp_path):
+    path = journal(tmp_path, [event('one', operation='a', phase='started'),
+                              event('one', operation='a', phase='terminal', outcome='success'),
+                              event('two', operation='b', phase='started')])
+    assert read_turn_state(path, SCOPE, thread_id='thread', operation_id='a') == TurnUsage('one', None, 'success')
+    assert read_turn_state(path, SCOPE, thread_id='thread', operation_id='b') == TurnUsage('two', None, None)
+    assert read_turn_state(path, SCOPE, thread_id='thread', operation_id='missing') is None
+    assert read_turn_usage(path, SCOPE, thread_id='thread', operation_id='b') is None
+
+
+def test_late_active_usage_in_the_journal_blocks_steer_after_queue_reservation(tmp_path):
+    path = journal(tmp_path, [event('native-turn', operation='native-operation', phase='started')])
+    budget = CampaignBudget(tmp_path)
+    budget.reserve('setup', 'setup-intent')
+    budget.observe('setup', 105, terminal=True)
+    budget.reserve('home', 'home-intent')
+    budget.observe('home', 210, terminal=True)
+    budget.reserve('interactive', 'interactive-intent')
+    budget.bind_interactive_usage(lambda: read_turn_state(
+        path, SCOPE, thread_id='thread', operation_id='native-operation'))
+    budget.reserve('queued', 'queue-intent')
+    with closing(sqlite3.connect(path)) as db:
+        db.execute('INSERT INTO events VALUES (?,?,?,?,?,?)', (*SCOPE, 2, event('native-turn', tokens=225_000)))
+        db.execute('UPDATE event_streams SET next_sequence=3')
+        db.commit()
+    before = path.read_bytes()
+
+    with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
+        budget.reserve('steer', 'steer-intent')
+
+    assert path.read_bytes() == before
+    entries = [json.loads(line) for line in budget.path.read_text(encoding='utf-8').splitlines()]
+    assert entries[-3]['step'] == 'queued'
+    assert entries[-2]['group_tokens'] == 225_000 and entries[-2]['charged'] == 450_000
+    assert entries[-1] == {'event': 'stopped', 'reason': 'PREVENTIVE_BUDGET_REACHED'}
 
 
 @pytest.mark.parametrize('payload', [

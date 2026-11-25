@@ -812,5 +812,45 @@
     "external_provider_requests": 0,
     "actual_paid_campaign": "NOT_RUN",
     "migration": "none"
+  },
+  "active_turn_usage_before_controls": {
+    "inspected_nexus_head": "ad440fca42253825fef9138ce05f72a11704b150",
+    "nexus_wheel_sha256": "af370051ed57f3106acb3a6d1a4324d01a7b6aab22cf4f5ebb2616bdd1bc0887",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "codex_app_server_0_157_0_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "platform": "Windows x64",
+    "evidence_directory": "D:/nxs-si038-active-usage-ad440fca",
+    "baseline_regression": "test_queue_reservation_requires_a_reader_for_the_active_turn",
+    "failed_before_fix": true,
+    "tests": {
+      "source_focused_passed": 46,
+      "installed_and_focused_passed": 50,
+      "installed_native_setup_cases": 4,
+      "installed_exit_code": 0,
+      "junit_sha256": "772c3b6f8d83ee360696ab0dd24ab934d973c27bedbf2caa2618406f75a5c66c",
+      "log_sha256": "857f2f699f4e04cb973657ae4b2f37afb2257e96782ee4782e872aa7fd92a02c",
+      "command": "python -B -m pytest -c pyproject.toml -o pythonpath= -o asyncio_default_fixture_loop_scope=function -p assert_contract_wheel -p anyio.pytest_plugin -p pytest_asyncio.plugin tests/execution_r4/test_si038_codex_setup_qualification.py tests/test_si038_codex_budget.py tests/test_si038_codex_usage.py tests/test_si038_codex_catalog.py --basetemp D:/nxs-si038-active-usage-ad440fca/pytest --junitxml D:/nxs-si038-active-usage-ad440fca/installed.xml -q"
+    },
+    "replay": {
+      "source_journal_sha256": "f833c00560ed12651b3aff395a8ae8c7b0dfda909ac170a42701772bf4706fd0",
+      "source_journal_preserved": true,
+      "original_order_admissions": 5,
+      "original_order_observed_simulated_tokens": 1173,
+      "original_order_provisioned_tokens": 375000,
+      "injected_active_tokens_after_queue": 225000,
+      "preventive_charge": 450000,
+      "queued_reservation_retained": true,
+      "steer_reserved_after_limit": false,
+      "external_provider_requests": 0,
+      "command": "python -B D:/nxs-si038-active-usage-ad440fca/replay.py D:/nxs-si038-active-usage-ad440fca",
+      "sha256": {
+        "replay.py": "7a26f6c7a64947d0f20c5dd3783aa287a4fb13159f446c6c393f23dc438cc466",
+        "replay.json": "e6819e1ed207c983c8f3ef9905898085f2246ba9f8506fc7236a5a7efba73f4e",
+        "original-order/si038-budget.jsonl": "dbb07a06a7e7c75d281ad90ad885c347b8182656ae4d92c1a7f121cb5af7ea7b",
+        "revised-active-counter/si038-budget.jsonl": "997a1215ca19cf7c8866cd7143d54eff123f7a47a5abb089862c8545f142b960"
+      }
+    },
+    "actual_paid_campaign": "NOT_RUN"
   }
 }

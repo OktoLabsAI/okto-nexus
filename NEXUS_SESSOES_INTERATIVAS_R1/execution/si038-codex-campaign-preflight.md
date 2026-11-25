@@ -86,3 +86,13 @@ O controlador vincula um turno concluído ao leitor da operação exata. Antes d
 Na reprodução com uma cópia do journal de setup, o controlador anterior reservou o primeiro trabalho com uma cobrança de 150 mil tokens depois que o consumo do setup subiu de 105 para 375 mil. A releitura registrou os 375 mil no mesmo turno. A nova provisão alcançaria 450 mil e foi recusada. A reserva já gravada para o setup permaneceu no registro. [Comandos e hashes](si038-codex-campaign-preflight.json)
 
 Passaram 39 testes focados e quatro testes com o Nexus instalado e o app-server Codex 0.157.0. No caso tardio, uma única requisição ao simulador completou o setup. Uma notificação acrescentada à cópia do journal reproduziu a revisão de consumo, e a próxima reserva foi recusada. O SQLite confirmou zero vínculos, commits de setup e sessões na tentativa bloqueada. O marco dispensa migração e pode ser revertido pelo commit. A campanha com provedor real continua pendente. [Resultados e hashes](si038-codex-campaign-preflight.json)
+
+## Releitura do turno ativo antes da fila e da reorientação
+
+Depois que o journal registra a abertura do turno interativo, o roteiro vincula `bind_interactive_usage` a um leitor `read_turn_state` com o servidor, o executor, a sessão, a época, a thread e a operação exatos. O controlador relê esse turno antes de reservar a entrada da fila e novamente antes de reservar a reorientação. Um turno correlacionado que ainda aguarda o primeiro relatório continua coberto pela provisão. Uma leitura indisponível, uma identidade divergente ou um turno encerrado interrompem novas admissões.
+
+A reprodução usou uma cópia do journal anterior do app-server Codex 0.157.0. Na sequência original, o controle permitiu as cinco reservas e contabilizou 1.173 tokens simulados, com 375 mil provisionados. Em outra cópia, um relatório de 225 mil tokens foi inserido após a reserva da fila. A releitura registrou a cobrança de 450 mil e recusou a reserva da reorientação. O recibo da reserva da fila permaneceu no ledger. O journal de origem conservou seu hash. [Resultados e hashes](si038-codex-campaign-preflight.json)
+
+Passaram 46 testes focados e quatro casos de setup com o Nexus instalado e o app-server Codex revisado. O teste que exige vincular o turno antes de reservar a fila falhou no controlador anterior. Os casos nativos usaram o simulador em loopback.
+
+A releitura usa os relatórios já gravados. O provedor ainda pode registrar consumo com atraso. A alteração afeta o controlador e a leitura de evidências da campanha, sem migração. A reversão é pelo commit. A consulta autenticada e as campanhas reais continuam pendentes.

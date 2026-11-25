@@ -17,7 +17,7 @@ class UnconfirmedUsage(ValueError):
 @dataclass(frozen=True)
 class TurnUsage:
     turn_id: str
-    tokens: int
+    tokens: int | None
     terminal_outcome: str | None
 
 
@@ -34,7 +34,14 @@ def _total(raw):
 
 def read_turn_usage(journal: Path, scope: tuple[str, str, str, str], *, thread_id: str,
                     operation_id: str) -> TurnUsage | None:
-    """Return accounting only after a usage report names the requested turn.
+    """Return accounting only after a usage report names the requested turn."""
+    turn = read_turn_state(journal, scope, thread_id=thread_id, operation_id=operation_id)
+    return turn if turn is not None and turn.tokens is not None else None
+
+
+def read_turn_state(journal: Path, scope: tuple[str, str, str, str], *, thread_id: str,
+                    operation_id: str) -> TurnUsage | None:
+    """Return the exact started turn even when its first usage report is pending.
 
     Read just the event metadata for the supplied namespace and stream epoch.
     Each cumulative increment belongs to the exact turn that reported it,
@@ -89,6 +96,6 @@ def read_turn_usage(journal: Path, scope: tuple[str, str, str, str], *, thread_i
         totals[turn] = totals.get(turn, 0) + total - previous_total
         previous_total = total
     target = turns.get(operation_id)
-    if target not in totals:
+    if target is None:
         return None
-    return TurnUsage(target, totals[target], terminal.get(target))
+    return TurnUsage(target, totals.get(target), terminal.get(target))

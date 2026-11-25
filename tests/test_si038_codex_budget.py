@@ -10,18 +10,30 @@ def records(budget):
     return [json.loads(line) for line in budget.path.read_text(encoding='utf-8').splitlines()]
 
 
-def begin_interactive(budget):
+def begin_interactive(budget, *, bind=True):
     budget.reserve('setup', 'setup-intent')
     budget.observe('setup', 105, terminal=True)
     budget.reserve('home', 'home-intent')
     budget.observe('home', 210, terminal=True)
     budget.reserve('interactive', 'interactive-intent')
+    report = [TurnUsage('interactive-turn', None, None)]
+    if bind:
+        budget.bind_interactive_usage(lambda: report[0])
+    return report
+
+
+def test_queue_reservation_requires_a_reader_for_the_active_turn(tmp_path):
+    budget = CampaignBudget(tmp_path)
+    begin_interactive(budget, bind=False)
+    with pytest.raises(BudgetStop, match='INTERACTIVE_USAGE_UNBOUND'):
+        budget.reserve('queued', 'queued-intent')
+    assert not any(entry.get('step') == 'queued' for entry in records(budget))
 
 
 def test_reserve_queue_and_steer_during_one_active_turn(tmp_path):
     budget = CampaignBudget(tmp_path)
-    begin_interactive(budget)
-    budget.observe('interactive', 120_000)
+    report = begin_interactive(budget)
+    report[0] = TurnUsage('interactive-turn', 120_000, None)
     budget.reserve('queued', 'queued-intent')
     budget.reserve('steer', 'steer-intent')
     budget.observe('interactive', 165_000, terminal=True)
@@ -109,6 +121,7 @@ def test_late_home_usage_blocks_steer_and_retains_the_queue_reservation(tmp_path
     home_total = 210
     budget.bind_completed_usage('home', lambda: TurnUsage('home-turn', home_total, 'success'))
     budget.reserve('interactive', 'interactive-intent')
+    budget.bind_interactive_usage(lambda: TurnUsage('interactive-turn', None, None))
     budget.reserve('queued', 'queued-intent')
     home_total = 150_000
 
@@ -125,8 +138,8 @@ def test_late_home_usage_blocks_steer_and_retains_the_queue_reservation(tmp_path
 @pytest.mark.parametrize('tokens', [225_000, 240_000])
 def test_reserve_is_refused_when_it_would_reach_the_preventive_budget(tmp_path, tokens):
     budget = CampaignBudget(tmp_path)
-    begin_interactive(budget)
-    budget.observe('interactive', tokens)
+    report = begin_interactive(budget)
+    report[0] = TurnUsage('interactive-turn', tokens, None)
     with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
         budget.reserve('queued', 'queued-intent')
     assert not any(event.get('step') == 'queued' for event in records(budget))
@@ -134,16 +147,40 @@ def test_reserve_is_refused_when_it_would_reach_the_preventive_budget(tmp_path, 
 
 def test_reservation_below_the_preventive_budget_is_recorded(tmp_path):
     budget = CampaignBudget(tmp_path)
-    begin_interactive(budget)
-    budget.observe('interactive', 224_999)
+    report = begin_interactive(budget)
+    report[0] = TurnUsage('interactive-turn', 224_999, None)
     budget.reserve('queued', 'queued-intent')
     assert records(budget)[-1]['charged'] == 449_999
 
 
+@pytest.mark.parametrize(('update', 'reason'), [
+    (TurnUsage('interactive-turn', None, 'success'), 'INTERACTIVE_TURN_ALREADY_FINISHED'),
+    (TurnUsage('interactive-turn', 225_000, None), 'PREVENTIVE_BUDGET_REACHED'),
+    (TurnUsage('other-turn', 100, None), 'EFFECT_OR_USAGE_UNCERTAIN'),
+    (None, 'EFFECT_OR_USAGE_UNCERTAIN'),
+])
+def test_steer_rechecks_the_bound_turn_after_receiving_the_queue(tmp_path, update, reason):
+    budget = CampaignBudget(tmp_path)
+    report = begin_interactive(budget)
+    budget.reserve('queued', 'queued-intent')
+    report[0] = update
+
+    with pytest.raises(BudgetStop, match=reason):
+        budget.reserve('steer', 'steer-intent')
+
+    entries = records(budget)
+    assert [entry['step'] for entry in entries if entry['event'] == 'reserved'] == [
+        'setup', 'home', 'interactive', 'queued']
+    if reason == 'PREVENTIVE_BUDGET_REACHED':
+        assert entries[-2]['turn_id'] == 'interactive-turn'
+        assert entries[-2]['group_tokens'] == 225_000
+        assert entries[-2]['charged'] == 450_000
+
+
 def test_usage_plus_existing_provisions_stops_at_the_preventive_budget(tmp_path):
     budget = CampaignBudget(tmp_path)
-    begin_interactive(budget)
-    budget.observe('interactive', 200_000)
+    report = begin_interactive(budget)
+    report[0] = TurnUsage('interactive-turn', 200_000, None)
     budget.reserve('queued', 'queued-intent')
     with pytest.raises(BudgetStop, match='PREVENTIVE_BUDGET_REACHED'):
         budget.observe('interactive', 225_000)
@@ -173,8 +210,8 @@ def test_late_token_report_is_preserved_when_it_crosses_budget(tmp_path, tokens,
                                              ('queued', 'QUEUED_TURN_ALREADY_STARTED')])
 def test_uncertain_or_out_of_order_control_blocks_new_admission(tmp_path, fall, reason):
     budget = CampaignBudget(tmp_path)
-    begin_interactive(budget)
-    budget.observe('interactive', 300)
+    report = begin_interactive(budget)
+    report[0] = TurnUsage('interactive-turn', 300, None)
     budget.reserve('queued', 'queued-intent')
     with pytest.raises(BudgetStop, match=reason):
         if fall == 'counter':

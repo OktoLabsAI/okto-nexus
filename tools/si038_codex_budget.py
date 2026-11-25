@@ -36,6 +36,7 @@ class CampaignBudget:
         self._observed = {}
         self._terminal = set()
         self._completed_usage = {}
+        self._interactive_usage = None
         self._stopped = False
         try:
             self._publish('x', dict(event='opened', steps=STEPS, provision=PROVISION,
@@ -85,7 +86,7 @@ class CampaignBudget:
                     or not 1 <= len(intent_id) <= 160 or intent_id in self._reservations.values()):
                 self._stop('INTENT_INVALID_OR_ALREADY_RESERVED')
             for group, (turn_id, read) in self._completed_usage.items():
-                current = self._read_completed_usage(read, turn_id)
+                current = self._read_usage(read, turn_id, completed=True)
                 if current.tokens != self._observed[group]:
                     self._observe(group, current.tokens, terminal=True, turn_id=turn_id)
             if step in ('home', 'interactive') and STEPS[index - 1] not in self._terminal:
@@ -94,6 +95,11 @@ class CampaignBudget:
                 self._stop('INTERACTIVE_TURN_ALREADY_FINISHED')
             if step == 'steer' and 'queued' in self._observed:
                 self._stop('QUEUED_TURN_ALREADY_STARTED')
+            if step in ('queued', 'steer'):
+                if self._interactive_usage is None:
+                    self._stop('INTERACTIVE_USAGE_UNBOUND')
+                turn_id, read = self._interactive_usage
+                self._observe_active_turn(self._read_usage(read, turn_id))
             charged = self._charge(extra=step)
             if charged >= PREVENTIVE:
                 self._stop('PREVENTIVE_BUDGET_REACHED')
@@ -101,14 +107,17 @@ class CampaignBudget:
                               provision=PROVISION, charged=charged))
             self._reservations[step] = intent_id
 
-    def _read_completed_usage(self, read: Callable[[], TurnUsage | None], turn_id: str | None = None) -> TurnUsage:
+    def _read_usage(self, read: Callable[[], TurnUsage | None], turn_id: str | None = None,
+                    *, completed: bool = False) -> TurnUsage:
         try:
             report = read()
         except Exception:
             self._stop('EFFECT_OR_USAGE_UNCERTAIN')
-        if (not isinstance(report, TurnUsage) or report.terminal_outcome != 'success'
+        if (not isinstance(report, TurnUsage)
+                or report.terminal_outcome not in (None, 'success', 'failed', 'interrupted')
                 or not isinstance(report.turn_id, str) or not report.turn_id
-                or type(report.tokens) is not int or report.tokens < 0
+                or report.tokens is not None and (type(report.tokens) is not int or report.tokens < 0)
+                or completed and (report.terminal_outcome != 'success' or report.tokens is None)
                 or turn_id is not None and report.turn_id != turn_id):
             self._stop('EFFECT_OR_USAGE_UNCERTAIN')
         return report
@@ -124,9 +133,34 @@ class CampaignBudget:
                 raise BudgetStop('CAMPAIGN_STOPPED')
             if group in self._completed_usage:
                 self._stop('USAGE_SOURCE_ALREADY_BOUND')
-            observed = self._read_completed_usage(read)
+            observed = self._read_usage(read, completed=True)
             self._observe(group, observed.tokens, terminal=True, turn_id=observed.turn_id)
             self._completed_usage[group] = (observed.turn_id, read)
+
+    def bind_interactive_usage(self, read: Callable[[], TurnUsage | None]) -> None:
+        """Bind the journal reader to the exact native turn before queue or steer."""
+        with self._lock:
+            if self._stopped:
+                raise BudgetStop('CAMPAIGN_STOPPED')
+            if 'interactive' not in self._reservations:
+                self._stop('NO_RESERVATION_FOR_USAGE')
+            if self._interactive_usage is not None:
+                self._stop('USAGE_SOURCE_ALREADY_BOUND')
+            report = self._read_usage(read)
+            self._observe_active_turn(report)
+            self._record(dict(event='interactive_usage_bound', turn_id=report.turn_id))
+            self._interactive_usage = (report.turn_id, read)
+
+    def _observe_active_turn(self, report: TurnUsage) -> None:
+        previous = self._observed.get('interactive')
+        terminal = report.terminal_outcome is not None
+        if report.tokens is None:
+            if previous is not None:
+                self._stop('EFFECT_OR_USAGE_UNCERTAIN')
+        elif report.tokens != previous or terminal:
+            self._observe('interactive', report.tokens, terminal=terminal, turn_id=report.turn_id)
+        if terminal:
+            self._stop('INTERACTIVE_TURN_ALREADY_FINISHED')
 
     def observe(self, group: str, tokens: int, *, terminal: bool = False) -> None:
         """Record an exact group's observed delta, including late observations.
