@@ -149,3 +149,17 @@ The operator authorized version, help, and schema probes for all three harnesses
 - **Claude Code 2.1.327** advertises `attach` for its background sessions. The selector can accept a partial name, so a Nexus bridge needs to prove an exact-ID path and reject any fallback selection. Help describes a continuing background session when the viewer returns to the shell. It leaves stream-json ownership and canonical authorization unproved. This build version is outside the existing Core production qualification.
 
 This probe ran no native engine or viewer and created no productive session. No provider credentials were supplied. It does not qualify any attach or saved-resume path, and SI-004 remains in progress.
+
+## Estratégias implementadas no Windows
+
+| Harness e versão | Caminho aplicado | Limite observado |
+| --- | --- | --- |
+| Codex app-server 0.157.0 e visualizador 0.170.0 | O Core mantém o app-server e a thread. O visualizador usa o relay com escopo de uma thread, e seu fechamento conserva o processo, a fila e o turno. | O app-server 0.157.0 foi recusado como visualizador. O relay recusou fork e resume de outro UUID. [Detach](si032-codex-abrupt-viewer-exit.md) [Versão](si027-codex-viewer-refusal.md) [Escopo](si021-codex-viewer-switch.md) |
+| Pi 0.87.1 | O Core mantém a sessão RPC e o renderer hospedado. O editor desanexa sem fechar o processo. A fila comum espera a fronteira de turno e as respostas de operador passam pelo canal dedicado de decisões. | A apresentação depende da identidade completa da instalação. Os ensaios cobrem o Windows e Connector no mesmo host, com respostas simuladas. [Renderer e fila](si025-pi-connector-shared-queue-steer.md) [Decisões](si025-pi-native-questions.md) [Identidade](si027-pi-installation-gate.json) |
+| Claude Code 2.1.328 | O Core controla o terminal gerenciado sob perfil revisado. O leitor consome o trecho retido e pode sair sem fechar o processo. A reorientação confirma a interrupção do turno antes da substituição. | O attach nativo recusou o UUID do stream-json ativo. O leitor do terminal gerenciado usa filtro e buffer limitados. [Recusa](si026-claude-remote-steer.json) [Leitura](si026-claude-terminal-retained-output.md) [Controles](si026-claude-viewer-controls.md) |
+
+Estas provas dos caminhos implementados sustentam a seleção técnica usada
+pelo catálogo de comandos. Cada ensaio conserva as versões e os hashes do
+seu candidato. O ledger registra SI-004 como `IMPLEMENTED`. Os cenários
+SI-T-G01, G11, G12, G16 e I06 ainda exigem a camada de campanha para
+verificação. O registro dispensa migração. [Matriz completa](si027-session-capability-matrix.md)
