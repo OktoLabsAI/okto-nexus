@@ -603,5 +603,49 @@
       "The active-session UI condition was exercised by renderer tests. The browser probe scoped both result panels to the retained closed session.",
       "This probe did not launch a Connector, harness, human study or real-provider campaign."
     ]
+  },
+  "human_session_at_eee78980": {
+    "inspected_nexus_head": "eee78980f40658aea440286f43e8fa73ac8cf6ce",
+    "nexus_wheel_sha256": "af370051ed57f3106acb3a6d1a4324d01a7b6aab22cf4f5ebb2616bdd1bc0887",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "platform": "Windows x64, Edge, Pi 0.87.1 and Connector on this machine",
+    "provider": "isolated deterministic Pi fixture",
+    "participant_count": 1,
+    "task_1": {
+      "status": "PASS",
+      "found_original_request": true,
+      "entry_used": "Working",
+      "additional_route": "Technical activity",
+      "friction": ["Too much metadata and too many selectors", "Technical label did not identify the console",
+                   "Connections and selection controls appeared to require specialist knowledge"]
+    },
+    "task_2": {
+      "status": "FAIL",
+      "intended_action": "Send for the next turn",
+      "observed_action": "turn.steer",
+      "input_surface": "web",
+      "input_state_before_stop": "DISPATCHING",
+      "participant_described_send_as_relatively_simple": true,
+      "queue_timing_understanding_reported": false
+    },
+    "task_3": {"status": "NOT_RUN"},
+    "participant_request": "Use one console surface for message input and live output. Optionally emphasize the most recent user message.",
+    "usability_accepted": false,
+    "windows_screen_reader_speech": "NOT_RUN",
+    "external_provider_calls": 0,
+    "synthetic_model_calls_before_stop": 1,
+    "fixture_pytest_result": "SKIPPED",
+    "canonical_close": "SUCCEEDED",
+    "listener_closed": true,
+    "temporary_browser_auth_removed": true,
+    "evidence_directory": "D:/nxs-si036-participant-eee78980",
+    "sha256": {
+      "test_participant.py": "7e14dc2a285b042ff378831413a89e123fa5139871631c41adfb2c3fc9ff05e7",
+      "prepare-home.ps1": "4a9e4533313fe2b6139f6d9e4b922d50691cdf35ca63fe38381b025ae64a0acc",
+      "output/playwright/active-harness.log": "1fab764d32f7591b6ef232e152a86c1ffa863d3ed40a17cc84e7c5d9817f5768",
+      "participant-observation.json": "53d460fae206a3a4317762b5a85f6692e31556991a1f9c2e278461f53b3f0f4a",
+      "native.xml": "2d37b9104d437ec4b63e1f482b18bc4b454fb4898585c43c7dc83ab2e8031fd0"
+    }
   }
 }

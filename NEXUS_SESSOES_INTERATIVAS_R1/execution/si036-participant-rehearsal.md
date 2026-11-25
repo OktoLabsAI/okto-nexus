@@ -53,3 +53,13 @@ O painel usa o estado atualizado da sessão para oferecer **Continue this exact 
 O Edge abriu os dois resultados no wheel atualizado e exibiu a resposta de cada operação acima da conversa, com retorno de foco ao fechar. O botão deixou de aparecer para a sessão encerrada. O ensaio usou uma cópia do banco produzido pela execução anterior com Pi e Connector. Passaram 425 testes do frontend, incluindo a renderização da ação para uma sessão disponível. O build e a validação estrita do Twine também passaram.
 
 O wheel conserva os 815 arquivos do pacote fora da troca do HTML e do JavaScript do dashboard. A alteração dispensa migração e pode ser revertida pelo commit. O aceite do participante e a validação de fala no Windows seguem pendentes. [Resultados e hashes](si036-participant-rehearsal.json)
+
+## Rodada com participante no Edge
+
+O ambiente começou com **Projeto Remessas** selecionado e um trabalho em andamento. O participante encontrou o pedido em **Working** e confirmou o texto da primeira mensagem. Também conseguiu identificar a atividade pela saída do harness. Ao abrir o painel, relatou excesso de metadados e seletores, além de dificuldade para entender que **Technical activity** mostrava a saída do console. O envio pareceu depender de configurações de conexão que o participante esperava que a Home resolvesse automaticamente.
+
+O participante enviou a mensagem da segunda tarefa e descreveu o envio como relativamente simples. O SQLite registrou a entrada da web como `turn.steer` em `DISPATCHING`, durante o turno original. O cenário avaliava se o envio comum ficaria para o próximo turno. A rodada foi encerrada nesse ponto, com a leitura dos resultados ainda por executar. O aceite de usabilidade permanece pendente.
+
+O participante pediu uma tela de console única para digitar e acompanhar a saída do harness, com a opção de destacar a última mensagem do usuário. A próxima decisão de desenho é o grau de integração com a interface nativa do terminal. As novas tarefas deverão confirmar que o usuário pode enviar uma mensagem comum sem reorientar o turno por engano.
+
+A rodada usou o dashboard do Nexus instalado, Edge, Connector e Pi 0.87.1 com respostas simuladas. O fechamento canônico terminou com sucesso, o listener saiu e a sessão temporária do navegador foi removida. O teste de observação registrou a interrupção da rodada como `SKIPPED`. Este registro pode ser revertido pelo commit. [Observações e hashes](si036-participant-rehearsal.json)
