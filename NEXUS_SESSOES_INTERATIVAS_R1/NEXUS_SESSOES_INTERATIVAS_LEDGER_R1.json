@@ -1057,7 +1057,7 @@
         "SI-T-E15",
         "SI-T-E16"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si017-next-turn-receipt-recovery.md",
         "execution/si017-exact-conversation-stream.md",
@@ -1078,7 +1078,8 @@
         "execution/si017-orca-live-turn-announcements.md",
         "execution/si017-orca-live-turn-announcements.json",
         "execution/si017-windows-live-turn-announcements.md",
-        "execution/si017-windows-live-turn-announcements.json"
+        "execution/si017-windows-live-turn-announcements.json",
+        "execution/si017-current-navigation.json"
       ]
     },
     {
@@ -6160,7 +6161,7 @@
     },
     {
       "id": "SI-02",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "tasks": [
         "SI-012",
         "SI-013",

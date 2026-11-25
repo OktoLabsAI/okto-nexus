@@ -14,6 +14,29 @@ The conversation keeps its rendered message identities and input state during co
 
 The new endpoint is read-only and adds no migration. Rollback restores bounded periodic transcript reads. The existing queue, receipts, transcript storage, and Core and Connector pins remain compatible. SI-017 remains in progress for cross-session navigation and the remaining keyboard, zoom, pause, and assistive technology checks.
 
+## Revalidação e gate G2
+
+O Edge, com os wheels instalados no Windows, abriu a conversa exata de
+uma cópia descartável antes de cada perda de acesso. O vencimento
+da sessão de operador produziu HTTP 401. A retirada de acesso em
+outro ensaio produziu HTTP 403. Em ambos, o histórico e o painel
+protegidos saíram da interface. Após restaurar a autorização do
+segundo ensaio, um navegador limpo reabriu a conversa original.
+Os 69 eventos, três resultados e quatro operações ficaram intactos.
+
+As primeiras montagens pararam ao reabrir a interface após o 401.
+A repetição usou perfis de navegador independentes para os dois
+cortes e a restauração. Os ensaios de IME, zoom, foco, pausa visual
+e fala do Orca conservam as evidências dos seus ambientes.
+A fala no Windows e o aceite do participante ainda fazem parte
+da qualificação pendente.
+
+SI-012 a SI-017 verificam o ciclo G2 da conversa, fila e controles
+pela Home. O ensaio do compositor confirmou o papel de usuário
+nativo e zero entregas pelo barramento Operator. Este registro
+dispensa migração e pode ser revertido pelo commit.
+[Revalidação e escopo](si017-current-navigation.json) [Envio pela Home](si013-current-composer.json)
+
 ## Atualizações ao ler histórico paginado
 
 O painel agora mostra **New activity is available** quando o cursor validado avança além do histórico carregado e ainda há páginas a ler. Páginas que já existiam ao abrir a conversa ficam silenciosas. O aviso usa a região de status existente, preserva foco e rolagem e desaparece quando a leitura alcança os eventos novos.
