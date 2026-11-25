@@ -45,6 +45,23 @@ test('harness direct selection requires full binding relation and strips display
   const label=homeSessionOptionLabel(ref,0);assert.match(label,/Review API.*READY.*API.*Updated/);assert.doesNotMatch(label,/executor|one/);
 });
 
+test('one live session opens directly across closed history without choosing by recency',()=>{
+  const live={...session('live'),lifecycle_state:'READY',last_activity_at:'2026-11-17T12:00:00Z'};
+  const closed={...session('closed'),lifecycle_state:'CLOSED',last_activity_at:'2026-11-18T12:00:00Z'};
+  const card={connection:session('unused'),sessions:[closed,live],sessions_total:2,has_more_sessions:false,sessions_cursor:null};
+  assert.equal(initialHarnessSession(card),live);
+  assert.equal(initialHarnessSession({...card,sessions:[live,closed]}),live);
+  assert.equal(initialHarnessSession({...card,sessions:[closed],sessions_total:1}),closed);
+  for(const patch of [
+    {sessions:[live,{...closed,lifecycle_state:'READY'}]},
+    {sessions:[live,{...closed,lifecycle_state:'OPEN_PENDING'}]},
+    {sessions:[live,{...closed,session_id:live.session_id}]},
+    {sessions:[live,{...closed,workspace_id:'other'}]},
+    {sessions:[closed,{...closed,session_id:'other'}]},
+    {sessions_total:3},{has_more_sessions:true},{sessions_cursor:'next'},
+  ]) assert.equal(initialHarnessSession({...card,...patch}),null);
+});
+
 test('session viewer must revalidate full connection identity, including same-agent sibling binding',()=>{
   const connection={server_id:'server',executor_id:'executor',workspace_id:'ws',binding_id:'binding',workspace_binding_id:'wxb',agent_id:'agent'};
   const context={...connection,session_id:'one',lifecycle_state:'READY'};

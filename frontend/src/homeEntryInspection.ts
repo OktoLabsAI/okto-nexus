@@ -33,12 +33,19 @@ export function assertHarnessSessionContext(context:HomeSessionContext,connectio
 }
 /** Only the complete binding relation proves uniqueness, never child previews. */
 export function initialHarnessSession(card:HomeHarnessCard):HomeSessionRef|null {
-  const sessions=card.sessions;
-  if(card.sessions_total!==1||card.has_more_sessions!==false||card.sessions_cursor!==null||sessions?.length!==1)return null;
-  const ref=sessions[0],c=card.connection;
-  if(ref.server_id!==c.server_id||ref.executor_id!==c.executor_id||ref.workspace_id!==c.workspace_id||!ref.session_id||
-    !['READY','CLOSED'].includes(ref.lifecycle_state??''))return null;
-  return ref;
+  const {sessions,connection}=card;
+  if(!Array.isArray(sessions)||!sessions.length||card.sessions_total!==sessions.length||card.has_more_sessions!==false||card.sessions_cursor!==null)return null;
+  const seen=new Set<string>();
+  let live:HomeSessionRef|null=null;
+  for(const ref of sessions){
+    if(ref.server_id!==connection.server_id||ref.executor_id!==connection.executor_id||ref.workspace_id!==connection.workspace_id||
+      !ref.session_id||seen.has(ref.session_id))return null;
+    seen.add(ref.session_id);
+    if(ref.lifecycle_state==='CLOSED')continue;
+    if(ref.lifecycle_state!=='READY'||live)return null;
+    live=ref;
+  }
+  return sessions.length===1?sessions[0]:live;
 }
 export function homeSessionOptionLabel(ref:HomeSessionRef,index:number):string {
   const title=ref.title||`Session ${index+1}`;
