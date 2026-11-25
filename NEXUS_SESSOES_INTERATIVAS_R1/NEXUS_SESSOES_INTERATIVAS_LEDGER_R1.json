@@ -2666,7 +2666,7 @@
         "SI-T-I05",
         "SI-T-I06"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si031-connector-receipt-http-recovery.md",
         "execution/si031-connector-receipt-http-recovery.json",
@@ -2687,7 +2687,9 @@
         "execution/si041-live-admission-pause.md",
         "execution/si041-live-admission-pause.json",
         "execution/si041-qualification-checkpoint.md",
-        "execution/si041-qualification-checkpoint.json"
+        "execution/si041-qualification-checkpoint.json",
+        "execution/si039-current-package-legacy-upgrade.md",
+        "execution/si039-current-package-legacy-upgrade.json"
       ]
     },
     {
@@ -5986,7 +5988,8 @@
         "execution/si041-live-admission-pause.md",
         "execution/si041-live-admission-pause.json",
         "execution/si041-qualification-checkpoint.md",
-        "execution/si041-qualification-checkpoint.json"
+        "execution/si041-qualification-checkpoint.json",
+        "execution/si039-current-package-legacy-upgrade.json"
       ]
     },
     {
@@ -6008,7 +6011,8 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si024-capability-downgrade.md",
-        "execution/si024-capability-downgrade.json"
+        "execution/si024-capability-downgrade.json",
+        "execution/si039-current-package-legacy-upgrade.json"
       ]
     },
     {
@@ -6089,7 +6093,8 @@
         "execution/si039-installed-journey.json",
         "execution/si022-si026-claude-remote-presentation.json",
         "execution/si039-wheel-regression-audit.md",
-        "execution/si039-wheel-regression-audit.json"
+        "execution/si039-wheel-regression-audit.json",
+        "execution/si039-current-package-legacy-upgrade.json"
       ]
     },
     {

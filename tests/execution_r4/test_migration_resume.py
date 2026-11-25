@@ -15,6 +15,9 @@ from test_binding_operator import prepare_operator
     ("receipt", "no verifiable migration receipt"),
     ("partial_receipt", "no verifiable migration receipt"),
     ("owner", "Stop and drain"),
+    ("unrelated_attention", "preserved migration source row.*attention_operation_epochs"),
+    ("invalid_endpoint_attention", "preserved migration source row.*attention_operation_epochs"),
+    ("missing_endpoint_attention", "preserved migration source row.*attention_operation_epochs"),
 ])
 def test_migration_resumes_after_adoption_and_rejects_later_drift(tmp_path, monkeypatch, request, change, message):
     fixture = adopted_setup.__wrapped__(tmp_path,monkeypatch,request)
@@ -47,6 +50,12 @@ def test_migration_resumes_after_adoption_and_rejects_later_drift(tmp_path, monk
             "receipt": "UPDATE execution_migration_map SET canonical_ref=json_remove(canonical_ref,'$.adoption') WHERE state='BINDING_ADOPTED'",
             "partial_receipt": "UPDATE execution_migration_map SET canonical_ref=json_remove(canonical_ref,'$.adoption.binding_digest') WHERE state='BINDING_ADOPTED'",
             "owner": "UPDATE runtime_dispatcher_owner SET lease_expires_at='2999-01-01T00:00:00Z'",
+            "unrelated_attention": "UPDATE attention_operation_epochs SET episode=episode+1 "
+                "WHERE source_type='authority_agents'",
+            "invalid_endpoint_attention": "UPDATE attention_operation_epochs SET state='[]' "
+                "WHERE source_type='runtime_endpoint_revision' AND source_id='legacy-endpoint'",
+            "missing_endpoint_attention": "DELETE FROM attention_operation_epochs "
+                "WHERE source_type='runtime_endpoint_revision' AND source_id='legacy-endpoint'",
         }
         assert uow.connection.execute(mutations[change]).rowcount > 0
     with pytest.raises(ValueError, match=message):

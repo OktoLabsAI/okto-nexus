@@ -7,6 +7,23 @@ from .execution_legacy_migration import SOURCE, _row_digest
 from .migration_backup import _quoted
 
 
+def _resumable_attention_states(conn, adopted):
+    states = {}
+    for identity, state in conn.execute(
+        "SELECT json_array(server_id,executor_id),control_state FROM execution_executors"
+    ):
+        states["execution_executor", identity] = state
+        states["authority_execution_executors", identity] = "present"
+    for endpoint in adopted:
+        identity, state = conn.execute(
+            "SELECT json_array(endpoint_id),json_array(revision,enabled,activation_state) "
+            "FROM agent_endpoints WHERE endpoint_id=?", (endpoint,)
+        ).fetchone()
+        states["runtime_endpoint_revision", endpoint] = state
+        states["authority_agent_endpoints", identity] = "present"
+    return states
+
+
 def require_adopted_baseline(conn, manifest):
     adopted = {}
     for record in conn.execute("SELECT * FROM execution_migration_map WHERE source=? "
@@ -31,6 +48,8 @@ def require_adopted_baseline(conn, manifest):
     original = sqlite3.connect(Path(manifest["_backup_database"]).as_uri()+"?mode=ro",uri=True)
     original.row_factory = sqlite3.Row
     try:
+        attention_states = (_resumable_attention_states(conn, adopted)
+                            if "attention_operation_epochs" in manifest["inventory"]["tables"] else {})
         for table, expected in manifest["inventory"]["tables"].items():
             if table == "runtime_dispatcher_owner":
                 continue  # The caller independently requires no live owner.
@@ -69,6 +88,13 @@ def require_adopted_baseline(conn, manifest):
                     # start. Scan progress is operational, not source history;
                     # preserve the singleton while allowing its cursors/wake.
                     volatile = {"handoff_cursor", "attempt_cursor", "notice_cursor", "wake_generation"}
+                if table == "attention_operation_epochs" and current is not None:
+                    # Executor startup/shutdown and receipted endpoint adoption
+                    # advance the matching Attention anchors through SQLite triggers.
+                    expected_state = attention_states.get((before["source_type"], before["source_id"]))
+                    if (expected_state is not None and before["state"] != "deleted"
+                            and current["state"] == expected_state and current["episode"] > before["episode"]):
+                        volatile = {"state", "episode", "first_detected_at", "last_changed_at"}
                 if current is None or any(current[key] != before[key] for key in columns if key not in volatile):
                     raise ValueError(f"A preserved migration source row changed or disappeared in {table}.")
     finally:
