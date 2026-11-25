@@ -1,0 +1,107 @@
+{
+  "tasks": [
+    "SI-008",
+    "SI-035"
+  ],
+  "environment": "Windows x64, installed wheels, actual Server process exit via os._exit, JSON-RPC fixture peer as separate process",
+  "fixture_directory": "D:/nxs-si035-runtime-recovery",
+  "source_base": "9a3f1b4d3b0a0e8a44b77b656bc5de153ed7b926",
+  "connector_source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+  "core_source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+  "sites": {
+    "provider": "synthetic peer, no external model calls",
+    "successor": "ephemeral loopback HTTP port"
+  },
+  "sources_verified_sha256": {
+    "application/execution_domain_delivery.py": "96d2941921d3b6d0191a50490701bb8330ec3bbb77d9d40f942433d06ad69873",
+    "adapters/outbound/sqlite/session_interaction.py": "c03a27b4152d052404a08490443bde5c6a2dc1e1ed0f77a3024fd8a57e602e8a",
+    "migrations/191_reconcile_released_input_receipts.sql": "f55e09a23c7f9a9d448d050ae77e87d64488cffa9503fd13fbc5c8585ea5980a"
+  },
+  "package": {
+    "archives_sha256": {
+      "nexus": "2255bbd355a8d6c0bc4accc319d1754d5f15d8e876f7d07d00375d9d2cbc0b48",
+      "nexus_sdist": "5900174895fed3d9687f9e7fcc6cbe44c30f27d8bac349f16d279ba6dfa8d132",
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "wheel_changed_files_match_checkout": true,
+    "upgrade_from_real_pre_fix_fixture_db": {
+      "DELIVERY_UNKNOWN": {
+        "applied": [
+          191
+        ],
+        "second_apply": [],
+        "canonical_receipts_unchanged": true,
+        "operation_history_unchanged": true,
+        "follower_unchanged": true,
+        "queue_revision_delta": 1,
+        "integrity_ok": true
+      },
+      "ACCEPTED_NATIVE": {
+        "applied": [
+          191
+        ],
+        "second_apply": [],
+        "canonical_receipts_unchanged": true,
+        "operation_history_unchanged": true,
+        "follower_unchanged": true,
+        "queue_revision_delta": 0,
+        "integrity_ok": true
+      }
+    },
+    "twine_strict": "PASS",
+    "uv_pip_check": "PASS"
+  },
+  "tests": {
+    "abrupt_process_exit": {
+      "passed": 2,
+      "junit_sha256": "143285ba394695f7de12f76daf33baa2131707154ced49df8311335645a31e0b"
+    },
+    "receipt_recovery_and_arbitration": {
+      "passed": 7,
+      "junit_sha256": "3b8561c18801ac757c56e9228512494308a3af22b04ac165ebc3da94c0721bd8"
+    },
+    "queue_storage_reconciliation_release_and_migrations": {
+      "passed": 88,
+      "initial_fixture_failures": 3,
+      "reason": "Retirement checkpoint fixture lacked its required version field.",
+      "junit_sha256": "c06fc37155c6a35fc5e6c04779f0e1d31081bc3009fbbee253ff0b18148e918b"
+    },
+    "corrected_migration_fixture": {
+      "passed": 3,
+      "junit_sha256": "92966a7f9675faf9ac52c02502cd66305d711f333d15fd4f24ff259989c2b43c"
+    },
+    "prior_domain_and_administrative_crash_cases": {
+      "passed": 2,
+      "junit_sha256": "6a412ae288ac532e6df6a1b8efb9c6e332020f40b21f754b17c21d7ebfc2f139"
+    }
+  },
+  "cases": {
+    "before_turn_receipt": {
+      "server_exited_at_cut": true,
+      "peer_exit_verified": true,
+      "input_state": "DELIVERY_UNKNOWN",
+      "canonical_receipt_stage": "SUBMISSION_STARTED",
+      "possible_effect": true,
+      "retry_safe": false,
+      "follower_state": "BLOCKED_SESSION",
+      "native_turn_starts": 1,
+      "result_retained": false,
+      "replacement_process_exited_cleanly": true,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "after_terminal_capture": {
+      "server_exited_at_cut": true,
+      "peer_exit_verified": true,
+      "input_state": "ACCEPTED_NATIVE",
+      "canonical_receipt_stage": "SUCCEEDED",
+      "possible_effect": true,
+      "retry_safe": false,
+      "follower_state": "BLOCKED_SESSION",
+      "native_turn_starts": 1,
+      "result_retained": true,
+      "replacement_process_exited_cleanly": true,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    }
+  }
+}

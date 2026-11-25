@@ -320,21 +320,60 @@ def test_retired_queue_backfill_preserves_receipts_and_is_idempotent(database):
         assert uow.connection.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
 
 
+def link_pending_turn(uow, scope):
+    pending = enqueue(uow, scope)
+    uow.connection.execute("""
+        INSERT INTO execution_operations(server_id,executor_id,session_id,operation_id,subject_agent_id,actor_agent_id,
+            binding_id,workspace_id,workspace_binding_id,action,intent_hash,semantic_payload,expected_revisions_json,
+            admission_state,created_at)
+        VALUES(?,?,?,'same-operation','recipient','recipient',?,?,?,'turn.submit','test','{}','{}','ACCEPTED','t')
+    """, (scope.session.server_id, scope.session.executor_id, scope.session.session_id,
+          scope.binding_id, scope.workspace_id, scope.workspace_binding_id))
+    uow.connection.execute("UPDATE session_interaction_inputs SET status='DISPATCHING',operation_id='same-operation',"
+                           "possible_effect=1 WHERE input_id=?", (pending.input_id,))
+
+
+@pytest.mark.parametrize('latest', ['SUBMISSION_STARTED', 'SUBMITTED', 'SUCCEEDED'])
+def test_released_input_backfill_requires_retirement_proof_and_intermediate_receipt(database, latest):
+    factory, (scope, sibling) = database
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        for selection in (scope, sibling):
+            link_pending_turn(uow, selection)
+            for revision, stage in enumerate(('SUBMISSION_STARTED', latest), start=1):
+                conn.execute("""
+                    INSERT INTO execution_receipts(server_id,executor_id,operation_id,receipt_revision,intent_hash,
+                        stage,possible_effect,retry_safe,received_at)
+                    VALUES(?,?,'same-operation',?,'test',?,1,0,'t')
+                """, (selection.session.server_id, selection.session.executor_id, revision, stage))
+        conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED' WHERE session_id=?",
+                     (scope.session.session_id,))
+        conn.execute("""
+            UPDATE execution_sessions SET local_retirement_json=json_object(
+                'version',1,'process_state','EXITED','owner_generation',owner_generation,'opening_operation_id',open_operation_id)
+            WHERE executor_id=?
+        """, (scope.session.executor_id,))
+        conn.execute("DELETE FROM schema_migrations WHERE version=191")
+        prior = enqueue(uow, scope)
+        other = enqueue(uow, sibling)
+        receipts = [tuple(row) for row in conn.execute('SELECT * FROM execution_receipts ORDER BY rowid')]
+    assert MigrationRunner(factory).apply() == [191]
+    assert MigrationRunner(factory).apply() == []
+    with factory.unit_of_work() as uow:
+        expected = prior if latest == 'SUCCEEDED' else replace(prior, status=InputDeliveryState.DELIVERY_UNKNOWN,
+            input_revision=prior.input_revision + 1, queue_revision=prior.queue_revision + 1)
+        assert enqueue(uow, scope) == expected
+        assert enqueue(uow, sibling) == other
+        assert [tuple(row) for row in uow.connection.execute('SELECT * FROM execution_receipts ORDER BY rowid')] == receipts
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+
+
 def test_receipt_projection_keeps_native_acceptance_and_exact_executor(database):
     factory, (scope, sibling) = database
     with factory.unit_of_work() as uow:
         conn = uow.connection
         for selection in (scope, sibling):
-            pending = enqueue(uow, selection)
-            conn.execute("""
-                INSERT INTO execution_operations(server_id,executor_id,session_id,operation_id,subject_agent_id,actor_agent_id,
-                    binding_id,workspace_id,workspace_binding_id,action,intent_hash,semantic_payload,expected_revisions_json,
-                    admission_state,created_at)
-                VALUES(?,?,?,'same-operation','recipient','recipient',?,?,?,'turn.submit','test','{}','{}','ACCEPTED','t')
-            """, (selection.session.server_id, selection.session.executor_id, selection.session.session_id,
-                  selection.binding_id, selection.workspace_id, selection.workspace_binding_id))
-            conn.execute("UPDATE session_interaction_inputs SET status='DISPATCHING',operation_id='same-operation',"
-                         "possible_effect=1 WHERE input_id=?", (pending.input_id,))
+            link_pending_turn(uow, selection)
         key = (scope.session.server_id, scope.session.executor_id, 'same-operation')
         record_input_delivery(conn, operation_key=key, state=InputDeliveryState.REFUSED_BEFORE_SEND, require_unsent=True)
         project_input_receipt(conn, operation_key=key, stage='SUBMITTED', possible_effect=True, native_id='turn')

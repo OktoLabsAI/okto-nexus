@@ -16,11 +16,17 @@ import pytest
 from test_runtime_relay_process_restart import PeerWitness
 
 
+def queue_receipt(client, queue, intent):
+    return client.get(queue['path'] + '/inputs/receipt', params=queue['query'] | {'client_intent_id': intent})
+
+
 @pytest.mark.parametrize('cut', ['before_output_capture', 'before_terminal_capture',
                                 'after_terminal_capture', 'after_terminal_capture_burst', 'after_projection_commit',
-                                'admin_after_terminal_capture', 'before_turn_receipt', 'after_turn_receipt'])
+                                'admin_after_terminal_capture', 'before_turn_receipt', 'after_turn_receipt',
+                                'queue_before_turn_receipt', 'queue_after_terminal_capture'])
 def test_actual_owner_crash_recovers_only_durable_native_results(tmp_path, cut):
     administrative = cut.startswith('admin_')
+    queued = cut.startswith('queue_')
     helper = Path(__file__).with_name('canonical_crash_process.py')
     tests = Path(__file__).parents[1]
     package_root = str(Path(okto_nexus.__file__).resolve().parent.parent)
@@ -64,17 +70,31 @@ def test_actual_owner_crash_recovers_only_durable_native_results(tmp_path, cut):
             with restart_log.open('w', encoding='utf-8') as restart_output:
                 restarted = subprocess.Popen(command + ['serve', cut, '--home', record['home'],
                     '--host', '127.0.0.1', '--port', str(port), '--feature-harness-integrations', 'true',
-                    '--embedding-mode', 'off', '--harness-root', str(tmp_path)], env=env, cwd=tmp_path,
+                    '--embedding-mode', 'off', '--harness-root', str(tmp_path),
+                    '--runtime-session-interaction-enabled', str(queued).lower()], env=env, cwd=tmp_path,
                     stdin=subprocess.DEVNULL, stdout=restart_output, stderr=subprocess.STDOUT, creationflags=flags)
-                durable = administrative or cut.startswith('after_terminal_capture') or cut == 'after_projection_commit'
+                durable = administrative or 'after_terminal_capture' in cut or cut == 'after_projection_commit'
                 with httpx.Client(base_url=f'http://127.0.0.1:{port}', trust_env=False, timeout=5,
-                                  headers=record['headers']['operator']) as client:
+                                  headers=None if queued else record['headers']['operator']) as client:
+                    if queued:
+                        queue = record['queue']
+                        client.cookies.set('nexus_operator_session', queue['token'])
+                        expected_status = 'ACCEPTED_NATIVE' if durable else 'DELIVERY_UNKNOWN'
                     deadline = time.monotonic() + 35
                     while True:
                         assert restarted.poll() is None, restart_log.read_text(encoding='utf-8')
                         assert time.monotonic() < deadline, (rows('SELECT * FROM execution_agent_recovery'),
                             rows('SELECT status,reason FROM delivery_outbox'), restart_log.read_text(encoding='utf-8'))
                         try:
+                            if queued:
+                                response = queue_receipt(client, queue, 'original-queued-input')
+                                follower = queue_receipt(client, queue, 'retained-follower')
+                                if (response.status_code == follower.status_code == 200
+                                        and response.json()['status'] == expected_status
+                                        and follower.json()['status'] == 'BLOCKED_SESSION'):
+                                    break
+                                time.sleep(.05)
+                                continue
                             if administrative:
                                 response = client.get(f"/api/v1/harness/operations/{marker['turn']}",
                                     headers=record['headers']['subject'])
@@ -97,11 +117,34 @@ def test_actual_owner_crash_recovers_only_durable_native_results(tmp_path, cut):
                         except httpx.TransportError:
                             pass
                         time.sleep(.05)
-                    assert response.json()['ok'], response.text
+                    if queued:
+                        view = response.json()
+                        retained = follower.json()
+                        assert view['input_id'] == queue['inputs']['original-queued-input']
+                        assert view['scope'] == retained['scope'] == queue['exact']
+                        assert view['operation_id'] == marker['turn'] and view['possible_effect']
+                        assert retained['input_id'] == queue['inputs']['retained-follower']
+                        assert retained['operation_id'] is None and not retained['possible_effect']
+                        operation = client.get(f"/v1/runtime/operations/{marker['turn']}", headers=record['headers']['subject'])
+                        assert operation.status_code == 200, operation.text
+                        # Containment settles the queue view. The original Core
+                        # crash fence remains the only receipt for an unknown turn.
+                        stage = 'SUCCEEDED' if durable else 'SUBMISSION_STARTED'
+                        assert operation.json()['executor_stage'] == stage
+                        assert operation.json()['retry_safe'] is False
+                        assert rows("SELECT operation_id FROM execution_operations WHERE action='turn.submit'") == [
+                            {'operation_id': marker['turn']},
+                        ]
+                        results = rows('SELECT output_text FROM execution_results WHERE operation_id=?', (marker['turn'],))
+                        assert results == ([{'output_text': 'original-queued-input'}] if durable else [])
+                    else:
+                        assert response.json()['ok'], response.text
                     receipts = rows("SELECT message_id FROM messages WHERE subject LIKE 'runtime processing receipt:%'")
                     delivery = (rows('SELECT status,consumer_kind FROM message_deliveries WHERE delivery_id=?',
-                        (marker['delivery_id'],))[0] if not administrative else None)
-                    if administrative:
+                        (marker['delivery_id'],))[0] if not (administrative or queued) else None)
+                    if queued:
+                        assert not receipts and not rows('SELECT * FROM delivery_outbox')
+                    elif administrative:
                         view = response.json()['data']
                         assert view['executor_stage'] == 'SUCCEEDED', view
                         assert len(results) == 1 and results[0]['terminal_sequence'] is not None
@@ -125,6 +168,10 @@ def test_actual_owner_crash_recovers_only_durable_native_results(tmp_path, cut):
                         assert domain['canonical_terminal_operation_id'] is None
                         assert delivery['status'] != 'read' and delivery['consumer_kind'] == 'push'
                     for _ in range(3):
+                        if queued:
+                            inspected = queue_receipt(client, queue, 'original-queued-input')
+                            assert inspected.status_code == 200 and inspected.json() == view
+                            continue
                         inspected = (client.get(f"/api/v1/harness/operations/{marker['turn']}",
                             headers=record['headers']['subject']) if administrative else
                             client.get('/api/v1/harness/outbox', params={'operation_id': marker['operation_id']}))
@@ -132,10 +179,14 @@ def test_actual_owner_crash_recovers_only_durable_native_results(tmp_path, cut):
                         if administrative:
                             assert inspected.json()['data']['result'] == view['result']
                     wire = [json.loads(line) for line in Path(record['wire']).read_text(encoding='utf-8').splitlines()]
-                    assert sum(item.get('method') == 'turn/start' for item in wire) == 1
+                    turns = [item for item in wire if item.get('method') == 'turn/start']
+                    assert len(turns) == 1
+                    if queued:
+                        assert turns[0]['params']['input'][0]['text'] == 'original-queued-input'
                     assert not (tmp_path / 'unexpected-native-launch').exists()
                     assert rows('PRAGMA foreign_key_check') == []
-                    shutdown = client.post('/v1/runtime/shutdown', json={'timeout_seconds': 2})
+                    shutdown = client.post('/v1/runtime/shutdown', headers=record['headers']['operator'],
+                                           json={'timeout_seconds': 2})
                     assert shutdown.status_code in {200, 202}, shutdown.text
                 assert restarted.wait(timeout=15) == 0, restart_log.read_text(encoding='utf-8')
         finally:

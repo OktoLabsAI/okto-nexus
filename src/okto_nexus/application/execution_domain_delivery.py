@@ -259,11 +259,15 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
     caused effects. Never replay it, fabricate a receipt or publish partial text
     as a completed response.
     """
-    if not conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
+    session = conn.execute("SELECT owner_generation FROM execution_sessions WHERE server_id=? AND executor_id=? "
             "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
-            (server_id, executor_id, session_id)).fetchone():
+            (server_id, executor_id, session_id)).fetchone()
+    if session is None:
         raise ValueError('Delivery release requires a closed canonical session.')
+    from ..adapters.outbound.sqlite.session_interaction import project_released_inputs
     from .execution_released_closes import settle_released_closes
+    project_released_inputs(conn, server_id=server_id, executor_id=executor_id,
+                            session_id=session_id, owner_generation=session['owner_generation'])
     settle_released_closes(conn, server_id=server_id, executor_id=executor_id,
         session_id=session_id, proof=proof)
     rows = conn.execute("SELECT m.domain_operation_id,p.operation_id FROM execution_operations p "

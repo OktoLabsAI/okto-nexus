@@ -577,7 +577,9 @@
         "execution/si008-lost-enqueue-response.json",
         "execution/si030-installed-work-resume.md",
         "execution/si030-installed-work-resume.json",
-        "execution/si008-current-recovery.json"
+        "execution/si008-current-recovery.json",
+        "execution/si035-server-process-crash.md",
+        "execution/si035-server-process-crash.json"
       ]
     },
     {
@@ -2352,6 +2354,8 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si035-server-process-crash.md",
+        "execution/si035-server-process-crash.json",
         "execution/si035-queue-dispatch-races.md",
         "execution/si035-queue-dispatch-races.json",
         "execution/si035-input-restart-receipts.md",
@@ -3346,7 +3350,8 @@
       "evidence": [
         "execution/si023-retired-session-queue.json",
         "execution/si035-input-restart-receipts.md",
-        "execution/si035-input-restart-receipts.json"
+        "execution/si035-input-restart-receipts.json",
+        "execution/si035-server-process-crash.json"
       ]
     },
     {

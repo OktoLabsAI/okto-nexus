@@ -400,6 +400,28 @@ def project_input_receipt(conn: Connection, *, operation_key: tuple[str, str, st
     record_input_delivery(conn, operation_key=operation_key, state=state)
 
 
+def project_released_inputs(conn: Connection, *, server_id: str, executor_id: str,
+                            session_id: str, owner_generation: int) -> None:
+    """Settle the queue view after verified containment and complete stream replay."""
+    rows = conn.execute("""
+        SELECT i.operation_id FROM session_interaction_inputs i
+        JOIN execution_operations o USING (server_id, executor_id, operation_id)
+        JOIN execution_receipts r USING (server_id, executor_id, operation_id)
+        WHERE i.server_id=? AND i.executor_id=? AND i.session_id=? AND i.owner_generation=?
+          AND i.status='DISPATCHING' AND i.possible_effect=1
+          AND o.session_id=i.session_id AND o.action='turn.submit' AND r.intent_hash=o.intent_hash
+          AND r.stage IN ('SUBMISSION_STARTED', 'SUBMITTED') AND r.possible_effect=1
+          AND r.receipt_revision=(
+              SELECT max(latest.receipt_revision) FROM execution_receipts latest
+              WHERE latest.server_id=i.server_id AND latest.executor_id=i.executor_id
+                AND latest.operation_id=i.operation_id
+          )
+    """, (server_id, executor_id, session_id, owner_generation)).fetchall()
+    for row in rows:
+        record_input_delivery(conn, operation_key=(server_id, executor_id, row['operation_id']),
+                              state=InputDeliveryState.DELIVERY_UNKNOWN)
+
+
 def retire_unconsumed_dispatch(uow: SqliteUnitOfWork, *, scope: InputScope, operation_id: str,
                                observed: CapacityReservation) -> None:
     """Retire the existing operation only with matching host and local no-effect proof."""
