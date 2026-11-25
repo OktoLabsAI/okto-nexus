@@ -2180,8 +2180,10 @@
         "SI-T-H10",
         "SI-T-H11"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si032-current-console-exit.md",
+        "execution/si032-current-console-exit.json",
         "execution/si020-current-native-client-exit.json",
         "execution/si026-claude-terminal-retained-output.md",
         "execution/si026-claude-terminal-retained-output.json",
@@ -5695,7 +5697,8 @@
       "status": "PASS",
       "evidence": [
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si032-current-console-exit.json"
       ]
     },
     {
@@ -5721,7 +5724,8 @@
         "execution/si022-codex-remote-attach.json",
         "execution/si032-exact-reattach-command.json",
         "execution/si032-codex-interrupt-and-detach.md",
-        "execution/si032-codex-interrupt-and-detach.json"
+        "execution/si032-codex-interrupt-and-detach.json",
+        "execution/si032-current-console-exit.json"
       ]
     },
     {

@@ -233,9 +233,14 @@ Ctrl+C opens an interruption review for the active turn. Ctrl+Y confirms the
 interruption and pauses the queue. Ctrl+N cancels the review. Nexus can also
 queue a message for the next turn while the harness is busy.
 
-Press Ctrl+] to detach. On Windows, closing the viewer's console also leaves
-the session, running turn and queue with the same executor while its authorization
-is valid. When the viewer returns to the shell, use the **Reattach to this session**
+Press Ctrl+] to detach, including while an interruption review is open. The
+reviewed Codex 0.170.0 Windows frontend also exits on `/exit` while the
+app-server keeps the session open. Closing the viewer's console leaves the
+running turn and queue with the same executor while its authorization is valid.
+To leave the Pi or Claude viewer, use the key shown in its banner. Their
+Nexus composers enqueue submitted text.
+
+When the viewer returns to the shell, use the **Reattach to this session**
 command to follow the same session again. If a send
 was in progress when the viewer closed, check the receipt reference printed in
 the terminal with the original operator login before sending again.

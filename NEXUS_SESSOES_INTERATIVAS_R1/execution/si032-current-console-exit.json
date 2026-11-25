@@ -1,0 +1,124 @@
+{
+  "task": "SI-032",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": "Windows x64, Codex frontend 0.170.0 and embedded app-server 0.157.0, actual ConPTY, model fixture on loopback",
+  "native": {
+    "passed": 2,
+    "test_files": {
+      "": 2
+    },
+    "junit_sha256": "1ef971c08531aab324135d4cfd64574491df4bf9569c699fd14059d66cb3e20f"
+  },
+  "cases": {
+    "detach-during-review": {
+      "proof": {
+        "cut": "detach-during-review",
+        "presenter_exit_code": 0,
+        "native_frontend_observed_to_exit": true,
+        "writer_lease_detached": true,
+        "new_writer_without_takeover": true,
+        "retained_queue_and_grant_at_cut": true,
+        "queue_completed_without_any_presenter": true,
+        "reattached_after_both_results": true,
+        "queued_message_delivered_once": true,
+        "same_engine_thread_and_turn_after_cut": true,
+        "native_turn_starts": 2,
+        "native_steers": 0,
+        "native_interrupts": 0,
+        "loopback_model_requests": 2,
+        "external_provider_calls": 0,
+        "turn_result": "SUCCEEDED",
+        "queued_turn_result": "SUCCEEDED",
+        "canonical_close": "SUCCEEDED"
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 2
+        },
+        "foreign_key_violations": 0,
+        "detached_writer_attachments": 2,
+        "results_on_original_session": 2
+      },
+      "console_modes_restored": true,
+      "transcripts_sha256": {
+        "first-writer.txt": "4e75f4dc949966f0e9208b0f723ef17e5641b61a93af424fe6c6beb5c98cfdc5",
+        "successor-writer.txt": "2fb0fd9ccef9b153d5a6509f72ce180c74c18f08cedf9276f85d597ca5f3a119"
+      }
+    },
+    "native-exit": {
+      "proof": {
+        "cut": "native-exit",
+        "presenter_exit_code": 0,
+        "native_frontend_observed_to_exit": true,
+        "writer_lease_detached": true,
+        "new_writer_without_takeover": true,
+        "retained_queue_and_grant_at_cut": true,
+        "queue_completed_without_any_presenter": true,
+        "reattached_after_both_results": true,
+        "queued_message_delivered_once": true,
+        "same_engine_thread_and_turn_after_cut": true,
+        "native_turn_starts": 2,
+        "native_steers": 0,
+        "native_interrupts": 0,
+        "loopback_model_requests": 2,
+        "external_provider_calls": 0,
+        "turn_result": "SUCCEEDED",
+        "queued_turn_result": "SUCCEEDED",
+        "canonical_close": "SUCCEEDED"
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 2
+        },
+        "foreign_key_violations": 0,
+        "detached_writer_attachments": 2,
+        "results_on_original_session": 2
+      },
+      "console_modes_restored": true,
+      "transcripts_sha256": {
+        "first-writer.txt": "253237fe0ad6c77c51655e20214835e86e99c4464e965ad9b2300f6cdb637b28",
+        "successor-writer.txt": "73dd91b6943d0b493992eb4f371d7ff438dce1d5ba70781d5cd79e7250c08f05"
+      }
+    }
+  },
+  "regressions": {
+    "passed": 37,
+    "test_files": {
+      "tests.session_interaction.test_session_cli": 18,
+      "tests.session_interaction.test_presentation_transport": 13,
+      "tests.session_interaction.test_attachment_broker": 6
+    },
+    "junit_sha256": "9de925444970bd8d9864394afbe2d011e9dd329786b7fce9c93b4eb3e8385ed4"
+  },
+  "fixture_sha256": {
+    "test_viewer_exit.py": "76d0b92d373795f052d33ba542b739c8901d1d01da4903aee8937c3eebddf7ac",
+    "run.ps1": "fd548a1107b594c98f85ed14867c0b8c0d103a4852dafddea8b48ad7fdfeb37e"
+  },
+  "raw_evidence_directory": "D:/nxs-si032-current",
+  "limits": [
+    "The documented /exit result is scoped to the reviewed Codex frontend. It is not used as a Nexus detach alias.",
+    "Both native cases used a synthetic model on a single Windows machine. Campaign checks for SI-T-G03/G04/G05 remain pending."
+  ]
+}
