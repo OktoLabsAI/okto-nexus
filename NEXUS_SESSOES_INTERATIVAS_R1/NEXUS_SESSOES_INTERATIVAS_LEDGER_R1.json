@@ -499,7 +499,7 @@
         "SI-T-B11",
         "SI-T-B12"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si007-queue-head.md",
         "execution/si007-r4-admission.md",
@@ -523,7 +523,8 @@
         "execution/si007-shared-turn-arbitration.md",
         "execution/si007-shared-turn-arbitration.json",
         "execution/si007-queue-with-blocking-pi-question.md",
-        "execution/si007-queue-with-blocking-pi-question.json"
+        "execution/si007-queue-with-blocking-pi-question.json",
+        "execution/si007-current-fifo.json"
       ]
     },
     {

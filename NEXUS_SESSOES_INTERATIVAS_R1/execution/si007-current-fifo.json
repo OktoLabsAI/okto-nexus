@@ -1,0 +1,43 @@
+{
+  "task": "SI-007",
+  "revisions": {
+    "nexus": "8bcee9bd3e12901c448dc57cb3821c6dd295de9c",
+    "connector": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": "Windows, isolated wheels, production HTTP application and dispatcher, disposable SQLite, synthetic native peer",
+  "suite": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit_sha256": "1a342c438a16fc6049ca8d98f0da4f63d8e84593ead88d720dd79d9380ccef9b",
+    "capacity_attempts": "All 12 cases in tests/session_interaction/test_capacity_attempts.py, including original attempt reuse, ownership replacement, exact unsent proof and generation fencing",
+    "http_cases": [
+      "test_server_dispatches_queue_after_busy_boundary_without_handoff_acquisition",
+      "test_queue_limit_preserves_accepted_inputs_and_expiration_frees_capacity",
+      "test_unstaged_input_blocks_when_its_recorded_grant_expires",
+      "test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order"
+    ],
+    "warning": "Starlette TestClient deprecation for httpx"
+  },
+  "previous_evidence_by_scenario": {
+    "SI-T-B01,B06,B09,B22": "si007-pi-tool-boundary.json",
+    "SI-T-B02,B03,B04,B11": "si007-concurrent-browser-fifo.json",
+    "SI-T-B07": "si007-queue-with-blocking-pi-question.json",
+    "SI-T-B08": "si025-pi-delayed-settlement.json",
+    "SI-T-B12": "si032-queue-without-terminal.json",
+    "SI-T-B17,B18": "si009-queue-limit-and-expiration.json",
+    "SI-T-B21": "si002-current-write-path.json"
+  },
+  "limitations": [
+    "Earlier Pi, Edge and Codex ConPTY runs preserve their own wheel revisions and use simulated provider replies.",
+    "The Pi settlement test delayed the native event without inducing retry or compaction at the provider.",
+    "No remote or paid provider campaign was run for this verification."
+  ]
+}
