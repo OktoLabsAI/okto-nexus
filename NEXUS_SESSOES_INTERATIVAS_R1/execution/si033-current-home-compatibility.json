@@ -1,0 +1,115 @@
+{
+  "task": "SI-033",
+  "repo_head_before_evidence": "848cbcda0068575e445a0002deaebe4644a60fdd",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": {
+    "os": "Windows x64 with actual ConPTY",
+    "browser": "Microsoft Edge 158.0.4370.33, Playwright CLI 0.1.25",
+    "harness": "Pi 0.87.1, synthetic model in an isolated environment",
+    "connector": "Separate remote executor through Connector R4 on loopback"
+  },
+  "installed_regressions": {
+    "passed": 216,
+    "skipped": 0,
+    "test_files": {
+      "tests.quick_connect.test_connect_arguments": 48,
+      "tests.quick_connect.test_entry_compatibility": 50,
+      "tests.test_runtime_legacy_profile_review": 9,
+      "tests.execution_r4.test_terminal_scripted_recovery": 1,
+      "tests.test_attention_handoff_navigation": 9,
+      "tests.execution_r4.test_canonical_handoff_recovery": 15,
+      "tests.execution_r4.test_participant_init": 21,
+      "tests.execution_r4.test_participant_doctor": 19,
+      "tests.execution_r4.test_participant_removal": 25,
+      "tests.execution_r4.test_participant_launch": 19
+    },
+    "junit_sha256": "be28cbd39d7f362be0e8292749307709d8de2b5e7b6251fa495f330be53c0e39"
+  },
+  "frontend_node": {
+    "passed": 50,
+    "sha256": "33e5edfa9b91745ac2eef8afccef6ae62aad784b40a35ea4623748ebcdb6a496"
+  },
+  "installed_native_browser": {
+    "passed": 1,
+    "skipped": 0,
+    "test_files": {
+      "": 1
+    },
+    "junit_sha256": "e3ad4eed3dec66a5412bf578cb4928993e8b202b3948990c8bea6eb44aa73079"
+  },
+  "native_proof": {
+    "native_pi": "0.87.1",
+    "real_connector_r4": true,
+    "windows_conpty": true,
+    "connect_without_viewer": true,
+    "no_session_before_home_chat": true,
+    "one_canonical_home_chat": true,
+    "browser_chat_correlated_with_native_turn": true,
+    "terminal_wrote_one_queued_message": true,
+    "exact_writer_detached_with_native_turn_active": true,
+    "browser_reloaded_same_session": true,
+    "browser_observed_followup_before_reply": true,
+    "browser_observed_both_results": true,
+    "one_native_process_and_session": true,
+    "exact_native_history_once": true,
+    "native_turns": 2,
+    "connector_generation_unchanged": true,
+    "native_exit_after_canonical_close": true,
+    "synthetic_model_calls": 2,
+    "external_provider_calls": 0
+  },
+  "browser": {
+    "single_follow_up_region_with_three_columns": true,
+    "active_harness_status_after_terminal_detach": "Working",
+    "same_exact_session_target_throughout": true,
+    "home_chat_shows_human_message_without_delivery_envelope": true,
+    "snapshot_sha256": {
+      "chat-recorded": "bdcd0ff7e33825372e601321734613eff56979017f75401742b47d1d4e657fd9",
+      "source-conversation": "48c41897621f4846a94fb0c0827a8a519013e6c6535e48d5f415d7308efa7e28",
+      "browser-returned": "39fb1775dcbe34c0d2bfc78a3eaa7f6b5bf8ebb3fd540a5e35ba2244c4f932b2",
+      "browser-saw-followup": "d21b443987f76c7a656eab5e40721f5cf99b2b73a303e15cd6cadae5decac741",
+      "browser-saw-results": "4c062049ed665c959970a59f4a345fe4b2203377a65dd37d2262239607775d1b"
+    }
+  },
+  "sqlite": {
+    "operations_on_original_remote_session": {
+      "runtime.open": 1,
+      "turn.submit": 2,
+      "runtime.close": 1
+    },
+    "writer_attachment": "DETACHED",
+    "terminal_input_final_status": "ACCEPTED_NATIVE",
+    "results_on_original_session": 2,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "fixture_sha256": {
+    "drive.ps1": "b2cf9886998bab7dbd55ae998ebe373f4222e2998a4c913d0e807ef82896feb9",
+    "test_i07_writer.py": "50433a4fa6a2523d32d83e89cb73dbe4d1a62774371e44c009a7b461af0c2ebe",
+    "remote_pi_project.py": "0838a608fc87635c4787608ac5e1ef8cf1894ac1f1a9106dec7a3153665f9fa4",
+    "terminal.py": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20",
+    "pi_fixture.py": "9cf2a5dbc2484001a33f3fb45f69be174c53c09048059f84bb0248b4dd5ea971"
+  },
+  "raw_evidence_directory": "D:/nxs-si033-current-848cbcda",
+  "limits": [
+    "The two model responses were synthetic. SI-T-I01 and SI-T-I04 still require the prescribed campaign.",
+    "The browser roundtrip covers the exact conversation and live harness status. The two-tab result card and steer treatment were examined by the separate controlled SI-T-I04 probe.",
+    "Node navigation assertions are component regressions. This run does not qualify human usability or screen reader coverage."
+  ]
+}

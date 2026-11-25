@@ -2250,7 +2250,7 @@
         "SI-T-F14",
         "SI-T-F17"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si028-installed-quick-connect-modes.md",
         "execution/si028-installed-quick-connect-modes.json",
@@ -2260,7 +2260,9 @@
         "execution/si036-home-states-native-detach.md",
         "execution/si036-home-states-native-detach.json",
         "execution/si033-legacy-compatibility-current.md",
-        "execution/si033-legacy-compatibility-current.json"
+        "execution/si033-legacy-compatibility-current.json",
+        "execution/si033-current-home-compatibility.md",
+        "execution/si033-current-home-compatibility.json"
       ]
     },
     {
@@ -6044,7 +6046,9 @@
         "execution/si032-exact-reattach-command.json",
         "execution/si036-pi-browser-queue-transcript.json",
         "execution/si036-home-states-native-detach.md",
-        "execution/si036-home-states-native-detach.json"
+        "execution/si036-home-states-native-detach.json",
+        "execution/si033-current-home-compatibility.md",
+        "execution/si033-current-home-compatibility.json"
       ]
     },
     {
