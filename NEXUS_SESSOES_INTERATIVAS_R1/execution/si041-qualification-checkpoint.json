@@ -269,5 +269,88 @@
       "SI-T-I08",
       "SI-T-I09"
     ]
+  },
+  "current_candidate_review": {
+    "decision": "ROLLOUT_PENDING",
+    "versions": {
+      "nexus": "0.3.8",
+      "connector": "0.0.15",
+      "core": "0.0.16"
+    },
+    "verified_branch_tips_before_report": {
+      "nexus": {
+        "branch": "feature/v0.3.8",
+        "head": "3459c5711665deca53555732bd0d42f59fdf88ec"
+      },
+      "connector": {
+        "branch": "feature/v0.0.15",
+        "head": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d"
+      },
+      "core": {
+        "branch": "feature/v0.0.16",
+        "head": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+      }
+    },
+    "migration_evidence": "si039-current-package-legacy-upgrade.json",
+    "terminal_guide_evidence": "si040-session-action-guide.json",
+    "regressions": {
+      "platform": "Windows x64",
+      "evidence_directory": "D:/nxs-si040-current-package",
+      "command": "python -B -m pytest -c pyproject.toml -o pythonpath= -o asyncio_default_fixture_loop_scope=function -p assert_contract_wheel -p anyio.pytest_plugin -p pytest_asyncio.plugin tests/execution_r4/test_session_input_runtime.py tests/test_runtime_diagnostics_dashboard.py --basetemp D:/nxs-si040-current-package/rollback-pytest --junitxml D:/nxs-si040-current-package/rollback.xml -q",
+      "passed": 38,
+      "skipped": 9,
+      "skip_reason": "Isolated browser campaign not enabled",
+      "exit_code": 0,
+      "restart_receipt_cases_passed": [
+        "unknown",
+        "completed",
+        "unknown-admissions-disabled",
+        "completed-admissions-disabled"
+      ],
+      "junit_sha256": "977ba23bc0741a2019a315a56782d91d33bf1799674f3104e67ce40476361bec",
+      "log_sha256": "e5748cc8e7cb2b9519324f48b14c57e13dfd74f1c3ab7c801755ad3885b8a59d"
+    },
+    "two_session_evidence": [
+      "si041-two-session-loopback.json",
+      "si041-two-session-native-ack.json"
+    ],
+    "live_admission_pause": {
+      "qualification_level": "installed_package_real_browser_and_harness_simulated_model",
+      "browser": "Microsoft Edge 158.0.4370.33 via Playwright CLI, isolated and headless",
+      "harness": "Pi 0.87.1 with Node 24.15.0",
+      "transport": "Authenticated Connector WSS over loopback",
+      "evidence_directory": "D:/nxs-si041-current-3459c571",
+      "command": "python -B -m pytest -c pyproject.toml -o pythonpath= -o asyncio_default_fixture_loop_scope=function -p assert_contract_wheel -p anyio.pytest_plugin -p pytest_asyncio.plugin D:/nxs-si041-current-3459c571/test_live_pause.py --basetemp D:/nxs-si041-current-3459c571/native --junitxml D:/nxs-si041-current-3459c571/native.xml -q",
+      "native_tests_passed": 1,
+      "native_exit_code": 0,
+      "browser_exit_code": 0,
+      "browser_startup_recovery": "The launcher blocked after starting Edge. The driver used the same isolated browser session and the live native test; no new native session was opened.",
+      "refused_new_input_http": 409,
+      "repeated_intent_returned_original_receipt": true,
+      "retained_input_final_receipt": "ACCEPTED_NATIVE",
+      "same_pi_process_session_connector_generation_and_grants": true,
+      "exact_transcript_once": true,
+      "browser_showed_second_result_while_paused": true,
+      "browser_reopened_admission": true,
+      "canonical_close_stopped_pi": true,
+      "synthetic_model_calls": 2,
+      "external_provider_calls": 0,
+      "sha256": {
+        "test_live_pause.py": "7ccf565a7c4839b73291bdf4457b1f6ded2411987727d2e7be15d0d667493923",
+        "drive.ps1": "82492e7cc4b8e337cbf492e779b41d7c6dbfcc408a46b724c41d76590a9495b0",
+        "native.xml": "12ac7e2cac8caa8f989c65286a6160291d4eb6153fee9f85127471405a27ff4d",
+        "native-proof.json": "75752fc8686547d8b64699d06a90d1a7b92428dee7d81a2c7e29cf3eaf4c8cbf",
+        "browser.log": "a3a654c06b9ab49fedde397155b6d77f6db67b0c9a238249bef3d317c54865c0",
+        "result-while-paused.log": "6bf4f54af3377e497291ce45b3ab312ad234674a6cb40778a1740fe42fa611b7",
+        "settings-reopened.log": "a7a3c35e76040b63b8b4a8cd687020823ece7c52c1d0860fe93add553aed1607"
+      }
+    },
+    "open_gates": {
+      "product_usability_and_windows_screen_reader_speech": "SI-036",
+      "provider_campaigns": "SI-038",
+      "separate_connector_host_deferred": "SI-T-H01",
+      "additional_mac_measurements_deferred": "SI-037",
+      "scenarios_not_run": 30
+    }
   }
 }

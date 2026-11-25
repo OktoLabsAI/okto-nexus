@@ -2780,7 +2780,7 @@
         "SI-T-I08",
         "SI-T-I09"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si041-two-session-native-ack.md",
         "execution/si041-two-session-native-ack.json",
@@ -6042,7 +6042,9 @@
         "execution/si041-live-admission-pause.md",
         "execution/si041-live-admission-pause.json",
         "execution/si041-native-admission-rollback.md",
-        "execution/si041-native-admission-rollback.json"
+        "execution/si041-native-admission-rollback.json",
+        "execution/si041-qualification-checkpoint.md",
+        "execution/si041-qualification-checkpoint.json"
       ]
     },
     {
