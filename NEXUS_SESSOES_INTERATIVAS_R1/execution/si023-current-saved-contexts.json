@@ -1,0 +1,168 @@
+{
+  "task": "SI-023",
+  "supplements_scenario": "SI-T-F15",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "isolated_import_guard_sha256": "0d2d9c624f1e6914f972c200e37b7fd1550c021b2bdbb9ff2e4230ea09541694",
+  "installed_regressions": {
+    "count": 41,
+    "junit_sha256": "59fcee49d5d4a931aafd2b560a2a565c2ae12f0117b88c6c9cda3d078fb5c753",
+    "tests": {
+      "tests.execution_r4.test_retired_attach_history": [
+        "test_retained_external_work_rejects_old_writer_completion_and_ack[COMPLETED]",
+        "test_retained_external_work_rejects_old_writer_completion_and_ack[VERIFYING]",
+        "test_retained_external_work_rejects_old_writer_completion_and_ack[REJECTED]",
+        "test_retained_external_session_survives_ordinary_session_retention",
+        "test_retired_attach_proof_cannot_resume_external_execution[ack]",
+        "test_retired_attach_proof_cannot_resume_external_execution[complete]",
+        "test_operator_can_reopen_retired_external_claim_without_resuming_attach",
+        "test_retained_external_claim_does_not_consume_or_relabel_ordinary_inbox"
+      ],
+      "tests.execution_r4.test_terminal_session_picker": [
+        "test_zero_sessions_opens_only_after_explicit_request",
+        "test_one_session_requires_continue_or_new_choice[1-single]",
+        "test_one_session_requires_continue_or_new_choice[n-None]",
+        "test_multiple_sessions_choose_exact_id_not_timestamp_or_checkpoint",
+        "test_cancel_session_selection_never_submits",
+        "test_pending_observe_or_exit_precedes_session_selection",
+        "test_pending_recovery_uses_original_slot_before_explicit_selection",
+        "test_control_pending_recovery_does_not_become_productive_work",
+        "test_new_context_cannot_control_or_answer_remembered_sibling",
+        "test_new_context_cannot_resume_a_remembered_sibling",
+        "test_resume_passes_the_selected_session_and_watches_its_receipt",
+        "test_control_targets_selected_session",
+        "test_closed_or_partial_session_inventory_is_not_latest_fallback",
+        "test_closed_session_requires_explicit_new_context",
+        "test_selected_session_closed_before_submit_refuses_without_replacement",
+        "test_explicit_chat_session_bypasses_picker_but_revalidates",
+        "test_json_send_without_durable_session_requires_explicit_selection",
+        "test_json_explicit_session_intents_never_prompt[options0]",
+        "test_json_explicit_session_intents_never_prompt[options1]",
+        "test_json_resume_preserves_original_intent_without_session_picker"
+      ],
+      "tests.session_interaction.test_saved_codex_rollout": [
+        "test_private_successor_publishes_only_exact_self_contained_rollout[False]",
+        "test_private_successor_publishes_only_exact_self_contained_rollout[True]",
+        "test_saved_profile_allows_a_fresh_capability_but_keeps_model_and_credentials_exact"
+      ],
+      "tests.session_interaction.test_saved_claude_profile": [
+        "test_saved_profile_rejects_drift_and_unreviewed_sources",
+        "test_saved_question_profile_requires_the_reviewed_permissions_in_every_scope",
+        "test_saved_read_profile_requires_native_working_directory_policy",
+        "test_saved_grant_revalidates_exact_retired_history_and_current_profile"
+      ],
+      "tests.execution_r4.test_session_input_runtime": [
+        "test_saved_codex_context_requires_retirement_and_same_history[intact-VERIFIED]",
+        "test_saved_codex_context_requires_retirement_and_same_history[changed-FILE_CHANGED]",
+        "test_saved_codex_context_requires_retirement_and_same_history[interrupted_verification-VERIFIED]",
+        "test_saved_codex_context_requires_retirement_and_same_history[no_live_evidence-None]",
+        "test_saved_codex_context_requires_retirement_and_same_history[unreleased_slot-CAPTURED]",
+        "test_saved_codex_context_requires_retirement_and_same_history[legacy_witness-VERIFIED]"
+      ]
+    }
+  },
+  "native": {
+    "environment": "Windows x64 with Nexus and Connector on localhost, real Codex app-server 0.157.0, synthetic model SSE",
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "fixtures_sha256": {
+      "remote_native_project.py": "52c1ff8d2a09de6793110fd306e2443376090ef2deb227b7bfdd783397da2719",
+      "test_codex_closed_history.py": "c220b9d52da4bd095289c942bd8708e4bc52b52b9fee1ffd19afb233f576e7a9"
+    },
+    "entry_points": [
+      "authenticated Connector R4 transport",
+      "terminal session resume application path"
+    ],
+    "result": {
+      "count": 2,
+      "junit_sha256": "2e2a64d437c14f60bcee1d655aa47ff34b06f77394e367868cc0e1c1ce858ee7",
+      "tests": {
+        "": [
+          "test_connector_canonical_close_preserves_exact_local_rollout[False]",
+          "test_connector_canonical_close_preserves_exact_local_rollout[True]"
+        ]
+      }
+    },
+    "intact": {
+      "report": {
+        "build": "Codex app-server 0.157.0",
+        "canonical_close": "SUCCEEDED",
+        "local_private_snapshot_observed": true,
+        "owned_app_server_exited": true,
+        "exact_thread_and_source_verified": true,
+        "file_drift_injected": false,
+        "private_record_persisted": true,
+        "rollout_path_absent_from_server": true,
+        "loopback_fixture_requests": 1,
+        "external_provider_requests": 0,
+        "successor_admitted": true,
+        "native_thread_resume_count": 1,
+        "human_cancel_had_no_effect": true,
+        "same_command_recovered_original_receipt": true
+      },
+      "report_sha256": "5e2836f363433ae77194d032b1f3b15c7104c42102f3bd9049804dff3406b5ea",
+      "server_sqlite": {
+        "integrity": "ok",
+        "operations": {
+          "runtime.close": 2,
+          "runtime.open": 2,
+          "turn.submit": 1
+        },
+        "all_sessions_closed": true,
+        "successor_points_to_exact_source_and_close": true
+      }
+    },
+    "changed_after_exit": {
+      "report": {
+        "build": "Codex app-server 0.157.0",
+        "canonical_close": "SUCCEEDED",
+        "local_private_snapshot_observed": true,
+        "owned_app_server_exited": true,
+        "exact_thread_and_source_verified": true,
+        "file_drift_injected": true,
+        "private_record_persisted": false,
+        "rollout_path_absent_from_server": true,
+        "loopback_fixture_requests": 1,
+        "external_provider_requests": 0,
+        "successor_admitted": false,
+        "native_thread_resume_count": 0,
+        "human_cancel_had_no_effect": true,
+        "same_command_recovered_original_receipt": false
+      },
+      "report_sha256": "a769955d27778008c8eb2c41a142641951bd3038c136d687e4ec3bf579563dcb",
+      "server_sqlite": {
+        "integrity": "ok",
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 1
+        },
+        "all_sessions_closed": true,
+        "successor_points_to_exact_source_and_close": false
+      }
+    }
+  },
+  "raw_evidence_directories": [
+    "D:/nxs-si022-resume-no-status",
+    "D:/nxs-si023-exact-current"
+  ],
+  "limits": [
+    "The Codex model responses were synthetic. No provider account, inference or paid campaign was used.",
+    "Both hosts were on one Windows machine. The resume test exercised the terminal handler through the installed package and did not repeat the real TUI or participant session.",
+    "SI-T-G13 through SI-T-G16 and SI-T-G20 retain their qualification requirements."
+  ]
+}

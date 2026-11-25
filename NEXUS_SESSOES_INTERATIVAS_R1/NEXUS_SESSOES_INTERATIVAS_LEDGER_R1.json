@@ -1452,8 +1452,10 @@
         "SI-T-G20",
         "SI-T-F15"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si023-current-saved-contexts.md",
+        "execution/si023-current-saved-contexts.json",
         "execution/si025-pi-saved-retirement.md",
         "execution/si025-pi-saved-retirement.json",
         "execution/si025-pi-connector-successor.md",
@@ -4873,6 +4875,7 @@
         "execution/si023-si030-codex-resume-windows.json",
         "execution/si023-si030-saved-resume-confirmation.json",
         "execution/si023-codex-remote-successor.json",
+        "execution/si023-current-saved-contexts.json",
         "execution/si037-linux-pi-saved-resume.md",
         "execution/si037-linux-pi-saved-resume.json",
         "execution/si037-linux-pi-embedded-resume.md",
