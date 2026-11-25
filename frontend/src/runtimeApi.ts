@@ -450,6 +450,11 @@ export const piPresentationApi = {
     target.query.set('client_intent_id', intent);
     return read<SessionInputReceipt>(`${target.path}/presenter/inputs/receipt?${target.query}`, signal, undefined, true);
   },
+  interruptReceipt(scope: InteractionScope, intent: string, signal: AbortSignal) {
+    const target = interactionTarget(scope);
+    target.query.set('client_intent_id', intent);
+    return read<SessionInterruptReceipt>(`${target.path}/presenter/interrupt/receipt?${target.query}`, signal, undefined, true);
+  },
 };
 
 function sessionInputReceipt(scope: InteractionScope, selector: 'input_id' | 'client_intent_id', id: string, signal: AbortSignal) {

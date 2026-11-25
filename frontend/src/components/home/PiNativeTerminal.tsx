@@ -4,7 +4,7 @@ import {FitAddon} from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
 import {connectPiTerminal} from '../../piTerminalConnection';
 import {piTerminalEdits, type PiEdit} from '../../piTerminalInput';
-import {piPresentationApi, type InteractionScope} from '../../runtimeApi';
+import {piPresentationApi, runtimeApi, type InteractionScope} from '../../runtimeApi';
 import {useAgentModalGuard} from '../AgentActionModal';
 
 type TerminalView = 'connecting' | 'read' | 'write' | 'unavailable' | 'disconnected';
@@ -16,9 +16,11 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
   const [uncertain, setUncertain] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [draftEdited, setDraftEdited] = useState(false);
-  useAgentModalGuard(draftEdited);
+  const [confirmInterrupt, setConfirmInterrupt] = useState(false);
+  useAgentModalGuard(draftEdited || confirmInterrupt);
   const receiptKey = `nexus:pi-pending:${JSON.stringify(scope)}`;
   const recover = useRef<() => void>(() => {});
+  const decideInterrupt = useRef<(confirm: boolean) => void>(() => {});
 
   useEffect(() => {
     const controller = new AbortController();
@@ -39,8 +41,10 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     let keepalive: number | undefined;
     let timeout: number | undefined;
     let unknown: string | null = null;
+    let interrupt: {id: string; intent: string} | null = null;
     let disposed = false;
     setDraftEdited(false);
+    setConfirmInterrupt(false);
 
     function disconnect() {
       attached = false;
@@ -52,15 +56,34 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
       if (controller.signal.aborted) return;
       setView('disconnected');
       setDraftEdited(false);
+      setConfirmInterrupt(false);
       if (pending?.key === 'enter') {
         setUncertain(true);
         setStatus('Message delivery is unconfirmed. Check delivery before sending again.');
+      }
+      if (pending?.key === 'interrupt_confirm') {
+        setUncertain(true);
+        setStatus('Interruption is unconfirmed. Check its status before trying again.');
       }
     }
 
     recover.current = () => {
       if (!unknown || pending && attached) return;
       const intent = unknown;
+      if (intent.startsWith('interrupt:')) {
+        void piPresentationApi.interruptReceipt(scope, intent.slice(10), controller.signal).then(receipt => {
+          if (controller.signal.aborted || unknown !== intent ||
+              Object.entries(receipt.scope).some(([key, value]) => scope[key as keyof InteractionScope] !== value)) return;
+          const outcome = receipt.interrupt.target_status;
+          if (outcome !== 'interrupted' && outcome !== 'finished') {
+            setStatus('Interruption is still unconfirmed.');
+            return;
+          }
+          clearReceipt();
+          setStatus(outcome === 'interrupted' ? 'Work interrupted. The message queue is paused.' : 'The turn had already finished.');
+        }).catch(() => { if (!controller.signal.aborted) setStatus('Interruption is still unconfirmed.'); });
+        return;
+      }
       void piPresentationApi.receipt(scope, intent, controller.signal).then(receipt => {
         if (controller.signal.aborted || unknown !== intent) return;
         if (receipt.session_owner_generation !== scope.session_owner_generation ||
@@ -69,10 +92,7 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
           setStatus('Message delivery is still unconfirmed.');
           return;
         }
-        sessionStorage.removeItem(receiptKey);
-        unknown = null;
-        setUncertain(false);
-        terminal.options.disableStdin = !attached || connection?.access !== 'write';
+        clearReceipt();
         setStatus(receipt.status === 'QUEUED' ? 'Message queued for the next turn.' : `Message receipt recovered (${receipt.status.toLowerCase().replaceAll('_', ' ')}).`);
       }).catch(() => {
         if (!controller.signal.aborted) setStatus('Message delivery is still unconfirmed.');
@@ -82,13 +102,39 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     try {
       unknown = sessionStorage.getItem(receiptKey);
       setUncertain(Boolean(unknown));
-      setStatus(unknown ? 'Check delivery of the previous message before sending again.' : '');
+      setStatus(unknown?.startsWith('interrupt:') ? 'Check whether the previous interruption took effect.' :
+        unknown ? 'Check delivery of the previous message before sending again.' : '');
     } catch {
       setStatus('This browser cannot preserve a message receipt.');
     }
 
+    function clearReceipt() {
+      sessionStorage.removeItem(receiptKey);
+      unknown = null;
+      setUncertain(false);
+      terminal.options.disableStdin = !attached || connection?.access !== 'write';
+    }
+
+    decideInterrupt.current = confirm => {
+      if (!attached || !connection || !interrupt || pending) return;
+      const {id, intent} = interrupt;
+      if (confirm) {
+        try { sessionStorage.setItem(receiptKey, `interrupt:${intent}`); }
+        catch { setStatus('This browser cannot preserve an interruption receipt.'); return; }
+        unknown = `interrupt:${intent}`;
+      }
+      interrupt = null;
+      setConfirmInterrupt(false);
+      const key = confirm ? 'interrupt_confirm' : 'interrupt_cancel';
+      pending = {request: ++serial, key, intent};
+      try {
+        connection.socket.send(JSON.stringify({kind:key,request_id:serial,review_id:id}));
+        timeout = window.setTimeout(disconnect, 10_000);
+      } catch { disconnect(); }
+    };
+
     function pump() {
-      if (!attached || connection?.access !== 'write' || pending || unknown || !edits.length) return;
+      if (!attached || connection?.access !== 'write' || pending || unknown || interrupt || !edits.length) return;
       const edit = edits.shift()!;
       const intent = crypto.randomUUID();
       if (edit.key === 'enter') {
@@ -113,6 +159,14 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
 
     terminal.attachCustomKeyEventHandler(event => {
       if (event.key === 'Tab' || (event.key === 'Enter' && event.isComposing)) return false;
+      if (interrupt) {
+        const key=event.key.toLowerCase();
+        if (event.type==='keydown' && event.ctrlKey && (key==='y'||key==='n')) {
+          event.preventDefault();
+          decideInterrupt.current(key==='y');
+        }
+        return false;
+      }
       if (event.type === 'keydown' && event.key === 'Enter' && event.shiftKey && !event.isComposing) {
         event.preventDefault();
         addEdits('\x1b[13;2u');
@@ -121,7 +175,7 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
       return true;
     });
     function addEdits(data: string) {
-      if (!attached || connection?.access !== 'write' || unknown && pending?.key !== 'enter') return;
+      if (!attached || connection?.access !== 'write' || interrupt || unknown && pending?.key !== 'enter') return;
       const batch = piTerminalEdits(data);
       if (!batch || edits.length + batch.length > 64) {
         setStatus('The terminal could not accept all of that input.');
@@ -157,6 +211,7 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
             terminal.options.disableStdin = link.access !== 'write' || Boolean(unknown);
             terminal.write('\x1b[?2004h');
             setView(link.access);
+            if (!terminal.options.disableStdin) terminal.focus();
             if (link.keepalive) keepalive = window.setInterval(() => {
               if (socket.readyState === WebSocket.OPEN) socket.send('{"kind":"keepalive"}');
             }, 5000);
@@ -164,17 +219,48 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
               frame.key && typeof frame.key.limit_reached === 'boolean') {
             window.clearTimeout(timeout);
             if (pending.key === 'enter') {
-              sessionStorage.removeItem(receiptKey);
-              unknown = null;
-              setUncertain(false);
+              clearReceipt();
               if (!frame.key.limit_reached) {
                 setDraftEdited(edits.some(edit => edit.key === 'insert' || edit.key === 'newline'));
               }
               if (frame.key.queued) setStatus('Message queued for the next turn.');
+              const command = frame.key.command;
+              if (command?.name === 'help') setStatus('/status shows this session. /interrupt stops the current turn after confirmation.');
+              if (command?.name === 'unavailable') setStatus('Command unavailable. Type /help for available commands.');
+              if (command?.name === 'status') {
+                void runtimeApi.sessionInteraction(scope,controller.signal).then(current=>{
+                  if(controller.signal.aborted||Object.entries(current.scope).some(([key,value])=>scope[key as keyof InteractionScope]!==value))return;
+                  const turn=current.next_turn.turn_state;
+                  setStatus(turn==='busy'?'Working':turn==='idle'?'Ready for a message':'Current activity is unavailable.');
+                }).catch(()=>{if(!controller.signal.aborted)setStatus('Current activity is unavailable.');});
+              }
+              if (command?.name === 'interrupt') {
+                if (command.status === 'reviewed' && typeof command.review_id === 'string') {
+                  interrupt = {id:command.review_id,intent:pending.intent};
+                  edits.length = 0;
+                  setDraftEdited(false);
+                  setConfirmInterrupt(true);
+                  setStatus('Interrupt the current turn? Ctrl+Y confirms. Ctrl+N cancels.');
+                } else setStatus('There is no interruptible turn in this session.');
+              }
             }
             if (frame.key.limit_reached) setStatus('The draft reached the Pi editor limit.');
             pending = null;
             pump();
+          } else if (attached && pending && frame.request_id === pending.request && frame.kind === pending.key &&
+              (pending.key === 'interrupt_confirm' || pending.key === 'interrupt_cancel')) {
+            window.clearTimeout(timeout);
+            const result = frame[frame.kind]?.status;
+            pending = null;
+            if (result === 'recorded' && unknown) {
+              terminal.options.disableStdin = true;
+              setUncertain(true);
+              setStatus('Interruption requested. Checking the current turn.');
+              recover.current();
+            } else {
+              clearReceipt();
+              setStatus(result==='cancelled'?'Work continues.':'The turn changed. Interruption was not sent.');
+            }
           } else disconnect();
         } catch {
           disconnect();
@@ -199,18 +285,17 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     };
   }, [receiptKey, attempt]);
 
-  return <div className="space-y-2">
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <h3 className="text-sm font-semibold">Pi terminal</h3>
-      <span className="text-xs text-muted-foreground" role="status">{{connecting: 'Connecting…', read: 'Connected · View only',
-        write: 'Connected', unavailable: 'Terminal unavailable', disconnected: 'Disconnected'}[view]}</span>
+  return <div className="harness-console flex h-full min-h-0 flex-col bg-[#101419] text-white">
+    <div className="min-h-0 flex-1 overflow-auto px-3 py-2" aria-label="Pi terminal">
+      <div className="h-full" ref={host} data-modal-passive/>
     </div>
-    <div className="overflow-auto rounded-lg bg-[#101419] p-2" aria-label="Pi terminal" style={{height: 'clamp(14rem, 51vh, 38rem)'}}>
-      <div className="h-full" ref={host}/>
-    </div>
-    {view === 'write' && !uncertain && <p className="text-xs text-muted-foreground">Enter sends a message. Shift+Enter adds a line.</p>}
-    {status && <p className="text-sm" role="status">{status}</p>}
-    {uncertain && <button type="button" onClick={() => recover.current()}>Check delivery</button>}
-    {(view === 'disconnected' || view === 'unavailable') && <button type="button" onClick={() => {setView('connecting'); setAttempt(previous => previous + 1);}}>Reconnect terminal</button>}
+    <footer className="flex min-h-10 shrink-0 flex-wrap items-center gap-3 border-t border-white/10 px-3 py-2 text-xs text-white/80">
+      <span role="status">{status||{connecting:'Connecting…',read:'View only',write:'Enter to send · /help for commands',
+        unavailable:'Console unavailable',disconnected:'Disconnected'}[view]}</span>
+      {confirmInterrupt&&<><button className="underline" type="button" onClick={()=>decideInterrupt.current(true)}>Interrupt turn</button>
+        <button className="underline" type="button" onClick={()=>decideInterrupt.current(false)}>Keep running</button></>}
+      {uncertain && <button className="underline" type="button" onClick={() => recover.current()}>Check status</button>}
+      {(view === 'disconnected' || view === 'unavailable') && <button className="underline" type="button" onClick={() => {setView('connecting'); setAttempt(previous => previous + 1);}}>Reconnect</button>}
+    </footer>
   </div>;
 }

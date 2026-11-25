@@ -9,6 +9,8 @@
 .agent-action-modal-compact { width: min(560px, 94vw); height: min(300px, 90dvh); }
 .agent-action-modal-compact-tall { width: min(620px, 94vw); height: min(480px, 90dvh); }
 .agent-action-modal-expanded { width: calc(100vw - 24px); height: calc(100dvh - 24px); }
+.agent-action-modal.agent-action-terminal { width: 100vw; height: 100dvh; border: 0; border-radius: 0; }
+.agent-action-terminal .agent-modal-body:has(> .harness-console) { overflow: hidden; padding: 0; }
 .agent-modal-header { @apply flex shrink-0 items-center gap-2 border-b border-surface-200 px-5 py-3 dark:border-surface-700; }
 .agent-modal-header h2 { @apply mr-auto truncate text-sm font-semibold; }
 .agent-modal-header > button { @apply rounded-lg p-2 text-surface-500 hover:bg-surface-100 focus-visible:ring-2 focus-visible:ring-accent-500 dark:hover:bg-surface-800; }

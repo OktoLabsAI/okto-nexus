@@ -15,6 +15,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from nexus_connector_core.turn_operation import PI_LITERAL_INPUT_REVISION
+from nexus_connector_core.native.pi_renderer import PiEditorUpdate
 from starlette.websockets import WebSocketDisconnect
 from wsproto import ConnectionType, WSConnection
 from wsproto.events import AcceptConnection, RejectConnection, Request, TextMessage
@@ -633,6 +634,50 @@ def test_browser_pi_requires_same_origin_human_and_one_use_ticket_in_first_frame
     with transport.client.websocket_connect(url, headers=headers, subprotocols=protocols) as ws:
         with pytest.raises(WebSocketDisconnect):
             _prove_pi_ticket(ws, transport.scope, ticket=offer['ticket'])
+
+
+def test_browser_pi_commands_run_in_the_exact_editor_and_require_interrupt_confirmation(transport, pi_presentation, monkeypatch):
+    services = pi_presentation.enable_input()
+    target = InterruptTargetView(target=ObservedRunTarget(kind='observed_run', run_ref='prun_' + '1' * 32),
+                                 capability_revision='exact-run', queue_revision=0)
+    transport.app.state.inventory_fresh_publications = None
+    monkeypatch.setattr(dashboard_session_presentations, 'review_exact_interrupt', lambda *_: target)
+    monkeypatch.setattr(dashboard_session_presentations, '_interrupt_target_for', lambda _: object())
+    effects = []
+    monkeypatch.setattr(dashboard_session_presentations, 'request_exact_human_interrupt', lambda **kwargs: effects.append(kwargs))
+
+    @asynccontextmanager
+    async def editor(scope, **_):
+        assert scope == transport.scope
+        sender, receiver = anyio.create_memory_object_stream(1)
+        drafts = iter(['/help', '/model', '/interrupt'])
+
+        async def edit(key, **_):
+            assert key == 'enter'
+            await sender.send(PiEditorUpdate(1, next(drafts)))
+
+        yield edit, receiver.receive
+
+    transport.app.state.local_pi_presentations = replace(services, open_editor=editor)
+    review = _pi_review(transport, access='write').json()
+    offer = prepare(transport, 'browser-console-writer', presentation='pi', access='write',
+        expected_writer_epoch=review['writer_epoch'], capability_revision=review['capability_revision']).json()
+    url = f'ws://127.0.0.1{PREFIX}/attachments/{offer["attachment_id"]}/stream'
+    with transport.client.websocket_connect(url, headers={'Origin': ORIGIN},
+            subprotocols=[PI_PRESENTATION_SUBPROTOCOL, BROWSER_PRESENTATION_PROTOCOL]) as ws:
+        _prove_pi_ticket(ws, transport.scope, editor=True, ticket=offer['ticket'])
+        assert ws.receive_json()['access'] == 'write'
+        for sequence, name in enumerate(['help', 'unavailable', 'interrupt'], start=1):
+            ws.send_json({'kind': 'key', 'key': 'enter', 'request_id': sequence, 'client_intent_id': f'command-{sequence}',
+                'capability_revision': pi_presentation.input_revision})
+            reply = ws.receive_json()['key']
+            assert reply['queued'] is None and reply['command']['name'] == name
+            assert not effects
+        ws.send_json({'kind': 'interrupt_confirm', 'request_id': 4, 'review_id': reply['command']['review_id']})
+        assert ws.receive_json()['interrupt_confirm'] == {'status': 'recorded'}
+    effect, = effects
+    assert effect['scope'] == transport.scope and effect['native_turn_id'] == target.target.run_ref
+    assert effect['client_intent_id'] == 'command-3' and effect['observed_run'] is True
 
 
 def test_pi_backpressure_releases_attachment_before_bounded_close(transport, pi_presentation, monkeypatch):

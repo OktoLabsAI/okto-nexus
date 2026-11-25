@@ -691,5 +691,30 @@
       "native.xml": "5a92536b5709518fe813f51949bc587f85d9b99316214915990b5add01918d02",
       "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
     }
+  },
+  "console_focused_pi": {
+    "prior_human_round": {"nexus_version": "0.3.8", "status": "NOT_ACCEPTED", "feedback": "Previous detail routes and technical metadata were still visible."},
+    "nexus_version": "0.3.9",
+    "connector_version": "0.0.16",
+    "connector_commit": "57be879eac3e56ca1f533b8373721bb82647b6ab",
+    "core_version": "0.0.17",
+    "core_commit": "6f071e7b8bb8a2a6fbfd0e6b68557a81567f78af",
+    "platform": "Windows x64, Edge, Pi 0.87.1 via Connector on this machine",
+    "browser": {"full_screen": true, "delivery_metadata_hidden": true, "no_tabs_or_selectors": true,
+      "help": true, "status": true, "interrupt_cancelled": true, "queued_message_confirmed": true,
+      "focus_restored": true, "result_panels_checked": 2, "refresh_used_for_results": true},
+    "native_proof": {"sessions": 1, "turns": 2, "input_final_state": "ACCEPTED_NATIVE", "attachment_final_state": "DETACHED",
+      "owner_final_state": "CLOSED", "listener_closed": true, "temporary_browser_auth_removed": true, "external_provider_calls": 0},
+    "tests": {"frontend_node": 429, "core_renderer_and_resources": 9, "connector_boundaries": 13},
+    "limits": ["Browser proof covers Pi with deterministic responses. Confirmed interruption was exercised in the transport fixture, with simulated admission.",
+      "The final work-entry fallback for linked handoffs was added after the browser journey started and was covered by Node tests and the build.",
+      "Native Codex, native Claude, human acceptance and Windows screen-reader speech remain pending."],
+    "evidence_directory": "D:/nxs-console-v039/browser",
+    "sha256": {
+      "exercise-console.js": "76aded9d6674cac3ddc03ffb4b91f09fd1110032f1de9be2ef762524ee1f9562",
+      "browser-results.js": "2deecb9a9892cae9c462d677bc5ce53d9307b5498c00aa59afc57a09371af2c6",
+      "native.xml": "b12d62153d2e4ab4f654d27eed10621a1f3269979a2aa85b25856700775df730",
+      "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
+    }
   }
 }

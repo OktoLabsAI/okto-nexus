@@ -567,7 +567,7 @@ async def _reply_terminal(ws, request, value):
     await _send(ws, {'kind': request.kind, 'request_id': request.request_id, request.kind: value})
 
 
-async def _present_pi(ws, services, active, hello, *, presentation):
+async def _present_pi(ws, services, active, hello, *, presentation, browser=False):
     access = active['attachment'].access
     state = ws.app.state
     remote = presentation == 'pi_remote'
@@ -706,14 +706,27 @@ async def _present_pi(ws, services, active, hello, *, presentation):
                         reply = {'status': 'applied'}
                     else:
                         queued = None
+                        command = None
                         if data.draft is not None:
                             if pending.key != 'enter' or data.limit_reached:
                                 raise ValueError('The draft editor response does not match the key')
-                            request = _TerminalEnqueueRequest(kind='enqueue', request_id=pending.request_id,
-                                client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
-                                content=TextInput(type='text', text=data.draft))
-                            queued = await _record_presenter_input(state, services, active, request, presentation=presentation)
+                            if browser and data.draft.lstrip().startswith(('/', '!')):
+                                name = data.draft.strip()
+                                command = {'name': name[1:] if name in ('/help', '/status', '/interrupt') else 'unavailable'}
+                                if name == '/interrupt':
+                                    request = _TerminalControlReviewRequest(kind='interrupt_review', request_id=pending.request_id,
+                                        client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision)
+                                    review = await _worker(_review_terminal_control, state=state, services=services, active=active,
+                                                           request=request)
+                                    command.update(_terminal_review_reply(review))
+                            else:
+                                request = _TerminalEnqueueRequest(kind='enqueue', request_id=pending.request_id,
+                                    client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
+                                    content=TextInput(type='text', text=data.draft))
+                                queued = await _record_presenter_input(state, services, active, request, presentation=presentation)
                         reply = {'limit_reached': data.limit_reached, 'queued': queued}
+                        if command is not None:
+                            reply['command'] = command
                     if _services(state, presentation) is not services:
                         break
                     await _reply_terminal(ws, pending, reply)
@@ -825,6 +838,7 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
     broker = services.broker
     pi = presentation in _PI
     remote = presentation == 'codex_remote'
+    browser = ticket is None
     _, audience, protocol = _PRESENTERS[presentation]
     channel_id = 'viewer_' + secrets.token_hex(16)
     scope = None
@@ -862,7 +876,7 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
             close_code = await _present_claude(ws, services, active, presentation=presentation)
             return
         if pi:
-            close_code = await _present_pi(ws, services, active, hello, presentation=presentation)
+            close_code = await _present_pi(ws, services, active, hello, presentation=presentation, browser=browser)
             return
         prove_owner = _author_callback(services.prove_owner, author, presentation)
         read_context = _author_callback(services.read_context, author, presentation)

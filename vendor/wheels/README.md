@@ -1,5 +1,9 @@
 # Current development dependency
 
+Nexus 0.3.9 and Connector 0.0.16 use Core 0.0.17 from `6f071e7b8bb8a2a6fbfd0e6b68557a81567f78af`.
+The Connector CI wheel is from `57be879eac3e56ca1f533b8373721bb82647b6ab`.
+Both wheel hashes are pinned in `vendor/ci/manifest.json`.
+
 Nexus 0.3.8 and Connector 0.0.15 use Core 0.0.16 from `db402559ea571365dbe83833fe41d837618c177d`.
 The unpublished wheel SHA-256 is `f8a3dcb553613b23f380e38c09f183f6cfd809ccd08188a824da8075b9585876`.
 Core checks the retired Pi file immediately before spawn and confirms the original native branch before publishing the opening.

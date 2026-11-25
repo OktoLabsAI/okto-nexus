@@ -23,8 +23,8 @@ const card={kind:'harness',id:'card',connection:{agent_label:'Research collabora
 const render=(value=card)=>renderToStaticMarkup(React.createElement(HomeHarnessCard,{card:value,column:'active',blocked:false,onActivity(){},onEvent(){}}));
 test('registered harness preview uses friendly identity and Server events, without technical expansion or onboarding',()=>{
   const html=render();
-  assert.match(html,/Research collaborator/);assert.match(html,/Codex/);assert.match(html,/Team computer/);assert.match(html,/Registered harness/);
-  assert.match(html,/Report delivered/);assert.match(html,/View delivery/);assert.match(html,/Follow activity/);
+  assert.match(html,/Research collaborator/);assert.match(html,/Codex/);assert.doesNotMatch(html,/Team computer/);assert.match(html,/Registered harness/);
+  assert.match(html,/Report delivered/);assert.match(html,/View delivery/);assert.match(html,/Open console/);
   assert.doesNotMatch(html,/<button[^>]*>Reconnect|12 results|Connection details|Individual reconnection/);
   assert.doesNotMatch(html,/private-server|private-executor|private-session|private-operation|original-group|Related attention|Related results|Connect or resume|Continue/);
   assert.doesNotMatch(html,/40.*sessions|0 sessions|Running|Ready to execute/);
@@ -55,17 +55,17 @@ test('question/approval affordance respects canonical allowed actions and preser
   const buttons=[];const walk=node=>{if(!node||typeof node!=='object')return;if(node.type==='button')buttons.push(node);React.Children.forEach(node.props?.children,walk);};walk(tree);
   buttons.find(node=>node.props.children==='View delivery').props.onClick();
   assert.equal(opened,event);assert.equal(opened.target,target);assert.equal(opened.group_id,'original-group');assert.equal(activity,0);
-  buttons.find(node=>node.props.children==='Follow activity').props.onClick();assert.equal(activity,1);
+  buttons.find(node=>node.props.children==='Open console').props.onClick();assert.equal(activity,1);
 });
 test('unknown identity and tracking remain explicit without IDs as friendly-name fallbacks',()=>{
   const html=render({...card,connection:{...card.connection,agent_label:null,host_label:null,agent_id:'private-agent'},events_summary:{attention:null,results:0,work:0,sessions:0,external:0}});
-  assert.match(html,/Unnamed collaborator/);assert.match(html,/Host not reported/);assert.match(html,/Activity coverage incomplete/);assert.doesNotMatch(html,/private-agent|0 results/);
+  assert.match(html,/<h4[^>]*>Codex/);assert.doesNotMatch(html,/Host not reported|Activity coverage incomplete|private-agent|0 results/);
 });
 test('independent request identifies its harness and never infers blocked or running from a missing proof',()=>{
   const item={kind:'request',id:'notification',request:{kind:'native_question_pending',allowed_actions:['respond_native'],freshness:'current',resolution:'open'},
     harness_refs:[{card_id:'private-card',connection:card.connection}],blocks_harness:null};
   const html=renderToStaticMarkup(React.createElement(HomeHarnessSignalCard,{item,blocked:false,onOpen(){}}));
-  assert.match(html,/Research collaborator/);assert.match(html,/Codex/);assert.match(html,/Team computer/);assert.match(html,/Blocking status unconfirmed/);assert.match(html,/Respond/);
+  assert.match(html,/Research collaborator/);assert.match(html,/Codex/);assert.doesNotMatch(html,/Team computer/);assert.match(html,/Blocking status unconfirmed/);assert.match(html,/Respond/);
   assert.doesNotMatch(html,/private-card|Running|Waiting for your response|Continue|Reconnect/);
 });
 test('reported completion without native result remains a report, and waiting confirmation/snooze never imply resumed work',()=>{
@@ -79,7 +79,7 @@ test('reported completion without native result remains a report, and waiting co
 test('Active references a nonblocking question without duplicating its Needs you action; blocked harness keeps its action inside',()=>{
   const question={...event,kind:'attention',title:'Choose the report format',attention:{kind:'native_question_pending',allowed_actions:['respond_native'],resolution:'open',freshness:'current'}};
   const value={...card,events_preview:[question],events_summary:{attention:1,results:0,work:0,sessions:0,external:0}};
-  const active=render(value);assert.match(active,/Choose the report format/);assert.match(active,/Follow activity/);assert.doesNotMatch(active,/Review question/);
+  const active=render(value);assert.match(active,/Choose the report format/);assert.match(active,/Open console/);assert.doesNotMatch(active,/Review question/);
   const waiting=renderToStaticMarkup(React.createElement(HomeHarnessCard,{card:{...value,activity_state:'waiting_for_user',blocks_harness:true},column:'needs_you',blocked:false,onActivity(){},onEvent(){}}));
   assert.match(waiting,/Choose the report format/);assert.match(waiting,/Review question/);assert.match(waiting,/View context/);assert.doesNotMatch(waiting,/Reconnect/);
 });
@@ -105,15 +105,15 @@ test('actual overview signal handler opens the exact canonical attention when it
   const [external]=invoke({kind:'delivery',entry:{target:null},result:null,report,harness_refs:[]});
   assert.equal(external.kind,'attention');assert.equal(external.item,report);assert.equal(external.action,'inspect_external_observation');
 });
-test('QC public Harness ID is distinct from adapter family and collaborator, without changing event targets',()=>{
+test('Home displays the collaborator and adapter without exposing connection IDs',()=>{
   const value={...card,connection:{...card.connection,connect_id:'reviewer'}};
-  const html=render(value);assert.match(html,/Harness ID:[\s\S]*reviewer/);assert.match(html,/Collaborator: Research collaborator/);assert.match(html,/Codex/);
+  const html=render(value);assert.doesNotMatch(html,/Harness ID|reviewer/);assert.match(html,/Research collaborator/);assert.match(html,/Codex/);
   assert.equal(value.connection.harness_id,'codex_app_server');assert.equal(value.events_preview[0].target,target);
   const signal={kind:'request',id:'request',request:{kind:'native_question_pending',allowed_actions:['respond_native'],freshness:'current',resolution:'open'},
     harness_refs:[{card_id:'card',connection:value.connection}],blocks_harness:false};
   const request=renderToStaticMarkup(React.createElement(HomeHarnessSignalCard,{item:signal,blocked:false,onOpen(){}}));
-  assert.match(request,/Harness ID: reviewer/);assert.match(request,/Codex/);assert.match(request,/Respond/);
-  assert.match(render(),/Harness ID not assigned/);
+  assert.doesNotMatch(request,/Harness ID|reviewer/);assert.match(request,/Codex/);assert.match(request,/Respond/);
+  assert.doesNotMatch(render(),/Harness ID/);
 });
 
 const count=value=>({value,total_is_exact:value!==null});
@@ -129,7 +129,7 @@ test('v2 one exact open action opens its canonical request only once and shows p
   const tree=HomeHarnessCard({card:value,column:'needs_you',blocked:false,showProject:true,onActivity(){assert.fail('No intermediary selection needed');},onEvent(){assert.fail('No duplicate event action');},onRequest:r=>selected.push(r)});
   const buttons=buttonsOf(tree);assert.equal(buttons.length,1);assert.equal(buttons[0].props.children,'Respond');buttons[0].props.onClick();
   assert.equal(selected[0],questionRequest);assert.equal(selected[0].request.source_revision,'q7');
-  const html=renderToStaticMarkup(tree);assert.match(html,/Project: API/);assert.match(html,/Waiting for your response/);assert.doesNotMatch(html,/Reconnect|>Working</);
+  const html=renderToStaticMarkup(tree);assert.match(html,/>API</);assert.match(html,/Waiting for your response/);assert.doesNotMatch(html,/Reconnect|>Working</);
 });
 test('partial singleton preview and multiple actions require the complete contextual action list',()=>{
   for(const patch of [{pending_actions:{value:1,total_is_exact:false}},{has_more_pending_requests:true,pending_requests_cursor:'cursor'},{pending_actions:count(7)}]){

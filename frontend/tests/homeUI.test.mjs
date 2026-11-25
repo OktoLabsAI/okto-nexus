@@ -211,7 +211,7 @@ test('registered harness overview stays passive and reserves occurrence preferen
   try{
     const markup=renderHome(snapshot);await new Promise(setImmediate);
     assert.deepEqual(calls,[]);assert.equal(entryRows.length,0);
-    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Follow activity/);assert.doesNotMatch(markup,/Connection details/);
+    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Open console/);assert.doesNotMatch(markup,/Connection details/);
     assert.doesNotMatch(markup,/Related attention|Related results|Choose an exact context|Mark seen|Snooze|Filter details|Filter Home by agent|Home filters|<input/);
   }finally{api.attentionSeen=previous;}
 });

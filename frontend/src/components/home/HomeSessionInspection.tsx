@@ -34,5 +34,6 @@ export function HomeSessionInspection({context, technicalControls, onContinue, n
   if(read.nativePi&&generation)return <Suspense fallback={<p role="status">Loading terminal…</p>}>
     <PiNativeTerminal scope={{...read.session.scope,session_owner_generation:generation}}/>
   </Suspense>;
+  if(nativeTerminal)return <p role="status">{read.session.lifecycle_state==='CLOSED'?'This session has ended.':'A native console is unavailable for this session.'}</p>;
   return <SessionExecutionPanel session={read.session} embedded interactive technicalControls={technicalControls} onContinue={onContinue}/>;
 }

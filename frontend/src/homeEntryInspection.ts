@@ -26,6 +26,24 @@ export function homeSessionRefKey(ref:HomeSessionRef):string {
 export function homeSessionTarget(ref:HomeSessionRef):HomeTarget {
   return {kind:'session',server_id:ref.server_id,executor_id:ref.executor_id,workspace_id:ref.workspace_id,session_id:ref.session_id};
 }
+
+/** A work record can open the console only when it names an exact session. */
+export function homeConsoleTarget(target:HomeTarget|null):Extract<HomeTarget,{kind:'session'}>|null {
+  if(target?.kind==='session') return target;
+  if(target?.kind!=='execution'||!target.workspace_id) return null;
+  return {kind:'session',server_id:target.server_id,executor_id:target.executor_id,
+    workspace_id:target.workspace_id,session_id:target.session_id};
+}
+
+export function homeWorkConsoleTarget(entry:HomeEntry,target:HomeTarget|null):HomeTarget|null {
+  const exact=homeConsoleTarget(target);
+  if(exact)return exact;
+  if(target&&target.kind!=='handoff'&&target.kind!=='message')return null;
+  if(entry.sessions_total!==1||entry.has_more_sessions!==false||entry.sessions_cursor!==null||entry.sessions?.length!==1)return null;
+  const ref=entry.sessions[0];
+  if(ref.lifecycle_state!=='READY'||ref.workspace_id!==entry.workspace_id||target&&target.server_id!==ref.server_id)return null;
+  return homeSessionTarget(ref);
+}
 export function assertHarnessSessionContext(context:HomeSessionContext,connection:HomeHarnessConnection,ref:HomeSessionRef):void {
   if(context.session_id!==ref.session_id||(['server_id','executor_id','workspace_id'] as const).some(key=>ref[key]!==connection[key])||
     (['server_id','executor_id','workspace_id','binding_id','workspace_binding_id','agent_id'] as const)

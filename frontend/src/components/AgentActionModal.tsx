@@ -33,7 +33,7 @@ export function AgentModalFooter({children}: {children: ReactNode}) {
 }
 
 export function AgentActionModal({title, children, onClose, wide = false, compact = false, guardChanges = true, testId, dirty = false, busy = false, presentation = 'modal'}: {
-  title: string; children: ReactNode; onClose: () => void; wide?: boolean; compact?: boolean | 'tall'; guardChanges?: boolean; testId?: string; dirty?: boolean; busy?: boolean; presentation?: 'modal' | 'drawer';
+  title: string; children: ReactNode; onClose: () => void; wide?: boolean; compact?: boolean | 'tall'; guardChanges?: boolean; testId?: string; dirty?: boolean; busy?: boolean; presentation?: 'modal' | 'drawer' | 'terminal';
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -74,15 +74,15 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
     return () => {element.close(); if (trigger?.isConnected) trigger.focus({preventScroll:true});};
   }, []);
   return createPortal(<dialog ref={dialog} aria-labelledby={titleId} aria-modal="true" data-testid={testId}
-    className={`agent-action-modal ${presentation === 'drawer' ? 'agent-action-drawer' : ''} ${wide ? 'agent-action-modal-wide' : ''} ${compact === 'tall' ? 'agent-action-modal-compact-tall' : compact ? 'agent-action-modal-compact' : ''} ${expanded ? 'agent-action-modal-expanded' : ''}`}
+    className={`agent-action-modal ${presentation === 'drawer' ? 'agent-action-drawer' : presentation === 'terminal' ? 'agent-action-terminal' : ''} ${wide ? 'agent-action-modal-wide' : ''} ${compact === 'tall' ? 'agent-action-modal-compact-tall' : compact ? 'agent-action-modal-compact' : ''} ${expanded ? 'agent-action-modal-expanded' : ''}`}
     onCancel={event => {event.preventDefault(); event.stopPropagation(); dismiss();}}>
     <ModalContext.Provider value={{footer, dismiss, guard, changes, transition}}>
       <header className="agent-modal-header">
         <h2 id={titleId}>{title}</h2>
-        <button type="button" aria-label={expanded ? 'Restore modal' : 'Expand modal'} title={expanded ? 'Restore' : 'Expand'} onClick={() => setExpanded(v => !v)}>
+        {presentation !== 'terminal' && <button type="button" aria-label={expanded ? 'Restore modal' : 'Expand modal'} title={expanded ? 'Restore' : 'Expand'} onClick={() => setExpanded(v => !v)}>
           {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-        </button>
-        <button type="button" aria-label="Close modal" title="Close" disabled={busy} onClick={dismiss}><X size={18} /></button>
+        </button>}
+        <button type="button" aria-label={presentation === 'terminal' ? 'Back to Home' : 'Close modal'} title={presentation === 'terminal' ? 'Back to Home' : 'Close'} disabled={busy} onClick={dismiss}><X size={18} /></button>
       </header>
       {discard && <div className="agent-modal-discard" role="alert">
         <p>Discard unsaved changes?</p>

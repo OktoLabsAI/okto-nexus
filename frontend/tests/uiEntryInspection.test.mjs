@@ -15,7 +15,7 @@ function load(url){
     const path=['.ts','.tsx','/index.ts'].map(ext=>new URL(name+ext,url)).find(p=>existsSync(p));assert.ok(path,name);return load(path);};
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
-const {initialEntrySession,initialHarnessSession,homeSessionTarget,homeSessionOptionLabel,assertHarnessSessionContext,assertEntryInspectionPage,entryInspectionQuery,occurrenceSession,readEntryInspectionPage}=load(new URL('../src/homeEntryInspection.ts',import.meta.url));
+const {initialEntrySession,initialHarnessSession,homeConsoleTarget,homeWorkConsoleTarget,homeSessionTarget,homeSessionOptionLabel,assertHarnessSessionContext,assertEntryInspectionPage,entryInspectionQuery,occurrenceSession,readEntryInspectionPage}=load(new URL('../src/homeEntryInspection.ts',import.meta.url));
 const {HomeEntryInspection}=load(new URL('../src/components/home/HomeEntryInspection.tsx',import.meta.url));
 const target={kind:'handoff',server_id:'server',workspace_id:'ws',handoff_id:'handoff'};
 const session=id=>({server_id:'server',executor_id:'executor',workspace_id:'ws',session_id:id});
@@ -25,6 +25,17 @@ const entry={id:'entry',title:'Work from another agent',agent_id:'implementer',a
 const selection={groupId:'group',entry,revision:'rev',filters:{workspace_id:'ws'}};
 const page={version:1,server_id:'server',partition:'sessions',group_id:'group',entry_id:'entry',revision:'rev',status:'ready',
   scope:{workspace_id:'ws',quick:'active',include_recent_results:true},items:[]};
+
+test('work opens only its exact console while results and decisions keep their own targets',()=>{
+  const work={kind:'execution',...session('one'),operation_id:'exact-op'};
+  assert.deepEqual(homeConsoleTarget(work),{kind:'session',...session('one')});
+  for(const other of [target,null,{...work,workspace_id:null},{...work,kind:'result'}])assert.equal(homeConsoleTarget(other),null);
+  const linked={...entry,workspace_id:'ws',sessions_total:1,sessions:[{...session('one'),lifecycle_state:'READY'}]};
+  assert.deepEqual(homeWorkConsoleTarget(linked,target),{kind:'session',...session('one')});
+  assert.equal(homeWorkConsoleTarget(entry,target),null);
+  assert.equal(homeWorkConsoleTarget({...linked,has_more_sessions:true},target),null);
+  assert.equal(homeWorkConsoleTarget(linked,{...work,kind:'result'}),null);
+});
 
 test('multiple or incomplete session relations require explicit choice; a proven unique relation can open',()=>{
   assert.equal(initialEntrySession(entry,target),null);
