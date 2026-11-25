@@ -1220,8 +1220,10 @@
         "SI-T-H14",
         "SI-T-H17"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si020-current-native-client-exit.md",
+        "execution/si020-current-native-client-exit.json",
         "execution/si020-pi-process-birth.md",
         "execution/si020-codex-keyboard-detach-windows.md",
         "execution/si020-codex-keyboard-detach-windows.json",
@@ -2161,6 +2163,7 @@
       ],
       "status": "IN_PROGRESS",
       "evidence": [
+        "execution/si020-current-native-client-exit.json",
         "execution/si026-claude-terminal-retained-output.md",
         "execution/si026-claude-terminal-retained-output.json",
         "execution/si032-codex-abrupt-viewer-exit.md",
@@ -5601,7 +5604,8 @@
         "execution/si032-codex-abrupt-viewer-exit.md",
         "execution/si032-codex-abrupt-viewer-exit.json",
         "execution/si032-queue-without-terminal.md",
-        "execution/si032-queue-without-terminal.json"
+        "execution/si032-queue-without-terminal.json",
+        "execution/si020-current-native-client-exit.json"
       ]
     },
     {
@@ -5624,6 +5628,7 @@
       "evidence": [
         "execution/si032-codex-abrupt-viewer-exit.md",
         "execution/si032-codex-abrupt-viewer-exit.json",
+        "execution/si020-current-native-client-exit.json",
         "execution/si022-codex-silent-presenter.md",
         "execution/si022-codex-silent-presenter.json",
         "execution/si022-pi-silent-presenter.md",
