@@ -19,3 +19,22 @@ Migration 177 links a new interrupt to the exact operation and stream proved dur
 The interaction flag remains opt-in. Once schema 177 is applied, rollback needs a schema-aware build that preserves the target link, pending inputs and durable pause. Controls created before schema 177 keep their receipts without an inferred target link. A submitted control with no retained terminal proof stays unconfirmed.
 
 Realtime native qualification, Pi and Claude observed-run targeting, reorientation, and human accessibility validation remain open. The browser and server were temporary and used no provider account.
+
+## Recusa e retomada no pacote atual
+
+No Edge, o operador revisou o turno e confirmou uma interrupção. A API
+aceitou o controle e o peer Codex recusou antes da escrita. A Home
+mostrou o turno ainda em execução e um item retido na fila pausada.
+O turno terminou por conta própria e a entrada permaneceu em primeiro
+lugar, sem operação de envio.
+
+**Resume queue** exibiu a consequência da ação. A confirmação
+**Resume sending** fez o único POST de retomada. O dispatcher enviou
+o item original uma vez e o SQLite confirmou um resultado para ele
+na mesma sessão. O encerramento canônico e a auditoria passaram.
+
+O ensaio usou a aplicação instalada com peer sintético em loopback.
+Os relatos de interrupção confirmada, cancelamento e efeito composto
+do Claude mantêm seus candidatos e limites. Este marco atualiza as
+evidências, sem migração. Reverter o commit retira o registro.
+[Resultados e hashes](si014-current-browser-controls.json)

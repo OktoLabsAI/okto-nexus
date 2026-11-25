@@ -888,7 +888,7 @@
         "SI-T-C14",
         "SI-T-E07"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si014-dashboard-queue.md",
         "execution/si014-home-queue.md",
@@ -903,7 +903,8 @@
         "execution/si009-isolated-cancellation-and-promotion.md",
         "execution/si009-isolated-cancellation-and-promotion.json",
         "execution/si026-claude-home-compound-reorientation.md",
-        "execution/si026-claude-home-compound-reorientation.json"
+        "execution/si026-claude-home-compound-reorientation.json",
+        "execution/si014-current-browser-controls.json"
       ]
     },
     {
