@@ -994,7 +994,7 @@
         "SI-T-D10",
         "SI-T-D13"
       ],
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si016-home-session-commands.md",
         "execution/si016-browser-terminal-only.md",
@@ -1018,7 +1018,8 @@
         "execution/si016-pi-literal-ui.md",
         "execution/si016-pi-literal-ui.json",
         "execution/si037-linux-pi-literal.md",
-        "execution/si037-linux-pi-literal.json"
+        "execution/si037-linux-pi-literal.json",
+        "execution/si015-si016-current-commands.json"
       ]
     },
     {
