@@ -68,5 +68,51 @@
     "nexus_build": "d34d5ffd",
     "nexus_wheel_sha256": "0814c210e6107bbd8666dc374c49a1d48295d56fcb5011b139447884daa95971",
     "installed_wheels_verified": true
+  },
+  "current_installed_review": {
+    "nexus_head": "a1989334d3b7e6fc3573f13252fa831ee98f5c0c",
+    "nexus_wheel_sha256": "af370051ed57f3106acb3a6d1a4324d01a7b6aab22cf4f5ebb2616bdd1bc0887",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "platform": "Windows x64",
+    "evidence_directory": "D:/nxs-si040-current-package",
+    "parser_examples": {
+      "nexus": 43,
+      "connector": 1,
+      "exact_scoped_session_commands": 10,
+      "runtime_effects": 0,
+      "missing_remote_workspace_refused": true,
+      "sha256": "ec0e5356decf0a7bea537200338fc3afaff79c7e2990fa96a232fdb927b8210f"
+    },
+    "regressions": [
+      {
+        "files": [
+          "tests/quick_connect/test_connect_arguments.py",
+          "tests/quick_connect/test_connect_dispatch.py",
+          "tests/quick_connect/test_entry_compatibility.py",
+          "tests/execution_r4/test_terminal_connect.py"
+        ],
+        "passed": 154,
+        "failed": 0,
+        "skipped": 0,
+        "junit_sha256": "baa29556c9f36b7d44045630f03d9e13fb7b82af832c0771103855ce8ec7333d"
+      },
+      {
+        "files": [
+          "tests/session_interaction/test_session_cli.py",
+          "tests/execution_r4/test_terminal_scripted_recovery.py",
+          "tests/session_interaction/test_receipt_lookup.py"
+        ],
+        "passed": 96,
+        "failed": 0,
+        "skipped": 1,
+        "skip_reason": "requires a POSIX pseudoterminal",
+        "junit_sha256": "723880e0ffeffd89f257de8ad27ef13e17f01aec0a1491ecf42d3f523c63b7c4"
+      }
+    ],
+    "ui_labels": ["Continue this exact session", "View result", "Queued for the next turn"],
+    "prior_edge_evidence": "si036-current-closed-results-keyboard.md",
+    "campaign_status": "NOT_RUN",
+    "user_acceptance": "not_run"
   }
 }

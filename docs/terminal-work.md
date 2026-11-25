@@ -64,7 +64,8 @@ supports. Queue acceptance and native delivery have separate receipt states.
 | Intent | Action |
 | --- | --- |
 | Follow an existing live session | Use `session attach` with its exact session ID. Detach to leave work and the queue with the current executor. |
-| Continue work in a live session | Select it in Home or use `work chat --session-id SESSION_ID` and submit the next request. |
+| Continue work in a live session | Choose **Continue this exact session** in Home when the action is available, or use `work chat --session-id SESSION_ID` and submit the next request. |
+| Read a completed result | Choose **View result** on the result card in Home. This opens the recorded result, including after the session closes. |
 | Resume retained native history | Use `session resume` in a terminal for an eligible retired source on the embedded executor or a Connector that supports saved resume for the selected adapter. Confirm the successor opening. Nexus checks verified history and exclusive ownership. The original queue stays with the source. |
 | Recover an interrupted submission | Use `work resume` for a Nexus work request, or `session receipt` with the original intent and owner generation for native input. If a saved resume lost its response, run the same `session resume` command to recover its receipt. |
 | Start a separate session | Use `session open` to confirm an empty session, or `work send --new-session` with a first request. Check an unconfirmed receipt before deciding whether to send again. |
@@ -97,6 +98,10 @@ If you have the original request ID or session ID, pass `--request-id` or
 preserves the checkpoint and stops recovery before any admission.
 Inside `work chat`, `/resume` checks the session already open in the prompt.
 To recover a request from another session, use `work resume` from the shell.
+
+```sh
+okto-nexus work resume --session-id SESSION_ID --request-id REQUEST_ID --json
+```
 
 When paging with `work events`, keep the same `--session-id` and
 `--stream-epoch` and use the previous page's `next_after_sequence` as
@@ -206,6 +211,8 @@ okto-nexus session queue --pause --id HARNESS_ID --workspace-id WORKSPACE_ID --s
 okto-nexus session queue --resume --id HARNESS_ID --workspace-id WORKSPACE_ID --session-id SESSION_ID --operator-profile OPERATOR
 ```
 
+Home shows **Queued for the next turn** while an admitted message waits for
+delivery. Check the receipt for native acceptance or uncertain delivery.
 Pausing holds pending messages. After an interrupt, resume the queue when
 eligible messages should continue in order. If a change is unconfirmed,
 inspect the same session with `session queue` before requesting a change.
