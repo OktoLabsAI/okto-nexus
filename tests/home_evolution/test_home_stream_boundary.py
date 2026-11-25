@@ -183,8 +183,8 @@ def test_commit_subscription_reconnect_and_retention_gap_refresh_real_home(tmp_p
     outputs = queue.Queue()
     records = []
 
-    def recv_control():
-        assert parent.poll(20), 'fixture control response timed out'
+    def recv_control(timeout=20, phase='control response'):
+        assert parent.poll(timeout), f'fixture {phase} timed out'
         return parent.recv()
 
     def next_output():
@@ -195,7 +195,8 @@ def test_commit_subscription_reconnect_and_retention_gap_refresh_real_home(tmp_p
         return result
 
     try:
-        ready = recv_control()
+        # A cold spawn imports the HTTP app and migrates the disposable database.
+        ready = recv_control(timeout=90, phase='server readiness')
         assert ready['ready'] and ready['runtime_started'] is False
         base = f"http://127.0.0.1:{ready['port']}"
         client = subprocess.Popen([node, '--input-type=module', '-e', NODE_CLIENT, base,

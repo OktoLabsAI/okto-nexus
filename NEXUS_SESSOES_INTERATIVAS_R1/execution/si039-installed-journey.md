@@ -63,3 +63,11 @@ A distribuição de código-fonte e o wheel do dashboard atual contêm os mesmos
 O Connector 0.0.15 e o Core 0.0.16 fixados na CI correspondem aos checkouts `2b0000a1` e `94aeb596`. A instalação isolada em Python 3.13 validou o conteúdo dos três wheels carregados de `site-packages` e passou nas verificações offline de lock e dependências. A instalação base inicializou com o Core e com o Connector opcional ausente. Com `serve-lite`, a rota de protocolo e a Home retornaram HTTP 200, e os bytes servidos do JavaScript e do CSS corresponderam aos arquivos do wheel.
 
 O smoke HTTP/MCP em loopback confirmou 54 ferramentas, entrega de mensagem, conclusão de handoff, leitura do artefato criado, geração de `shared.md` e a saída do processo após a parada canônica. O ensaio usou identidades descartáveis. A suíte instalada ampliada roda em separado e terá seu resultado registrado após concluir. Este commit atualiza as evidências e dispensa migração. [Resultados e comandos](si039-installed-journey.json)
+
+## Regressão instalada de 811 casos e inicialização do teste SSE
+
+A suíte ampliada terminou com 809 aprovados, um ignorado por exigir um pseudoterminal POSIX e uma falha. O verificador confirmou que os arquivos de entrada conservaram seus hashes. A falha ocorreu enquanto o pai esperava a primeira confirmação do servidor descartável, antes do snapshot e da abertura do stream. A repetição isolada com o wheel atual reproduziu a mesma falha. O SQLite da primeira tentativa chegou a migrar o esquema, sem commits de atividades da fixture.
+
+O teste agora reserva 90 segundos para o carregamento inicial do servidor descartável. Cada comando seguinte conserva o limite de 20 segundos, e os limites de espera do cliente Node continuam em oito segundos. Os seis testes focados passaram com o wheel atual. A prova de SSE conferiu commit antes da assinatura, commit durante a desconexão e atualização após lacuna de retenção. O cliente e o servidor descartáveis encerraram com código zero. [JUnit, fases do stream e hashes dos wheels](si039-installed-journey.json)
+
+O marco altera o teste e as evidências, sem migração. Reverter o commit restaura a espera anterior da fixture.

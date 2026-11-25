@@ -329,5 +329,122 @@
       "The installed CI probe verified artifact bytes and import origin. The separate regression result is recorded only on completion.",
       "The smoke ran with disposable identities over Windows loopback and did not execute a real harness or use a provider."
     ]
+  },
+  "installed_windows_811_and_home_sse_fixture_recheck": {
+    "first_installed_regression": {
+      "tests": 811,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 1,
+      "passes": 809,
+      "failed_fixture_phase": "cold server startup before initial HTTP/SSE",
+      "hashed_input_files_unchanged": true,
+      "windows_skip": "test_pi_posix_terminal_reads_raw_utf8_and_restores_after_an_error"
+    },
+    "repeat_before_fixture_fix": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "fixture_fix": {
+      "initial_readiness_timeout_seconds": 90,
+      "per_commit_control_timeout_seconds": 20,
+      "sse_per_event_timeout_seconds": 8
+    },
+    "focused_after_fixture_fix": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "stream_evidence": {
+      "server_exit_code": 0,
+      "client_exit_code": 0,
+      "runtime_started": false,
+      "provider_calls": 0,
+      "real_authentication": false,
+      "phases": [
+        {
+          "stage": "commit-before-subscribe",
+          "frame": {
+            "event": "attention-reset",
+            "id": 1,
+            "data": {
+              "version": 1,
+              "event_cursor": 1,
+              "reason": "snapshot_required",
+              "clear": false
+            }
+          },
+          "cursor": 1,
+          "low": 1,
+          "titles": [
+            "Boundary item 1"
+          ],
+          "total": 1,
+          "calls": 2,
+          "peak": 1
+        },
+        {
+          "stage": "commit-while-disconnected",
+          "frame": {
+            "event": "attention-reset",
+            "id": 2,
+            "data": {
+              "version": 1,
+              "event_cursor": 2,
+              "reason": "snapshot_required",
+              "clear": false
+            }
+          },
+          "cursor": 2,
+          "low": 1,
+          "titles": [
+            "Boundary item 2",
+            "Boundary item 1"
+          ],
+          "total": 2,
+          "calls": 3,
+          "peak": 1
+        },
+        {
+          "stage": "retention-gap",
+          "frame": {
+            "event": "attention-reset",
+            "id": 3,
+            "data": {
+              "version": 1,
+              "event_cursor": 3,
+              "reason": "retention_gap",
+              "clear": false
+            }
+          },
+          "cursor": 3,
+          "low": 3,
+          "titles": [
+            "Boundary item 3",
+            "Boundary item 2",
+            "Boundary item 1"
+          ],
+          "total": 3,
+          "calls": 4,
+          "peak": 1
+        }
+      ]
+    },
+    "first_wheel_sha256": "17a101e75910fa3307d1bcd1e8f73066ce06fe6c022f0f79d9f355f5e7aac72a",
+    "focused_wheel_sha256": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+    "sha256": {
+      "first_junit": "4b57426a4d7681eb765ffc98c485b94db202858c0ddb8ed1a09aeac5c01ffc68",
+      "first_runner_result": "fa8b89711b10a6bf0e100c9b749cd36ee4eec0cfb5791eaf4e983386f7544e89",
+      "repeat_junit": "23b4bbbb660e39d6693e1c6f4e49982c5400d244b34465d751bb9344b38ddb2b",
+      "focused_junit": "4ee7093f61960eee9c5e7dc8e416a63f1dc74f737f1006eae66420002eff9e77",
+      "focused_runner_result": "2a6b938b858dcb6cb3a5051ce9933169464f6d99cc0bf2a4bc27573312679dd4"
+    },
+    "limits": [
+      "The 811-case suite tested the earlier installed wheel. The failed case did not reach the Home stream.",
+      "The focused repeat exercised the current installed wheel after the test fixture change."
+    ]
   }
 }
