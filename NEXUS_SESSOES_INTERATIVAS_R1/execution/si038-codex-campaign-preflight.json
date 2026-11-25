@@ -910,5 +910,57 @@
       "vault-loader.pth": "25111e49fbbe09e856600aefb7768e298fdbdd1549239cdf9c60c44e8e4bf41a"
     },
     "actual_paid_campaign": "NOT_RUN"
+  },
+  "native_queue_retained_at_preventive_stop": {
+    "inspected_nexus_head": "67e8b2189f7a8ed925cd7a76634310abea25eaa8",
+    "artifact_reference": "current_native_journey_with_active_accounting",
+    "platform": "Windows x64, ConPTY, Edge 158.0.4370.33",
+    "qualification_level": "installed_runtime_real_app_server_viewer_connector_and_browser_simulated_model",
+    "fault_scope": "Usage report injected into a disposable copy read only by the budget controller",
+    "injected_active_turn_tokens": 225000,
+    "native_journal_cumulative_simulated_tokens": 630,
+    "budget_only_snapshot_cumulative_tokens": 225105,
+    "preventive_charge_retained": 450000,
+    "reserved_steps": ["setup", "home", "interactive", "queued"],
+    "steer_reservations": 0,
+    "steer_operations": 0,
+    "steer_requests_to_app_server": 0,
+    "original_queue_final_state": "ACCEPTED_NATIVE",
+    "queue_usage_observed_after_stop": 315,
+    "original_queue_delivered_once": true,
+    "native_thread_count": 1,
+    "native_process_launches": 1,
+    "native_turns": 3,
+    "same_session_results": 3,
+    "viewer_detaches_before_terminal_result": 2,
+    "sqlite_integrity": "ok",
+    "sqlite_foreign_key_violations": 0,
+    "loopback_model_requests": 3,
+    "external_provider_requests": 0,
+    "canonical_close_and_listener_exit": true,
+    "native_tests_passed": 1,
+    "exit_codes": {"native": 0, "browser": 0, "audit": 0},
+    "first_fixture_failure": "Missing contextlib.closing import before the snapshot was created",
+    "evidence_directory": "D:/nxs-si038-native-stop-confirmed-67e8b218",
+    "reproduction_setup": "Recreate venv with Python 3.13.1, sync requirements.txt offline, and copy vault-loader.pth into that venv's Lib/site-packages before running run.ps1.",
+    "commands": [
+      "powershell -NoProfile -File D:/nxs-si038-native-stop-confirmed-67e8b218/run.ps1",
+      "node D:/nxs-si038-native-stop-confirmed-67e8b218/browser.cjs D:/nxs-si038-native-stop-confirmed-67e8b218",
+      "python -B D:/nxs-si038-native-stop-confirmed-67e8b218/audit-stop.py"
+    ],
+    "sha256": {
+      "test_terminal_home.py": "56bd4d890606a028d6c6df9479c4fe5ac05ab156b8e881ff0ba798eea47a64d8",
+      "browser.cjs": "0fa5cdcce011a841f33a93c41bc8990d843610c9e00ab46c337406c4afabc8de",
+      "run.ps1": "b07dd762ae212fe28dddf8246361be0e88b3ababe4ffe31561557450f9cb0de5",
+      "terminal-home.xml": "0b64a88d050efc46dff26e02891286caec71889ce91ea344affbf2d1e9e4e154",
+      "proof.json": "3aa62ddab779fa12dde517e6c81ae89f8915a2d7218bd08783250107331d733e",
+      "browser-final.json": "08465178bbf6d3b5ddb3047bbda47f01185ecb6ee8f8790608f93d4d22df4d1e",
+      "preventive-stop.json": "ac9b26979e34db4c1e9d8a4db4b535ce98ce19c20da98b5a364245f69abfe55e",
+      "si038-budget.jsonl": "6bed29805c220f2845664e8a675839b006e90e4d0eb64ff0dda089c43fc647b7",
+      "audit-stop.py": "6d585668b241be8ff6a03d374ab37dd5ee4d3daa7a6cd5b9523f40344b1916a3",
+      "requirements.txt": "1f632ea0937844fe5308c4496e1f05e23755673dae6d202ffc22f4ac7cbc7c36",
+      "vault-loader.pth": "b2c7d033c03e0f2dd4077803352d3a00158d01999a6a0e6392542160b1502372"
+    },
+    "actual_paid_campaign": "NOT_RUN"
   }
 }
