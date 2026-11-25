@@ -852,5 +852,63 @@
       }
     },
     "actual_paid_campaign": "NOT_RUN"
+  },
+  "current_native_journey_with_active_accounting": {
+    "inspected_nexus_head": "8e27b1b1a38a06c1394f821150c2d48bb9bbf88a",
+    "nexus_wheel_sha256": "af370051ed57f3106acb3a6d1a4324d01a7b6aab22cf4f5ebb2616bdd1bc0887",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "codex_app_server_0_157_0_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "codex_viewer_0_170_0_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "platform": "Windows x64, ConPTY, Edge 158.0.4370.33",
+    "qualification_level": "installed_runtime_real_app_server_viewer_connector_and_browser_simulated_model",
+    "setup_usage_simulated_separately": true,
+    "active_journal_reads": {
+      "before_binding": true,
+      "before_queue_reservation": true,
+      "before_steer_reservation": true,
+      "same_turn_for_all_reads": true,
+      "tokens_reported_at_each_read": [null, null, null]
+    },
+    "permanent_provisions": 375000,
+    "simulated_observed_tokens": 1173,
+    "native_thread_count": 1,
+    "native_process_launches": 1,
+    "native_turns": 3,
+    "native_steers": 1,
+    "viewer_detaches_before_terminal_result": 2,
+    "retained_results": 3,
+    "scoped_original_work_events_observed": 43,
+    "sqlite_integrity": "ok",
+    "sqlite_foreign_key_violations": 0,
+    "loopback_model_requests": 4,
+    "external_provider_requests": 0,
+    "canonical_close_and_listener_exit": true,
+    "native_tests_passed": 1,
+    "exit_codes": {"native": 0, "browser": 0, "durability": 0, "audit": 0},
+    "first_fixture_failure": "The protected operator session was unavailable when the connector spawned Nexus. A fresh disposable installation loaded the vault fixture only under its test home.",
+    "evidence_directory": "D:/nxs-si038-native-vault-8e27b1b1",
+    "temporary_venv_removed": true,
+    "reproduction_setup": "Recreate venv with Python 3.13.1, sync requirements.txt offline, and copy vault-loader.pth into that venv's Lib/site-packages before running run.ps1.",
+    "commands": [
+      "powershell -NoProfile -File D:/nxs-si038-native-vault-8e27b1b1/run.ps1",
+      "node D:/nxs-si038-native-vault-8e27b1b1/browser.cjs D:/nxs-si038-native-vault-8e27b1b1",
+      "python -B D:/nxs-si038-native-vault-8e27b1b1/prove_durability.py",
+      "python -B D:/nxs-si038-native-vault-8e27b1b1/audit.py"
+    ],
+    "sha256": {
+      "test_terminal_home.py": "faba4d626d0b9cbfaa7503986ddcce81269ae6343619d57cc7af9e9c98045c02",
+      "browser.cjs": "0fa5cdcce011a841f33a93c41bc8990d843610c9e00ab46c337406c4afabc8de",
+      "run.ps1": "2b8d579800b23b3719cdbbad11a88dd532aa9f2da776aa626420a27cb9b9ec46",
+      "requirements.txt": "1f632ea0937844fe5308c4496e1f05e23755673dae6d202ffc22f4ac7cbc7c36",
+      "terminal-home.xml": "b85ce3cbad21eb5dfb6dee3d2efc45e72f9483856099dc9267d7ec9ad4fc55cb",
+      "accounting-controls.json": "6aeee72677ada29581463f190ce36061a4019168f05453728f547ecbad6eea42",
+      "browser-final.json": "08465178bbf6d3b5ddb3047bbda47f01185ecb6ee8f8790608f93d4d22df4d1e",
+      "si038-budget.jsonl": "d8e6198e129a86481dd2e83bcff87248a508157055b669aae2bb26f281de1a01",
+      "proof.json": "bd6504abeb6c72a135780e2243aeeeb86ed328677707a644f790e77cda9b37e2",
+      "durability.json": "b0373cacf8aac6290be9a6b15f645ea7db01a7d32dcfdc33370b7a29a033a64f",
+      "vault-loader.pth": "25111e49fbbe09e856600aefb7768e298fdbdd1549239cdf9c60c44e8e4bf41a"
+    },
+    "actual_paid_campaign": "NOT_RUN"
   }
 }

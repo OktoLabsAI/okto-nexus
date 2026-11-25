@@ -96,3 +96,11 @@ A reprodução usou uma cópia do journal anterior do app-server Codex 0.157.0. 
 Passaram 46 testes focados e quatro casos de setup com o Nexus instalado e o app-server Codex revisado. O teste que exige vincular o turno antes de reservar a fila falhou no controlador anterior. Os casos nativos usaram o simulador em loopback.
 
 A releitura usa os relatórios já gravados. O provedor ainda pode registrar consumo com atraso. A alteração afeta o controlador e a leitura de evidências da campanha, sem migração. A reversão é pelo commit. A consulta autenticada e as campanhas reais continuam pendentes.
+
+## Ensaio integrado com o controlador atualizado
+
+No Windows, o Edge 158 usou o dashboard instalado com o Connector, o app-server Codex 0.157.0 e o visualizador 0.170.0. O controlador vinculou e releu o mesmo turno antes da fila e antes da reorientação. Nessas três leituras, o turno já tinha uma identidade no journal e ainda aguardava o primeiro relatório de consumo. As reservas permanentes cobriram essa janela.
+
+O Connector abriu a sessão preparada em leitura. Um segundo visualizador iniciou o turno com escrita autorizada. A Home enfileirou outra mensagem e o CLI reorientou o turno em execução. Os dois visualizadores se desanexaram antes do término. O mesmo processo depois concluiu o turno e executou a entrada da fila. O Edge viu as duas respostas uma vez. O SQLite confirmou uma abertura, três envios, uma reorientação, um fechamento e três resultados na mesma sessão. O ledger conservou cinco reservas, com 375 mil tokens provisionados e 1.173 tokens simulados contabilizados.
+
+A primeira montagem encerrou antes da anexação porque o subprocesso não recebeu o cofre sintético. A rodada aprovada instalou os mesmos wheels em um ambiente descartável com o cofre limitado ao diretório de teste. O ensaio e a auditoria passaram. Houve quatro requisições ao simulador local, e o encerramento canônico fechou o processo do Codex e o listener. A autorização para a consulta autenticada e a execução com provedor real continua pendente. O marco adiciona evidências e pode ser revertido pelo commit. [Comandos e hashes](si038-codex-campaign-preflight.json)
