@@ -603,7 +603,7 @@
         "SI-T-B19",
         "SI-T-B20"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si009-cancellation.md",
         "execution/si009-queue-view.md",
@@ -612,7 +612,8 @@
         "execution/si009-queue-limit-and-expiration.md",
         "execution/si009-queue-limit-and-expiration.json",
         "execution/si009-isolated-cancellation-and-promotion.md",
-        "execution/si009-isolated-cancellation-and-promotion.json"
+        "execution/si009-isolated-cancellation-and-promotion.json",
+        "execution/si009-current-cancellation.json"
       ]
     },
     {
