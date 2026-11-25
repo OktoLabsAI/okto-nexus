@@ -1,0 +1,244 @@
+{
+  "task": "SI-035",
+  "repo_head_before_evidence": "5fce3ff9c91093e488cd0ac5a7daeb96f1953786",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": {
+    "os": "Windows x64, actual ConPTY and disposable Server processes",
+    "writer_race": "Pi 0.87.1 through the installed Connector R4 on loopback",
+    "server_crashes": "Isolated Server process exit and restart, fixture peer using Codex JSON-RPC",
+    "provider": "Synthetic only"
+  },
+  "tests": {
+    "arbitration_and_reconciliation": {
+      "passed": 37,
+      "test_files": {
+        "tests.execution_r4.test_session_input_runtime": 6,
+        "tests.session_interaction.test_capacity_attempts": 12,
+        "tests.session_interaction.test_queue_storage": 18,
+        "tests.execution_r4.test_remote_restart_fence": 1
+      },
+      "junit_sha256": "281917dbe310f54d472bbca0c1526a2b34c4cb13f4b7d91a026b2d7ecc2d33bf"
+    },
+    "queue_controls": {
+      "passed": 9,
+      "test_files": {
+        "tests.execution_r4.test_session_input_runtime": 4,
+        "tests.session_interaction.test_queue_controls": 5
+      },
+      "junit_sha256": "1d0e31e8410d161117fac8008afbde6599af9f5f4ee0a143168dd0255953f49d"
+    },
+    "real_process_crash_matrix": {
+      "passed": 10,
+      "test_files": {
+        "tests.execution_r4.test_canonical_process_result_crash": 10
+      },
+      "junit_sha256": "fcdf73f6a92778a707b711ec00a3f043e121835830bf073c39504f7ef4ff04cc"
+    },
+    "native_writer_shared_login": {
+      "passed": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "cd506760d4ed3f7c95317fe9e78204e37c4edc73bb35f90012bc35d57aa58993"
+    },
+    "native_writer_independent_logins": {
+      "passed": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "3485b88bb0097dfd9df317b0f3494b70cb356122d51f1c09fe49471649f1d2e5"
+    }
+  },
+  "native_writer_probes": {
+    "shared_login": {
+      "native_proof": {
+        "native_pi": "0.87.1",
+        "real_connector_r4": true,
+        "windows_conpty": true,
+        "contender_count": 2,
+        "confirmed_same_occupied_writer": true,
+        "one_takeover_winner": true,
+        "writer_epoch_increment": 1,
+        "old_writer_replaced_and_console_restored": true,
+        "losing_client_refused": true,
+        "reader_receipt_repeated_without_effect": true,
+        "stale_draft_not_admitted": true,
+        "original_and_successor_inputs_dispatched_once_in_order": true,
+        "same_native_process_and_session": true,
+        "connector_generation_and_grants_unchanged": true,
+        "native_write_sequence": [
+          "prompt",
+          "prompt",
+          "prompt"
+        ],
+        "exact_session_closed": true,
+        "synthetic_model_calls": 3,
+        "external_provider_calls": 0
+      },
+      "database": {
+        "session_count": 1,
+        "operations": {
+          "runtime.open": 1,
+          "turn.submit": 3,
+          "runtime.close": 1
+        },
+        "writer_epochs": {
+          "1": "REPLACED",
+          "2": "DETACHED"
+        },
+        "queue_inputs_accepted_once": 2,
+        "results_same_session": 3,
+        "sqlite_integrity_and_foreign_keys_ok": true
+      },
+      "fixture_sha256": {
+        "test_pi_writer_race.py": "958f2eb07017bdcd64c9e1a89d3129adfdb840722a53f9d7fa9b64aefa66bdcd",
+        "terminal.py": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20",
+        "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+        "pi_fixture.py": "9cf2a5dbc2484001a33f3fb45f69be174c53c09048059f84bb0248b4dd5ea971"
+      },
+      "raw_evidence_directory": "D:/nxs-si035-current-84bd968d"
+    },
+    "independent_logins": {
+      "native_proof": {
+        "native_pi": "0.87.1",
+        "real_connector_r4": true,
+        "windows_conpty": true,
+        "contender_count": 2,
+        "confirmed_same_occupied_writer": true,
+        "one_takeover_winner": true,
+        "writer_epoch_increment": 1,
+        "independently_authenticated_clients": 3,
+        "cross_author_receipts_refused": true,
+        "old_writer_replaced_and_console_restored": true,
+        "losing_client_refused": true,
+        "reader_receipt_repeated_without_effect": true,
+        "stale_draft_not_admitted": true,
+        "original_and_successor_inputs_dispatched_once_in_order": true,
+        "same_native_process_and_session": true,
+        "connector_generation_and_grants_unchanged": true,
+        "native_write_sequence": [
+          "prompt",
+          "prompt",
+          "prompt"
+        ],
+        "exact_session_closed": true,
+        "synthetic_model_calls": 3,
+        "external_provider_calls": 0
+      },
+      "database": {
+        "session_count": 1,
+        "operations": {
+          "runtime.open": 1,
+          "turn.submit": 3,
+          "runtime.close": 1
+        },
+        "writer_epochs": {
+          "1": "REPLACED",
+          "2": "DETACHED"
+        },
+        "queue_inputs_accepted_once": 2,
+        "results_same_session": 3,
+        "sqlite_integrity_and_foreign_keys_ok": true
+      },
+      "fixture_sha256": {
+        "test_pi_writer_race.py": "e8fd00771e712f0fadb179e5608c21cf2f9e8eca2bb071ae948e6fbadd16edac",
+        "terminal.py": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20",
+        "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+        "pi_fixture.py": "9cf2a5dbc2484001a33f3fb45f69be174c53c09048059f84bb0248b4dd5ea971"
+      },
+      "raw_evidence_directory": "D:/nxs-si035-writer-auth"
+    }
+  },
+  "crash_process_cases": {
+    "before_output_capture": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "before_terminal_capture": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "after_terminal_capture": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "after_terminal_capture_burst": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "after_projection_commit": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "admin_after_terminal_capture": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "before_turn_receipt": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "after_turn_receipt": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "queue_before_turn_receipt": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    },
+    "queue_after_terminal_capture": {
+      "native_turn_starts": 1,
+      "replacement_native_launches": 0,
+      "sqlite_integrity_and_foreign_keys_ok": true
+    }
+  },
+  "exact_queue_crash_cases": {
+    "queue_before_turn_receipt": {
+      "input_state": "DELIVERY_UNKNOWN",
+      "canonical_receipt_stage": "SUBMISSION_STARTED",
+      "retry_safe": false,
+      "follower_state": "BLOCKED_SESSION",
+      "follower_has_no_operation": true,
+      "result_count": 0
+    },
+    "queue_after_terminal_capture": {
+      "input_state": "ACCEPTED_NATIVE",
+      "canonical_receipt_stage": "SUCCEEDED",
+      "retry_safe": false,
+      "follower_state": "BLOCKED_SESSION",
+      "follower_has_no_operation": true,
+      "result_count": 1
+    }
+  },
+  "raw_evidence_directory": "D:/nxs-si035-current-84bd968d",
+  "limits": [
+    "The writer race tested attachment ownership with one productive Pi process. The productive ownership transfer and its campaign are tracked under SI-T-G15.",
+    "The process crash matrix used a protocol fixture for the native peer. The Pi ownership assertions used a real native process with three simulated responses per case.",
+    "The same-host loopback topology is used in accordance with the Windows validation scope."
+  ]
+}

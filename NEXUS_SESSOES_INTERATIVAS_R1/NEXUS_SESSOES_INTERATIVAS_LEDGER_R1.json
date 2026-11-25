@@ -2375,7 +2375,7 @@
         "SI-T-G15",
         "SI-T-H12"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si035-server-process-crash.md",
         "execution/si035-server-process-crash.json",
@@ -2394,7 +2394,9 @@
         "execution/si035-pi-native-opening-recovery.md",
         "execution/si035-pi-native-opening-recovery.json",
         "execution/si023-codex-independent-background.md",
-        "execution/si023-codex-independent-background.json"
+        "execution/si023-codex-independent-background.json",
+        "execution/si035-current-faults-and-writer-contention.md",
+        "execution/si035-current-faults-and-writer-contention.json"
       ]
     },
     {
@@ -3375,7 +3377,8 @@
         "execution/si023-retired-session-queue.json",
         "execution/si035-input-restart-receipts.md",
         "execution/si035-input-restart-receipts.json",
-        "execution/si035-server-process-crash.json"
+        "execution/si035-server-process-crash.json",
+        "execution/si035-current-faults-and-writer-contention.json"
       ]
     },
     {
@@ -5093,7 +5096,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si019-pi-concurrent-readers-and-writer-transfer.md",
-        "execution/si019-pi-concurrent-readers-and-writer-transfer.json"
+        "execution/si019-pi-concurrent-readers-and-writer-transfer.json",
+        "execution/si035-current-faults-and-writer-contention.md",
+        "execution/si035-current-faults-and-writer-contention.json"
       ]
     },
     {
@@ -5116,7 +5121,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si019-pi-concurrent-readers-and-writer-transfer.md",
-        "execution/si019-pi-concurrent-readers-and-writer-transfer.json"
+        "execution/si019-pi-concurrent-readers-and-writer-transfer.json",
+        "execution/si035-current-faults-and-writer-contention.md",
+        "execution/si035-current-faults-and-writer-contention.json"
       ]
     },
     {
