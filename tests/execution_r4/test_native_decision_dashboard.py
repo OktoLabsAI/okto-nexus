@@ -65,8 +65,11 @@ def native_browser(decision_state, assets, request):
     client = TestClient(app, base_url=origin, client=('127.0.0.1', 50000))
     auth = app.state.operator_auth
     assert auth.configure('native-browser-fixture', 'fixture-operator-password', local=True)
-    client.cookies.set('nexus_operator_session', auth.login('native-browser-fixture', 'fixture-operator-password'))
-    trace = {'requests': [], 'drop': False}
+    operator_session = auth.login('native-browser-fixture', 'fixture-operator-password')
+    assert operator_session
+    client.cookies.set('nexus_operator_session', operator_session)
+    client.headers['X-Nexus-Operator-Session-Required'] = '1'
+    trace = {'requests': [], 'drop': False, 'sign_out': lambda: auth.logout(operator_session)}
     with sync_playwright() as driver:
         browser = driver.chromium.launch(channel='msedge', headless=True)
         context = browser.new_context(viewport={'width': 1440, 'height': 1100})
@@ -254,3 +257,28 @@ def test_native_ui_revoked_grant_refuses_confirmation(decision_state, native_bro
     expect(page.get_by_role('region', name='Native runtime decision').get_by_role('alert')).to_be_visible()
     assert snapshot(decision_state)['execution_decisions'] == []
     assert len([path for method, path, _ in trace['requests'] if method == 'POST']) == 1
+
+
+@pytest.mark.parametrize('decision_state', ['input'], indirect=True)
+def test_native_ui_revoked_operator_session_clears_pending_answer(native_browser, request):
+    from playwright.sync_api import expect
+
+    page, trace = native_browser
+    state = request.getfixturevalue('decision_state')
+    before = snapshot(state)
+    assert before['execution_native_requests'] and before['execution_decisions'] == []
+    page.get_by_label('Choose the next step', exact=True).select_option('custom')
+    page.get_by_label('Another answer', exact=True).fill('unsent-browser-answer')
+    trace['sign_out']()
+
+    with page.expect_response(lambda response: response.request.method == 'POST'
+                              and urlsplit(response.url).path == _DECISION_ROUTE) as rejected:
+        page.get_by_role('button', name='Send answer', exact=True).click()
+
+    assert rejected.value.status == 401
+    expect(page.get_by_role('button', name='Sign in', exact=True)).to_be_visible()
+    expect(page.get_by_role('region', name='Native runtime decision')).to_have_count(0)
+    storage = page.evaluate('JSON.stringify([Object.entries(sessionStorage), Object.entries(localStorage)])')
+    assert 'unsent-browser-answer' not in storage
+    assert snapshot(state) == before
+    assert len([path for method, path, _ in trace['requests'] if method == 'POST' and path == _DECISION_ROUTE]) == 1

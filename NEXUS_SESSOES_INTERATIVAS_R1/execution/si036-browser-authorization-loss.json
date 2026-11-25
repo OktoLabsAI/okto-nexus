@@ -79,5 +79,48 @@
     "schema_changes": false,
     "manual_acceptance": false,
     "fixture_native_harnesses": 0
+  },
+  "current_canonical_decision": {
+    "inspected_nexus_head": "5f55658ea846c18582e82cf2f7e5d8946ccd5379",
+    "nexus_wheel_sha256": "af370051ed57f3106acb3a6d1a4324d01a7b6aab22cf4f5ebb2616bdd1bc0887",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "platform": "Windows x64",
+    "browser": "Microsoft Edge 158.0.4370.33",
+    "playwright_version": "1.63.0",
+    "qualification_level": "installed_dashboard_real_browser_production_api_synthetic_native_requests",
+    "evidence_directory": "D:/nxs-si036-diagnostics-5f55658e",
+    "command": "python -B -m pytest -c pyproject.toml -o pythonpath= -o asyncio_default_fixture_loop_scope=function -p assert_contract_wheel -p anyio.pytest_plugin -p pytest_asyncio.plugin tests/execution_r4/test_native_decision_dashboard.py --basetemp D:/nxs-si036-diagnostics-5f55658e/canonical-final --junitxml D:/nxs-si036-diagnostics-5f55658e/canonical-final.xml -qx --tb=short",
+    "opt_in": ["OKTO_NEXUS_UI_CAMPAIGN=1", "OKTO_NEXUS_UI_INSTALLED=1"],
+    "canonical_suite": {
+      "passed": 15,
+      "exit_code": 0,
+      "junit_sha256": "40280755071cbe33d8c17ed32ca102b6d75371a77df831bdf53e8840f58eb915",
+      "log_sha256": "4e1cbe1e60b26c5d1d33e133b10976fa8b52ed9dac9b2043439d93c5c1e6ceb7"
+    },
+    "focused_revocation_with_journal_comparison": {
+      "passed": 1,
+      "exit_code": 0,
+      "case": "test_native_ui_revoked_operator_session_clears_pending_answer[input]",
+      "http_status": 401,
+      "canonical_posts": 1,
+      "protected_form_removed": true,
+      "sign_in_visible": true,
+      "answer_persisted_in_browser": false,
+      "durable_rows_unchanged": true,
+      "new_native_decisions": 0,
+      "provider_calls": 0,
+      "junit_sha256": "39fe58101ce4886d2068419915249956d18928338660984f7f66434218e60e1d",
+      "log_sha256": "f9c6876dbcbe8ba462aac1e321fec79353e6bcced4f2a33a2cdc7560498bbe2d"
+    },
+    "legacy_diagnostics": {
+      "suite_completed": false,
+      "first_attempt": "The old onboarding selector timed out before the first case.",
+      "second_attempt": "With current login and navigation the first legacy session setup received HTTP 409 because legacy connection setup was removed.",
+      "first_junit_sha256": "86354acae8467a0ece4b954faf8dbdf1e14e4448a684ae2a6b685a6a7a3c2b57",
+      "second_junit_sha256": "0c7b80a6951a8b0ea7d29f20cc5b48f3cdbe4a1219caf6d691475d54e5842a75"
+    },
+    "manual_acceptance": false,
+    "windows_screen_reader_speech": "not_run"
   }
 }

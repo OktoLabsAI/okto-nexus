@@ -9,3 +9,11 @@ O teste de 401/403 usou uma cópia descartável com conversa retida e sem permis
 A primeira tentativa precisou esperar a abertura do painel de métricas. O ensaio também passou a fechar o painel da sessão pelos controles da Home antes de navegar de volta, respeitando a confirmação de saída. A versão final confirmou os três caminhos de SI-T-E15 com as evidências combinadas.
 
 Esta etapa registra evidências. A reversão do commit restaura o ledger anterior e dispensa migração. [Resultados e hashes](si036-browser-authorization-loss.json)
+
+## Revogação com uma resposta nativa aberta
+
+No Edge com o dashboard do Nexus 0.3.8 instalado, o operador preencheu uma resposta personalizada para uma pergunta nativa. Depois que o servidor revogou o login, a tentativa de enviar recebeu HTTP 401. O navegador voltou à tela de entrada e retirou o formulário. A resposta ficou fora do armazenamento do navegador, e as tabelas de pedidos, aprovações, decisões e operações permaneceram iguais.
+
+Passaram os 15 testes de decisão canônica e, em rodada focal, o cenário com comparação integral das linhas antes e depois da revogação. A suíte usou o backend real e fixtures de pedidos nativos, sem chamadas a provedores. O ensaio opt-in de diagnóstico legado parou na preparação. O teste esperava a antiga navegação e, após alinhar a fixture, a antiga abertura respondeu HTTP 409. As mudanças exploratórias ficaram fora do commit. A regressão entregue usa a decisão canônica e revoga o cookie no servidor. [Resultados e hashes](si036-browser-authorization-loss.json)
+
+O marco acrescenta um cenário de regressão e suas evidências. A reversão é pelo commit. O aceite do participante e a validação de fala com leitor de tela no Windows continuam pendentes.
