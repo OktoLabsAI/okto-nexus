@@ -1,0 +1,132 @@
+{
+  "task": "SI-034",
+  "scenario": "SI-T-H16",
+  "repo_head_before_evidence": "84bd968d5af8c8af142fe402b10242f7a34ed0ee",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": {
+    "os": "Windows x64 with actual ConPTY",
+    "browser": "Microsoft Edge 158.0.4370.33, Playwright CLI 0.1.25, operator cookie required",
+    "harness": "Pi 0.87.1 and a synthetic model on the same Windows host",
+    "topology": "Separate remote executor through installed Connector R4 on loopback"
+  },
+  "tests": {
+    "installed_authority": {
+      "passed": 123,
+      "skipped": 0,
+      "test_files": {
+        "tests.session_interaction.test_operator_authority": 3,
+        "tests.session_interaction.test_attachment_broker": 6,
+        "tests.session_interaction.test_cancellation": 13,
+        "tests.session_interaction.test_queue_controls": 5,
+        "tests.session_interaction.test_presentation_transport": 47,
+        "tests.session_interaction.test_transcript": 25,
+        "tests.session_interaction.test_conversation_stream": 4,
+        "tests.execution_r4.test_terminal_authorization": 20
+      },
+      "junit_sha256": "761e61d36506e798969a2cbdbe054751975adf4f997a992ddf757b512e8c2f1b"
+    },
+    "installed_gateway": {
+      "passed": 77,
+      "skipped": 0,
+      "test_files": {
+        "tests.test_operator_auth": 10,
+        "tests.session_interaction.test_contract": 25,
+        "tests.session_interaction.test_codex_presenter_requests": 37,
+        "tests.execution_r4.test_remote_codex_presentation": 5
+      },
+      "junit_sha256": "330bbdf5784bdf36bde8717e9dc4c2f2f9e1c845edd1cc182d6fba74529301c3"
+    },
+    "installed_native_browser": {
+      "passed": 1,
+      "skipped": 0,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "dc04295bfdc326bfbed36ac145154f7f8b6bf554fc42856c385d62b1a0ce8db0"
+    }
+  },
+  "native_proof": {
+    "native_pi": "0.87.1",
+    "real_connector_r4": true,
+    "windows_conpty": true,
+    "author_revoked_with_active_browser_writer_and_queue": true,
+    "attachment_retired_and_terminal_mode_restored": true,
+    "browser_cleared_protected_view_and_draft": true,
+    "independent_login_remained_valid": true,
+    "exact_original_input_blocked_without_operation": true,
+    "result_observed_only_after_new_login": true,
+    "one_native_process_and_session": true,
+    "one_native_turn": true,
+    "connector_generation_unchanged": true,
+    "native_exit_after_canonical_close": true,
+    "synthetic_model_calls": 1,
+    "external_provider_calls": 0
+  },
+  "operator_audit": {
+    "successful_logins": 3,
+    "single_revoked_login": true
+  },
+  "browser_snapshot_sha256": {
+    "chat-recorded": "f1e67c2a11ab07a55d582b4346720ba8c44f0a53a1626084b35d33f40e69b14c",
+    "before-revocation": "1ecbbee822ebdedae50443d06093756a0afa55ec8937a0a34f384b7059ce7398",
+    "protected-draft": "0f4072f1738e936b222836bbcc379cc592979f142d569ffbce72ee38b3111d11",
+    "authorization-revoked": "ccd711d4e96b34c5eaf759e08bc4407d6edc5c21c34ff83cc15e1b4af0a21acc",
+    "reauthenticated-home": "1fb6bd8dc2dc4e3c1895f11d497a7e631edd5a893070c4d335d82a47e833d132"
+  },
+  "sqlite": {
+    "operations_on_original_remote_session": {
+      "runtime.open": 1,
+      "turn.submit": 1,
+      "runtime.close": 1
+    },
+    "detached_writer": 1,
+    "attachment_ticket_and_challenge_hashes_cleared": true,
+    "original_author_terminal_input": "BLOCKED_AUTH",
+    "blocked_input_operation": null,
+    "blocked_input_possible_effect": false,
+    "results_on_original_session": 1,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "fixture_sha256": {
+    "drive.ps1": "8e98ab1eabd0d5ea5f8c29d605e64ace7cbcc8da6461fc2d1683b3bf63864cf1",
+    "test_revocation.py": "c98fd7700cbf1c7439878287c42d104ab360b0d83291cca0cd8c3059fe6ffbc6",
+    "remote_pi_project.py": "0838a608fc87635c4787608ac5e1ef8cf1894ac1f1a9106dec7a3153665f9fa4",
+    "terminal.py": "321993cc0f1e7cfaf8666cdb336fa2d38936b1352303b367bddbb8b8e875bc20",
+    "pi_fixture.py": "9cf2a5dbc2484001a33f3fb45f69be174c53c09048059f84bb0248b4dd5ea971",
+    "playwright.json": "8fb79d28fa98a98b4a260e386a066041b76cd4155b42256665857981aa325a73",
+    "verify-browser-checkpoint.ps1": "4987b915d8d12352a2aa662e41b0cd47305a2f9f223a43f632777cf3dc80df11"
+  },
+  "raw_evidence_directory": "D:/nxs-si034-live-v2",
+  "installed_regression_directory": "D:/nxs-si034-current-848cbcda",
+  "first_probe": {
+    "native_junit_sha256": "486617a08884e3a90db0ba62255c2291e633f8892f8c945a25ebd4456cf0f23c",
+    "observation": "Live revocation and queue blocking were observed; the scripted return did not select operational Home after reauthentication. The completed probe used the login form in the same Edge session, which restored the exact target on operational Home without navigation."
+  },
+  "completed_browser_driver": {
+    "initial_playwright_driver_exit_code": 1,
+    "reason": "The automatic post-sign-in snapshot succeeded. A redundant subsequent navigation encountered the existing prompt protecting an open detail panel.",
+    "verified_completion": "The captured live post-login DOM was checked independently by exact URL, conversation content, empty composer and absence of revoked data before releasing the test checkpoint."
+  },
+  "limits": [
+    "This controlled test exercised a real Pi process, Edge and terminal on one host and used one simulated model response.",
+    "The browser reauthenticated through the operator form. A separate login remained valid during the revocation and performed the exact canonical shutdown afterward.",
+    "Distinct-host and provider campaign qualification are tracked separately."
+  ]
+}
