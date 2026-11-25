@@ -1,0 +1,9 @@
+# SI-024 · Controles nativos do Codex no pacote instalado
+
+No Windows, o frontend Codex 0.170.0 abriu em ConPTY a thread que o app-server 0.157.0 já executava. Via Connector, a confirmação no visualizador reorientou exatamente o turno revisado. A outra mensagem permaneceu na fila até o turno original terminar. Após desanexar, o CLI recuperou o recibo original, e a fila produziu um segundo resultado na mesma thread. O banco do Nexus e o journal do Connector registraram uma abertura nativa, uma reorientação, dois envios e um fechamento canônico.
+
+No executor local, cancelar a interrupção preservou o turno e a fila. Uma revisão do turno anterior foi recusada quando o turno seguinte já estava ativo. A confirmação válida pausou a fila antes de enviar uma única interrupção e só anunciou o resultado depois do recibo do turno exato. A retomada explícita da fila usou a mesma thread. Em outro ensaio, retirar a capacidade de escrita durante a revisão preservou a fila e permitiu reanexar em leitura ao mesmo processo. A auditoria confirmou zero envios de interrupção ou reorientação nesse caso. Todos os processos dos ensaios terminaram.
+
+Passaram os três ensaios nativos e 78 regressões com os wheels instalados. Na primeira rodada, um visualizador não apresentou o marcador de turno ativo dentro da janela, e outro recusou a seleção de build no ambiente isolado. A repetição preservou as variáveis reais de arquitetura do Windows no ambiente do subprocesso e ampliou a janela de observação, mantendo as verificações de turno, thread e efeitos. [Resultados, auditoria SQLite e hashes](si024-current-native-controls.json)
+
+Os ensaios usaram uma única máquina e respostas de modelo simuladas em loopback, sem chamadas a provedores. A SI-024 fica implementada, com a qualificação de campanha dos cenários SI-T-G01, G05, G10, G19 e I06 pendente. O commit registra evidências e pode ser revertido por Git, sem migração.

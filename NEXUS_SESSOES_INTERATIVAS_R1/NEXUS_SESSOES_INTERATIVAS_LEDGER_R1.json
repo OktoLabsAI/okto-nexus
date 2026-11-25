@@ -1551,8 +1551,10 @@
         "SI-T-H05",
         "SI-T-I06"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si024-current-native-controls.md",
+        "execution/si024-current-native-controls.json",
         "execution/si024-codex-busy-presentation.md",
         "execution/si024-codex-controlled-windows.json",
         "execution/si024-codex-interrupt-queue-windows.json",
@@ -3527,7 +3529,8 @@
         "execution/si024-codex-steer-ack.md",
         "execution/si024-codex-steer-ack.json",
         "execution/si022-codex-remote-native-steer.md",
-        "execution/si022-codex-remote-native-steer.json"
+        "execution/si022-codex-remote-native-steer.json",
+        "execution/si024-current-native-controls.json"
       ]
     },
     {

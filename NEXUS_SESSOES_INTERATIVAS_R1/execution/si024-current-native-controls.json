@@ -1,0 +1,268 @@
+{
+  "task": "SI-024",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": "Windows x64, native app-server and separate Codex frontend in ConPTY, loopback SSE model fixture, Nexus and Connector on the same host",
+  "native_executables": {
+    "codex_app_server_0.157.0_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "codex_frontend_0.170.0_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+  },
+  "regressions": {
+    "tests": 78,
+    "passes": 78,
+    "failures": 0,
+    "groups": {
+      "tests.session_interaction.test_codex_presenter_requests": [
+        "test_observed_exact_read_and_resume_emit_only_bounded_read_intents",
+        "test_other_methods_have_no_route_through_the_read_parser[thread/list]",
+        "test_other_methods_have_no_route_through_the_read_parser[thread/loaded/list]",
+        "test_other_methods_have_no_route_through_the_read_parser[thread/start]",
+        "test_other_methods_have_no_route_through_the_read_parser[thread/fork]",
+        "test_other_methods_have_no_route_through_the_read_parser[thread/unsubscribe]",
+        "test_other_methods_have_no_route_through_the_read_parser[turn/start]",
+        "test_other_methods_have_no_route_through_the_read_parser[turn/steer]",
+        "test_other_methods_have_no_route_through_the_read_parser[turn/interrupt]",
+        "test_picker_and_sibling_ids_are_refused[params0-bdfe5b81-54cf-43cf-8001-5de670d3dd69]",
+        "test_picker_and_sibling_ids_are_refused[params1-bdfe5b81-54cf-43cf-8001-5de670d3dd69]",
+        "test_picker_and_sibling_ids_are_refused[params2-bdfe5b81-54cf-43cf-8001-5de670d3dd69]",
+        "test_picker_and_sibling_ids_are_refused[params3-bdfe5b81-54cf-43cf-8001-5de670d3dd69]",
+        "test_picker_and_sibling_ids_are_refused[params4-local-label]",
+        "test_resume_refuses_any_engine_override[override0]",
+        "test_resume_refuses_any_engine_override[override1]",
+        "test_resume_refuses_any_engine_override[override2]",
+        "test_resume_refuses_any_engine_override[override3]",
+        "test_resume_refuses_any_engine_override[override4]",
+        "test_resume_refuses_any_engine_override[override5]",
+        "test_resume_refuses_any_engine_override[override6]",
+        "test_resume_refuses_any_engine_override[override7]",
+        "test_resume_refuses_any_engine_override[override8]",
+        "test_resume_refuses_any_engine_override[override9]",
+        "test_resume_refuses_any_engine_override[override10]",
+        "test_resume_refuses_any_engine_override[override11]",
+        "test_bootstrap_history_is_scoped_and_uses_small_first_pages",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/turns/list-extra0]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/turns/list-extra1]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/turns/list-extra2]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra3]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra4]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra5]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra6]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra7]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra8]",
+        "test_history_rejects_unbounded_or_unqualified_options[thread/items/list-extra9]"
+      ],
+      "tests.session_interaction.test_presentation_transport": [
+        "test_authenticated_read_disconnect_and_replay_leave_work_untouched",
+        "test_origin_ticket_scope_and_human_are_checked_before_challenge",
+        "test_wrong_challenge_logout_and_idle_retire_only_the_channel",
+        "test_disabled_and_unqualified_intents_are_refused",
+        "test_writer_and_web_share_queue_with_exact_scope_and_idempotency",
+        "test_review_confirmation_admits_only_the_control_that_was_reviewed",
+        "test_context_requires_matching_thread_and_authority_throughout_read[different-thread]",
+        "test_context_requires_matching_thread_and_authority_throughout_read[owner-replaced]",
+        "test_context_requires_matching_thread_and_authority_throughout_read[operator-logout]",
+        "test_explicit_detach_requires_the_same_channel",
+        "test_loopback_network_carries_context_and_history_then_detaches[eof]",
+        "test_loopback_network_carries_context_and_history_then_detaches[logout]",
+        "test_loopback_network_carries_context_and_history_then_detaches[follow]",
+        "test_client_refuses_foreign_server_before_sending_the_operator_cookie",
+        "test_native_inline_history_has_shared_scope_and_refuses_partial_reads",
+        "test_native_next_turn_accepts_only_exact_plain_text_and_keeps_steer_separate",
+        "test_native_steer_projects_only_the_exact_turn_and_text",
+        "test_native_interrupt_requires_an_exact_target_and_uses_a_separate_receipt"
+      ],
+      "tests.session_interaction.test_session_cli": [
+        "test_attach_refuses_a_generation_change_since_the_catalog[False-detail_owner_generation]",
+        "test_attach_refuses_a_generation_change_since_the_catalog[False-detail_connection_generation]",
+        "test_attach_refuses_a_generation_change_since_the_catalog[True-detail_owner_generation]",
+        "test_attach_refuses_a_generation_change_since_the_catalog[True-detail_connection_generation]",
+        "test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched",
+        "test_unreviewed_codex_viewer_is_refused_before_attachment[False]",
+        "test_unreviewed_codex_viewer_is_refused_before_attachment[True]",
+        "test_session_queue_requires_the_current_exact_review[unavailable---resume-3-Queue changes are unavailable]",
+        "test_missing_server_features_refuse_before_viewer_selection_or_input[404]",
+        "test_missing_server_features_refuse_before_viewer_selection_or_input[405]"
+      ],
+      "tests.execution_r4.test_canonical_controls": [
+        "test_targeting_uses_core_contract[codex_app_server-turn.steer-native_turn_id-t-True]",
+        "test_targeting_uses_core_contract[codex_app_server-turn.steer-current_run-None-False]",
+        "test_targeting_uses_core_contract[codex_app_server-turn.interrupt-current_run-None-True]",
+        "test_targeting_uses_core_contract[codex_app_server-turn.interrupt-none-None-False]",
+        "test_targeting_uses_core_contract[pi_rpc-turn.steer-current_run-None-True]",
+        "test_targeting_uses_core_contract[pi_rpc-turn.interrupt-native_turn_id-t-False]",
+        "test_targeting_uses_core_contract[claude_stream-turn.steer-current_run-None-True]",
+        "test_targeting_uses_core_contract[claude_stream-turn.interrupt-current_run-None-True]",
+        "test_targeting_uses_core_contract[claude_attach-turn.interrupt-current_run-None-False]",
+        "test_targeting_uses_core_contract[codex_app_server-turn.submit-current_run-None-False]",
+        "test_native_target_is_bound_to_the_wire_hash",
+        "test_public_controls_preserve_ids_authority_and_expired_containment[revoke]",
+        "test_public_controls_preserve_ids_authority_and_expired_containment[close]"
+      ]
+    },
+    "junit_sha256": "78fea12a74a26dcfb4e9906bd71963027fe384b2ca82ae849205b1555d0995c7"
+  },
+  "remote_native": {
+    "junit": {
+      "tests": 1,
+      "passes": 1,
+      "failures": 0,
+      "groups": {
+        "": [
+          "test_remote_native_steer"
+        ]
+      },
+      "junit_sha256": "d0fe98719cb823ddee6d9e118c9d7ddddcf860a55f056f48523b8426f793e627"
+    },
+    "fixture_sha256": {
+      "test_remote_steer.py": "9e99054ef1d7d2843caf92e2800155d82400355a3c206af6325e567c8ee9fe71",
+      "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+      "remote_native_project.py": "52c1ff8d2a09de6793110fd306e2443376090ef2deb227b7bfdd783397da2719",
+      "audit_durability.py": "8e9abe6b3aec569887bcda9594596d912957bca0241339e97e0f22ddb5eda57e"
+    },
+    "proof": {
+      "remote_native_exact_steer": true,
+      "review_did_not_send": true,
+      "exact_original_native_turn_acknowledged": true,
+      "steered_result_on_original_turn": true,
+      "queue_unchanged_until_original_turn_completed": true,
+      "receipt_recovers_after_detach": true,
+      "same_thread_and_app_server_until_close": true,
+      "exact_writer_detaches": 1,
+      "canonical_close": true,
+      "native_turn_starts": 2,
+      "native_steers": 1,
+      "loopback_response_requests": 3,
+      "external_provider_requests": 0
+    },
+    "durability": {
+      "nexus_integrity": "ok",
+      "connector_journal_integrity": "ok",
+      "foreign_key_violations": 0,
+      "operation_counts": {
+        "runtime.open": 1,
+        "turn.submit": 2,
+        "turn.steer": 1,
+        "runtime.close": 1
+      },
+      "closed_sessions": 1,
+      "native_launches": 1,
+      "writer_detaches": 1,
+      "steer_source": "native_terminal",
+      "steer_input_final_state": "ACCEPTED_NATIVE",
+      "target_matched_first_turn": true,
+      "web_input_final_state": "ACCEPTED_NATIVE",
+      "results_persisted_in_two_separate_turns": true,
+      "same_native_thread": true
+    },
+    "terminal_sha256": "713e7919a18fddd861dffacd540748ec2ff5a0a18a0ab6795834f491edf1ac18"
+  },
+  "local_native": {
+    "junit": {
+      "tests": 2,
+      "passes": 2,
+      "failures": 0,
+      "groups": {
+        "": [
+          "test_native_viewer_reviews_and_confirms_exact_interrupt",
+          "test_losing_write_capability_during_review_fences_before_native_send"
+        ]
+      },
+      "junit_sha256": "7465cce4243a633dc9ce4a7ced4ff16b6b24c75b689991f1b13b3c1a1e943c27"
+    },
+    "initial_junit": {
+      "tests": 2,
+      "passes": 0,
+      "failures": 2,
+      "groups": {
+        "": [
+          "test_native_viewer_reviews_and_confirms_exact_interrupt",
+          "test_losing_write_capability_during_review_fences_before_native_send"
+        ]
+      },
+      "junit_sha256": "a7c9a2ff753655f5d2ee5c13f55f49fb7bb527f658cca44bb2581f1ed18cc2db"
+    },
+    "fixture_sha256": {
+      "test_native_interrupt.py": "91c55dd31536e559213d2f85be35bf80262b563e0b74b269fdae3fb7e1941496",
+      "test_live_writer_downgrade.py": "f72b7d0730b9f3cceedea06a098cc3e2ef803bb2fffa894d6fc55bb68ac75c7c"
+    },
+    "fixture_adjustments": [
+      "Keep the actual Windows processor architecture variables in the sanitized child environment.",
+      "Allow longer observation of the busy frontend and loopback model fixture under concurrent machine activity."
+    ],
+    "interrupt": {
+      "terminal_sha256": {
+        "cancel.txt": "7fc2d17eaa15722dac77e8064000983400e2557dbdc02066876ff26ddd71455e",
+        "stale.txt": "c7a505a9d66cbff093876133ce4d70f2e2bb30a3d598b63284f01abb422aae6a",
+        "approve.txt": "6052edabe849e58ccf607176e91c97aaec83bb2ac0350e4cf9b7e047a3c9791b"
+      },
+      "database": {
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0,
+        "operation_counts": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.interrupt": 1,
+          "turn.submit": 3
+        },
+        "closed_sessions": 1,
+        "detach_access_by_order": [
+          "write",
+          "write",
+          "write"
+        ],
+        "queue_final_status": "ACCEPTED_NATIVE"
+      }
+    },
+    "downgrade": {
+      "terminal_sha256": {
+        "downgrade.txt": "4adfcca6dcc7dc6f791742286c60b714b0ecca2b98fa4cf41acc2d275dbcfd94",
+        "read-reattach.txt": "64e3f1f1bc9e880afd4a7d6b5eee26f07bba3cfe6e5325cf13a7e3849ccfa996"
+      },
+      "database": {
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0,
+        "operation_counts": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 2
+        },
+        "closed_sessions": 1,
+        "detach_access_by_order": [
+          "write",
+          "read"
+        ],
+        "queue_final_status": "ACCEPTED_NATIVE"
+      }
+    }
+  },
+  "raw_evidence_directories": [
+    "D:/nxs-si024-current-controls",
+    "D:/nxs-si024-controls-confirmed",
+    "D:/nxs-si024-current-remote"
+  ],
+  "qualification": {
+    "provider_calls": 0,
+    "campaign_scenarios_pending": [
+      "SI-T-G01",
+      "SI-T-G05",
+      "SI-T-G10",
+      "SI-T-G19",
+      "SI-T-I06"
+    ]
+  }
+}
