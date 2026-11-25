@@ -1748,8 +1748,10 @@
         "SI-T-G17",
         "SI-T-H10"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si026-current-managed-controls.md",
+        "execution/si026-current-managed-controls.json",
         "execution/si026-claude-cli-writer.md",
         "execution/si026-claude-cli-writer.json",
         "execution/si026-claude-presenter-queue.md",
@@ -3613,7 +3615,8 @@
         "execution/si026-claude-remote-managed-steer.json",
         "execution/si026-claude-home-compound-reorientation.md",
         "execution/si026-claude-home-compound-reorientation.json",
-        "execution/si026-claude-viewer-controls.json"
+        "execution/si026-claude-viewer-controls.json",
+        "execution/si026-current-managed-controls.json"
       ]
     },
     {
@@ -3639,7 +3642,8 @@
         "execution/si026-claude-terminal-steer.json",
         "execution/si026-claude-remote-managed-steer.json",
         "execution/si026-claude-requesting-refusal.md",
-        "execution/si026-claude-requesting-refusal.json"
+        "execution/si026-claude-requesting-refusal.json",
+        "execution/si026-current-managed-controls.json"
       ]
     },
     {
@@ -3664,7 +3668,8 @@
         "execution/si026-claude-operator-steer.json",
         "execution/si026-claude-terminal-steer.json",
         "execution/si026-claude-remote-managed-steer.json",
-        "execution/si026-claude-viewer-controls.json"
+        "execution/si026-claude-viewer-controls.json",
+        "execution/si026-current-managed-controls.json"
       ]
     },
     {
@@ -5000,7 +5005,8 @@
       "evidence": [
         "execution/si026-claude-terminal-retained-output.md",
         "execution/si026-claude-terminal-retained-output.json",
-        "execution/si032-claude-abrupt-writer-exit.json"
+        "execution/si032-claude-abrupt-writer-exit.json",
+        "execution/si026-current-managed-controls.json"
       ]
     },
     {
@@ -5353,7 +5359,8 @@
       "evidence": [
         "execution/si026-claude-requesting-refusal.md",
         "execution/si026-claude-requesting-refusal.json",
-        "execution/si023-codex-live-resume-refusal.json"
+        "execution/si023-codex-live-resume-refusal.json",
+        "execution/si026-current-managed-controls.json"
       ]
     },
     {

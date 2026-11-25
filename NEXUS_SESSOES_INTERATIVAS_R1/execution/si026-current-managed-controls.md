@@ -1,0 +1,9 @@
+# SI-026 · Controles da sessão Claude gerenciada
+
+No Windows, o Connector executou o Claude Code 2.1.328 em ConPTY. Antes do início da geração, o Nexus recusou a reorientação sem escrever no terminal. Depois que o turno ficou apto, uma confirmação com revisão desatualizada recebeu HTTP 409, também sem escrever. A confirmação válida enviou um único Escape e uma única mensagem substituta ao processo original.
+
+A fixture perdeu a confirmação após a gravação do recibo e simulou falha de confirmação após a escrita no ConPTY. A consulta da intenção original retornou `DELIVERY_UNKNOWN`, com a interrupção confirmada e a escrita da substituição incerta. Após chegar o resultado, o mesmo recibo passou para `ACCEPTED_NATIVE`. A auditoria confirmou uma operação de reorientação, o cancelamento do turno exato e uma única abertura nativa. O servidor de modelo simulado registrou o encerramento da conexão do turno interrompido.
+
+No ensaio de saída abrupta, o visualizador foi encerrado durante o turno. Um segundo visualizador obteve a escrita sem transferência manual. A mensagem da API da Home e a do compositor mantiveram a ordem da fila e produziram resultados distintos no processo original. Ambos os testes encerraram a sessão pelo controle canônico, e os bancos do Nexus e os journals do Connector passaram nas verificações de integridade.
+
+Passaram os dois ensaios nativos e 47 regressões com os wheels instalados. O escopo é o terminal nativo gerenciado com visualizador e compositor do Nexus no Windows. A matriz mantém a recusa de anexação nativa ao processo `stream-json` ativo. Os ensaios usaram um modelo simulado em loopback e um perfil temporário `plan`. A campanha para SI-T-G01, G03 e G17 segue pendente. O commit registra evidências e pode ser revertido por Git, sem migração. [Resultados, auditorias e hashes](si026-current-managed-controls.json) · [Matriz de capacidades](si027-session-capability-matrix.md)

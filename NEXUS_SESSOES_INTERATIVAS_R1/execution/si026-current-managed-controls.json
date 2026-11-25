@@ -1,0 +1,156 @@
+{
+  "task": "SI-026",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": "Windows x64, Claude Code 2.1.328 managed ConPTY and installed CLI/Connector on loopback, synthetic model, reviewed plan profile with tools denied",
+  "claude_sha256": "551d573567b46ce78aba1b20beb20ac2494f5f8adffd1b41dfd269a96e1d9839",
+  "regressions": {
+    "passed": 47,
+    "test_files": {
+      "tests.session_interaction.test_presentation_transport": 6,
+      "tests.session_interaction.test_session_cli": 14,
+      "tests.session_interaction.test_saved_claude_profile": 4,
+      "tests.session_interaction.test_contract": 5,
+      "tests.session_interaction.test_transcript": 2,
+      "tests.execution_r4.test_session_input_runtime": 16
+    },
+    "junit_sha256": "f25e03d4da456de91f0a8d15c534712d4bd06b53e63eef97e18a53e9e7a5a1ac"
+  },
+  "fixtures_sha256": {
+    "test_steer.py": "34727b63e736a493dc741a8d96f2f42149a5ba0404a8fb5e33a66dabee90b6ec",
+    "test_writer_crash.py": "6912964f45bd1973c000ff7f32d86de5b0f52d5fedfa2c2f78dd8ff5681be8d4",
+    "remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "drive_writer.py": "03d2375c4461512041b837c0502a93d56850aeb2615b54ca3c1196fd821496ab",
+    "isolated_cli.py": "c3cacc9152fcf60cbafb854a7778e146a719d89dc566ae17e53db2ae27657f19",
+    "pty_probe.py": "d74b379ddaf1d100e6320048afb865a58ec95e71ba9565f718c5916afd362a57",
+    "prove_durability.py": "0ab8be252977c5761d8108b8bef7a9a8619531d545ea170166d26b091bede55d",
+    "prove_writer_crash_durability.py": "5867c88ae75dad17b052c0a9a7ebe5ab1d2864ee9ad4756334e53f1651737981",
+    "run.ps1": "508834b867a457b8f297ba44b9dc1d9f8ab2129e948c8989b393ea4f5a87b787"
+  },
+  "requesting_and_uncertain_reorientation": {
+    "junit": {
+      "passed": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "e7b8a5570f4abe8c56e477823405bb7bf8673ca1ad251ca130bf0ee8aa00d528"
+    },
+    "proof": {
+      "requesting_refused": true,
+      "stale_queue_rejected_before_write": true,
+      "public_writer_confirmation_and_console_restore": true,
+      "reader_on_original_pty_and_result_in_native_history": true,
+      "native_terminal_surface": true,
+      "presenter_confirmation_recovered": true,
+      "original_terminal_receipt": "CANCELLED",
+      "before_result": "DELIVERY_UNKNOWN",
+      "compound": {
+        "interruption": "confirmed",
+        "replacement": "write_unknown"
+      },
+      "after_result": "ACCEPTED_NATIVE",
+      "one_operation_no_replay": true,
+      "fixture_requests": [
+        "original",
+        "replacement"
+      ],
+      "terminal_writes": [
+        "escape",
+        "replacement"
+      ],
+      "replacement_on_same_pty": true,
+      "canonical_close": true,
+      "sqlite_check": "ok"
+    },
+    "database_audit": {
+      "operation_counts": {
+        "runtime.open": 1,
+        "turn.submit": 1,
+        "turn.steer": 1,
+        "runtime.close": 1
+      },
+      "closed_sessions": 1,
+      "native_launches": 1,
+      "selected_original_turn_cancelled": true,
+      "input_final_state": "ACCEPTED_NATIVE",
+      "input_surface": "native_terminal",
+      "read_detaches": 1,
+      "write_detaches": 1,
+      "foreign_key_violations": 0
+    },
+    "outputs_sha256": {
+      "result.json": "8982947f5fdb4c5a51ca081e2e603916300909cc79b8552785cc5c1bad680ba8",
+      "durability.json": "206a5bcb4fd59b53bd5c2d808f368b5e18681f9c9a642bfdf67efaed7e486329",
+      "terminal-redacted.txt": "a1fe1ad8eef9cf808120f3716143f7f32925a58dc8aba7d5971a987c5ad834ed"
+    }
+  },
+  "writer_exit_recovered_in_same_session": {
+    "junit": {
+      "passed": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "bbc7c7655546b9f330ded9c171e1dceaf3742b70d06c2d1ac7a95304ceee90e6"
+    },
+    "proof": {
+      "exact_owned_claude_startup": true,
+      "requests_without_turn": 0,
+      "loopback_fixture_turns": 3,
+      "same_owner_read_after_reattach": true,
+      "original_completed_with_replacement_writer_attached": true,
+      "session_closed": true,
+      "queued_on_live_writer": true,
+      "abrupt_exit_code": 222,
+      "crashed_writer_lease_detached_without_takeover": true,
+      "replacement_writer_console_modes_restored": true,
+      "web_and_terminal_fifo": true,
+      "recovered_after_crash_without_replay": true,
+      "same_native_process_for_both_turns": true,
+      "external_model_requests": 0,
+      "sqlite_quick_check": "ok"
+    },
+    "database_audit": {
+      "operation_counts": {
+        "runtime.open": 1,
+        "turn.submit": 3,
+        "runtime.close": 1
+      },
+      "native_launches": 1,
+      "durable_terminal_input": "ACCEPTED_NATIVE",
+      "input_source": "native_terminal",
+      "distinct_successful_results": 3,
+      "web_then_terminal_fifo": true,
+      "reader_detaches": 1,
+      "writer_detaches": 2,
+      "session_closed": true,
+      "foreign_key_violations": 0
+    },
+    "outputs_sha256": {
+      "result.json": "3f4d16ae0435f8c3e60f2eaf8d11b9c8c2970f02e54a80869dae0fd706f41d43",
+      "durability.json": "7c86551b85e8a6d67422f694429e3e8fbcdb63220f6ee0f20e055b605fcc0ce2",
+      "crashed-viewer-redacted.txt": "44a7140a03bbed53d0c266d1b2bc3948ffa9e6aa4f22bd98c285f831d066fa00",
+      "reattached-viewer-redacted.txt": "4bb9ffc4ba9beb72b14fd405b1f780e18b9ce27b632e6277683cf3aafd5ffa53"
+    }
+  },
+  "raw_evidence_directory": "D:/nxs-si026-current",
+  "limits": [
+    "Managed native Claude terminal; Nexus viewer and composer use the authenticated presentation transport.",
+    "No paid model traffic. The reviewed build was run with temporary profiles against only a loopback model fixture.",
+    "The broader Claude campaign scenarios SI-T-G01, SI-T-G03 and SI-T-G17 retain their original gates."
+  ]
+}
