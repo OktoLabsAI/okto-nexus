@@ -16,3 +16,25 @@ O SQLite confirmou quatro bindings e quatro recibos de configuração. A rodada 
 Na preparação, ampliei a largura do ConPTY para capturar cada saída JSON completa. A conferência do perfil legado usa o argumento `--profile` em `attach_argv` e o checkpoint persistido. O escopo desta rodada termina na decisão de apresentação e na recusa por ausência de sessão. A anexação bem-sucedida e a insuficiência de grants permanecem no ledger.
 
 O marco registra evidência, sem alteração de comportamento, pacote ou esquema. O rollback consiste em reverter o commit de evidências.
+
+## Revalidação no pacote instalado
+
+O executável confirmou o recibo antes de perguntar se deveria abrir
+o harness. Enter escolheu Não e devolveu o shell. O JSON retornou
+`configured` e `not_requested` com os argumentos de anexação e zero
+leituras de entrada. Quando o visualizador ficou indisponível, o
+recibo de conexão permaneceu recuperável pelo perfil original.
+Os quatro setups de teste criaram zero sessões e operações.
+
+Em outro ensaio, `connect -i` exibiu duas sessões vivas do Pi e
+esperou pela escolha. Os três anexos do roteiro chegaram à sessão
+mais antiga por seleção interativa ou por identificadores exatos.
+O script sem ID de sessão recebeu `SESSION_SELECTION_REQUIRED`.
+O banco conservou o resultado original e confirmou os três
+desanexos e dois fechamentos canônicos.
+
+Passaram os ensaios com ConPTY, Git e Pi 0.87.1 real, e 115 regressões
+instaladas. O Pi usou respostas simuladas. A recusa por grant vencido
+e a abertura vazia autorizada conservam sua prova instalada anterior.
+O registro dispensa migração e pode ser revertido pelo commit.
+[Resultados dos modos](si028-si029-current-connect.json) [Abertura e autorização](si029-empty-session-opening.md)

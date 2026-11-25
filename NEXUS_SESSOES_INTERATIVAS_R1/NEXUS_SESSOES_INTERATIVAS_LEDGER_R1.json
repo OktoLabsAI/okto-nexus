@@ -1957,7 +1957,7 @@
         "SI-T-F13",
         "SI-T-F16"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si029-empty-session-opening.md",
         "execution/si029-empty-session-opening.json",
@@ -1968,7 +1968,8 @@
         "execution/si028-connect-presentation.md",
         "execution/si032-exact-reattach-command.json",
         "execution/si026-claude-canonical-fresh-terminal.md",
-        "execution/si026-claude-canonical-fresh-terminal.json"
+        "execution/si026-claude-canonical-fresh-terminal.json",
+        "execution/si028-si029-current-connect.json"
       ]
     },
     {
