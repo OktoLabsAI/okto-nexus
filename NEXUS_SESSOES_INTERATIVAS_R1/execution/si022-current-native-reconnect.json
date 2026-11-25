@@ -1,0 +1,95 @@
+{
+  "tasks": [
+    "SI-022",
+    "SI-023"
+  ],
+  "scenario": "SI-T-H12",
+  "packaged_product": {
+    "archives_sha256": {
+      "nexus": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2",
+      "nexus_sdist": "91741e0de556f52cc38b086c2feadbcc3570af3f80067fe275d86d684fb9214f",
+      "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+      "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    },
+    "base": "6bbe0b456679e24eed060009006ef094025f20e8",
+    "changed_packaged_members": [
+      "okto_nexus/adapters/inbound/http/executor_link.py",
+      "okto_nexus-0.3.8.dist-info/RECORD"
+    ],
+    "product_source_sha256": "33b1aefcb1c973722494699e3ed7279a11c2d58f520e3c9d2d9de3437a6e868f"
+  },
+  "connector_source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+  "core_source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+  "installed_wheel": {
+    "okto-nexus": "0.3.8",
+    "okto-nexus-connector": "0.0.15",
+    "okto-nexus-connector-core": "0.0.16",
+    "packed_handler_matches_installation": true
+  },
+  "build_identity": {
+    "version": "0.87.1",
+    "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "node_sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+  },
+  "environment": "Windows x64, Connector-managed Pi in a subprocess, actual R4 WebSocket loopback, ConPTY, model response fixture",
+  "fixture_directory": "D:/nxs-si022-resume-no-status/native",
+  "fixture_sha256": {
+    "test_pi_full_reconnect_new_work.py": "e24d9ae458dd04614cb354d4b823f6f26076941343853a8729219a76215909af",
+    "remote_pi_project.py": "59dab71181caa71cf6b492d4994961f2145cf0b74fd199d9d3fbcc7e81affcc6",
+    "isolated_pi.py": "b7ab01d7470df71db2c19bf6c44ac459233c7d0eaf097f5a7cf479e6bda44564"
+  },
+  "native_proof": {
+    "real_pi": "0.87.1",
+    "same_host_loopback": true,
+    "fast_resume_window_expired": true,
+    "new_control_generation": true,
+    "old_process_exited_before_new_ready": true,
+    "editor_detached_restored_modes": true,
+    "socket_attempts_blocked": 4,
+    "original_turn_receipt_stage": "SUCCEEDED",
+    "old_queue_status": "BLOCKED_SESSION",
+    "same_queue_intent_and_sequence": true,
+    "old_operations_retained": true,
+    "external_provider_requests": 0,
+    "explicit_new_turn_after_reconnect": true,
+    "new_process_and_session_for_explicit_turn": true,
+    "retired_queue_remained_on_old_session": true,
+    "original_only_native_user_message": true,
+    "no_prompt_or_queue_replay": true
+  },
+  "no_close_status": {
+    "asgi_code": 1005,
+    "old_resume_rows_after_cut": 0,
+    "red_regression_junit_sha256": "900bdfd2148f7758808151d49fe0f8b2ac09dc50ce3f2018e3a3e62da5ba669b",
+    "prior_native_trace_sha256": "f3d90f4cb219af048c71e79803963736f0dd6a9a14bd7eb7a3b43bc9c9ca8e33",
+    "fixed_native_trace_sha256": "1f7b8eda0009b76ccd5b37360a974cecd2dfae7c8c7e735f9d05c6d3cc46482a"
+  },
+  "sqlite": {
+    "canonical_operations": {
+      "runtime.close": 1,
+      "runtime.open": 2,
+      "turn.submit": 2
+    },
+    "one_turn_per_session": true,
+    "old_queue_never_dispatched": true,
+    "explicit_new_result_retained": true,
+    "integrity_and_foreign_keys_ok": true
+  },
+  "tests": {
+    "native_reconnect": {
+      "passed": 1,
+      "junit_sha256": "7ab4dacf5f2a5ed5fbd743003e28596a41b93acaef8b6251ab848b772bbafce2"
+    },
+    "continuity_renewal_and_human_operator": {
+      "passed": 34,
+      "junit_sha256": "4144840e343fbe48d973429e951561c4a962ec53e882a944645beeda9132f783"
+    }
+  },
+  "archived_fixture_correction": {
+    "reason": "Wait for canonical ACCEPTED on the first Pi turn and give the isolated response time to reach the connection cut.",
+    "junit_sha256": "0600ff6f66a2e4d3a38be4799d9f74bc02d4d55d6e60c4683810b7dd79d652a0"
+  },
+  "not_run": [
+    "SI-T-H01 between separate machines"
+  ]
+}

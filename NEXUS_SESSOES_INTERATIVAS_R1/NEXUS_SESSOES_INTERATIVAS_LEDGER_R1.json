@@ -1352,8 +1352,10 @@
         "SI-T-H04",
         "SI-T-H12"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si022-current-native-reconnect.md",
+        "execution/si022-current-native-reconnect.json",
         "execution/si026-claude-presenter-queue.md",
         "execution/si026-claude-presenter-queue.json",
         "execution/si031-connector-receipt-http-recovery.md",
@@ -1484,6 +1486,7 @@
         "execution/si023-retired-session-queue.json",
         "execution/si022-pi-full-reconnect.md",
         "execution/si022-pi-full-reconnect.json",
+        "execution/si022-current-native-reconnect.json",
         "execution/si035-codex-productive-transfer.md",
         "execution/si035-codex-productive-transfer.json",
         "execution/si023-si024-codex-fork-refusal.md",
@@ -5726,7 +5729,8 @@
         "execution/si022-pi-full-reconnect.md",
         "execution/si022-pi-full-reconnect.json",
         "execution/si035-pi-reconnect-candidate.md",
-        "execution/si035-pi-reconnect-candidate.json"
+        "execution/si035-pi-reconnect-candidate.json",
+        "execution/si022-current-native-reconnect.json"
       ]
     },
     {

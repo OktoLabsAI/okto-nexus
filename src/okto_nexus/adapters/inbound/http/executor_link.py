@@ -853,7 +853,8 @@ def build_router() -> APIRouter:
                     if state is not None and state["control_state"] == "RECOVERING":
                         await _request_reconcile()
         except WebSocketDisconnect as error:
-            resumable_disconnect = resume_supported and error.code in (1000, 1001, 1006)
+            # ASGI can report an aborted transport with no close status (1005).
+            resumable_disconnect = resume_supported and error.code in (1000, 1001, 1005, 1006)
         except asyncio.TimeoutError:
             resumable_disconnect = resume_supported
         except (CoreError, UnicodeError, ValueError, RecursionError) as error:

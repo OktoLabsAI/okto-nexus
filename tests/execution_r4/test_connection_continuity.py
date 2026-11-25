@@ -117,7 +117,9 @@ def test_live_connection_renews_proofs_without_changing_owner(tmp_path, monkeypa
                 assert ws.receive_json() == dict(base, type='heartbeat')
 
 
-@pytest.mark.parametrize('case', ['exact', 'pending-bootstrap', 'stale-generation', 'expired-proof', 'revoked-grant'])
+@pytest.mark.parametrize('case', [
+    'exact', 'no-close-status', 'pending-bootstrap', 'stale-generation', 'expired-proof', 'revoked-grant',
+])
 def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch, case):
     deps, app, access, operator, grant, _, info, revisions, ticket, lane_ticket, server, executor = setup_authority(
         tmp_path, monkeypatch)
@@ -162,7 +164,7 @@ def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 original = dict(uow.connection.execute('SELECT * FROM execution_leases').fetchone())
                 assert original['status'] == 'ACTIVE'
-            ws.close()
+            ws.close(code=1005 if case == 'no-close-status' else 1000)
             # Keep the test transport alive until the server handles close;
             # cancellation is injected above at the actual cleanup boundary.
             deadline = time.monotonic() + 5
