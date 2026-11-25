@@ -440,7 +440,7 @@
         "SI-T-A09",
         "SI-T-A10"
       ],
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si006-storage.md",
         "execution/si006-human-authority.md",
@@ -456,7 +456,8 @@
         "execution/si006-stale-session-generation.md",
         "execution/si006-stale-session-generation.json",
         "execution/si006-homonymous-workspace-scope.md",
-        "execution/si006-homonymous-workspace-scope.json"
+        "execution/si006-homonymous-workspace-scope.json",
+        "execution/si006-current-durable-input.json"
       ]
     },
     {

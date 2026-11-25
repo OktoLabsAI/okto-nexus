@@ -1,0 +1,109 @@
+{
+  "task": "SI-006",
+  "product_candidate": "8bcee9bd",
+  "current_baseline_checkout": "fe676b97",
+  "versions": {
+    "nexus": "0.3.8",
+    "connector": "0.0.15",
+    "core": "0.0.16"
+  },
+  "artifact_sha256": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+  "retained_pins": {
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": "Windows isolated installed packages and disposable SQLite",
+  "suite": {
+    "tests": 29,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focused_test_names": [
+    "test_acceptance_enforces_encoded_runtime_bound",
+    "test_atomic_storage_and_retry_do_not_create_r4_operations",
+    "test_canonical_release_blocks_only_unsent_inputs_in_the_closed_session",
+    "test_dashboard_admits_exact_input_once_under_the_original_human_login",
+    "test_dashboard_rejects_input_from_an_older_session_generation",
+    "test_lost_queue_reply_recovers_same_receipt_and_rejects_changed_text",
+    "test_public_id_across_workspaces_routes_to_the_confirmed_session",
+    "test_queue_commit_failure_returns_no_receipt_or_native_send",
+    "test_read_transaction_and_inconsistent_workspace_binding_are_refused",
+    "test_ticket_is_exact_one_use_and_never_materialized_from_a_receipt",
+    "test_writer_is_rechecked_inside_input_admission_after_takeover"
+  ],
+  "homonymous_workspaces": {
+    "same_harness_id_and_project_label": true,
+    "separate_workspaces": 2,
+    "exact_directory_resolution": true,
+    "cross_workspace_exact_scope_conflict": 409,
+    "selected_native_turns": 1,
+    "sibling_native_turns": 0,
+    "canonical_closes": 2
+  },
+  "homonymous_storage_audit": {
+    "physical_integrity": "ok",
+    "same_public_id_under_distinct_bound_workspaces": true,
+    "one_result_for_the_chosen_workspace": true,
+    "operations": {
+      "runtime.close": 2,
+      "runtime.open": 2,
+      "turn.submit": 1
+    }
+  },
+  "historical_receipts": {
+    "original_sha256": "c5c5a980ec8df0786dcdcb8fb822c1e349c9f028be170d59605f4f046ea9cf0b",
+    "original_unchanged": true,
+    "source_schema": 168,
+    "upgraded_schema": 190,
+    "migrations_applied": [
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190
+    ],
+    "second_apply": [],
+    "original_table_count": 161,
+    "original_rows_compared": 90,
+    "all_original_columns_equal": true,
+    "canonical_receipts_validated_by_installed_core": 4,
+    "legacy_receipt_histories": 3,
+    "legacy_receipt_digest": "982b70f10baf662de6c23b450ca75de22a6e011a81198a19c2dc7530d106b5a7",
+    "sqlite_integrity": "ok",
+    "foreign_keys_valid": true
+  },
+  "existing_native_pi_evidence": [
+    "si006-pi-human-input-authority.json",
+    "si006-exact-input-boundaries.json"
+  ],
+  "sha256": {
+    "tests.xml": "ea563d51b77b8db5258a788556e33f25ce418e44b596d1145f35d3bb68e3084c",
+    "upgrade_receipts.py": "5ca3f515535ca6d03d37624ba585fe0a3e598fcbd0545100bf1db9f580c0dc40",
+    "historical-receipts.json": "8c43d8a06146166c991d3c25d565e0415bbb3c1282fc111e8db99ad78115f420",
+    "audit_homonymous.py": "aa6d75f77f10b1d671722b17cdbea3b2a46f47be92b0136b70f58ae69f9ca52f",
+    "homonymous-audit.json": "71863c756a68c5a14e420da8fe918c893b582af6379f1bef8aa6078aa5ff73b6",
+    "proof.json": "21ec00674e9686f8bce34ef0c7629a2473dc8b284bbfb995d08ae0e1f3da0a2c"
+  },
+  "limits": [
+    "The current HTTP checks used synthetic peers. Previously recorded Pi process tests cover A01, A02, A04, A07, A09 and A10 with deterministic responses.",
+    "The migration check compared one preserved pre-interaction backup. Production data was outside the fixture."
+  ]
+}
