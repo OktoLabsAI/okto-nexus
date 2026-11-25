@@ -1,0 +1,129 @@
+{
+  "task": "SI-031",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": "Windows x64, installed Nexus and Connector entrypoints, authenticated R4 loopback, real Claude Code 2.1.328 in managed ConPTY",
+  "launcher_fixture": "Disposable venv with distribution entrypoints regenerated from installed metadata and a fixture-only operator vault; no packages changed.",
+  "native": {
+    "junit": {
+      "passed": 1,
+      "failures": 0,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "df1b7a737e21635e82a6d3594b2d72879cfbfc4eb8ada4c01457f73bbd47a098"
+    },
+    "first_attempt": {
+      "passed": 0,
+      "failures": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "4c4d0a7aeddcd6666b746a677e28eac9d40d94f3f08fc9059d09f75de0dab782"
+    },
+    "second_attempt": {
+      "passed": 0,
+      "failures": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "93038bf34d1a69ed03203d99e3bae30bcf1670e8579d208b3ffa317baca5c804"
+    },
+    "third_attempt": {
+      "passed": 0,
+      "failures": 1,
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "1c4cd9c8434688107c4f34833cadb37affdd8983dfca3e391226b67942e8e1c2"
+    },
+    "fixture_adjustments": [
+      "Wait for ACTIVE in the attachment broker after the reader banner and before asserting the selected scope.",
+      "Normalize terminal control sequences and spaces when finding the rendered result, then detach while the broker still reports ACTIVE.",
+      "Check the recorded one-request observation as a structured object."
+    ],
+    "proof": {
+      "skip_did_not_prompt_or_attach": true,
+      "default_no_preserved_binding": true,
+      "interactive_open_used_same_remote_session": true,
+      "ctrl_c_detached_and_receipt_reached_connector": true,
+      "no_additional_admissions_or_grant_changes": true,
+      "native_launches_observed": 1,
+      "fixture_model_requests": 1,
+      "external_provider_requests": 0,
+      "canonical_close": "SUCCEEDED",
+      "child_did_not_receive_parent_canary": true
+    },
+    "sqlite": {
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "operations": {
+        "runtime.close": 1,
+        "runtime.open": 1,
+        "turn.submit": 1
+      },
+      "closed_sessions": 1,
+      "read_detaches": 1,
+      "successful_results": 1
+    },
+    "confirmed_connector_journal_launches": 1,
+    "output_sha256": {
+      "proof.json": "938efc0be443c12712f2f4b7ff8ea96db8942d35ae4a0343961598be6fa7b243",
+      "skip.txt": "ff6a746037ce742413ef5d85f9456c467d0b64f24e362a8504e4dc2ac5251321",
+      "decline.txt": "85df749427dc7930570c93091eeb8389d9b77ffc413f3bfb9bd4fde4b34c1b1e",
+      "attach.txt": "a1c1dfac7031b57e1b6e75f925a8fd990e5c55ef14c9cdb8f023918bd3d10af5"
+    }
+  },
+  "regressions": {
+    "connector": {
+      "passed": 92,
+      "failures": 0,
+      "test_files": {
+        "tests.unit.test_connect_reuse": 38,
+        "tests.unit.test_r4_daemon_control": 37,
+        "tests.unit.test_cli_presentation": 17
+      },
+      "junit_sha256": "3852f6ac24590c4ea74b00ab66a47e87b8a67a6971c504b36617265370618dcb"
+    },
+    "nexus": {
+      "passed": 23,
+      "failures": 0,
+      "test_files": {
+        "tests.execution_r4.test_remote_operator_terminal": 17,
+        "tests.session_interaction.test_session_cli": 6
+      },
+      "junit_sha256": "91f713b80259456faf1d0ed3afd8e45e42d84c3cdb2fde9abdfb2e6e2d45fa79"
+    }
+  },
+  "fixture_sha256": {
+    "setup_launchers.py": "82bb5dc6e61851d6f594c60da9925c0db3cd0998fd8a3b5404984cd247f590d6",
+    "run-final.ps1": "171b5bfe9822da29ddbc38004e038f96d9a2907fbe8e2a11e8ddb167c000b846",
+    "test_claude_offer_final.py": "4b6dc35b379cc72afb89e5d0b3880283b9d8a8dfef5d659ea9d849d955a2267b",
+    "remote_native_fixture.py": "21b3c1273d5ee2d818ff946bba90f8bf96d4043788778292d7c44b89f04ac62f",
+    "venv/Lib/site-packages/sitecustomize.py": "cc37a63f0eb58b87303a388c36aaf4ea40003a980ab1e5bd240315d1fb51eedc"
+  },
+  "other_harness_evidence": [
+    "si031-connector-connect-terminal.json",
+    "si031-connector-pi-offer.json"
+  ],
+  "raw_evidence_directory": "D:/nxs-si031-claude-offer",
+  "remaining": [
+    "SI-T-H01 (different machines, postponed)",
+    "SI-T-I02 (provider campaign)"
+  ]
+}

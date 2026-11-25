@@ -2101,8 +2101,10 @@
         "SI-T-H12",
         "SI-T-I02"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si031-current-claude-connect-offer.md",
+        "execution/si031-current-claude-connect-offer.json",
         "execution/si026-claude-cli-writer.md",
         "execution/si026-claude-cli-writer.json",
         "execution/si026-claude-presenter-queue.md",
