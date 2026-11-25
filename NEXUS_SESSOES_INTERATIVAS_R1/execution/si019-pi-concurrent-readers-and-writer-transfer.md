@@ -13,3 +13,18 @@ A regressão do Connector exercitou dois leitores e um editor pelo R4. O ensaio 
 A suíte ampla do Core teve 2.421 testes aprovados, 70 ignorados e três falhas reproduzidas com o wheel anterior. O commit `049feff` revisou a fixture de retry do Codex para usar saída controlada, atualizou a expectativa de conversação do Claude 2.1.328 e documentou `ClaudeTerminalResumeGrant`. A rodada focada seguinte teve 25 aprovados e dois ignorados. O conteúdo do wheel permaneceu igual após essas correções de testes e documentação.
 
 Os wheels vendorizados passaram pelas verificações de hash e de conteúdo. A alteração dispensa migração de banco e preserva o formato das mensagens R4. Para reverter, reinstale em conjunto as versões candidatas anteriores do Nexus, do Connector e do Core indicadas na evidência. Os gates SI-T-G06 e SI-T-G07 conservam a qualificação pendente para campanhas. [Resultados e versões](si019-pi-concurrent-readers-and-writer-transfer.json)
+
+## Revalidação do broker e do transporte
+
+Passaram 97 casos com o Nexus, Connector e Core instalados no Windows.
+As regressões cobriram ticket de uso único, expiração, origem, desafio,
+revogação, confirmação de troca de escritor e revalidação dentro da
+transação de entrada. O relay de leitura recusou outras threads,
+listagem global e métodos que iniciam trabalho. A retomada salva
+revalidou o perfil e o histórico selecionado.
+
+O ledger registra SI-019 como `IMPLEMENTED` com o ensaio de múltiplos
+leitores no Pi e o ensaio de duas threads no Codex já arquivados. A
+bateria atual usou peers sintéticos e loopback. Os cenários de campanha
+SI-T-G06, G07, G08 e G10 ficam pendentes. O registro dispensa migração.
+[Casos, versões e hashes](si019-current-broker.json)
