@@ -717,7 +717,7 @@
         "SI-T-C18",
         "SI-T-C19"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si011-si026-claude-remote-interrupt.md",
         "execution/si011-si026-claude-remote-interrupt.json",
@@ -736,7 +736,8 @@
         "execution/si011-terminal-queue.md",
         "execution/si011-terminal-queue.json",
         "execution/si041-two-session-native-ack.md",
-        "execution/si041-two-session-native-ack.json"
+        "execution/si041-two-session-native-ack.json",
+        "execution/si010-si011-current-turn-controls.json"
       ]
     },
     {
@@ -6137,7 +6138,7 @@
     },
     {
       "id": "SI-01",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "tasks": [
         "SI-006",
         "SI-007",

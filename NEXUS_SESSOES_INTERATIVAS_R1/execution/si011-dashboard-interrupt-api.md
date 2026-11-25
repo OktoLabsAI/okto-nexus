@@ -14,3 +14,19 @@ The admission transaction checks the same target and queue revision and installs
 ## Delivery and rollback
 
 The API and dispatch checks use the existing schema. A source rollback must preserve the durable pause and let compatible runtime readers reconcile any retained operation. The dashboard panel, native interruption confirmation, Pi and Claude observed-run targeting, and the real remote and harness qualification campaigns remain pending.
+
+## Revalidação no pacote instalado
+
+No candidato `8bcee9bd`, a barreira já estava gravada quando o peer
+recebeu a interrupção do turno revisado. Uma segunda confirmação
+recuperou a operação original. Depois do evento de término, o item
+pendente só foi enviado após retomada autorizada. A prova do turno
+anterior foi recusada na regressão do protocolo. A disputa entre
+Home e terminal por uma pergunta produziu um só recibo de decisão.
+
+Os 19 casos de controles e fila fecharam a verificação do gate G1
+junto com SI-006 a SI-010. O gate usa as rotas e o dispatcher sem
+depender da nova interface. Os relatórios nativos e de navegador
+mantêm seus candidatos e limites. A revalidação dispensa migração
+e pode ser revertida pelo commit.
+[Relatório instalado e evidências por cenário](si010-si011-current-turn-controls.json)
