@@ -1,0 +1,9 @@
+# SI-030 · Seleção e recuperação no CLI instalado
+
+Em Windows ConPTY, duas sessões Pi 0.87.1 do mesmo vínculo permaneceram vivas em processos distintos. O `connect -i` confirmou a configuração antes do seletor. O operador escolheu a sessão mais antiga. `session attach` abriu a mesma sessão por ID explícito e, em outro ensaio no mesmo ambiente, pelo seletor. Sem ID em JSON, o CLI devolveu `SESSION_SELECTION_REQUIRED` com os dois IDs. Cada visualizador mostrou o resultado retido e saiu com Ctrl+C. A auditoria confirmou três anexos encerrados na sessão escolhida e uma única operação de trabalho, criada antes dos anexos.
+
+Em outro ensaio, a fixture suprimiu o corpo da resposta HTTP 202 depois que o servidor admitiu um envio para a sessão mais antiga. O CLI registrou a incerteza no checkpoint da intenção. `work resume` observou o recibo original em ConPTY enquanto o turno executava. Em JSON, a repetição devolveu o mesmo recibo com `SUCCEEDED`. As duas chamadas apenas consultaram a API. O SQLite confirmou um único envio e um único resultado na sessão escolhida, sem anexos durante a recuperação.
+
+A retomada de histórico pelo `session resume` foi verificada separadamente com Codex no mesmo conjunto de wheels. O Connector abriu uma sucessora somente após o fechamento confirmado da origem, e recusou o histórico alterado. [Retomada salva](si023-current-saved-contexts.md)
+
+Passaram os dois ensaios nativos e 145 regressões dos wheels instalados. As regressões incluem listagem paginada, catálogo incompleto, revalidação de geração e recusa de recibos trocados. Os ensaios usaram um modelo simulado, sem tráfego para provedores reais. As sessões foram encerradas pelo controle canônico. A qualificação de campanha para SI-T-G01, G02 e G16 segue pendente. A atualização registra evidências e pode ser revertida por Git, sem migração. [Resultados, auditorias e hashes](si030-current-cli-session-selection.json)

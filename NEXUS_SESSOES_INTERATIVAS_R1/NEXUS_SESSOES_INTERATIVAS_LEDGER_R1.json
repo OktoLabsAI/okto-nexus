@@ -2023,8 +2023,10 @@
         "SI-T-G02",
         "SI-T-G16"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si030-current-cli-session-selection.md",
+        "execution/si030-current-cli-session-selection.json",
         "execution/si030-installed-work-resume.md",
         "execution/si030-installed-work-resume.json",
         "execution/si029-empty-session-opening.md",
@@ -4795,7 +4797,8 @@
         "execution/si030-installed-pi-session-selection.md",
         "execution/si030-installed-pi-session-selection.json",
         "execution/si030-terminal-session-pagination.md",
-        "execution/si030-terminal-session-pagination.json"
+        "execution/si030-terminal-session-pagination.json",
+        "execution/si030-current-cli-session-selection.json"
       ]
     },
     {
@@ -4818,7 +4821,8 @@
         "execution/si030-installed-pi-session-selection.md",
         "execution/si030-installed-pi-session-selection.json",
         "execution/si030-terminal-session-pagination.md",
-        "execution/si030-terminal-session-pagination.json"
+        "execution/si030-terminal-session-pagination.json",
+        "execution/si030-current-cli-session-selection.json"
       ]
     },
     {
@@ -4861,6 +4865,7 @@
       "evidence": [
         "execution/si030-installed-work-resume.md",
         "execution/si030-installed-work-resume.json",
+        "execution/si030-current-cli-session-selection.json",
         "execution/si032-exact-reattach-command.json",
         "execution/si033-legacy-compatibility-current.md",
         "execution/si033-legacy-compatibility-current.json"

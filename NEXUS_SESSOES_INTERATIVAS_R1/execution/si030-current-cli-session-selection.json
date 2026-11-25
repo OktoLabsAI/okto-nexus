@@ -1,0 +1,153 @@
+{
+  "task": "SI-030",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": "Windows x64 with the installed Nexus CLI, ConPTY, two live Pi 0.87.1 processes per fixture and deterministic isolated model responses",
+  "separate_human_presentation_and_work_recovery": {
+    "selection": {
+      "junit": {
+        "passed": 1,
+        "test_files": {
+          "": 1
+        },
+        "junit_sha256": "2f8473e7c5b7a82bc0a1076a79b9f325d80c764b357a30cae278a0384242fef7"
+      },
+      "native_proof": {
+        "status": "ATTACHED",
+        "receipt_before_picker_and_viewer": true,
+        "pid_stable_after_detach": true,
+        "explicit_older_selection": true,
+        "attachment": "DETACHED",
+        "fixture_no_host_vault": true,
+        "zero_new_operations": true,
+        "paired_local_operator_login_available": true,
+        "external_provider_calls": 0,
+        "exact_public_id_and_session_attached": true,
+        "script_requires_explicit_selection": true,
+        "session_attach_picker_chooses_older": true,
+        "exact_older_detachments": 3,
+        "prior_deterministic_result_seen_before_each_detach": true,
+        "canonical_closes": 2
+      },
+      "fixture_sha256": {
+        "test_connect_pi.py": "43b408fdd22310fe5117cc536b62214149b358144fa9c357c9df4ec839ac8a60",
+        "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd"
+      },
+      "output_sha256": {
+        "proof.json": "8ea8b0a7eca59653647f4941fc3118fedf60f55a960cc6c40b63066b61ed20d1",
+        "connect-native.txt": "9944326f77719eb50129ab75bdf20d3987f3b3af314e09658f1a147b02a334e6",
+        "session-exact-public-id.txt": "4447259fe5767d25be1b04c3bb65cccf73c391d78ab6fe29b216839208685270",
+        "session-picker-exact.txt": "3a6a6eb300d735aaf8f3024d8a446825e8a23844b05b65d8cad20383df2677e2",
+        "session-script-selection.json": "b23ba8367e5d2e9eff83b5133ef10eff40298e3d9bf16493bf3849ae43ff2d06"
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "foreign_key_violations": 0,
+        "operations_by_session": {
+          "selected": {
+            "runtime.close": 1,
+            "runtime.open": 1,
+            "turn.submit": 1
+          },
+          "sibling": {
+            "runtime.close": 1,
+            "runtime.open": 1
+          }
+        },
+        "closed_sessions": 2,
+        "attachments": 3,
+        "canonical_results": 1,
+        "session_queue_inputs": 0,
+        "same_selected_session_as_native_proof": true
+      }
+    },
+    "work_resume": {
+      "junit": {
+        "passed": 1,
+        "test_files": {
+          "": 1
+        },
+        "junit_sha256": "3132ba3184a6cbc2dac266006b3771b956e50e02145f6efcc4124025b57d5fc8"
+      },
+      "native_proof": {
+        "initial_response": "RESPONSE_UNCONFIRMED",
+        "http_status_before_body_loss": 202,
+        "lost_positive_responses": 1,
+        "exact_operation_from_checkpoint_and_both_recoveries": true,
+        "older_session_selected": true,
+        "sibling_newer_and_live": true,
+        "same_native_owners": true,
+        "conpty_recovery": true,
+        "redirected_json_recovery": true,
+        "resume_productive_requests": 0,
+        "resume_session_or_attachment_reads": 0,
+        "prior_checkpoint_contains_prompt": false,
+        "native_prompt_writes": 1,
+        "external_provider_calls": 0,
+        "terminal_receipt": "SUCCEEDED",
+        "canonical_closes": 2
+      },
+      "fixture_sha256": {
+        "test_connect_pi.py": "3ebea7dd266d987a723e468290edf0ab4740561ef06b72d8d8ad4d8d696dfdb0",
+        "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd"
+      },
+      "output_sha256": {
+        "proof.json": "7db340e02d9b5b08e2cd430332c124ad7e92f536b7bf29a9dbd3cbd9bf2d9466",
+        "resume-conpty.txt": "b50c96151f842d19c6fcc7079724ec3ddb23a013b52a9836222b99c1a6476d9d"
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "foreign_key_violations": 0,
+        "operations_by_session": {
+          "selected": {
+            "runtime.close": 1,
+            "runtime.open": 1,
+            "turn.submit": 1
+          },
+          "sibling": {
+            "runtime.close": 1,
+            "runtime.open": 1
+          }
+        },
+        "closed_sessions": 2,
+        "attachments": 0,
+        "canonical_results": 1,
+        "session_queue_inputs": 0,
+        "same_selected_session_as_native_proof": true
+      }
+    },
+    "saved_resume": "si023-current-saved-contexts.json"
+  },
+  "regressions": {
+    "passed": 145,
+    "test_files": {
+      "tests.session_interaction.test_session_cli": 91,
+      "tests.execution_r4.test_terminal_session_picker": 20,
+      "tests.execution_r4.test_terminal_work": 26,
+      "tests.execution_r4.test_session_views": 8
+    },
+    "junit_sha256": "cd80328800406229f8e7f70dcfd5b40231f928e76708b4d33fd713a22583c8ed"
+  },
+  "runner_sha256": "5fcc85bb5c6aff8b8d6b8903097c70243ff8bcd4e36d54c369ae3137f43d4e28",
+  "raw_evidence_directory": "D:/nxs-si030-current",
+  "remaining_campaign_scenarios": [
+    "SI-T-G01",
+    "SI-T-G02",
+    "SI-T-G16"
+  ]
+}
