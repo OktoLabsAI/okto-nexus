@@ -1,0 +1,72 @@
+{
+  "task": "SI-013",
+  "revisions": {
+    "nexus": "8bcee9bd3e12901c448dc57cb3821c6dd295de9c",
+    "checked_nexus_head": "7c26b5e6dccf156108fd3520658a768fdba58eba",
+    "connector": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": {
+    "platform": "Windows",
+    "browser": "Edge 158.0.4370.33 driven by Playwright CLI in a disposable profile",
+    "harness": "Pi 0.87.1 in the local Nexus executor, with isolated synthetic responses and outbound networking blocked",
+    "operator": "Disposable human login on loopback",
+    "fixture_directory": "D:/nxs-si013-current-wheel-7c26b5e6"
+  },
+  "browser": {
+    "offered_sessions": 2,
+    "automatic_selection": false,
+    "composer_before_selection": false,
+    "writes_before_selection": 0,
+    "writes_after_selection": 1,
+    "committed_post_status": 202,
+    "accepted_before_operation_link": true,
+    "response_dropped": true,
+    "receipt_status": 200,
+    "receipt_gets_before_recovery": 1,
+    "exact_receipt_recovered": true,
+    "send_locked_during_recovery": true
+  },
+  "audit": {
+    "accepted_browser_inputs": 1,
+    "matching_native_user_entries": 1,
+    "native_role": "user",
+    "exact_text": true,
+    "selected_session_results": 2,
+    "sibling_session_results": 0,
+    "operator_bus_entries_for_input": 0,
+    "handoffs": 0,
+    "canonical_closes": 2,
+    "database_integrity": "ok",
+    "foreign_key_violations": 0,
+    "remaining_fixture_processes": 0
+  },
+  "regressions": {
+    "native_browser_cases_passed": 1,
+    "frontend_node_cases_passed": 425,
+    "failures": 0,
+    "skipped": 0
+  },
+  "sha256": {
+    "native_junit": "2c43fdb148d05d1902fc4cc456d1e044740c0d7cc5ea71617dbd2d65a953d713",
+    "frontend_tap": "de085bcc13d25576e3647f48810812a2f1fb1098728ce7ff48b415c7f7496ac7",
+    "browser_script": "768296db032433d3e904db79c7a3f5a93e31d1a949d5a14ba88279b83a895fc0",
+    "browser_checkpoint": "27f5d8220355faacc6a3a60d1f5ed16c986e41daf850ffb7e951e02643b4d6b8",
+    "database_audit": "196942e83e513f195535607a889a6fa42f85502a70260ffc57b61efe086825f6"
+  },
+  "previous_evidence": {
+    "SI-T-E07,E08": "si013-browser-queue-recovery.json",
+    "SI-T-E09": "si017-live-draft-focus.json",
+    "SI-T-E10": "si036-browser-session-isolation.json",
+    "SI-T-E12": "si036-browser-scroll-ime.json"
+  },
+  "limitations": [
+    "The deliberate network failure discarded a committed reply. This run used the manual receipt action. Reload recovery has earlier independent evidence.",
+    "Human usability and Windows screen-reader speech remain independently tracked."
+  ]
+}

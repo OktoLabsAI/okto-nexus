@@ -833,7 +833,7 @@
         "SI-T-A11",
         "SI-T-A12"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si013-dashboard-input-api.md",
         "execution/si013-home-conversation.md",
@@ -850,7 +850,8 @@
         "execution/si013-exact-session-selection.md",
         "execution/si013-exact-session-selection.json",
         "execution/si025-pi-acceptance-before-start.md",
-        "execution/si025-pi-acceptance-before-start.json"
+        "execution/si025-pi-acceptance-before-start.json",
+        "execution/si013-current-composer.json"
       ]
     },
     {
