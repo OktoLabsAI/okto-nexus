@@ -1286,8 +1286,10 @@
         "SI-T-D13",
         "SI-T-H19"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
+        "execution/si021-current-native-authority.md",
+        "execution/si021-current-native-authority.json",
         "execution/si021-codex-terminal-queue.md",
         "execution/si021-codex-terminal-queue.json",
         "execution/si024-codex-native-input-windows.md",
@@ -4211,7 +4213,8 @@
       "status": "PASS",
       "evidence": [
         "execution/si021-codex-viewer-switch.md",
-        "execution/si021-codex-viewer-switch.json"
+        "execution/si021-codex-viewer-switch.json",
+        "execution/si021-current-native-authority.json"
       ]
     },
     {

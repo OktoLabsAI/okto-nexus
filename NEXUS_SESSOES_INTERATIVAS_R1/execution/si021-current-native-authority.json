@@ -1,0 +1,83 @@
+{
+  "task": "SI-021",
+  "nexus_product_revision": "923aebfa07cd3bc07403a360eb4ca3d88284c854",
+  "connector_source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+  "core_source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+  "archives_sha256": {
+    "nexus": "2255bbd355a8d6c0bc4accc319d1754d5f15d8e876f7d07d00375d9d2cbc0b48",
+    "nexus_sdist": "5900174895fed3d9687f9e7fcc6cbe44c30f27d8bac349f16d279ba6dfa8d132",
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": "Windows x64, isolated reviewed Codex 0.157.0 app-server and 0.170.0 terminal under ConPTY, TLS and a scoped WSS broker on loopback",
+  "fixture_directory": "D:/nxs-si021-current-native-scope",
+  "fixture_sha256": {
+    "test_engine_scope.py": "e5c855796dffe13c6d70e36ccf71fa168ab7d5321f45c16256d79024aa3f9a26",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "viewer.py": "e608a2fac2ee559bf67ba4438fefec1e70e239dde593af8d31ae2ae48b67c8a0"
+  },
+  "actual_viewer": {
+    "engine_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "two_actual_threads_on_one_engine": true,
+    "core_refused_sibling_metadata_before_native_io": true,
+    "relay_refusals": {
+      "list_all": -32601,
+      "list_loaded": -32601,
+      "sibling_read": -32602,
+      "sibling_resume": -32602,
+      "sibling_history": -32602
+    },
+    "server_sibling_history_close": 4409,
+    "diagnostic_sockets": 3,
+    "all_attached_channels_retired": true,
+    "native_viewer": {
+      "read_and_resume_exact_thread": true,
+      "list_methods_refused_at_relay": [
+        "thread/list",
+        "thread/loaded/list"
+      ]
+    },
+    "native_viewer_launch_audit": {
+      "verified_binary_launched": true,
+      "empty_auth_profile": true,
+      "engine_provider_credential_absent": true
+    },
+    "native_detach_audit": {
+      "detached": true,
+      "restored_console": true
+    },
+    "only_exact_thread_read_reached_engine_during_observation": 7,
+    "both_threads_unchanged_and_readable_after_viewer_exit": true,
+    "operator_ticket_sibling_and_engine_canary_absent_from_console": true,
+    "native_engine_process_cleaned_up": true,
+    "native_work_operations": 0,
+    "external_provider_calls": 0
+  },
+  "sqlite": {
+    "detached_read_attachments": 3,
+    "remaining_ticket_or_challenge_hashes": 0,
+    "operations_inputs_and_controls": 0,
+    "integrity_and_foreign_keys_ok": true
+  },
+  "tests": {
+    "native_scope": {
+      "passed": 1,
+      "junit_sha256": "1aadb15106db7b426401e8bb7fcf59890dcc244a03159f9c69f64326ed53f296"
+    },
+    "grant_session_authority_and_presenter": {
+      "passed": 104,
+      "junit_sha256": "968eae6e8d725c8a2540edd7aa186729857b0c0d88762b66832fc09fa869bd25"
+    }
+  },
+  "related_evidence": [
+    "si002-current-write-path.json",
+    "si020-current-native-client-exit.json",
+    "si025-pi-connector-shared-queue-steer.json",
+    "si036-pi-browser-writer-roundtrip.json"
+  ],
+  "campaign_pending": [
+    "SI-T-G09",
+    "SI-T-G10"
+  ]
+}

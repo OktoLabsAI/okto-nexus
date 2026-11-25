@@ -103,5 +103,21 @@
       "replacement_process_exited_cleanly": true,
       "sqlite_integrity_and_foreign_keys_ok": true
     }
+  },
+  "final_fixture_repeat": {
+    "passed": 2,
+    "junit_sha256": "bd01d2cafc19f94fab293ae7a87be5ebc893472b9033de42602f58e414b933ec"
+  },
+  "offline_live_mcp": {
+    "status": "PASS",
+    "authenticated_agents": 2,
+    "provider_calls": 0,
+    "owned_server_stopped": true,
+    "log_sha256": "3b5e73fa2535b23f251d6b36cd592028d15026ad4765d5d23f3741b79f167c8c"
+  },
+  "ruff_comparison": {
+    "baseline_diagnostics": 20,
+    "candidate_diagnostics": 20,
+    "new_diagnostics": 0
   }
 }
