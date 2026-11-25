@@ -12,3 +12,26 @@ The revision covers the exact scope, declared effects, current capability and ta
 ## Delivery and rollback
 
 The catalogue is a read-only dashboard endpoint. This increment has no storage migration or Core or Connector pin change. Rolling back removes the catalogue endpoint and preserves the prior canonical interaction paths. SI-015 remains in progress. Typed command invocation, revision enforcement during command admission, the Home picker, and cross-harness qualification still need evidence. No literal test case is promoted.
+
+## Revalidação no pacote instalado
+
+O Edge recebeu o catálogo v1 da sessão exata de um app-server Codex
+0.157.0, aberto pelo Connector neste Windows. A versão da abertura veio
+do registro canônico. O catálogo distinguiu a consulta `status` do Nexus
+e `resume` exclusivo do terminal. Pausar a fila por outro cliente
+avançou a revisão e tornou a reorientação indisponível. A revisão antiga
+recebeu HTTP 409 e preservou o rascunho. Uma nova confirmação gravou
+exatamente uma entrada pendente.
+
+Após a conclusão do turno original, o Edge exibiu seu resultado e
+manteve a entrada retida. Uma alteração isolada nos metadados do agente
+mudou a revisão de configuração. A consulta de status pela revisão
+antiga recebeu HTTP 409 e pela atual recebeu HTTP 200 na mesma sessão.
+
+Passaram 31 regressões do pacote instalado, o ensaio no Edge e a
+auditoria do SQLite. A primeira rodada chegou ao recibo terminal antes
+da projeção do resultado. O roteiro repetido aguardou a projeção da
+operação exata. O modelo foi simulado em loopback. A matriz do SI-004
+fundamenta a seleção por versão e conserva seus cenários de campanha
+pendentes. O marco é reversível pelo commit e dispensa migração.
+[Resultados e hashes](si015-si016-current-commands.json)
