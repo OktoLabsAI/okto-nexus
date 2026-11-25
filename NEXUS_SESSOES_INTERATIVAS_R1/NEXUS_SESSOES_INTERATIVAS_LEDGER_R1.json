@@ -557,7 +557,7 @@
         "SI-T-B16",
         "SI-T-H16"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si008-capacity-recovery.md",
         "execution/si008-receipt-lookup.md",
@@ -571,7 +571,8 @@
         "execution/si008-lost-enqueue-response.md",
         "execution/si008-lost-enqueue-response.json",
         "execution/si030-installed-work-resume.md",
-        "execution/si030-installed-work-resume.json"
+        "execution/si030-installed-work-resume.json",
+        "execution/si008-current-recovery.json"
       ]
     },
     {

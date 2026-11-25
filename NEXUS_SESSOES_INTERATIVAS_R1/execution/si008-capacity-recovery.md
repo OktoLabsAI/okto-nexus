@@ -23,3 +23,24 @@ connection-loss path after SENDING, and pre-admission fencing on expiry
 and denied authorization. The host replies are fixture data. This
 increment adds no migration or public runtime registration. Scheduler
 composition and real harness qualification remain pending.
+
+## Revalidação no pacote instalado
+
+No Windows, passaram 22 casos com o candidato `8bcee9bd`. As quatro
+variantes de reinício do ciclo de vida do Server recuperaram a operação
+original, com a admissão ligada e desligada. Um efeito incerto permaneceu
+em `DELIVERY_UNKNOWN` e um efeito confirmado retornou `ACCEPTED_NATIVE`.
+O sucessor fez zero envios e conservou o item seguinte, que ficou bloqueado
+após o encerramento da sessão original.
+
+Em HTTP por loopback, a perda da resposta após o commit preservou o recibo,
+a posição e o texto. A retomada entregou a entrada uma única vez. O teste
+de expiração confirmou `BLOCKED_AUTH`, sem nova reserva nem alteração
+do grant e do lease. O ensaio de revogação no Edge e Pi continua registrado
+com seu próprio candidato e provedor simulado.
+
+Os reinícios deste teste usaram duas instâncias ASGI, banco persistido
+e falha injetada. O cenário de encerramento abrupto do processo Server
+continua registrado como limite da campanha. Este marco atualiza as
+evidências e pode ser revertido sem migração.
+[Resultados, hashes e fontes por cenário](si008-current-recovery.json)

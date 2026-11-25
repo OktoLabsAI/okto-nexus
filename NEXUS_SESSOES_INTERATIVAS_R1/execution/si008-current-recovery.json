@@ -1,0 +1,63 @@
+{
+  "task": "SI-008",
+  "revisions": {
+    "nexus": "8bcee9bd3e12901c448dc57cb3821c6dd295de9c",
+    "connector": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+    "core": "94aeb596e345a1c68c73f766fb21f7d4f539c297"
+  },
+  "installed_wheel_sha256": {
+    "nexus": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "environment": "Windows, isolated wheels, disposable SQLite and Core journal, synthetic native peer",
+  "suite": {
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit_sha256": "e2b1237345140f9a0d451dc0aebf944f487d694e14775d656a60c943ec777eca",
+    "receipt_lookup_cases": 4,
+    "capacity_attempt_cases": 12,
+    "http_cases": [
+      "test_restart_reconciles_queued_input_receipts_without_resending[unknown]",
+      "test_restart_reconciles_queued_input_receipts_without_resending[completed]",
+      "test_restart_reconciles_queued_input_receipts_without_resending[unknown-admissions-disabled]",
+      "test_restart_reconciles_queued_input_receipts_without_resending[completed-admissions-disabled]",
+      "test_lost_queue_reply_recovers_same_receipt_and_rejects_changed_text",
+      "test_unstaged_input_blocks_when_its_recorded_grant_expires"
+    ],
+    "warning": "Starlette TestClient deprecation for httpx"
+  },
+  "observations": {
+    "after_restart": {
+      "outcome_unknown": "DELIVERY_UNKNOWN",
+      "succeeded": "ACCEPTED_NATIVE",
+      "new_native_writes": 0,
+      "new_native_opens": 0,
+      "retained_follower_after_session_release": "BLOCKED_SESSION"
+    },
+    "lost_enqueue_response": {
+      "transport": "HTTP loopback with response body loss after commit",
+      "same_intent_recovers_original_receipt": true,
+      "changed_content_status": 409,
+      "writes_after_queue_resume": 1
+    },
+    "expired_authority": {
+      "input_status": "BLOCKED_AUTH",
+      "linked_operation": false,
+      "new_capacity_attempts": 0,
+      "original_grant_and_lease_unchanged": true
+    }
+  },
+  "previous_evidence_by_scenario": {
+    "SI-T-A08": "si008-recorded-grant-expiration.json",
+    "SI-T-B13,B16": "si035-input-restart-receipts.json",
+    "SI-T-B14": "si008-lost-enqueue-response.json",
+    "SI-T-H16": "si036-browser-session-isolation.json"
+  },
+  "limitations": [
+    "The restart cases use two production ASGI lifecycles and an injected receipt publication failure. An abrupt OS-level Server termination is outside this run.",
+    "The existing browser revocation evidence uses real Edge and Pi with simulated replies on its recorded candidate."
+  ]
+}
