@@ -377,9 +377,10 @@ function managementUrl(path: string) {
   return path.replace(/^\/v1\//, "/api/v1/runtime-management/");
 }
 
-async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
+async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown, operatorRequired = false): Promise<T> {
   const headers = new Headers();
   headers.set("x-nexus-ui", "1");
+  if (operatorRequired) headers.set('x-nexus-operator-session-required', '1');
   if (body !== undefined) headers.set("Content-Type", "application/json");
   const url = managementUrl(path);
   const response = await fetch(url, { headers, signal, cache: "no-store",
@@ -404,6 +405,52 @@ function interactionTarget(scope: InteractionScope) {
     scope: {...exact, session_id},
   };
 }
+
+export type PiPresentation = 'pi' | 'pi_remote';
+export type PresentationAccess = 'read' | 'write';
+
+export interface PiPresentationReview {
+  version: 1;
+  scope: RuntimeScope;
+  expected_session_generation: number;
+  attach_strategy: string;
+  capability_revision: string;
+  writer_epoch?: number;
+  writer_occupied?: boolean;
+  input_capability_revision?: string;
+}
+
+function presentationTarget(scope: InteractionScope) {
+  return {
+    path: `/v1/sessions/${encodeURIComponent(scope.session_id)}/attachments`,
+    document: {scope: interactionTarget(scope).scope, expected_session_generation: scope.session_owner_generation},
+  };
+}
+
+export const piPresentationApi = {
+  review(scope: InteractionScope, presentation: PiPresentation, access: PresentationAccess, signal: AbortSignal) {
+    const {path, document} = presentationTarget(scope);
+    return read<PiPresentationReview>(`${path}:review`, signal, {...document, access, presentation}, true);
+  },
+  prepare(scope: InteractionScope, presentation: PiPresentation, access: PresentationAccess,
+    review: PiPresentationReview, intent: string, signal: AbortSignal) {
+    const {path, document} = presentationTarget(scope);
+    return read<{version: number; attachment_id: string; ticket: string | null; pi_keepalive?: boolean}>(
+      `${path}:prepare`, signal, {...document, access, presentation, capability_revision: review.capability_revision,
+        client_intent_id: intent, intent: 'attach_live',
+        ...(access === 'write' ? {expected_writer_epoch: review.writer_epoch} : {})}, true);
+  },
+  url(attachmentId: string, location: URL) {
+    const url = new URL(managementUrl(`/v1/attachments/${encodeURIComponent(attachmentId)}/stream`), location);
+    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    return url;
+  },
+  receipt(scope: InteractionScope, intent: string, signal: AbortSignal) {
+    const target = interactionTarget(scope);
+    target.query.set('client_intent_id', intent);
+    return read<SessionInputReceipt>(`${target.path}/presenter/inputs/receipt?${target.query}`, signal, undefined, true);
+  },
+};
 
 function sessionInputReceipt(scope: InteractionScope, selector: 'input_id' | 'client_intent_id', id: string, signal: AbortSignal) {
   const target = interactionTarget(scope);
@@ -634,7 +681,7 @@ export const runtimeApi = {
   acceptSuccession: (id: number) => read<{decision: string}>(`/v1/connections/installation-successions/${id}:accept`, undefined, {}),
   prepareBinding: (body: Record<string, unknown>) => read<BindingProposal>("/v1/connections/bindings:prepare", undefined, body),
   applyBinding: (body: Record<string, unknown>) => read<BindingView>("/v1/connections/bindings:apply", undefined, body),
-  binding: (id: string) => read<BindingView>(`/v1/connections/bindings/${encodeURIComponent(id)}`, undefined),
+  binding: (id: string, signal?: AbortSignal) => read<BindingView>(`/v1/connections/bindings/${encodeURIComponent(id)}`, signal),
   async executors(agentId: string, signal: AbortSignal): Promise<ExecutorChoice[]> {
     const items: ExecutorChoice[] = [];
     let cursor: string | null = null;

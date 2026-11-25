@@ -647,5 +647,49 @@
       "participant-observation.json": "53d460fae206a3a4317762b5a85f6692e31556991a1f9c2e278461f53b3f0f4a",
       "native.xml": "2d37b9104d437ec4b63e1f482b18bc4b454fb4898585c43c7dc83ab2e8031fd0"
     }
+  },
+  "native_pi_in_browser": {
+    "base_nexus_head": "38bf110adb9252f3863632c3893c3d7fb4bc1507",
+    "nexus": "checkout source and packaged frontend assets",
+    "connector_wheel_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core_wheel_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+    "platform": "Windows x64, Edge, Pi 0.87.1 via Connector on this machine",
+    "provider": "isolated deterministic Pi fixture",
+    "external_provider_calls": 0,
+    "tests": {"frontend_node": 428, "presentation_transport": 49, "browser_native_pi_fixture": 1},
+    "browser": {
+      "exact_session_without_selector": true,
+      "native_prompt_visible": true,
+      "native_single_surface_with_paste_and_enter": true,
+      "queue_confirmation_visible": true,
+      "focus_restored_after_detach": true,
+      "result_panels_checked": 2,
+      "results_refresh_required": true
+    },
+    "native_state": {
+      "terminal_attachments": 1,
+      "attachment_final_state": "DETACHED",
+      "sessions": 1,
+      "native_turns": 2,
+      "input_surface": "native_terminal",
+      "input_at_detach": "QUEUED",
+      "input_final_state": "ACCEPTED_NATIVE",
+      "canonical_close": "SUCCEEDED",
+      "listener_closed": true,
+      "temporary_browser_auth_removed": true
+    },
+    "limits": [
+      "Browser evidence covers the draft and ordinary send in native Pi via Connector. Codex, Claude and Pi browser control shortcuts remain pending.",
+      "The final eligibility condition was narrowed to harness follow after the browser run. The final sources passed Node tests and the dashboard build.",
+      "The native Pi transcript exposes its injected delivery metadata. No human acceptance or Windows screen-reader speech verification was performed."
+    ],
+    "evidence_directory": "D:/nxs-home-native-pi-38bf110a",
+    "sha256": {
+      "test_terminal_browser.py": "326bef9d043519e5c1af461b66fee4c4d983f0f86c7af22cba1c685b2b703d42",
+      "browser-exercise.js": "ba8cd50480ff345f603490e54dbcf15150320eb81e405cf432686e5eea7bc673",
+      "browser-results.js": "2deecb9a9892cae9c462d677bc5ce53d9307b5498c00aa59afc57a09371af2c6",
+      "native.xml": "5a92536b5709518fe813f51949bc587f85d9b99316214915990b5add01918d02",
+      "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
+    }
   }
 }

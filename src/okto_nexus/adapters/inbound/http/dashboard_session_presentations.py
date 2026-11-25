@@ -29,6 +29,7 @@ from ....application.session_interaction_controls import read_human_interrupt_re
 from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_receipts import read_session_input_receipt
 from ....domain.presentation_protocol import (
+    BROWSER_PRESENTATION_PROTOCOL,
     CLAUDE_PRESENTATION_SUBPROTOCOL,
     LOCAL_CODEX_AUDIENCE,
     LOCAL_PI_AUDIENCE,
@@ -146,6 +147,10 @@ class _PiHello(_Hello):
     columns: Annotated[int, Field(strict=True, ge=24, le=300)]
     rows: Annotated[int, Field(strict=True, ge=8, le=120)]
     editor: bool = False
+
+
+class _BrowserPiHello(_PiHello):
+    ticket: Annotated[str, Field(pattern=r'^[A-Za-z0-9_-]{43}$', min_length=43, max_length=43)]
 
 
 class _ChallengeReply(_Document):
@@ -827,7 +832,12 @@ async def _present(ws, services, author, attachment_id, ticket, presentation):
     await ws.accept(subprotocol=protocol)
     try:
         with anyio.fail_after(10):
-            hello = (_PiHello if pi else _Hello).model_validate(await _receive(ws))
+            document = await _receive(ws)
+            if ticket is None:
+                hello = _BrowserPiHello.model_validate(document)
+                ticket = hello.ticket
+            else:
+                hello = (_PiHello if pi else _Hello).model_validate(document)
             scope = hello.input_scope()
             if _services(ws.app.state, presentation) is not services:
                 raise ValueError('Presentation owner changed')
@@ -1034,7 +1044,15 @@ def build_router():
         presentation = recognized[0]
         protocol = _PRESENTERS[presentation][2]
         services, ticket = _services(ws.app.state, presentation), _ticket(ws)
-        if services is None or ticket is None or not _upgrade_allowed(ws, protocol):
+        browser = BROWSER_PRESENTATION_PROTOCOL in offered
+        if browser:
+            origin_scheme = 'https' if ws.url.scheme == 'wss' else 'http'
+            if (presentation not in _PI or offered != {protocol, BROWSER_PRESENTATION_PROTOCOL}
+                    or 'authorization' in ws.headers
+                    or ws.headers.getlist('origin') != [f'{origin_scheme}://{ws.url.netloc}']):
+                await ws.close(code=4403)
+                return
+        if services is None or (not browser and ticket is None) or not _upgrade_allowed(ws, protocol):
             await ws.close(code=4403)
             return
         reference = await _worker(ws.app.state.operator_auth.authority_reference,

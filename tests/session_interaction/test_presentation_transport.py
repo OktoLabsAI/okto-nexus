@@ -55,7 +55,11 @@ from okto_nexus.application.execution_native_session_mapping import (
 )
 from okto_nexus.bootstrap import local_pi_presentations
 from okto_nexus.bootstrap.local_pi_presentations import publish_local_pi_presentations
-from okto_nexus.domain.presentation_protocol import CLAUDE_PRESENTATION_SUBPROTOCOL, PI_PRESENTATION_SUBPROTOCOL
+from okto_nexus.domain.presentation_protocol import (
+    BROWSER_PRESENTATION_PROTOCOL,
+    CLAUDE_PRESENTATION_SUBPROTOCOL,
+    PI_PRESENTATION_SUBPROTOCOL,
+)
 from okto_nexus.domain.session_interaction import InputAuthor
 from tests.session_interaction.test_queue_storage import database as queue_database
 from tests.session_interaction.test_queue_storage import enqueue
@@ -550,8 +554,9 @@ def _pi_prepare(transport, *, client_intent_id='pi-view', **options):
     return prepare(transport, client_intent_id, presentation='pi', capability_revision=review.json()['capability_revision'], **options)
 
 
-def _prove_pi_ticket(ws, scope, *, columns=100, rows=36, editor=False):
-    ws.send_json({'kind': 'hello', 'version': 1, **document(scope), 'columns': columns, 'rows': rows, 'editor': editor})
+def _prove_pi_ticket(ws, scope, *, columns=100, rows=36, editor=False, **credentials):
+    ws.send_json({'kind': 'hello', 'version': 1, **document(scope), 'columns': columns, 'rows': rows,
+        'editor': editor, **credentials})
     challenge = ws.receive_json()
     assert challenge['kind'] == 'challenge'
     ws.send_json({'kind': 'prove', 'challenge': challenge['challenge']})
@@ -592,6 +597,42 @@ def test_pi_ticket_is_read_only_one_use_and_scoped_to_its_protocol(transport, pi
     assert _pi_prepare(transport).json()['ticket'] is None
     with stream(transport, offer, protocol=PI_PRESENTATION_SUBPROTOCOL) as ws, pytest.raises(WebSocketDisconnect):
         _prove_pi_ticket(ws, transport.scope)
+
+
+def test_browser_pi_requires_same_origin_human_and_one_use_ticket_in_first_frame(transport, pi_presentation):
+    offer = _pi_prepare(transport).json()
+    url = f'ws://127.0.0.1{PREFIX}/attachments/{offer["attachment_id"]}/stream'
+    protocols = [PI_PRESENTATION_SUBPROTOCOL, BROWSER_PRESENTATION_PROTOCOL]
+
+    for headers, path in [({}, ''), ({'Origin': 'http://elsewhere.test'}, ''),
+                          ({'Origin': ORIGIN, 'Authorization': f'Bearer {offer["ticket"]}'}, ''),
+                          ({'Origin': ORIGIN}, '?unexpected=1')]:
+        with pytest.raises(WebSocketDisconnect) as exc, transport.client.websocket_connect(
+                url + path, headers=headers, subprotocols=protocols):
+            pytest.fail('Invalid browser upgrade was accepted')
+        assert exc.value.code == 4403
+
+    headers = {'Origin': ORIGIN}
+    with transport.client.websocket_connect(url, headers=headers, subprotocols=protocols) as ws:
+        assert ws.accepted_subprotocol == PI_PRESENTATION_SUBPROTOCOL
+        with pytest.raises(WebSocketDisconnect) as exc:
+            _prove_pi_ticket(ws, transport.scope, ticket='invalid')
+        assert exc.value.code == 4409
+    transport.client.cookies.set(COOKIE, transport.other)
+    with transport.client.websocket_connect(url, headers=headers, subprotocols=protocols) as ws:
+        with pytest.raises(WebSocketDisconnect):
+            _prove_pi_ticket(ws, transport.scope, ticket=offer['ticket'])
+    assert attachment_state(transport, offer)[0] == 'PREPARED'
+    transport.client.cookies.set(COOKIE, transport.token)
+
+    with transport.client.websocket_connect(url, headers=headers, subprotocols=protocols) as ws:
+        _prove_pi_ticket(ws, transport.scope, ticket=offer['ticket'])
+        assert ws.receive_json()['access'] == 'read'
+        assert ws.receive_bytes() == b'\x1b[2JExact Pi renderer bytes\n'
+    assert attachment_state(transport, offer) == ('DETACHED', None, None)
+    with transport.client.websocket_connect(url, headers=headers, subprotocols=protocols) as ws:
+        with pytest.raises(WebSocketDisconnect):
+            _prove_pi_ticket(ws, transport.scope, ticket=offer['ticket'])
 
 
 def test_pi_backpressure_releases_attachment_before_bounded_close(transport, pi_presentation, monkeypatch):

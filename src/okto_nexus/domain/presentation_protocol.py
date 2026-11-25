@@ -3,6 +3,7 @@
 PRESENTATION_SUBPROTOCOL = 'nexus.presenter.v1'
 REMOTE_CODEX_SUBPROTOCOL = 'nexus.presenter.codex-remote.v1'
 PI_PRESENTATION_SUBPROTOCOL = 'nexus.presenter.pi.v1'
+BROWSER_PRESENTATION_PROTOCOL = 'nexus.presenter.browser.v1'
 CLAUDE_PRESENTATION_SUBPROTOCOL = 'nexus.presenter.claude.v1'
 REMOTE_CLAUDE_SUBPROTOCOL = 'nexus.presenter.claude-remote.v1'
 REMOTE_PI_SUBPROTOCOL = 'nexus.presenter.pi-remote.v1'

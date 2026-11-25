@@ -53,7 +53,7 @@ function HarnessSessionInspection({sessionRef,connection}:{sessionRef:HomeSessio
     return()=>abort.abort();
   },[key]);
   if(read.key!==key||!read.context)return <p role={read.key===key&&read.error?'alert':'status'}>{read.key===key&&read.error?read.error:'Revalidating session…'}</p>;
-  return <HomeSessionInspection context={read.context}/>;
+  return <HomeSessionInspection context={read.context} nativeTerminal/>;
 }
 
 function HarnessActivityPanel({cardId,state,onMore,onRefresh,onEntry,onSessions,onRefreshSessions,onRequests,onRefreshRequests,onRequest,renderSession,onConnection,requestsIntent=false}: {

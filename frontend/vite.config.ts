@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     port: 5202,
     proxy: {
-      "/api": "http://127.0.0.1:8202",
+      "/api": {target: "http://127.0.0.1:8202", ws: true},
       "/v1": "http://127.0.0.1:8202",
       "/mcp": "http://127.0.0.1:8202",
     },
