@@ -1,0 +1,105 @@
+{
+  "task": "SI-037",
+  "scenario": "SI-T-H13",
+  "repo_head_before_evidence": "8528ca5a2809816cfeefed6e64c3c35b0d6b2bd1",
+  "installed_packages": {
+    "nexus": {
+      "version": "0.3.8",
+      "source": "14d178101e90433d130595336792c37373cc4283",
+      "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+    },
+    "connector": {
+      "version": "0.0.15",
+      "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+      "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+    },
+    "core": {
+      "version": "0.0.16",
+      "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+      "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+    }
+  },
+  "environment": {
+    "os": "Windows x64",
+    "harness": "Native Pi 0.87.1",
+    "transport": "WSS loopback, stock wsproto on Windows selector sockets",
+    "executor_kind": "embedded",
+    "provider": "Synthetic local responses"
+  },
+  "tests": {
+    "installed_native_wss_slow_reader": {
+      "passed": 1,
+      "skipped": {},
+      "test_files": {
+        "": 1
+      },
+      "junit_sha256": "54eec0f5388d69e94506d034ef073489dbc4da4a1441d622c5cabcbebb849c69"
+    },
+    "installed_process_and_cli_regressions": {
+      "passed": 127,
+      "skipped": {
+        "test_pi_posix_terminal_reads_raw_utf8_and_restores_after_an_error": "requires a POSIX pseudoterminal"
+      },
+      "test_files": {
+        "tests.test_runtime_process_ownership": 7,
+        "tests.test_observation_process_birth": 29,
+        "tests.session_interaction.test_session_cli": 91
+      },
+      "junit_sha256": "221de4333c6db9f1e37f005b7f928d187d8aebac1846e25d8e8faca5c8f44867"
+    }
+  },
+  "native_proof": {
+    "pi_build": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "response_bytes": 192076,
+    "sessions_before_close": 1,
+    "transport": "WSS loopback, stock wsproto on Windows selector sockets",
+    "socket_observations": {
+      "pending": 0,
+      "high_water": 1,
+      "sends_cancelled": 1,
+      "receive_socket_buffer": 2048,
+      "send_socket_buffer": 2048
+    },
+    "maximum_slow_frame_bytes": 12288,
+    "total_slow_frames_attempted": 16,
+    "real_socket_pause_sizes": [
+      6224
+    ],
+    "same_native_process_while_streaming_and_after_reattach": true,
+    "continued_native_deltas_after_pressure": true,
+    "replacement_attached_during_original_turn": true,
+    "viewer_tail_rendered": true,
+    "omitted_prefix_retained_in_canonical_result": true,
+    "external_provider_requests": 0,
+    "canonical_close": "SUCCEEDED"
+  },
+  "transport": {
+    "slow_viewer_wss_close_code": 4409,
+    "replacement_saw_result": true,
+    "observation_sha256": "1a400f6e08e21e90fbd7e8b04ce6cf6a7f7bee55d645ed9b8f794ce14a0482c3"
+  },
+  "sqlite": {
+    "scope": "One original session",
+    "operations": {
+      "runtime.open": 1,
+      "turn.submit": 1,
+      "runtime.close": 1
+    },
+    "full_result_bytes": 192076,
+    "detached_readers": 2,
+    "integrity": "ok",
+    "foreign_key_violations": 0
+  },
+  "fixture_sha256": {
+    "test_slow.py": "6bfe4f06c03336b174eaea2a74bfe143e75e6fe25635306dedb93e9d6cc42957",
+    "tls_probe.py": "24e57f0f92124f48664877e052adac61bf1b1fe3767cb20725c1d3162fd3265f",
+    "reader.py": "d7eef14ef7f8768f8d3f7b16d25a689c363d2bc022d16d25c8aed21667694421",
+    "pi_fixture.py": "a4250b342e60cfdcc3c512e7e1eac8ce1ed3c0c35fab1a02f49d0713269447cd"
+  },
+  "raw_evidence_directory": "D:/nxs-si037-current-8528ca5a",
+  "limits": [
+    "Windows measurements describe this controlled loopback run and socket configuration.",
+    "The Connector is pinned and installed. This WSS presentation case used the exact executor kind recorded above.",
+    "Additional macOS measurements, distinct-host qualification and Windows user-session restart tests remain deferred."
+  ]
+}

@@ -2534,7 +2534,7 @@
         "SI-T-H14",
         "SI-T-H18"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si026-claude-terminal-retained-output.md",
         "execution/si026-claude-terminal-retained-output.json",
@@ -2575,7 +2575,9 @@
         "execution/si037-registration-continuity.md",
         "execution/si037-registration-continuity.json",
         "execution/si037-macos-pi-probe.md",
-        "execution/si037-macos-pi-probe.json"
+        "execution/si037-macos-pi-probe.json",
+        "execution/si037-current-windows-slow-reader.md",
+        "execution/si037-current-windows-slow-reader.json"
       ]
     },
     {
@@ -5795,7 +5797,8 @@
       "evidence": [
         "execution/si037-pi-viewer-backpressure.json",
         "execution/si037-pi-wss-slow-reader.md",
-        "execution/si037-pi-wss-slow-reader.json"
+        "execution/si037-pi-wss-slow-reader.json",
+        "execution/si037-current-windows-slow-reader.json"
       ]
     },
     {
