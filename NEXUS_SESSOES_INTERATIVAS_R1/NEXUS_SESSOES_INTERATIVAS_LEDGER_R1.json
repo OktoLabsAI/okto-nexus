@@ -1113,7 +1113,7 @@
         "SI-T-G16",
         "SI-T-G20"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         "execution/si018-managed-native-session-mapping.md",
         "execution/si018-core-live-owner-proof.md",
@@ -1128,7 +1128,8 @@
         "execution/si030-cli-empty-new-context.md",
         "execution/si030-cli-empty-new-context.json",
         "execution/si030-pi-terminal-separate-session.md",
-        "execution/si030-pi-terminal-separate-session.json"
+        "execution/si030-pi-terminal-separate-session.json",
+        "execution/si018-current-native-mapping.json"
       ]
     },
     {

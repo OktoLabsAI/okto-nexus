@@ -11,3 +11,21 @@ The existing exact Codex turn target now uses this mapping for its thread match.
 The focused Python regression passed 99 cases. The synthetic R4 integration checks the retained opening, native ID, stream, launch revisions and receipt provenance. A changed binding, workspace, workspace binding, agent, or owner generation fails the exact lookup. The same suite exercises existing steer, interrupt, and next-turn behavior. Ruff, Git diff validation, offline archive building, and strict Twine checks passed.
 
 This change uses existing durable records and adds no migration. The preceding compatible build restores the prior target lookup while retaining those records. SI-018 remains in progress for the Core runtime ownership proof, current build revalidation, and attachment or saved-session transfer qualification.
+
+## Revalidação no pacote instalado
+
+O CLI instalado abriu o visualizador da sessão Pi selecionada entre
+duas sessões vivas do mesmo vínculo. Os três desanexos ficaram ligados
+à sessão mais antiga. O PID e o resultado original ficaram disponíveis
+até os dois encerramentos canônicos.
+
+Em SQLite somente leitura, o resolvedor do Nexus recuperou os dois
+mapeamentos retidos. Cada um conservou a identidade nativa, a época,
+a operação de abertura e o build Pi 0.87.1. Dez consultas com vínculo,
+workspace, vínculo de workspace, agente ou geração divergente foram
+recusadas. A auditoria conservou o hash do banco.
+
+O ensaio usou Pi real com respostas simuladas no Windows. O ledger
+registra SI-018 como `IMPLEMENTED` com as provas de propriedade do
+Core já arquivadas. SI-T-G01, G16 e G20 conservam a campanha pendente.
+O registro dispensa migração. [Dados e hashes](si018-current-native-mapping.json)
