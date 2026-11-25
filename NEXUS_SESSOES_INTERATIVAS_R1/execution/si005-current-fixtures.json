@@ -1,0 +1,49 @@
+{
+  "task": "SI-005",
+  "candidate": "8bcee9bd",
+  "nexus_wheel_sha256": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+  "connector_pin_sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+  "core_pin_sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b",
+  "environment": "Windows, installed packages, substitute authorities and disposable SQLite",
+  "results": {
+    "tests": 47,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focal_fixtures": [
+    "test_acknowledgement_and_model_end_leave_the_exact_session_busy",
+    "test_answers_clear_only_the_exact_pending_question",
+    "test_authority_references_survive_restart_and_logout_only_the_exact_session",
+    "test_concurrent_authors_commit_distinct_fifo_sequences",
+    "test_scope_or_generation_mismatch_refuses_without_creating_a_queue",
+    "test_slow_subscriber_hits_core_byte_bound_while_fixture_keeps_producing",
+    "test_transcript_keeps_both_event_and_item_identity"
+  ],
+  "blocked_io_attempts": 0,
+  "internal_asyncio_loopback_bind_and_connect_events": 10,
+  "initial_verifier_failures_caused_by_asyncio_socketpair": 2,
+  "io_guard_scope": [
+    "socket.connect",
+    "socket.bind",
+    "socket.getaddrinfo",
+    "subprocess.Popen",
+    "os.system"
+  ],
+  "related_dynamic_scenarios": {
+    "SI-T-B08": "si025-pi-delayed-settlement.json",
+    "SI-T-E01": "si012-codex-live-conversation.json",
+    "SI-T-H14": "si037-pi-headless-output.json"
+  },
+  "sha256": {
+    "run_isolated.py": "9715257b4650d5a1507716d3254bc4d6424dac80fae19cc106b83ac3e447d6f8",
+    "tests.xml": "67b9567b4ed6fb72e1d268dfe5916ce6b2e65605f45503d54ebfc617acbfdea9",
+    "tests.log": "06790826b2bfb89bff34c6d9e74c41063f0c7f3886c120f66ada245ce9719198",
+    "final-tests.xml": "b9cfdc1a755847046a4e3a7274421369634f8388fc8c9c22f2288eef609f7acf",
+    "final-tests.log": "fa66a2df5dad14d75d3950b878aee09375e3dce381e7e760c12183f3b8f29a81"
+  },
+  "limits": [
+    "The current check verifies the fixture behavior and storage. Historical browser and native process observations retain their own package versions.",
+    "No provider inference or user study was performed."
+  ]
+}
