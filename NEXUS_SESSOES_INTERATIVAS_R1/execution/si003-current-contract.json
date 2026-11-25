@@ -1,0 +1,143 @@
+{
+  "task": "SI-003",
+  "intake": "a59602fb33120372f23be655e9d43fe0be85fd9b",
+  "artifact": {
+    "wheel_sha256": "d4bc8553512e8ba5356b685ccd6bf1c3d2bd2694c7508fe208804013b402ed19",
+    "sdist_sha256": "8384864f4d662b5f5c4737dac285b6f4b7569c2a4d4fb852e06606fdfca4b211",
+    "prior_wheel_sha256": "a3217d74a9e0ee7e47475b0e4c8463aa5d6a52c59ead6635e030faa838801b83",
+    "unchanged_package_files": 816,
+    "changed_package_file": "okto_nexus/adapters/inbound/http/session_interaction_contract.py",
+    "distribution_metadata_equal": true
+  },
+  "versions": {
+    "windows_python": "3.13.1",
+    "nexus": "0.3.8",
+    "connector": "0.0.15",
+    "core": "0.0.16"
+  },
+  "retained_pins": {
+    "connector": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de",
+    "core": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+  },
+  "review_effect_by_target_kind": {
+    "native_turn": "same_turn",
+    "observed_run": "next_boundary",
+    "claude_operation": "interrupt_then_send"
+  },
+  "before_validation": {
+    "tests": 3,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0
+  },
+  "candidate_contracts_queue_dispatch_and_parser": {
+    "tests": 82,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "candidate_cli_executable": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "candidate_cli_invocations": [
+    {
+      "scenario": "SI-T-F06",
+      "flags": [
+        "-i"
+      ],
+      "exit_code": 2,
+      "terminal": "redirected stdin and stdout",
+      "diagnostic_observed": "requires terminal input and output",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "-i",
+        "--no-interactive"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "--no-interactive",
+        "-i"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "-i",
+        "--no-chat"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F08",
+      "flags": [
+        "--no-chat",
+        "-i"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "not allowed with argument",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F10",
+      "flags": [
+        "-ni"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "use --no-interactive instead of -ni",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    },
+    {
+      "scenario": "SI-T-F10",
+      "flags": [
+        "--inter"
+      ],
+      "exit_code": 2,
+      "terminal": "Windows ConPTY",
+      "diagnostic_observed": "unrecognized argument: --inter",
+      "state_or_project_files_created": 0,
+      "loopback_service_connections": 0
+    }
+  ],
+  "typed_client_verified_by_prior_dashboard_build": true,
+  "limits": [
+    "The current B05 repeat exercises SQLite sequence allocation. Two browsers and an installed Pi were exercised in si007-concurrent-browser-fifo.",
+    "The C09 HTTP tests used the installed Server and Core with a synthetic native peer.",
+    "The Ruff check reports two diagnostics already present in the unchanged compaction test."
+  ],
+  "sha256": {
+    "si003-red.xml": "680c67382b4655c0aa2a27dbedd81f88d5f28ba44c7aed0eb7f020c2002ba9b8",
+    "tests.xml": "be5c1ab8fe63f133248c1d42e3d9cbaf56c9da7f3fce25b8bb9a2776002b641f",
+    "cli-tests.xml": "89be30f77b494e61a2757b0fd76109e91639d35513035d2480ffb29b5a0e4dee",
+    "proof.json": "300989cdb3e0412752f284341a9e03076314ab9f5006030902e3eba5b6cd3c93",
+    "audit_artifact.py": "b75d17b43cd3c04597645a38ffc9ca4314c4d6f86c653072f4088531512887d7",
+    "prepare.py": "80b85a43e8963b3b59ac34c08c0c6727b8a32bf1419692167b1a5436a48a4940",
+    "assert_contract_wheel.py": "0d2d9c624f1e6914f972c200e37b7fd1550c021b2bdbb9ff2e4230ea09541694"
+  }
+}

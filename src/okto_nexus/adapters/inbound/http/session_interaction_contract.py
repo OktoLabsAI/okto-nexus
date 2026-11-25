@@ -159,6 +159,17 @@ class SteerTargetView(_Document):
     effect: Literal["same_turn", "next_boundary", "interrupt_then_send"]
     effect_revision: Identifier
 
+    @model_validator(mode="after")
+    def effect_matches_target(self) -> "SteerTargetView":
+        expected_effect = {
+            "native_turn": "same_turn",
+            "observed_run": "next_boundary",
+            "claude_operation": "interrupt_then_send",
+        }[self.target.kind]
+        if self.effect != expected_effect:
+            raise ValueError("The reorientation effect must match its target.")
+        return self
+
 
 class SteerInputPreview(_Document):
     input_id: Identifier

@@ -262,7 +262,7 @@
         "SI-T-C09",
         "SI-T-F08"
       ],
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "evidence": [
         {
           "timestamp": "2026-11-18T10:05:49.999186+00:00",
@@ -273,7 +273,8 @@
         "execution/si007-concurrent-browser-fifo.md",
         "execution/si007-concurrent-browser-fifo.json",
         "execution/si028-connect-invalid-presentation.md",
-        "execution/si028-connect-invalid-presentation.json"
+        "execution/si028-connect-invalid-presentation.json",
+        "execution/si003-current-contract.json"
       ]
     },
     {

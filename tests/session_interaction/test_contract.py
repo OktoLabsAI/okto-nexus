@@ -11,6 +11,7 @@ from okto_nexus.adapters.inbound.http.session_interaction_contract import (
     PromoteInput,
     SessionCommand,
     SteerInput,
+    SteerTargetView,
 )
 from okto_nexus.domain.session_interaction import (
     InputDeliveryState,
@@ -125,6 +126,20 @@ def test_steer_is_separate_and_requires_a_reviewed_effect(wire):
     assert reviewed.target.run_ref == "run-1"
     with pytest.raises(ValidationError):
         SteerInput.model_validate(dict(body, confirmed_effect_revision="review", target={"kind": "current_run"}))
+
+
+@pytest.mark.parametrize(("target", "effect"), [
+    ({"kind": "native_turn", "turn_id": "turn-1"}, "same_turn"),
+    ({"kind": "observed_run", "run_ref": "run-1"}, "next_boundary"),
+    ({"kind": "claude_operation", "operation_id": "operation-1"}, "interrupt_then_send"),
+])
+def test_steer_review_effect_matches_the_target_kind(target, effect):
+    body = {"target": target, "capability_revision": "cap-1", "queue_revision": 0, "effect_revision": "review-1"}
+    review = SteerTargetView.model_validate(dict(body, effect=effect))
+    assert review.model_dump(mode="json") == dict(body, effect=effect)
+    for other in {"same_turn", "next_boundary", "interrupt_then_send"} - {effect}:
+        with pytest.raises(ValidationError, match="The reorientation effect must match its target."):
+            SteerTargetView.model_validate(dict(body, effect=other))
 
 
 def test_attachment_intent_cannot_pick_latest_or_override_host_or_token(wire):
