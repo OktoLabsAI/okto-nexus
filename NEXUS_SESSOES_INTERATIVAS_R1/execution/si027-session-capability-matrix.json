@@ -85,6 +85,86 @@
     "pinned_core_and_connector_artifacts": "PASS",
     "default_opt_in_policy": "PASS"
   },
+  "current_candidate_verification": {
+    "installed_packages": {
+      "nexus": {
+        "version": "0.3.8",
+        "source": "14d178101e90433d130595336792c37373cc4283",
+        "sha256": "a5271cc33317cd9210db2a73bd866f15aaf2ecf465c052b91d7b93a19714c3c2"
+      },
+      "connector": {
+        "version": "0.0.15",
+        "source": "2b0000a1b65be8dc9757b7c23a8f7948d0f9a11d",
+        "sha256": "4b6679b5c7143c28245725e5cdf932cd29a8ba12d9d1fa09b84e730094bd04de"
+      },
+      "core": {
+        "version": "0.0.16",
+        "source": "94aeb596e345a1c68c73f766fb21f7d4f539c297",
+        "sha256": "2783456e93947de08c04a2b11dc38cce5d2382ed46b6c6d4094c64ecb7042f6b"
+      }
+    },
+    "installation_checks": {
+      "reviewed_codex_context": {
+        "exact": "accepted",
+        "changed": [
+          "content_fingerprint",
+          "version",
+          "platform",
+          "architecture"
+        ]
+      },
+      "reviewed_pi_control_context": {
+        "exact": "accepted",
+        "changed": [
+          "build_identity",
+          "version",
+          "platform",
+          "architecture"
+        ]
+      },
+      "reviewed_pi_presentation_context": {
+        "exact": "accepted",
+        "changed": [
+          "build_identity",
+          "version",
+          "platform",
+          "architecture"
+        ]
+      },
+      "reviewed_claude_terminal_context": {
+        "exact": "accepted",
+        "changed": [
+          "content_fingerprint",
+          "version",
+          "platform",
+          "architecture"
+        ]
+      },
+      "reviewed_claude_saved_context": {
+        "exact": "accepted",
+        "changed": [
+          "content_fingerprint",
+          "version",
+          "platform",
+          "architecture"
+        ]
+      }
+    },
+    "claude_raw_stream_controls_qualified": false,
+    "codex_viewer_may_be_used_as_engine": false,
+    "server_interaction_enabled_by_default": false,
+    "matrix_evidence_links": "PASS",
+    "installed_regressions": {
+      "passed": 22,
+      "junit_sha256": "9585e2aacf84b9fdf2defb071c590813e6009f07b25fff26f650b83017f8a124"
+    },
+    "runtime_evidence": [
+      "si023-current-saved-contexts.json",
+      "si024-current-native-controls.json",
+      "si025-current-native-queue.json",
+      "si026-current-managed-controls.json"
+    ]
+  },
   "combinations": [
     {
       "installation": "codex",

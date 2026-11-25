@@ -39,4 +39,6 @@ No caso Codex local, a compilação do app-server foi recusada em leitura e escr
 
 Os wheels instalados passaram por 35 testes do Core e 79 do Nexus. As checagens da matriz compararam cada instalação com os seletores do produto e recusaram variações de versão, identidade, sistema e arquitetura. O app-server e o visualizador do Codex tiveram as identidades conferidas separadamente. O opt-in do Server e os hashes dos pins também foram conferidos. [Resultados e hashes](si027-session-capability-matrix.json)
 
+No candidato instalado mais recente, passaram 22 regressões adicionais de identidade, negociação de apresentação e recusa de visualizador. Os seletores aceitaram as instalações revisadas e recusaram mudanças de identidade, versão, sistema ou arquitetura. Os hashes dos três wheels coincidem com os dos ensaios recentes de retomada, Codex, Pi e Claude. [Checagem do candidato](si027-session-capability-matrix.json) · [Codex](si024-current-native-controls.md) · [Pi](si025-current-native-queue.md) · [Claude](si026-current-managed-controls.md)
+
 SI-027 tem a matriz implementada. O ledger mantém em aberto os gates que exigem campanha, inclusive SI-T-I09. A qualificação da operação entre máquinas permanece pendente. Esta etapa atualiza documentação e evidências, dispensa migração e pode ser revertida pelo commit do Nexus.
