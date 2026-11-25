@@ -19,3 +19,19 @@ The archive still lacks some native message identities under the current
 Core pin. The response therefore reports incomplete history. The HTTP test
 is separate from native and browser qualification. This step adds no
 migration. Reverting the route leaves the canonical journal intact.
+
+## Revalidação no pacote instalado
+
+Passaram 30 casos no candidato `8bcee9bd` no Windows. A leitura
+reconciliou deltas e snapshots pela identidade nativa e conservou
+mensagens distintas que tinham o mesmo texto. A origem de subagente
+foi preservada. A projeção excluiu eventos privados e sinalizou o
+trecho incompleto quando o histórico tinha uma lacuna. As páginas
+usaram um cursor limitado à sessão e à geração selecionadas. O stream
+voltou a conferir a autorização original antes de continuar.
+
+O teste HTTP consultou os dois pontos de leitura sobre o journal
+canônico em SQLite. Os ensaios de navegador, privacidade com Pi e
+origem de subagente no Claude permanecem registrados com seus
+próprios candidatos e limitações. A verificação dispensa migração e
+pode ser revertida pelo commit. [Resultados e hashes](si012-current-transcript.json)

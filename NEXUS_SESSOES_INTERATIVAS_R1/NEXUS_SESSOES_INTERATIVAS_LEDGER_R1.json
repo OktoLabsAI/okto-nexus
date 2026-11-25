@@ -773,7 +773,7 @@
         "SI-T-E06",
         "SI-T-H20"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "execution/si012-transcript.md",
         "execution/si012-core-event-identities.md",
@@ -793,7 +793,8 @@
         "execution/si036-home-incoming-message.md",
         "execution/si036-home-incoming-message.json",
         "execution/si012-terminal-event-scope.md",
-        "execution/si012-terminal-event-scope.json"
+        "execution/si012-terminal-event-scope.json",
+        "execution/si012-current-transcript.json"
       ]
     },
     {
