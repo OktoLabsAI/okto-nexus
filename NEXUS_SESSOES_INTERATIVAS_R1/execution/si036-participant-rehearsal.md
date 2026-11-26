@@ -91,3 +91,11 @@ O card mantém o título do trabalho visível e oferece somente **Open console**
 Instalei o wheel corrigido em um ambiente descartável e exercitei os dois caminhos no Edge com o Pi real e respostas simuladas. Ambos exibiram o pedido no mesmo console, sem controles do painel anterior. `/status` respondeu na tela, e a mensagem enviada por Enter foi entregue no turno seguinte da mesma sessão. Os dois resultados foram conferidos pelo corpo exato. Passaram 429 testes Node, 11 testes de lançamento e o ensaio com Pi e Connector. O navegador, o Pi e o listener da automação foram encerrados.
 
 A correção do registro vale para novas admissões. A sessão usada na rodada anterior foi encerrada no ambiente de teste. A mudança dispensa migração e pode ser revertida por commit. O aceite humano da versão corrigida continua pendente. [Evidências e limites](si036-participant-rehearsal.json)
+
+## Digitação e entrega pelo navegador
+
+Na janela do participante, o Edge exibia a resposta do Pi enquanto o rodapé ainda mostrava **Message queued for the next turn**. O recibo persistido já estava em `ACCEPTED_NATIVE`. O console agora acompanha o recibo exato do último envio e passa a mostrar **Message delivered to Pi** quando o harness confirma a entrada. A recarga recupera o estado do mesmo recibo. O alerta de saída no console aparece quando há um rascunho editado.
+
+No Edge, com o wheel instalado e o Pi real usando respostas simuladas, a automação digitou `/status` e uma mensagem de duas linhas, corrigiu um caractere com Backspace e enviou com Enter. Recarregou a página durante a espera e após a entrega. O console manteve a mesma sessão e mostrou a resposta e a confirmação atualizada. Depois da recarga, `/status` continuou funcionando na mesma sessão. O SQLite confirmou uma sessão, uma mensagem de acompanhamento e dois turnos. A execução encerrou o Pi e o listener pela via canônica.
+
+Passaram 429 testes Node, o build, a validação estrita do wheel e o ensaio instalado. A mudança dispensa migração e pode ser revertida pelo commit. A rodada de usabilidade continua separada da automação. [Evidências](si036-participant-rehearsal.json)

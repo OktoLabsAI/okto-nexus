@@ -737,5 +737,24 @@
       "native.xml": "de3cffbf12d62c9d435fa9d354c9d072ca14b087b1e4190075f08c42a7c08e0a",
       "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
     }
+  },
+  "browser_keyboard_and_delivery_receipt": {
+    "baseline_head": "8ddc53d0",
+    "observed_before_fix": {"native_reply_visible": true, "durable_status": "ACCEPTED_NATIVE", "footer_still_said_queued": true},
+    "nexus_wheel_sha256": "4b900182423798ad46161015154354aed2cb902722701bc8b89a38908a24ea62",
+    "browser": {"edge_keyboard": true, "backspace": true, "shift_enter": true, "enter_to_send": true,
+      "pending_receipt_restored_after_reload": true, "delivered_receipt_restored_after_reload": true,
+      "reply_visible_in_same_console": true, "status_command_worked_after_reload": true, "clean_reload_without_prompt": true},
+    "native": {"sessions": 1, "turns": 2, "ordinary_input_final_state": "ACCEPTED_NATIVE", "response_mode": "deterministic fixture",
+      "external_provider_calls": 0, "listener_closed": true, "temporary_browser_auth_removed": true},
+    "tests": {"frontend_node": 429, "installed_pi_browser_fixture": 1},
+    "evidence_directory": "D:/nxs-pi-browser-input",
+    "sha256": {
+      "type-and-send.js": "683c36bd6f148e04c8ac07fd5a99696bbbcd39137ab761212a4c69f42e689a27",
+      "verify-delivery.js": "1159f8979ae7f4d6274d50f878dd49186033da128aaf6d2488c9da28b3e2f68c",
+      "console-delivered.png": "84f227a94af9ab970a9f1b6ae6b7c4777e89956726432ba8b4fc90545f2f798c",
+      "native.xml": "e19f3832424eea4550dc2b8edcb78a20e402be608fc620c94cf616ef911b58d8",
+      "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
+    }
   }
 }

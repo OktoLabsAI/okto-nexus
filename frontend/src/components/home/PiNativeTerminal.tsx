@@ -4,23 +4,41 @@ import {FitAddon} from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
 import {connectPiTerminal} from '../../piTerminalConnection';
 import {piTerminalEdits, type PiEdit} from '../../piTerminalInput';
-import {piPresentationApi, runtimeApi, type InteractionScope} from '../../runtimeApi';
+import {piPresentationApi, runtimeApi, type InteractionScope, type SessionInputReceipt} from '../../runtimeApi';
+import {assertInteractionScope, receiptLabel} from '../../sessionConversation';
 import {useAgentModalGuard} from '../AgentActionModal';
 
 type TerminalView = 'connecting' | 'read' | 'write' | 'unavailable' | 'disconnected';
+type Delivery = {intent: string; inputId: string};
+const pendingDelivery = new Set<SessionInputReceipt['status']>(['QUEUED', 'DISPATCHING', 'PAUSED', 'DELIVERY_UNKNOWN']);
+
+function deliveryMessage(status: SessionInputReceipt['status']) {
+  if (status === 'QUEUED') return 'Message queued for the next turn.';
+  if (status === 'ACCEPTED_NATIVE') return 'Message delivered to Pi.';
+  return receiptLabel[status];
+}
 
 export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
   const host = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<TerminalView>('connecting');
   const [status, setStatus] = useState('');
+  const [delivery, setDelivery] = useState('');
   const [uncertain, setUncertain] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [draftEdited, setDraftEdited] = useState(false);
   const [confirmInterrupt, setConfirmInterrupt] = useState(false);
   useAgentModalGuard(draftEdited || confirmInterrupt);
   const receiptKey = `nexus:pi-pending:${JSON.stringify(scope)}`;
+  const deliveryKey = `${receiptKey}:last-delivery`;
   const recover = useRef<() => void>(() => {});
   const decideInterrupt = useRef<(confirm: boolean) => void>(() => {});
+
+  useEffect(() => {
+    if (!draftEdited) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ''; };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [draftEdited]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -40,17 +58,21 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     let connection: Awaited<ReturnType<typeof connectPiTerminal>> = null;
     let keepalive: number | undefined;
     let timeout: number | undefined;
+    let deliveryTimer: number | undefined;
+    let tracked: Delivery | null = null;
     let unknown: string | null = null;
     let interrupt: {id: string; intent: string} | null = null;
     let disposed = false;
     setDraftEdited(false);
     setConfirmInterrupt(false);
+    setDelivery('');
 
     function disconnect() {
       attached = false;
       edits.length = 0;
       window.clearInterval(keepalive);
       window.clearTimeout(timeout);
+      window.clearTimeout(deliveryTimer);
       terminal.options.disableStdin = true;
       connection?.socket.close();
       if (controller.signal.aborted) return;
@@ -65,6 +87,37 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
         setUncertain(true);
         setStatus('Interruption is unconfirmed. Check its status before trying again.');
       }
+    }
+
+    function watchDelivery(message: Delivery, initial?: SessionInputReceipt['status']) {
+      tracked = message;
+      window.clearTimeout(deliveryTimer);
+      if (initial) setDelivery(deliveryMessage(initial));
+      const poll = async () => {
+        if (!attached || controller.signal.aborted || tracked !== message) return;
+        let delay = 2000;
+        try {
+          const receipt = await piPresentationApi.receipt(scope, message.intent, controller.signal);
+          if (!attached || controller.signal.aborted || tracked !== message) return;
+          assertInteractionScope({...receipt.scope, session_owner_generation: receipt.session_owner_generation}, scope);
+          if (receipt.input_id !== message.inputId) throw new Error('Message receipt changed.');
+          setDelivery(deliveryMessage(receipt.status));
+          if (!pendingDelivery.has(receipt.status)) return;
+        } catch (error) {
+          if (!attached || controller.signal.aborted || tracked !== message) return;
+          setDelivery('Message status unavailable.');
+          const status = (error as {status?: number}).status;
+          if (status && status < 500) return;
+          delay = 5000;
+        }
+        deliveryTimer = window.setTimeout(poll, delay);
+      };
+      void poll();
+    }
+
+    function rememberDelivery(message: Delivery, current?: SessionInputReceipt['status']) {
+      try { sessionStorage.setItem(deliveryKey, JSON.stringify(message)); } catch { /* Acknowledgement remains visible here. */ }
+      watchDelivery(message, current);
     }
 
     recover.current = () => {
@@ -93,7 +146,8 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
           return;
         }
         clearReceipt();
-        setStatus(receipt.status === 'QUEUED' ? 'Message queued for the next turn.' : `Message receipt recovered (${receipt.status.toLowerCase().replaceAll('_', ' ')}).`);
+        setStatus('');
+        rememberDelivery({intent, inputId: receipt.input_id}, receipt.status);
       }).catch(() => {
         if (!controller.signal.aborted) setStatus('Message delivery is still unconfirmed.');
       });
@@ -101,6 +155,8 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
 
     try {
       unknown = sessionStorage.getItem(receiptKey);
+      const last = JSON.parse(sessionStorage.getItem(deliveryKey) ?? 'null');
+      if (last && typeof last.intent === 'string' && typeof last.inputId === 'string') tracked = last;
       setUncertain(Boolean(unknown));
       setStatus(unknown?.startsWith('interrupt:') ? 'Check whether the previous interruption took effect.' :
         unknown ? 'Check delivery of the previous message before sending again.' : '');
@@ -212,6 +268,7 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
             terminal.write('\x1b[?2004h');
             setView(link.access);
             if (!terminal.options.disableStdin) terminal.focus();
+            if (tracked) watchDelivery(tracked);
             if (link.keepalive) keepalive = window.setInterval(() => {
               if (socket.readyState === WebSocket.OPEN) socket.send('{"kind":"keepalive"}');
             }, 5000);
@@ -223,7 +280,10 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
               if (!frame.key.limit_reached) {
                 setDraftEdited(edits.some(edit => edit.key === 'insert' || edit.key === 'newline'));
               }
-              if (frame.key.queued) setStatus('Message queued for the next turn.');
+              if (frame.key.queued && typeof frame.key.queued.input_id === 'string') {
+                setStatus('');
+                rememberDelivery({intent: pending.intent, inputId: frame.key.queued.input_id}, frame.key.queued.status);
+              }
               const command = frame.key.command;
               if (command?.name === 'help') setStatus('/status shows this session. /interrupt stops the current turn after confirmation.');
               if (command?.name === 'unavailable') setStatus('Command unavailable. Type /help for available commands.');
@@ -285,13 +345,15 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     };
   }, [receiptKey, attempt]);
 
+  const terminalStatus = status || (!delivery || view !== 'write' ? {connecting:'Connecting…',read:'View only',
+    write:'Enter to send · /help for commands',unavailable:'Console unavailable',disconnected:'Disconnected'}[view] : '');
   return <div className="harness-console flex h-full min-h-0 flex-col bg-[#101419] text-white">
     <div className="min-h-0 flex-1 overflow-auto px-3 py-2" aria-label="Pi terminal">
       <div className="h-full" ref={host} data-modal-passive/>
     </div>
     <footer className="flex min-h-10 shrink-0 flex-wrap items-center gap-3 border-t border-white/10 px-3 py-2 text-xs text-white/80">
-      <span role="status">{status||{connecting:'Connecting…',read:'View only',write:'Enter to send · /help for commands',
-        unavailable:'Console unavailable',disconnected:'Disconnected'}[view]}</span>
+      {!!terminalStatus&&<span role="status">{terminalStatus}</span>}
+      {!!delivery&&<span role="status">{delivery}</span>}
       {confirmInterrupt&&<><button className="underline" type="button" onClick={()=>decideInterrupt.current(true)}>Interrupt turn</button>
         <button className="underline" type="button" onClick={()=>decideInterrupt.current(false)}>Keep running</button></>}
       {uncertain && <button className="underline" type="button" onClick={() => recover.current()}>Check status</button>}

@@ -241,7 +241,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   useEffect(() => {
     registerLeaveGuard(panel ? dismiss : null);
     const beforeUnload = (event: BeforeUnloadEvent) => {event.preventDefault();event.returnValue = '';};
-    if (panel) window.addEventListener('beforeunload', beforeUnload);
+    if (panel && !(panel.kind==='target' && panel.console)) window.addEventListener('beforeunload', beforeUnload);
     return () => {registerLeaveGuard(null);window.removeEventListener('beforeunload', beforeUnload);};
   }, [panel, dismiss, registerLeaveGuard]);
   const rememberAttention = (selection: HomeEntrySelection['attention'], target?: HomeTarget) => {
