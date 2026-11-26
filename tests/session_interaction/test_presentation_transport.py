@@ -645,16 +645,24 @@ def test_browser_pi_commands_run_in_the_exact_editor_and_require_interrupt_confi
     monkeypatch.setattr(dashboard_session_presentations, '_interrupt_target_for', lambda _: object())
     effects = []
     monkeypatch.setattr(dashboard_session_presentations, 'request_exact_human_interrupt', lambda **kwargs: effects.append(kwargs))
+    renderer_keys = []
 
     @asynccontextmanager
     async def editor(scope, **_):
         assert scope == transport.scope
         sender, receiver = anyio.create_memory_object_stream(1)
-        drafts = iter(['/help', '/model', '/interrupt'])
+        draft = None
 
-        async def edit(key, **_):
-            assert key == 'enter'
-            await sender.send(PiEditorUpdate(1, next(drafts)))
+        async def edit(key, *, text):
+            nonlocal draft
+            renderer_keys.append(key)
+            if key == 'insert':
+                draft = text
+            elif key == 'clear':
+                draft = None
+            else:
+                assert key == 'snapshot'
+            await sender.send(PiEditorUpdate(len(renderer_keys), draft if key == 'snapshot' else None))
 
         yield edit, receiver.receive
 
@@ -667,17 +675,38 @@ def test_browser_pi_commands_run_in_the_exact_editor_and_require_interrupt_confi
             subprotocols=[PI_PRESENTATION_SUBPROTOCOL, BROWSER_PRESENTATION_PROTOCOL]) as ws:
         _prove_pi_ticket(ws, transport.scope, editor=True, ticket=offer['ticket'])
         assert ws.receive_json()['access'] == 'write'
-        for sequence, name in enumerate(['help', 'unavailable', 'interrupt'], start=1):
-            ws.send_json({'kind': 'key', 'key': 'enter', 'request_id': sequence, 'client_intent_id': f'command-{sequence}',
-                'capability_revision': pi_presentation.input_revision})
-            reply = ws.receive_json()['key']
-            assert reply['queued'] is None and reply['command']['name'] == name
-            assert not effects
-        ws.send_json({'kind': 'interrupt_confirm', 'request_id': 4, 'review_id': reply['command']['review_id']})
+        sequence = 0
+
+        def press(key, **payload):
+            nonlocal sequence
+            sequence += 1
+            ws.send_json({'kind': 'key', 'key': key, 'request_id': sequence, 'client_intent_id': f'command-{sequence}',
+                'capability_revision': pi_presentation.input_revision, **payload})
+            result = ws.receive_json()['key']
+            assert result['queued'] is None and not effects
+            return result
+
+        press('insert', text='/')
+        assert press('command_preview')['command_prefix'] == '/'
+        for command in ('/help', '/status'):
+            press('insert', text=command)
+            assert press('command_preview')['command_prefix'] == command
+            assert press('enter')['command'] == {'name': command[1:]}
+            assert press('command_preview')['command_prefix'] is None
+        for unsupported in ('/model', '!echo inert', '/status extra'):
+            press('insert', text=unsupported)
+            assert press('enter')['command'] == {'name': 'unavailable', 'draft_kept': True}
+            assert renderer_keys[-1] == 'snapshot'
+            assert press('command_preview')['command_prefix'] == ('/model' if unsupported == '/model' else None)
+        press('insert', text='/interrupt')
+        reply = press('enter')
+        assert reply['command']['name'] == 'interrupt'
+        intent = f'command-{sequence}'
+        ws.send_json({'kind': 'interrupt_confirm', 'request_id': sequence + 1, 'review_id': reply['command']['review_id']})
         assert ws.receive_json()['interrupt_confirm'] == {'status': 'recorded'}
     effect, = effects
     assert effect['scope'] == transport.scope and effect['native_turn_id'] == target.target.run_ref
-    assert effect['client_intent_id'] == 'command-3' and effect['observed_run'] is True
+    assert effect['client_intent_id'] == intent and effect['observed_run'] is True
 
 
 def test_pi_backpressure_releases_attachment_before_bounded_close(transport, pi_presentation, monkeypatch):

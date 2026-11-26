@@ -1,6 +1,7 @@
 """Authenticated operator transport for scoped native presenters."""
 
 import asyncio
+import re
 import secrets
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
@@ -80,6 +81,9 @@ _PRESENTERS = {
     'pi_remote': ('remote_pi_presentations', REMOTE_PI_AUDIENCE, REMOTE_PI_SUBPROTOCOL),
     'claude_remote': ('remote_claude_presentations', REMOTE_CLAUDE_AUDIENCE, REMOTE_CLAUDE_SUBPROTOCOL),
 }
+
+_PI_BROWSER_COMMANDS = {'/help', '/status', '/interrupt'}
+_PI_COMMAND_PREFIX = re.compile(r'/[a-z]{0,32}')
 _REMOTE = frozenset({'codex_remote', 'pi_remote', 'claude_remote'})
 _PI = frozenset({'pi', 'pi_remote'})
 _CLAUDE = frozenset({'claude', 'claude_remote'})
@@ -189,7 +193,8 @@ class _PiKeyRequest(_Document):
     request_id: Revision
     client_intent_id: Identifier
     capability_revision: Identifier
-    key: Literal['insert', 'enter', 'newline', 'backspace', 'delete', 'left', 'right', 'up', 'down', 'home', 'end']
+    key: Literal['insert', 'enter', 'newline', 'backspace', 'delete', 'left', 'right', 'up', 'down', 'home', 'end',
+                 'command_preview']
     text: Annotated[str, Field(max_length=4096)] | None = None
 
 
@@ -605,6 +610,8 @@ async def _present_pi(ws, services, active, hello, *, presentation, browser=Fals
         inbound = asyncio.create_task(ws.receive())
         output = asyncio.create_task(read_output())
         pending = review = admitted_steer = admitted_interrupt = None
+        checking_submission = False
+        browser_command = None
         renewal = anyio.current_time() + _RENEW_SECONDS
         try:
             while True:
@@ -676,7 +683,15 @@ async def _present_pi(ws, services, active, hello, *, presentation, browser=Fals
                     elif hello.editor and kind == 'key':
                         review = None
                         pending = _PiKeyRequest.model_validate(raw)
-                        await edit(pending.key, text=pending.text)
+                        if pending.key == 'command_preview' and not browser:
+                            raise ValueError('Command previews are available only in the browser')
+                        checking_submission = browser and pending.key == 'enter'
+                        if checking_submission or pending.key == 'command_preview':
+                            if pending.text is not None:
+                                raise ValueError('The draft snapshot does not take input text')
+                            await edit('snapshot', text=None)
+                        else:
+                            await edit(pending.key, text=pending.text)
                     else:
                         review = None
                         request = _TerminalEnqueueRequest.model_validate(raw)
@@ -704,26 +719,44 @@ async def _present_pi(ws, services, active, hello, *, presentation, browser=Fals
                             raise ValueError('The renderer did not clear the applied draft')
                         admitted_steer = None
                         reply = {'status': 'applied'}
+                    elif pending.key == 'command_preview':
+                        draft = (data.draft or '').lower()
+                        reply = {'limit_reached': False, 'queued': None,
+                                 'command_prefix': draft if _PI_COMMAND_PREFIX.fullmatch(draft) else None}
+                    elif checking_submission:
+                        checking_submission = False
+                        draft = (data.draft or '').strip()
+                        if draft.startswith(('/', '!')) and draft.lower() not in _PI_BROWSER_COMMANDS:
+                            reply = {'limit_reached': False, 'queued': None,
+                                     'command': {'name': 'unavailable', 'draft_kept': True}}
+                        else:
+                            browser_command = draft.lower() if draft.startswith('/') else None
+                            await edit('clear' if browser_command else 'enter', text=None)
+                            output = asyncio.create_task(read_output())
+                            continue
                     else:
                         queued = None
                         command = None
-                        if data.draft is not None:
+                        if browser_command is not None:
+                            if data.draft is not None or data.limit_reached:
+                                raise ValueError('The renderer did not clear the command')
+                            command = {'name': browser_command[1:]}
+                            browser_command = None
+                            if command['name'] == 'interrupt':
+                                request = _TerminalControlReviewRequest(kind='interrupt_review', request_id=pending.request_id,
+                                    client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision)
+                                review = await _worker(_review_terminal_control, state=state, services=services, active=active,
+                                                       request=request)
+                                command.update(_terminal_review_reply(review))
+                        elif data.draft is not None:
                             if pending.key != 'enter' or data.limit_reached:
                                 raise ValueError('The draft editor response does not match the key')
                             if browser and data.draft.lstrip().startswith(('/', '!')):
-                                name = data.draft.strip()
-                                command = {'name': name[1:] if name in ('/help', '/status', '/interrupt') else 'unavailable'}
-                                if name == '/interrupt':
-                                    request = _TerminalControlReviewRequest(kind='interrupt_review', request_id=pending.request_id,
-                                        client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision)
-                                    review = await _worker(_review_terminal_control, state=state, services=services, active=active,
-                                                           request=request)
-                                    command.update(_terminal_review_reply(review))
-                            else:
-                                request = _TerminalEnqueueRequest(kind='enqueue', request_id=pending.request_id,
-                                    client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
-                                    content=TextInput(type='text', text=data.draft))
-                                queued = await _record_presenter_input(state, services, active, request, presentation=presentation)
+                                raise ValueError('The renderer submission changed after review')
+                            request = _TerminalEnqueueRequest(kind='enqueue', request_id=pending.request_id,
+                                client_intent_id=pending.client_intent_id, capability_revision=pending.capability_revision,
+                                content=TextInput(type='text', text=data.draft))
+                            queued = await _record_presenter_input(state, services, active, request, presentation=presentation)
                         reply = {'limit_reached': data.limit_reached, 'queued': queued}
                         if command is not None:
                             reply['command'] = command

@@ -98,4 +98,12 @@ Na janela do participante, o Edge exibia a resposta do Pi enquanto o rodapé ain
 
 No Edge, com o wheel instalado e o Pi real usando respostas simuladas, a automação digitou `/status` e uma mensagem de duas linhas, corrigiu um caractere com Backspace e enviou com Enter. Recarregou a página durante a espera e após a entrega. O console manteve a mesma sessão e mostrou a resposta e a confirmação atualizada. Depois da recarga, `/status` continuou funcionando na mesma sessão. O SQLite confirmou uma sessão, uma mensagem de acompanhamento e dois turnos. A execução encerrou o Pi e o listener pela via canônica.
 
+### Comandos no console do Pi
+
+Digitar `/` no console exibe os comandos do Nexus disponíveis ali. `Tab` ou um clique completa a entrada e `Enter` executa o comando. A interrupção continua exigindo confirmação no turno exato. Entradas indisponíveis, como `/model`, ficam no editor para correção. A seleção do comando usa o rascunho do editor do Pi e a API libera ao navegador apenas o prefixo da sugestão.
+
+No Edge com o wheel instalado, o Pi 0.87.1, o Connector 0.0.16 e o Core 0.0.17, o ensaio com respostas simuladas abriu as sugestões pelo teclado, completou `/status` com `Tab`, selecionou `/help` com um clique, preservou `/model` no editor após `Enter` e cancelou a interrupção pelo próprio console. O mesmo terminal voltou a receber texto e manteve os recibos de fila e entrega após recarregar. A resposta e o `/status` também continuaram disponíveis. O SQLite confirmou uma sessão, uma entrada entregue ao Pi e dois turnos concluídos. O teste de transporte confirmou que a interrupção só atua após confirmação e que comandos indisponíveis ficam fora da fila.
+
+Passaram 429 testes do frontend, 51 testes do transporte, Ruff e a verificação do lock. O wheel e o sdist passaram no Twine. Wheel SHA-256 `eb3ed86e23d268c87c24b26c4a6187cf69441d96eca65c0d376dbc4b5902a3e9`. O rollback volta ao pacote anterior e dispensa migração. O ensaio automatizado no Windows mantém separada a validação humana.
+
 Passaram 429 testes Node, o build, a validação estrita do wheel e o ensaio instalado. A mudança dispensa migração e pode ser revertida pelo commit. A rodada de usabilidade continua separada da automação. [Evidências](si036-participant-rehearsal.json)

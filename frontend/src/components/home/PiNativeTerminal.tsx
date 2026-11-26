@@ -11,6 +11,11 @@ import {useAgentModalGuard} from '../AgentActionModal';
 type TerminalView = 'connecting' | 'read' | 'write' | 'unavailable' | 'disconnected';
 type Delivery = {intent: string; inputId: string};
 const pendingDelivery = new Set<SessionInputReceipt['status']>(['QUEUED', 'DISPATCHING', 'PAUSED', 'DELIVERY_UNKNOWN']);
+const piCommands = [
+  {name: '/help', label: 'Show available commands'},
+  {name: '/status', label: 'Check this session'},
+  {name: '/interrupt', label: 'Review stopping the current turn'},
+];
 
 function deliveryMessage(status: SessionInputReceipt['status']) {
   if (status === 'QUEUED') return 'Message queued for the next turn.';
@@ -27,11 +32,13 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
   const [attempt, setAttempt] = useState(0);
   const [draftEdited, setDraftEdited] = useState(false);
   const [confirmInterrupt, setConfirmInterrupt] = useState(false);
+  const [commandPrefix, setCommandPrefix] = useState<string | null>(null);
   useAgentModalGuard(draftEdited || confirmInterrupt);
   const receiptKey = `nexus:pi-pending:${JSON.stringify(scope)}`;
   const deliveryKey = `${receiptKey}:last-delivery`;
   const recover = useRef<() => void>(() => {});
   const decideInterrupt = useRef<(confirm: boolean) => void>(() => {});
+  const completeCommand = useRef<(name: string) => void>(() => {});
 
   useEffect(() => {
     if (!draftEdited) return;
@@ -59,6 +66,8 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     let keepalive: number | undefined;
     let timeout: number | undefined;
     let deliveryTimer: number | undefined;
+    let previewTimer: number | undefined;
+    let prefix: string | null = null;
     let tracked: Delivery | null = null;
     let unknown: string | null = null;
     let interrupt: {id: string; intent: string} | null = null;
@@ -66,6 +75,7 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     setDraftEdited(false);
     setConfirmInterrupt(false);
     setDelivery('');
+    setCommandPrefix(null);
 
     function disconnect() {
       attached = false;
@@ -73,12 +83,15 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
       window.clearInterval(keepalive);
       window.clearTimeout(timeout);
       window.clearTimeout(deliveryTimer);
+      window.clearTimeout(previewTimer);
       terminal.options.disableStdin = true;
       connection?.socket.close();
       if (controller.signal.aborted) return;
       setView('disconnected');
       setDraftEdited(false);
       setConfirmInterrupt(false);
+      setCommandPrefix(null);
+      if (!unknown) setStatus('');
       if (pending?.key === 'enter') {
         setUncertain(true);
         setStatus('Message delivery is unconfirmed. Check delivery before sending again.');
@@ -213,13 +226,38 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
       }
     }
 
+    function showPrefix(value: string | null) {
+      prefix = value;
+      setCommandPrefix(value);
+    }
+
+    completeCommand.current = name => {
+      if (!prefix || !name.startsWith(prefix) || !attached || pending || edits.length || unknown || interrupt) return;
+      const suffix = name.slice(prefix.length);
+      terminal.focus();
+      if (suffix) {
+        addEdits('\x1b[F');
+        addEdits(suffix);
+      }
+    };
+
     terminal.attachCustomKeyEventHandler(event => {
-      if (event.key === 'Tab' || (event.key === 'Enter' && event.isComposing)) return false;
+      if (event.key === 'Enter' && event.isComposing) return false;
       if (interrupt) {
         const key=event.key.toLowerCase();
         if (event.type==='keydown' && event.ctrlKey && (key==='y'||key==='n')) {
           event.preventDefault();
           decideInterrupt.current(key==='y');
+        }
+        return false;
+      }
+      if (event.key === 'Tab') {
+        const currentPrefix = prefix;
+        const choice = currentPrefix && piCommands.find(command =>
+          command.name.startsWith(currentPrefix) && command.name !== currentPrefix);
+        if (choice && event.type === 'keydown' && !event.shiftKey && !pending && !edits.length) {
+          event.preventDefault();
+          completeCommand.current(choice.name);
         }
         return false;
       }
@@ -236,6 +274,16 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
       if (!batch || edits.length + batch.length > 64) {
         setStatus('The terminal could not accept all of that input.');
         return;
+      }
+      if (!batch.length) return;
+      showPrefix(null);
+      window.clearTimeout(previewTimer);
+      if (!batch.some(edit => edit.key === 'enter')) {
+        previewTimer = window.setTimeout(() => {
+          if (!attached || unknown || interrupt || edits.length >= 64) return;
+          edits.push({key: 'command_preview'});
+          pump();
+        }, 220);
       }
       if (batch.some(edit => edit.key === 'insert' || edit.key === 'newline')) setDraftEdited(true);
       edits.push(...batch);
@@ -275,18 +323,21 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
           } else if (attached && frame.kind === 'key' && pending && frame.request_id === pending.request &&
               frame.key && typeof frame.key.limit_reached === 'boolean') {
             window.clearTimeout(timeout);
-            if (pending.key === 'enter') {
+            if (pending.key === 'command_preview') {
+              const value = frame.key.command_prefix;
+              if (!edits.length) showPrefix(typeof value === 'string' && /^\/[a-z]{0,32}$/.test(value) ? value : null);
+            } else if (pending.key === 'enter') {
               clearReceipt();
+              const command = frame.key.command;
               if (!frame.key.limit_reached) {
-                setDraftEdited(edits.some(edit => edit.key === 'insert' || edit.key === 'newline'));
+                setDraftEdited(command?.draft_kept === true || edits.some(edit => edit.key === 'insert' || edit.key === 'newline'));
               }
               if (frame.key.queued && typeof frame.key.queued.input_id === 'string') {
                 setStatus('');
                 rememberDelivery({intent: pending.intent, inputId: frame.key.queued.input_id}, frame.key.queued.status);
               }
-              const command = frame.key.command;
-              if (command?.name === 'help') setStatus('/status shows this session. /interrupt stops the current turn after confirmation.');
-              if (command?.name === 'unavailable') setStatus('Command unavailable. Type /help for available commands.');
+              if (command?.name === 'help') setStatus('Nexus commands: /help, /status and /interrupt.');
+              if (command?.name === 'unavailable') setStatus('Command unavailable in this console. Your draft is still here.');
               if (command?.name === 'status') {
                 void runtimeApi.sessionInteraction(scope,controller.signal).then(current=>{
                   if(controller.signal.aborted||Object.entries(current.scope).some(([key,value])=>scope[key as keyof InteractionScope]!==value))return;
@@ -320,6 +371,7 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
             } else {
               clearReceipt();
               setStatus(result==='cancelled'?'Work continues.':'The turn changed. Interruption was not sent.');
+              if (!terminal.options.disableStdin) terminal.focus();
             }
           } else disconnect();
         } catch {
@@ -345,13 +397,21 @@ export function PiNativeTerminal({scope}: {scope: InteractionScope}) {
     };
   }, [receiptKey, attempt]);
 
-  const terminalStatus = status || (!delivery || view !== 'write' ? {connecting:'Connecting…',read:'View only',
-    write:'Enter to send · /help for commands',unavailable:'Console unavailable',disconnected:'Disconnected'}[view] : '');
+  const terminalStatus = status || {connecting:'Connecting…',read:'View only',
+    write:'Enter to send · /help for commands',unavailable:'Console unavailable',disconnected:'Disconnected'}[view];
+  const suggestions = view === 'write' && !uncertain && !confirmInterrupt && commandPrefix &&
+    piCommands.filter(command => command.name.startsWith(commandPrefix));
   return <div className="harness-console flex h-full min-h-0 flex-col bg-[#101419] text-white">
     <div className="min-h-0 flex-1 overflow-auto px-3 py-2" aria-label="Pi terminal">
       <div className="h-full" ref={host} data-modal-passive/>
     </div>
     <footer className="flex min-h-10 shrink-0 flex-wrap items-center gap-3 border-t border-white/10 px-3 py-2 text-xs text-white/80">
+      {suggestions && suggestions.length > 0 && <div role="group" aria-label="Nexus commands"
+        className="flex w-full flex-wrap items-center gap-2">
+        {suggestions.map(command => <button key={command.name} type="button"
+          className="rounded border border-white/20 px-2 py-1 hover:bg-white/10 focus-visible:outline-white"
+          onClick={() => completeCommand.current(command.name)}>{command.name} · {command.label}</button>)}
+      </div>}
       {!!terminalStatus&&<span role="status">{terminalStatus}</span>}
       {!!delivery&&<span role="status">{delivery}</span>}
       {confirmInterrupt&&<><button className="underline" type="button" onClick={()=>decideInterrupt.current(true)}>Interrupt turn</button>
