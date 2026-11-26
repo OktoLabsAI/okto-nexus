@@ -41,7 +41,10 @@ export function homeWorkConsoleTarget(entry:HomeEntry,target:HomeTarget|null):Ho
   if(target&&target.kind!=='handoff'&&target.kind!=='message')return null;
   if(entry.sessions_total!==1||entry.has_more_sessions!==false||entry.sessions_cursor!==null||entry.sessions?.length!==1)return null;
   const ref=entry.sessions[0];
-  if(ref.lifecycle_state!=='READY'||ref.workspace_id!==entry.workspace_id||target&&target.server_id!==ref.server_id)return null;
+  // Work relations identify the session but may omit liveness. The terminal
+  // revalidates the canonical session before attempting to attach.
+  if((ref.lifecycle_state!==undefined&&ref.lifecycle_state!=='READY')||ref.workspace_id!==entry.workspace_id||
+    target&&(target.server_id!==ref.server_id||target.workspace_id!==ref.workspace_id))return null;
   return homeSessionTarget(ref);
 }
 export function assertHarnessSessionContext(context:HomeSessionContext,connection:HomeHarnessConnection,ref:HomeSessionRef):void {

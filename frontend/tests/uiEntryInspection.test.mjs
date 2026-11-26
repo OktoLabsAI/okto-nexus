@@ -32,6 +32,8 @@ test('work opens only its exact console while results and decisions keep their o
   for(const other of [target,null,{...work,workspace_id:null},{...work,kind:'result'}])assert.equal(homeConsoleTarget(other),null);
   const linked={...entry,workspace_id:'ws',sessions_total:1,sessions:[{...session('one'),lifecycle_state:'READY'}]};
   assert.deepEqual(homeWorkConsoleTarget(linked,target),{kind:'session',...session('one')});
+  const delivery={kind:'message',server_id:'server',workspace_id:'ws',message_id:'delivery'};
+  assert.deepEqual(homeWorkConsoleTarget({...linked,sessions:[session('one')]},delivery),{kind:'session',...session('one')});
   assert.equal(homeWorkConsoleTarget(entry,target),null);
   assert.equal(homeWorkConsoleTarget({...linked,has_more_sessions:true},target),null);
   assert.equal(homeWorkConsoleTarget(linked,{...work,kind:'result'}),null);

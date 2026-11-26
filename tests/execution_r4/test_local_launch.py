@@ -14,20 +14,24 @@ from okto_nexus.adapters.inbound.http import runtime_v1
 from okto_nexus.bootstrap.execution_authority import build_execution_access
 from okto_nexus.domain.base import iso_plus
 from okto_nexus.errors import OktoNexusError
-from test_local_realization import local_setup, publish
+from test_local_realization import local_setup, publish  # noqa: F401 - pytest fixture
 from test_binding_operator import prepare_operator
 from test_vertical_inventory import _NativeFactory
 
 
 @pytest.fixture
-def admitted_local(local_setup, monkeypatch):
-    deps, app, client, headers, body, candidate, root = local_setup
+def admitted_local(monkeypatch, request):
+    if getattr(request, 'param', False):
+        from test_session_input_runtime import _prepare_interactive_fixture
+        _prepare_interactive_fixture(monkeypatch)
+    setup = request.getfixturevalue('local_setup')
+    deps, app, client, headers, body, candidate, root = setup
     # This boundary test sends manually. Stop the real automatic sender before
     # admitting anything so it cannot consume or refuse this test's operation.
     dispatch = app.state.embedded_dispatch_owner
     assert dispatch.pump is not None
     client.portal.call(dispatch.pump.stop)
-    first = publish(local_setup, changes={"secret_bindings":{"OPENAI_API_KEY":"provider:LOCAL_TEST_KEY"}})
+    first = publish(setup, changes={"secret_bindings":{"OPENAI_API_KEY":"provider:LOCAL_TEST_KEY"}})
     assert first.status_code == 201, first.text
     view = first.json()
     _, apply = prepare_operator(client, headers, dict(client_intent_id="launch-binding", agent_id_hint="subject",
@@ -53,6 +57,15 @@ def admitted_local(local_setup, monkeypatch):
     assert resolved.status_code == 200, resolved.text
     resolution = resolved.json()
     assert resolution["can_submit"], resolution
+    if getattr(request, "param", False):
+        from dataclasses import replace
+        from okto_nexus.bootstrap import embedded_inventory
+
+        other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **options:
+            SimpleNamespace(candidates=tuple(c for c in (candidate, other)
+                if not options.get('adapter_ids') or c.adapter_id in options['adapter_ids'])))
+        client.portal.call(app.state.embedded_inventory_owner.refresh)
     admitted = client.post("/v1/runtime/operations", headers=headers["subject"], json={
         k:resolution[k] for k in ("client_intent_id","operation_id","resolution_revision","intent_hash")})
     assert admitted.status_code == 202, admitted.text
@@ -65,7 +78,21 @@ def admitted_local(local_setup, monkeypatch):
     sent = begin_execution_send(deps.connection_factory,reservation=reserved,remote_ready=True,
         fresh_publications=owner.fresh,access=access,channel=channel)
     monkeypatch.setenv("LOCAL_TEST_KEY","technical-provider-secret")
-    return local_setup, sent, channel, access
+    return setup, sent, channel, access
+
+
+@pytest.mark.parametrize('admitted_local', [True], indirect=True)
+def test_opening_retains_launch_build_after_compatible_inventory_refresh(admitted_local):
+    setup, sent, _, _ = admitted_local
+    deps, _, _, _, _, candidate, _ = setup
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute('''
+            SELECT s.native_launch_build_json,c.inventory_revision
+            FROM execution_sessions s JOIN execution_inventory_current c USING(server_id,executor_id)
+            WHERE s.session_id=?''', (sent.scope['session_id'],)).fetchone()
+    assert row['inventory_revision'] != sent.frame['payload']['inventory_revision']
+    build = json.loads(row['native_launch_build_json'])
+    assert build['version'] == candidate.version and build['build_identity'] == candidate.build_identity
 
 
 @pytest.mark.parametrize('inventory_refresh', [False, True])

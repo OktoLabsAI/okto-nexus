@@ -717,5 +717,25 @@
       "native.xml": "b12d62153d2e4ab4f654d27eed10621a1f3269979a2aa85b25856700775df730",
       "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
     }
+  },
+  "one_console_entry_and_launch_evidence": {
+    "baseline_head": "bacea74f",
+    "prior_human_round": {"status": "NOT_ACCEPTED", "duplicate_work_route": true, "attachment_review_http_status": 409,
+      "session_lifecycle": "READY", "lease_state": "ACTIVE", "launch_build_record_present": false},
+    "nexus_wheel_sha256": "5ee02b81059c251ce55ce46013dc66dcd860bd1e7bffd1fa520363ad363d08d5",
+    "browser": {"single_action_in_active_card": true, "open_console_loads_native_output": true, "old_message_work_link_opens_same_console": true,
+      "legacy_work_tabs_absent": true, "status_command": true, "queued_message_confirmed": true, "focus_restored": true,
+      "exact_result_bodies": 2},
+    "native": {"sessions": 1, "turns": 2, "ordinary_input_final_state": "ACCEPTED_NATIVE", "external_provider_calls": 0,
+      "runtime_closed": true, "listener_closed": true, "temporary_browser_auth_removed": true},
+    "tests": {"frontend_node": 429, "local_launch": 11, "installed_pi_browser_fixture": 1},
+    "limits": ["Historical sessions without a recorded launch build were not backfilled.", "A fresh human acceptance round is separate from browser automation."],
+    "evidence_directory": "D:/nxs-console-fixed-bacea",
+    "sha256": {
+      "probe.js": "967f308facde49d19e4a31ae40342bc5669990bd4031f684c22b3088f9c49bee",
+      "check-results.js": "cbb5b2a190e3d0673800f9bfc108c47a0d88a010300510f5b24e70dd9b0450cd",
+      "native.xml": "de3cffbf12d62c9d435fa9d354c9d072ca14b087b1e4190075f08c42a7c08e0a",
+      "proof.json": "5c6f9aa7bef201d1d72d3b5149ba4f6bf5b58c5a3b3927fdb9e4f195f9f4375a"
+    }
   }
 }

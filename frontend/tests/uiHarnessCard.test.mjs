@@ -35,7 +35,8 @@ test('work previews retain authorized subjects and omit the generic label for a 
   const delivered={...event,id:'delivered',title:turn.title,entry:turn};
   const html=render({...card,events_preview:[turn,named,delivered]});
   assert.match(html,/Running/);
-  assert.match(html,/View work/);
+  assert.doesNotMatch(html,/View work/);
+  assert.equal((html.match(/>Open console<\/button>/g)??[]).length,1);
   assert.match(html,/Review storefront accessibility/);
   assert.doesNotMatch(html,/Work request|private-session/);
 });

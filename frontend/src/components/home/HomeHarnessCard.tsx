@@ -4,7 +4,6 @@ import {attentionDescription,primaryAttentionAction} from '../../attentionPresen
 import {deliveryPresentation,harnessBadges,homeActionText,requestKind} from '../../homeStatePresentation';
 import {isUntitledHomeWork} from '../../homePresentation';
 import {formatTime} from '../../timeFormat';
-import {homeConsoleTarget,homeWorkConsoleTarget,homeSessionRefKey,initialHarnessSession} from '../../homeEntryInspection';
 
 const harnessName=(id:string)=>({codex_app_server:'Codex',claude_stream:'Claude',pi_rpc:'Pi'}[id]??'Other harness');
 const requestButton=(item:HomeHarnessRequest)=>{
@@ -16,7 +15,6 @@ export function harnessEventAction(event:HomeHarnessEvent):string {
   if(action==='respond_native')return 'Review question';
   if(action==='decide_native'||action==='decide_approval')return 'Review approval';
   if(event.kind==='attention')return 'Review update';
-  if(event.kind==='work'&&event.entry&&homeWorkConsoleTarget(event.entry,event.target)||homeConsoleTarget(event.target))return 'Open console';
   return event.kind==='result'?'View delivery':event.kind==='session'?'View session':event.kind==='external'?'View report':'View work';
 }
 
@@ -26,7 +24,6 @@ export function HomeHarnessCard({card,column,blocked,onActivity,onEvent,onReques
   onRequest?:(request:HomeHarnessRequest)=>void;onRequests?:()=>void;showProject?:boolean;projectLabel?:string;stale?:boolean;
 }) {
   const connection=card.connection;
-  const directSession=column==='active'?initialHarnessSession(card):null;
   const status=card.operational_status,badges=harnessBadges(card);
   const pending=status?.pending_actions.value;
   const requests=card.requests_preview??card.blocking_requests??[];
@@ -48,17 +45,14 @@ export function HomeHarnessCard({card,column,blocked,onActivity,onEvent,onReques
       {confirming&&<p className="text-sm">Your decision is recorded. No further response is required while confirmation is pending.</p>}
     </header>
     {card.reminder_snoozed&&<p className="text-xs text-surface-500">Reminder snoozed. This does not resume the harness.</p>}
-    <ul className="space-y-3" aria-label="Activity preview">{card.events_preview.map(event=>{
-      const target=event.kind==='work'&&event.entry?homeWorkConsoleTarget(event.entry,event.target):homeConsoleTarget(event.target);
-      const sharesConsole=target?.kind==='session'&&directSession?.lifecycle_state==='READY'&&homeSessionRefKey(target)===homeSessionRefKey(directSession);
-      return <li key={event.id} className="border-l-2 border-surface-200 pl-3" data-home-event={event.id}>
+    <ul className="space-y-3" aria-label="Activity preview">{card.events_preview.map(event=><li key={event.id} className="border-l-2 border-surface-200 pl-3" data-home-event={event.id}>
       {!isUntitledHomeWork(event.entry??event)?<p className="text-sm font-medium break-words">{event.title}</p>:
         event.attention&&<p className="text-sm font-medium break-words">{attentionDescription(event.attention).title}</p>}
       <p className="text-xs text-surface-500">{homeEntryStateLabel(event)}</p>
-      {(target||event.target||event.attention)&&(event.kind!=='attention'||!status&&column==='needs_you')&&
-        !sharesConsole&&
+      {(event.target||event.attention)&&event.kind!=='work'&&event.kind!=='session'&&
+        (event.kind!=='attention'||!status&&column==='needs_you')&&
         <button type="button" className={`text-sm underline ${homeFocus}`} disabled={blocked} onClick={()=>onEvent(event)}>{harnessEventAction(event)}</button>}
-    </li>;})}</ul>
+    </li>)}</ul>
     {card.events_total===0&&<p className="text-sm text-surface-500">No tracked activity.</p>}
     <button type="button" className={`btn btn-secondary w-full ${homeFocus}`} disabled={blocked} onClick={open}>{primary}</button>
   </li>;

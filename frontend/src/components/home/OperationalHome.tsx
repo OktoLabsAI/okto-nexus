@@ -27,6 +27,23 @@ type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuati
   | {kind: 'restored_attention'; selection: HomeAttentionReturn}
   | {kind:'console-choice';cardId:string}
   | {kind:'harness';cardId:string|null;requests?:boolean};
+
+function restoreHomeTarget(target:HomeTarget,board:HomeHarnessBoard|null):Panel {
+  const session=homeConsoleTarget(target);
+  if(session)return {kind:'target',target:session,console:true};
+  if(board&&(target.kind==='message'||target.kind==='handoff')){
+    const encoded=encodeHomeTarget(target);
+    const matches=Object.values(board.columns).flatMap(column=>column.items).flatMap(card=>card.kind==='harness'?
+      card.events_preview.filter(event=>event.kind==='work'&&event.target&&encodeHomeTarget(event.target)===encoded)
+        .map(event=>({event,connection:card.connection})):[]);
+    if(matches.length===1){
+      const {event,connection}=matches[0];
+      return {kind:'target',target:homeWorkConsoleTarget(event.entry,target)??target,console:true,connection};
+    }
+    if(matches.length>1)return {kind:'target',target,console:true};
+  }
+  return {kind:'target',target};
+}
 /** Only the authorized pre-filter inventory can prove the first-connection case. */
 export function isFirstHarnessEmpty(page:HomeEntryPage<HomeEntryGroup>|null,stale=false,filtered=false):boolean {
   if(!page||stale||filtered||!isQuietEntries(page)||page.partition!=='groups')return false;
@@ -254,10 +271,10 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     const pop = () => {
       if (panel) {dismiss();return;}
       const raw = new URL(window.location.href).searchParams.get('home_target');
-      const target = raw && decodeHomeTarget(raw);if (target) setPanel({kind:'target', target, console:target.kind==='session'});
+      const target = raw && decodeHomeTarget(raw);if (target) setPanel(restoreHomeTarget(target,snapshot));
     };
     window.addEventListener('popstate', pop);return () => window.removeEventListener('popstate', pop);
-  }, [panel, dismiss]);
+  }, [panel, dismiss, snapshot]);
   useEffect(() => {
     if (initialTarget.current || !snapshot) return;initialTarget.current = true;
     const selection = attentionReturn.current;
@@ -268,7 +285,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     }
     const raw = new URL(window.location.href).searchParams.get('home_target');if (!raw) return;
     const target = decodeHomeTarget(raw);
-    if (target) setPanel({kind:'target', target, console:target.kind==='session'});else setNotice('The saved detail reference is invalid. No record was selected.');
+    if (target) setPanel(restoreHomeTarget(target,snapshot));else setNotice('The saved detail reference is invalid. No record was selected.');
   }, [snapshot, attentionReturn, identityKey, workspace]);
   useEffect(() => {
     if (state.status === 'forbidden' || state.status === 'disabled') {
@@ -288,6 +305,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     }
     const session=event.kind==='work'?homeWorkConsoleTarget(event.entry,event.target):homeConsoleTarget(event.target);
     if(session&&(event.kind==='work'||event.kind==='session'))return {kind:'target',target:session,connection,console:true};
+    if(event.kind==='work'&&event.target)return {kind:'target',target:event.target,console:true};
     return event.target?selectEntry(event.entry,event.target):null;
   };
   const requestPanel=(item:HomeHarnessRequest):Panel|null=>{
@@ -300,7 +318,8 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     if(presentationVersion===2){open({kind:'console-choice',cardId:card.id});loadHarnessSessions(card.id);return;}
     open({kind:'harness',cardId:card.id});
   };
-  const consoleTarget=panel?.kind==='target'&&panel.console&&panel.target.kind==='session'?panel.target:null;
+  const consoleView=panel?.kind==='target'&&panel.console;
+  const consoleTarget=consoleView&&panel.target.kind==='session'?panel.target:null;
   const consoleCard=panel?.kind==='console-choice'&&snapshot?Object.values(snapshot.columns).flatMap(column=>column.items)
     .find((card):card is HarnessCard=>card.kind==='harness'&&card.id===panel.cardId):null;
   const blocked=state.loading||!!state.entryLoading||!!state.boardLoading||state.paused||state.hasPendingUpdate||state.staleSections.length>0||!snapshot||
@@ -361,7 +380,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       <p>{snapshot.unlinked.total===null?'Some activity has incomplete connection tracking':`${snapshot.unlinked.total} activities without a proven registered connection`}. These are separate from harness cards.</p>
       <button type="button" className={"underline "+homeFocus} disabled={readBlocked} onClick={()=>open({kind:'harness',cardId:null})}>View other activity</button>
       </div>}/>
-    {panel&&snapshot&&<AgentActionModal title={consoleTarget?'Harness console':panel.kind==='console-choice'?'Open console':panel.kind==='request'?'New request':panel.kind==='attention'?'Canonical attention record':panel.kind==='target'&&panel.continuation?'Continue this exact session':'Activity detail'} onClose={close} presentation={consoleTarget?'terminal':'drawer'} wide testId="home-detail">
+    {panel&&snapshot&&<AgentActionModal title={consoleView?'Harness console':panel.kind==='console-choice'?'Open console':panel.kind==='request'?'New request':panel.kind==='attention'?'Canonical attention record':panel.kind==='target'&&panel.continuation?'Continue this exact session':'Activity detail'} onClose={close} presentation={consoleView?'terminal':'drawer'} wide testId="home-detail">
       {panel.kind==='request'?<HomeNewRequest workspace={workspace} workspaces={workspaces} onChanged={changed}/>
         :panel.kind==='console-choice'?consoleCard?<HarnessConsoleChoice card={consoleCard} state={state}
           onMore={()=>loadHarnessSessions(consoleCard.id)} onOpen={ref=>{
@@ -380,11 +399,12 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
           renderSession={ref=>{const card=Object.values(snapshot.columns).flatMap(c=>c.items).find((c):c is HarnessCard=>c.kind==='harness'&&c.id===panel.cardId);
             return card?<HarnessSessionInspection key={homeSessionRefKey(ref)} sessionRef={ref} connection={card.connection} serverId={snapshot.server_id} workspace={card.connection.workspace_id}/>:<p>Connection context unavailable.</p>;}}
           onEntry={entry=>{if(entry.target){const target=entry.kind==='work'?homeWorkConsoleTarget(entry,entry.target):homeConsoleTarget(entry.target);
-            selectPanel(target?{kind:'target',target,console:true}:selectEntry(entry,entry.target));}}}/>
+            selectPanel(target||entry.kind==='work'?{kind:'target',target:target??entry.target,console:true}:selectEntry(entry,entry.target));}}}/>
         :panel.kind==='attention'?<HomeAttentionInspection item={panel.item} action={panel.action} onClose={close} onChanged={changed}/>
           :panel.kind==='restored_attention'?<HomeRestoredAttention selection={panel.selection} onClose={close} onChanged={changed}/>
           :panel.kind==='target'&&consoleTarget?<HarnessSessionInspection key={homeSessionRefKey(consoleTarget)} sessionRef={consoleTarget}
             connection={panel.connection} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace}/>:
+          consoleView?<p role="status">There is no console available for this work.</p>:
             <HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} entrySelection={panel.entrySelection}
               onAttentionSelected={selection=>rememberAttention(selection,panel.target)} onClose={close} onChanged={changed}/>}
     </AgentActionModal>}

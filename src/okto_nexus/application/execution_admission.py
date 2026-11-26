@@ -8,7 +8,6 @@ from .executor_inventory import load_current_executor_inventory
 from datetime import datetime, timezone
 import json
 import secrets
-import time
 from typing import Any, Mapping
 
 from nexus_connector_core.protocol import canonical_json
@@ -340,7 +339,14 @@ def submit_execution_operation(
             )
             if action == "runtime.open":
                 from .execution_native_session_mapping import native_launch_build
-                launch_build = native_launch_build(snapshot, resolved["semantic_intent"]["payload"])
+                opening = resolved["semantic_intent"]["payload"]
+                if saved_resume is None and all(opening[key] == binding[key] for key in (
+                        "adapter_id", "candidate_ref", "inventory_revision")):
+                    # The opening keeps the original consent revision on the wire.
+                    # Admission has already accepted this fresh observation of that
+                    # same candidate. Capture it without changing the intent.
+                    opening = {**opening, "inventory_revision": snapshot["inventory_revision"]}
+                launch_build = native_launch_build(snapshot, opening)
                 conn.execute(
                     "INSERT INTO execution_sessions(server_id,executor_id,"
                     "session_id,binding_id,workspace_id,workspace_binding_id,"
