@@ -106,4 +106,6 @@ No Edge com o wheel instalado, o Pi 0.87.1, o Connector 0.0.16 e o Core 0.0.17, 
 
 Passaram 429 testes do frontend, 51 testes do transporte, Ruff e a verificação do lock. O wheel e o sdist passaram no Twine. Wheel SHA-256 `eb3ed86e23d268c87c24b26c4a6187cf69441d96eca65c0d376dbc4b5902a3e9`. O rollback volta ao pacote anterior e dispensa migração. O ensaio automatizado no Windows mantém separada a validação humana.
 
+O console perdeu a conexão uma vez após o ensaio. A ação Reconectar restaurou a escrita na mesma sessão. O Edge registrou 24 mensagens de manutenção da conexão em 125 segundos sem editar o rascunho, e `/status` respondeu ao final desse intervalo. A causa da queda inicial permaneceu indeterminada.
+
 Passaram 429 testes Node, o build, a validação estrita do wheel e o ensaio instalado. A mudança dispensa migração e pode ser revertida pelo commit. A rodada de usabilidade continua separada da automação. [Evidências](si036-participant-rehearsal.json)
