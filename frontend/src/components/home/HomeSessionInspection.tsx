@@ -5,8 +5,8 @@ import {readHomeSessionInspection} from '../../homeSessionInspection';
 import {SessionExecutionPanel} from '../SessionExecutionPanel';
 
 /** Revalidate identity before opening the exact session context. */
-export function HomeSessionInspection({context, technicalControls, onContinue, consoleView=false, harness}: {
-  context: HomeSessionContext; technicalControls?: ReactNode; onContinue?: () => void; consoleView?: boolean; harness?: string;
+export function HomeSessionInspection({context, technicalControls, onContinue, consoleView=false, conversationOnly=false, harness}: {
+  context: HomeSessionContext; technicalControls?: ReactNode; onContinue?: () => void; consoleView?: boolean; conversationOnly?: boolean; harness?: string;
 }) {
   const key=JSON.stringify([context.server_id,context.executor_id,context.workspace_id,context.session_id,
     context.binding_id,context.workspace_binding_id,context.agent_id]);
@@ -21,6 +21,6 @@ export function HomeSessionInspection({context, technicalControls, onContinue, c
     return()=>{controller.abort();window.removeEventListener('nexus-auth-expired',revoke);window.removeEventListener('nexus-operator-logout',revoke);};
   },[key]);
   if(read.key!==key||!read.session)return <p role={read.key===key&&read.error?'alert':'status'}>{read.key===key&&read.error?read.error:'Revalidating the exact session…'}</p>;
-  return <SessionExecutionPanel session={read.session} harness={harness} embedded interactive consoleView={consoleView}
+  return <SessionExecutionPanel session={read.session} harness={harness} embedded interactive consoleView={consoleView} conversationOnly={conversationOnly}
     technicalControls={technicalControls} onContinue={onContinue}/>;
 }

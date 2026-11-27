@@ -35,8 +35,8 @@ export function AgentModalFooter({children}: {children: ReactNode}) {
   return modal ? (modal.footer && createPortal(children, modal.footer)) : <div className="flex items-center gap-2">{children}</div>;
 }
 
-export function AgentActionModal({title, children, onClose, wide = false, compact = false, guardChanges = true, testId, dirty = false, busy = false, presentation = 'modal'}: {
-  title: string; children: ReactNode; onClose: () => void; wide?: boolean; compact?: boolean | 'tall'; guardChanges?: boolean; testId?: string; dirty?: boolean; busy?: boolean; presentation?: 'modal' | 'drawer' | 'terminal';
+export function AgentActionModal({title, children, onClose, wide = false, compact = false, guardChanges = true, testId, dirty = false, busy = false, presentation = 'modal', expandable = true}: {
+  title: string; children: ReactNode; onClose: () => void; wide?: boolean; compact?: boolean | 'tall'; guardChanges?: boolean; testId?: string; dirty?: boolean; busy?: boolean; presentation?: 'modal' | 'drawer' | 'terminal'; expandable?: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -82,7 +82,7 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
     <ModalContext.Provider value={{footer, dismiss, guard, changes, transition}}>
       <header className="agent-modal-header">
         <h2 id={titleId}>{title}</h2>
-        {presentation !== 'terminal' && <button type="button" aria-label={expanded ? 'Restore modal' : 'Expand modal'} title={expanded ? 'Restore' : 'Expand'} onClick={() => setExpanded(v => !v)}>
+        {expandable && presentation !== 'terminal' && <button type="button" aria-label={expanded ? 'Restore modal' : 'Expand modal'} title={expanded ? 'Restore' : 'Expand'} onClick={() => setExpanded(v => !v)}>
           {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
         </button>}
         <button type="button" aria-label={presentation === 'terminal' ? 'Back to Home' : 'Close modal'} title={presentation === 'terminal' ? 'Back to Home' : 'Close'} disabled={busy} onClick={dismiss}><X size={18} /></button>

@@ -73,11 +73,12 @@ function ConsoleDraftGuard({dirty, busy}: {dirty: boolean; busy: boolean}) {
   return null;
 }
 
-export function SessionConversation({scope, active, visible, composerOnly=false, onAccessLost}: {
+export function SessionConversation({scope, active, visible, composerOnly=false, guardDraft=false, onAccessLost}: {
   scope: InteractionScope;
   active: boolean;
   visible: boolean;
   composerOnly?: boolean;
+  guardDraft?: boolean;
   onAccessLost: () => void;
 }) {
   const key = interactionKey(scope);
@@ -611,8 +612,8 @@ export function SessionConversation({scope, active, visible, composerOnly=false,
   </>;
   return <section aria-label={composerOnly ? 'Session input' : 'Session conversation'}
     className={composerOnly ? 'shrink-0 space-y-2 border-t px-4 py-3' : 'space-y-3 min-w-0'}>
+    {(composerOnly || guardDraft) && <ConsoleDraftGuard dirty={!!draft.text && !draft.uncertain} busy={busy}/>}
     {composerOnly ? <>
-      <ConsoleDraftGuard dirty={!!draft.text && !draft.uncertain} busy={busy}/>
       <div className="max-h-[25dvh] space-y-2 overflow-y-auto overscroll-contain">{feedback}{controls}</div>
       {form}
     </> : <>{transcript}{feedback}{form}{controls}</>}

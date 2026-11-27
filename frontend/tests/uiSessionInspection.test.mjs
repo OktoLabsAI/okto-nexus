@@ -248,6 +248,12 @@ test('the Home console keeps historical output and requires a known owner for th
   assert.doesNotMatch(active,/<textarea/);
 });
 
+test('Activity detail can render only the conversation for an exact session',()=>{
+  const markup=render({session:session(),embedded:true,interactive:true,conversationOnly:true});
+  assert.match(markup,/aria-label="Session conversation view"[\s\S]*aria-label="Conversation messages"/);
+  assert.doesNotMatch(markup,/Session view|Technical activity|Runtime session history|Maximize terminal|<textarea/);
+});
+
 test('conversation cursor pages cannot cross scope, owner generation or stream',()=>{
   const scope=session().scope;
   const page={scope,stream_epoch:'epoch',next_after_sequence:2,committed_contiguous:3,has_more:true,updates:[]};

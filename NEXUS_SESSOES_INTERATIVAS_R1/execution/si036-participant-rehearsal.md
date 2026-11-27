@@ -116,4 +116,6 @@ No Edge, com o wheel instalado, o Pi 0.87.1, o Connector 0.0.16 e o Core 0.0.17,
 
 Passaram 429 testes do frontend e 12 testes focados em comandos, reorientação e interrupção. O build, a verificação do lock e o Twine passaram. Wheel SHA-256 `23acbe2c8814554521a1bd1adf5fc92bd4731b5ba61426d92acfb839f1eca090`. O rollback restaura o frontend anterior e dispensa migração. A validação de navegador usou o Pi com um provedor simulado e mantém separada a validação humana.
 
+A Home operacional passou a ser o padrão. A apresentação clássica fica disponível como fallback quando o servidor desativa o recurso. O painel Activity detail exibe o estado e o resultado ou problema, com um botão para alternar entre o console e a conversa da sessão vinculada. No Edge, com registros controlados, foram verificados o padrão com preferência clássica antiga, sucesso, falha, entrega não aprovada e alternância nos dois sentidos. Passaram 430 testes do frontend e o build. O rollback de interface dispensa migração.
+
 Passaram 429 testes Node, o build, a validação estrita do wheel e o ensaio instalado. A mudança dispensa migração e pode ser revertida pelo commit. A rodada de usabilidade continua separada da automação. [Evidências](si036-participant-rehearsal.json)

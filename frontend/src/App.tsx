@@ -202,7 +202,6 @@ function Dashboard({
     if (attentionDialog) {attentionDialog.dispatchEvent(new Event('cancel', {cancelable:true}));return false;}
     return true;
   }, []);
-  const [homeOperational, setHomeOperational] = useState(() => localStorage.getItem('okto-nexus-home-operational') === 'enabled');
   const [latestHomeEvent, setLatestHomeEvent] = useState<NexusEvent | null>(null);
   const settingsPending = useRef(false);
   const onSettingsPending = useCallback((pending: boolean) => {settingsPending.current = pending;}, []);
@@ -225,6 +224,7 @@ function Dashboard({
     }
   }, []);
   const [info, setInfo] = useState<NexusInfo | null>(null);
+  const homeEnabled = info?.features?.feature_home !== false;
   const [sidebarOpen, setSidebarOpen] = useState(
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
@@ -677,7 +677,7 @@ function Dashboard({
           </label>}
           <GlobalAttentionButton state={globalAttention.state} onOpen={() => {globalAttention.refresh();setView('Attention');}}/>
           <LiveChip status={sseStatus} />
-          {!(view==='Home'&&homeOperational&&info?.features?.feature_home!==false)&&<button
+          {!(view==='Home'&&homeEnabled)&&<button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
             title={`Refresh ${getNavigationEntry(view).label}`}
@@ -859,7 +859,7 @@ function Dashboard({
       <main className="flex-1 min-w-0 overflow-hidden">
           {view === 'Home' && <div className="h-full flex flex-col min-h-0">
             <div className="min-h-0 flex-1">
-              {homeOperational && info?.features?.feature_home !== false
+              {homeEnabled
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey} attentionReturn={homeAttentionReturn}
                     presentationVersion={info?.home_presentation_versions?.includes(2)?2:1}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
@@ -954,11 +954,7 @@ function Dashboard({
               onChanged={loadApprovalCount}
             />
           )}
-          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending}
-            homeOperational={homeOperational} onHomeOperationalChange={next=>{
-              if (!mayLeavePanel()) return;
-              localStorage.setItem('okto-nexus-home-operational', next ? 'enabled' : 'disabled');setHomeOperational(next);
-            }}/>}
+          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending}/>}
       </main>
       </div>
       {attentionInspection && attention.state.status !== 'forbidden' && attention.state.status !== 'disabled' &&

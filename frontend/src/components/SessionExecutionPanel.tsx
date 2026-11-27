@@ -9,6 +9,7 @@ import {canContinueSession} from './home/continuation';
 
 export interface SessionExecutionPanelProps {
   session: RuntimeSession; harness?: string; host?: string; embedded?: boolean; interactive?: boolean; consoleView?: boolean;
+  conversationOnly?: boolean;
   technicalControls?: ReactNode;
   onContinue?: () => void;
 }
@@ -28,7 +29,7 @@ export function SessionExecutionPanel(props: SessionExecutionPanelProps) {
   return <ExecutionBody key={identity} {...props}/>;
 }
 
-function ExecutionBody({session,harness,host,embedded=false,interactive=false,consoleView=false,technicalControls,onContinue}: SessionExecutionPanelProps) {
+function ExecutionBody({session,harness,host,embedded=false,interactive=false,consoleView=false,conversationOnly=false,technicalControls,onContinue}: SessionExecutionPanelProps) {
   const [current,setCurrent] = useState<RuntimeSession|null>(session);
   const [tab,setTab] = useState<'tail'|'history'>(sessionReleased(session)?'history':'tail');
   const [presentation,setPresentation] = useState<'conversation'|'activity'>('conversation');
@@ -70,14 +71,16 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,co
   const generation = current.scope.session_owner_generation;
   const scope: InteractionScope | null = generation !== undefined && Number.isSafeInteger(generation) && generation > 0
     ? {...current.scope, session_owner_generation:generation} : null;
-  if(consoleView) {
+  if(consoleView || conversationOnly) {
     const released = sessionReleased(current);
-    return <section aria-label="Session console" className="harness-console flex h-full min-h-0 flex-col">
-      <RuntimeEventStream scope={current.scope} harness={harness} history={released} active={!released}
-        allowMaximize={false} consoleView onAccessLost={clear}/>
+    return <section aria-label={consoleView?'Session console':'Session conversation view'}
+      className={consoleView?'harness-console flex h-full min-h-0 flex-col':'min-w-0'}>
+      {consoleView&&<RuntimeEventStream scope={current.scope} harness={harness} history={released} active={!released}
+        allowMaximize={false} consoleView onAccessLost={clear}/>}
       {error&&<p role="alert" className="shrink-0 px-4 py-2 text-sm">{error}</p>}
-      {scope && (!released || !sessionReleased(session)) && <SessionConversation scope={scope}
-        active={!released && !error} visible composerOnly onAccessLost={clear}/>}
+      {scope && (conversationOnly || !released || !sessionReleased(session)) && <SessionConversation scope={scope}
+        active={!released && !error} visible composerOnly={consoleView} guardDraft onAccessLost={clear}/>}
+      {conversationOnly && !scope && <p role="status">Conversation is unavailable for this session.</p>}
     </section>;
   }
   const command = embedded && !error ? terminalSessionCommand(current) : null;

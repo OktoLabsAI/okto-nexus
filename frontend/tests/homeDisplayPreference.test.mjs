@@ -3,27 +3,27 @@ import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import ts from 'typescript';
 
-// Execute the App's actual controlled Settings callback: the modal draft guard
-// must refuse before either persistence or a displayed-Home state transition.
+// Exercise the actual Home default and the guarded navigation callbacks in App.
 const source=ts.createSourceFile('App.tsx',readFileSync(new URL('../src/App.tsx',import.meta.url),'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
-let callback,initial,projectCallback,completeCallback,resumeCallback,applyReturn;
+let initial,projectCallback,completeCallback,resumeCallback,applyReturn;
 const visit=node=>{
-  if(ts.isJsxAttribute(node)&&node.name.getText(source)==='onHomeOperationalChange')callback=node.initializer.expression;
   if(ts.isJsxAttribute(node)&&node.name.getText(source)==='onComplete')completeCallback=node.initializer.expression;
   if(ts.isJsxAttribute(node)&&node.name.getText(source)==='onResume')resumeCallback=node.initializer.expression;
-  if(ts.isVariableDeclaration(node)&&ts.isArrayBindingPattern(node.name)&&node.name.elements[0]?.name?.getText(source)==='homeOperational')initial=node.initializer.arguments[0];
+  if(ts.isVariableDeclaration(node)&&node.name.getText(source)==='homeEnabled')initial=node.initializer;
   if(ts.isVariableDeclaration(node)&&node.name.getText(source)==='pickWorkspace')projectCallback=node.initializer;
   if(ts.isVariableDeclaration(node)&&node.name.getText(source)==='applyConnectionReturn')applyReturn=node.initializer;
   ts.forEachChild(node,visit);
 };visit(source);
-assert.ok(callback);assert.ok(initial);
+assert.ok(initial);
 const compile=expression=>ts.transpileModule('const value='+expression.getText(source),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText+';return value;';
 
-test('Home display defaults off and preserves the exact existing opt-in value',()=>{
-  for(const [value,expected] of [[null,false],['disabled',false],['true',false],['enabled',true]]){
-    const read=new Function('localStorage',compile(initial))({getItem:key=>{assert.equal(key,'okto-nexus-home-operational');return value;}});
-    assert.equal(read(),expected);
-  }
+test('Home is operational by default, with a fallback only when disabled by the Server',()=>{
+  const read=new Function('info',compile(initial));
+  assert.equal(read(null),true);
+  assert.equal(read({features:{}}),true);
+  assert.equal(read({features:{feature_home:true}}),true);
+  assert.equal(read({features:{feature_home:false}}),false);
+  assert.doesNotMatch(source.text,/okto-nexus-home-operational/);
 });
 
 test('both project selectors reuse the App scope callback with its draft guard and opaque IDs',()=>{
@@ -85,12 +85,7 @@ test('a deferred return from an expired operator identity cannot change project 
   apply({identityKey:'previous-operator',workspaceId:'old-project',openContext:true,target:{kind:'connection'}});
 });
 
-test('Settings Home display callback honors an open draft guard before storage or state and uses no API',()=>{
-  const writes=[],states=[];let allowed=false;
-  const apply=new Function('mayLeavePanel','localStorage','setHomeOperational',compile(callback))(
-    ()=>allowed,{setItem:(...args)=>writes.push(args)},next=>states.push(next));
-  apply(true);assert.deepEqual(writes,[]);assert.deepEqual(states,[]);
-  allowed=true;apply(true);apply(false);
-  assert.deepEqual(writes,[['okto-nexus-home-operational','enabled'],['okto-nexus-home-operational','disabled']]);
-  assert.deepEqual(states,[true,false]);
+test('Settings no longer offer a classic Home preference',()=>{
+  const settings=readFileSync(new URL('../src/views/SettingsView.tsx',import.meta.url),'utf8');
+  assert.doesNotMatch(settings,/onHomeOperationalChange|Use classic Home|home-display-preference/);
 });

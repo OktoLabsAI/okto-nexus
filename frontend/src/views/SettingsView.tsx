@@ -141,12 +141,10 @@ function SettingField({
 }
 
 export function SettingsView({
-  onSettingsApplied, onPendingChange, homeOperational, onHomeOperationalChange,
+  onSettingsApplied, onPendingChange,
 }: {
   onSettingsApplied?: () => void | Promise<unknown>;
   onPendingChange?: (pending: boolean) => void;
-  homeOperational?: boolean;
-  onHomeOperationalChange?: (enabled: boolean) => void;
 }) {
   const { theme, toggle } = useTheme();
   const [themeDraft, setThemeDraft] = useState(theme);
@@ -295,13 +293,6 @@ export function SettingsView({
         </section>
 
         <OperatorNotifications />
-
-        {onHomeOperationalChange && <section className="panel p-5 space-y-3" data-testid="home-display-preference">
-          <h2 className="font-display font-semibold text-sm">Home display</h2>
-          <p className="text-xs text-surface-500">{homeOperational ? 'Operational Home is selected.' : 'Classic Home is selected.'} This presentation preference applies immediately in this browser only. It does not change Server features or permissions.</p>
-          <button type="button" className="btn btn-secondary" aria-pressed={homeOperational===true}
-            onClick={()=>onHomeOperationalChange(!homeOperational)}>{homeOperational ? 'Use classic Home' : 'Use operational Home'}</button>
-        </section>}
 
         {interfaceItems.length > 0 && (
           <section className="panel p-5 space-y-4" data-testid="interface-settings">

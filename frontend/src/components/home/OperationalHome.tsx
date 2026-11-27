@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState,type ReactNode} from 'react';
 import {Pause, Play, Plus, RefreshCw} from 'lucide-react';
 import type {WorkspaceListItem} from '../../api';
 import type {AttentionAction, AttentionOccurrence} from '../../attentionTypes';
-import type {HomeTarget,HomeEntryPage,HomeEntryGroup,HomeBoard,HomeHarnessBoard,HomeHarnessChild,HomeHarnessEvent,HomeSessionRef,HomeHarnessRequest,HomeHarnessCard as HarnessCard,HomeHarnessConnection,HomeSessionContext} from '../../homeTypes';
+import type {HomeTarget,HomeEntryPage,HomeEntryGroup,HomeBoard,HomeHarnessBoard,HomeHarnessChild,HomeHarnessEvent,HomeSessionRef,HomeHarnessRequest,HomeHarnessCard as HarnessCard,HomeHarnessConnection,HomeSessionContext,HomeResult} from '../../homeTypes';
 import {primaryAttentionAction} from '../../attentionPresentation';
 import {type HomeInvalidation,type HomeStreamStatus} from '../../homeController';
 import {useHomeOverview} from '../../hooks/useHomeOverview';
@@ -19,28 +19,33 @@ import {homeFocus,homeEntriesAnnouncementIds,isQuietEntries} from './HomeCards';
 import {HomeBoardCards,isQuietBoard} from './HomeBoardCards';
 import {HomeHarnessCard,HomeHarnessSignalCard} from './HomeHarnessCard';
 import type {HomeAttentionReturn, HomeEntrySelection} from '../../homeEntryInspection';
-import {initialHarnessSession,homeConsoleTarget,homeWorkConsoleTarget,homeSessionRefKey,homeSessionOptionLabel,homeSessionTarget,assertHarnessSessionContext} from '../../homeEntryInspection';
+import {initialHarnessSession,homeSessionRefKey,homeSessionOptionLabel,homeSessionTarget,assertHarnessSessionContext} from '../../homeEntryInspection';
 import {HomeSessionInspection} from './HomeSessionInspection';
+import {HomeActivityDetail} from './HomeActivityDetail';
 
-type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean;entrySelection?:HomeEntrySelection;connection?:HomeHarnessConnection;console?:boolean}
+type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean;entrySelection?:HomeEntrySelection;connection?:HomeHarnessConnection;console?:boolean;result?:HomeResult;entry?:HomeHarnessChild}
   | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction}
   | {kind: 'restored_attention'; selection: HomeAttentionReturn}
   | {kind:'console-choice';cardId:string}
   | {kind:'harness';cardId:string|null;requests?:boolean};
 
 function restoreHomeTarget(target:HomeTarget,board:HomeHarnessBoard|null):Panel {
-  const session=homeConsoleTarget(target);
-  if(session)return {kind:'target',target:session,console:true};
-  if(board&&(target.kind==='message'||target.kind==='handoff')){
-    const encoded=encodeHomeTarget(target);
-    const matches=Object.values(board.columns).flatMap(column=>column.items).flatMap(card=>card.kind==='harness'?
-      card.events_preview.filter(event=>event.kind==='work'&&event.target&&encodeHomeTarget(event.target)===encoded)
-        .map(event=>({event,connection:card.connection})):[]);
-    if(matches.length===1){
-      const {event,connection}=matches[0];
-      return {kind:'target',target:homeWorkConsoleTarget(event.entry,target)??target,console:true,connection};
+  if(target.kind==='session')return {kind:'target',target,console:true};
+  if (board) {
+    const encoded = encodeHomeTarget(target);
+    const result = board.columns.results.items.find(card=>card.kind==='delivery' && card.result?.detail_target &&
+      encodeHomeTarget(card.result.detail_target)===encoded);
+    if (result?.kind==='delivery' && result.result) return {kind:'target',target,result:result.result,entry:result.entry};
+    if (target.kind==='message'||target.kind==='handoff') {
+      const byEntry = new Map<string, HomeHarnessChild>();
+      for (const card of Object.values(board.columns).flatMap(column=>column.items)) {
+        if (card.kind!=='harness') continue;
+        for (const event of card.events_preview) {
+          if (event.target && encodeHomeTarget(event.target)===encoded) byEntry.set(event.entry_id,event.entry);
+        }
+      }
+      if (byEntry.size===1) return {kind:'target',target,entry:byEntry.values().next().value};
     }
-    if(matches.length>1)return {kind:'target',target,console:true};
   }
   return {kind:'target',target};
 }
@@ -238,12 +243,14 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     dialog?.dispatchEvent(new Event('cancel', {cancelable:true}));
     return !dialog;
   }, []);
+  const detail=panel?.kind==='target'&&!panel.console&&!panel.continuation&&!panel.entrySelection?.attention&&
+    !['connection','approval'].includes(panel.target.kind)?panel:null;
   useEffect(() => {
     registerLeaveGuard(panel ? dismiss : null);
     const beforeUnload = (event: BeforeUnloadEvent) => {event.preventDefault();event.returnValue = '';};
-    if (panel && !(panel.kind==='target' && panel.console)) window.addEventListener('beforeunload', beforeUnload);
+    if (panel && !detail && !(panel.kind==='target' && panel.console)) window.addEventListener('beforeunload', beforeUnload);
     return () => {registerLeaveGuard(null);window.removeEventListener('beforeunload', beforeUnload);};
-  }, [panel, dismiss, registerLeaveGuard]);
+  }, [panel, detail, dismiss, registerLeaveGuard]);
   const rememberAttention = (selection: HomeEntrySelection['attention'], target?: HomeTarget) => {
     attentionReturn.current = selection && snapshot ? {
       attentionId: selection.item.attention_id, action: selection.action, serverId: snapshot.server_id,
@@ -300,13 +307,11 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   };
   const eventPanel=(event:HomeHarnessEvent,connection?:HomeHarnessConnection):Panel|null=>{
     const action=event.attention?primaryAttentionAction(event.attention):null;
-    if(event.attention&&action){
+    if(event.kind!=='result'&&event.attention&&action){
       return event.target?selectEntry(event.entry,event.target,{item:event.attention,action}):{kind:'attention',item:event.attention,action};
     }
-    const session=event.kind==='work'?homeWorkConsoleTarget(event.entry,event.target):homeConsoleTarget(event.target);
-    if(session&&(event.kind==='work'||event.kind==='session'))return {kind:'target',target:session,connection,console:true};
-    if(event.kind==='work'&&event.target)return {kind:'target',target:event.target,console:true};
-    return event.target?selectEntry(event.entry,event.target):null;
+    if(event.kind==='session'&&event.target?.kind==='session')return {kind:'target',target:event.target,connection,console:true};
+    return event.target?{...selectEntry(event.entry,event.target),connection,result:event.result??undefined}:null;
   };
   const requestPanel=(item:HomeHarnessRequest):Panel|null=>{
     const action=primaryAttentionAction(item.request);if(!action)return null;
@@ -320,6 +325,10 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   };
   const consoleView=panel?.kind==='target'&&panel.console;
   const consoleTarget=consoleView&&panel.target.kind==='session'?panel.target:null;
+  const panelTitle=consoleView?'Harness console':panel?.kind==='console-choice'?'Open console':panel?.kind==='request'?'New request':
+    panel?.kind==='attention'||panel?.kind==='restored_attention'||(panel?.kind==='target'&&(panel.entrySelection?.attention||panel.target.kind==='approval'))?'Review request':
+    panel?.kind==='target'&&panel.continuation?'Continue this exact session':panel?.kind==='target'&&panel.target.kind==='connection'?'Connection details':
+    panel?.kind==='harness'?'Harness activity':'Activity detail';
   const consoleCard=panel?.kind==='console-choice'&&snapshot?Object.values(snapshot.columns).flatMap(column=>column.items)
     .find((card):card is HarnessCard=>card.kind==='harness'&&card.id===panel.cardId):null;
   const blocked=state.loading||!!state.entryLoading||!!state.boardLoading||state.paused||state.hasPendingUpdate||state.staleSections.length>0||!snapshot||
@@ -373,14 +382,14 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
         <HomeHarnessSignalCard key={card.id} item={card} blocked={readBlocked} showProject={workspace==='all'} projectLabel={projectLabel(card.entry.workspace_id)} onOpen={()=>{
           if(card.kind==='request'){
             const next=requestPanel(card);if(next)open(next);
-          }else if(card.result?.detail_target)open(selectEntry(card.entry,card.result.detail_target));
+          }else if(card.result?.detail_target)open({...selectEntry(card.entry,card.result.detail_target),result:card.result});
           else if(card.report){const action=primaryAttentionAction(card.report);if(action)open({kind:'attention',item:card.report,action});}
         }}/>}
       footer={snapshot&&(snapshot.unlinked.total===null||snapshot.unlinked.total>0)&&<div className="text-sm rounded-lg border p-3" data-testid="home-unlinked">
       <p>{snapshot.unlinked.total===null?'Some activity has incomplete connection tracking':`${snapshot.unlinked.total} activities without a proven registered connection`}. These are separate from harness cards.</p>
       <button type="button" className={"underline "+homeFocus} disabled={readBlocked} onClick={()=>open({kind:'harness',cardId:null})}>View other activity</button>
       </div>}/>
-    {panel&&snapshot&&<AgentActionModal title={consoleView?'Harness console':panel.kind==='console-choice'?'Open console':panel.kind==='request'?'New request':panel.kind==='attention'?'Canonical attention record':panel.kind==='target'&&panel.continuation?'Continue this exact session':'Activity detail'} onClose={close} presentation={consoleView?'terminal':'drawer'} wide testId="home-detail">
+    {panel&&snapshot&&<AgentActionModal title={panelTitle} onClose={close} presentation={consoleView?'terminal':'drawer'} expandable={!detail} wide testId="home-detail">
       {panel.kind==='request'?<HomeNewRequest workspace={workspace} workspaces={workspaces} onChanged={changed}/>
         :panel.kind==='console-choice'?consoleCard?<HarnessConsoleChoice card={consoleCard} state={state}
           onMore={()=>loadHarnessSessions(consoleCard.id)} onOpen={ref=>{
@@ -398,13 +407,13 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
           onConnection={target=>selectPanel({kind:'target',target})}
           renderSession={ref=>{const card=Object.values(snapshot.columns).flatMap(c=>c.items).find((c):c is HarnessCard=>c.kind==='harness'&&c.id===panel.cardId);
             return card?<HarnessSessionInspection key={homeSessionRefKey(ref)} sessionRef={ref} connection={card.connection} serverId={snapshot.server_id} workspace={card.connection.workspace_id}/>:<p>Connection context unavailable.</p>;}}
-          onEntry={entry=>{if(entry.target){const target=entry.kind==='work'?homeWorkConsoleTarget(entry,entry.target):homeConsoleTarget(entry.target);
-            selectPanel(target||entry.kind==='work'?{kind:'target',target:target??entry.target,console:true}:selectEntry(entry,entry.target));}}}/>
+          onEntry={entry=>{if(entry.target)selectPanel(selectEntry(entry,entry.target));}}/>
         :panel.kind==='attention'?<HomeAttentionInspection item={panel.item} action={panel.action} onClose={close} onChanged={changed}/>
           :panel.kind==='restored_attention'?<HomeRestoredAttention selection={panel.selection} onClose={close} onChanged={changed}/>
           :panel.kind==='target'&&consoleTarget?<HarnessSessionInspection key={homeSessionRefKey(consoleTarget)} sessionRef={consoleTarget}
             connection={panel.connection} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace}/>:
-          consoleView?<p role="status">There is no console available for this work.</p>:
+          detail?<HomeActivityDetail key={encodeHomeTarget(detail.target)} target={detail.target} entry={detail.entrySelection?.entry??detail.entry}
+            result={detail.result} harness={detail.connection?.harness_id} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace}/>:
             <HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} entrySelection={panel.entrySelection}
               onAttentionSelected={selection=>rememberAttention(selection,panel.target)} onClose={close} onChanged={changed}/>}
     </AgentActionModal>}
