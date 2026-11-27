@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, type Ref} from 'react';
 import {runtimeApi, type InteractionScope, type SessionCommandCatalog, type SessionCommandStatus} from '../runtimeApi';
 import {assertInteractionScope} from '../sessionConversation';
 
@@ -17,7 +17,7 @@ function sessionStatus(value: SessionCommandStatus) {
   }
 }
 
-export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, canInterrupt,
+export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, canInterrupt, consoleView=false, editorAction, editorCompletion,
   onSelect, onSend, onSendLiteral, onSteer, onInterrupt, onAccessLost}: {
   scope: InteractionScope;
   draft: string;
@@ -25,6 +25,9 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
   canSend: boolean;
   canSteer: boolean;
   canInterrupt: boolean;
+  consoleView?: boolean;
+  editorAction?: Ref<HTMLButtonElement>;
+  editorCompletion?: Ref<HTMLButtonElement>;
   onSelect: (id: string, needsMessage: boolean) => void;
   onSend: (message: string, revision: string) => void;
   onSendLiteral: (revision: string) => void;
@@ -42,6 +45,11 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
   const message = match?.[2] ?? '';
   const selected = catalog?.items.find(item => item.command_id === query && item.command_id !== 'send_literal');
   const showList = showAll || query === '' || !selected;
+  const suggestions = catalog?.items.filter(item => item.command_id !== 'send_literal' &&
+    (showAll || item.command_id.startsWith(query) || item.label.toLowerCase().includes(query)) &&
+    (!consoleView || query && !showAll || item.state === 'supported')) ?? [];
+  const completion = !selected && message.length === 0 && suggestions.find(item =>
+    item.state === 'supported' && item.command_id.startsWith(query));
   const statusRequest = useRef<AbortController | null>(null);
   const [checkingStatus, setCheckingStatus] = useState(false);
   useEffect(() => () => statusRequest.current?.abort(), []);
@@ -119,12 +127,13 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
     {catalog && selected && <div className="space-y-1 text-sm">
       <p className="font-medium">{selected.label} · {selected.source === 'nexus' ? 'Nexus' : 'Native terminal'}</p>
       <p>{selected.effect}</p>
-      {selected.state === 'native_only' && catalog.native_launch_version &&
+      {!consoleView && selected.state === 'native_only' && catalog.native_launch_version &&
         <p>Harness version at session start: {catalog.native_launch_version}</p>}
       {selected.reason && <p role="status">{selected.reason}</p>}
       {selected.state === 'supported' && <>
         {invalidArgument && <p>{needsMessage ? 'Add a plain message after the command.' : 'This command takes no arguments.'}</p>}
-        <button type="button" className="btn btn-secondary" disabled={locked || invalidArgument || !controlsAvailable || checkingStatus}
+        <button type="button" ref={selected.handler === 'enqueue' ? undefined : editorAction}
+          className="btn btn-secondary" disabled={locked || invalidArgument || !controlsAvailable || checkingStatus}
           onClick={event => run(event.currentTarget)}>{label}</button>
       </>}
     </div>}
@@ -135,11 +144,11 @@ export function SessionCommandPicker({scope, draft, locked, canSend, canSteer, c
     {catalog?.literal_text_supported && <button type="button" className="btn btn-secondary"
       disabled={locked || !canSend || new TextEncoder().encode(draft).length > 64 * 1024}
       onClick={() => onSendLiteral(catalog.capability_revision)}>Send as text</button>}
-    {showList && catalog && <ul className="max-h-52 space-y-1 overflow-auto text-sm">
-      {catalog.items.filter(item => item.command_id !== 'send_literal' && (showAll || item.command_id.startsWith(query) ||
-        item.label.toLowerCase().includes(query))).map(item =>
+    {showList && suggestions.length > 0 && <ul className={consoleView ? 'flex flex-wrap gap-2 text-sm' : 'max-h-52 space-y-1 overflow-auto text-sm'}>
+      {suggestions.map(item =>
         <li key={item.command_id}>
-          <button type="button" className="btn btn-secondary" disabled={locked || checkingStatus} onClick={() => {
+          <button type="button" ref={item === completion ? editorCompletion : undefined}
+            className="btn btn-secondary" disabled={locked || checkingStatus} onClick={() => {
             setShowAll(false);
             setNotice('');
             onSelect(item.command_id, item.arguments.includes('message'));

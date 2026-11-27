@@ -406,45 +406,7 @@ function interactionTarget(scope: InteractionScope) {
   };
 }
 
-export type PiPresentation = 'pi' | 'pi_remote';
-export type PresentationAccess = 'read' | 'write';
-
-export interface PiPresentationReview {
-  version: 1;
-  scope: RuntimeScope;
-  expected_session_generation: number;
-  attach_strategy: string;
-  capability_revision: string;
-  writer_epoch?: number;
-  writer_occupied?: boolean;
-  input_capability_revision?: string;
-}
-
-function presentationTarget(scope: InteractionScope) {
-  return {
-    path: `/v1/sessions/${encodeURIComponent(scope.session_id)}/attachments`,
-    document: {scope: interactionTarget(scope).scope, expected_session_generation: scope.session_owner_generation},
-  };
-}
-
-export const piPresentationApi = {
-  review(scope: InteractionScope, presentation: PiPresentation, access: PresentationAccess, signal: AbortSignal) {
-    const {path, document} = presentationTarget(scope);
-    return read<PiPresentationReview>(`${path}:review`, signal, {...document, access, presentation}, true);
-  },
-  prepare(scope: InteractionScope, presentation: PiPresentation, access: PresentationAccess,
-    review: PiPresentationReview, intent: string, signal: AbortSignal) {
-    const {path, document} = presentationTarget(scope);
-    return read<{version: number; attachment_id: string; ticket: string | null; pi_keepalive?: boolean}>(
-      `${path}:prepare`, signal, {...document, access, presentation, capability_revision: review.capability_revision,
-        client_intent_id: intent, intent: 'attach_live',
-        ...(access === 'write' ? {expected_writer_epoch: review.writer_epoch} : {})}, true);
-  },
-  url(attachmentId: string, location: URL) {
-    const url = new URL(managementUrl(`/v1/attachments/${encodeURIComponent(attachmentId)}/stream`), location);
-    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
-    return url;
-  },
+export const presenterReceipts = {
   receipt(scope: InteractionScope, intent: string, signal: AbortSignal) {
     const target = interactionTarget(scope);
     target.query.set('client_intent_id', intent);

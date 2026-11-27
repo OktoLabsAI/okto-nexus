@@ -229,6 +229,25 @@ test('the interactive Home body opens conversation and keeps existing controls i
   assert.doesNotMatch(markup,/Older runtime actions|Runtime session history/);
 });
 
+test('the Home console puts one event terminal above the exact-session composer',()=>{
+  const active=session({lifecycle_state:'READY',lease_state:'ACTIVE',control_available:true});
+  const markup=render({session:active,embedded:true,interactive:true,consoleView:true,harness:'pi_rpc'});
+  assert.match(markup,/aria-label="Live runtime events"[\s\S]*aria-label="Session input"[\s\S]*<textarea/);
+  assert.match(markup,/Pi · terminal/);
+  assert.doesNotMatch(markup,/Session view|Technical activity|Conversation messages|Maximize terminal|Read only|Open this session in a terminal/);
+  assert.equal((markup.match(/<textarea/g)||[]).length,1);
+});
+
+test('the Home console keeps historical output and requires a known owner for the composer',()=>{
+  const closed=render({session:session(),embedded:true,interactive:true,consoleView:true});
+  assert.match(closed,/Recorded runtime events/);
+  assert.doesNotMatch(closed,/<textarea/);
+  const noOwner=session({scope:{...session().scope,session_owner_generation:undefined},lifecycle_state:'READY'});
+  const active=render({session:noOwner,embedded:true,interactive:true,consoleView:true});
+  assert.match(active,/Live runtime events/);
+  assert.doesNotMatch(active,/<textarea/);
+});
+
 test('conversation cursor pages cannot cross scope, owner generation or stream',()=>{
   const scope=session().scope;
   const page={scope,stream_epoch:'epoch',next_after_sequence:2,committed_contiguous:3,has_more:true,updates:[]};

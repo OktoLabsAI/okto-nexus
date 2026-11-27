@@ -21,7 +21,10 @@ export function useAgentModalChanges(): ModalChangeReceipt | null {
 export function useAgentModalGuard(dirty: boolean, busy = false) {
   const modal = useContext(ModalContext);
   const guard = modal?.guard;
-  useEffect(() => {guard?.(dirty, busy);}, [guard, dirty, busy]);
+  useEffect(() => {
+    guard?.(dirty, busy);
+    return () => guard?.(false, false);
+  }, [guard, dirty, busy]);
 }
 export function ModalCancelButton({children = 'Cancel', onClose}: {children?: ReactNode; onClose: () => void}) {
   const modal = useContext(ModalContext);

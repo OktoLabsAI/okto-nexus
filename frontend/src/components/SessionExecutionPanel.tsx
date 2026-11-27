@@ -8,7 +8,7 @@ import {SessionConversation} from './SessionConversation';
 import {canContinueSession} from './home/continuation';
 
 export interface SessionExecutionPanelProps {
-  session: RuntimeSession; harness?: string; host?: string; embedded?: boolean; interactive?: boolean;
+  session: RuntimeSession; harness?: string; host?: string; embedded?: boolean; interactive?: boolean; consoleView?: boolean;
   technicalControls?: ReactNode;
   onContinue?: () => void;
 }
@@ -28,7 +28,7 @@ export function SessionExecutionPanel(props: SessionExecutionPanelProps) {
   return <ExecutionBody key={identity} {...props}/>;
 }
 
-function ExecutionBody({session,harness,host,embedded=false,interactive=false,technicalControls,onContinue}: SessionExecutionPanelProps) {
+function ExecutionBody({session,harness,host,embedded=false,interactive=false,consoleView=false,technicalControls,onContinue}: SessionExecutionPanelProps) {
   const [current,setCurrent] = useState<RuntimeSession|null>(session);
   const [tab,setTab] = useState<'tail'|'history'>(sessionReleased(session)?'history':'tail');
   const [presentation,setPresentation] = useState<'conversation'|'activity'>('conversation');
@@ -67,6 +67,19 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,te
     return()=>{controller.abort();window.clearTimeout(timer);window.removeEventListener('nexus-auth-expired',revoke);window.removeEventListener('nexus-operator-logout',revoke);};
   },[]);
   if(blocked||!current)return <p role="alert">{error}</p>;
+  const generation = current.scope.session_owner_generation;
+  const scope: InteractionScope | null = generation !== undefined && Number.isSafeInteger(generation) && generation > 0
+    ? {...current.scope, session_owner_generation:generation} : null;
+  if(consoleView) {
+    const released = sessionReleased(current);
+    return <section aria-label="Session console" className="harness-console flex h-full min-h-0 flex-col">
+      <RuntimeEventStream scope={current.scope} harness={harness} history={released} active={!released}
+        allowMaximize={false} consoleView onAccessLost={clear}/>
+      {error&&<p role="alert" className="shrink-0 px-4 py-2 text-sm">{error}</p>}
+      {scope && (!released || !sessionReleased(session)) && <SessionConversation scope={scope}
+        active={!released && !error} visible composerOnly onAccessLost={clear}/>}
+    </section>;
+  }
   const command = embedded && !error ? terminalSessionCommand(current) : null;
   const activity = <section aria-label="Session execution output" data-modal-passive className="space-y-3 min-w-0">
     <p className="text-xs text-surface-500 break-words">{[harness,host,current.lifecycle_state].filter(Boolean).join(' · ')} · Read only</p>
@@ -90,11 +103,9 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,te
   const continueButton = onContinue && interactive && !error && canContinueSession(current)
     ? <button type="button" className="btn btn-secondary" onClick={onContinue}>Continue this exact session</button>
     : null;
-  const generation = current.scope.session_owner_generation;
-  if (!interactive || generation === undefined || !Number.isSafeInteger(generation) || generation <= 0) {
+  if (!interactive || !scope) {
     return <>{activity}{technicalControls}{continueButton}</>;
   }
-  const scope: InteractionScope = {...current.scope, session_owner_generation: generation};
   return <section aria-label="Session" className="space-y-3 min-w-0">
     <div role="group" aria-label="Session view" className="flex flex-wrap gap-2">
       <button type="button" className="btn btn-secondary" aria-pressed={presentation === 'conversation'}

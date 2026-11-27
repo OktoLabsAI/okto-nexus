@@ -71,7 +71,7 @@ function HarnessSessionInspection({sessionRef,connection,serverId,workspace}:{se
     return()=>abort.abort();
   },[key]);
   if(read.key!==key||!read.context)return <p role={read.key===key&&read.error?'alert':'status'}>{read.key===key&&read.error?read.error:'Revalidating session…'}</p>;
-  return <HomeSessionInspection context={read.context} nativeTerminal/>;
+  return <HomeSessionInspection context={read.context} harness={connection?.harness_id} consoleView/>;
 }
 
 function HarnessConsoleChoice({card,state,onOpen,onMore}: {card:HarnessCard;state:HomeState;onOpen:(ref:HomeSessionRef)=>void;onMore:()=>void}) {

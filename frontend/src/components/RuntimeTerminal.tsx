@@ -36,18 +36,18 @@ function Action({action}: {action: TerminalAction}) {
   </li>;
 }
 
-export function RuntimeTerminal({events, harness, scrollRef, scrollback, label='Session terminal', empty='No activity to display yet.', allowMaximize=true}: {
-  events: RuntimeEventPage['events']; harness?: string; scrollRef?: Ref<HTMLOListElement>; scrollback?: Scrollback; label?: string; empty?: string; allowMaximize?: boolean;
+export function RuntimeTerminal({events, harness, scrollRef, scrollback, label='Session terminal', empty='No activity to display yet.', allowMaximize=true, consoleView=false}: {
+  events: RuntimeEventPage['events']; harness?: string; scrollRef?: Ref<HTMLOListElement>; scrollback?: Scrollback; label?: string; empty?: string; allowMaximize?: boolean; consoleView?: boolean;
 }) {
   const actions=useMemo(()=>presentEvents(events,harness),[events,harness]);
-  return <TerminalView actions={actions} harness={harness} scrollRef={scrollRef} scrollback={scrollback} label={label} empty={empty} allowMaximize={allowMaximize}/>;
+  return <TerminalView actions={actions} harness={harness} scrollRef={scrollRef} scrollback={scrollback} label={label} empty={empty} allowMaximize={allowMaximize} consoleView={consoleView}/>;
 }
 
 export function RuntimeFinalOutput({text}: {text: string}) {
   return <TerminalView actions={[{id:'final',kind:'assistant',title:'Assistant',text}]} label="Execution output"/>;
 }
 
-function TerminalView({actions,harness,scrollRef,scrollback,label,empty,allowMaximize=true}: {actions:TerminalAction[];harness?:string;scrollRef?:Ref<HTMLOListElement>;scrollback?:Scrollback;label:string;empty?:string;allowMaximize?:boolean}) {
+function TerminalView({actions,harness,scrollRef,scrollback,label,empty,allowMaximize=true,consoleView=false}: {actions:TerminalAction[];harness?:string;scrollRef?:Ref<HTMLOListElement>;scrollback?:Scrollback;label:string;empty?:string;allowMaximize?:boolean;consoleView?:boolean}) {
   const [maximized,setMaximized]=useState(false);
   const [fontSize,setFontSize]=useState(readFontSize);
   useEffect(()=>{
@@ -113,8 +113,8 @@ function TerminalView({actions,harness,scrollRef,scrollback,label,empty,allowMax
     else if (scrollRef) (scrollRef as {current:HTMLOListElement|null}).current=element;
     if (element) element.scrollTop=position.current;
   },[scrollRef,maximized]);
-  const terminal=<div className="runtime-terminal" style={{'--terminal-font-size':`${fontSize}px`} as CSSProperties}>
-    <header className="runtime-terminal-bar"><Terminal size={14}/><span>{harness==='codex_app_server'?'Codex':harness==='claude_stream'?'Claude':harness==='pi_rpc'?'Pi':'Session'} · terminal</span><span className="runtime-terminal-readonly">Read only</span>
+  const terminal=<div className={consoleView?'runtime-terminal runtime-terminal-fill':'runtime-terminal'} style={{'--terminal-font-size':`${fontSize}px`} as CSSProperties}>
+    <header className="runtime-terminal-bar"><Terminal size={14}/><span>{harness==='codex_app_server'?'Codex':harness==='claude_stream'?'Claude':harness==='pi_rpc'?'Pi':'Session'} · terminal</span>{!consoleView && <span className="runtime-terminal-readonly">Read only</span>}
       <div className="runtime-terminal-font-controls" role="group" aria-label="Terminal font size">
         <button type="button" className="runtime-terminal-expand" aria-label="Decrease terminal font size" title="Decrease font size" disabled={fontSize<=minFontSize} onClick={()=>resizeFont(fontSize-1)}><Minus size={15}/></button>
         <button type="button" className="runtime-terminal-expand runtime-terminal-font-size" aria-label="Reset terminal font size" title="Reset font size to 12px" onClick={()=>resizeFont(defaultFontSize)}><span aria-live="polite">{fontSize}px</span></button>

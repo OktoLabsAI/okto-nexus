@@ -108,4 +108,12 @@ Passaram 429 testes do frontend, 51 testes do transporte, Ruff e a verificação
 
 O console perdeu a conexão uma vez após o ensaio. A ação Reconectar restaurou a escrita na mesma sessão. O Edge registrou 24 mensagens de manutenção da conexão em 125 segundos sem editar o rascunho, e `/status` respondeu ao final desse intervalo. A causa da queda inicial permaneceu indeterminada.
 
+### Terminal de eventos com barra de entrada
+
+A Home voltou a usar o terminal de eventos do Nexus. A mesma tela reúne o histórico paginado da sessão e uma barra inferior para mensagens, reorientação e comandos autorizados no catálogo da sessão. A edição do rascunho acontece no navegador. O envio, a confirmação dos controles e a recuperação de recibos usam os endpoints canônicos. O console também permite verificar uma ação que ficou sem confirmação na apresentação anterior do Pi.
+
+No Edge, com o wheel instalado, o Pi 0.87.1, o Connector 0.0.16 e o Core 0.0.17, a automação abriu a sessão a partir da Home, completou `/status` com `Tab`, preservou o rascunho de `/model`, enviou uma mensagem de duas linhas e confirmou `/steer` na mesma barra. O Pi executou a ferramenta `read` em um arquivo descartável. O terminal exibiu a chamada, seu resultado e as duas respostas simuladas. O recibo de aplicação da reorientação apareceu no navegador e o contexto recebido pelo provedor confirmou o texto exato. Após recarregar, a sessão e o recibo da mensagem permaneceram disponíveis. A barra coube na largura de 390 px. O SQLite confirmou duas entradas na mesma sessão e zero anexos da apresentação direta.
+
+Passaram 429 testes do frontend e 12 testes focados em comandos, reorientação e interrupção. O build, a verificação do lock e o Twine passaram. Wheel SHA-256 `23acbe2c8814554521a1bd1adf5fc92bd4731b5ba61426d92acfb839f1eca090`. O rollback restaura o frontend anterior e dispensa migração. A validação de navegador usou o Pi com um provedor simulado e mantém separada a validação humana.
+
 Passaram 429 testes Node, o build, a validação estrita do wheel e o ensaio instalado. A mudança dispensa migração e pode ser revertida pelo commit. A rodada de usabilidade continua separada da automação. [Evidências](si036-participant-rehearsal.json)
